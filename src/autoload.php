@@ -21,3 +21,6 @@ $loader->registerPrefixes(array(
     // 'Twig_'  => __DIR__.'/vendor/twig/lib',
 ));
 $loader->register();
+
+// Require php-github-api
+require_once(__DIR__.'/vendor/php-github-api/lib/phpGitHubApi.php');
