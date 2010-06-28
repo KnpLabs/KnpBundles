@@ -1,8 +1,7 @@
-/symfony2bundles/config/config*_local.yml
-/symfony2bundles/cache/*
-/symfony2bundles/logs/*
-/nbproject
-.DS_Store
-catalog.xml
-*.swp
-/web/.htaccess
+/front/config/config*_local.yml
+/front/cache/*
+/front/logs/*
+
+# external software files
+.DS_STORE
+tags

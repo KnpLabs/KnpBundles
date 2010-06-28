@@ -25,11 +25,10 @@ class FrontKernel extends Kernel
             // new Symfony\Framework\SwiftmailerBundle\Bundle(),
 
             // register your bundles here
+
+            // register your applications here
             new Application\FrontBundle\FrontBundle(),
         );
-
-        if ($this->isDebug()) {
-        }
 
         return $bundles;
     }

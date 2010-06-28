@@ -1,12 +1,12 @@
 <?php
 
-require_once __DIR__.'/vendor/symfony/src/Symfony/Foundation/UniversalClassLoader.php';
+require_once __DIR__.'/vendor/Symfony/src/Symfony/Foundation/UniversalClassLoader.php';
 
 use Symfony\Foundation\UniversalClassLoader;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
-    'Symfony'                    => __DIR__.'/vendor/symfony/src',
+    'Symfony'                    => __DIR__.'/vendor/Symfony/src',
     'Application'                => __DIR__,
     'Bundle'                     => __DIR__,
     // 'Doctrine\\Common'           => __DIR__.'/vendor/doctrine/lib/vendor/doctrine-common/lib',
@@ -18,6 +18,6 @@ $loader->registerNamespaces(array(
 ));
 $loader->registerPrefixes(array(
     // 'Swift_' => __DIR__.'/vendor/swiftmailer/lib/classes',
-    'Twig_'  => __DIR__.'/vendor/twig/lib',
+    // 'Twig_'  => __DIR__.'/vendor/twig/lib',
 ));
 $loader->register();
