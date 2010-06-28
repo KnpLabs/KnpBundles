@@ -25,6 +25,7 @@ class ApiKernel extends Kernel
             // new Symfony\Framework\SwiftmailerBundle\Bundle(),
 
             // register your bundles here
+            new Bundle\GitHubBundle\GitHubBundle(),
 
             // register your applications here
             new Application\ApiBundle\ApiBundle(),
