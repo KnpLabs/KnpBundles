@@ -2,6 +2,10 @@
 /front/cache/*
 /front/logs/*
 
+/api/config/config*_local.yml
+/api/cache/*
+/api/logs/*
+
 # external software files
 .DS_STORE
 tags
