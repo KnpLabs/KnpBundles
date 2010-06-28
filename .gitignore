@@ -1,0 +1,8 @@
+/symfony2bundles/config/config*_local.yml
+/symfony2bundles/cache/*
+/symfony2bundles/logs/*
+/nbproject
+.DS_Store
+catalog.xml
+*.swp
+/web/.htaccess
