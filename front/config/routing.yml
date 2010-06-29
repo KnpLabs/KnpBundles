@@ -1,3 +1,2 @@
-homepage:
-    pattern:  /
-    defaults: { _controller: FrontBundle:Default:index }
+lichess:
+  resource: FrontBundle/Resources/config/routing.yml

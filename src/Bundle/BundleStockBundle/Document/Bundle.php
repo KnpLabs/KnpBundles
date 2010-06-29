@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\BundleStockBundle\Model;
+namespace Bundle\BundleStockBundle\Document;
 
 /**
  * An Open Source Bundle living on GitHub
@@ -14,6 +14,10 @@ class Bundle
     * Like in GitHub, this name is not unique
      *
      * @String
+     * @Validation({
+     *   @NotBlank,
+     *   @MinLength(11)
+     * })
      * @var string
      */
     protected $name = null;

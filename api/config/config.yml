@@ -5,7 +5,9 @@ kernel.config:
     charset:             UTF-8
     error_handler_level: null
 
-web.config: ~
+web.config:
+    validation:
+        annotations: true
 
 web.templating:
     escaping:       htmlspecialchars

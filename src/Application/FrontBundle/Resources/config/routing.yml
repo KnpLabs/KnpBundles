@@ -1,0 +1,3 @@
+bundle_list:
+    pattern:        /
+    defaults:       { _controller: FrontBundle:Bundle:list }

@@ -21,10 +21,10 @@ class FrontKernel extends Kernel
 
             // enable third-party bundles
             new Symfony\Framework\ZendBundle\ZendBundle(),
-            // new Symfony\Framework\DoctrineBundle\Bundle(),
-            // new Symfony\Framework\SwiftmailerBundle\Bundle(),
+            new Symfony\Framework\DoctrineMongoDBBundle\DoctrineMongoDBBundle(),
 
             // register your bundles here
+            new Bundle\BundleStockBundle\BundleStockBundle(),
 
             // register your applications here
             new Application\FrontBundle\FrontBundle(),

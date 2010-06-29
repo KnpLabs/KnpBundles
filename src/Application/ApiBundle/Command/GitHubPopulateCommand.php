@@ -2,6 +2,7 @@
 
 namespace Application\ApiBundle\Command;
 
+use Bundle\BundleStockBundle\Document\Bundle;
 use Symfony\Framework\FoundationBundle\Command\Command as BaseCommand;
 use Symfony\Components\Console\Input\InputArgument;
 use Symfony\Components\Console\Input\InputOption;
@@ -20,10 +21,8 @@ class GitHubPopulateCommand extends BaseCommand
     protected function configure()
     {
         $this
-            ->setDefinition(array(
-            ))
-            ->setName('s2b:github:populate')
-        ;
+        ->setDefinition(array())
+        ->setName('github:populate');
     }
 
     /**
@@ -36,12 +35,35 @@ class GitHubPopulateCommand extends BaseCommand
         $output->writeln(sprintf('Will now search new Bundles in GitHub'));
 
         $search = $this->container->getGithubSearchService();
-        $bundles = $search->searchBundles();
+        $bundles = array();
+        
+        foreach($search->searchBundles() as $repo) {
+            $bundle = new Bundle();
+            $bundle->setName($repo['name']);
+            $bundle->setAuthor($repo['username']);
+            $bundles[] = $bundle;
+        }
+
+        $bundles = $this->filterValidBundles($bundles);
 
         foreach($bundles as $bundle) {
-            $output->writeln($bundle['name']);
+            $output->writeln($bundle->getGitHubUrl());
         }
 
         $output->writeln(sprintf('%d Bundles found', count($bundles)));
+    }
+
+    /**
+     * Returns only valid Symfony2 bundles
+     *
+     * @return array
+     **/
+    protected function filterValidBundles(array $bundles)
+    {
+        $validator = $this->container->getValidatorService();
+        foreach($bundles as $bundle) {
+            print $validator->validate($bundle);
+        }
+        return $bundles;
     }
 }
