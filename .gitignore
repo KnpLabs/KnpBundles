@@ -7,5 +7,5 @@
 /api/logs/*
 
 # external software files
-.DS_STORE
+.DS_Store
 tags
