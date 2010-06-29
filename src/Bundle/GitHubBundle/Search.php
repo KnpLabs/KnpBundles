@@ -22,7 +22,7 @@ class Search
      */
     public function getGitHubApi()
     {
-      return $this->github;
+        return $this->github;
     }
     
     /**
@@ -32,7 +32,7 @@ class Search
      */
     public function setGitHubApi($github)
     {
-      $this->github = $github;
+        $this->github = $github;
     }
 
     /**
