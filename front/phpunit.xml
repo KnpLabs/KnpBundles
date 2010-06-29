@@ -12,17 +12,17 @@
          bootstrap="../src/autoload.php"
 >
   <testsuites>
-    <testsuite name="Project Test Suite">
-      <directory>../src/Application/*/Tests</directory>
+    <testsuite name="FrontBundle Test Suite">
+      <directory>../src/Application/FrontBundle/Tests</directory>
     </testsuite>
   </testsuites>
 
   <filter>
     <whitelist>
-      <directory>../src/Application</directory>
+      <directory>../src/Application/FrontBundle</directory>
       <exclude>
-        <directory>../src/Application/*/Resources</directory>
-        <directory>../src/Application/*/Tests</directory>
+        <directory>../src/Application/FrontBundle/Resources</directory>
+        <directory>../src/Application/FrontBundle/Tests</directory>
       </exclude>
     </whitelist>
   </filter>
