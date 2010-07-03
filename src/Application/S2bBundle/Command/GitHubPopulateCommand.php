@@ -63,7 +63,7 @@ class GitHubPopulateCommand extends BaseCommand
         $validator = $this->container->getValidatorService();
         $validBundles = array();
         foreach($bundles as $bundle) {
-            if($validator->validate($bundle)) {
+            if(!$validator->validate($bundle)->count()) {
                 $validBundles[] = $bundle;
                 $output->writeLn(sprintf('+ %s', $bundle));
             }
