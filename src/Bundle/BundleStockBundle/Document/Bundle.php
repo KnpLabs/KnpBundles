@@ -23,7 +23,7 @@ class Bundle
      * Author name, e.g. "knplabs"
      *
      * @String
-     * @Validation({ @NotBlank })
+     * @Validation({ @NotBlank, @Regex("/^\w+$/") })
      * @var string
      */
     protected $author = null;

@@ -25,9 +25,25 @@ class BundleTest extends WebTestCase
     public function testNameValidation()
     {
         $bundle = $this->createValidBundle();
+
         $bundle->setName(null);
         $this->assertRegexp('/This value should not be blank/s', $this->validator->validate($bundle)->__toString());
+
         $bundle->setName('myNameIsNotValidAtAll');
+        $this->assertRegexp('/This value is not valid/s', $this->validator->validate($bundle)->__toString());
+
+        $bundle->setName('Bundle');
+        $this->assertRegexp('/This value is not valid/s', $this->validator->validate($bundle)->__toString());
+    }
+
+    public function testAuthorValidation()
+    {
+        $bundle = $this->createValidBundle();
+
+        $bundle->setAuthor(null);
+        $this->assertRegexp('/This value should not be blank/s', $this->validator->validate($bundle)->__toString());
+
+        $bundle->setAuthor('bad/author');
         $this->assertRegexp('/This value is not valid/s', $this->validator->validate($bundle)->__toString());
     }
 
