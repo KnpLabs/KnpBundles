@@ -130,4 +130,9 @@ class Bundle
     {
       $this->id = $id;
     }
+
+    public function __toString()
+    {
+        return $this->getAuthor().'/'.$this->getName();
+    }
 }

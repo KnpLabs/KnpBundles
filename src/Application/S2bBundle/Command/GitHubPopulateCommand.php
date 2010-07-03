@@ -37,14 +37,14 @@ class GitHubPopulateCommand extends BaseCommand
         $search = $this->container->getGithubSearchService();
         $bundles = array();
         
-        foreach($search->searchBundles(300) as $repo) {
+        foreach($search->searchBundles() as $repo) {
             $bundle = new Bundle();
             $bundle->setName($repo['name']);
             $bundle->setAuthor($repo['username']);
             $bundles[] = $bundle;
         }
 
-        $bundles = $this->filterValidBundles($bundles);
+        $bundles = $this->filterValidBundles($bundles, $output);
 
         foreach($bundles as $bundle) {
             $output->writeln($bundle->getGitHubUrl());
@@ -58,12 +58,19 @@ class GitHubPopulateCommand extends BaseCommand
      *
      * @return array
      **/
-    protected function filterValidBundles(array $bundles)
+    protected function filterValidBundles(array $bundles, OutputInterface $output)
     {
         $validator = $this->container->getValidatorService();
+        $validBundles = array();
         foreach($bundles as $bundle) {
-            print $validator->validate($bundle);
+            if($validator->validate($bundle)) {
+                $validBundles[] = $bundle;
+                $output->writeLn(sprintf('+ %s', $bundle));
+            }
+            else {
+                $output->writeLn(sprintf('- %s', $bundle));
+            }
         }
-        return $bundles;
+        return $validBundles;
     }
 }
