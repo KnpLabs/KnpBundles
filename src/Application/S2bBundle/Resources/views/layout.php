@@ -8,6 +8,9 @@
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     </head>
     <body>
+        <div class="header">
+            <h1>Symfony2 Bundles</h1>
+        </div>
         <div class="content">
             <?php $view->slots->output('_content') ?>
         </div>

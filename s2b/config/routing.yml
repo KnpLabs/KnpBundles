@@ -1,3 +1,2 @@
-homepage:
-    pattern:  /
-    defaults: { _controller: FrontBundle:Default:index }
+s2b:
+  resource: S2bBundle/Resources/config/routing.yml

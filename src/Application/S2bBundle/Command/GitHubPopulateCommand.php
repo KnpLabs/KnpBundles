@@ -32,45 +32,59 @@ class GitHubPopulateCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln(sprintf('Will now search new Bundles in GitHub'));
+        $output->writeln(sprintf('Will now search for new Bundles in GitHub'));
 
-        $search = $this->container->getGithubSearchService();
-        $bundles = array();
-        
-        foreach($search->searchBundles() as $repo) {
-            $bundle = new Bundle();
-            $bundle->setName($repo['name']);
-            $bundle->setAuthor($repo['username']);
-            $bundles[] = $bundle;
-        }
-
-        $bundles = $this->filterValidBundles($bundles, $output);
-
-        foreach($bundles as $bundle) {
-            $output->writeln($bundle->getGitHubUrl());
-        }
-
-        $output->writeln(sprintf('%d Bundles found', count($bundles)));
-    }
-
-    /**
-     * Returns only valid Symfony2 bundles
-     *
-     * @return array
-     **/
-    protected function filterValidBundles(array $bundles, OutputInterface $output)
-    {
+        $dm = $this->container->getDoctrine_odm_mongodb_documentManagerService();
+        $existingBundles = $dm->find('Bundle\BundleStockBundle\Document\Bundle')->getResults();
+        $githubRepos = $this->container->getGithubSearchService()->searchBundles();
         $validator = $this->container->getValidatorService();
-        $validBundles = array();
-        foreach($bundles as $bundle) {
-            if(!$validator->validate($bundle)->count()) {
-                $validBundles[] = $bundle;
-                $output->writeLn(sprintf('+ %s', $bundle));
+        $bundles = array();
+        $counters = array(
+            'created' => 0,
+            'updated' => 0,
+            'removed' => 0
+        );
+
+        // first pass, update and revalidate existing bundles
+        foreach($existingBundles as $existingBundle) {
+            $exists = false;
+            foreach($githubRepos as $githubRepo) {
+                if($existingBundle->getName() === $githubRepo['name'] && $existingBundle->getUsername() === $githubRepo['username']) {
+                    $existingBundle->fromRepositoryArray($githubRepo);
+                    $exists = true;
+                    ++$counters['updated'];
+                    break;
+                }
             }
-            else {
-                $output->writeLn(sprintf('- %s', $bundle));
+            $existingBundle->setIsOnGithub($exists);
+            if($validator->validate($existingBundle)->count()) {
+                $dm->remove($existingBundle);
+                ++$counters['removed'];
             }
         }
-        return $validBundles;
+        
+        // second pass, create missing bundles
+        foreach($githubRepos as $githubRepo) {
+            $exists = false;
+            foreach($existingBundles as $existingBundle) {
+                if($existingBundle->getName() === $githubRepo['name'] && $existingBundle->getUsername() === $githubRepo['username']) {
+                    $exists = true;
+                    break;
+                }
+            }
+            if(!$exists) {
+                $bundle = new Bundle();
+                $bundle->fromRepositoryArray($githubRepo);
+                $bundle->setIsOnGithub(true);
+                if(!$validator->validate($bundle)->count()) {
+                    $dm->persist($bundle);
+                    ++$counters['created'];
+                }
+            }
+        }
+
+        $dm->flush();
+
+        $output->writeln(sprintf('%d created, %d updated, %d removed', $counters['created'], $counters['updated'], $counters['removed']));
     }
 }
