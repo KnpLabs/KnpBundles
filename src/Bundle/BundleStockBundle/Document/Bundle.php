@@ -10,14 +10,11 @@ namespace Bundle\BundleStockBundle\Document;
 class Bundle
 {
     /**
-    * Bundle name, e.g. "MarkdownBundle"
-    * Like in GitHub, this name is not unique
+     * Bundle name, e.g. "MarkdownBundle"
+     * Like in GitHub, this name is not unique
      *
      * @String
-     * @Validation({
-     *   @NotBlank,
-     *   @MinLength(11)
-     * })
+     * @Validation({ @Regex("/^\w+Bundle$/") })
      * @var string
      */
     protected $name = null;
@@ -26,6 +23,7 @@ class Bundle
      * Author name, e.g. "knplabs"
      *
      * @String
+     * @Validation({ @NotBlank })
      * @var string
      */
     protected $author = null;
