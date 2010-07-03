@@ -14,7 +14,7 @@ class Bundle
      * Like in GitHub, this name is not unique
      *
      * @String
-     * @Validation({ @Regex("/^\w+Bundle$/") })
+     * @Validation({ @NotBlank, @Regex("/^\w+Bundle$/") })
      * @var string
      */
     protected $name = null;
