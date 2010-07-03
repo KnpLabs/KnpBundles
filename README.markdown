@@ -13,3 +13,7 @@ Symfony2bundles aimes to provide:
 ## Participating
 
 Join the discussion on [Google Wave](https://wave.google.com/wave/waveref/googlewave.com/w+0CQKHWtqC).
+
+## Run tests
+
+    phpunit -c s2b
