@@ -38,9 +38,19 @@ class Search
     /**
      * Get a list of Symfony2 Bundles from GitHub
      */
-    public function searchBundles()
+    public function searchBundles($limit = 300)
     {
-        $repos = $this->github->getRepoApi()->search('Symfony2+Bundle');
+        $repos = array();
+        $page = 1;
+        do {
+            $pageRepos = $this->github->getRepoApi()->search('Bundle', 'php', $page);
+            if(empty($pageRepos)) {
+                break;
+            }
+            $repos = array_merge($repos, $pageRepos);
+            $page++;
+        }
+        while(count($repos) < $limit);
 
         return $repos;
     }

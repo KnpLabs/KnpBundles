@@ -35,9 +35,10 @@ class GitHubPopulateCommand extends BaseCommand
         $output->writeln(sprintf('Will now search new Bundles in GitHub'));
 
         $search = $this->container->getGithubSearchService();
+<<<<<<< HEAD
         $bundles = array();
         
-        foreach($search->searchBundles() as $repo) {
+        foreach($search->searchBundles(300) as $repo) {
             $bundle = new Bundle();
             $bundle->setName($repo['name']);
             $bundle->setAuthor($repo['username']);
@@ -45,6 +46,9 @@ class GitHubPopulateCommand extends BaseCommand
         }
 
         $bundles = $this->filterValidBundles($bundles);
+=======
+        $bundles = $search->searchBundles(300);
+>>>>>>> 59a9800... Improve bundle search
 
         foreach($bundles as $bundle) {
             $output->writeln($bundle->getGitHubUrl());
