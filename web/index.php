@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../front/FrontKernel.php';
+require_once __DIR__.'/../front/S2bKernel.php';
 
-$kernel = new FrontKernel('prod', false);
+$kernel = new S2bKernel('prod', false);
 $kernel->handle()->send();
