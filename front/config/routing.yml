@@ -1,2 +1,0 @@
-lichess:
-  resource: FrontBundle/Resources/config/routing.yml

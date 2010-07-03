@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\ApiBundle\Command;
+namespace Application\S2bBundle\Command;
 
 use Bundle\BundleStockBundle\Document\Bundle;
 use Symfony\Framework\FoundationBundle\Command\Command as BaseCommand;

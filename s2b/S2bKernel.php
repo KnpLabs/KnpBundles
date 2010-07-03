@@ -6,7 +6,7 @@ use Symfony\Foundation\Kernel;
 use Symfony\Components\DependencyInjection\Loader\YamlFileLoader as ContainerLoader;
 use Symfony\Components\Routing\Loader\YamlFileLoader as RoutingLoader;
 
-class ApiKernel extends Kernel
+class S2bKernel extends Kernel
 {
     public function registerRootDir()
     {
@@ -28,7 +28,7 @@ class ApiKernel extends Kernel
             new Bundle\BundleStockBundle\BundleStockBundle(),
 
             // register your applications here
-            new Application\ApiBundle\ApiBundle(),
+            new Application\S2bBundle\S2bBundle(),
         );
 
         return $bundles;
