@@ -29,8 +29,6 @@
                     <?php $view->output('S2bBundle:Main:menu', array('current' => $view->slots->get('current_menu_item', null))) ?>
                 </div>
 
-                <p id="rss"> <a href="index.html">Grab the RSS feed</a> </p>
-
                 <form id="quick-search" method="get" action="<?php echo $view->router->generate('search') ?>">
                     <fieldset class="search">
                         <label for="qsearch">Search:</label>

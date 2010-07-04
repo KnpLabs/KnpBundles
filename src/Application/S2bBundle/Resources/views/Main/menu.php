@@ -2,7 +2,7 @@
 <?php
 $entries = array(
     'homepage' => 'Home',
-    'all' => 'All Bundles',
+    'all' => 'Bundles',
     'search' => 'Search'
 );
 

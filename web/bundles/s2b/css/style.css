@@ -197,12 +197,10 @@ L A Y O U T
     margin: 0; padding:  0 5px 0 0;
     font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;
     font-weight: bold;
-    font-size: 11px;
     line-height: 1.8em;
     font-style: normal;
     letter-spacing: -.5px;
     color: #0d6684;
-
     /* change the values of top and left to adjust the position */
     top: 152px; left: 114px;
 }
@@ -541,11 +539,10 @@ B L O G   P O S T
 /* markdown */
 .markdown {
     margin: 20px 12px 0 20px;
-    padding: 0 10px 10px 20px;
+    padding: 1em;
     background: #FAFAFA;
     border: 1px solid #EAECEE;
     overflow: hidden;
-    width: 494px;
 }
 .markdown ul {
     list-style: none;
@@ -566,30 +563,15 @@ B L O G   P O S T
     margin-right: 0;
 }
 .markdown h1 { font-size: 2.2em; font-weight: normal; letter-spacing: -2px; }
-.markdown h2 { font-size: 1.8em; font-weight: normal; border-top: 1px solid #D4D4D4; }
+.markdown h2 { font-size: 1.8em; font-weight: normal; border-top: 1px solid #D4D4D4; margin-top: 1em;}
 .markdown h3 { font-size: 1.4em; font-weight: normal; letter-spacing: -0.5px; padding-top: 15px; }
 .markdown h4 { font-size: 1.2em; }
 
-/* dateinfo */
-.left p.dateinfo {
-    background: url(../images/date-bg.gif) no-repeat;
-    height: 83px;
-    width: 68px;
-    margin: 12px 0 0 70px;
-    padding: 8px 0 0 1px;
-    font: bold 15px Arial, Helvetica, sans-serif;
-    text-transform: uppercase;
-    text-align: center;
-    letter-spacing: 2px;
-    color: #fff;
-}
-.left p.dateinfo span {
-    font: bold 30px Arial, Helvetica, sans-serif;
-    display: block;
-    color: #555;
-    margin: 8px 0 0 0;
-    padding: 0;
-    letter-spacing: 0;
+.markdown pre {
+    background: #fff;
+    padding: 1em;
+    border: 1px solid #E4ECEE;
+    overflow: auto;
 }
 
 /* post meta */
@@ -629,6 +611,7 @@ B L O G   P O S T
 .left .post-meta ul li.watch { background: url(../images/eye.png) no-repeat 2px center; }
 .left .post-meta ul li.download { background: url(../images/box.png) no-repeat 2px center; }
 .left .post-meta ul li.source { background: url(../images/source.png) no-repeat 2px center; }
+.left .post-meta ul li.version { background: url(../images/pill.png) no-repeat 2px center; }
 
 .left .post-meta ul li a { color: #147DB6; }
 .left .post-meta ul li a:hover { color: #333; }
@@ -768,6 +751,11 @@ ul.bundle-list li a {
 }
 ul.bundle-list li a span {
     color: #888;
+}
+ul.bundle-list li a em {
+    font-size: 11px;
+    font-style: italic;
+    margin-left: 0.5em;
 }
 ul.bundle-list li .description {
     color: #666;
