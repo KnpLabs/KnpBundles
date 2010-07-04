@@ -1,6 +1,5 @@
 <?php $view->extend('S2bBundle::layout') ?>
 
-
 <div class="post">
 
     <div class="right">
@@ -28,10 +27,23 @@
 
         <div class="post-meta">
             <h4>Links</h4>
-            <ul class="tags">
+            <ul>
                 <li class="source"><a href="<?php echo $bundle->getGithubUrl() ?>">View source</a></li>
                 <li class="download"><a href="<?php echo $bundle->getGithubUrl() ?>/tarball/master">Download</a></li>
             </ul>
+        </div>
+
+        <div class="post-meta">
+            <h4>Versions</h4>
+            <?php if(count($bundle->getTags())): ?>
+                <ul>
+                    <?php foreach($bundle->getTags() as $tag): ?>
+                        <li class="version"><a href="<?php echo $bundle->getGithubUrl() ?>/tree/<?php echo $tag ?>"><?php echo $tag ?></a></li>
+                    <?php endforeach ?>
+                </ul>
+            <?php else: ?>
+                No version released.
+            <?php endif; ?>
         </div>
 
     </div>
@@ -40,6 +52,7 @@
 
 <?php $view->slots->set('h1', $bundle->getShortName().'<span>Bundle</span>') ?>
 <?php $view->slots->set('slogan', $bundle->getDescription()) ?>
+<?php $view->slots->set('current_menu_item', 'all') ?>
 
 <?php $view->slots->start('sidemenu') ?>
 <div class="popular">

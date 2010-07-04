@@ -76,6 +76,12 @@ class Bundle
     protected $lastCommits = array();
 
     /**
+     * Released tags are Git tags
+     * @Field(type="collection")
+     */
+    protected $tags = array();
+
+    /**
      * Whether the bundle is available on GitHub or not
      * @Boolean
      * @Validation({@AssertType("boolean")})
@@ -107,6 +113,34 @@ class Bundle
         $this->setFollowers($repo['followers']);
         $this->setForks($repo['forks']);
         $this->setCreatedAt(new \DateTime($repo['created']));
+    }
+    
+    /**
+     * Get tags
+     * @return array
+     */
+    public function getTags()
+    {
+      return $this->tags;
+    }
+    
+    /**
+     * Set tags
+     * @param  array
+     * @return null
+     */
+    public function setTags(array $tags)
+    {
+      $this->tags = $tags;
+    }
+
+    public function getLastTagName()
+    {
+        if(empty($this->tags)) {
+            return null;
+        }
+
+        return reset($this->tags);
     }
     
     /**
@@ -186,7 +220,6 @@ class Bundle
 
     /**
      * Returns the number of days elapsed since the last commit on the master branch
-     *
      * @return int
      **/
     public function getDaysSinceLastCommit()

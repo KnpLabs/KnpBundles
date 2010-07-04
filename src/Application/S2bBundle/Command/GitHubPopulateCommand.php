@@ -115,8 +115,13 @@ class GitHubPopulateCommand extends BaseCommand
                     break;
                 }
             }
+            $output->write(' tags');
+            $tags = $github->getRepoApi()->getRepoTags($bundle->getUsername(), $bundle->getName());
+            $bundle->setTags(array_keys($tags));
+
             $bundle->recalculateScore();
             $output->writeLn(' '.$bundle->getScore());
+            sleep(3); // prevent reaching GitHub API max calls (60 per minute)
         }
 
         $dm->flush();
