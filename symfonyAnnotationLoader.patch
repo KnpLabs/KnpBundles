@@ -1,0 +1,20 @@
+diff --git a/src/Symfony/Components/Validator/Mapping/Loader/AnnotationLoader.php b/src/Symfony/Components/Validator/Mapping/Loader/AnnotationLoader.php
+index 93a0299..6307324 100644
+--- a/src/Symfony/Components/Validator/Mapping/Loader/AnnotationLoader.php
++++ b/src/Symfony/Components/Validator/Mapping/Loader/AnnotationLoader.php
+@@ -14,7 +14,7 @@ class AnnotationLoader implements LoaderInterface
+     {
+         $this->reader = new AnnotationReader();
+         $this->reader->setDefaultAnnotationNamespace('Symfony\Components\Validator\Constraints\\');
+-        $this->reader->setAutoloadAnnotations(true);
++        $this->reader->setAutoloadAnnotationClasses(true);
+     }
+ 
+     /**
+@@ -59,4 +59,4 @@ class AnnotationLoader implements LoaderInterface
+ 
+         return $loaded;
+     }
+-}
+\ No newline at end of file
++}
