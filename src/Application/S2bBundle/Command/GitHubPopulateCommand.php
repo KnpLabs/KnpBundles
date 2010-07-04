@@ -9,6 +9,7 @@ use Symfony\Components\Console\Input\InputOption;
 use Symfony\Components\Console\Input\InputInterface;
 use Symfony\Components\Console\Output\OutputInterface;
 use Symfony\Components\Console\Output\Output;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Update local database from GitHub searches
@@ -32,11 +33,10 @@ class GitHubPopulateCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln(sprintf('Will now search for new Bundles in GitHub'));
-
+        $output->writeln(sprintf('Search for new Bundles on GitHub'));
         $dm = $this->container->getDoctrine_odm_mongodb_documentManagerService();
         $existingBundles = $dm->find('Bundle\BundleStockBundle\Document\Bundle')->getResults();
-        $githubRepos = $this->container->getGithubSearchService()->searchBundles();
+        $githubRepos = $this->container->getGithubSearchService()->searchBundles(5);
         $validator = $this->container->getValidatorService();
         $bundles = array();
         $counters = array(
@@ -86,5 +86,39 @@ class GitHubPopulateCommand extends BaseCommand
         $dm->flush();
 
         $output->writeln(sprintf('%d created, %d updated, %d removed', $counters['created'], $counters['updated'], $counters['removed']));
+
+        // Now update bundles with more precise GitHub data
+        $bundles = $dm->find('Bundle\BundleStockBundle\Document\Bundle')->getResults();
+        $github = new \phpGitHubApi();
+        foreach($bundles as $bundle) {
+            $output->write($bundle->getFullName());
+            $output->write(str_repeat(' ', 50-strlen($bundle->getFullName())));
+            $output->write(' commits');
+            $commits = $github->getCommitApi()->getBranchCommits($bundle->getUsername(), $bundle->getName(), 'master');
+            if(empty($commits)) {
+                $dm->remove($bundle);
+                break;
+            }
+            else {
+                $bundle->setLastCommits(array_slice($commits, 0, 5));
+                $lastCommitAt = new \DateTime();
+                $lastCommitAt->setTimestamp(strtotime($commits[0]['committed_date']));
+                $bundle->setLastCommitAt($lastCommitAt);
+            }
+            $output->write(' readme');
+            $blobs = $github->getObjectApi()->listBlobs($bundle->getUsername(), $bundle->getName(), 'master');
+            foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
+                if(isset($blobs[$readmeFilename])) {
+                    $readmeSha = $blobs[$readmeFilename];
+                    $readmeText = $github->getObjectApi()->getRawData($bundle->getUsername(), $bundle->getName(), $readmeSha);
+                    $bundle->setReadme($readmeText);
+                    break;
+                }
+            }
+            $bundle->recalculateScore();
+            $output->writeLn(' '.$bundle->getScore());
+        }
+
+        $dm->flush();
     }
 }

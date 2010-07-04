@@ -1,13 +1,29 @@
 <?php $view->extend('S2bBundle::layout') ?>
+<?php $view->slots->set('current_menu_item', 'all') ?>
 
-<h1>All <?php echo count($bundles) ?> Bundles</h1>
+<?php $view->output('S2bBundle:Bundle:bigList', array('bundles' => $bundles)) ?>
 
-<ol class="list_all">
-<?php foreach($bundles as $bundle): ?>
-    <li>
-        <a href="<?php echo $view->router->generate('bundle_show', array('username' => $bundle->getUsername(), 'name' => $bundle->getName())) ?>">
-            <?php echo $bundle->getFullName() ?>
-        </a>
+<?php $view->slots->set('h1', '<span>'.count($bundles).'</span> Bundles') ?>
+<?php $view->slots->set('slogan', 'Sorted by '.$sort) ?>
+
+<?php $view->slots->start('sidemenu') ?>
+
+<h3>Sort by</h3>
+
+<?php $fields = array(
+    'name' => 'Name',
+    'username' => 'Author',
+    'createdAt' => 'Last created',
+    'lastCommitAt' => 'Last updated',
+    'followers' => 'Followers',
+    'forks' => 'Forks',
+    'score' => 'Score'
+); ?>
+<ul>
+<?php foreach($fields as $field => $text): ?>
+    <li<?php $field == $sort && print ' class="current"' ?>>
+        <a href="<?php echo $view->router->generate('all', array('sort' => $field)) ?>"><?php echo $text ?></a>
     </li>
-<?php endforeach; ?>
-</ol>
+<?php endforeach ?>
+</ul>
+<?php $view->slots->stop() ?>

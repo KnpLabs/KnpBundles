@@ -14,6 +14,8 @@ web.templating:
     escaping:       htmlspecialchars
     assets_version: SomeVersionScheme
 
+markdown.parser: ~      # Enable the parser service
+
 # doctrine.dbal:
 #     dbname:   xxxxxxxx
 #     user:     root

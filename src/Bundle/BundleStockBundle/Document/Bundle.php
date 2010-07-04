@@ -1,11 +1,18 @@
 <?php
 
 namespace Bundle\BundleStockBundle\Document;
+use Doctrine\ODM\MongoDB\Mapping\Types\CommitsType;
 
 /**
  * An Open Source Bundle living on GitHub
  *
- * @Document(db="symfony2bundles", collection="bundle")
+ * @Document(
+ *   db="symfony2bundles",
+ *   collection="bundle",
+ *   indexes={
+ *     @Index(keys={"username"="asc", "name"="asc"}, options={"unique"=true})
+ *   }
+ * )
  * @HasLifecycleCallbacks
  */
 class Bundle
@@ -13,64 +20,79 @@ class Bundle
     /**
      * Bundle name, e.g. "MarkdownBundle"
      * Like in GitHub, this name is not unique
-     *
      * @String
      * @Validation({ @NotBlank, @Regex("/^\w+Bundle$/") })
-     * @var string
      */
     protected $name = null;
 
     /**
      * Username, e.g. "knplabs"
-     *
      * @String
      * @Validation({ @NotBlank, @Regex("/^\w+$/") })
-     * @var string
      */
     protected $username = null;
 
     /**
      * Bundle description
-     *
      * @String
-     * @var string
      */
     protected $description = null;
 
     /**
-     * Internal ranking of the Bundle, based on several indicators
-     * Defines the Bundle position in lists and searches
-     *
-     * @Float
-     * @var float
+     * The bundle readme text extracted from source code
+     * @String
      */
-    protected $rank = null;
+    protected $readme = null;
 
     /**
-     * @Column(name="created_at", type="datetime")
+     * Internal score of the Bundle, based on several indicators
+     * Defines the Bundle position in lists and searches
+     * @Float
+     */
+    protected $score = null;
+
+    /**
+     * Bundle creation date (on this website)
+     * @Date
      */
     protected $createdAt;
 
     /**
-     * @Column(name="updated_at", type="datetime")
+     * Bundle update date (on this website)
+     * @Date
      */
     protected $updatedAt;
 
     /**
-     * Wheter the bundle is available on GitHub or not
-     *
+     * Date of the last Git commit
+     * @Date
+     */
+    protected $lastCommitAt = null;
+
+    /**
+     * The last commits on this bundle repo
+     * @Field(type="collection")
+     */
+    protected $lastCommits = array();
+
+    /**
+     * Whether the bundle is available on GitHub or not
      * @Boolean
-     * @Column(name="is_on_github", type="boolean")
-     * @var boolean
+     * @Validation({@AssertType("boolean")})
      */
     protected $isOnGithub = null;
 
     /**
-     * Primary key
-     *
-     * @var string
+     * Number of GitHub followers
+     * @Int
      */
-    protected $id = null;
+    protected $followers = null;
+
+    /**
+     * Number of GitHub forks
+     * @Int
+     */
+    protected $forks = null;
 
     /**
      * Updates a Bundle Document from a repository infos array 
@@ -82,6 +104,152 @@ class Bundle
         $this->setName($repo['name']);
         $this->setUsername($repo['username']);
         $this->setDescription($repo['description']);
+        $this->setFollowers($repo['followers']);
+        $this->setForks($repo['forks']);
+        $this->setCreatedAt(new \DateTime($repo['created']));
+    }
+    
+    /**
+     * Get lastCommits
+     * @return array
+     */
+    public function getLastCommits()
+    {
+      return $this->lastCommits;
+    }
+    
+    /**
+     * Set lastCommits
+     * @param  array
+     * @return null
+     */
+    public function setLastCommits(array $lastCommits)
+    {
+      $this->lastCommits = $lastCommits;
+    }
+    
+    /**
+     * Get readme
+     * @return string
+     */
+    public function getReadme()
+    {
+      return $this->readme;
+    }
+    
+    /**
+     * Set readme
+     * @param  string
+     * @return null
+     */
+    public function setReadme($readme)
+    {
+      $this->readme = $readme;
+    }
+
+    /**
+     * Get score
+     * @return float
+     */
+    public function getScore()
+    {
+        return $this->score;
+    }
+
+    public function getRoundScore()
+    {
+        return round($this->score);
+    }
+
+    /**
+     * Set score
+     * @param  float
+     * @return null
+     */
+    public function setScore($score)
+    {
+        $this->score = $score;
+    }
+
+    public function recalculateScore()
+    {
+        $score = $this->getFollowers();
+        $score += 3 * $this->getForks();
+        if($this->getDaysSinceLastCommit() < 30) {
+            $score += (30 - $this->getDaysSinceLastCommit()) / 5;
+        }
+        if(strlen($this->getReadme()) > 500) {
+            $score += 5;
+        }
+        $this->setScore($score);
+    }
+
+    /**
+     * Returns the number of days elapsed since the last commit on the master branch
+     *
+     * @return int
+     **/
+    public function getDaysSinceLastCommit()
+    {
+        $now = new \DateTime();
+        return $now->diff($this->getLastCommitAt())->format('%d');
+    }
+
+    /**
+     * Get lastCommitAt
+     * @return \DateTime
+     */
+    public function getLastCommitAt()
+    {
+        return $this->lastCommitAt;
+    }
+
+    /**
+     * Set lastCommitAt
+     * @param  \DateTime
+     * @return null
+     */
+    public function setLastCommitAt(\DateTime $lastCommitAt)
+    {
+        $this->lastCommitAt = $lastCommitAt;
+    }
+
+    /**
+     * Get forks
+     * @return int
+     */
+    public function getForks()
+    {
+        return $this->forks;
+    }
+
+    /**
+     * Set forks
+     * @param  int
+     * @return null
+     */
+    public function setForks($forks)
+    {
+        $this->forks = $forks;
+    }
+
+    /**
+     * Get followers
+     * @return int
+     */
+    public function getFollowers()
+    {
+        return $this->followers;
+    }
+
+    /**
+     * Set followers
+     * @param  int
+     * @return null
+     */
+    public function setFollowers($followers)
+    {
+        $this->followers = $followers;
     }
 
     /**
@@ -113,12 +281,41 @@ class Bundle
     }
 
     /**
+     * Get the Git repo url
+     *
+     * @return string
+     **/
+    public function getGitUrl()
+    {
+        return sprintf('git://github.com/%s/%s.git', $this->getUsername(), $this->getName());
+    }
+
+    /**
+     * Get the author url on GitHub
+     *
+     * @return string
+     **/
+    public function getUsernameUrl()
+    {
+        return sprintf('http://github.com/%s', $this->getUsername());
+    }
+
+    /**
      * Get full name, including username
      * @return string
      */
     public function getFullName()
     {
         return $this->username.'/'.$this->name;
+    }
+
+    /**
+     * Get the first part of the name, without Bundle
+     * @return string
+     */
+    public function getShortName()
+    {
+        return preg_replace('/^(.+)Bundle$/', '$1', $this->getName());
     }
 
     /**
@@ -198,15 +395,6 @@ class Bundle
     }
 
     /**
-     * Get id
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * getCreatedAt 
      * 
      * @return \DateTime
@@ -214,6 +402,16 @@ class Bundle
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * Set the repo creation date
+     *
+     * @return null
+     **/
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
     }
 
     /**
@@ -230,12 +428,6 @@ class Bundle
     public function markAsUpdated()
     {
         $this->updatedAt = new \DateTime();
-    }
-
-    /** @PrePersist */
-    public function markAsCreated()
-    {
-        $this->createdAt= new \DateTime();
     }
 
     public function __toString()
