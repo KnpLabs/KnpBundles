@@ -180,16 +180,28 @@ a.fork_me img {
     width: 1000px;
 }
 
+#header #logo {
+  height: 76px;
+  width: 77px;
+  left:15px;
+  margin:0;
+  padding:0 5px 0 0px;
+  position:absolute;
+  top:72px;
+}
+#header #logo img {
+  background: none;
+  border: none;
+}
+
 #header h1 { margin: 0; padding: 0; }
 #header h1 {
     position: absolute;
     margin: 0; padding: 0 5px 0 0;
-    background: url(../images/bundle76.png) top left no-repeat;
-    padding-left: 95px;
     height: 128px;
 
     /* change the values of top and left to adjust the position of the logo*/
-    top: 82px; left: 25px;
+    top: 82px; left: 120px;
 }
 #header h1,
 #header h1 a {
@@ -617,6 +629,8 @@ B L O G   P O S T
     padding: 3px 5px;
     margin: 0;
     text-align: right;
+}
+.left .post-meta ul li a {
     color: #147DB6;
 }
 * html body .left .post-meta ul li { height: 1%; }

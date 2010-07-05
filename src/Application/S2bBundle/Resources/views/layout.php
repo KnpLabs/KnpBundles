@@ -18,6 +18,9 @@
         <!--header -->
         <div id="header-wrap">
             <div id="header">
+                <a href="<?php echo $view->router->generate('homepage') ?>" id="logo">
+                  <img alt="Symfony2Bundles" src="/bundles/s2b/images/bundle76.png" />
+                </a>
                 <h1>
                     <?php $view->slots->output('h1', 'Symfony<span>2</span> Bundles') ?>
                 </h1>
