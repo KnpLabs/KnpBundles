@@ -31,9 +31,6 @@ class MainController extends Controller
             return strtotime($a['committed_date']) < strtotime($b['committed_date']);
         });
         $commits = array_slice($commits, 0, 5);
-        foreach($commits as $index => $commit) {
-            $commits[$index]['ago'] = TimeTool::ago(date_create($commit['committed_date']));
-        }
 
         return $this->render('S2bBundle:Main:timeline', array('commits' => $commits));
     }

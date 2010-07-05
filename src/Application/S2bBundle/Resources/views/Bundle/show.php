@@ -65,7 +65,7 @@
         <?php foreach($commits as $commit): ?>
             <li>
                 <a href="<?php echo $commit['url'] ?>"><?php echo $commit['message'] ?></a><br />
-                <span><?php echo $commit['author']['name'] ?> | <?php echo $commit['ago'] ?></span>
+                <span><?php echo $commit['author']['name'] ?> | <?php echo $view->time->ago(date_create($commit['committed_date'])) ?></span>
             </li>
         <?php endforeach ?>
     </ul>

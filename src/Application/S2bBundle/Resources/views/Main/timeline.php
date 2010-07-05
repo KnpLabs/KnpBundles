@@ -7,7 +7,7 @@
                 <?php echo $commit['repo_name'] ?>
             </a>
             <?php echo $commit['message'] ?><br />
-            <span><?php echo $commit['author']['name'] ?> | <?php echo $commit['ago'] ?></span>
+            <span><?php echo $commit['author']['name'] ?> | <?php echo $view->time->ago(date_create($commit['committed_date'])) ?></span>
         </li>
     <?php endforeach; ?>
     </ol>
