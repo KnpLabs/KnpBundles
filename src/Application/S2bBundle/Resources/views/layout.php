@@ -113,7 +113,7 @@
 
             <!-- /footer-bottom-->
         </div>
-        <a class="fork_me" href="http://github.com/knplabs/symfony2bundles"><img src="http://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
+        <a class="fork_me" title="Fork <?php $view->slots->output('repo_name', 'symfony2bundles') ?> on GitHub" href="<?php $view->slots->output('repo_url', 'http://github.com/knplabs/symfony2bundles') ?>"><img src="http://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
         <?php echo $view->javascripts ?>
     </body>
 </html>

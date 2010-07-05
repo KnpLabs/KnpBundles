@@ -4,6 +4,8 @@
 <?php $view->slots->set('title', $bundle->getName().' by '.$bundle->getUsername()) ?>
 <?php $view->slots->set('description', $bundle->getDescription()) ?>
 <?php $view->slots->set('slogan', $bundle->getDescription()) ?>
+<?php $view->slots->set('repo_name', $bundle->getName()) ?>
+<?php $view->slots->set('repo_url', $bundle->getGitHubUrl()) ?>
 <?php $view->slots->set('current_menu_item', 'all') ?>
 
 <div class="post">
@@ -13,7 +15,7 @@
             <pre>git submodule add <?php echo $bundle->getGitUrl() ?> src/Bundle/<?php echo $bundle->getName() ?></pre>
         </div>
 
-        <div class="markdown" >
+        <div class="markdown">
             <?php echo $view->markdown->transform($bundle->getReadme('esc_raw')) ?>
         </div>
 
