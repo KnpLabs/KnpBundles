@@ -11,8 +11,8 @@ $(function()
     });
 });
 
-//analytics
 if(document.domain == 'symfony2bundles.org') {
+    //analytics
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-7062980-9']);
     _gaq.push(['_trackPageview']);
@@ -29,7 +29,7 @@ if(document.domain == 'symfony2bundles.org') {
       showTab: true,  
       /* optional */
       alignment: 'left',
-      background_color:'#f00', 
+      background_color:'#000', 
       text_color: 'white',
       hover_color: '#06C',
       lang: 'en'
@@ -38,7 +38,7 @@ if(document.domain == 'symfony2bundles.org') {
     function _loadUserVoice() {
       var s = document.createElement('script');
       s.setAttribute('type', 'text/javascript');
-      s.setAttribute('src', ("https:" == document.location.protocol ? "https://" : "http://") + "cdn.uservoice.com/javascripts/widgets/tab.js");
+      s.setAttribute('src', "http://cdn.uservoice.com/javascripts/widgets/tab.js");
       document.getElementsByTagName('head')[0].appendChild(s);
     }
     _loadSuper = window.onload;

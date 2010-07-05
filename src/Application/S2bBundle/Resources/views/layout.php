@@ -103,8 +103,8 @@
             <p class="bottom-right">
               <a href="<?php echo $view->router->generate('homepage') ?>">Home</a> |
               <a href="http://github.com/knplabs/symfony2bundles">Code</a> |
-              <a href="">Feedback</a> |
-              <strong><a href="#top">Back to Top</a></strong>
+              <a href="http://symfony2bundles.uservoice.com/">Feedback</a> |
+              <strong><a href="#header">Back to Top</a></strong>
             </p>
 
             <!-- /footer-bottom-->
