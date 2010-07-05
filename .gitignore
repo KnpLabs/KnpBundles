@@ -1,6 +1,8 @@
 /s2b/config/config*_local.yml
 /s2b/cache/*
 /s2b/logs/*
+/s2b/data
+/s2b/deploy.sh
 
 # external software files
 .DS_Store
