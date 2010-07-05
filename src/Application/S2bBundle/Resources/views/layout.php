@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title><?php $view->slots->output('title') ?> | Symfony2 Bundles</title>
         <meta content="<?php $view->slots->output('description') ?>" name="description">
