@@ -1,2 +1,13 @@
 imports:
     - { resource: config.yml }
+
+doctrine_odm.mongodb:
+    default_document_manager: default
+    cache_driver:             array
+    document_managers:
+        default:
+            connection: mongodb
+    connections:
+        mongodb:
+            server:           localhost
+            default_database: symfony2bundles
