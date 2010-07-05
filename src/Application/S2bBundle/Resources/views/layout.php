@@ -56,7 +56,7 @@
 
                 <!-- sidebar -->
                 <div id="sidebar">
-                    <div class="sidemenu"><?php $view->slots->output('sidemenu') ?></div>
+                    <?php $view->slots->output('sidemenu') ?>
                 </div>
             </div>
         </div>

@@ -383,6 +383,9 @@ fieldset.search {
     color: #444;
 }
 * html body .sidemenu li {	height: 1%; }
+.sidemenu.uppercase li a {
+    text-transform: uppercase;
+}
 .sidemenu li a:link,
 .sidemenu li a:visited {
     color: #33799B;
