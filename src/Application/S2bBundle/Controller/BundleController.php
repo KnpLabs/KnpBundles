@@ -42,9 +42,6 @@ class BundleController extends Controller
             throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
         }
         $commits = $bundle->getLastCommits();
-        foreach($commits as $index => $commit) {
-            $commits[$index]['ago'] = TimeTool::ago(date_create($commit['committed_date']));
-        }
 
         return $this->render('S2bBundle:Bundle:show', array('bundle' => $bundle, 'commits' => $commits));
     }
