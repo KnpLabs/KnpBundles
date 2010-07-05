@@ -36,7 +36,7 @@ class GitHubPopulateCommand extends BaseCommand
         $output->writeln(sprintf('Search for new Bundles on GitHub'));
         $dm = $this->container->getDoctrine_odm_mongodb_documentManagerService();
         $existingBundles = $dm->find('Bundle\BundleStockBundle\Document\Bundle')->getResults();
-        $githubRepos = $this->container->getGithubSearchService()->searchBundles(5);
+        $githubRepos = $this->container->getGithubSearchService()->searchBundles(5000);
         $validator = $this->container->getValidatorService();
         $bundles = array();
         $counters = array(
