@@ -1,5 +1,11 @@
 <?php $view->extend('S2bBundle::layout') ?>
 
+<?php $view->slots->set('h1', $bundle->getShortName().'<span>Bundle</span>') ?>
+<?php $view->slots->set('title', $bundle->getName().' by '.$bundle->getUsername()) ?>
+<?php $view->slots->set('description', $bundle->getDescription()) ?>
+<?php $view->slots->set('slogan', $bundle->getDescription()) ?>
+<?php $view->slots->set('current_menu_item', 'all') ?>
+
 <div class="post">
 
     <div class="right">
@@ -49,10 +55,6 @@
     </div>
 
 </div>
-
-<?php $view->slots->set('h1', $bundle->getShortName().'<span>Bundle</span>') ?>
-<?php $view->slots->set('slogan', $bundle->getDescription()) ?>
-<?php $view->slots->set('current_menu_item', 'all') ?>
 
 <?php $view->slots->start('sidemenu') ?>
 <div class="popular">

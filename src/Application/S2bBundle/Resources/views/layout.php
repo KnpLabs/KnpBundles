@@ -9,8 +9,8 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Symfony2 Bundles | <?php $view->slots->output('slogan', 'Find the Bundles you need') ?></title>
-        <meta content="Comprehensive list of Symfony2 bundles ordered by relevance and integrated with GitHub" name="description">
+        <title><?php $view->slots->output('title') ?> | Symfony2 Bundles</title>
+        <meta content="<?php $view->slots->output('description') ?>" name="description">
         <link rel="shortcut icon" href="/favicon.png" type="image/png" />
         <?php echo $view->stylesheets ?>
     </head>

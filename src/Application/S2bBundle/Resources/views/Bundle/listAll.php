@@ -4,7 +4,9 @@
 <?php $view->output('S2bBundle:Bundle:bigList', array('bundles' => $bundles)) ?>
 
 <?php $view->slots->set('h1', '<span>'.count($bundles).'</span> Bundles') ?>
-<?php $view->slots->set('slogan', 'Sorted by '.$sort) ?>
+<?php $view->slots->set('title', 'All '.count($bundles).' Bundles') ?>
+<?php $view->slots->set('slogan', 'All Bundles sorted by '.$sort) ?>
+<?php $view->slots->set('description', 'All Symfony2 Bundles sorted by '.$sort) ?>
 
 <?php $view->slots->start('sidemenu') ?>
 
