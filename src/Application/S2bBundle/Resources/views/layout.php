@@ -96,14 +96,15 @@
 
             <p class="bottom-left">
             Symfony2Bundles |
+            Supported by <a href="http://www.knplabs.com/" title="French web agency who loves Symfony">knpLabs</a> |
             Template by <a href="http://www.styleshout.com/">styleshout</a>
             </p>
 
             <p class="bottom-right">
-            <a href="<?php echo $view->router->generate('homepage') ?>">Home</a> |
-            <a href="http://github.com/knplabs/symfony2bundles">Code</a> |
-            <a href="">Feedback</a> |
-            <strong><a href="#top">Back to Top</a></strong>
+              <a href="<?php echo $view->router->generate('homepage') ?>">Home</a> |
+              <a href="http://github.com/knplabs/symfony2bundles">Code</a> |
+              <a href="">Feedback</a> |
+              <strong><a href="#top">Back to Top</a></strong>
             </p>
 
             <!-- /footer-bottom-->
