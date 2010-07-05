@@ -59,13 +59,13 @@
 </div>
 
 <?php $view->slots->start('sidemenu') ?>
-<div class="popular">
+<div class="sidemenu">
     <h3>Last commits</h3>
     <ul>
-        <?php foreach($bundle->getLastCommits() as $commit): ?>
+        <?php foreach($commits as $commit): ?>
             <li>
                 <a href="<?php echo $commit['url'] ?>"><?php echo $commit['message'] ?></a><br />
-                <span>by <?php echo $commit['author']['name'] ?> on <?php echo date('Y-m-d', strtotime($commit['committed_date'])) ?></span>
+                <span><?php echo $commit['author']['name'] ?> | <?php echo $commit['ago'] ?></span>
             </li>
         <?php endforeach ?>
     </ul>

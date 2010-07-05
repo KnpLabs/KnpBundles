@@ -4,6 +4,7 @@
 <?php $view->slots->set('title', 'Home') ?>
 <?php $view->slots->set('description', 'Comprehensive list of Symfony2 Bundles ordered by relevance and integrated with GitHub') ?>
 <?php $view->slots->set('slogan', 'Comprehensive list of Symfony2 Bundles ordered by relevance and integrated with GitHub') ?>
+<?php $view->slots->set('sidemenu', $view->actions->render('S2bBundle:Main:timeline')) ?>
 
 <h2>Welcome to the community driven Symfony2 Bundles website!</h2>
 <div class="readable">
@@ -24,5 +25,3 @@
   Symfony2Bundles is Open Source! <a href="http://github.com/knplabs/symfony2bundles">Get the code</a> and contribute!
   </p>
 </div>
-
-<?php $view->slots->set('sidemenu', 'Work in progress :)') ?>

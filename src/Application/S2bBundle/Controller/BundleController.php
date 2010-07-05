@@ -4,6 +4,7 @@ namespace Application\S2bBundle\Controller;
 
 use Symfony\Framework\FoundationBundle\Controller;
 use Symfony\Components\HttpKernel\Exception\NotFoundHttpException;
+use Application\S2bBundle\Tool\TimeTool;
 
 class BundleController extends Controller
 {
@@ -40,7 +41,12 @@ class BundleController extends Controller
         if(!$bundle) {
             throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
         }
-        return $this->render('S2bBundle:Bundle:show', array('bundle' => $bundle));
+        $commits = $bundle->getLastCommits();
+        foreach($commits as $index => $commit) {
+            $commits[$index]['ago'] = TimeTool::ago(date_create($commit['committed_date']));
+        }
+
+        return $this->render('S2bBundle:Bundle:show', array('bundle' => $bundle, 'commits' => $commits));
     }
 
     public function listAllAction($sort)

@@ -367,74 +367,35 @@ fieldset.search {
 
 
 /* sidemenu */
-.sidemenu ul {
+.sidemenu ul,
+.sidemenu ol {
     text-align: left;
     margin: 10px 15px 10px 8px;
     padding: 0;
     border-top: 1px solid #EFEFEF;
 }
-.sidemenu ul li {
+.sidemenu li {
     list-style: none;
     font-size: 11px;
     margin: 0;
     padding: 7px 5px;
     border-bottom: 1px solid #EFEFEF;
+    color: #444;
 }
-* html body .sidemenu ul li {	height: 1%; }
-.sidemenu ul li a:link,
-.sidemenu ul li a:visited {
+* html body .sidemenu li {	height: 1%; }
+.sidemenu li a:link,
+.sidemenu li a:visited {
     color: #33799B;
     padding-left: 0;
     font-weight: bold;
-    text-transform: uppercase;
 }
-.sidemenu ul li a span {
+.sidemenu li span {
     color: #959595;
     font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;
-    font-style: normal;
-    font-weight: normal;
-    text-transform: none;
+    color: #777;
 }
-.sidemenu ul li a:hover,
-.sidemenu ul li.current a{ color: #000; }
-
-.sidemenu ul ul { margin: 0 0 0 5px; padding: 0; }
-.sidemenu ul ul li { border: none; }
-
-/* popular */
-.popular ul {
-    text-align: left;
-    margin: 10px 15px 10px 8px;
-    padding: 0;
-    border-top: 1px solid #EFEFEF;
-}
-.popular ul li {
-    list-style: none;
-    border-bottom: 1px solid #EFEFEF;
-    font-size: 12px;
-    line-height: 1.5em;
-    padding: 8px 5px 8px 20px;
-    margin: 0;
-    background: url(../images/document.gif) no-repeat 3px 11px;
-}
-* html body .popular ul li { height: 1%; }
-.popular ul li a:link,
-.popular ul li a:visited {
-    color: #33799B;
-    padding-left: 0;
-    font-weight: bold;
-    text-transform: none;
-}
-.popular ul li span {
-    color: #888;
-    font-family: 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, Sans-Serif;
-    font-style: normal;
-    font-weight: normal;
-    text-transform: uppercase;
-    font-size: 10px;
-    line-height: 1.7em;
-}
-.popular ul li a:hover { color: #000; }
+.sidemenu li a:hover,
+.sidemenu li.current a{ color: #000; }
 
 /* footer */
 #footer-outer {

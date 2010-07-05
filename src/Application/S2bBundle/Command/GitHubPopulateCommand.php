@@ -91,8 +91,7 @@ class GitHubPopulateCommand extends BaseCommand
         $bundles = $dm->find('Bundle\BundleStockBundle\Document\Bundle')->getResults();
         $github = new \phpGitHubApi();
         foreach($bundles as $bundle) {
-            $output->write($bundle->getFullName());
-            $output->write(str_repeat(' ', 50-strlen($bundle->getFullName())));
+            $output->write($bundle->getFullName().str_repeat(' ', 50-strlen($bundle->getFullName())));
             $output->write(' commits');
             $commits = $github->getCommitApi()->getBranchCommits($bundle->getUsername(), $bundle->getName(), 'master');
             if(empty($commits)) {

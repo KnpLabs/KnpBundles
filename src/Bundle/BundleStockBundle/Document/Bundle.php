@@ -114,16 +114,16 @@ class Bundle
         $this->setForks($repo['forks']);
         $this->setCreatedAt(new \DateTime($repo['created']));
     }
-    
+
     /**
      * Get tags
      * @return array
      */
     public function getTags()
     {
-      return $this->tags;
+        return $this->tags;
     }
-    
+
     /**
      * Set tags
      * @param  array
@@ -131,7 +131,7 @@ class Bundle
      */
     public function setTags(array $tags)
     {
-      $this->tags = $tags;
+        $this->tags = $tags;
     }
 
     public function getLastTagName()
@@ -142,16 +142,16 @@ class Bundle
 
         return reset($this->tags);
     }
-    
+
     /**
      * Get lastCommits
      * @return array
      */
     public function getLastCommits()
     {
-      return $this->lastCommits;
+        return $this->lastCommits;
     }
-    
+
     /**
      * Set lastCommits
      * @param  array
@@ -159,18 +159,22 @@ class Bundle
      */
     public function setLastCommits(array $lastCommits)
     {
-      $this->lastCommits = $lastCommits;
+        foreach($lastCommits as $index => $commit) {
+            $lastCommits[$index]['repo_name'] = $this->getName();
+            $lastCommits[$index]['repo_username'] = $this->getUsername();
+        }
+        $this->lastCommits = $lastCommits;
     }
-    
+
     /**
      * Get readme
      * @return string
      */
     public function getReadme()
     {
-      return $this->readme;
+        return $this->readme;
     }
-    
+
     /**
      * Set readme
      * @param  string
@@ -178,7 +182,7 @@ class Bundle
      */
     public function setReadme($readme)
     {
-      $this->readme = $readme;
+        $this->readme = $readme;
     }
 
     /**
