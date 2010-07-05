@@ -3,6 +3,7 @@
 /s2b/logs/*
 /s2b/data
 /s2b/deploy.sh
+/web/alive.php
 
 # external software files
 .DS_Store
