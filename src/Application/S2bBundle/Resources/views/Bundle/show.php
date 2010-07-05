@@ -14,7 +14,7 @@
         </div>
 
         <div class="markdown" >
-            <?php echo $view->markdown->transform($bundle->getReadme()) ?>
+            <?php echo $view->markdown->transform($bundle->getReadme('esc_raw')) ?>
         </div>
 
     </div>
