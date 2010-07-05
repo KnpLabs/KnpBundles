@@ -157,6 +157,13 @@ L A Y O U T
 --------------------------------------------------------------------------------- */
 
 /* header */
+a.fork_me {
+    position: absolute; top: 0; right: 0;
+}
+a.fork_me img {
+    border: 0; background: none;
+    margin: 0; padding: 0;
+}
 #header-wrap {
     float: left;
     height: 200px;

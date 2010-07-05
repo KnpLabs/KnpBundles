@@ -109,7 +109,7 @@
 
             <!-- /footer-bottom-->
         </div>
-        <a href="http://github.com/knplabs/symfony2bundles"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
+        <a class="fork_me" href="http://github.com/knplabs/symfony2bundles"><img src="http://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
         <?php echo $view->javascripts ?>
     </body>
 </html>
