@@ -19,7 +19,7 @@ body {
 /* links */
 a:link, a:visited {
     text-decoration: none;
-    color: #FF409F;
+    color: #147DB6;
 }
 a:hover { color: #147DB6; }
 a:link.more, a:visited.more {
@@ -499,6 +499,14 @@ fieldset.search {
     padding: 0;
     width: 320px;
     text-align: right;
+}
+
+#footer-bottom .knplabs img {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    vertical-align: middle;
 }
 
 /* ------------------------------------------------------------------------------

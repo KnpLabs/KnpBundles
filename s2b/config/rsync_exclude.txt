@@ -4,4 +4,5 @@
 /s2b/config/config_prod_local.yml
 /s2b/deploy.sh
 /web/*_dev.php
+/web/uploads
 .git*

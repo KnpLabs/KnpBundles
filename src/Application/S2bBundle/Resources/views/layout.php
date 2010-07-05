@@ -96,8 +96,8 @@
 
             <p class="bottom-left">
             Symfony2Bundles |
-            Supported by <a href="http://www.knplabs.com/" title="French web agency who loves Symfony">knpLabs</a> |
-            Template by <a href="http://www.styleshout.com/">styleshout</a>
+            Template by <a href="http://www.styleshout.com/">styleshout</a> |
+            Supported by <a class="knplabs" href="http://www.knplabs.com/" title="French web agency who loves Symfony2"><img alt="knpLabs logo" src="<?php echo $view->assets->getUrl('bundles/s2b/images/knplabs.png') ?>" /></a>
             </p>
 
             <p class="bottom-right">
@@ -109,6 +109,7 @@
 
             <!-- /footer-bottom-->
         </div>
+        <a href="http://github.com/knplabs/symfony2bundles"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
         <?php echo $view->javascripts ?>
     </body>
 </html>
