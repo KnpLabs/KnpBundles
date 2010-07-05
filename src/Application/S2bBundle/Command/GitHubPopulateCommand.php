@@ -11,6 +11,9 @@ use Symfony\Components\Console\Output\OutputInterface;
 use Symfony\Components\Console\Output\Output;
 use Doctrine\Common\Collections\ArrayCollection;
 
+// Require php-github-api
+require_once(__DIR__.'/../../../vendor/php-github-api/lib/phpGitHubApi.php');
+
 /**
  * Update local database from GitHub searches
  */
