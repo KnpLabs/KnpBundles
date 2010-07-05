@@ -1,0 +1,7 @@
+/web/uploads/*
+/s2b/cache/*
+/s2b/logs/*
+/s2b/config/config_prod_local.yml
+/s2b/deploy.sh
+/web/*_dev.php
+.git*
