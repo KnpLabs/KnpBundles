@@ -1,6 +1,6 @@
 $(function()
 {
-    $('a, input, label, div.lichess_server').tipsy({fade: true});
+    $('a, input, label, div.lichess_server').tipsy({fade: false});
 
     $('.bundle-list').delegate('li', 'click', function() {
         location.href = $(this).find('a').attr('href');
