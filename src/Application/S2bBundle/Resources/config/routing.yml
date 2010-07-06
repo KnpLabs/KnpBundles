@@ -2,13 +2,13 @@ homepage:
     pattern:        /
     defaults:       { _controller: S2bBundle:Main:index }
 
-all:
-    pattern:        /all/:sort
+bundle_list:
+    pattern:        /bundles/:sort
     defaults:       { _controller: S2bBundle:Bundle:listAll, sort: score }
 
-bundle_show:
-    pattern:        /:username/:name
-    defaults:       { _controller: S2bBundle:Bundle:show }
+user_list:
+    pattern:        /developers
+    defaults:       { _controller: S2bBundle:User:listAll }
 
 search:
     pattern:        /search
@@ -18,3 +18,11 @@ latest:
     pattern:        /latest.:_format
     defaults:       { _controller: S2bBundle:Bundle:listLatest }
     requirements:   { _format: "(atom)" }
+
+bundle_show:
+    pattern:        /:username/:name
+    defaults:       { _controller: S2bBundle:Bundle:show }
+
+user_show:
+    pattern:        /:name
+    defaults:       { _controller: S2bBundle:User:show }

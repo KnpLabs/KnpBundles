@@ -9,7 +9,7 @@
 ); ?>
 
 <?php $view->extend('S2bBundle::layout') ?>
-<?php $view->slots->set('current_menu_item', 'all') ?>
+<?php $view->slots->set('current_menu_item', 'bundle_list') ?>
 
 <?php $view->output('S2bBundle:Bundle:bigList', array('bundles' => $bundles)) ?>
 
@@ -24,7 +24,7 @@
     <ul>
     <?php foreach($fields as $field => $text): ?>
         <li<?php $field == $sort && print ' class="current"' ?>>
-            <a href="<?php echo $view->router->generate('all', array('sort' => $field)) ?>"><?php echo $text ?></a>
+            <a href="<?php echo $view->router->generate('bundle_list', array('sort' => $field)) ?>"><?php echo $text ?></a>
         </li>
     <?php endforeach ?>
     </ul>

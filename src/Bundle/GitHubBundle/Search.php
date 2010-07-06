@@ -1,6 +1,7 @@
 <?php
 
 namespace Bundle\GitHubBundle;
+use Symfony\Components\Console\Output\OutputInterface;
 
 class Search
 {
@@ -38,7 +39,7 @@ class Search
     /**
      * Get a list of Symfony2 Bundles from GitHub
      */
-    public function searchBundles($limit = 300)
+    public function searchBundles($limit = 300, OutputInterface $output = null)
     {
         $repos = array();
         $page = 1;
@@ -49,9 +50,11 @@ class Search
             }
             $repos = array_merge($repos, $pageRepos);
             $page++;
+            if($output) $output->write('...'.count($repos));
         }
         while(count($repos) < $limit);
 
+        if($output) $output->writeLn('... DONE');
         return $repos;
     }
 }

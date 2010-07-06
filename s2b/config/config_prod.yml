@@ -4,6 +4,7 @@ imports:
 doctrine_odm.mongodb:
     default_document_manager: default
     cache_driver:             array
+    auto_generate_proxy_classes: true
     document_managers:
         default:
             connection: mongodb

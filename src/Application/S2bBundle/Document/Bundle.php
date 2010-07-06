@@ -25,6 +25,14 @@ class Bundle
     protected $name = null;
 
     /**
+     * The name of the user who owns this bundle
+     * This value is redundant with the name of the referenced User, for performance reasons
+     * @String
+     * @Validation({ @NotBlank })
+     */
+    protected $username = null;
+
+    /**
      * User who owns the bundle
      * @ReferenceOne(targetDocument="Application\S2bBundle\Document\User")
      * @Validation({ @NotBlank, @Valid })
@@ -107,6 +115,7 @@ class Bundle
     public function fromRepositoryArray(array $repo)
     {
         $this->setName($repo['name']);
+        $this->setUsername($repo['username']);
         $this->setDescription($repo['description']);
         $this->setFollowers($repo['followers']);
         $this->setForks($repo['forks']);
@@ -221,17 +230,7 @@ class Bundle
     }
 
     /**
-     * Returns the number of days elapsed since the last commit on the master branch
-     * @return int
-     **/
-    public function getDaysSinceLastCommit()
-    {
-        $now = new \DateTime();
-        return $now->diff($this->getLastCommitAt())->format('%d');
-    }
-
-    /**
-     * Get lastCommitAt
+     * Get the date of the last commit
      * @return \DateTime
      */
     public function getLastCommitAt()
@@ -378,7 +377,17 @@ class Bundle
      */
     public function getUsername()
     {
-        return $this->getUser()->getName();
+        return $this->username;
+    }
+
+    /**
+     * Set username
+     * @param  string
+     * @return null
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
     }
 
     /**
@@ -395,16 +404,6 @@ class Bundle
     public function setUser(User $user)
     {
         $this->user = $user;
-    }
-
-    /**
-     * Set username
-     * @param  string
-     * @return null
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
     }
 
     /**

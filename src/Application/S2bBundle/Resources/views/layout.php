@@ -1,7 +1,7 @@
+<?php $view->assets->setVersion('2') ?>
 <?php $view->stylesheets->add('bundles/s2b/css/reset.css') ?>
 <?php $view->stylesheets->add('bundles/s2b/vendor/tipsy/stylesheets/tipsy.css') ?>
 <?php $view->stylesheets->add('bundles/s2b/css/style.css') ?>
-<?php $view->stylesheets->add('bundles/s2b/css/enhancements.css') ?>
 <?php $view->javascripts->add('bundles/s2b/vendor/jquery.min.js') ?>
 <?php $view->javascripts->add('bundles/s2b/vendor/tipsy/javascripts/jquery.tipsy.min.js') ?>
 <?php $view->javascripts->add('bundles/s2b/js/ctrl.js') ?>
@@ -20,8 +20,8 @@
         <!--header -->
         <div id="header-wrap">
             <div id="header">
-                <a href="<?php echo $view->router->generate('homepage') ?>" id="logo">
-                  <img alt="Symfony2Bundles" src="/bundles/s2b/images/bundle76.png" />
+                <a title="Back to homepage" href="<?php echo $view->router->generate('homepage') ?>" id="logo">
+                    <?php $view->slots->output('logo', '<img alt="Symfony2Bundles" src="'.$view->assets->getUrl('bundles/s2b/images/bundle76.png').'" width="76" height="76" />') ?>
                 </a>
                 <h1>
                     <?php $view->slots->output('h1', 'Symfony<span>2</span> Bundles') ?>

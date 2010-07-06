@@ -4,7 +4,6 @@ namespace Application\S2bBundle\Controller;
 
 use Symfony\Framework\FoundationBundle\Controller;
 use Symfony\Components\HttpKernel\Exception\NotFoundHttpException;
-use Application\S2bBundle\Tool\TimeTool;
 
 class BundleController extends Controller
 {
@@ -24,7 +23,7 @@ class BundleController extends Controller
         $reduceFunction = sprintf('function() { return %s; }', implode(' || ', $expressions));
 
         $bundles = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Bundle\BundleStockBundle\Document\Bundle')
+            ->createQuery('Application\S2bBundle\Document\Bundle')
             ->reduce($reduceFunction)
             ->sort('score', 'desc')
             ->execute();
@@ -34,7 +33,7 @@ class BundleController extends Controller
     public function showAction($username, $name)
     {
         $bundle = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Bundle\BundleStockBundle\Document\Bundle')
+            ->createQuery('Application\S2bBundle\Document\Bundle')
             ->where('username', $username)
             ->where('name', $name)
             ->getSingleResult();
@@ -49,7 +48,7 @@ class BundleController extends Controller
     public function listAllAction($sort)
     {
         $query = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Bundle\BundleStockBundle\Document\Bundle');
+            ->createQuery('Application\S2bBundle\Document\Bundle');
         switch($sort) {
             case 'name':
             case 'username':
@@ -72,7 +71,7 @@ class BundleController extends Controller
     public function listLatestAction()
     {
         $bundles = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Bundle\BundleStockBundle\Document\Bundle')
+            ->createQuery('Application\S2bBundle\Document\Bundle')
             ->sort('createdAt', 'desc')
             ->limit(50)
             ->execute();
@@ -84,7 +83,7 @@ class BundleController extends Controller
     public function listLastCreatedAction()
     {
         $bundles = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Bundle\BundleStockBundle\Document\Bundle')
+            ->createQuery('Application\S2bBundle\Document\Bundle')
             ->sort('createdAt', 'desc')
             ->limit(5)
             ->execute();
@@ -94,7 +93,7 @@ class BundleController extends Controller
     public function listLastUpdatedAction()
     {
         $bundles = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Bundle\BundleStockBundle\Document\Bundle')
+            ->createQuery('Application\S2bBundle\Document\Bundle')
             ->sort('lastCommitAt', 'desc')
             ->limit(5)
             ->execute();
@@ -104,7 +103,7 @@ class BundleController extends Controller
     public function listPopularAction()
     {
         $bundles = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Bundle\BundleStockBundle\Document\Bundle')
+            ->createQuery('Application\S2bBundle\Document\Bundle')
             ->sort('followers', 'desc')
             ->limit(5)
             ->execute();
@@ -114,7 +113,7 @@ class BundleController extends Controller
     public function listBestScoreAction()
     {
         $bundles = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Bundle\BundleStockBundle\Document\Bundle')
+            ->createQuery('Application\S2bBundle\Document\Bundle')
             ->sort('score', 'desc')
             ->limit(5)
             ->execute();

@@ -38,10 +38,12 @@ class GitHubPopulateCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln(sprintf('Search for new Bundles on GitHub'));
+        $githubRepos = $this->container->getGithubSearchService()->searchBundles(5000, $output);
+        $output->writeLn(sprintf('Found %d bundle candidates', count($githubRepos)));
+
         $dm = $this->container->getDoctrine_odm_mongodb_documentManagerService();
         $existingBundles = $dm->find('Application\S2bBundle\Document\Bundle')->getResults();
         $users = $dm->find('Application\S2bBundle\Document\User')->getResults();
-        $githubRepos = $this->container->getGithubSearchService()->searchBundles(5000);
         $validator = $this->container->getValidatorService();
         $bundles = array();
         $counters = array(
@@ -95,7 +97,9 @@ class GitHubPopulateCommand extends BaseCommand
                 }
                 $bundle->setUser($user);
                 if(!$validator->validate($bundle)->count()) {
+                    $user->addBundle($bundle);
                     $dm->persist($bundle);
+                    $dm->persist($user);
                     ++$counters['created'];
                 }
             }
@@ -138,7 +142,19 @@ class GitHubPopulateCommand extends BaseCommand
 
             $bundle->recalculateScore();
             $output->writeLn(' '.$bundle->getScore());
-            sleep(3); // prevent reaching GitHub API max calls (60 per minute)
+            sleep(1); // prevent reaching GitHub API max calls (60 per minute)
+        }
+        
+        // Now update users with more precise GitHub data
+        $users = $dm->find('Application\S2bBundle\Document\User')->getResults();
+        $output->writeLn(array('', sprintf('Will now update %d users', count($users))));
+        foreach($users as $user) {
+            $output->write($user->getName().str_repeat(' ', 50-strlen($user->getName())));
+            $data = $github->getUserApi()->show($user->getName());
+            $user->fromUserArray($data);
+            $dm->persist($user);
+            $output->writeLn('OK');
+            sleep(1);
         }
 
         $dm->flush();

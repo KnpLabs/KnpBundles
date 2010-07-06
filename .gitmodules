@@ -13,3 +13,6 @@
 [submodule "src/Bundle/MarkdownBundle"]
 	path = src/Bundle/MarkdownBundle
 	url = git://github.com/knplabs/MarkdownBundle.git
+[submodule "src/Bundle/GravatarBundle"]
+	path = src/Bundle/GravatarBundle
+	url = git://github.com/ornicar/GravatarBundle.git

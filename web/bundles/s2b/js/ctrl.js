@@ -2,7 +2,7 @@ $(function()
 {
     $('a, input, label').tipsy({fade: false});
 
-    $('.bundle-list').delegate('li', 'click', function() {
+    $('.clickable-list').delegate('li.item', 'click', function() {
         location.href = $(this).find('a').attr('href');
     });
 

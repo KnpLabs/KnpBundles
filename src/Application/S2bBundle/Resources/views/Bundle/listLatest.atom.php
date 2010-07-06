@@ -1,7 +1,7 @@
 <?php print '<?xml version="1.0" encoding="UTF-8"?>'."\n" ?>
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xml:lang="en-US">
     <id>Symfony2 Bundles</id>
-    <link type="text/html" rel="alternate" href="<?php echo $view->router->generate('all', array('sort' => 'createdAt'), true) ?>"/>
+    <link type="text/html" rel="alternate" href="<?php echo $view->router->generate('bundle_list', array('sort' => 'createdAt'), true) ?>"/>
     <link type="application/atom+xml" rel="self" href="<?php echo $view->router->generate('latest', array('_format' => 'atom'), true) ?>"/>
     <title>Symfony2 Bundles</title>
     <updated><?php echo date('c') ?></updated>

@@ -3,7 +3,6 @@
 namespace Application\S2bBundle\Controller;
 
 use Symfony\Framework\FoundationBundle\Controller;
-use Application\S2bBundle\Tool\TimeTool;
 
 class MainController extends Controller
 {
@@ -11,7 +10,7 @@ class MainController extends Controller
     public function indexAction()
     {
         $nbBundles = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Bundle\BundleStockBundle\Document\Bundle')
+            ->createQuery('Application\S2bBundle\Document\Bundle')
             ->count();
         return $this->render('S2bBundle:Main:index', array('nbBundles' => $nbBundles));
     }
@@ -20,7 +19,7 @@ class MainController extends Controller
     public function timelineAction()
     {
         $bundles = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Bundle\BundleStockBundle\Document\Bundle')
+            ->createQuery('Application\S2bBundle\Document\Bundle')
             ->execute();
         $commits = array();
         foreach($bundles as $bundle) {

@@ -6,7 +6,7 @@
 <?php $view->slots->set('slogan', $bundle->getDescription()) ?>
 <?php $view->slots->set('repo_name', $bundle->getName()) ?>
 <?php $view->slots->set('repo_url', $bundle->getGitHubUrl()) ?>
-<?php $view->slots->set('current_menu_item', 'all') ?>
+<?php $view->slots->set('current_menu_item', 'bundle_list') ?>
 
 <div class="post">
 
@@ -26,8 +26,8 @@
         <div class="post-meta">
             <h4>Infos</h4>
             <ul>
-                <li class="user"><a href="<?php echo $bundle->getUsernameUrl() ?>"><?php echo $bundle->getUsername() ?></a></li>
-                <li class="time"><?php echo $bundle->getDaysSinceLastCommit() ?> days ago</li>
+                <li class="user"><a href="<?php echo $view->router->generate('user_show', array('name' => $bundle->getUsername())) ?>"><?php echo $bundle->getUsername() ?></a></li>
+                <li class="time"><?php echo $view->time->ago($bundle->getLastCommitAt()->getRawValue()) ?></li>
                 <li class="watch"><?php echo $bundle->getFollowers() ?> followers</li>
                 <li class="fork"><?php echo $bundle->getForks() ?> forks</li>
             </ul>
@@ -59,8 +59,8 @@
 </div>
 
 <?php $view->slots->start('sidemenu') ?>
+<h3>Last commits</h3>
 <div class="sidemenu">
-    <h3>Last commits</h3>
     <ul>
         <?php foreach($commits as $commit): ?>
             <li>
