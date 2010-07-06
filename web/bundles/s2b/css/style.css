@@ -156,6 +156,15 @@ div.readable {
     font-size: 1.2em;
 }
 
+hr {
+    border-color: #EFEFEF;
+    border-style: solid;
+    border-bottom: none;
+    background-color: #EFEFEF;
+    color: #EFEFEF;
+    margin: 1em 0;
+}
+
 /* ------------------------------------------------------------------------------
 L A Y O U T
 --------------------------------------------------------------------------------- */

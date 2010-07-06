@@ -24,4 +24,6 @@
   This website is at early stages of development, and many things will change, especially the ranking algorithm.<br />
   Symfony2Bundles is Open Source! <a href="http://github.com/knplabs/symfony2bundles">Get the code</a> and contribute!
   </p>
+<hr />
+Are you a Bundle developer? You should read the <a title="On symfony-reloaded.org" href="http://symfony-reloaded.org/guides/Bundles/Best-Practices">Bundle Best Practices</a>.
 </div>
