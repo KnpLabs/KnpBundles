@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\BundleStockBundle\Document;
+namespace Application\S2bBundle\Document;
 
 /**
  * An Open Source Bundle living on GitHub
@@ -25,11 +25,11 @@ class Bundle
     protected $name = null;
 
     /**
-     * Username, e.g. "knplabs"
-     * @String
-     * @Validation({ @NotBlank, @Regex("/^\w+$/") })
+     * User who owns the bundle
+     * @ReferenceOne(targetDocument="Application\S2bBundle\Document\User")
+     * @Validation({ @NotBlank, @Valid })
      */
-    protected $username = null;
+    protected $user = null;
 
     /**
      * Bundle description
@@ -107,7 +107,6 @@ class Bundle
     public function fromRepositoryArray(array $repo)
     {
         $this->setName($repo['name']);
-        $this->setUsername($repo['username']);
         $this->setDescription($repo['description']);
         $this->setFollowers($repo['followers']);
         $this->setForks($repo['forks']);
@@ -342,7 +341,7 @@ class Bundle
      */
     public function getFullName()
     {
-        return $this->username.'/'.$this->name;
+        return $this->getUsername().'/'.$this->name;
     }
 
     /**
@@ -379,7 +378,23 @@ class Bundle
      */
     public function getUsername()
     {
-        return $this->username;
+        return $this->getUser()->getName();
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user 
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
     }
 
     /**

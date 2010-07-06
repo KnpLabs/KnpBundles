@@ -25,7 +25,6 @@ class S2bKernel extends Kernel
 
             // register your bundles here
             new Bundle\GitHubBundle\GitHubBundle(),
-            new Bundle\BundleStockBundle\BundleStockBundle(),
             new Bundle\MarkdownBundle\MarkdownBundle(),
             new Bundle\TimeBundle\TimeBundle(),
 

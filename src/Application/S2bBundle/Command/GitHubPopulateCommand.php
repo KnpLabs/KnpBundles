@@ -2,7 +2,8 @@
 
 namespace Application\S2bBundle\Command;
 
-use Bundle\BundleStockBundle\Document\Bundle;
+use Application\S2bBundle\Document\Bundle;
+use Application\S2bBundle\Document\User;
 use Symfony\Framework\FoundationBundle\Command\Command as BaseCommand;
 use Symfony\Components\Console\Input\InputArgument;
 use Symfony\Components\Console\Input\InputOption;
@@ -38,7 +39,8 @@ class GitHubPopulateCommand extends BaseCommand
     {
         $output->writeln(sprintf('Search for new Bundles on GitHub'));
         $dm = $this->container->getDoctrine_odm_mongodb_documentManagerService();
-        $existingBundles = $dm->find('Bundle\BundleStockBundle\Document\Bundle')->getResults();
+        $existingBundles = $dm->find('Application\S2bBundle\Document\Bundle')->getResults();
+        $users = $dm->find('Application\S2bBundle\Document\User')->getResults();
         $githubRepos = $this->container->getGithubSearchService()->searchBundles(5000);
         $validator = $this->container->getValidatorService();
         $bundles = array();
@@ -79,6 +81,19 @@ class GitHubPopulateCommand extends BaseCommand
                 $bundle = new Bundle();
                 $bundle->fromRepositoryArray($githubRepo);
                 $bundle->setIsOnGithub(true);
+                $user = null;
+                foreach($users as $u) {
+                    if($githubRepo['username'] === $u->getName()) {
+                        $user = $u;
+                        $break;
+                    }
+                }
+                if(!$user) {
+                    $user = new User();
+                    $user->setName($githubRepo['username']);
+                    $users[] = $user;
+                }
+                $bundle->setUser($user);
                 if(!$validator->validate($bundle)->count()) {
                     $dm->persist($bundle);
                     ++$counters['created'];
@@ -91,7 +106,7 @@ class GitHubPopulateCommand extends BaseCommand
         $output->writeln(sprintf('%d created, %d updated, %d removed', $counters['created'], $counters['updated'], $counters['removed']));
 
         // Now update bundles with more precise GitHub data
-        $bundles = $dm->find('Bundle\BundleStockBundle\Document\Bundle')->getResults();
+        $bundles = $dm->find('Application\S2bBundle\Document\Bundle')->getResults();
         $github = new \phpGitHubApi();
         foreach($bundles as $bundle) {
             $output->write($bundle->getFullName().str_repeat(' ', 50-strlen($bundle->getFullName())));
