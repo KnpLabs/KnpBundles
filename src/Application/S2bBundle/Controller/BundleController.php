@@ -76,7 +76,9 @@ class BundleController extends Controller
             ->sort('createdAt', 'desc')
             ->limit(50)
             ->execute();
-        return $this->render('S2bBundle:Bundle:listLatest', array('bundles' => $bundles));
+        $response = $this->render('S2bBundle:Bundle:listLatest', array('bundles' => $bundles));
+        $response->headers->set('Content-Type', 'application/atom+xml');
+        return $response;
     }
 
     public function listLastCreatedAction()

@@ -17,4 +17,4 @@ search:
 latest:
     pattern:        /latest.:_format
     defaults:       { _controller: S2bBundle:Bundle:listLatest }
-    requirements:   { _format: "(xml)" }
+    requirements:   { _format: "(atom)" }
