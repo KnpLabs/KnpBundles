@@ -1,7 +1,6 @@
 <?php
 
 namespace Bundle\BundleStockBundle\Document;
-use Doctrine\ODM\MongoDB\Mapping\Types\CommitsType;
 
 /**
  * An Open Source Bundle living on GitHub
