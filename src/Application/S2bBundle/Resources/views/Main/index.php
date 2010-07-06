@@ -25,5 +25,5 @@
   Symfony2Bundles is Open Source! <a href="http://github.com/knplabs/symfony2bundles">Get the code</a> and contribute!
   </p>
 <hr />
-Are you a Bundle developer? You should read the <a title="On symfony-reloaded.org" href="http://symfony-reloaded.org/guides/Bundles/Best-Practices">Bundle Best Practices</a>.
+Are you a Bundle developer? You should read about <a title="On symfony-reloaded.org" href="http://symfony-reloaded.org/guides/Bundles/Best-Practices">Bundle Best Practices</a> and <a title="On symfony-reloaded.org" href="http://symfony-reloaded.org/guides/Bundles/Configuration">Bundle Configuration</a>.
 </div>
