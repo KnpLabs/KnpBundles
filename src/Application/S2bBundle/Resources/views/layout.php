@@ -13,6 +13,7 @@
         <title><?php $view->slots->output('title') ?> | Symfony2 Bundles</title>
         <meta content="<?php $view->slots->output('description') ?>" name="description">
         <link rel="shortcut icon" href="/favicon.png" type="image/png" />
+        <link href="<?php echo $view->router->generate('latest', array('_format' => 'xml')) ?>" rel="alternate" title="ATOM" type="application/atom+xml" />
         <?php echo $view->stylesheets ?>
     </head>
     <body>
@@ -105,10 +106,11 @@
             </p>
 
             <p class="bottom-right">
-              <a href="<?php echo $view->router->generate('homepage') ?>">Home</a> |
-              <a href="http://github.com/knplabs/symfony2bundles">Code</a> |
-              <a href="http://symfony2bundles.uservoice.com/">Feedback</a> |
-              <strong><a href="#header">Back to Top</a></strong>
+                <a href="<?php echo $view->router->generate('homepage') ?>">Home</a> |
+                <a href="<?php echo $view->router->generate('latest', array('_format' => 'xml')) ?>">Syndication</a> |
+                <a href="http://github.com/knplabs/symfony2bundles">Code</a> |
+                <a href="http://symfony2bundles.uservoice.com/">Feedback</a> |
+                <strong><a href="#header">Back to Top</a></strong>
             </p>
 
             <!-- /footer-bottom-->

@@ -13,3 +13,8 @@ bundle_show:
 search:
     pattern:        /search
     defaults:       { _controller: S2bBundle:Bundle:search }
+
+latest:
+    pattern:        /latest.:_format
+    defaults:       { _controller: S2bBundle:Bundle:listLatest }
+    requirements:   { _format: "(xml)" }

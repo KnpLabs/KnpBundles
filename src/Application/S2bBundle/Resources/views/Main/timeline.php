@@ -1,4 +1,4 @@
-<h3>Updated Bundles</h3>
+<h3>Active Bundles</h3>
 <div class="sidemenu">
     <ol class="timeline">
     <?php foreach ($commits as $commit): ?>

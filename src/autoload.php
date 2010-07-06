@@ -14,4 +14,3 @@ $loader->registerNamespaces(array(
     'Zend'                       => __DIR__.'/vendor/zend/library',
 ));
 $loader->register();
-

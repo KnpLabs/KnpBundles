@@ -69,6 +69,16 @@ class BundleController extends Controller
         return $this->render('S2bBundle:Bundle:listAll', array('bundles' => $query->execute(), 'sort' => $sort));
     }
 
+    public function listLatestAction()
+    {
+        $bundles = $this->container->getDoctrine_odm_mongodb_documentManagerService()
+            ->createQuery('Bundle\BundleStockBundle\Document\Bundle')
+            ->sort('createdAt', 'desc')
+            ->limit(50)
+            ->execute();
+        return $this->render('S2bBundle:Bundle:listLatest', array('bundles' => $bundles));
+    }
+
     public function listLastCreatedAction()
     {
         $bundles = $this->container->getDoctrine_odm_mongodb_documentManagerService()
