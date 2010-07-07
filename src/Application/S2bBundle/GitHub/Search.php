@@ -41,18 +41,29 @@ class Search
      */
     public function searchBundles($limit = 300, OutputInterface $output = null)
     {
-        $repos = array();
-        $page = 1;
-        do {
-            $pageRepos = $this->github->getRepoApi()->search('Bundle', 'php', $page);
-            if(empty($pageRepos)) {
-                break;
+        try {
+            $repos = array();
+            $page = 1;
+            do {
+                $pageRepos = $this->github->getRepoApi()->search('Bundle', 'php', $page);
+                if(empty($pageRepos)) {
+                    break;
+                }
+                $repos = array_merge($repos, $pageRepos);
+                $page++;
+                if($output) $output->write('...'.count($repos));
             }
-            $repos = array_merge($repos, $pageRepos);
-            $page++;
-            if($output) $output->write('...'.count($repos));
+            while(count($repos) < $limit);
         }
-        while(count($repos) < $limit);
+        catch(Exception $e) {
+            if($output) $output->writeLn($e->getMessage());
+        }
+
+        if(empty($repos)) {
+            if($output) $output->writeLn('Failed, will retry');
+            sleep(2);
+            return $this->searchBundles($limit, $output);
+        }
 
         if($output) $output->writeLn('... DONE');
         return $repos;
