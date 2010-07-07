@@ -36,7 +36,7 @@
         <div class="post-meta">
             <h4>Links</h4>
             <ul>
-                <li class="source"><a href="<?php echo $bundle->getGithubUrl() ?>">View source</a></li>
+                <li class="github"><a href="<?php echo $bundle->getGithubUrl() ?>">View source</a></li>
                 <li class="download"><a href="<?php echo $bundle->getGithubUrl() ?>/tarball/master">Download</a></li>
             </ul>
         </div>

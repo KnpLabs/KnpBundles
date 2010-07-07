@@ -1,6 +1,6 @@
 $(function()
 {
-    $('a, input, label').tipsy({fade: false});
+    $('a, input, label').tipsy({fade: false, gravity: $.fn.tipsy.autoNS});
 
     $('.clickable-list').delegate('li.item', 'click', function() {
         location.href = $(this).find('a').attr('href');
@@ -15,12 +15,12 @@ $(function()
         var regexp = /^http:\/\/github\.com\/[\w\d]+\/[\w\d]+Bundle$/;
         var url = $(this).find('input').val();
         if(url == addBundleDefaultValue || !url.match(regexp)) {
-            alert(url+' is not a valid GitHub Bundle repository url!');
+            alert('This is not a valid GitHub Bundle repository url!');
             return false;
         }
         var $form = $(this);
         setTimeout(function() {
-            $form.replaceWith('<p>Importing the Bundle fro GitHub.<br />This can take a few seconds, be patient!</p>');
+            $form.replaceWith('<p>Importing the Bundle from GitHub.<br />This can take a few seconds, be patient!</p>');
         }, 500);
     });
 

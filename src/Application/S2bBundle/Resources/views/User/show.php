@@ -32,7 +32,7 @@
         <div class="post-meta">
             <h4>Links</h4>
             <ul>
-                <li class="source"><a href="<?php echo $user->getGithubUrl() ?>">View on GitHub</a></li>
+                <li class="github"><a href="<?php echo $user->getGithubUrl() ?>">View on GitHub</a></li>
                 <?php if($user->getBlog()): ?>
                     <li class="blog"><a href="<?php echo $user->getBlog() ?>">Blog</a></li>
                 <?php endif; ?>
