@@ -1,4 +1,4 @@
-<?php $view->assets->setVersion('2') ?>
+<?php $view->assets->setVersion('3') ?>
 <?php $view->stylesheets->add('bundles/s2b/css/reset.css') ?>
 <?php $view->stylesheets->add('bundles/s2b/vendor/tipsy/stylesheets/tipsy.css') ?>
 <?php $view->stylesheets->add('bundles/s2b/css/style.css') ?>
@@ -100,9 +100,9 @@
         <div id="footer-bottom">
 
             <p class="bottom-left">
-            Symfony2Bundles |
-            Template by <a href="http://www.styleshout.com/">styleshout</a> |
-            Supported by <a class="knplabs" href="http://www.knplabs.com/" title="French web agency who loves Symfony2"><img alt="knpLabs logo" src="<?php echo $view->assets->getUrl('bundles/s2b/images/knplabs.png') ?>" /></a>
+                Powered by <a href="http://www.symfony-reloaded.org/">Symfony2</a>, <a href="http://www.doctrine-project.org/">Doctrine2</a> &amp; <a href="http://www.mongodb.org/">mongoDB</a> |
+                Template by <a href="http://www.styleshout.com/">styleshout</a> |
+                Supported by <a class="knplabs" href="http://www.knplabs.com/" title="French web agency who loves Symfony2"><img alt="knpLabs logo" src="<?php echo $view->assets->getUrl('bundles/s2b/images/knplabs20.png') ?>" /></a>
             </p>
 
             <p class="bottom-right">
