@@ -20,7 +20,7 @@
         <!--header -->
         <div id="header-wrap">
             <div id="header">
-                <a title="Back to homepage" href="<?php echo $view->router->generate('homepage') ?>" id="logo">
+                <a href="<?php echo $view->router->generate('homepage') ?>" id="logo">
                     <?php $view->slots->output('logo', '<img alt="Symfony2Bundles" src="'.$view->assets->getUrl('bundles/s2b/images/bundle76.png').'" width="76" height="76" />') ?>
                 </a>
                 <h1>
