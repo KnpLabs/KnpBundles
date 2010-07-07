@@ -3,11 +3,11 @@ homepage:
     defaults:       { _controller: S2bBundle:Main:index }
 
 bundle_list:
-    pattern:        /bundles/:sort
+    pattern:        /bundle/:sort
     defaults:       { _controller: S2bBundle:Bundle:listAll, sort: score }
 
 user_list:
-    pattern:        /developers
+    pattern:        /developer
     defaults:       { _controller: S2bBundle:User:listAll }
 
 search:

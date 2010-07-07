@@ -142,7 +142,7 @@ class GitHubPopulateCommand extends BaseCommand
 
             $bundle->recalculateScore();
             $output->writeLn(' '.$bundle->getScore());
-            sleep(2); // prevent reaching GitHub API max calls (60 per minute)
+            sleep(3); // prevent reaching GitHub API max calls (60 per minute)
         }
         
         // Now update users with more precise GitHub data
