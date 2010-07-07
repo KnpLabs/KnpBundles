@@ -11,6 +11,6 @@ $loader->registerNamespaces(array(
     'Bundle'                     => __DIR__,
     'Doctrine\\Common'           => __DIR__.'/vendor/MongoDbOdm/lib/vendor/doctrine-common/lib',
     'Doctrine\\ODM\\MongoDB'     => __DIR__.'/vendor/MongoDbOdm/lib',
-    'Zend'                       => __DIR__.'/vendor/zend/library',
+    'Zend'                       => __DIR__.'/vendor/Zend/library',
 ));
 $loader->register();

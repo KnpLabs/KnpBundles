@@ -16,3 +16,6 @@
 [submodule "src/Bundle/GravatarBundle"]
 	path = src/Bundle/GravatarBundle
 	url = git://github.com/ornicar/GravatarBundle.git
+[submodule "src/vendor/Goutte"]
+	path = src/vendor/Goutte
+	url = git://github.com/fabpot/Goutte.git
