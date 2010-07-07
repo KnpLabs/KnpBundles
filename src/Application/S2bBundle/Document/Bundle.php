@@ -249,6 +249,15 @@ class Bundle
     }
 
     /**
+     * Returns the number of days elapsed since the last commit on the master branch
+     * @return int
+     **/
+    public function getDaysSinceLastCommit()
+    {
+        return date_create()->diff($this->getLastCommitAt())->format('%d');
+    }
+
+    /**
      * Get forks
      * @return int
      */
