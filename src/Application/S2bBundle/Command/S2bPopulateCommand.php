@@ -130,5 +130,7 @@ class S2bPopulateCommand extends BaseCommand
         }
 
         $dm->flush();
+
+        $output->writeLn('Population complete.');
     }
 }
