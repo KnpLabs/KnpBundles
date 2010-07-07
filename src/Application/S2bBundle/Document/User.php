@@ -68,20 +68,6 @@ class User
     }
 
     /**
-     * Update a User Document from a GitHub user infos array 
-     * 
-     * @param array $user 
-     */
-    public function fromUserArray(array $user)
-    {
-        $this->setEmail(isset($user['email']) ? $user['email'] : null);
-        $this->setFullName(isset($user['name']) ? $user['name'] : null);
-        $this->setCompany(isset($user['company']) ? $user['company'] : null);
-        $this->setLocation(isset($user['location']) ? $user['location'] : null);
-        $this->setBlog(isset($user['blog']) ? $user['blog'] : null);
-    }
-
-    /**
      * Get blog
      * @return string
      */

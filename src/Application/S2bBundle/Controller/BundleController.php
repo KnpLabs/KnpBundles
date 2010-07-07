@@ -6,6 +6,8 @@ use Symfony\Framework\FoundationBundle\Controller;
 use Symfony\Components\HttpKernel\Exception\NotFoundHttpException;
 use Application\S2bBundle\Document\Bundle;
 use Application\S2bBundle\Document\User;
+use Application\S2bBundle\Github;
+use Symfony\Components\Console\Output\NullOutput as Output;
 
 class BundleController extends Controller
 {
@@ -123,59 +125,48 @@ class BundleController extends Controller
     public function addAction()
     {
         $url = $this->getRequest()->get('url');
-        if(!preg_match('#^http://github.com/(\w+)/(\w+Bundle).*$#', $url, $match)) {
-            return $this->forward('S2bBundle:Bundle:listAll', array('sort' => 'score'));
+
+        if(preg_match('#^http://github.com/(\w+)/(\w+Bundle).*$#', $url, $match)) {
+            $bundle = $this->addBundle($match[1], $match[2]);
+            if($bundle) {
+                return $this->redirect($this->generateUrl('bundle_show', array('username' => $bundle->getUsername(), 'name' => $bundle->getName())));
+            }
         }
-        $username = $match[1];
-        $name = $match[2];
+
+        return $this->forward('S2bBundle:Bundle:listAll', array('sort' => 'score'));
+    }
+
+    protected function addBundle($username, $name)
+    {
         $dm = $this->container->getDoctrine_odm_mongodb_documentManagerService();
         $bundle = $dm->find('Application\S2bBundle\Document\Bundle', array('username' => $username, 'name' => $name))->getSingleResult();
         if($bundle) {
-            return $this->redirect($this->generateUrl('bundle_show', array('username' => $username, 'name' => $name)));
+            return $bundle;
         }
-        $validator = $this->container->getValidatorService();
-        // Require php-github-api
-        require_once(__DIR__.'/../../../vendor/php-github-api/lib/phpGitHubApi.php');
-        $github = new \phpGithubApi();
-        $githubRepo = $github->getRepoApi()->show($username, $name);
-        if(!$githubRepo) {
-            return $this->forward('S2bBundle:Bundle:listAll', array('sort' => 'score'));
+        $githubBundle = new Github\Bundle(new \phpGithubApi(), new Output());
+
+        if(!$bundle = $githubBundle->import($username, $name)) {
+            return false;
         }
-        $bundle = new Bundle();
-        $bundle->fromRepositoryArray($githubRepo);
-        $bundle->setIsOnGithub(true);
-        $user = $dm->find('Application\S2bBundle\Document\User', array('name' => $name))->getSingleResult();
-        if(!$user) {
-            $user = new User();
-            $user->setName($username);
-            $data = $github->getUserApi()->show($user->getName());
-            $user->fromUserArray($data);
-        }
-        $bundle->setUser($user);
-        if($validator->validate($bundle)->count()) {
-            return $this->forward('S2bBundle:Bundle:listAll', array('sort' => 'score'));
-        }
-        $user->addBundle($bundle);
-        $dm->persist($bundle);
-        $dm->persist($user);
-        $commits = $github->getCommitApi()->getBranchCommits($bundle->getUsername(), $bundle->getName(), 'master');
-        if(empty($commits)) {
-            return $this->forward('S2bBundle:Bundle:listAll', array('sort' => 'score'));
-        }
-        $bundle->setLastCommits(array_slice($commits, 0, 5));
-        $blobs = $github->getObjectApi()->listBlobs($bundle->getUsername(), $bundle->getName(), 'master');
-        foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
-            if(isset($blobs[$readmeFilename])) {
-                $readmeSha = $blobs[$readmeFilename];
-                $readmeText = $github->getObjectApi()->getRawData($bundle->getUsername(), $bundle->getName(), $readmeSha);
-                $bundle->setReadme($readmeText);
-                break;
+        
+        if(!$user = $dm->find('Application\S2bBundle\Document\User', array('name' => $username))->getSingleResult()) {
+            $githubUser = new Github\User(new \phpGithubApi(), new Output());
+            if(!$user = $githubUser->import($username)) {
+                return false;
             }
         }
-        $tags = $github->getRepoApi()->getRepoTags($bundle->getUsername(), $bundle->getName());
-        $bundle->setTags(array_keys($tags));
-        $bundle->recalculateScore();
+        $bundle->setUser($user);
+
+        $validator = $this->container->getValidatorService();
+        if($validator->validate($bundle)->count()) {
+            return false;
+        }
+        $user->addBundle($bundle);
+        $githubBundle->update($bundle);
+        $dm->persist($bundle);
+        $dm->persist($user);
         $dm->flush();
-        return $this->redirect($this->generateUrl('bundle_show', array('username' => $bundle->getUserName(), 'name' => $bundle->getName())));
+
+        return $bundle;
     }
 }

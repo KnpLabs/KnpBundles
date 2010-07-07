@@ -108,21 +108,6 @@ class Bundle
     protected $forks = null;
 
     /**
-     * Updates a Bundle Document from a repository infos array 
-     * 
-     * @param array $rep 
-     */
-    public function fromRepositoryArray(array $repo)
-    {
-        $this->setName($repo['name']);
-        $this->setUsername(isset($repo['username']) ? $repo['username'] : $repo['owner']);
-        $this->setDescription($repo['description']);
-        $this->setFollowers(isset($repo['followers']) ? $repo['followers'] : $repo['watchers']);
-        $this->setForks($repo['forks']);
-        $this->setCreatedAt(new \DateTime(isset($repo['created']) ? $repo['created'] : $repo['created_at']));
-    }
-
-    /**
      * Get tags
      * @return array
      */

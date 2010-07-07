@@ -14,3 +14,6 @@ $loader->registerNamespaces(array(
     'Zend'                       => __DIR__.'/vendor/Zend/library',
 ));
 $loader->register();
+
+// Require php-github-api
+require_once(__DIR__.'/vendor/php-github-api/lib/phpGitHubApi.php');

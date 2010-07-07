@@ -1,10 +1,10 @@
 <?php
 
-namespace Application\S2bBundle\Search;
+namespace Application\S2bBundle\Github;
 use Symfony\Components\Console\Output\OutputInterface;
 use Goutte\Client;
 
-class RepoSearch
+class Search
 {
     /**
      * php-github-api instance used to request GitHub API
@@ -41,6 +41,36 @@ class RepoSearch
     {
         $repos = $this->searchBundlesOnGitHub($limit);
         $repos = $this->searchBundlesOnGoogle($repos, $limit);
+        return $repos;
+    }
+
+    protected function searchBundlesOnGitHub($limit)
+    {
+        $this->output->write('Search on Github');
+        try {
+            $repos = array();
+            $page = 1;
+            do {
+                $pageRepos = $this->github->getRepoApi()->search('Bundle', 'php', $page);
+                if(empty($pageRepos)) {
+                    break;
+                }
+                $repos = array_merge($repos, $pageRepos);
+                $page++;
+                $this->output->write('...'.count($repos));
+            }
+            while(count($repos) < $limit);
+        }
+        catch(Exception $e) {
+            $this->output->writeLn($e->getMessage());
+        }
+
+        if(empty($repos)) {
+            $this->output->writeLn(' - Failed, will retry');
+            sleep(3);
+            return $this->searchBundles($limit);
+        }
+        $this->output->writeLn('... DONE');
         return $repos;
     }
 
@@ -87,36 +117,6 @@ class RepoSearch
             }
             $this->output->write(sprintf('%d/%d', $pageNumber - 1, $maxBatch*$maxPage));
             sleep(2);
-        }
-        $this->output->writeLn('... DONE');
-        return $repos;
-    }
-
-    protected function searchBundlesOnGitHub($limit)
-    {
-        $this->output->write('Search on Github');
-        try {
-            $repos = array();
-            $page = 1;
-            do {
-                $pageRepos = $this->github->getRepoApi()->search('Bundle', 'php', $page);
-                if(empty($pageRepos)) {
-                    break;
-                }
-                $repos = array_merge($repos, $pageRepos);
-                $page++;
-                $this->output->write('...'.count($repos));
-            }
-            while(count($repos) < $limit);
-        }
-        catch(Exception $e) {
-            $this->output->writeLn($e->getMessage());
-        }
-
-        if(empty($repos)) {
-            $this->output->writeLn(' - Failed, will retry');
-            sleep(3);
-            return $this->searchBundles($limit);
         }
         $this->output->writeLn('... DONE');
         return $repos;

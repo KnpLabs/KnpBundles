@@ -4,16 +4,14 @@ namespace Application\S2bBundle\Command;
 
 use Application\S2bBundle\Document\Bundle;
 use Application\S2bBundle\Document\User;
+use Application\S2bBundle\Github;
 use Symfony\Framework\FoundationBundle\Command\Command as BaseCommand;
 use Symfony\Components\Console\Input\InputArgument;
 use Symfony\Components\Console\Input\InputOption;
 use Symfony\Components\Console\Input\InputInterface;
 use Symfony\Components\Console\Output\OutputInterface;
 use Symfony\Components\Console\Output\Output;
-use Doctrine\Common\Collections\ArrayCollection;
 
-// Require php-github-api
-require_once(__DIR__.'/../../../vendor/php-github-api/lib/phpGitHubApi.php');
 // Require Goutte
 require_once(__DIR__.'/../../../vendor/Goutte/src/Goutte/Client.php');
 
@@ -43,8 +41,11 @@ class S2bPopulateCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $github = new \phpGitHubApi();
-        $repoSearch = new \Application\S2bBundle\Search\RepoSearch($github, new \Goutte\Client(), $output);
-        $githubRepos = $repoSearch->searchBundles(5000, $output);
+        $githubSearch = new Github\Search($github, new \Goutte\Client(), $output);
+        $githubUser = new Github\User($github, $output);
+        $githubBundle = new Github\Bundle($github, $output);
+
+        $githubRepos = $githubSearch->searchBundles(5000, $output);
         $output->writeLn(sprintf('Found %d bundle candidates', count($githubRepos)));
 
         $dm = $this->container->getDoctrine_odm_mongodb_documentManagerService();
@@ -60,19 +61,14 @@ class S2bPopulateCommand extends BaseCommand
 
         // first pass, update and revalidate existing bundles
         foreach($existingBundles as $existingBundle) {
-            $exists = false;
+            $existingBundle->setIsOnGithub(false);
             foreach($githubRepos as $githubRepo) {
                 if($existingBundle->getName() === $githubRepo['name'] && $existingBundle->getUsername() === $githubRepo['username']) {
-                    $existingBundle->fromRepositoryArray($githubRepo);
-                    $exists = true;
+                    $githubBundle->updateInfos($existingBundle, $githubRepo);
                     ++$counters['updated'];
                     break;
+                    $output->writeLn(sprintf('Update %s', $bundle->getName()));
                 }
-            }
-            $existingBundle->setIsOnGithub($exists);
-            if($validator->validate($existingBundle)->count()) {
-                $dm->remove($existingBundle);
-                ++$counters['removed'];
             }
         }
         
@@ -86,9 +82,7 @@ class S2bPopulateCommand extends BaseCommand
                 }
             }
             if(!$exists) {
-                $bundle = new Bundle();
-                $bundle->fromRepositoryArray($githubRepo);
-                $bundle->setIsOnGithub(true);
+                $bundle = $githubBundle->import($githubRepo['username'], $githubRepo['name'], $githubRepo);
                 $user = null;
                 foreach($users as $u) {
                     if($githubRepo['username'] === $u->getName()) {
@@ -97,8 +91,7 @@ class S2bPopulateCommand extends BaseCommand
                     }
                 }
                 if(!$user) {
-                    $user = new User();
-                    $user->setName($githubRepo['username']);
+                    $user = $githubUser->import($githubRepo['username']);
                     $users[] = $user;
                 }
                 $bundle->setUser($user);
@@ -107,9 +100,10 @@ class S2bPopulateCommand extends BaseCommand
                     $dm->persist($bundle);
                     $dm->persist($user);
                     ++$counters['created'];
+                    $output->writeLn(sprintf('Create %s', $bundle->getName()));
                 }
                 else {
-                    $output->writeLn('Ignore '.$bundle->getName());
+                    $output->writeLn(sprintf('Ignore %s', $bundle->getName()));
                 }
             }
         }
@@ -118,48 +112,21 @@ class S2bPopulateCommand extends BaseCommand
 
         $output->writeln(sprintf('%d created, %d updated, %d removed', $counters['created'], $counters['updated'], $counters['removed']));
 
-        return;
-
         // Now update bundles with more precise GitHub data
         $bundles = $dm->find('Application\S2bBundle\Document\Bundle')->getResults();
         foreach($bundles as $bundle) {
             $output->write($bundle->getFullName().str_repeat(' ', 50-strlen($bundle->getFullName())));
-            $output->write(' commits');
-            $commits = $github->getCommitApi()->getBranchCommits($bundle->getUsername(), $bundle->getName(), 'master');
-            if(empty($commits)) {
-                $dm->remove($bundle);
-                break;
-            }
-            $bundle->setLastCommits(array_slice($commits, 0, 5));
-            $output->write(' readme');
-            $blobs = $github->getObjectApi()->listBlobs($bundle->getUsername(), $bundle->getName(), 'master');
-            foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
-                if(isset($blobs[$readmeFilename])) {
-                    $readmeSha = $blobs[$readmeFilename];
-                    $readmeText = $github->getObjectApi()->getRawData($bundle->getUsername(), $bundle->getName(), $readmeSha);
-                    $bundle->setReadme($readmeText);
-                    break;
-                }
-            }
-            $output->write(' tags');
-            $tags = $github->getRepoApi()->getRepoTags($bundle->getUsername(), $bundle->getName());
-            $bundle->setTags(array_keys($tags));
-
-            $bundle->recalculateScore();
+            $githubBundle->update($bundle);
             $output->writeLn(' '.$bundle->getScore());
-            sleep(3); // prevent reaching GitHub API max calls (60 per minute)
         }
         
         // Now update users with more precise GitHub data
         $users = $dm->find('Application\S2bBundle\Document\User')->getResults();
         $output->writeLn(array('', sprintf('Will now update %d users', count($users))));
         foreach($users as $user) {
-            $output->write($user->getName().str_repeat(' ', 50-strlen($user->getName())));
-            $data = $github->getUserApi()->show($user->getName());
-            $user->fromUserArray($data);
-            $dm->persist($user);
+            $output->write($user->getName().str_repeat(' ', 40-strlen($user->getName())));
+            $githubUser->update($user);
             $output->writeLn('OK');
-            sleep(1);
         }
 
         $dm->flush();
