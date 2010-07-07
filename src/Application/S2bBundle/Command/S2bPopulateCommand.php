@@ -4,7 +4,6 @@ namespace Application\S2bBundle\Command;
 
 use Application\S2bBundle\Document\Bundle;
 use Application\S2bBundle\Document\User;
-use Application\S2bBundle\GitHub\Search;
 use Symfony\Framework\FoundationBundle\Command\Command as BaseCommand;
 use Symfony\Components\Console\Input\InputArgument;
 use Symfony\Components\Console\Input\InputOption;
@@ -15,11 +14,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 // Require php-github-api
 require_once(__DIR__.'/../../../vendor/php-github-api/lib/phpGitHubApi.php');
+// Require Goutte
+require_once(__DIR__.'/../../../vendor/Goutte/src/Goutte/Client.php');
+
+// Ugly fix to prevent Zend fatal error
+set_include_path(get_include_path().PATH_SEPARATOR.realpath(__DIR__.'/../../../vendor/Zend/library'));
 
 /**
- * Update local database from GitHub searches
+ * Update local database from web searches
  */
-class GitHubPopulateCommand extends BaseCommand
+class S2bPopulateCommand extends BaseCommand
 {
     /**
      * @see Command
@@ -28,7 +32,7 @@ class GitHubPopulateCommand extends BaseCommand
     {
         $this
         ->setDefinition(array())
-        ->setName('github:populate');
+        ->setName('s2b:populate');
     }
 
     /**
@@ -38,10 +42,9 @@ class GitHubPopulateCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln(sprintf('Search for new Bundles on GitHub'));
         $github = new \phpGitHubApi();
-        $githubSearch = new Search($github);
-        $githubRepos = $githubSearch->searchBundles(5000, $output);
+        $repoSearch = new \Application\S2bBundle\Search\RepoSearch($github, new \Goutte\Client(), $output);
+        $githubRepos = $repoSearch->searchBundles(5000, $output);
         $output->writeLn(sprintf('Found %d bundle candidates', count($githubRepos)));
 
         $dm = $this->container->getDoctrine_odm_mongodb_documentManagerService();
@@ -105,12 +108,17 @@ class GitHubPopulateCommand extends BaseCommand
                     $dm->persist($user);
                     ++$counters['created'];
                 }
+                else {
+                    $output->writeLn('Ignore '.$bundle->getName());
+                }
             }
         }
 
         $dm->flush();
 
         $output->writeln(sprintf('%d created, %d updated, %d removed', $counters['created'], $counters['updated'], $counters['removed']));
+
+        return;
 
         // Now update bundles with more precise GitHub data
         $bundles = $dm->find('Application\S2bBundle\Document\Bundle')->getResults();
