@@ -3,6 +3,7 @@
 namespace Application\S2bBundle\Controller;
 
 use Symfony\Framework\FoundationBundle\Controller;
+use Symfony\Components\HttpKernel\Exception\HttpException;
 use Symfony\Components\HttpKernel\Exception\NotFoundHttpException;
 use Application\S2bBundle\Document\Bundle;
 use Application\S2bBundle\Document\User;
@@ -49,25 +50,19 @@ class BundleController extends Controller
 
     public function listAllAction($sort)
     {
-        $query = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Application\S2bBundle\Document\Bundle');
-        switch($sort) {
-            case 'name':
-            case 'username':
-                $query->sort($sort, 'asc');
-                break;
-            case 'createdAt':
-            case 'lastCommitAt':
-            case 'followers':
-            case 'forks':
-            case 'score':
-                $query->sort($sort, 'desc');
-                break;
-            default:
-                throw new NotFoundHttpException($sort.' is not a valid sorting field');
+        $fields = array(
+            'score' => 'score',
+            'name' => 'name',
+            'lastCommitAt' => 'last updated',
+            'createdAt' => 'last created'
+        );
+        if(!isset($fields[$sort])) {
+            throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
         }
+        $query = $this->container->getDoctrine_odm_mongodb_documentManagerService()->createQuery('Application\S2bBundle\Document\Bundle');
+        $query->sort($sort, 'name' === $sort ? 'asc' : 'desc');
 
-        return $this->render('S2bBundle:Bundle:listAll', array('bundles' => $query->execute(), 'sort' => $sort));
+        return $this->render('S2bBundle:Bundle:listAll', array('bundles' => $query->execute(), 'sort' => $sort, 'fields' => $fields));
     }
 
     public function listLatestAction()

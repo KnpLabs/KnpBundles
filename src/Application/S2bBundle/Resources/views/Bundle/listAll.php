@@ -1,13 +1,3 @@
-<?php $fields = array(
-    'name' => 'name',
-    'username' => 'author',
-    'createdAt' => 'last created',
-    'lastCommitAt' => 'last updated',
-    'followers' => 'followers',
-    'forks' => 'forks',
-    'score' => 'score'
-); ?>
-
 <?php $view->extend('S2bBundle::layout') ?>
 <?php $view->slots->set('current_menu_item', 'bundle_list') ?>
 

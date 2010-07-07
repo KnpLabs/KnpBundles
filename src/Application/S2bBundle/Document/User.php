@@ -163,6 +163,21 @@ class User
     }
 
     /**
+     * Get the names of this user bundles
+     *
+     * @return array
+     **/
+    public function getBundleNames()
+    {
+        $names = array();
+        foreach($this->getBundles() as $bundle) {
+            $names[] = $bundle->getName();
+        }
+
+        return $names;
+    }
+
+    /**
      * Add a bundle to this user bundles
      *
      * @return null
@@ -190,6 +205,26 @@ class User
         }
 
         return $date;
+    }
+
+    /**
+     * Get the more recent commits by this user
+     *
+     * @return array
+     **/
+    public function getLastCommits()
+    {
+        $commits = array();
+        foreach($this->getBundles() as $bundle) {
+            $commits = array_merge($commits, $bundle->getLastCommits());
+        }
+        usort($commits, function($a, $b)
+        {
+            return strtotime($a['committed_date']) < strtotime($b['committed_date']);
+        });
+        $commits = array_slice($commits, 0, 10);
+        
+        return $commits;
     }
 
     /**

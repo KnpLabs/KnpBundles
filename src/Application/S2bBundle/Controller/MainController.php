@@ -34,6 +34,13 @@ class MainController extends Controller
         return $this->render('S2bBundle:Main:timeline', array('commits' => $commits));
     }
 
+    public function apiAction()
+    {
+        $text = file_get_contents(__DIR__.'/../doc/02-Api.markdown');
+
+        return $this->render('S2bBundle:Main:api', array('text' => $text));
+    }
+
     public function notFoundAction()
     {
         $response = $this->render('S2bBundle:Main:notFound');

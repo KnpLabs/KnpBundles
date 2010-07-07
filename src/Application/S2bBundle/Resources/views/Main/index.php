@@ -7,7 +7,7 @@
 <?php $view->slots->set('sidemenu', $view->actions->render('S2bBundle:Main:timeline')) ?>
 
 <h2>Welcome to the community driven Symfony2 Bundles website!</h2>
-<div class="readable">
+<div class="home_text">
   <p>
   As for now, <strong><?php echo $nbBundles ?></strong> Symfony2 Bundles are indexed. <a href="<?php echo $view->router->generate('bundle_list') ?>">View all bundles</a> or <a href="<?php echo $view->router->generate('search') ?>">search for bundles</a>!
   </p>

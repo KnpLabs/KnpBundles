@@ -13,18 +13,10 @@ class UserController extends Controller
             ->find('Application\S2bBundle\Document\User', array('name' => $name))
             ->getSingleResult();
         if(!$user) {
-            throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $username));
+            throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
         $bundles = $user->getBundles();
-        $commits = array();
-        foreach($bundles as $bundle) {
-            $commits = array_merge($commits, $bundle->getLastCommits());
-        }
-        usort($commits, function($a, $b)
-        {
-            return strtotime($a['committed_date']) < strtotime($b['committed_date']);
-        });
-        $commits = array_slice($commits, 0, 5);
+        $commits = $user->getLastCommits();
 
         return $this->render('S2bBundle:User:show', array('user' => $user, 'bundles' => $bundles, 'commits' => $commits));
     }

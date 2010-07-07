@@ -323,16 +323,6 @@ class Bundle
     }
 
     /**
-     * Get the author url on GitHub
-     *
-     * @return string
-     **/
-    public function getUsernameUrl()
-    {
-        return sprintf('http://github.com/%s', $this->getUsername());
-    }
-
-    /**
      * Get full name, including username
      * @return string
      */
@@ -476,6 +466,26 @@ class Bundle
     public function markAsUpdated()
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    /**
+     * Get an array representing the Bundle
+     *
+     * @return array
+     **/
+    public function toArray()
+    {
+        return array(
+            'name' => $this->getName(),
+            'username' => $this->getUsername(),
+            'description' => $this->getDescription(),
+            'score' => $this->getScore(),
+            'followers' => $this->getFollowers(),
+            'forks' => $this->getForks(),
+            'createdAt' => $this->getCreatedAt()->getTimestamp(),
+            'lastCommitAt' => $this->getLastCommitAt()->getTimestamp(),
+            'tags' => $this->getTags()
+        );
     }
 
     public function __toString()
