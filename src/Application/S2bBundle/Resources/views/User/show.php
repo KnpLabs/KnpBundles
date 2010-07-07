@@ -5,7 +5,7 @@
 <?php $view->slots->set('description', $user->getFullName().' has '.$user->getNbBundles().' Symfony2 bundles') ?>
 <?php $view->slots->set('slogan', $user->getFullName() ? $user->getFullName() : ' ') ?>
 <?php $view->slots->set('current_menu_item', 'user_list') ?>
-<?php $view->slots->set('logo', '<img alt="'.$user->getName().'" src="'.$view->assets->getUrl(Bundle\GravatarBundle\Api::getUrl($user->getEmail('esc_raw'), array('size' => 76, 'default' => 'mm'))).'" width="76" height="76" />') ?>
+<?php $view->slots->set('logo', '<img alt="'.$user->getName().'" src="'.$view->assets->getUrl(Bundle\GravatarBundle\Api::getUrl($user->getEmail('esc_raw'), array('size' => 80, 'default' => 'mm'))).'" width="80" height="80" />') ?>
 
 <div class="post">
 
