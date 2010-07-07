@@ -114,8 +114,8 @@ class RepoSearch
         }
 
         if(empty($repos)) {
-            $this->output->writeLn('Failed, will retry');
-            sleep(2);
+            $this->output->writeLn(' - Failed, will retry');
+            sleep(3);
             return $this->searchBundles($limit);
         }
         $this->output->writeLn('... DONE');

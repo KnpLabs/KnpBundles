@@ -6,9 +6,20 @@ $(function()
         location.href = $(this).find('a').attr('href');
     });
 
-    $('#qsearch').one('click', function() {
+    $('input.hint').one('click', function() {
         $(this).val('');
     });
+
+    var addBundleDefaultValue = $('form.add_bundle input').val();
+    $('form.add_bundle').submit(function() {
+        var regexp = /^http:\/\/github\.com\/[\w\d]+\/[\w\d]+Bundle$/;
+        var url = $(this).find('input').val();
+        if(url == addBundleDefaultValue || !url.match(regexp)) {
+            alert(url+' is not a valid GitHub Bundle repository url!');
+            return false;
+        }
+    });
+
 });
 
 if(document.domain == 'symfony2bundles.org') {

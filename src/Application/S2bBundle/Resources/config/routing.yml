@@ -2,6 +2,10 @@ homepage:
     pattern:        /
     defaults:       { _controller: S2bBundle:Main:index }
 
+bundle_add:
+    pattern:        /bundle/add
+    defaults:       { _controller: S2bBundle:Bundle:add }
+
 bundle_list:
     pattern:        /bundle/:sort
     defaults:       { _controller: S2bBundle:Bundle:listAll, sort: score }

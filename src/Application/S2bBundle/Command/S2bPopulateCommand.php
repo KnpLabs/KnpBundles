@@ -130,12 +130,7 @@ class S2bPopulateCommand extends BaseCommand
                 $dm->remove($bundle);
                 break;
             }
-            else {
-                $bundle->setLastCommits(array_slice($commits, 0, 5));
-                $lastCommitAt = new \DateTime();
-                $lastCommitAt->setTimestamp(strtotime($commits[0]['committed_date']));
-                $bundle->setLastCommitAt($lastCommitAt);
-            }
+            $bundle->setLastCommits(array_slice($commits, 0, 5));
             $output->write(' readme');
             $blobs = $github->getObjectApi()->listBlobs($bundle->getUsername(), $bundle->getName(), 'master');
             foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {

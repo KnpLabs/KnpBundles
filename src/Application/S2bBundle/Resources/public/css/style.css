@@ -99,25 +99,13 @@ td {
 }
 
 /* form elements */
-form {
-    margin: 10px 25px 10px 25px;
-    padding: 10px 25px 25px 25px;
-    background: #F3F4F5;
-    border: 1px solid #E2E4E7;
-    width: 477px;
-}
-form p {
-    border-bottom: 1px solid #E6E6E6;
-    padding: 12px 0 5px 0;	margin: 0;	
-    color: #2C76A6;
-}
 label {
     font-weight: bold;
     color: #666666;
 }
 input, select, textarea {
-    margin: 5px 0;
-    padding: 7px 6px;
+    padding: 7px;
+    width: 227px;
     color: #6A6969;
     border-width: 1px;
     border-style: solid;
@@ -127,9 +115,6 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus {
     color: #19465D;
     background: #EEF8FB;
-}
-#name, #email, #message, #website {
-    width: 460px;
 }
 input.button {
     font: bold 12px Arial, Sans-serif;

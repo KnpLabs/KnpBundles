@@ -115,11 +115,11 @@ class Bundle
     public function fromRepositoryArray(array $repo)
     {
         $this->setName($repo['name']);
-        $this->setUsername($repo['username']);
+        $this->setUsername(isset($repo['username']) ? $repo['username'] : $repo['owner']);
         $this->setDescription($repo['description']);
-        $this->setFollowers($repo['followers']);
+        $this->setFollowers(isset($repo['followers']) ? $repo['followers'] : $repo['watchers']);
         $this->setForks($repo['forks']);
-        $this->setCreatedAt(new \DateTime($repo['created']));
+        $this->setCreatedAt(new \DateTime(isset($repo['created']) ? $repo['created'] : $repo['created_at']));
     }
 
     /**
@@ -171,6 +171,10 @@ class Bundle
             $lastCommits[$index]['repo_username'] = $this->getUsername();
         }
         $this->lastCommits = $lastCommits;
+
+        $lastCommitAt = new \DateTime();
+        $lastCommitAt->setTimestamp(strtotime($lastCommits[0]['committed_date']));
+        $this->setLastCommitAt($lastCommitAt);
     }
 
     /**

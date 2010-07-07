@@ -1,4 +1,4 @@
-<?php $view->assets->setVersion('3') ?>
+<?php $view->assets->setVersion('4') ?>
 <?php $view->stylesheets->add('bundles/s2b/css/reset.css') ?>
 <?php $view->stylesheets->add('bundles/s2b/vendor/tipsy/stylesheets/tipsy.css') ?>
 <?php $view->stylesheets->add('bundles/s2b/css/style.css') ?>
@@ -37,7 +37,7 @@
                 <form id="quick-search" method="get" action="<?php echo $view->router->generate('search') ?>">
                     <fieldset class="search">
                         <label for="qsearch">Search:</label>
-                        <input class="tbox" id="qsearch" type="text" name="q" value="<?php $view->slots->output('search_query', 'Search...') ?>" />
+                        <input class="tbox hint" id="qsearch" type="text" name="q" value="<?php $view->slots->output('search_query', 'Search...') ?>" />
                         <button class="btn" title="Submit Search">Search</button>
                     </fieldset>
                 </form>

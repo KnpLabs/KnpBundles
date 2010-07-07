@@ -4,6 +4,8 @@ namespace Application\S2bBundle\Controller;
 
 use Symfony\Framework\FoundationBundle\Controller;
 use Symfony\Components\HttpKernel\Exception\NotFoundHttpException;
+use Application\S2bBundle\Document\Bundle;
+use Application\S2bBundle\Document\User;
 
 class BundleController extends Controller
 {
@@ -33,9 +35,7 @@ class BundleController extends Controller
     public function showAction($username, $name)
     {
         $bundle = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Application\S2bBundle\Document\Bundle')
-            ->where('username', $username)
-            ->where('name', $name)
+            ->find('Application\S2bBundle\Document\Bundle', array('username' => $username, 'name' => $name))
             ->getSingleResult();
         if(!$bundle) {
             throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
@@ -118,5 +118,64 @@ class BundleController extends Controller
             ->limit(5)
             ->execute();
         return $this->render('S2bBundle:Bundle:list', array('bundles' => $bundles));
+    }
+
+    public function addAction()
+    {
+        $url = $this->getRequest()->get('url');
+        if(!preg_match('#^http://github.com/(\w+)/(\w+Bundle).*$#', $url, $match)) {
+            return $this->forward('S2bBundle:Bundle:listAll', array('sort' => 'score'));
+        }
+        $username = $match[1];
+        $name = $match[2];
+        $dm = $this->container->getDoctrine_odm_mongodb_documentManagerService();
+        $bundle = $dm->find('Application\S2bBundle\Document\Bundle', array('username' => $username, 'name' => $name))->getSingleResult();
+        if($bundle) {
+            return $this->redirect($this->generateUrl('bundle_show', array('username' => $username, 'name' => $name)));
+        }
+        $validator = $this->container->getValidatorService();
+        // Require php-github-api
+        require_once(__DIR__.'/../../../vendor/php-github-api/lib/phpGitHubApi.php');
+        $github = new \phpGithubApi();
+        $githubRepo = $github->getRepoApi()->show($username, $name);
+        if(!$githubRepo) {
+            return $this->forward('S2bBundle:Bundle:listAll', array('sort' => 'score'));
+        }
+        $bundle = new Bundle();
+        $bundle->fromRepositoryArray($githubRepo);
+        $bundle->setIsOnGithub(true);
+        $user = $dm->find('Application\S2bBundle\Document\User', array('name' => $name))->getSingleResult();
+        if(!$user) {
+            $user = new User();
+            $user->setName($username);
+            $data = $github->getUserApi()->show($user->getName());
+            $user->fromUserArray($data);
+        }
+        $bundle->setUser($user);
+        if($validator->validate($bundle)->count()) {
+            return $this->forward('S2bBundle:Bundle:listAll', array('sort' => 'score'));
+        }
+        $user->addBundle($bundle);
+        $dm->persist($bundle);
+        $dm->persist($user);
+        $commits = $github->getCommitApi()->getBranchCommits($bundle->getUsername(), $bundle->getName(), 'master');
+        if(empty($commits)) {
+            return $this->forward('S2bBundle:Bundle:listAll', array('sort' => 'score'));
+        }
+        $bundle->setLastCommits(array_slice($commits, 0, 5));
+        $blobs = $github->getObjectApi()->listBlobs($bundle->getUsername(), $bundle->getName(), 'master');
+        foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
+            if(isset($blobs[$readmeFilename])) {
+                $readmeSha = $blobs[$readmeFilename];
+                $readmeText = $github->getObjectApi()->getRawData($bundle->getUsername(), $bundle->getName(), $readmeSha);
+                $bundle->setReadme($readmeText);
+                break;
+            }
+        }
+        $tags = $github->getRepoApi()->getRepoTags($bundle->getUsername(), $bundle->getName());
+        $bundle->setTags(array_keys($tags));
+        $bundle->recalculateScore();
+        $dm->flush();
+        return $this->redirect($this->generateUrl('bundle_show', array('username' => $bundle->getUserName(), 'name' => $bundle->getName())));
     }
 }
