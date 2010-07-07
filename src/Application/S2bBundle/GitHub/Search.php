@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\GitHubBundle;
+namespace Application\S2bBundle\GitHub;
 use Symfony\Components\Console\Output\OutputInterface;
 
 class Search
@@ -12,9 +12,9 @@ class Search
      */
     protected $github = null;
     
-    public function __construct()
+    public function __construct(\phpGitHubApi $github)
     {
-        $this->github = new \phpGitHubApi();
+        $this->github = $github;
     }
     
     /**

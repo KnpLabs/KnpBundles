@@ -24,7 +24,6 @@ class S2bKernel extends Kernel
             new Symfony\Framework\DoctrineMongoDBBundle\DoctrineMongoDBBundle(),
 
             // register your bundles here
-            new Bundle\GitHubBundle\GitHubBundle(),
             new Bundle\MarkdownBundle\MarkdownBundle(),
             new Bundle\TimeBundle\TimeBundle(),
 

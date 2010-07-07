@@ -4,6 +4,7 @@ namespace Application\S2bBundle\Command;
 
 use Application\S2bBundle\Document\Bundle;
 use Application\S2bBundle\Document\User;
+use Application\S2bBundle\GitHub\Search;
 use Symfony\Framework\FoundationBundle\Command\Command as BaseCommand;
 use Symfony\Components\Console\Input\InputArgument;
 use Symfony\Components\Console\Input\InputOption;
@@ -38,7 +39,9 @@ class GitHubPopulateCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln(sprintf('Search for new Bundles on GitHub'));
-        $githubRepos = $this->container->getGithubSearchService()->searchBundles(5000, $output);
+        $github = new \phpGitHubApi();
+        $githubSearch = new Search($github);
+        $githubRepos = $githubSearch->searchBundles(5000, $output);
         $output->writeLn(sprintf('Found %d bundle candidates', count($githubRepos)));
 
         $dm = $this->container->getDoctrine_odm_mongodb_documentManagerService();
@@ -111,7 +114,6 @@ class GitHubPopulateCommand extends BaseCommand
 
         // Now update bundles with more precise GitHub data
         $bundles = $dm->find('Application\S2bBundle\Document\Bundle')->getResults();
-        $github = new \phpGitHubApi();
         foreach($bundles as $bundle) {
             $output->write($bundle->getFullName().str_repeat(' ', 50-strlen($bundle->getFullName())));
             $output->write(' commits');
