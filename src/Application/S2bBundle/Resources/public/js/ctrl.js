@@ -18,6 +18,10 @@ $(function()
             alert(url+' is not a valid GitHub Bundle repository url!');
             return false;
         }
+        var $form = $(this);
+        setTimeout(function() {
+            $form.replaceWith('<p>Importing the Bundle fro GitHub.<br />This can take a few seconds, be patient!</p>');
+        }, 500);
     });
 
 });
