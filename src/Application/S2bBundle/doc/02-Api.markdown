@@ -97,9 +97,10 @@ When requesting only one user, you get more informations such as last commits.
 
     :name.:format
 
-    $ curl http://symfony2bundles.org/ornicar
+    $ curl http://symfony2bundles.org/ornicar.json
 
-Return informations about one developer:
+Return informations about one developer.
+When requesting only one developer, you get more informations such as last commits.
 
     - name: ornicar
       email: thibault.duplessis@gmail.com
