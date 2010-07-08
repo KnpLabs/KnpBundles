@@ -70,7 +70,9 @@ class S2bKernel extends Kernel
 
         $configuration = $loader->load($this->getLocalConfigurationFile($this->getEnvironment()));
 
-        $configuration->setParameter('exception_handler.controller', 'S2bBundle:Main:notFound');
+        if(!$this->isDebug()) {
+            $configuration->setParameter('exception_listener.controller', 'S2bBundle:Main:notFound');
+        }
 
         return $configuration;
     }
