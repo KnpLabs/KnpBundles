@@ -8,5 +8,5 @@
 <?php $view->slots->set('sidemenu', $view->actions->render('S2bBundle:Main:timeline')) ?>
 
 <div class="doc_text markdown">
-    <?php echo $view->markdown->transform($text) ?>
+    <?php echo $view->markdown->transform(html_entity_decode($text, ENT_COMPAT, 'UTF-8')) ?>
 </div>
