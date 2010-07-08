@@ -535,16 +535,14 @@ img.gravatar {
     background: #FAFAFA;
     border: 1px solid #EAECEE;
     overflow: hidden;
+    color: #444;
 }
 .markdown ul {
-    list-style: none;
     margin: 0; padding: 0;
 }
 .markdown ul li {
-    float: left;
-    margin-right: 5px;
+    list-style: disc inside;
 }
-.markdown ul li a:hover { cursor: pointer; }
 .markdown p {
     margin-left: 0;
     margin-right: 0;
