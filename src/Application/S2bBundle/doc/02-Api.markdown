@@ -74,7 +74,7 @@ Return a list of bundles:
 
 When requesting only one bundle, you get more informations such as last commits, readme and documentation.
 
-    username/name/.:format
+    :username/:name/.:format
 
     $ curl http://symfony2bundles.org/avalanche123/MicroKernelBundle.json
 
