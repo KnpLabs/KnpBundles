@@ -40,7 +40,8 @@ class Search
     public function searchBundles($limit = 300)
     {
         $repos = $this->searchBundlesOnGitHub($limit);
-        //$repos = $this->searchBundlesOnGoogle($repos, $limit);
+        $repos = $this->searchBundlesOnGoogle($repos, $limit);
+        $repos = array_unique($repos);
         return $repos;
     }
 
@@ -59,7 +60,7 @@ class Search
                     if(!preg_match('#^\w+Bundle$#', $pageRepo['name'])) {
                         continue;
                     }
-                    $repos[] = $pageRepo;
+                    $repos[] = $pageRepo['username'].'/'.$pageRepo['name'];
                 }
                 $page++;
                 $this->output->write('...'.count($repos));
@@ -67,13 +68,13 @@ class Search
             while(count($repos) < $limit);
         }
         catch(\Exception $e) {
-            $this->output->writeLn(' ~ '.$e->getMessage());
+            $this->output->write(' - '.$e->getMessage());
         }
 
         if(empty($repos)) {
             $this->output->writeLn(' - Failed, will retry');
             sleep(3);
-            return $this->searchBundles($limit);
+            return $this->searchBundlesOnGitHub($limit);
         }
         $this->output->writeLn('... DONE');
         return $repos;
@@ -83,7 +84,7 @@ class Search
     {
         $this->output->write('Search on Google');
         $maxBatch = 5;
-        $maxPage = 6;
+        $maxPage = 5;
         $pageNumber = 1;
         for($batch = 1; $batch <= $maxBatch; $batch++) {
             for($page = 1; $page <= $maxPage; $page++) {
@@ -97,44 +98,26 @@ class Search
                     $this->output->write('.');
                 }
                 else {
-                    $this->output->write(sprintf(' [%s]', $this->browser->getResponse()->getStatus()));
+                    $this->output->write(sprintf(' - No link - [%s]', $this->browser->getResponse()->getStatus()));
                     break 2;
                 }
                 foreach($links->extract('href') as $url) {
-                    if(!preg_match('#^http://github.com/(\w+)/(\w+Bundle).*$#', $url, $match)) {
+                    if(!preg_match('#^http://github.com/(\w+/\w+Bundle).*$#', $url, $match)) {
                         continue;
                     }
-                    if(!file_exists(sprintf('http://github.com/%s/%s', $username, $name))) {
-                        continue;
-                    }
-                    $username = $match[1];
-                    $name = $match[2];
-                    $exists = false;
+                    $name = $match[1];
                     foreach($repos as $repo) {
                         if($repo['name'] == $name && $repo['username'] == $username) {
-                            $exists = true;
                             break;
                         }
                     }
-                    if(!$exists) {
-                        try {
-                            $repo = $this->github->getRepoApi()->show($username, $name);
-                            $existsOnGithub = true;
-                        }
-                        catch(\phpGitHubApiRequestException $e) {
-                            $existsOnGithub = false;
-                        }
-                        if($existsOnGithub) {
-                            $repo['username'] = $repo['owner'];
-                            $repos[] = $repo;
-                            $this->output->write('!');
-                        }
-                    }
+                    $repos[] = $repo;
+                    $this->output->write('!');
                 }
                 $pageNumber++;
                 usleep(500*1000);
             }
-            $this->output->write(sprintf('%d/%d', 10*$pageNumber - 1, $maxBatch*$maxPage*10));
+            $this->output->write(sprintf('%d/%d', 10*($pageNumber - 1), $maxBatch*$maxPage*10));
             sleep(2);
         }
         $this->output->writeLn(' DONE');

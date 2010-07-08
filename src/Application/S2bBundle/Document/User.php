@@ -192,6 +192,18 @@ class User
     }
 
     /**
+     * Remove a bundle from this user bundles
+     *
+     * @return null
+     **/
+    public function removeBundle(Bundle $bundle)
+    {
+        if($this->getBundles()->contains($bundle)) {
+            $this->getBundles()->removeElement($bundle);
+        }
+    }
+
+    /**
      * Get the date of the last commit
      * @return \DateTime
      **/

@@ -63,7 +63,7 @@ class S2bPopulateCommand extends BaseCommand
         foreach($existingBundles as $existingBundle) {
             $existingBundle->setIsOnGithub(false);
             foreach($githubRepos as $githubRepo) {
-                if($existingBundle->getName() === $githubRepo['name'] && $existingBundle->getUsername() === $githubRepo['username']) {
+                if($existingBundle->getFullName() === $githubRepo) {
                     $githubBundle->updateInfos($existingBundle);
                     break;
                 }
@@ -71,20 +71,22 @@ class S2bPopulateCommand extends BaseCommand
             if(!$existingBundle->getIsOnGithub()) {
                 $output->writeLn(sprintf('Remove %s : no more on Github', $existingBundle->getFullName()));
                 ++$counters['removed'];
+                $existingBundle->getUser()->removeBundle($existingBundle);
                 $dm->remove($existingBundle);
                 continue;
             }
 
             // if the bundles doesnt validate anymore, remove it
-            if($violations = $validator->validate($existingBundle)->count()) {
+            if(count($violations = $validator->validate($existingBundle))) {
                 $output->writeLn(sprintf('Remove %s : %s', $existingBundle->getFullName(), print_r($violations)));
                 ++$counters['removed'];
+                $existingBundle->getUser()->removeBundle($existingBundle);
                 $dm->remove($existingBundle);
+                continue;
             }
-            else {
-                $output->writeLn(sprintf('Update %s', $existingBundle->getFullName()));
-                ++$counters['updated'];
-            }
+
+            $output->writeLn(sprintf('Update %s', $existingBundle->getFullName()));
+            ++$counters['updated'];
         }
 
         $dm->flush();
@@ -94,38 +96,41 @@ class S2bPopulateCommand extends BaseCommand
         foreach($githubRepos as $githubRepo) {
             $exists = false;
             foreach($existingBundles as $existingBundle) {
-                if($existingBundle->getName() === $githubRepo['name'] && $existingBundle->getUsername() === $githubRepo['username']) {
+                if($existingBundle->getFullName() === $githubRepo) {
                     $exists = true;
                     break;
                 }
             }
-            if(!$exists) {
-                $bundle = $githubBundle->import($githubRepo['username'], $githubRepo['name'], $githubRepo);
-                if(!$bundle) {
-                    continue;
+            if($exists) {
+                continue;
+            }
+
+            list($username, $name) = explode('/', $githubRepo);
+            $bundle = $githubBundle->import($username, $name);
+            if(!$bundle) {
+                continue;
+            }
+            $user = null;
+            foreach($users as $u) {
+                if($username === $u->getName()) {
+                    $user = $u;
+                    $break;
                 }
-                $user = null;
-                foreach($users as $u) {
-                    if($githubRepo['username'] === $u->getName()) {
-                        $user = $u;
-                        $break;
-                    }
-                }
-                if(!$user) {
-                    $user = $githubUser->import($githubRepo['username']);
-                    $users[] = $user;
-                }
-                $bundle->setUser($user);
-                if(!$validator->validate($bundle)->count()) {
-                    $user->addBundle($bundle);
-                    $dm->persist($bundle);
-                    $dm->persist($user);
-                    ++$counters['created'];
-                    $output->writeLn(sprintf('Create %s', $bundle->getName()));
-                }
-                else {
-                    $output->writeLn(sprintf('Ignore %s', $bundle->getName()));
-                }
+            }
+            if(!$user) {
+                $user = $githubUser->import($username);
+                $users[] = $user;
+            }
+            $bundle->setUser($user);
+            if(!$validator->validate($bundle)->count()) {
+                $user->addBundle($bundle);
+                $dm->persist($bundle);
+                $dm->persist($user);
+                ++$counters['created'];
+                $output->writeLn(sprintf('Create %s', $bundle->getName()));
+            }
+            else {
+                $output->writeLn(sprintf('Ignore %s', $bundle->getName()));
             }
         }
 
@@ -138,7 +143,11 @@ class S2bPopulateCommand extends BaseCommand
         // Now update bundles with more precise GitHub data
         foreach($existingBundles as $bundle) {
             $output->write($bundle->getFullName().str_repeat(' ', 50-strlen($bundle->getFullName())));
-            $githubBundle->update($bundle);
+            if(!$githubBundle->update($bundle)) {
+                $output->write('Fail, will be removed');
+                $bundle->getUser()->removeBundle($bundle);
+                $dm->remove($bundle);
+            }
             $output->writeLn(' '.$bundle->getScore());
         }
         
@@ -148,8 +157,13 @@ class S2bPopulateCommand extends BaseCommand
         $output->writeLn(array('', sprintf('Will now update %d users', count($users))));
         foreach($users as $user) {
             $output->write($user->getName().str_repeat(' ', 40-strlen($user->getName())));
-            $githubUser->update($user);
-            $output->writeLn('OK');
+            if(!$user->getNbBundles() || !$githubUser->update($user)) {
+                $output->writeLn('No bundle, remove user');
+                $dm->remove($user);
+            }
+            else {
+                $output->writeLn('OK');
+            }
         }
 
         $dm->flush();

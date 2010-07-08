@@ -30,25 +30,32 @@ class User
     {
         $user = new Document\User();
         $user->setName($name);
-        try {
-            $this->update($user);
-        }
-        catch(\phpGitHubApiRequestException $e) {
-            $this->output->writeLn(sprintf('%s is not a valid GitHub username', $name));
-            $user = null;
+        if(!$this->update($user)) {
+            return false;
         }
         return $user;
     }
 
     public function update(Document\User $user)
     {
-        $data = $this->github->getUserApi()->show($user->getName());
+        try {
+            $data = $this->github->getUserApi()->show($user->getName());
+        }
+        catch(\phpGitHubApiRequestException $e) {
+            if(404 == $e->getCode()) {
+                return false;
+            }
+            sleep(3);
+            return $this->update($user);
+        }
 
         $user->setEmail(isset($data['email']) ? $data['email'] : null);
         $user->setFullName(isset($data['name']) ? $data['name'] : null);
         $user->setCompany(isset($data['company']) ? $data['company'] : null);
         $user->setLocation(isset($data['location']) ? $data['location'] : null);
         $user->setBlog(isset($data['blog']) ? $data['blog'] : null);
+
+        return true;
     }
     
     /**
