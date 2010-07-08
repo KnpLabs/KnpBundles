@@ -64,13 +64,31 @@ class S2bPopulateCommand extends BaseCommand
             $existingBundle->setIsOnGithub(false);
             foreach($githubRepos as $githubRepo) {
                 if($existingBundle->getName() === $githubRepo['name'] && $existingBundle->getUsername() === $githubRepo['username']) {
-                    $githubBundle->updateInfos($existingBundle, $githubRepo);
-                    ++$counters['updated'];
+                    $githubBundle->updateInfos($existingBundle);
                     break;
-                    $output->writeLn(sprintf('Update %s', $bundle->getName()));
                 }
             }
+            if(!$existingBundle->getIsOnGithub()) {
+                $output->writeLn(sprintf('Remove %s : no more on Github', $existingBundle->getFullName()));
+                ++$counters['removed'];
+                $dm->remove($existingBundle);
+                continue;
+            }
+
+            // if the bundles doesnt validate anymore, remove it
+            if($violations = $validator->validate($existingBundle)->count()) {
+                $output->writeLn(sprintf('Remove %s : %s', $existingBundle->getFullName(), print_r($violations)));
+                ++$counters['removed'];
+                $dm->remove($existingBundle);
+            }
+            else {
+                $output->writeLn(sprintf('Update %s', $existingBundle->getFullName()));
+                ++$counters['updated'];
+            }
         }
+
+        $dm->flush();
+        $existingBundles = $dm->find('Application\S2bBundle\Document\Bundle')->getResults();
         
         // second pass, create missing bundles
         foreach($githubRepos as $githubRepo) {
@@ -83,6 +101,9 @@ class S2bPopulateCommand extends BaseCommand
             }
             if(!$exists) {
                 $bundle = $githubBundle->import($githubRepo['username'], $githubRepo['name'], $githubRepo);
+                if(!$bundle) {
+                    continue;
+                }
                 $user = null;
                 foreach($users as $u) {
                     if($githubRepo['username'] === $u->getName()) {
@@ -109,17 +130,19 @@ class S2bPopulateCommand extends BaseCommand
         }
 
         $dm->flush();
+        $existingBundles = $dm->find('Application\S2bBundle\Document\Bundle')->getResults();
 
         $output->writeln(sprintf('%d created, %d updated, %d removed', $counters['created'], $counters['updated'], $counters['removed']));
 
+        $output->writeln('Will now update commits, files and tags');
         // Now update bundles with more precise GitHub data
-        $bundles = $dm->find('Application\S2bBundle\Document\Bundle')->getResults();
-        foreach($bundles as $bundle) {
+        foreach($existingBundles as $bundle) {
             $output->write($bundle->getFullName().str_repeat(' ', 50-strlen($bundle->getFullName())));
             $githubBundle->update($bundle);
             $output->writeLn(' '.$bundle->getScore());
         }
         
+        $output->writeln('Will now update users');
         // Now update users with more precise GitHub data
         $users = $dm->find('Application\S2bBundle\Document\User')->getResults();
         $output->writeLn(array('', sprintf('Will now update %d users', count($users))));

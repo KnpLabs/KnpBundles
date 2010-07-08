@@ -31,12 +31,8 @@ class Bundle
         $bundle = new Document\Bundle();
         $bundle->setName($name);
         $bundle->setUsername($username);
-        try {
-            $this->updateInfos($bundle, $data);
-        }
-        catch(\phpGitHubApiRequestException $e) {
-            $this->output->writeLn(sprintf('%s/%s is not a valid GitHub repo', $username, $name));
-            $bundle = null;
+        if(!$this->updateInfos($bundle)) {
+            return false;
         }
         return $bundle;
     }
@@ -49,22 +45,47 @@ class Bundle
         $bundle->recalculateScore();
     }
 
+    /**
+     * Return true if the Bundle exists on GitHub, false otherwise 
+     * 
+     * @param Document\Bundle $bundle 
+     * @param array $data 
+     * @return boolean whether the Bundle exists on GitHub
+     */
     public function updateInfos(Document\Bundle $bundle, array $data = null)
     {
         if (null === $data) {
-            $data = $this->github->getRepoApi()->show($bundle->getUsername(), $bundle->getName());
+            try {
+                $data = $this->github->getRepoApi()->show($bundle->getUsername(), $bundle->getName());
+            }
+            catch(\phpGitHubApiRequestException $e) {
+                if(404 == $e->getCode()) {
+                    return false;
+                }
+                sleep(2);
+                return $this->updateInfos($bundle);
+            }
         }
 
         $bundle->setDescription($data['description']);
         $bundle->setFollowers(isset($data['followers']) ? $data['followers'] : $data['watchers']);
         $bundle->setForks($data['forks']);
+        $bundle->setIsFork((bool)$data['fork']);
         $bundle->setCreatedAt(new \DateTime(isset($data['created']) ? $data['created'] : $data['created_at']));
         $bundle->setIsOnGithub(true);
+
+        return true;
     }
 
     public function updateCommits(Document\Bundle $bundle)
     {
-        $commits = $this->github->getCommitApi()->getBranchCommits($bundle->getUsername(), $bundle->getName(), 'master');
+        try {
+            $commits = $this->github->getCommitApi()->getBranchCommits($bundle->getUsername(), $bundle->getName(), 'master');
+        }
+        catch(\phpGitHubApiRequestException $e) {
+            sleep(2);
+            return $this->updateCommits($bundle);
+        }
         if(empty($commits)) {
             return $this->forward('S2bBundle:Bundle:listAll', array('sort' => 'score'));
         }
@@ -73,7 +94,13 @@ class Bundle
 
     public function updateFiles(Document\Bundle $bundle)
     {
-        $blobs = $this->github->getObjectApi()->listBlobs($bundle->getUsername(), $bundle->getName(), 'master');
+        try {
+            $blobs = $this->github->getObjectApi()->listBlobs($bundle->getUsername(), $bundle->getName(), 'master');
+        }
+        catch(\phpGitHubApiRequestException $e) {
+            sleep(2);
+            return $this->updateFiles($bundle);
+        }
         foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
             if(isset($blobs[$readmeFilename])) {
                 $readmeSha = $blobs[$readmeFilename];
@@ -86,7 +113,13 @@ class Bundle
 
     public function updateTags(Document\Bundle $bundle)
     {
-        $tags = $this->github->getRepoApi()->getRepoTags($bundle->getUsername(), $bundle->getName());
+        try {
+            $tags = $this->github->getRepoApi()->getRepoTags($bundle->getUsername(), $bundle->getName());
+        }
+        catch(\phpGitHubApiRequestException $e) {
+            sleep(2);
+            return $this->updateTags($bundle);
+        }
         $bundle->setTags(array_keys($tags));
     }
     

@@ -108,6 +108,32 @@ class Bundle
     protected $forks = null;
 
     /**
+     * True if the Bundle is a fork
+     * @Boolean
+     * @Validation({@AssertFalse, @AssertType("boolean")})
+     */
+    protected $isFork = null;
+    
+    /**
+     * Get isFork
+     * @return bool
+     */
+    public function getIsFork()
+    {
+      return $this->isFork;
+    }
+    
+    /**
+     * Set isFork
+     * @param  bool
+     * @return null
+     */
+    public function setIsFork($isFork)
+    {
+      $this->isFork = $isFork;
+    }
+
+    /**
      * Get tags
      * @return array
      */
