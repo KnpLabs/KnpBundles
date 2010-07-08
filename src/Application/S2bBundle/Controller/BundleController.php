@@ -32,7 +32,8 @@ class BundleController extends Controller
             ->reduce($reduceFunction)
             ->sort('score', 'desc')
             ->execute();
-        return $this->render('S2bBundle:Bundle:searchResults', array('query' => $query, 'bundles' => $bundles));
+
+        return $this->render('S2bBundle:Bundle:searchResults', array('query' => $query, 'bundles' => $bundles, 'callback' => $this->getRequest()->get('callback')));
     }
 
     public function showAction($username, $name)
@@ -45,7 +46,7 @@ class BundleController extends Controller
         }
         $commits = $bundle->getLastCommits();
 
-        return $this->render('S2bBundle:Bundle:show', array('bundle' => $bundle, 'commits' => $commits));
+        return $this->render('S2bBundle:Bundle:show', array('bundle' => $bundle, 'commits' => $commits, 'callback' => $this->getRequest()->get('callback')));
     }
 
     public function listAllAction($sort)
@@ -62,7 +63,7 @@ class BundleController extends Controller
         $query = $this->container->getDoctrine_odm_mongodb_documentManagerService()->createQuery('Application\S2bBundle\Document\Bundle');
         $query->sort($sort, 'name' === $sort ? 'asc' : 'desc');
 
-        return $this->render('S2bBundle:Bundle:listAll', array('bundles' => $query->execute(), 'sort' => $sort, 'fields' => $fields));
+        return $this->render('S2bBundle:Bundle:listAll', array('bundles' => $query->execute(), 'sort' => $sort, 'fields' => $fields, 'callback' => $this->getRequest()->get('callback')));
     }
 
     public function listLatestAction()

@@ -9,7 +9,7 @@ bundle_add:
 search:
     pattern:        /search.:_format
     defaults:       { _controller: S2bBundle:Bundle:search, _format: html }
-    requirements:   { _format: "(html|json)" }
+    requirements:   { _format: "(html|json|js)" }
 
 latest:
     pattern:        /latest.:_format
@@ -23,19 +23,24 @@ api:
 bundle_list:
     pattern:        /bundle/:sort.:_format
     defaults:       { _controller: S2bBundle:Bundle:listAll, sort: score, _format: html }
-    requirements:   { _sort: "(score|name|createdAt|lastCommitAt)", _format: "(html|json)" }
+    requirements:   { _sort: "(score|name|createdAt|lastCommitAt)", _format: "(html|json|js)" }
 
 user_list:
     pattern:        /developer/:sort.:_format
     defaults:       { _controller: S2bBundle:User:listAll, sort: name, _format: html }
-    requirements:   { _sort: "(name)", _format: "(html|json)" }
+    requirements:   { _sort: "(name)", _format: "(html|json|js)" }
+
+user_bundle_list:
+    pattern:        /:name/bundles.:_format
+    defaults:       { _controller: S2bBundle:User:bundles }
+    requirements:   { _format: "(json|js)" }
 
 bundle_show:
     pattern:        /:username/:name.:_format
     defaults:       { _controller: S2bBundle:Bundle:show, _format: html }
-    requirements:   { _format: "(html|json)" }
+    requirements:   { _format: "(html|json|js)" }
 
 user_show:
     pattern:        /:name.:_format
     defaults:       { _controller: S2bBundle:User:show, _format: html }
-    requirements:   { _format: "(html|json)" }
+    requirements:   { _format: "(html|json|js)" }

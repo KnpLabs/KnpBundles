@@ -1,5 +1,30 @@
 Everything here is available through an HTTP API.
-As for now, the only supported format is JSON.
+
+## Formats
+
+As for now, the only supported formats are JSON and JavaScript (JSONP)
+
+### JSON
+
+Add the ".json" extension at the end of the url path.
+The response content-type will be "application/json".
+
+    $ curl http://symfony2bundles.org/bundle/score.json
+
+### JavaScript (JSONP)
+
+Add the ".js" extension at the end of the url path, and a "callback" parameter to wrap the data.
+The response content-type will be "application/javascript".
+
+    $ curl http://symfony2bundles.org/bundle/score.js?callback=doSomething
+
+jQuery provides an easy way to deal with jsonp, removing the need for a callback:
+
+    $.ajax({
+        url:        "http://symfony2bundles.org/bundle/score.js",
+        dataType:   "jsonp",
+        success:    function(data) { ... }
+    });
 
 ## Bundles
 
@@ -55,20 +80,20 @@ When requesting only one bundle, you get more informations such as last commits,
 
 Return informations about one bundle:
 
-    - name: MicroKernelBundle
-      username: avalanche123
-      description: A micro kernel for Symfony 2, inspired by the Ruby Sinatra Web Framework
-      score: 21.2
-      followers: 5
-      forks: 2
-      createdAt: 1273839236
-      lastCommitAt: 1278106123
-      tags:
-        - 1.0
-        - 1.1
-      lastCommits:
-        ~ described at http://develop.github.com/p/commits.html
-      readme: # Symfony 2 Micro Kernel\r\n\r\nThis is a Ruby Sinatra inspired micro kernel for Symfony 2.[...]
+    name: MicroKernelBundle
+    username: avalanche123
+    description: A micro kernel for Symfony 2, inspired by the Ruby Sinatra Web Framework
+    score: 21.2
+    followers: 5
+    forks: 2
+    createdAt: 1273839236
+    lastCommitAt: 1278106123
+    tags:
+      - 1.0
+      - 1.1
+    lastCommits:
+      ~ described at http://develop.github.com/p/commits.html
+    readme: # Symfony 2 Micro Kernel\r\n\r\nThis is a Ruby Sinatra inspired micro kernel for Symfony 2.[...]
 
 ## Developers
 
@@ -100,7 +125,7 @@ When requesting only one user, you get more informations such as last commits.
     $ curl http://symfony2bundles.org/ornicar.json
 
 Return informations about one developer.
-When requesting only one developer, you get more informations such as last commits.
+When requesting only one developer, you get more informations such as last commits and bundle names.
 
     - name: ornicar
       email: thibault.duplessis@gmail.com
@@ -113,3 +138,29 @@ When requesting only one developer, you get more informations such as last commi
       lastCommitAt: lastCommitAt
       lastCommits:
         ~ described at http://develop.github.com/p/commits.html
+
+### List the bundles of a developer
+
+Get a list of the bundles a given developer owns. 
+
+    :name/bundles.:format
+
+    $ curl http://symfony2bundles.org/avalanche123/bundles.json
+
+Return a list of bundles.
+You get all informations available for each bundle.
+
+    - name: MicroKernelBundle
+      username: avalanche123
+      description: A micro kernel for Symfony 2, inspired by the Ruby Sinatra Web Framework
+      score: 21.2
+      followers: 5
+      forks: 2
+      createdAt: 1273839236
+      lastCommitAt: 1278106123
+      tags:
+        - 1.0
+        - 1.1
+      lastCommits:
+        ~ described at http://develop.github.com/p/commits.html
+      readme: # Symfony 2 Micro Kernel\r\n\r\nThis is a Ruby Sinatra inspired micro kernel for Symfony 2.[...]

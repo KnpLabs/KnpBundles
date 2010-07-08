@@ -18,7 +18,7 @@ class UserController extends Controller
         $bundles = $user->getBundles();
         $commits = $user->getLastCommits();
 
-        return $this->render('S2bBundle:User:show', array('user' => $user, 'bundles' => $bundles, 'commits' => $commits));
+        return $this->render('S2bBundle:User:show', array('user' => $user, 'bundles' => $bundles, 'commits' => $commits, 'callback' => $this->getRequest()->get('callback')));
     }
 
     public function listAllAction()
@@ -27,6 +27,19 @@ class UserController extends Controller
             ->createQuery('Application\S2bBundle\Document\User')
             ->sort('name', 'asc');
 
-        return $this->render('S2bBundle:User:listAll', array('users' => $query->execute()));
+        return $this->render('S2bBundle:User:listAll', array('users' => $query->execute(), 'callback' => $this->getRequest()->get('callback')));
+    }
+
+    public function bundlesAction($name)
+    {
+        $user = $this->container->getDoctrine_odm_mongodb_documentManagerService()
+            ->find('Application\S2bBundle\Document\User', array('name' => $name))
+            ->getSingleResult();
+        if(!$user) {
+            throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
+        }
+        $bundles = $user->getBundles();
+
+        return $this->render('S2bBundle:User:bundles', array('bundles' => $bundles, 'callback' => $this->getRequest()->get('callback')));
     }
 }
