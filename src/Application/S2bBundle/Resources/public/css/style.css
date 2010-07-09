@@ -557,6 +557,8 @@ img.gravatar {
     padding: 1em;
     border: 1px solid #E4ECEE;
     overflow: auto;
+    box-shadow: inset 2px 2px 5px #F2F2F2;
+    -moz-box-shadow: inset 2px 2px 5px #F2F2F2;
     -webkit-box-shadow: inset 2px 2px 5px #F2F2F2;
 }
 
