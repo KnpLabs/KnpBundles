@@ -45,8 +45,8 @@ class S2bPopulateCommand extends BaseCommand
         $githubUser = new Github\User($github, $output);
         $githubBundle = new Github\Bundle($github, $output);
 
-        $githubRepos = $githubSearch->searchBundles(5000, $output);
-        $output->writeLn(sprintf('Found %d bundle candidates', count($githubRepos)));
+        $foundBundles = $githubSearch->searchBundles(5000, $output);
+        $output->writeLn(sprintf('Found %d bundle candidates', count($foundBundles)));
 
         $dm = $this->container->getDoctrine_odm_mongodb_documentManagerService();
         $existingBundles = $dm->find('Application\S2bBundle\Document\Bundle')->getResults();
@@ -61,13 +61,7 @@ class S2bPopulateCommand extends BaseCommand
 
         // first pass, update and revalidate existing bundles
         foreach($existingBundles as $existingBundle) {
-            $existingBundle->setIsOnGithub(false);
-            foreach($githubRepos as $githubRepo) {
-                if($existingBundle->getFullName() === $githubRepo) {
-                    $githubBundle->updateInfos($existingBundle);
-                    break;
-                }
-            }
+            $githubBundle->updateInfos($existingBundle);
             if(!$existingBundle->getIsOnGithub()) {
                 $output->writeLn(sprintf('Remove %s : no more on Github', $existingBundle->getFullName()));
                 ++$counters['removed'];
@@ -93,10 +87,10 @@ class S2bPopulateCommand extends BaseCommand
         $existingBundles = $dm->find('Application\S2bBundle\Document\Bundle')->getResults();
         
         // second pass, create missing bundles
-        foreach($githubRepos as $githubRepo) {
+        foreach($foundBundles as $foundBundle) {
             $exists = false;
             foreach($existingBundles as $existingBundle) {
-                if($existingBundle->getFullName() === $githubRepo) {
+                if($existingBundle->getFullName() === $foundBundle->getFullName()) {
                     $exists = true;
                     break;
                 }
@@ -105,20 +99,18 @@ class S2bPopulateCommand extends BaseCommand
                 continue;
             }
 
-            list($username, $name) = explode('/', $githubRepo);
-            $bundle = $githubBundle->import($username, $name);
-            if(!$bundle) {
+            if(!$bundle = $githubBundle->updateInfos($foundBundle)) {
                 continue;
             }
             $user = null;
             foreach($users as $u) {
-                if($username === $u->getName()) {
+                if($bundle->getUsername() === $u->getName()) {
                     $user = $u;
                     $break;
                 }
             }
             if(!$user) {
-                $user = $githubUser->import($username);
+                $user = $githubUser->import($bundle->getUsername());
                 $users[] = $user;
             }
             $bundle->setUser($user);

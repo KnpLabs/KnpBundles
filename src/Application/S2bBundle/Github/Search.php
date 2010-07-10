@@ -1,6 +1,7 @@
 <?php
 
 namespace Application\S2bBundle\Github;
+use Application\S2bBundle\Document\Bundle;
 use Symfony\Components\Console\Output\OutputInterface;
 use Goutte\Client;
 
@@ -39,51 +40,50 @@ class Search
      */
     public function searchBundles($limit = 300)
     {
-        $repos = $this->searchBundlesOnGitHub($limit);
-        $repos = $this->searchBundlesOnGoogle($repos, $limit);
-        $repos = array_unique($repos);
-        return $repos;
+        $bundles = $this->searchBundlesOnGitHub($limit);
+        $bundles = $this->searchBundlesOnGoogle($bundles, $limit);
+        return $bundles;
     }
 
     protected function searchBundlesOnGitHub($limit)
     {
         $this->output->write('Search on Github');
         try {
-            $repos = array();
+            $bundles = array();
             $page = 1;
             do {
-                $pageRepos = $this->github->getRepoApi()->search('Bundle', 'php', $page);
-                if(empty($pageRepos)) {
+                $repos = $this->github->getRepoApi()->search('Bundle', 'php', $page);
+                if(empty($repos)) {
                     break;
                 }
-                foreach($pageRepos as $pageRepo) {
-                    if(!preg_match('#^\w+Bundle$#', $pageRepo['name'])) {
+                foreach($repos as $repo) {
+                    if(!preg_match('#^\w+Bundle$#', $repo['name'])) {
                         continue;
                     }
-                    $repos[] = $pageRepo['username'].'/'.$pageRepo['name'];
+                    $bundles[] = new Bundle($repo['username'].'/'.$repo['name']);
                 }
                 $page++;
-                $this->output->write('...'.count($repos));
+                $this->output->write('...'.count($bundles));
             }
-            while(count($repos) < $limit);
+            while(count($bundles) < $limit);
         }
         catch(\Exception $e) {
             $this->output->write(' - '.$e->getMessage());
         }
 
-        if(empty($repos)) {
+        if(empty($bundles)) {
             $this->output->writeLn(' - Failed, will retry');
             sleep(3);
             return $this->searchBundlesOnGitHub($limit);
         }
         $this->output->writeLn('... DONE');
-        return $repos;
+        return $bundles;
     }
 
-    protected function searchBundlesOnGoogle(array $repos, $limit)
+    protected function searchBundlesOnGoogle(array $bundles, $limit)
     {
         $this->output->write('Search on Google');
-        $maxBatch = 5;
+        $maxBatch = 2;
         $maxPage = 5;
         $pageNumber = 1;
         for($batch = 1; $batch <= $maxBatch; $batch++) {
@@ -105,14 +105,18 @@ class Search
                     if(!preg_match('#^http://github.com/(\w+/\w+Bundle).*$#', $url, $match)) {
                         continue;
                     }
-                    $name = $match[1];
-                    foreach($repos as $repo) {
-                        if($repo['name'] == $name && $repo['username'] == $username) {
+                    $bundle = new Bundle($match[1]);
+                    $alreadyFound = false;
+                    foreach($bundles as $_bundle) {
+                        if($bundle->getName() == $_bundle->getName()) {
+                            $alreadyFound = true;
                             break;
                         }
                     }
-                    $repos[] = $repo;
-                    $this->output->write('!');
+                    if(!$alreadyFound) {
+                        $bundles[] = $bundle;
+                        $this->output->write(sprintf('!'));
+                    }
                 }
                 $pageNumber++;
                 usleep(500*1000);
@@ -121,7 +125,7 @@ class Search
             sleep(2);
         }
         $this->output->writeLn(' DONE');
-        return $repos;
+        return $bundles;
     }
 
     /**

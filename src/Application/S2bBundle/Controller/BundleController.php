@@ -141,7 +141,7 @@ class BundleController extends Controller
         }
         $githubBundle = new Github\Bundle(new \phpGithubApi(), new Output());
 
-        if(!$bundle = $githubBundle->import($username, $name)) {
+        if(!$bundle = $githubBundle->update(new Bundle($username.'/'.$name))) {
             return false;
         }
         

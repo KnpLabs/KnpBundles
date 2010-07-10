@@ -26,17 +26,6 @@ class Bundle
         $this->output = $output;
     }
 
-    public function import($username, $name)
-    {
-        $bundle = new Document\Bundle();
-        $bundle->setName($name);
-        $bundle->setUsername($username);
-        if(!$this->updateInfos($bundle)) {
-            return false;
-        }
-        return $bundle;
-    }
-
     public function update(Document\Bundle $bundle)
     {
         if(!$this->updateCommits($bundle)) {
@@ -50,7 +39,7 @@ class Bundle
         }
         $bundle->recalculateScore();
          
-        return true;
+        return $bundle;
     }
 
     /**
@@ -67,6 +56,7 @@ class Bundle
         }
         catch(\phpGitHubApiRequestException $e) {
             if(404 == $e->getCode()) {
+                $bundle->setIsOnGithub(false);
                 return false;
             }
             sleep(3);
@@ -80,7 +70,7 @@ class Bundle
         $bundle->setCreatedAt(new \DateTime(isset($data['created']) ? $data['created'] : $data['created_at']));
         $bundle->setIsOnGithub(true);
 
-        return true;
+        return $bundle;
     }
 
     public function updateCommits(Document\Bundle $bundle)
@@ -101,7 +91,7 @@ class Bundle
         }
         $bundle->setLastCommits(array_slice($commits, 0, 5));
 
-        return true;
+        return $bundle;
     }
 
     public function updateFiles(Document\Bundle $bundle)
@@ -131,7 +121,7 @@ class Bundle
             }
         }
 
-        return true;
+        return $bundle;
     }
 
     public function updateTags(Document\Bundle $bundle)
@@ -150,7 +140,7 @@ class Bundle
         }
         $bundle->setTags(array_keys($tags));
 
-        return true;
+        return $bundle;
     }
     
     /**

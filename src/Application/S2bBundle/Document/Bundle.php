@@ -113,6 +113,13 @@ class Bundle
      * @Validation({@AssertFalse, @AssertType("boolean")})
      */
     protected $isFork = null;
+
+    public function __construct($fullName = null)
+    {
+        if($fullName) {
+            list($this->username, $this->name) = explode('/', $fullName);
+        }
+    }
     
     /**
      * Get isFork
