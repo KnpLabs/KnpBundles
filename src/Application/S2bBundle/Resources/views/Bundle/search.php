@@ -5,4 +5,8 @@
 <?php $view->slots->set('slogan', $view->slots->get('slogan', 'Find the Bundle you need')) ?>
 <?php $view->slots->set('description', $view->slots->get('description', 'Find the Bundle you need')) ?>
 
+<?php $view->slots->start('sidemenu') ?>
+<?php $view->output('S2bBundle:Bundle:add') ?>
+<?php $view->slots->stop() ?>
+
 <?php $view->slots->output('_content', 'Please use the search input at the top right.<br />The engine will search in Bundle name, Bundle description and developer name.') ?>
