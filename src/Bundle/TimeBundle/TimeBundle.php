@@ -3,7 +3,7 @@
 namespace Bundle\TimeBundle;
 
 use Bundle\TimeBundle\DependencyInjection\TimeExtension;
-use Symfony\Foundation\Bundle\Bundle as BaseBundle;
+use Symfony\Framework\Bundle\Bundle as BaseBundle;
 use Symfony\Components\DependencyInjection\ContainerInterface;
 use Symfony\Components\DependencyInjection\Loader\Loader;
 
