@@ -8,7 +8,6 @@ kernel.config:
 web.config:
     validation:
         enabled: true
-        annotations: true
 
 web.templating:
     escaping:       htmlspecialchars
@@ -16,6 +15,13 @@ web.templating:
 markdown.parser: ~      # Enable the parser service
 
 time.helper: ~      # Enable the time helper
+
+doctrine.orm:
+  default_entity_manager:   default
+  cache_driver:             array           # array, apc, memcache, xcache
+  entity_managers:
+    default:
+      connection:           default
 
 # doctrine.dbal:
 #     dbname:   xxxxxxxx
