@@ -1,7 +1,7 @@
 <?php
 
 namespace Application\S2bBundle\Github;
-use Application\S2bBundle\Document\Bundle;
+use Application\S2bBundle\Entities\Bundle;
 use Symfony\Components\Console\Output\OutputInterface;
 use Goutte\Client;
 

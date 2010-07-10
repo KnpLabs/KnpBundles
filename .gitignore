@@ -9,3 +9,4 @@
 # external software files
 .DS_Store
 tags
+*.autosave

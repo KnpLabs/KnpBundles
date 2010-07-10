@@ -2,10 +2,10 @@
 
 namespace Application\S2bBundle\Command;
 
-use Application\S2bBundle\Document\Bundle;
-use Application\S2bBundle\Document\User;
+use Application\S2bBundle\Entities\Bundle;
+use Application\S2bBundle\Entities\User;
 use Application\S2bBundle\Github;
-use Symfony\Framework\FoundationBundle\Command\Command as BaseCommand;
+use Symfony\Bundle\FrameworkBundle\Command\Command as BaseCommand;
 use Symfony\Components\Console\Input\InputArgument;
 use Symfony\Components\Console\Input\InputOption;
 use Symfony\Components\Console\Input\InputInterface;

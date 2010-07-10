@@ -1,118 +1,134 @@
 <?php
 
-namespace Application\S2bBundle\Document;
+namespace Application\S2bBundle\Entities;
 
 /**
  * An Open Source Bundle living on GitHub
  *
- * @Document(
- *   db="symfony2bundles",
- *   collection="bundle",
- *   indexes={
- *     @Index(keys={"username"="asc", "name"="asc"}, options={"unique"=true})
- *   }
- * )
+ * @Entity
+ * @Table(name="bundle")
  * @HasLifecycleCallbacks
  */
 class Bundle
 {
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('name', new Constraints\NotBlank());
+        $metadata->addPropertyConstraint('name', new Constraints\MinLength(2));
+        $metadata->addPropertyConstraint('username', new Constraints\NotBlank());
+        $metadata->addPropertyConstraint('username', new Constraints\MinLength(2));
+    }
+    
+    /**
+     * @Column(name="id", type="integer")
+     * @Id
+     * @GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
     /**
      * Bundle name, e.g. "MarkdownBundle"
      * Like in GitHub, this name is not unique
-     * @String
-     * @Validation({ @NotBlank, @Regex("/^\w+Bundle$/") })
+     *
+     * @Column(type="string", length=127)
      */
     protected $name = null;
 
     /**
      * The name of the user who owns this bundle
      * This value is redundant with the name of the referenced User, for performance reasons
-     * @String
-     * @Validation({ @NotBlank })
+     *
+     * @Column(type="string", length=127)
      */
     protected $username = null;
 
     /**
      * User who owns the bundle
-     * @ReferenceOne(targetDocument="Application\S2bBundle\Document\User")
-     * @Validation({ @NotBlank, @Valid })
+     *
+     * @ManyToOne(targetEntity="User", inversedBy="bundles")
+     * @JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user = null;
 
     /**
      * Bundle description
-     * @String
+     *
+     * @Column(type="string", length=255)
      */
     protected $description = null;
 
     /**
      * The bundle readme text extracted from source code
-     * @String
+     *
+     * @Column(type="text")
      */
     protected $readme = null;
 
     /**
      * Internal score of the Bundle, based on several indicators
      * Defines the Bundle position in lists and searches
-     * @Float
+     *
+     * @Column(type="integer")
      */
     protected $score = null;
 
     /**
      * Bundle creation date (on this website)
-     * @Date
+     *
+     * @Column(type="date")
      */
     protected $createdAt;
 
     /**
      * Bundle update date (on this website)
-     * @Date
+     *
+     * @Column(type="date")
      */
     protected $updatedAt;
 
     /**
      * Date of the last Git commit
-     * @Date
+     *
+     * @Column(type="date")
      */
     protected $lastCommitAt = null;
 
     /**
      * The last commits on this bundle repo
-     * @Field(type="collection")
+     *
+     * @Column(type="text")
      */
     protected $lastCommits = array();
 
     /**
      * Released tags are Git tags
-     * @Field(type="collection")
+     * @Column(type="text")
      */
     protected $tags = array();
 
     /**
-     * Whether the bundle is available on GitHub or not
-     * @Boolean
-     * @Validation({@AssertType("boolean")})
-     */
-    protected $isOnGithub = null;
-
-    /**
      * Number of GitHub followers
-     * @Int
+     * @Column(type="integer")
      */
-    protected $followers = null;
+    protected $nbFollowers = null;
 
     /**
      * Number of GitHub forks
-     * @Int
+     * @Column(type="integer")
      */
-    protected $forks = null;
+    protected $nbForks = null;
 
     /**
      * True if the Bundle is a fork
-     * @Boolean
-     * @Validation({@AssertFalse, @AssertType("boolean")})
+     * @Column(type="boolean")
      */
     protected $isFork = null;
+
+    /**
+     * Whether the bundle is available on GitHub or not
+     * @Column(type="boolean")
+     */
+    protected $isOnGithub = null;
 
     public function __construct($fullName = null)
     {
@@ -146,7 +162,7 @@ class Bundle
      */
     public function getTags()
     {
-        return $this->tags;
+        return unserialize($this->tags);
     }
 
     /**
@@ -156,16 +172,17 @@ class Bundle
      */
     public function setTags(array $tags)
     {
-        $this->tags = $tags;
+        $this->tags = serialize($tags);
     }
 
     public function getLastTagName()
     {
-        if(empty($this->tags)) {
+        $tags = $this->getTags();
+        if(empty($tags)) {
             return null;
         }
 
-        return reset($this->tags);
+        return reset($tags);
     }
 
     /**
@@ -216,26 +233,21 @@ class Bundle
 
     /**
      * Get score
-     * @return float
+     * @return int
      */
     public function getScore()
     {
         return $this->score;
     }
 
-    public function getRoundScore()
-    {
-        return round($this->score);
-    }
-
     /**
      * Set score
-     * @param  float
+     * @param  int
      * @return null
      */
     public function setScore($score)
     {
-        $this->score = $score;
+        $this->score = (int) $score;
     }
 
     public function recalculateScore()
@@ -283,9 +295,9 @@ class Bundle
      * Get forks
      * @return int
      */
-    public function getForks()
+    public function getNbForks()
     {
-        return $this->forks;
+        return $this->nbForks;
     }
 
     /**
@@ -293,18 +305,18 @@ class Bundle
      * @param  int
      * @return null
      */
-    public function setForks($forks)
+    public function setNbForks($nbForks)
     {
-        $this->forks = $forks;
+        $this->nbforks = $nbforks;
     }
 
     /**
      * Get followers
      * @return int
      */
-    public function getFollowers()
+    public function getNbFollowers()
     {
-        return $this->followers;
+        return $this->nbFollowers;
     }
 
     /**
@@ -312,28 +324,9 @@ class Bundle
      * @param  int
      * @return null
      */
-    public function setFollowers($followers)
+    public function setNbFollowers($nbFollowers)
     {
-        $this->followers = $followers;
-    }
-
-    /**
-     * Get rank
-     * @return float
-     */
-    public function getRank()
-    {
-        return $this->rank;
-    }
-
-    /**
-     * Set rank
-     * @param  float
-     * @return null
-     */
-    public function setRank($rank)
-    {
-        $this->rank = $rank;
+        $this->nbFollowers = $nbFollowers;
     }
 
     /**

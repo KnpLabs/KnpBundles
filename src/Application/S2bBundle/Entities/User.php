@@ -1,64 +1,77 @@
 <?php
 
-namespace Application\S2bBundle\Document;
-use Doctrine\Common\Collections\Collection;
+namespace Application\S2bBundle\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Components\Validator\Constraints;
 
 /**
- * An user living on GitHub
+ * A user living on GitHub
  *
- * @Document(
- *   db="symfony2bundles",
- *   collection="user",
- *   indexes={
- *     @Index(keys={"name"="asc"}, options={"unique"=true})
- *   }
- * )
+ * @Entity
+ * @Table(name="user")
  * @HasLifecycleCallbacks
  */
 class User
 {
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('name', new Constraints\NotBlank());
+        $metadata->addPropertyConstraint('name', new Constraints\MinLength(2));
+    }
+    
+    /**
+     * @Column(name="id", type="integer")
+     * @Id
+     * @GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
     /**
      * User name, e.g. "ornicar"
      * Like in GitHub, this name is unique
-     * @String
-     * @Validation({ @NotBlank })
+     *
+     * @Column(type="string", length=127)
      */
     protected $name = null;
 
     /**
      * User email
-     * @String
+     *
+     * @Column(type="string", length=255)
      */
     protected $email = null;
 
     /**
      * Full name of the user, like "Thibault Duplessis"
-     * @String
+     *
+     * @Column(type="string", length=255)
      */
     protected $fullName = null;
 
     /**
      * The user company name
-     * @String
+     *
+     * @Column(type="string", length=255)
      */
     protected $company = null;
 
     /**
      * The user location
-     * @String
+     *
+     * @Column(type="string", length=255)
      */
     protected $location = null;
 
     /**
      * The user blog url
-     * @String
+     *
+     * @Column(type="string", length=255)
      */
     protected $blog = null;
 
     /**
      * Bundles the user owns
-     * @ReferenceMany(targetDocument="Application\S2bBundle\Document\Bundle")
+     * @OneToMany(targetEntity="Bundle", mappedBy="user")
      */
     protected $bundles = null;
 
@@ -145,7 +158,7 @@ class User
 
     /**
      * Get bundles
-     * @return Collection
+     * @return ArrayCollection
      */
     public function getBundles()
     {
@@ -235,7 +248,7 @@ class User
             return strtotime($a['committed_date']) < strtotime($b['committed_date']);
         });
         $commits = array_slice($commits, 0, 10);
-        
+
         return $commits;
     }
 
