@@ -19,3 +19,6 @@
 [submodule "src/vendor/Doctrine"]
 	path = src/vendor/Doctrine
 	url = git://github.com/doctrine/doctrine2.git
+[submodule "src/vendor/DoctrineMigrations"]
+	path = src/vendor/DoctrineMigrations
+	url = git://github.com/doctrine/migrations.git
