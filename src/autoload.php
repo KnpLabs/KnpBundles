@@ -10,9 +10,9 @@ $loader->registerNamespaces(array(
     'Application'               => __DIR__,
     'Bundle'                    => __DIR__,
     'Doctrine\DBAL\Migrations'  => __DIR__.'/vendor/migrations/lib',
-    'Doctrine\DBAL'             => __DIR__.'/vendor/doctrine/lib/vendor/doctrine-dbal/lib',
-    'Doctrine\Common'           => __DIR__.'/vendor/doctrine/lib/vendor/doctrine-common/lib',
-    'Doctrine'                  => __DIR__.'/vendor/doctrine/lib',
+    'Doctrine\DBAL'             => __DIR__.'/vendor/Doctrine/lib/vendor/doctrine-dbal/lib',
+    'Doctrine\Common'           => __DIR__.'/vendor/Doctrine/lib/vendor/doctrine-common/lib',
+    'Doctrine'                  => __DIR__.'/vendor/Doctrine/lib',
     'Zend'                      => __DIR__.'/vendor/Zend/library',
 ));
 $loader->register();
