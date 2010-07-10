@@ -7,9 +7,6 @@
 [submodule "src/vendor/php-github-api"]
 	path = src/vendor/php-github-api
 	url = git://github.com/ornicar/php-github-api.git
-[submodule "src/vendor/MongoDbOdm"]
-	path = src/vendor/MongoDbOdm
-	url = git://github.com/doctrine/mongodb-odm.git
 [submodule "src/Bundle/MarkdownBundle"]
 	path = src/Bundle/MarkdownBundle
 	url = git://github.com/knplabs/MarkdownBundle.git
