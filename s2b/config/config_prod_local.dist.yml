@@ -1,5 +1,5 @@
 imports:
-    - { resource: config_dev.yml }
+    - { resource: config.yml }
 
 doctrine.dbal:
   connections:
@@ -7,6 +7,6 @@ doctrine.dbal:
       driver:               PDOMySql
       dbname:               symfony2bundles
       user:                 root
-      password:             m
+      password:             ~
       host:                 localhost
       port:                 ~

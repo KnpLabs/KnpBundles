@@ -21,7 +21,8 @@ class S2bKernel extends Kernel
 
             // enable third-party bundles
             new Symfony\Framework\ZendBundle\ZendBundle(),
-            new Symfony\Framework\DoctrineMongoDBBundle\DoctrineMongoDBBundle(),
+            new Symfony\Framework\DoctrineBundle\DoctrineBundle(),
+            new Symfony\Framework\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
 
             // register your bundles here
             new Bundle\MarkdownBundle\MarkdownBundle(),
