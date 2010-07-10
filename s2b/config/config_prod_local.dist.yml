@@ -6,7 +6,7 @@ doctrine.dbal:
     default:
       driver:               PDOMySql
       dbname:               symfony2bundles
-      user:                 root
+      user:                 ~
       password:             ~
       host:                 localhost
       port:                 ~
