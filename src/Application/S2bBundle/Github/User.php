@@ -42,10 +42,10 @@ class User
             $data = $this->github->getUserApi()->show($user->getName());
         }
         catch(\phpGitHubApiRequestException $e) {
-            if(400 <= $e->getCode() && 500 > $e->getCode()) {
+            if(404 == $e->getCode()) {
                 return false;
             }
-            sleep(3);
+            sleep(5);
             return $this->update($user);
         }
 

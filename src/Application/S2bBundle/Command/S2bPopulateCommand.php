@@ -72,7 +72,7 @@ class S2bPopulateCommand extends BaseCommand
 
             // if the bundles doesnt validate anymore, remove it
             if(count($violations = $validator->validate($existingBundle))) {
-                $output->writeLn(sprintf('Remove %s : %s', $existingBundle->getFullName(), print_r($violations)));
+                $output->writeLn(sprintf('Remove %s : %s', $existingBundle->getFullName(), $violations->__toString()));
                 ++$counters['removed'];
                 $existingBundle->getUser()->removeBundle($existingBundle);
                 $dm->remove($existingBundle);
@@ -114,7 +114,7 @@ class S2bPopulateCommand extends BaseCommand
                 $users[] = $user;
             }
             $bundle->setUser($user);
-            if(!$validator->validate($bundle)->count()) {
+            if(!count($violations = $validator->validate($bundle))) {
                 $user->addBundle($bundle);
                 $dm->persist($bundle);
                 $dm->persist($user);
@@ -122,7 +122,7 @@ class S2bPopulateCommand extends BaseCommand
                 $output->writeLn(sprintf('Create %s', $bundle->getName()));
             }
             else {
-                $output->writeLn(sprintf('Ignore %s', $bundle->getName()));
+                $output->writeLn(sprintf('Ignore %s : %s', $bundle->getFullName(), $violations->__toString()));
             }
         }
 

@@ -59,7 +59,7 @@ class Bundle
                 $bundle->setIsOnGithub(false);
                 return false;
             }
-            sleep(3);
+            sleep(5);
             return $this->updateInfos($bundle);
         }
 
@@ -83,7 +83,7 @@ class Bundle
             if(404 == $e->getCode()) {
                 return false;
             }
-            sleep(3);
+            sleep(5);
             return $this->updateCommits($bundle);
         }
         if(empty($commits)) {
@@ -104,7 +104,7 @@ class Bundle
             if(404 == $e->getCode()) {
                 return false;
             }
-            sleep(3);
+            sleep(5);
             return $this->updateFiles($bundle);
         }
         foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
@@ -135,7 +135,7 @@ class Bundle
                 return false;
             }
             $this->output->write(' '.$e->getCode());
-            sleep(3);
+            sleep(5);
             return $this->updateTags($bundle);
         }
         $bundle->setTags(array_keys($tags));
