@@ -2,7 +2,7 @@
 
 require_once __DIR__.'/../src/autoload.php';
 
-use Symfony\Foundation\Kernel;
+use Symfony\Framework\Kernel;
 use Symfony\Components\DependencyInjection\Loader\YamlFileLoader as ContainerLoader;
 use Symfony\Components\Routing\Loader\YamlFileLoader as RoutingLoader;
 
@@ -16,13 +16,13 @@ class S2bKernel extends Kernel
     public function registerBundles()
     {
         $bundles = array(
-            new Symfony\Foundation\KernelBundle(),
-            new Symfony\Framework\FoundationBundle\FoundationBundle(),
+            new Symfony\Framework\KernelBundle(),
+            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
 
             // enable third-party bundles
-            new Symfony\Framework\ZendBundle\ZendBundle(),
-            new Symfony\Framework\DoctrineBundle\DoctrineBundle(),
-            new Symfony\Framework\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
+            new Symfony\Bundle\ZendBundle\ZendBundle(),
+            new Symfony\Bundle\DoctrineBundle\DoctrineBundle(),
+            new Symfony\Bundle\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
 
             // register your bundles here
             new Bundle\MarkdownBundle\MarkdownBundle(),
@@ -40,7 +40,7 @@ class S2bKernel extends Kernel
         return array(
             'Application'        => __DIR__.'/../src/Application',
             'Bundle'             => __DIR__.'/../src/Bundle',
-            'Symfony\\Framework' => __DIR__.'/../src/vendor/Symfony/src/Symfony/Framework',
+            'Symfony\\Bundle'    => __DIR__.'/../src/vendor/Symfony/src/Symfony/Bundle',
         );
     }
 

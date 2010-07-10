@@ -3,7 +3,7 @@
 
 require_once __DIR__.'/S2bKernel.php';
 
-use Symfony\Framework\FoundationBundle\Console\Application;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 
 $kernel = new S2bKernel('dev', true);
 
