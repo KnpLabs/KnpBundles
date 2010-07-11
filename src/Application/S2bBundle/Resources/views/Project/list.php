@@ -5,8 +5,8 @@
 
 <?php $view->slots->set('h1', '<span>'.count($repos).'</span> Projects') ?>
 <?php $view->slots->set('title', 'All '.count($repos).' Projects') ?>
-<?php $view->slots->set('slogan', 'All Projects sorted by '.$fields[$sort]) ?>
-<?php $view->slots->set('description', 'All Symfony2 Projects sorted by '.$sort) ?>
+<?php $view->slots->set('slogan', 'All Open Source Projects sorted by '.$fields[$sort]) ?>
+<?php $view->slots->set('description', 'All Open Source Symfony2 Projects sorted by '.$sort) ?>
 
 <?php $view->slots->start('sidemenu') ?>
 <h3>Sort by</h3>
