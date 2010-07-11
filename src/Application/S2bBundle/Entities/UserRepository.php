@@ -27,4 +27,16 @@ class UserRepository extends EntityRepository
             return null;
         }
     }
+
+    public function findAllSortedBy($field, $nb = null)
+    {
+        $qb = $this->createQueryBuilder('u');
+        $qb->orderBy('u.'.$field, 'name' === $field ? 'asc' : 'desc');
+        $query = $qb->getQuery();
+        if(null !== $nb) {
+            $query->setMaxResults($nb);
+        }
+
+        return $query->execute();
+    }
 }

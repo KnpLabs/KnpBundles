@@ -2,17 +2,14 @@
 
 namespace Application\S2bBundle\Controller;
 
-use Symfony\Framework\FoundationBundle\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller;
 use Symfony\Components\HttpKernel\Exception\NotFoundHttpException;
 
 class UserController extends Controller
 {
     public function showAction($name)
     {
-        $user = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->find('Application\S2bBundle\Document\User', array('name' => $name))
-            ->getSingleResult();
-        if(!$user) {
+        if(!$user = $this->getUserRepository()->findOneByName($name)) {
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
         $bundles = $user->getBundles();
@@ -23,23 +20,28 @@ class UserController extends Controller
 
     public function listAllAction()
     {
-        $query = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Application\S2bBundle\Document\User')
-            ->sort('name', 'asc');
+        $users = $this->getUserRepository()->findAllSortedBy('name');
 
-        return $this->render('S2bBundle:User:listAll', array('users' => $query->execute(), 'callback' => $this->getRequest()->get('callback')));
+        return $this->render('S2bBundle:User:listAll', array('users' => $users, 'callback' => $this->getRequest()->get('callback')));
     }
 
     public function bundlesAction($name)
     {
-        $user = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->find('Application\S2bBundle\Document\User', array('name' => $name))
-            ->getSingleResult();
-        if(!$user) {
+        if(!$user = $this->getUserRepository()->findOneByName($name)) {
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
         $bundles = $user->getBundles();
 
         return $this->render('S2bBundle:User:bundles', array('bundles' => $bundles, 'callback' => $this->getRequest()->get('callback')));
+    }
+
+    protected function getBundleRepository()
+    {
+        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entities\Bundle');
+    }
+
+    protected function getUserRepository()
+    {
+        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entities\User');
     }
 }
