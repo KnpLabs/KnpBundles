@@ -21,9 +21,18 @@ class RepoController extends Controller
             return $this->render('S2bBundle:Repo:search');
         }
 
-        $repos = $this->getRepository('Bundle')->search($query);
+        $repos = $this->getRepository('Repo')->search($query);
+        $bundles = $projects = array();
+        foreach($repos as $repo) {
+            if($repo instanceof Bundle) {
+                $bundles[] = $repo;
+            }
+            else {
+                $projects[] = $repo;
+            }
+        }
 
-        return $this->render('S2bBundle:Repo:searchResults', array('query' => $query, 'repos' => $repos, 'callback' => $this->getRequest()->get('callback')));
+        return $this->render('S2bBundle:Repo:searchResults', array('query' => $query, 'repos' => $repos, 'bundles' => $bundles, 'projects' => $projects, 'callback' => $this->getRequest()->get('callback')));
     }
 
     public function showAction($username, $name)

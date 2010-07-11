@@ -12,19 +12,6 @@ use Symfony\Components\Console\Output\NullOutput as Output;
 
 class BundleController extends Controller
 {
-    public function searchAction()
-    {
-        $query = preg_replace('(\W)', '', trim($this->getRequest()->get('q')));
-
-        if(empty($query)) {
-            return $this->render('S2bBundle:Bundle:search');
-        }
-
-        $repos = $this->getBundleRepository()->search($query);
-
-        return $this->render('S2bBundle:Bundle:searchResults', array('query' => $query, 'repos' => $repos, 'callback' => $this->getRequest()->get('callback')));
-    }
-
     public function listLatestAction()
     {
         $repos = $this->getBundleRepository()->findAllSortedBy('createdAt', 50);

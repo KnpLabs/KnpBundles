@@ -8,7 +8,7 @@ bundle_add:
 
 search:
     pattern:        /search.:_format
-    defaults:       { _controller: S2bBundle:Bundle:search, _format: html }
+    defaults:       { _controller: S2bBundle:Repo:search, _format: html }
     requirements:   { _format: "(html|json|js)" }
 
 latest:
