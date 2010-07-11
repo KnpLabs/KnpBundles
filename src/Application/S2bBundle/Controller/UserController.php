@@ -28,9 +28,17 @@ class UserController extends Controller
         if(!$user = $this->getUserRepository()->findOneByName($name)) {
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
-        $bundles = $user->getBundles();
 
-        return $this->render('S2bBundle:User:bundles', array('bundles' => $bundles, 'callback' => $this->getRequest()->get('callback')));
+        return $this->render('S2bBundle:Bundle:list', array('repos' => $user->getBundles(), 'callback' => $this->getRequest()->get('callback')));
+    }
+
+    public function projectsAction($name)
+    {
+        if(!$user = $this->getUserRepository()->findOneByName($name)) {
+            throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
+        }
+
+        return $this->render('S2bBundle:Project:list', array('repos' => $user->getProjects(), 'callback' => $this->getRequest()->get('callback')));
     }
 
     protected function getBundleRepository()

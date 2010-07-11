@@ -2,9 +2,9 @@ homepage:
     pattern:        /
     defaults:       { _controller: S2bBundle:Main:index }
 
-bundle_add:
-    pattern:        /bundle/add
-    defaults:       { _controller: S2bBundle:Bundle:add }
+repo_add:
+    pattern:        /repo/add
+    defaults:       { _controller: S2bBundle:Repo:add }
 
 search:
     pattern:        /search.:_format
@@ -38,6 +38,11 @@ user_list:
 user_bundle_list:
     pattern:        /:name/bundles.:_format
     defaults:       { _controller: S2bBundle:User:bundles }
+    requirements:   { _format: "(json|js)" }
+
+user_projects_list:
+    pattern:        /:name/projects.:_format
+    defaults:       { _controller: S2bBundle:User:projects }
     requirements:   { _format: "(json|js)" }
 
 repo_show:
