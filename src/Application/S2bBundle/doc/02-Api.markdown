@@ -42,8 +42,8 @@ Return a list of bundles:
       username: eXtreme
       description: Experimental Symfony2 Bundle providing support for OPL family as well with Open Power Template 2.1 templating engine.
       score: 16
-      followers: 2
-      forks: 1
+      nbFollowers: 2
+      nbForks: 1
       createdAt: 1278497445
       lastCommitAt: 1278513437
       tags:
@@ -62,8 +62,8 @@ Return a list of bundles:
       username: eXtreme
       description: Experimental Symfony2 Bundle providing support for OPL family as well with Open Power Template 2.1 templating engine.
       score: 16
-      followers: 2
-      forks: 1
+      nbFollowers: 2
+      nbForks: 1
       createdAt: 1278497445
       lastCommitAt: 1278513437
       tags:
@@ -84,8 +84,8 @@ Return informations about one bundle:
     username: avalanche123
     description: A micro kernel for Symfony 2, inspired by the Ruby Sinatra Web Framework
     score: 21.2
-    followers: 5
-    forks: 2
+    nbFollowers: 5
+    nbForks: 2
     createdAt: 1273839236
     lastCommitAt: 1278106123
     tags:
@@ -154,8 +154,8 @@ You get all informations available for each bundle.
       username: avalanche123
       description: A micro kernel for Symfony 2, inspired by the Ruby Sinatra Web Framework
       score: 21.2
-      followers: 5
-      forks: 2
+      nbFollowers: 5
+      nbForks: 2
       createdAt: 1273839236
       lastCommitAt: 1278106123
       tags:

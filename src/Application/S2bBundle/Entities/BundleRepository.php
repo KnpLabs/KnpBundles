@@ -3,6 +3,7 @@
 namespace Application\S2bBundle\Entities;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 
 /**
  * BundleRepository
@@ -12,6 +13,32 @@ use Doctrine\ORM\EntityRepository;
  */
 class BundleRepository extends EntityRepository
 {
+    public function search($query)
+    {
+        $pattern = '%'.str_replace(' ', '%', $query).'%';
+
+        $qb = $this->createQueryBuilder('b')->orderBy('b.score', 'DESC');
+        $qb->where($qb->expr()->orx(
+            $qb->expr()->like('b.username', ':username'),
+            $qb->expr()->like('b.name', ':name'),
+            $qb->expr()->like('b.description', ':description')
+        ));
+        $qb->setParameters(array('username' => $pattern, 'name' => $pattern, 'description' => $pattern));
+        return $qb->getQuery()->execute();
+    }
+
+    public function findAllSortedBy($field, $nb = null)
+    {
+        $qb = $this->createQueryBuilder('b');
+        $qb->orderBy('b.'.$field, 'name' === $field ? 'asc' : 'desc');
+        $query = $qb->getQuery();
+        if(null !== $nb) {
+            $query->setMaxResults($nb);
+        }
+
+        return $query->execute();
+    }
+
     public function count()
     {
         return $this->_em->createQuery('SELECT COUNT(b.id) FROM Application\S2bBundle\Entities\Bundle b')->getSingleScalarResult();
@@ -35,6 +62,22 @@ class BundleRepository extends EntityRepository
 
     public function findByLastCommitAt($nb)
     {
-        return $this->createQueryBuilder('b')->orderBy('b.lastCommitAt DESC')->limit($nb)->getResults();
+        return $this->createQueryBuilder('b')->orderBy('b.lastCommitAt', 'DESC')->getQuery()->setMaxResults($nb)->execute();
+    }
+
+    public function findOneByUsernameAndName($username, $name)
+    {
+        try {
+            return $this->createQueryBuilder('b')
+                ->where('b.username = :username')
+                ->andWhere('b.name = :name')
+                ->setParameter('username', $username)
+                ->setParameter('name', $name)
+                ->getQuery()
+                ->getSingleResult();
+        }
+        catch(NoResultException $e) {
+            return null;
+        }
     }
 }

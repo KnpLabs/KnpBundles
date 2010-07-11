@@ -29,7 +29,7 @@ class S2bKernel extends Kernel
             new Bundle\TimeBundle\TimeBundle(),
 
             // register your applications here
-            new Application\S2bBundle\S2bBundle(),
+            new Application\S2bBundle\S2bBundle()
         );
 
         return $bundles;

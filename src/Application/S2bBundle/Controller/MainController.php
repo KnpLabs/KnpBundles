@@ -18,8 +18,8 @@ class MainController extends Controller
     #TODO cache me!
     public function timelineAction()
     {
-        $bundles = $this->container->getDoctrine_Orm_DefaultEntityManagerService()
-            ->getRepository('Application\S2bBundle\Document\Bundle')
+        $commits = $this->container->getDoctrine_Orm_DefaultEntityManagerService()
+            ->getRepository('Application\S2bBundle\Entities\Bundle')
             ->getLastCommits(5);
 
         return $this->render('S2bBundle:Main:timeline', array('commits' => $commits));

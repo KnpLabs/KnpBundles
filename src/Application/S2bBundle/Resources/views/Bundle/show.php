@@ -28,8 +28,8 @@
             <ul>
                 <li class="user"><a href="<?php echo $view->router->generate('user_show', array('name' => $bundle->getUsername())) ?>"><?php echo $bundle->getUsername() ?></a></li>
                 <li class="time"><?php echo $view->time->ago($bundle->getLastCommitAt()->getRawValue()) ?></li>
-                <li class="watch"><?php echo $bundle->getFollowers() ?> followers</li>
-                <li class="fork"><?php echo $bundle->getForks() ?> forks</li>
+                <li class="watch"><?php echo $bundle->getNbFollowers() ?> followers</li>
+                <li class="fork"><?php echo $bundle->getNbForks() ?> forks</li>
             </ul>
         </div>
 

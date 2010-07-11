@@ -507,15 +507,32 @@ class Bundle
      *
      * @return array
      **/
-    public function toArray()
+    public function toBigArray()
     {
         return array(
             'name' => $this->getName(),
             'username' => $this->getUsername(),
             'description' => $this->getDescription(),
             'score' => $this->getScore(),
-            'followers' => $this->getFollowers(),
-            'forks' => $this->getForks(),
+            'nbFollowers' => $this->getNbFollowers(),
+            'nbForks' => $this->getNbForks(),
+            'createdAt' => $this->getCreatedAt()->getTimestamp(),
+            'lastCommitAt' => $this->getLastCommitAt()->getTimestamp(),
+            'tags' => $this->getTags(),
+            'lastCommits' => $this->getLastCommits(),
+            'readme' => $this->getReadme()
+        );
+    }
+
+    public function toSmallArray()
+    {
+        return array(
+            'name' => $this->getName(),
+            'username' => $this->getUsername(),
+            'description' => $this->getDescription(),
+            'score' => $this->getScore(),
+            'nbFollowers' => $this->getNbFollowers(),
+            'nbForks' => $this->getNbForks(),
             'createdAt' => $this->getCreatedAt()->getTimestamp(),
             'lastCommitAt' => $this->getLastCommitAt()->getTimestamp(),
             'tags' => $this->getTags()
