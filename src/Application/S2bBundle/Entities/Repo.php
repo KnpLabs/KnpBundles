@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @Entity(repositoryClass="Application\S2bBundle\Entities\RepoRepository")
  * @Table(
  *      name="repo",
- *      indexes={@Index(name="full_name", columns={"username", "name"})}),
+ *      indexes={@Index(name="discriminator", columns={"discr"})},
  *      uniqueConstraints={@UniqueConstraint(name="full_name_unique",columns={"username", "name"})}
  * )
  * @InheritanceType("SINGLE_TABLE")
@@ -154,12 +154,6 @@ abstract class Repo
      * @Column(type="boolean")
      */
     protected $isFork = null;
-
-    /**
-     * Whether the bundle is available on GitHub or not
-     * @Column(type="boolean")
-     */
-    protected $isOnGithub = null;
 
     public function __construct($fullName = null)
     {
@@ -459,25 +453,6 @@ abstract class Repo
     public function setDescription($description)
     {
         $this->description = $description;
-    }
-
-    /**
-     * Get isOnGithub
-     * @return boolean
-     */
-    public function getIsOnGithub()
-    {
-        return $this->isOnGithub;
-    }
-
-    /**
-     * Set isOnGithub
-     * @param  boolean
-     * @return null
-     */
-    public function setIsOnGithub($isOnGithub)
-    {
-        $this->isOnGithub = $isOnGithub;
     }
 
     /**

@@ -9,7 +9,10 @@ use Symfony\Components\Validator\Mapping\ClassMetadata;
  * A user living on GitHub
  *
  * @Entity(repositoryClass="Application\S2bBundle\Entities\UserRepository")
- * @Table(name="user")
+ * @Table(
+ *      name="user",
+ *      uniqueConstraints={@UniqueConstraint(name="name_unique",columns={"name"})}
+ * )
  * @HasLifecycleCallbacks
  */
 class User
