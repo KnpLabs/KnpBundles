@@ -97,6 +97,7 @@ class User
     public function __construct()
     {
         $this->repos = new ArrayCollection();
+        $this->contributionRepos = new ArrayCollection();
     }
 
     /**
@@ -196,6 +197,16 @@ class User
         return $bundles;
     }
 
+    public function getBundleNames()
+    {
+        $names = array();
+        foreach($this->getBundles() as $bundle) {
+            $names[] = $bundle->getName();
+        }
+
+        return $names;
+    }
+
     public function getProjects()
     {
         $projects = array();
@@ -206,6 +217,16 @@ class User
         }
 
         return $projects;
+    }
+
+    public function getProjectNames()
+    {
+        $names = array();
+        foreach($this->getProjects() as $project) {
+            $names[] = $project->getName();
+        }
+
+        return $names;
     }
 
     /**
@@ -306,7 +327,7 @@ class User
      * @param  ArrayCollection
      * @return null
      */
-    public function setContributionRepos($contributionRepos)
+    public function setContributionRepos(ArrayCollection $contributionRepos)
     {
       $this->contributionRepos = $contributionRepos;
     }
@@ -342,7 +363,7 @@ class User
         $commits = array();
         foreach(array_merge($this->getRepos()->toArray(), $this->getContributionRepos()->toArray()) as $repo) {
             foreach($repo->getLastCommits() as $commit) {
-                if($commit['author']['name'] === $this->getFullName() && $commit['author']['email'] === $this->getEmail()) {
+                if(isset($commit['author']['login']) && $commit['author']['login'] === $this->getName()) {
                     $commits[] = $commit;
                 }
             }
@@ -460,5 +481,21 @@ class User
     public function __toString()
     {
         return $this->getName();
+    }
+
+    public function toBigArray()
+    {
+        return array(
+            'name' => $this->getName(),
+            'email' => $this->getEmail(),
+            'fullName' => $this->getFullName(),
+            'company' => $this->getCompany(),
+            'location' => $this->getLocation(),
+            'blog' => $this->getBlog(),
+            'bundles' => $this->getBundleNames(),
+            'projects' => $this->getProjectNames(),
+            'lastCommitAt' => $this->getLastCommitAt()->getTimestamp(),
+            'lastCommits' => $this->getLastCommits()
+        );
     }
 }

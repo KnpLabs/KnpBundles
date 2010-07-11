@@ -160,6 +160,8 @@ abstract class Repo
         if($fullName) {
             list($this->username, $this->name) = explode('/', $fullName);
         }
+
+        $this->contributors = new ArrayCollection();
     }
     
     /**
@@ -504,6 +506,16 @@ abstract class Repo
       $this->contributors = new ArrayCollection($contributors);
     }
     
+    public function getContributorNames()
+    {
+        $names = array();
+        foreach ($this->getContributors() as $contributor)
+        {
+            $names[] = $contributor->getName();
+        }
+
+        return $names;
+    }
 
     /** @PreUpdate */
     public function markAsUpdated()
@@ -524,7 +536,16 @@ abstract class Repo
      **/
     public function toBigArray()
     {
+        return $this->toSmallArray() + array(
+            'lastCommits' => $this->getLastCommits(),
+            'readme' => $this->getReadme()
+        );
+    }
+
+    public function toSmallArray()
+    {
         return array(
+            'type' => $this->getClass(),
             'name' => $this->getName(),
             'username' => $this->getUsername(),
             'description' => $this->getDescription(),
@@ -534,23 +555,7 @@ abstract class Repo
             'createdAt' => $this->getCreatedAt()->getTimestamp(),
             'lastCommitAt' => $this->getLastCommitAt()->getTimestamp(),
             'tags' => $this->getTags(),
-            'lastCommits' => $this->getLastCommits(),
-            'readme' => $this->getReadme()
-        );
-    }
-
-    public function toSmallArray()
-    {
-        return array(
-            'name' => $this->getName(),
-            'username' => $this->getUsername(),
-            'description' => $this->getDescription(),
-            'score' => $this->getScore(),
-            'nbFollowers' => $this->getNbFollowers(),
-            'nbForks' => $this->getNbForks(),
-            'createdAt' => $this->getCreatedAt()->getTimestamp(),
-            'lastCommitAt' => $this->getLastCommitAt()->getTimestamp(),
-            'tags' => $this->getTags()
+            'contributors' => $this->getContributorNames()
         );
     }
 
