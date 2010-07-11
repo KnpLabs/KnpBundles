@@ -603,6 +603,7 @@ div.post-meta li.github { background: url(../images/github.png) no-repeat 2px ce
 div.post-meta li.version { background: url(../images/pill.png) no-repeat 2px center; }
 div.post-meta li.email { background: url(../images/mail.png) no-repeat 2px center; }
 div.post-meta li.lego { background: url(../images/lego.png) no-repeat 2px center; }
+div.post-meta li.application { background: url(../images/application16.png) no-repeat 2px center; }
 div.post-meta li.location { background: url(../images/globe.png) no-repeat 2px center; }
 div.post-meta li.company { background: url(../images/users.png) no-repeat 2px center; }
 div.post-meta li.blog { background: url(../images/quill.png) no-repeat 2px center; }

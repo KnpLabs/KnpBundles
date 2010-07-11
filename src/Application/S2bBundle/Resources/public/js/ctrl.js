@@ -12,15 +12,14 @@ $(function()
 
     var addBundleDefaultValue = $('form.add_bundle input').val();
     $('form.add_bundle').submit(function() {
-        var regexp = /^http:\/\/github\.com\/[\w\d]+\/[\w\d]+Bundle$/;
         var url = $(this).find('input').val();
-        if(url == addBundleDefaultValue || !url.match(regexp)) {
+        if(url == addBundleDefaultValue) {
             alert('This is not a valid GitHub Bundle repository url!');
             return false;
         }
         var $form = $(this);
         setTimeout(function() {
-            $form.replaceWith('<p>Importing the Bundle from GitHub.<br />This can take a few seconds, be patient!</p>');
+            $form.replaceWith('<p>Importing the repository from GitHub.<br />This can take a few seconds, be patient!</p>');
         }, 500);
     });
 
