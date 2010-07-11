@@ -48,9 +48,9 @@ class S2bPopulateCommand extends BaseCommand
         $foundBundles = $githubSearch->searchBundles(5000, $output);
         $output->writeLn(sprintf('Found %d bundle candidates', count($foundBundles)));
 
-        $dm = $this->container->getDoctrine_odm_mongodb_documentManagerService();
-        $existingBundles = $dm->find('Application\S2bBundle\Document\Bundle')->getResults();
-        $users = $dm->find('Application\S2bBundle\Document\User')->getResults();
+        $dm = $this->container->getDoctrine_Orm_DefaultEntityManagerService();
+        $existingBundles = $dm->getRepository('Application\S2bBundle\Entities\Bundle')->findAll();
+        $users = $dm->getRepository('Application\S2bBundle\Entities\User')->findAll();
         $validator = $this->container->getValidatorService();
         $bundles = array();
         $counters = array(
@@ -84,7 +84,7 @@ class S2bPopulateCommand extends BaseCommand
         }
 
         $dm->flush();
-        $existingBundles = $dm->find('Application\S2bBundle\Document\Bundle')->getResults();
+        $existingBundles = $dm->getRepository('Application\S2bBundle\Entities\Bundle')->findAll();
         
         // second pass, create missing bundles
         foreach($foundBundles as $foundBundle) {
@@ -100,6 +100,9 @@ class S2bPopulateCommand extends BaseCommand
             }
 
             if(!$bundle = $githubBundle->updateInfos($foundBundle)) {
+                continue;
+            }
+            if(!$bundle = $githubBundle->update($foundBundle)) {
                 continue;
             }
             $user = null;
@@ -127,7 +130,7 @@ class S2bPopulateCommand extends BaseCommand
         }
 
         $dm->flush();
-        $existingBundles = $dm->find('Application\S2bBundle\Document\Bundle')->getResults();
+        $existingBundles = $dm->getRepository('Application\S2bBundle\Entities\Bundle')->findAll();
 
         $output->writeln(sprintf('%d created, %d updated, %d removed', $counters['created'], $counters['updated'], $counters['removed']));
 
@@ -145,7 +148,7 @@ class S2bPopulateCommand extends BaseCommand
         
         $output->writeln('Will now update users');
         // Now update users with more precise GitHub data
-        $users = $dm->find('Application\S2bBundle\Document\User')->getResults();
+        $users = $dm->getRepository('Application\S2bBundle\Entities\User')->findAll();
         $output->writeLn(array('', sprintf('Will now update %d users', count($users))));
         foreach($users as $user) {
             $output->write($user->getName().str_repeat(' ', 40-strlen($user->getName())));

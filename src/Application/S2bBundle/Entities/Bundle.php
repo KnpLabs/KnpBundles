@@ -1,11 +1,13 @@
 <?php
 
 namespace Application\S2bBundle\Entities;
+use Symfony\Components\Validator\Constraints;
+use Symfony\Components\Validator\Mapping\ClassMetadata;
 
 /**
  * An Open Source Bundle living on GitHub
  *
- * @Entity
+ * @Entity(repositoryClass="Application\S2bBundle\Entities\BundleRepository")
  * @Table(name="bundle")
  * @HasLifecycleCallbacks
  */
@@ -46,7 +48,7 @@ class Bundle
      * User who owns the bundle
      *
      * @ManyToOne(targetEntity="User", inversedBy="bundles")
-     * @JoinColumn(name="user_id", referencedColumnName="id")
+     * @JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     protected $user = null;
 
@@ -60,7 +62,7 @@ class Bundle
     /**
      * The bundle readme text extracted from source code
      *
-     * @Column(type="text")
+     * @Column(type="text", nullable=true)
      */
     protected $readme = null;
 
@@ -77,14 +79,14 @@ class Bundle
      *
      * @Column(type="date")
      */
-    protected $createdAt;
+    protected $createdAt = null;
 
     /**
      * Bundle update date (on this website)
      *
      * @Column(type="date")
      */
-    protected $updatedAt;
+    protected $updatedAt = null;
 
     /**
      * Date of the last Git commit
@@ -98,13 +100,13 @@ class Bundle
      *
      * @Column(type="text")
      */
-    protected $lastCommits = array();
+    protected $lastCommits = null;
 
     /**
      * Released tags are Git tags
      * @Column(type="text")
      */
-    protected $tags = array();
+    protected $tags = null;
 
     /**
      * Number of GitHub followers
@@ -191,7 +193,7 @@ class Bundle
      */
     public function getLastCommits()
     {
-        return $this->lastCommits;
+        return unserialize($this->lastCommits);
     }
 
     /**
@@ -205,7 +207,7 @@ class Bundle
             $lastCommits[$index]['repo_name'] = $this->getName();
             $lastCommits[$index]['repo_username'] = $this->getUsername();
         }
-        $this->lastCommits = $lastCommits;
+        $this->lastCommits = serialize($lastCommits);
 
         $lastCommitAt = new \DateTime();
         $lastCommitAt->setTimestamp(strtotime($lastCommits[0]['committed_date']));
@@ -252,8 +254,8 @@ class Bundle
 
     public function recalculateScore()
     {
-        $score = $this->getFollowers();
-        $score += 3 * $this->getForks();
+        $score = $this->getNbFollowers();
+        $score += 3 * $this->getNbForks();
         if($this->getDaysSinceLastCommit() < 30) {
             $score += (30 - $this->getDaysSinceLastCommit()) / 5;
         }
@@ -307,7 +309,7 @@ class Bundle
      */
     public function setNbForks($nbForks)
     {
-        $this->nbforks = $nbforks;
+        $this->nbForks = $nbForks;
     }
 
     /**
@@ -490,6 +492,12 @@ class Bundle
 
     /** @PreUpdate */
     public function markAsUpdated()
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
+    /** @PrePersist */
+    public function markAsCreated()
     {
         $this->updatedAt = new \DateTime();
     }

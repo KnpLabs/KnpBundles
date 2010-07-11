@@ -1,13 +1,14 @@
 <?php
 
 namespace Application\S2bBundle\Entities;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Components\Validator\Constraints;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Components\Validator\Mapping\ClassMetadata;
 
 /**
  * A user living on GitHub
  *
- * @Entity
+ * @Entity(repositoryClass="Application\S2bBundle\Entities\UserRepository")
  * @Table(name="user")
  * @HasLifecycleCallbacks
  */
@@ -37,40 +38,41 @@ class User
     /**
      * User email
      *
-     * @Column(type="string", length=255)
+     * @Column(type="string", length=255, nullable=true)
      */
     protected $email = null;
 
     /**
      * Full name of the user, like "Thibault Duplessis"
      *
-     * @Column(type="string", length=255)
+     * @Column(type="string", length=255, nullable=true)
      */
     protected $fullName = null;
 
     /**
      * The user company name
      *
-     * @Column(type="string", length=255)
+     * @Column(type="string", length=255, nullable=true)
      */
     protected $company = null;
 
     /**
      * The user location
      *
-     * @Column(type="string", length=255)
+     * @Column(type="string", length=255, nullable=true)
      */
     protected $location = null;
 
     /**
      * The user blog url
      *
-     * @Column(type="string", length=255)
+     * @Column(type="string", length=255, nullable=true)
      */
     protected $blog = null;
 
     /**
      * Bundles the user owns
+     *
      * @OneToMany(targetEntity="Bundle", mappedBy="user")
      */
     protected $bundles = null;
@@ -211,9 +213,8 @@ class User
      **/
     public function removeBundle(Bundle $bundle)
     {
-        if($this->getBundles()->contains($bundle)) {
-            $this->getBundles()->removeElement($bundle);
-        }
+        $this->getBundles()->removeElement($bundle);
+        $bundle->setUser(null);
     }
 
     /**

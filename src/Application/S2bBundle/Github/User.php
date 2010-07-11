@@ -2,7 +2,7 @@
 
 namespace Application\S2bBundle\Github;
 use Symfony\Components\Console\Output\OutputInterface;
-use Application\S2bBundle\Document;
+use Application\S2bBundle\Entities;
 
 class User
 {
@@ -28,7 +28,7 @@ class User
 
     public function import($name)
     {
-        $user = new Document\User();
+        $user = new Entities\User();
         $user->setName($name);
         if(!$this->update($user)) {
             return false;
@@ -36,7 +36,7 @@ class User
         return $user;
     }
 
-    public function update(Document\User $user)
+    public function update(Entities\User $user)
     {
         try {
             $data = $this->github->getUserApi()->show($user->getName());

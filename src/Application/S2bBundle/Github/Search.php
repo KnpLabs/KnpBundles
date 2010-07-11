@@ -41,7 +41,7 @@ class Search
     public function searchBundles($limit = 300)
     {
         $bundles = $this->searchBundlesOnGitHub($limit);
-        $bundles = $this->searchBundlesOnGoogle($bundles, $limit);
+        //$bundles = $this->searchBundlesOnGoogle($bundles, $limit);
         return $bundles;
     }
 
@@ -61,6 +61,7 @@ class Search
                         continue;
                     }
                     $bundles[] = new Bundle($repo['username'].'/'.$repo['name']);
+                    return $bundles;
                 }
                 $page++;
                 $this->output->write('...'.count($bundles));

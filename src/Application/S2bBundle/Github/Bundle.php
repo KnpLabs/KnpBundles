@@ -2,7 +2,7 @@
 
 namespace Application\S2bBundle\Github;
 use Symfony\Components\Console\Output\OutputInterface;
-use Application\S2bBundle\Document;
+use Application\S2bBundle\Entities;
 
 class Bundle
 {
@@ -26,7 +26,7 @@ class Bundle
         $this->output = $output;
     }
 
-    public function update(Document\Bundle $bundle)
+    public function update(Entities\Bundle $bundle)
     {
         if(!$this->updateCommits($bundle)) {
             return false;
@@ -45,11 +45,11 @@ class Bundle
     /**
      * Return true if the Bundle exists on GitHub, false otherwise 
      * 
-     * @param Document\Bundle $bundle 
+     * @param Entities\Bundle $bundle 
      * @param array $data 
      * @return boolean whether the Bundle exists on GitHub
      */
-    public function updateInfos(Document\Bundle $bundle)
+    public function updateInfos(Entities\Bundle $bundle)
     {
         try {
             $data = $this->github->getRepoApi()->show($bundle->getUsername(), $bundle->getName());
@@ -64,16 +64,16 @@ class Bundle
         }
 
         $bundle->setDescription($data['description']);
-        $bundle->setFollowers(isset($data['followers']) ? $data['followers'] : $data['watchers']);
-        $bundle->setForks($data['forks']);
+        $bundle->setNbFollowers($data['watchers']);
+        $bundle->setNbForks($data['forks']);
         $bundle->setIsFork((bool)$data['fork']);
-        $bundle->setCreatedAt(new \DateTime(isset($data['created']) ? $data['created'] : $data['created_at']));
+        $bundle->setCreatedAt(new \DateTime($data['created_at']));
         $bundle->setIsOnGithub(true);
 
         return $bundle;
     }
 
-    public function updateCommits(Document\Bundle $bundle)
+    public function updateCommits(Entities\Bundle $bundle)
     {
         $this->output->write(' commits');
         try {
@@ -94,7 +94,7 @@ class Bundle
         return $bundle;
     }
 
-    public function updateFiles(Document\Bundle $bundle)
+    public function updateFiles(Entities\Bundle $bundle)
     {
         $this->output->write(' files');
         try {
@@ -124,7 +124,7 @@ class Bundle
         return $bundle;
     }
 
-    public function updateTags(Document\Bundle $bundle)
+    public function updateTags(Entities\Bundle $bundle)
     {
         $this->output->write(' tags');
         try {
