@@ -649,13 +649,13 @@ div.post-meta li.blog { background: url(../images/quill.png) no-repeat 2px cente
 }
 
 ul.user-list,
-ul.bundle-list {
+ul.repo-list {
     margin: 10px 30px 10px 20px;
     padding: 0;
     border-top: 1px solid #eeeeee;
 }
 ul.user-list li.item,
-ul.bundle-list li.item {
+ul.repo-list li.item {
     margin: 0;
     padding: 12px 5px;
     border-bottom: 1px solid #eeeeee;
@@ -664,30 +664,30 @@ ul.bundle-list li.item {
     background: #fff;
 }
 ul.user-list li.item:hover,
-ul.bundle-list li.item:hover {
+ul.repo-list li.item:hover {
     background: #EEF7FB;
 }
 ul.user-list a.item-link,
-ul.bundle-list a.item-link {
+ul.repo-list a.item-link {
     font-size: 1.7em;
     font-weight: bold;
     color: #444;
 }
 ul.user-list a.item-link span,
-ul.bundle-list a.item-link span {
+ul.repo-list a.item-link span {
     color: #888;
 }
-ul.user-list ul.bundles em,
-ul.bundle-list a.item-link em {
+ul.user-list ul.repo em,
+ul.repo-list a.item-link em {
     font-size: 11px;
     font-style: italic;
     margin-left: 0.2em;
 }
-ul.bundle-list span.description {
+ul.repo-list span.description {
     color: #666;
     display: block;
 }
-ul.bundle-list span.score {
+ul.repo-list span.score {
     float: right;
     font-size: 10px;
     background: url(../images/star-empty.png) top left no-repeat;
@@ -697,7 +697,7 @@ ul.bundle-list span.score {
     line-height: 20px;
 }
 ul.user-list img.gravatar,
-ul.bundle-list img.gravatar {
+ul.repo-list img.gravatar {
     vertical-align: middle;
 }
 ul.user-list ul.bundles {

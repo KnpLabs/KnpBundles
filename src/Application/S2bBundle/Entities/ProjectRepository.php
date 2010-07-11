@@ -2,6 +2,6 @@
 
 namespace Application\S2bBundle\Entities;
 
-class BundleRepository extends RepoRepository
+class ProjectRepository extends RepoRepository
 {
 }

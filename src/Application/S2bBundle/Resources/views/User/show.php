@@ -11,10 +11,10 @@
 
     <div class="right">
         <h2 class="section-title">I manage</h2>
-        <?php $view->output('S2bBundle:Bundle:bigList', array('bundles' => $bundles)) ?>
+        <?php $view->output('S2bBundle:Bundle:bigList', array('repos' => $user->getBundles())) ?>
         <?php if(count($user->getContributionBundles())): ?>
             <h2 class="section-title">I contribute</h2>
-            <?php $view->output('S2bBundle:Bundle:bigList', array('bundles' => $user->getContributionBundles())) ?>
+            <?php $view->output('S2bBundle:Bundle:bigList', array('repos' => $user->getContributionBundles())) ?>
         <?php endif; ?>
     </div>
 
@@ -55,9 +55,9 @@
 <h3>Last commits</h3>
 <div class="sidemenu">
     <ol class="timeline">
-    <?php foreach ($commits as $commit): ?>
+    <?php foreach ($user->getLastCommits() as $commit): ?>
         <li>
-            <a href="<?php echo $view->router->generate('bundle_show', array('username' => $commit['repo_username'], 'name' => $commit['repo_name'])) ?>">
+            <a href="<?php echo $view->router->generate('repo_show', array('username' => $commit['repo_username'], 'name' => $commit['repo_name'])) ?>">
                 <?php echo $commit['repo_name'] ?>
             </a>
             <?php echo $commit['message'] ?><br />

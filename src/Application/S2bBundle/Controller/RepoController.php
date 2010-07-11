@@ -6,38 +6,36 @@ use Symfony\Bundle\FrameworkBundle\Controller;
 use Symfony\Components\HttpKernel\Exception\HttpException;
 use Symfony\Components\HttpKernel\Exception\NotFoundHttpException;
 use Application\S2bBundle\Entities\Bundle;
+use Application\S2bBundle\Entities\Project;
 use Application\S2bBundle\Entities\User;
 use Application\S2bBundle\Github;
 use Symfony\Components\Console\Output\NullOutput as Output;
 
-class BundleController extends Controller
+class RepoController extends Controller
 {
     public function searchAction()
     {
         $query = preg_replace('(\W)', '', trim($this->getRequest()->get('q')));
 
         if(empty($query)) {
-            return $this->render('S2bBundle:Bundle:search');
+            return $this->render('S2bBundle:Repo:search');
         }
 
-        $bundles = $this->getBundleRepository()->search($query);
+        $repos = $this->getRepository('Bundle')->search($query);
 
-        return $this->render('S2bBundle:Bundle:searchResults', array('query' => $query, 'bundles' => $bundles, 'callback' => $this->getRequest()->get('callback')));
+        return $this->render('S2bBundle:Repo:searchResults', array('query' => $query, 'repos' => $repos, 'callback' => $this->getRequest()->get('callback')));
     }
 
     public function showAction($username, $name)
     {
-        $bundle = $this->getBundleRepository()->findOneByUsernameAndName($username, $name);
-
-        if(!$bundle) {
-            throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
+        if(!$repo = $this->getRepository('Repo')->findOneByUsernameAndName($username, $name)) {
+            throw new NotFoundHttpException(sprintf('The repo "%s/%s" does not exist', $username, $name));
         }
-        $commits = $bundle->getLastCommits();
 
-        return $this->render('S2bBundle:Bundle:show', array('bundle' => $bundle, 'commits' => $commits, 'callback' => $this->getRequest()->get('callback')));
+        return $this->render('S2bBundle:'.$repo->getClass().':show', array('repo' => $repo, 'callback' => $this->getRequest()->get('callback')));
     }
 
-    public function listAction($sort)
+    public function listAction($sort, $class)
     {
         $fields = array(
             'score' => 'score',
@@ -48,40 +46,40 @@ class BundleController extends Controller
         if(!isset($fields[$sort])) {
             throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
         }
-        $bundles = $this->getBundleRepository()->findAllSortedBy($sort);
+        $repos = $this->getRepository($class)->findAllSortedBy($sort);
 
-        return $this->render('S2bBundle:Bundle:listAll', array('bundles' => $bundles, 'sort' => $sort, 'fields' => $fields, 'callback' => $this->getRequest()->get('callback')));
+        return $this->render('S2bBundle:'.$class.':list', array('repos' => $repos, 'sort' => $sort, 'fields' => $fields, 'callback' => $this->getRequest()->get('callback')));
     }
 
     public function listLatestAction()
     {
-        $bundles = $this->getBundleRepository()->findAllSortedBy('createdAt', 50);
-        $response = $this->render('S2bBundle:Bundle:listLatest', array('bundles' => $bundles));
+        $bundles = $this->getRepository('Bundle')->findAllSortedBy('createdAt', 50);
+        $response = $this->render('S2bBundle:Repo:listLatest', array('repos' => $repos));
         return $response;
     }
 
     public function listLastCreatedAction()
     {
-        $bundles = $this->getBundleRepository()->findAllSortedBy('createdAt', 5);
-        return $this->render('S2bBundle:Bundle:list', array('bundles' => $bundles));
+        $bundles = $this->getRepository('Bundle')->findAllSortedBy('createdAt', 5);
+        return $this->render('S2bBundle:Repo:list', array('repos' => $repos));
     }
 
     public function listLastUpdatedAction()
     {
-        $bundles = $this->getBundleRepository()->findAllSortedBy('lastCommitAt', 5);
-        return $this->render('S2bBundle:Bundle:list', array('bundles' => $bundles));
+        $bundles = $this->getRepository('Bundle')->findAllSortedBy('lastCommitAt', 5);
+        return $this->render('S2bBundle:Repo:list', array('repos' => $repos));
     }
 
     public function listPopularAction()
     {
-        $bundles = $this->getBundleRepository()->findAllSortedBy('nbFollowers', 5);
-        return $this->render('S2bBundle:Bundle:list', array('bundles' => $bundles));
+        $bundles = $this->getRepository('Bundle')->findAllSortedBy('nbFollowers', 5);
+        return $this->render('S2bBundle:Repo:list', array('repos' => $repos));
     }
 
     public function listBestScoreAction()
     {
-        $bundles = $this->getBundleRepository()->findAllSortedBy('score', 5);
-        return $this->render('S2bBundle:Bundle:list', array('bundles' => $bundles));
+        $bundles = $this->getRepository('Bundle')->findAllSortedBy('score', 5);
+        return $this->render('S2bBundle:Repo:list', array('repos' => $repos));
     }
 
     public function addAction()
@@ -135,14 +133,14 @@ class BundleController extends Controller
         return $bundle;
     }
 
-    protected function getBundleRepository()
-    {
-        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entities\Bundle');
-    }
-
     protected function getUserRepository()
     {
-        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entities\User');
+        return $this->getRepository('User');
+    }
+
+    protected function getRepository($class)
+    {
+        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entities\\'.$class);
     }
 
 }

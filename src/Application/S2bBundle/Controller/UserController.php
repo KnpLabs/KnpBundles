@@ -12,17 +12,15 @@ class UserController extends Controller
         if(!$user = $this->getUserRepository()->findOneByNameWithBundles($name)) {
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
-        $bundles = $user->getBundles();
-        $commits = $user->getLastCommits();
 
-        return $this->render('S2bBundle:User:show', array('user' => $user, 'bundles' => $bundles, 'commits' => $commits, 'callback' => $this->getRequest()->get('callback')));
+        return $this->render('S2bBundle:User:show', array('user' => $user, 'callback' => $this->getRequest()->get('callback')));
     }
 
-    public function listAllAction()
+    public function listAction()
     {
         $users = $this->getUserRepository()->findAllSortedBy('name');
 
-        return $this->render('S2bBundle:User:listAll', array('users' => $users, 'callback' => $this->getRequest()->get('callback')));
+        return $this->render('S2bBundle:User:list', array('users' => $users, 'callback' => $this->getRequest()->get('callback')));
     }
 
     public function bundlesAction($name)

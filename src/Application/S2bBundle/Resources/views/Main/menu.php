@@ -3,6 +3,7 @@
 $entries = array(
     'homepage' => 'Home',
     'bundle_list' => 'Bundles',
+    'project_list' => 'Projects',
     'user_list' => 'Developers',
     'search' => 'Search',
     'api' => 'Api'

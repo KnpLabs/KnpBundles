@@ -18,7 +18,7 @@
         <ul class="bundles">
         <?php foreach($user->getBundles() as $bundle): ?>
             <li>
-                <a href="<?php echo $view->router->generate('bundle_show', array('username' => $user->getName(), 'name' => $bundle->getName())) ?>">
+                <a href="<?php echo $view->router->generate('repo_show', array('username' => $user->getName(), 'name' => $bundle->getName())) ?>">
                     <?php echo $bundle->getShortName() ?><span>Bundle</span><em><?php echo $bundle->getLastTagName() ?></em>
                 </a>
             </li>
