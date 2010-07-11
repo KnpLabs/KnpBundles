@@ -9,7 +9,7 @@ class UserController extends Controller
 {
     public function showAction($name)
     {
-        if(!$user = $this->getUserRepository()->findOneByName($name)) {
+        if(!$user = $this->getUserRepository()->findOneByNameWithBundles($name)) {
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
         $bundles = $user->getBundles();

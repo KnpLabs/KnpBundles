@@ -28,6 +28,22 @@ class UserRepository extends EntityRepository
         }
     }
 
+    public function findOneByNameWithBundles($name)
+    {
+        try {
+            return $this->createQueryBuilder('u')
+                ->leftJoin('u.bundles', 'b')
+                ->leftJoin('u.contributionBundles', 'cb')
+                ->where('u.name = :name')
+                ->setParameter('name', $name)
+                ->getQuery()
+                ->getSingleResult();
+        }
+        catch(NoResultException $e) {
+            return null;
+        }
+    }
+
     public function findAllSortedBy($field, $nb = null)
     {
         $qb = $this->createQueryBuilder('u');

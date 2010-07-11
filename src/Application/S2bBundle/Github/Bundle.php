@@ -142,6 +142,29 @@ class Bundle
 
         return $bundle;
     }
+
+    public function getContributorNames(Entities\Bundle $bundle)
+    {
+        try {
+            $contributors = $this->github->getRepoApi()->getRepoContributors($bundle->getUsername(), $bundle->getName());
+        }
+        catch(\phpGitHubApiRequestException $e) {
+            if(404 == $e->getCode()) {
+                return false;
+            }
+            $this->output->write(' '.$e->getCode());
+            sleep(5);
+            return $this->getContributorNames($bundle);
+        }
+        $names = array();
+        foreach($contributors as $contributor) {
+            if($bundle->getUsername() != $contributor['login']) {
+                $names[] = $contributor['login'];
+            }
+        }
+
+        return $names;
+    }
     
     /**
      * Get output

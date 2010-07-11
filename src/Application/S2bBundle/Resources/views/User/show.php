@@ -10,7 +10,12 @@
 <div class="post">
 
     <div class="right">
+        <h2 class="section-title">I manage</h2>
         <?php $view->output('S2bBundle:Bundle:bigList', array('bundles' => $bundles)) ?>
+        <?php if(count($user->getContributionBundles())): ?>
+            <h2 class="section-title">I contribute</h2>
+            <?php $view->output('S2bBundle:Bundle:bigList', array('bundles' => $user->getContributionBundles())) ?>
+        <?php endif; ?>
     </div>
 
     <div class="left">

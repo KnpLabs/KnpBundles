@@ -71,12 +71,26 @@ class User
     protected $blog = null;
 
     /**
+     * User creation date (on this website)
+     *
+     * @Column(type="datetime")
+     */
+    protected $createdAt = null;
+
+    /**
      * Bundles the user owns
      *
      * @OneToMany(targetEntity="Bundle", mappedBy="user")
      */
     protected $bundles = null;
 
+    /**
+     * Bundles this User contributed to
+     *
+     * @ManyToMany(targetEntity="Bundle", mappedBy="contributors")
+     */
+    protected $contributionBundles = null;
+    
     public function __construct()
     {
         $this->bundles = new ArrayCollection();
@@ -216,6 +230,25 @@ class User
         $this->getBundles()->removeElement($bundle);
         $bundle->setUser(null);
     }
+    
+    /**
+     * Get contributionBundles
+     * @return ArrayCollection
+     */
+    public function getContributionBundles()
+    {
+      return $this->contributionBundles;
+    }
+    
+    /**
+     * Set contributionBundles
+     * @param  ArrayCollection
+     * @return null
+     */
+    public function setContributionBundles($contributionBundles)
+    {
+      $this->contributionBundles = $contributionBundles;
+    }
 
     /**
      * Get the date of the last commit
@@ -326,6 +359,32 @@ class User
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * getCreatedAt 
+     * 
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set the user creation date
+     *
+     * @return null
+     **/
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /** @PrePersist */
+    public function markAsCreated()
+    {
+        $this->createdAt = new \DateTime();
     }
 
     public function __toString()

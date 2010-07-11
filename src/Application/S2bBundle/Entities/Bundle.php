@@ -3,6 +3,7 @@
 namespace Application\S2bBundle\Entities;
 use Symfony\Components\Validator\Constraints;
 use Symfony\Components\Validator\Mapping\ClassMetadata;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * An Open Source Bundle living on GitHub
@@ -77,14 +78,14 @@ class Bundle
     /**
      * Bundle creation date (on this website)
      *
-     * @Column(type="date")
+     * @Column(type="datetime")
      */
     protected $createdAt = null;
 
     /**
      * Bundle update date (on this website)
      *
-     * @Column(type="date")
+     * @Column(type="datetime")
      */
     protected $updatedAt = null;
 
@@ -107,6 +108,18 @@ class Bundle
      * @Column(type="text")
      */
     protected $tags = null;
+
+    /**
+     * Users who contributed to the Bundle
+     * @ManyToMany(targetEntity="User", inversedBy="contributionBundles")
+     * @JoinTable(name="contribution",
+     *      joinColumns={@JoinColumn(name="bundle_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="id")}
+     *)
+     *
+     * @var ArrayCollection
+     */
+    protected $contributors = null;
 
     /**
      * Number of GitHub followers
@@ -489,6 +502,26 @@ class Bundle
     {
         return $this->updatedAt;
     }
+    
+    /**
+     * Get contributors
+     * @return ArrayCollection
+     */
+    public function getContributors()
+    {
+      return $this->contributors;
+    }
+    
+    /**
+     * Set contributors
+     * @param  array
+     * @return null
+     */
+    public function setContributors(array $contributors)
+    {
+      $this->contributors = new ArrayCollection($contributors);
+    }
+    
 
     /** @PreUpdate */
     public function markAsUpdated()
@@ -499,7 +532,7 @@ class Bundle
     /** @PrePersist */
     public function markAsCreated()
     {
-        $this->updatedAt = new \DateTime();
+        $this->createdAt = $this->updatedAt = new \DateTime();
     }
 
     /**

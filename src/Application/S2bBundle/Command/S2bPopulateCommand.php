@@ -59,7 +59,7 @@ class S2bPopulateCommand extends BaseCommand
             'removed' => 0
         );
 
-        // first pass, update and revalidate existing bundles
+        //// first pass, update and revalidate existing bundles
         foreach($existingBundles as $existingBundle) {
             $githubBundle->updateInfos($existingBundle);
             if(!$existingBundle->getIsOnGithub()) {
@@ -98,12 +98,14 @@ class S2bPopulateCommand extends BaseCommand
             if($exists) {
                 continue;
             }
-            $output->write(sprintf('Create %s:', $bundle->getName()));
+            $output->write(sprintf('Create %s:', $foundBundle->getName()));
 
             if(!$bundle = $githubBundle->updateInfos($foundBundle)) {
+                $output->writeLn(' ABORTED');
                 continue;
             }
             if(!$bundle = $githubBundle->update($foundBundle)) {
+                $output->writeLn(' ABORTED');
                 continue;
             }
             $user = null;
@@ -160,6 +162,23 @@ class S2bPopulateCommand extends BaseCommand
             else {
                 $output->writeLn('OK');
             }
+        }
+
+        $dm->flush();
+
+        $output->writeLn('Will now update contributors');
+        $bundles = $dm->getRepository('Application\S2bBundle\Entities\Bundle')->findAll();
+        $userRepo = $dm->getRepository('Application\S2bBundle\Entities\User');
+        foreach($bundles as $bundle) {
+            $contributorNames = $githubBundle->getContributorNames($bundle);
+            $contributors = array();
+            foreach($contributorNames as $contributorName) {
+                if($contributor = $userRepo->findOneByName($contributorName)) {
+                    $contributors[] = $contributor;
+                }
+            }
+            $output->writeLn(sprintf('%s contributors: %s', $bundle->getFullName(), implode(', ', $contributors)));
+            $bundle->setContributors($contributors);
         }
 
         $dm->flush();

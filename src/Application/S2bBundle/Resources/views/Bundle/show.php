@@ -41,6 +41,17 @@
             </ul>
         </div>
 
+        <?php if(count($bundle->getContributors())): ?>
+            <div class="post-meta">
+                <h4>Contributors</h4>
+                <ul>
+                <?php foreach($bundle->getContributors() as $contributor): ?>
+                    <li class="user"><a href="<?php echo $view->router->generate('user_show', array('name' => $contributor->getName())) ?>"><?php echo $contributor->getName() ?></a></li>
+                <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
         <div class="post-meta">
             <h4>Versions</h4>
             <?php if(count($bundle->getTags())): ?>
