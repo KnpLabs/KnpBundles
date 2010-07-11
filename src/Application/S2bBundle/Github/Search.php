@@ -61,7 +61,6 @@ class Search
                         continue;
                     }
                     $bundles[] = new Bundle($repo['username'].'/'.$repo['name']);
-                    return $bundles;
                 }
                 $page++;
                 $this->output->write('...'.count($bundles));

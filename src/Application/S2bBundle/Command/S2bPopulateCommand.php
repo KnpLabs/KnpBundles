@@ -98,6 +98,7 @@ class S2bPopulateCommand extends BaseCommand
             if($exists) {
                 continue;
             }
+            $output->write(sprintf('Create %s:', $bundle->getName()));
 
             if(!$bundle = $githubBundle->updateInfos($foundBundle)) {
                 continue;
@@ -121,8 +122,8 @@ class S2bPopulateCommand extends BaseCommand
                 $user->addBundle($bundle);
                 $dm->persist($bundle);
                 $dm->persist($user);
+                $output->writeLn(' DONE');
                 ++$counters['created'];
-                $output->writeLn(sprintf('Create %s', $bundle->getName()));
             }
             else {
                 $output->writeLn(sprintf('Ignore %s : %s', $bundle->getFullName(), $violations->__toString()));

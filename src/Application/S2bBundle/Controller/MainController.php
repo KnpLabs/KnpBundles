@@ -2,15 +2,15 @@
 
 namespace Application\S2bBundle\Controller;
 
-use Symfony\Framework\FoundationBundle\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller;
 
 class MainController extends Controller
 {
 
     public function indexAction()
     {
-        $nbBundles = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Application\S2bBundle\Document\Bundle')
+        $nbBundles = $this->container->getDoctrine_Orm_DefaultEntityManagerService()
+            ->getRepository('Application\S2bBundle\Entities\Bundle')
             ->count();
         return $this->render('S2bBundle:Main:index', array('nbBundles' => $nbBundles));
     }
@@ -18,18 +18,9 @@ class MainController extends Controller
     #TODO cache me!
     public function timelineAction()
     {
-        $bundles = $this->container->getDoctrine_odm_mongodb_documentManagerService()
-            ->createQuery('Application\S2bBundle\Document\Bundle')
-            ->execute();
-        $commits = array();
-        foreach($bundles as $bundle) {
-            $commits = array_merge($commits, $bundle->getLastCommits());
-        }
-        usort($commits, function($a, $b)
-        {
-            return strtotime($a['committed_date']) < strtotime($b['committed_date']);
-        });
-        $commits = array_slice($commits, 0, 5);
+        $bundles = $this->container->getDoctrine_Orm_DefaultEntityManagerService()
+            ->getRepository('Application\S2bBundle\Document\Bundle')
+            ->getLastCommits(5);
 
         return $this->render('S2bBundle:Main:timeline', array('commits' => $commits));
     }

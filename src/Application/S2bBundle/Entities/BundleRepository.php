@@ -12,4 +12,29 @@ use Doctrine\ORM\EntityRepository;
  */
 class BundleRepository extends EntityRepository
 {
+    public function count()
+    {
+        return $this->_em->createQuery('SELECT COUNT(b.id) FROM Application\S2bBundle\Entities\Bundle b')->getSingleScalarResult();
+    }
+
+    public function getLastCommits($nb)
+    {
+        $bundles = $this->findByLastCommitAt($nb);
+        $commits = array();
+        foreach($bundles as $bundle) {
+            $commits = array_merge($commits, $bundle->getLastCommits());
+        }
+        usort($commits, function($a, $b)
+        {
+            return strtotime($a['committed_date']) < strtotime($b['committed_date']);
+        });
+        $commits = array_slice($commits, 0, 5);
+
+        return $commits;
+    }
+
+    public function findByLastCommitAt($nb)
+    {
+        return $this->createQueryBuilder('b')->orderBy('b.lastCommitAt DESC')->limit($nb)->getResults();
+    }
 }
