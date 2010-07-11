@@ -28,6 +28,9 @@ class Repo
 
     public function update(Entities\Repo $repo)
     {
+        if(!$this->updateInfos($repo)) {
+            return false;
+        }
         if(!$this->updateFiles($repo)) {
             return false;
         }
@@ -51,12 +54,12 @@ class Repo
      */
     public function updateInfos(Entities\Repo $repo)
     {
+        $this->output->write(' infos');
         try {
             $data = $this->github->getRepoApi()->show($repo->getUsername(), $repo->getName());
         }
         catch(\phpGitHubApiRequestException $e) {
             if(404 == $e->getCode()) {
-                $repo->setIsOnGithub(false);
                 return false;
             }
             sleep(5);
@@ -68,7 +71,6 @@ class Repo
         $repo->setNbForks($data['forks']);
         $repo->setIsFork((bool)$data['fork']);
         $repo->setCreatedAt(new \DateTime($data['created_at']));
-        $repo->setIsOnGithub(true);
 
         return $repo;
     }
@@ -104,7 +106,7 @@ class Repo
             sleep(5);
             return $this->updateFiles($repo);
         }
-        if(!$this->validateRepoFiles($repo, $blobs)) {
+        if($repo instanceof Entities\Project && !isset($blobs['src/autoload.php'])) {
             return false;
         }
         foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
@@ -124,13 +126,23 @@ class Repo
         return $repo;
     }
 
-    public function validateRepoFiles(Entities\Repo $repo, array $files)
+    public function validateFiles(Entities\Repo $repo)
     {
-        if($repo instanceof Entities\Project) {
-            return isset($files['src/autoload.php']);
+        if($repo instanceof Entities\Bundle) {
+            return true;
+        }
+        try {
+            $blobs = $this->github->getObjectApi()->listBlobs($repo->getUsername(), $repo->getName(), 'master');
+        }
+        catch(\phpGitHubApiRequestException $e) {
+            if(404 == $e->getCode()) {
+                return false;
+            }
+            sleep(5);
+            return $this->validateRepoFiles($repo);
         }
 
-        return true;
+        return isset($blobs['src/autoload.php']);
     }
 
     public function updateTags(Entities\Repo $repo)
@@ -159,7 +171,7 @@ class Repo
         }
         catch(\phpGitHubApiRequestException $e) {
             if(404 == $e->getCode()) {
-                return false;
+                return array();
             }
             $this->output->write(' '.$e->getCode());
             sleep(5);
