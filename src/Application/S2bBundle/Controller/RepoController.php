@@ -5,6 +5,7 @@ namespace Application\S2bBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller;
 use Symfony\Components\HttpKernel\Exception\HttpException;
 use Symfony\Components\HttpKernel\Exception\NotFoundHttpException;
+use Application\S2bBundle\Entities\Repo;
 use Application\S2bBundle\Entities\Bundle;
 use Application\S2bBundle\Entities\Project;
 use Application\S2bBundle\Entities\User;
@@ -95,28 +96,25 @@ class RepoController extends Controller
     {
         $url = $this->getRequest()->get('url');
 
-        if(preg_match('#^http://github.com/(\w+)/(\w+Bundle).*$#', $url, $match)) {
-            $bundle = $this->addBundle($match[1], $match[2]);
-            if($bundle) {
-                return $this->redirect($this->generateUrl('bundle_show', array('username' => $bundle->getUsername(), 'name' => $bundle->getName())));
+        if(preg_match('#^http://github.com/(\w+)/(\w+).*$#', $url, $match)) {
+            $repo = $this->addRepo($match[1], $match[2]);
+            if($repo) {
+                return $this->redirect($this->generateUrl('repo_show', array('username' => $repo->getUsername(), 'name' => $repo->getName())));
             }
         }
 
-        return $this->forward('S2bBundle:Bundle:listAll', array('sort' => 'score'));
+        return $this->forward('S2bBundle:Bundle:list', array('sort' => 'score'));
     }
 
-    protected function addBundle($username, $name)
+    protected function addRepo($username, $name)
     {
-        $bundle = $this->getBundleRepository()->findOneByUsernameAndName($username, $name);
-        if($bundle) {
-            return $bundle;
+        $repo = $this->getRepository('Repo')->findOneByUsernameAndName($username, $name);
+        if($repo) {
+            return $repo;
         }
-        $githubBundle = new Github\Bundle(new \phpGithubApi(), new Output());
+        $githubRepo = new Github\Repo(new \phpGithubApi(), new Output());
 
-        if(!$bundle = $githubBundle->updateInfos(new Bundle($username.'/'.$name))) {
-            return false;
-        }
-        if(!$bundle = $githubBundle->update($bundle)) {
+        if(!$repo = $githubRepo->update(Repo::create($username.'/'.$name))) {
             return false;
         }
         
@@ -126,20 +124,13 @@ class RepoController extends Controller
                 return false;
             }
         }
-        $bundle->setUser($user);
-
-        $validator = $this->container->getValidatorService();
-        if($validator->validate($bundle)->count()) {
-            return false;
-        }
-        $user->addBundle($bundle);
-        $githubBundle->update($bundle);
+        $user->addRepo($repo);
         $dm = $this->container->getDoctrine_Orm_DefaultEntityManagerService();
-        $dm->persist($bundle);
+        $dm->persist($repo);
         $dm->persist($user);
         $dm->flush();
 
-        return $bundle;
+        return $repo;
     }
 
     protected function getUserRepository()
