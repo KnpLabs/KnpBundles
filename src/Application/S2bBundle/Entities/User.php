@@ -271,17 +271,24 @@ class User
      *
      * @return array
      **/
-    public function getLastCommits()
+    public function getLastCommits($nb = 5)
     {
         $commits = array();
         foreach($this->getBundles() as $bundle) {
             $commits = array_merge($commits, $bundle->getLastCommits());
         }
+        foreach($this->getContributionBundles() as $bundle) {
+            foreach($bundle->getLastCommits() as $commit) {
+                if($commit['author']['name'] === $this->getFullName() && $commit['author']['email'] === $this->getEmail()) {
+                    $commits[] = $commit;
+                }
+            }
+        }
         usort($commits, function($a, $b)
         {
             return strtotime($a['committed_date']) < strtotime($b['committed_date']);
         });
-        $commits = array_slice($commits, 0, 10);
+        $commits = array_slice($commits, 0, $nb);
 
         return $commits;
     }
