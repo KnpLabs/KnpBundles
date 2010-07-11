@@ -4,7 +4,7 @@ namespace Application\S2bBundle\Github;
 use Symfony\Components\Console\Output\OutputInterface;
 use Application\S2bBundle\Entities;
 
-class Bundle
+class Repo
 {
     /**
      * php-github-api instance used to request GitHub API
@@ -26,93 +26,93 @@ class Bundle
         $this->output = $output;
     }
 
-    public function update(Entities\Bundle $bundle)
+    public function update(Entities\Repo $repo)
     {
-        if(!$this->updateCommits($bundle)) {
+        if(!$this->updateFiles($repo)) {
             return false;
         }
-        if(!$this->updateFiles($bundle)) {
+        if(!$this->updateCommits($repo)) {
             return false;
         }
-        if(!$this->updateTags($bundle)) {
+        if(!$this->updateTags($repo)) {
             return false;
         }
-        $bundle->recalculateScore();
+        $repo->recalculateScore();
          
-        return $bundle;
+        return $repo;
     }
 
     /**
-     * Return true if the Bundle exists on GitHub, false otherwise 
+     * Return true if the Repo exists on GitHub, false otherwise 
      * 
-     * @param Entities\Bundle $bundle 
+     * @param Entities\Repo $repo 
      * @param array $data 
-     * @return boolean whether the Bundle exists on GitHub
+     * @return boolean whether the Repo exists on GitHub
      */
-    public function updateInfos(Entities\Bundle $bundle)
+    public function updateInfos(Entities\Repo $repo)
     {
         try {
-            $data = $this->github->getRepoApi()->show($bundle->getUsername(), $bundle->getName());
+            $data = $this->github->getRepoApi()->show($repo->getUsername(), $repo->getName());
         }
         catch(\phpGitHubApiRequestException $e) {
             if(404 == $e->getCode()) {
-                $bundle->setIsOnGithub(false);
+                $repo->setIsOnGithub(false);
                 return false;
             }
             sleep(5);
-            return $this->updateInfos($bundle);
+            return $this->updateInfos($repo);
         }
 
-        $bundle->setDescription($data['description']);
-        $bundle->setNbFollowers($data['watchers']);
-        $bundle->setNbForks($data['forks']);
-        $bundle->setIsFork((bool)$data['fork']);
-        $bundle->setCreatedAt(new \DateTime($data['created_at']));
-        $bundle->setIsOnGithub(true);
+        $repo->setDescription($data['description']);
+        $repo->setNbFollowers($data['watchers']);
+        $repo->setNbForks($data['forks']);
+        $repo->setIsFork((bool)$data['fork']);
+        $repo->setCreatedAt(new \DateTime($data['created_at']));
+        $repo->setIsOnGithub(true);
 
-        return $bundle;
+        return $repo;
     }
 
-    public function updateCommits(Entities\Bundle $bundle)
+    public function updateCommits(Entities\Repo $repo)
     {
         $this->output->write(' commits');
         try {
-            $commits = $this->github->getCommitApi()->getBranchCommits($bundle->getUsername(), $bundle->getName(), 'master');
+            $commits = $this->github->getCommitApi()->getBranchCommits($repo->getUsername(), $repo->getName(), 'master');
         }
         catch(\phpGitHubApiRequestException $e) {
             if(404 == $e->getCode()) {
                 return false;
             }
             sleep(5);
-            return $this->updateCommits($bundle);
+            return $this->updateCommits($repo);
         }
-        if(empty($commits)) {
-            return $this->forward('S2bBundle:Bundle:listAll', array('sort' => 'score'));
-        }
-        $bundle->setLastCommits(array_slice($commits, 0, 5));
+        $repo->setLastCommits(array_slice($commits, 0, 10));
 
-        return $bundle;
+        return $repo;
     }
 
-    public function updateFiles(Entities\Bundle $bundle)
+    public function updateFiles(Entities\Repo $repo)
     {
         $this->output->write(' files');
         try {
-            $blobs = $this->github->getObjectApi()->listBlobs($bundle->getUsername(), $bundle->getName(), 'master');
+            $blobs = $this->github->getObjectApi()->listBlobs($repo->getUsername(), $repo->getName(), 'master');
         }
         catch(\phpGitHubApiRequestException $e) {
             if(404 == $e->getCode()) {
                 return false;
             }
             sleep(5);
-            return $this->updateFiles($bundle);
+            return $this->updateFiles($repo);
+        }
+        if(!$this->validateRepoFiles($repo, $blobs)) {
+            return false;
         }
         foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
             if(isset($blobs[$readmeFilename])) {
                 $readmeSha = $blobs[$readmeFilename];
                 try {
-                    $readmeText = $this->github->getObjectApi()->getRawData($bundle->getUsername(), $bundle->getName(), $readmeSha);
-                    $bundle->setReadme($readmeText);
+                    $readmeText = $this->github->getObjectApi()->getRawData($repo->getUsername(), $repo->getName(), $readmeSha);
+                    $repo->setReadme($readmeText);
                 }
                 catch(\phpGitHubApiRequestException $e) {
                     $this->output->write($e->getCode());
@@ -121,14 +121,23 @@ class Bundle
             }
         }
 
-        return $bundle;
+        return $repo;
     }
 
-    public function updateTags(Entities\Bundle $bundle)
+    public function validateRepoFiles(Entities\Repo $repo, array $files)
+    {
+        if($repo instanceof Entities\Project) {
+            return isset($files['src/autoload.php']);
+        }
+
+        return true;
+    }
+
+    public function updateTags(Entities\Repo $repo)
     {
         $this->output->write(' tags');
         try {
-            $tags = $this->github->getRepoApi()->getRepoTags($bundle->getUsername(), $bundle->getName());
+            $tags = $this->github->getRepoApi()->getRepoTags($repo->getUsername(), $repo->getName());
         }
         catch(\phpGitHubApiRequestException $e) {
             if(404 == $e->getCode()) {
@@ -136,17 +145,17 @@ class Bundle
             }
             $this->output->write(' '.$e->getCode());
             sleep(5);
-            return $this->updateTags($bundle);
+            return $this->updateTags($repo);
         }
-        $bundle->setTags(array_keys($tags));
+        $repo->setTags(array_keys($tags));
 
-        return $bundle;
+        return $repo;
     }
 
-    public function getContributorNames(Entities\Bundle $bundle)
+    public function getContributorNames(Entities\Repo $repo)
     {
         try {
-            $contributors = $this->github->getRepoApi()->getRepoContributors($bundle->getUsername(), $bundle->getName());
+            $contributors = $this->github->getRepoApi()->getRepoContributors($repo->getUsername(), $repo->getName());
         }
         catch(\phpGitHubApiRequestException $e) {
             if(404 == $e->getCode()) {
@@ -154,11 +163,11 @@ class Bundle
             }
             $this->output->write(' '.$e->getCode());
             sleep(5);
-            return $this->getContributorNames($bundle);
+            return $this->getContributorNames($repo);
         }
         $names = array();
         foreach($contributors as $contributor) {
-            if($bundle->getUsername() != $contributor['login']) {
+            if($repo->getUsername() != $contributor['login']) {
                 $names[] = $contributor['login'];
             }
         }

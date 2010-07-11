@@ -78,22 +78,22 @@ class User
     protected $createdAt = null;
 
     /**
-     * Bundles the user owns
+     * Repos the user owns
      *
-     * @OneToMany(targetEntity="Bundle", mappedBy="user")
+     * @OneToMany(targetEntity="Repo", mappedBy="user")
      */
-    protected $bundles = null;
+    protected $repos = null;
 
     /**
-     * Bundles this User contributed to
+     * Repos this User contributed to
      *
-     * @ManyToMany(targetEntity="Bundle", mappedBy="contributors")
+     * @ManyToMany(targetEntity="Repo", mappedBy="contributors")
      */
-    protected $contributionBundles = null;
+    protected $contributionRepos = null;
     
     public function __construct()
     {
-        $this->bundles = new ArrayCollection();
+        $this->repos = new ArrayCollection();
     }
 
     /**
@@ -173,81 +173,144 @@ class User
     }
 
     /**
-     * Get bundles
+     * Get repos
      * @return ArrayCollection
      */
+    public function getRepos()
+    {
+        return $this->repos;
+    }
+
     public function getBundles()
     {
-        return $this->bundles;
+        $bundles = array();
+        foreach($this->getRepos() as $repo) {
+            if($repo instanceof Bundle) {
+                $bundles[] = $repo;
+            }
+        }
+
+        return $bundles;
+    }
+
+    public function getProjects()
+    {
+        $projects = array();
+        foreach($this->getRepos() as $repo) {
+            if($repo instanceof Project) {
+                $projects[] = $repo;
+            }
+        }
+
+        return $projects;
     }
 
     /**
-     * Count the user bundles
+     * Count the user repos
      *
      * @return int
      **/
+    public function getNbRepos()
+    {
+        return $this->getRepos()->count();
+    }
+
     public function getNbBundles()
     {
-        return $this->getBundles()->count();
+        return count($this->getBundles());
+    }
+
+    public function getNbProjects()
+    {
+        return count($this->getProjects());
     }
 
     /**
-     * Get the names of this user bundles
+     * Get the names of this user repos
      *
      * @return array
      **/
-    public function getBundleNames()
+    public function getRepoNames()
     {
         $names = array();
-        foreach($this->getBundles() as $bundle) {
-            $names[] = $bundle->getName();
+        foreach($this->getRepos() as $repo) {
+            $names[] = $repo->getName();
         }
 
         return $names;
     }
 
     /**
-     * Add a bundle to this user bundles
+     * Add a repo to this user repos
      *
      * @return null
      **/
-    public function addBundle(Bundle $bundle)
+    public function addRepo(Repo $repo)
     {
-        if($this->getBundles()->contains($bundle)) {
-            throw new \OverflowException(sprintf('User %s already owns the %s bundle', $this->getName(), $bundle->getName()));
+        if($this->getRepos()->contains($repo)) {
+            throw new \OverflowException(sprintf('User %s already owns the %s repo', $this->getName(), $repo->getName()));
         }
-        $this->getBundles()->add($bundle);
-        $bundle->setUser($this);
+        $this->getRepos()->add($repo);
+        $repo->setUser($this);
     }
 
     /**
-     * Remove a bundle from this user bundles
+     * Remove a repo from this user repos
      *
      * @return null
      **/
-    public function removeBundle(Bundle $bundle)
+    public function removeRepo(Repo $repo)
     {
-        $this->getBundles()->removeElement($bundle);
-        $bundle->setUser(null);
+        $this->getRepos()->removeElement($repo);
+        $repo->setUser(null);
     }
     
     /**
-     * Get contributionBundles
+     * Get contributionRepos
      * @return ArrayCollection
      */
+    public function getContributionRepos()
+    {
+      return $this->contributionRepos;
+    }
+
     public function getContributionBundles()
     {
-      return $this->contributionBundles;
+        $bundles = array();
+        foreach($this->getContributionRepos() as $repo) {
+            if($repo instanceof Bundle) {
+                $bundles[] = $repo;
+            }
+        }
+
+        return $bundles;
+    }
+
+    public function getContributionProjects()
+    {
+        $projects = array();
+        foreach($this->getContributionRepos() as $repo) {
+            if($repo instanceof Project) {
+                $projects[] = $repo;
+            }
+        }
+
+        return $projects;
     }
     
     /**
-     * Set contributionBundles
+     * Set contributionRepos
      * @param  ArrayCollection
      * @return null
      */
-    public function setContributionBundles($contributionBundles)
+    public function setContributionRepos($contributionRepos)
     {
-      $this->contributionBundles = $contributionBundles;
+      $this->contributionRepos = $contributionRepos;
+    }
+
+    public function getNbContributionRepos()
+    {
+        return $this->getContributionRepos()->count();
     }
 
     /**
@@ -257,9 +320,9 @@ class User
     public function getLastCommitAt()
     {
         $date = null;
-        foreach($this->getBundles() as $bundle) {
-            if(null === $date || $bundle->getLastCommitAt() > $date) {
-                $date = $bundle->getLastCommitAt();
+        foreach($this->getRepos() as $repo) {
+            if(null === $date || $repo->getLastCommitAt() > $date) {
+                $date = $repo->getLastCommitAt();
             }
         }
 
@@ -271,14 +334,11 @@ class User
      *
      * @return array
      **/
-    public function getLastCommits($nb = 5)
+    public function getLastCommits($nb = 10)
     {
         $commits = array();
-        foreach($this->getBundles() as $bundle) {
-            $commits = array_merge($commits, $bundle->getLastCommits());
-        }
-        foreach($this->getContributionBundles() as $bundle) {
-            foreach($bundle->getLastCommits() as $commit) {
+        foreach(array_merge($this->getRepos()->toArray(), $this->getContributionRepos()->toArray()) as $repo) {
+            foreach($repo->getLastCommits() as $commit) {
                 if($commit['author']['name'] === $this->getFullName() && $commit['author']['email'] === $this->getEmail()) {
                     $commits[] = $commit;
                 }

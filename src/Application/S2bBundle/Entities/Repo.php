@@ -9,13 +9,17 @@ use Doctrine\Common\Collections\ArrayCollection;
  * An Open Source Repo living on GitHub
  *
  * @Entity(repositoryClass="Application\S2bBundle\Entities\RepoRepository")
- * @Table(name="repo")
+ * @Table(
+ *      name="repo",
+ *      indexes={@Index(name="full_name", columns={"username", "name"})}),
+ *      uniqueConstraints={@UniqueConstraint(name="full_name_unique",columns={"username", "name"})}
+ * )
  * @InheritanceType("SINGLE_TABLE")
  * @DiscriminatorColumn(name="discr", type="string")
  * @DiscriminatorMap({"bundle" = "Bundle", "project" = "Project"})
  * @HasLifecycleCallbacks
  */
-class Repo
+abstract class Repo
 {
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
@@ -23,6 +27,15 @@ class Repo
         $metadata->addPropertyConstraint('name', new Constraints\MinLength(2));
         $metadata->addPropertyConstraint('username', new Constraints\NotBlank());
         $metadata->addPropertyConstraint('username', new Constraints\MinLength(2));
+    }
+
+    public static function create($fullName)
+    {
+        if(preg_match('/Bundle$/', $fullName)) {
+            return new Bundle($fullName);
+        }
+        
+        return new Project($fullName);
     }
     
     /**
@@ -51,7 +64,7 @@ class Repo
     /**
      * User who owns the bundle
      *
-     * @ManyToOne(targetEntity="User", inversedBy="bundles")
+     * @ManyToOne(targetEntity="User", inversedBy="repos")
      * @JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     protected $user = null;
@@ -116,7 +129,7 @@ class Repo
      * Users who contributed to the Repo
      * @ManyToMany(targetEntity="User", inversedBy="contributionRepos")
      * @JoinTable(name="contribution",
-     *      joinColumns={@JoinColumn(name="bundle_id", referencedColumnName="id")},
+     *      joinColumns={@JoinColumn(name="repo_id", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="id")}
      *)
      *
@@ -424,7 +437,7 @@ class Repo
     /**
      * @param User $user 
      */
-    public function setUser(User $user)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
     }

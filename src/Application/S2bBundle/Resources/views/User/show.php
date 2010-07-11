@@ -10,12 +10,15 @@
 <div class="post">
 
     <div class="right">
-        <h2 class="section-title">I manage</h2>
-        <?php $view->output('S2bBundle:Bundle:bigList', array('repos' => $user->getBundles())) ?>
-        <?php if(count($user->getContributionBundles())): ?>
-            <h2 class="section-title">I contribute</h2>
-            <?php $view->output('S2bBundle:Bundle:bigList', array('repos' => $user->getContributionBundles())) ?>
-        <?php endif; ?>
+        <?php foreach(array('Bundle', 'Project') as $class): ?>
+            <?php foreach(array('get', 'getContribution') as $method): ?>
+                <?php $repos = $user->{$method.$class.'s'}() ?>
+                <?php if($number = count($repos)): ?>
+                    <h2 class="section-title">I <?php echo 'get' === $method ? 'manage' : 'contribute to' ?> <?php echo $number ?> <?php echo $class.($number > 1 ? 's' : '') ?></h2>
+                    <?php $view->output('S2bBundle:'.$class.':bigList', array('repos' => $repos)) ?>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
     </div>
 
     <div class="left">
@@ -25,6 +28,7 @@
             <ul>
                 <li class="time"><?php echo $view->time->ago($user->getLastCommitAt()->getRawValue()) ?></li>
                 <li class="lego"><?php echo $user->getNbBundles() ?> Bundles</li>
+                <li class="application"><?php echo $user->getNbProjects() ?> Projects</li>
                 <?php if($user->getCompany()): ?>
                     <li class="company"><?php echo $user->getCompany() ?></li>
                 <?php endif; ?>

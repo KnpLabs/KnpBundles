@@ -28,12 +28,12 @@ class UserRepository extends EntityRepository
         }
     }
 
-    public function findOneByNameWithBundles($name)
+    public function findOneByNameWithRepos($name)
     {
         try {
             return $this->createQueryBuilder('u')
-                ->leftJoin('u.bundles', 'b')
-                ->leftJoin('u.contributionBundles', 'cb')
+                ->leftJoin('u.repos', 'r')
+                ->leftJoin('u.contributionRepos', 'cr')
                 ->where('u.name = :name')
                 ->setParameter('name', $name)
                 ->getQuery()

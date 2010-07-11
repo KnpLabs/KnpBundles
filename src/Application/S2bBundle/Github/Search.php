@@ -1,7 +1,7 @@
 <?php
 
 namespace Application\S2bBundle\Github;
-use Application\S2bBundle\Entities\Bundle;
+use Application\S2bBundle\Entities\Repo;
 use Symfony\Components\Console\Output\OutputInterface;
 use Goutte\Client;
 
@@ -36,51 +36,49 @@ class Search
     }
     
     /**
-     * Get a list of Symfony2 Bundles from GitHub
+     * Get a list of Symfony2 Repos from GitHub
      */
-    public function searchBundles($limit = 300)
+    public function searchRepos($limit = 300)
     {
-        $bundles = $this->searchBundlesOnGitHub($limit);
-        //$bundles = $this->searchBundlesOnGoogle($bundles, $limit);
-        return $bundles;
+        $repos = array();
+        $repos = $this->searchReposOnGitHub('Bundle', $repos, $limit);
+        $repos = $this->searchReposOnGitHub('Symfony2', $repos, $limit);
+        //$repos = $this->searchReposOnGoogle($repos, $limit);
+        return array_slice($repos, 0, $limit);
     }
 
-    protected function searchBundlesOnGitHub($limit)
+    protected function searchReposOnGitHub($query, array $repos, $limit)
     {
-        $this->output->write('Search on Github');
+        $this->output->write(sprintf('Search "%s" on Github', $query));
         try {
-            $bundles = array();
             $page = 1;
             do {
-                $repos = $this->github->getRepoApi()->search('Bundle', 'php', $page);
-                if(empty($repos)) {
+                $found = $this->github->getRepoApi()->search($query, 'php', $page);
+                if(empty($found)) {
                     break;
                 }
-                foreach($repos as $repo) {
-                    if(!preg_match('#^\w+Bundle$#', $repo['name'])) {
-                        continue;
-                    }
-                    $bundles[] = new Bundle($repo['username'].'/'.$repo['name']);
+                foreach($found as $repo) {
+                    $repos[] = Repo::create($repo['username'].'/'.$repo['name']);
                 }
                 $page++;
-                $this->output->write('...'.count($bundles));
+                $this->output->write('...'.count($repos));
             }
-            while(count($bundles) < $limit);
+            while(count($repos) < $limit);
         }
         catch(\Exception $e) {
             $this->output->write(' - '.$e->getMessage());
         }
 
-        if(empty($bundles)) {
+        if(empty($repos)) {
             $this->output->writeLn(' - Failed, will retry');
             sleep(3);
-            return $this->searchBundlesOnGitHub($limit);
+            return $this->searchReposOnGitHub($query, $repos, $limit);
         }
         $this->output->writeLn('... DONE');
-        return $bundles;
+        return array_slice($repos, 0, $limit);
     }
 
-    protected function searchBundlesOnGoogle(array $bundles, $limit)
+    protected function searchReposOnGoogle(array $repos, $limit)
     {
         $this->output->write('Search on Google');
         $maxBatch = 2;
@@ -89,7 +87,7 @@ class Search
         for($batch = 1; $batch <= $maxBatch; $batch++) {
             for($page = 1; $page <= $maxPage; $page++) {
                 $url = sprintf('http://www.google.com/search?q=%s&start=%d',
-                    urlencode('site:github.com Symfony2 Bundle'),
+                    urlencode('site:github.com Symfony2 Repo'),
                     (1 === $pageNumber) ? '' : $pageNumber
                 );
                 $crawler = $this->browser->request('GET', $url);
@@ -102,19 +100,19 @@ class Search
                     break 2;
                 }
                 foreach($links->extract('href') as $url) {
-                    if(!preg_match('#^http://github.com/(\w+/\w+Bundle).*$#', $url, $match)) {
+                    if(!preg_match('#^http://github.com/(\w+/\w+Repo).*$#', $url, $match)) {
                         continue;
                     }
-                    $bundle = new Bundle($match[1]);
+                    $repo = new Repo($match[1]);
                     $alreadyFound = false;
-                    foreach($bundles as $_bundle) {
-                        if($bundle->getName() == $_bundle->getName()) {
+                    foreach($repos as $_repo) {
+                        if($repo->getName() == $_repo->getName()) {
                             $alreadyFound = true;
                             break;
                         }
                     }
                     if(!$alreadyFound) {
-                        $bundles[] = $bundle;
+                        $repos[] = $repo;
                         $this->output->write(sprintf('!'));
                     }
                 }
@@ -125,7 +123,7 @@ class Search
             sleep(2);
         }
         $this->output->writeLn(' DONE');
-        return $bundles;
+        return $repos;
     }
 
     /**

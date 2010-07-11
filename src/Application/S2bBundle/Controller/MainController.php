@@ -19,7 +19,7 @@ class MainController extends Controller
     public function timelineAction()
     {
         $commits = $this->container->getDoctrine_Orm_DefaultEntityManagerService()
-            ->getRepository('Application\S2bBundle\Entities\Bundle')
+            ->getRepository('Application\S2bBundle\Entities\Repo')
             ->getLastCommits(5);
 
         return $this->render('S2bBundle:Main:timeline', array('commits' => $commits));

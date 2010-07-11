@@ -650,7 +650,7 @@ div.post-meta li.blog { background: url(../images/quill.png) no-repeat 2px cente
 
 ul.user-list,
 ul.repo-list {
-    margin: 10px 30px 10px 20px;
+    margin: 10px 30px 40px 20px;
     padding: 0;
     border-top: 1px solid #eeeeee;
 }

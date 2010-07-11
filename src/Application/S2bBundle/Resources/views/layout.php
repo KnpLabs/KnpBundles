@@ -1,4 +1,4 @@
-<?php $view->assets->setVersion('4') ?>
+<?php $view->assets->setVersion('5') ?>
 <?php $view->stylesheets->add('bundles/s2b/css/reset.css') ?>
 <?php $view->stylesheets->add('bundles/s2b/vendor/tipsy/stylesheets/tipsy.css') ?>
 <?php $view->stylesheets->add('bundles/s2b/css/style.css') ?>
