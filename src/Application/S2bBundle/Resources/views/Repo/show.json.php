@@ -1,3 +1,3 @@
 <?php
 
-echo json_encode($bundle->getRawValue()->toBigArray());
+echo json_encode($repo->getRawValue()->toBigArray());
