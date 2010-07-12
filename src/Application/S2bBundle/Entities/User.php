@@ -483,7 +483,7 @@ class User
         return $this->getName();
     }
 
-    public function toBigArray()
+    public function toSmallArray()
     {
         return array(
             'name' => $this->getName(),
@@ -494,7 +494,13 @@ class User
             'blog' => $this->getBlog(),
             'bundles' => $this->getBundleNames(),
             'projects' => $this->getProjectNames(),
-            'lastCommitAt' => $this->getLastCommitAt()->getTimestamp(),
+            'lastCommitAt' => $this->getLastCommitAt()->getTimestamp()
+        );
+    }
+
+    public function toBigArray()
+    {
+        return $this->toSmallArray() + array(
             'lastCommits' => $this->getLastCommits()
         );
     }
