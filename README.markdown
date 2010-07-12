@@ -4,8 +4,6 @@ Open-source code of the [symfony2bundles.org](http://symfony2bundles.org) websit
 
 ## Install
 
-Symfony2Bundles require Symfony2 and MongoDB.
-
 ### Get the code
 
     git clone git://github.com/knplabs/symfony2bundles.git
@@ -14,22 +12,45 @@ Symfony2Bundles require Symfony2 and MongoDB.
 
 The last command requires Git >= 1.6. Alternatively, you can run `git submodule init` and `git submodule update`, and recurse manually in submodules.
 
-### Create Proxies dirs
+### Configure
 
-    php s2b/console proxy:create
-    php s2b/console-dev proxy:create
+To configure your DB for your development and test environments, edit your `/s2b/config/config_dev_local.yml` and `/s2b/config/config_test_local.yml` to add your specific DB settings:
 
-From now you can open index_dev.php on your browser, it should work.
+    imports:
+      - { resource: config_dev.yml }
 
-### Patch annotation classes autoloading
+    doctrine.dbal:
+      connections:
+        default:
+          driver:               PDOMySql
+          dbname:               s2b
+          user:                 root
+          password:             changeme
+          host:                 localhost
+          port:                 ~
 
-As for now a bug prevents using annotation autoloading. Let's patch Symfony.
+#### Create database and tables
 
-    cd src/vendor/Symfony/
-    git apply ../../../autoloadAnnotation.patch
-    cd ../../..
+    php s2b/console-dev doctrine:database:drop
+    php s2b/console-dev doctrine:database:create
+    php s2b/console-dev doctrine:schema:create
 
-### Populate document collections from GitHub
+    php s2b/console-test doctrine:database:drop
+    php s2b/console-test doctrine:database:create
+    php s2b/console-test doctrine:schema:create
+
+#### Generate the doctrine proxies
+
+    php s2b/console-dev doctrine:generate:proxies
+    php s2b/console-test doctrine:generate:proxies
+
+#### To generate migrations from your current schema
+
+    php s2b/console-dev doctrine:migrations:diff --bundle=Bundle\\s2bBundle
+    php s2b/console-dev doctrine:migrations:migrate --bundle=Bundle\\s2bBundle
+    php s2b/console-dev doctrine:generate:proxies
+
+#### Populate document collections from GitHub
 
     php s2b/console s2b:populate
 
