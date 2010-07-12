@@ -12,12 +12,6 @@ use Symfony\Components\Console\Output\NullOutput as Output;
 
 class BundleController extends Controller
 {
-    public function listLatestAction()
-    {
-        $repos = $this->getBundleRepository()->findAllSortedBy('createdAt', 50);
-        $response = $this->render('S2bBundle:Repo:listLatest', array('repos' => $repos));
-        return $response;
-    }
 
     public function listLastCreatedAction()
     {

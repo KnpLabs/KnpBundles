@@ -63,33 +63,9 @@ class RepoController extends Controller
 
     public function listLatestAction()
     {
-        $bundles = $this->getRepository('Bundle')->findAllSortedBy('createdAt', 50);
+        $repos = $this->getRepository('Repo')->findAllSortedBy('createdAt', 50);
         $response = $this->render('S2bBundle:Repo:listLatest', array('repos' => $repos));
         return $response;
-    }
-
-    public function listLastCreatedAction()
-    {
-        $bundles = $this->getRepository('Bundle')->findAllSortedBy('createdAt', 5);
-        return $this->render('S2bBundle:Repo:list', array('repos' => $repos));
-    }
-
-    public function listLastUpdatedAction()
-    {
-        $bundles = $this->getRepository('Bundle')->findAllSortedBy('lastCommitAt', 5);
-        return $this->render('S2bBundle:Repo:list', array('repos' => $repos));
-    }
-
-    public function listPopularAction()
-    {
-        $bundles = $this->getRepository('Bundle')->findAllSortedBy('nbFollowers', 5);
-        return $this->render('S2bBundle:Repo:list', array('repos' => $repos));
-    }
-
-    public function listBestScoreAction()
-    {
-        $bundles = $this->getRepository('Bundle')->findAllSortedBy('score', 5);
-        return $this->render('S2bBundle:Repo:list', array('repos' => $repos));
     }
 
     public function addAction()
