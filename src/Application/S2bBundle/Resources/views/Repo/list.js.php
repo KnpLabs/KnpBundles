@@ -1,7 +1,7 @@
 <?php
 
 $array = array();
-foreach($repo as $repo) {
+foreach($repos as $repo) {
     $array[] = $repo->getRawValue()->toSmallArray();
 }
 
