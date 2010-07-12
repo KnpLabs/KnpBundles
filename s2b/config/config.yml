@@ -18,7 +18,7 @@ time.helper: ~      # Enable the time helper
 
 doctrine.orm:
   default_entity_manager:   default
-  cache_driver:             array           # array, apc, memcache, xcache
+  cache_driver:             apc           # array, apc, memcache, xcache
   entity_managers:
     default:
       connection:           default

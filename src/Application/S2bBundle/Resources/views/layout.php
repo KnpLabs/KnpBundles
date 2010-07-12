@@ -100,7 +100,7 @@
         <div id="footer-bottom">
 
             <p class="bottom-left">
-                Powered by <a href="http://www.symfony-reloaded.org/">Symfony2</a>, <a href="http://www.doctrine-project.org/">Doctrine2</a> &amp; <a href="http://www.mongodb.org/">mongoDB</a> |
+                Powered by <a href="http://www.symfony-reloaded.org/">Symfony2</a> &amp <a href="http://www.doctrine-project.org/">Doctrine2</a> |
                 Template by <a href="http://www.styleshout.com/">styleshout</a> |
                 Supported by <a class="knplabs" href="http://www.knplabs.com/" title="French web agency who loves Symfony2"><img alt="knpLabs logo" src="<?php echo $view->assets->getUrl('bundles/s2b/images/knplabs20.png') ?>" /></a>
             </p>
