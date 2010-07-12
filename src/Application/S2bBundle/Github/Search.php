@@ -48,7 +48,7 @@ class Search
             }
         }
         $repos = $this->searchReposOnGitHub('Symfony2', $repos, $limit);
-        //$repos = $this->searchReposOnGoogle($repos, $limit);
+        $repos = $this->searchReposOnGoogle($repos, $limit);
         return array_slice($repos, 0, $limit);
     }
 
@@ -86,13 +86,13 @@ class Search
     protected function searchReposOnGoogle(array $repos, $limit)
     {
         $this->output->write('Search on Google');
-        $maxBatch = 2;
+        $maxBatch = 5;
         $maxPage = 5;
         $pageNumber = 1;
         for($batch = 1; $batch <= $maxBatch; $batch++) {
             for($page = 1; $page <= $maxPage; $page++) {
                 $url = sprintf('http://www.google.com/search?q=%s&start=%d',
-                    urlencode('site:github.com Symfony2 Repo'),
+                    urlencode('site:github.com Symfony2 Bundle'),
                     (1 === $pageNumber) ? '' : $pageNumber
                 );
                 $crawler = $this->browser->request('GET', $url);
@@ -105,10 +105,10 @@ class Search
                     break 2;
                 }
                 foreach($links->extract('href') as $url) {
-                    if(!preg_match('#^http://github.com/(\w+/\w+Repo).*$#', $url, $match)) {
+                    if(!preg_match('#^http://github.com/(\w+/\w+).*$#', $url, $match)) {
                         continue;
                     }
-                    $repo = new Repo($match[1]);
+                    $repo = Repo::create($match[1]);
                     $alreadyFound = false;
                     foreach($repos as $_repo) {
                         if($repo->getName() == $_repo->getName()) {
