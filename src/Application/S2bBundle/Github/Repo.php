@@ -62,6 +62,7 @@ class Repo
             if(404 == $e->getCode()) {
                 return false;
             }
+            $this->output->write(sprintf('{%s}', $e->getCode()));
             sleep(5);
             return $this->updateInfos($repo);
         }
@@ -85,6 +86,7 @@ class Repo
             if(404 == $e->getCode()) {
                 return false;
             }
+            $this->output->write(sprintf('{%s}', $e->getCode()));
             sleep(5);
             return $this->updateCommits($repo);
         }
@@ -103,6 +105,7 @@ class Repo
             if(404 == $e->getCode()) {
                 return false;
             }
+            $this->output->write(sprintf('{%s}', $e->getCode()));
             sleep(5);
             return $this->updateFiles($repo);
         }
@@ -117,7 +120,7 @@ class Repo
                     $repo->setReadme($readmeText);
                 }
                 catch(\phpGitHubApiRequestException $e) {
-                    $this->output->write($e->getCode());
+                    $this->output->write(sprintf('{%s}', $e->getCode()));
                 }
                 break;
             }
@@ -138,6 +141,7 @@ class Repo
             if(404 == $e->getCode()) {
                 return false;
             }
+            $this->output->write(sprintf('{%s}', $e->getCode()));
             sleep(5);
             return $this->validateRepoFiles($repo);
         }
@@ -155,7 +159,7 @@ class Repo
             if(404 == $e->getCode()) {
                 return false;
             }
-            $this->output->write(' '.$e->getCode());
+            $this->output->write(sprintf('{%s}', $e->getCode()));
             sleep(5);
             return $this->updateTags($repo);
         }
@@ -173,7 +177,7 @@ class Repo
             if(404 == $e->getCode()) {
                 return array();
             }
-            $this->output->write(' '.$e->getCode());
+            $this->output->write(sprintf('{%s}', $e->getCode()));
             sleep(5);
             return $this->getContributorNames($repo);
         }
