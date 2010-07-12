@@ -1,7 +1,7 @@
 <?php
 namespace Bundle\S2bBundle\Tests\Controller;
 
-use Symfony\Framework\FoundationBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class MainControllerTest extends WebTestCase
 {
@@ -22,7 +22,6 @@ class MainControllerTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isSuccessful());
 
         $this->assertEquals(1, $crawler->filter('h1:contains("Developer API")')->count());
-        $this->assertEquals(1, $crawler->filter('h3:contains("List bundles")')->count());
+        $this->assertEquals(1, $crawler->filter('h3:contains("List all Bundles")')->count());
     }
 }
-

@@ -1,7 +1,8 @@
 <?php
+
 namespace Bundle\S2bBundle\Tests\Controller;
 
-use Symfony\Framework\FoundationBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class BundleControllerTest extends WebTestCase
 {
@@ -12,12 +13,12 @@ class BundleControllerTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isSuccessful());
 
         $this->assertRegexp('/^\d+ Bundles$/', str_replace("\n", '', trim($crawler->filter('h1')->text())));
-        $this->assertEquals(1, $crawler->filter('p.slogan:contains("All Bundles sorted by score")')->count());
-        $this->assertTrue(10 < $crawler->filter('.bundle-list li.item')->count());
+        $this->assertEquals(1, $crawler->filter('p.slogan:contains("All Open Source Bundles sorted by score")')->count());
+        $this->assertTrue(10 < $crawler->filter('.repo-list li.item')->count());
 
         $crawler = $client->request('GET', '/bundle/name');
         $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertEquals(1, $crawler->filter('p.slogan:contains("All Bundles sorted by name")')->count());
+        $this->assertEquals(1, $crawler->filter('p.slogan:contains("All Open Source Bundles sorted by name")')->count());
     }
 
     public function testShow()
@@ -41,7 +42,7 @@ class BundleControllerTest extends WebTestCase
         $this->assertEquals(0, $crawler->filter('.bundle-list li.item')->count());
         $crawler = $client->submit($crawler->filter('form#quick-search button')->form(), array('q' => 'image'));
         $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertEquals(1, $crawler->filter('.bundle-list li.item a:contains("ImagineBundle")')->count());
+        $this->assertEquals(1, $crawler->filter('.repo-list li.item a:contains("ImagineBundle")')->count());
     }
 
     public function testLatest()
