@@ -36,30 +36,33 @@
             <ul>
                 <li class="github"><a href="<?php echo $repo->getGithubUrl() ?>">View source</a></li>
                 <li class="download"><a href="<?php echo $repo->getGithubUrl() ?>/tarball/master">Download</a></li>
+                <?php if($repo->getHomepage()): ?>
+                <li class="homepage"><a href="<?php echo $repo->getHomepage() ?>">Homepage</a></li>
+                <?php endif; ?>
             </ul>
         </div>
 
         <?php if(count($repo->getContributors())): ?>
-            <div class="post-meta">
-                <h4>Contributors</h4>
-                <ul>
+        <div class="post-meta">
+            <h4>Contributors</h4>
+            <ul>
                 <?php foreach($repo->getContributors() as $contributor): ?>
-                    <li class="user"><a href="<?php echo $view->router->generate('user_show', array('name' => $contributor->getName())) ?>"><?php echo $contributor->getName() ?></a></li>
+                <li class="user"><a href="<?php echo $view->router->generate('user_show', array('name' => $contributor->getName())) ?>"><?php echo $contributor->getName() ?></a></li>
                 <?php endforeach; ?>
-                </ul>
-            </div>
+            </ul>
+        </div>
         <?php endif; ?>
 
         <div class="post-meta">
             <h4>Versions</h4>
             <?php if(count($repo->getTags())): ?>
-                <ul>
-                    <?php foreach($repo->getTags() as $tag): ?>
-                        <li class="version"><a href="<?php echo $repo->getGithubUrl() ?>/tree/<?php echo $tag ?>"><?php echo $tag ?></a></li>
-                    <?php endforeach ?>
-                </ul>
+            <ul>
+                <?php foreach($repo->getTags() as $tag): ?>
+                <li class="version"><a href="<?php echo $repo->getGithubUrl() ?>/tree/<?php echo $tag ?>"><?php echo $tag ?></a></li>
+                <?php endforeach ?>
+            </ul>
             <?php else: ?>
-                No version released.
+            No version released.
             <?php endif; ?>
         </div>
 
@@ -72,10 +75,10 @@
 <div class="sidemenu">
     <ul>
         <?php foreach($repo->getLastCommits() as $commit): ?>
-            <li>
-                <a href="<?php echo $commit['url'] ?>"><?php echo $commit['message'] ?></a><br />
-                <span><?php echo $commit['author']['name'] ?> | <?php echo $view->time->ago(date_create($commit['committed_date'])) ?></span>
-            </li>
+        <li>
+        <a href="<?php echo $commit['url'] ?>"><?php echo $commit['message'] ?></a><br />
+        <span><?php echo $commit['author']['name'] ?> | <?php echo $view->time->ago(date_create($commit['committed_date'])) ?></span>
+        </li>
         <?php endforeach ?>
     </ul>
 </div>

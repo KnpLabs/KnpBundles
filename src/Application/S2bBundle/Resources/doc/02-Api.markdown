@@ -42,6 +42,7 @@ Return a list of Bundles:
       name: OplBundle
       username: eXtreme
       description: Experimental Symfony2 Bundle providing support for OPL family as well with Open Power Template 2.1 templating engine.
+      homepage: http://www.jacek.jedrzejewski.name/
       score: 16
       nbFollowers: 2
       nbForks: 1
@@ -68,6 +69,7 @@ Return informations about one Bundle:
     name: MicroKernelBundle
     username: avalanche123
     description: A micro kernel for Symfony 2, inspired by the Ruby Sinatra Web Framework
+    homepage:
     score: 21.2
     nbFollowers: 5
     nbForks: 2
@@ -96,6 +98,7 @@ Return a list of Projects:
       name: symfony2bundles
       username: knplabs
       description: Comprehensive list of Symfony2 bundles ordered by relevance and integrated with GitHub.
+      homepage: http://symfony2bundles.org/
       score: 46
       nbFollowers: 27
       nbForks: 3
@@ -120,6 +123,7 @@ Return informations about one Project:
     name: symfony2bundles
     username: knplabs
     description: Comprehensive list of Symfony2 bundles ordered by relevance and integrated with GitHub.
+    homepage: http://symfony2bundles.org/
     score: 46
     nbFollowers: 27
     nbForks: 3
@@ -145,6 +149,7 @@ Return a list of bundles and projects:
       name: symfony2bundles
       username: knplabs
       description: Comprehensive list of Symfony2 bundles ordered by relevance and integrated with GitHub.
+      homepage: http://symfony2bundles.org/
       score: 46
       nbFollowers: 27
       nbForks: 3
@@ -172,7 +177,7 @@ Return a list of developers:
       fullName: Thibault Duplessis
       company: knpLabs
       location: France
-      blog:
+      blog: http://twitter.com/ornicar
       bundles:
         - GravatarBundle
       projects:
@@ -193,7 +198,7 @@ Return informations about one developer.
       fullName: Thibault Duplessis
       company: knpLabs
       location: France
-      blog:
+      blog: http://twitter.com/ornicar
       bundles:
         - GravatarBundle
       projects:
@@ -216,6 +221,7 @@ Return a list of Bundles:
       name: OplBundle
       username: eXtreme
       description: Experimental Symfony2 Bundle providing support for OPL family as well with Open Power Template 2.1 templating engine.
+      homepage: http://www.jacek.jedrzejewski.name/
       score: 16
       nbFollowers: 2
       nbForks: 1
@@ -244,6 +250,7 @@ Return a list of Projects.
       name: symfony2bundles
       username: knplabs
       description: Comprehensive list of Symfony2 bundles ordered by relevance and integrated with GitHub.
+      homepage: http://symfony2bundles.org/
       score: 46
       nbFollowers: 27
       nbForks: 3

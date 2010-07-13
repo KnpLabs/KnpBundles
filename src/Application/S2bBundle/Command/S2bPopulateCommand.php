@@ -47,7 +47,8 @@ class S2bPopulateCommand extends BaseCommand
         $githubUser = new Github\User($github, $output);
         $githubRepo = new Github\Repo($github, $output);
 
-        $foundRepos = $githubSearch->searchRepos(500, $output);
+        //$foundRepos = $githubSearch->searchRepos(500, $output);
+        $foundRepos = array();
         $output->writeLn(sprintf('Found %d repo candidates', count($foundRepos)));
 
         $dm = $this->container->getDoctrine_Orm_DefaultEntityManagerService();
@@ -66,7 +67,7 @@ class S2bPopulateCommand extends BaseCommand
             'removed' => 0
         );
 
-        // second pass, create missing repos
+        // create missing repos
         foreach($foundRepos as $repo) {
             if(isset($repos[$repo->getFullName()])) {
                 continue;
@@ -107,42 +108,43 @@ class S2bPopulateCommand extends BaseCommand
                 $dm->remove($repo);
             }
             $output->writeLn(' '.$repo->getScore());
+            if(!rand(0, 5)) break;
         }
         
-        // Now update users with more precise GitHub data
-        $output->writeLn(sprintf('Will now update %d users', count($users)));
-        foreach($users as $user) {
-            if($dm->getUnitOfWork()->getEntityState($user) != UnitOfWork::STATE_MANAGED) {
-                continue;
-            }
-            $output->write($user->getName().str_repeat(' ', 40-strlen($user->getName())));
-            if(!$user->getNbRepos() || !$githubUser->update($user)) {
-                $output->writeLn('No repo, remove user');
-                $dm->remove($user);
-            }
-            else {
-                $output->writeLn('OK');
-            }
-        }
+        //// Now update users with more precise GitHub data
+        //$output->writeLn(sprintf('Will now update %d users', count($users)));
+        //foreach($users as $user) {
+            //if($dm->getUnitOfWork()->getEntityState($user) != UnitOfWork::STATE_MANAGED) {
+                //continue;
+            //}
+            //$output->write($user->getName().str_repeat(' ', 40-strlen($user->getName())));
+            //if(!$user->getNbRepos() || !$githubUser->update($user)) {
+                //$output->writeLn('No repo, remove user');
+                //$dm->remove($user);
+            //}
+            //else {
+                //$output->writeLn('OK');
+            //}
+        //}
 
-        $output->writeLn('Will now update contributors');
-        foreach($repos as $repo) {
-            if($dm->getUnitOfWork()->getEntityState($repo) != UnitOfWork::STATE_MANAGED) {
-                continue;
-            }
-            $contributorNames = $githubRepo->getContributorNames($repo);
-            $contributors = array();
-            foreach($contributorNames as $contributorName) {
-                if(isset($users[$contributorName])) {
-                    $contributor = $users[$contributorName];
-                    if($dm->getUnitOfWork()->getEntityState($contributor) == UnitOfWork::STATE_MANAGED) {
-                        $contributors[] = $contributor;
-                    }
-                }
-            }
-            $output->writeLn(sprintf('%s contributors: %s', $repo->getFullName(), implode(', ', $contributors)));
-            $repo->setContributors($contributors);
-        }
+        //$output->writeLn('Will now update contributors');
+        //foreach($repos as $repo) {
+            //if($dm->getUnitOfWork()->getEntityState($repo) != UnitOfWork::STATE_MANAGED) {
+                //continue;
+            //}
+            //$contributorNames = $githubRepo->getContributorNames($repo);
+            //$contributors = array();
+            //foreach($contributorNames as $contributorName) {
+                //if(isset($users[$contributorName])) {
+                    //$contributor = $users[$contributorName];
+                    //if($dm->getUnitOfWork()->getEntityState($contributor) == UnitOfWork::STATE_MANAGED) {
+                        //$contributors[] = $contributor;
+                    //}
+                //}
+            //}
+            //$output->writeLn(sprintf('%s contributors: %s', $repo->getFullName(), implode(', ', $contributors)));
+            //$repo->setContributors($contributors);
+        //}
 
         $output->writeLn('Will now flush changes to the database');
         $dm->flush();

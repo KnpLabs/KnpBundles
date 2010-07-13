@@ -607,6 +607,7 @@ div.post-meta li.application { background: url(../images/application16.png) no-r
 div.post-meta li.location { background: url(../images/globe.png) no-repeat 2px center; }
 div.post-meta li.company { background: url(../images/users.png) no-repeat 2px center; }
 div.post-meta li.blog { background: url(../images/quill.png) no-repeat 2px center; }
+div.post-meta li.homepage { background: url(../images/homepage.png) no-repeat 2px center; }
 
 .left .post-meta ul li a { color: #147DB6; }
 .left .post-meta ul li a:hover { color: #333; }

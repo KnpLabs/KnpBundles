@@ -70,6 +70,7 @@ class Repo
         $repo->setNbForks($data['forks']);
         $repo->setIsFork((bool)$data['fork']);
         $repo->setCreatedAt(new \DateTime($data['created_at']));
+        $repo->setHomepage(empty($data['homepage']) ? null : $data['homepage']);
 
         return $repo;
     }

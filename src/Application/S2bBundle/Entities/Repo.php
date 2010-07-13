@@ -77,6 +77,13 @@ abstract class Repo
     protected $description = null;
 
     /**
+     * The website url, if any
+     *
+     * @Column(type="string", length=255, nullable=true)
+     */
+    protected $homepage = null;
+    
+    /**
      * The bundle readme text extracted from source code
      *
      * @Column(type="text", nullable=true)
@@ -162,6 +169,25 @@ abstract class Repo
         }
 
         $this->contributors = new ArrayCollection();
+    }
+    
+    /**
+     * Get homepage
+     * @return string
+     */
+    public function getHomepage()
+    {
+      return $this->homepage;
+    }
+    
+    /**
+     * Set homepage
+     * @param  string
+     * @return null
+     */
+    public function setHomepage($homepage)
+    {
+      $this->homepage = $homepage;
     }
     
     /**
@@ -549,6 +575,7 @@ abstract class Repo
             'name' => $this->getName(),
             'username' => $this->getUsername(),
             'description' => $this->getDescription(),
+            'homepage' => $this->getHomepage(),
             'score' => $this->getScore(),
             'nbFollowers' => $this->getNbFollowers(),
             'nbForks' => $this->getNbForks(),
