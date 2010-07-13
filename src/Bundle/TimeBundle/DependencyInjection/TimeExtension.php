@@ -9,7 +9,7 @@ use Symfony\Components\DependencyInjection\BuilderConfiguration;
 class TimeExtension extends LoaderExtension
 {
 
-    public function helperLoad($config, $configuration)
+    public function helperLoad($config, BuilderConfiguration $configuration)
     {
         $loader = new XmlFileLoader(__DIR__.'/../Resources/config');
         $configuration->merge($loader->load('helper.xml'));
