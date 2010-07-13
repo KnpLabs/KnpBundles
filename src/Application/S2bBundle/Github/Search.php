@@ -73,12 +73,6 @@ class Search
         catch(\Exception $e) {
             $this->output->write(' - '.$e->getMessage());
         }
-
-        if(empty($repos)) {
-            $this->output->writeLn(' - Failed, will retry');
-            sleep(3);
-            return $this->searchReposOnGitHub($query, $repos, $limit);
-        }
         $this->output->writeLn('... DONE');
         return array_slice($repos, 0, $limit);
     }

@@ -88,7 +88,9 @@ class RepoController extends Controller
         if($repo) {
             return $repo;
         }
-        $githubRepo = new Github\Repo(new \phpGithubApi(), new Output());
+        $github = new \phpGithubApi();
+        $github->setRequest(new Github\Request());
+        $githubRepo = new Github\Repo($github, new Output());
 
         if(!$repo = $githubRepo->update(Repo::create($username.'/'.$name))) {
             return false;

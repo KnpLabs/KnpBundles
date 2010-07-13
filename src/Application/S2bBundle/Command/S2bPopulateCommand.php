@@ -42,6 +42,7 @@ class S2bPopulateCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $github = new \phpGitHubApi();
+        $github->setRequest(new Github\Request());
         $githubSearch = new Github\Search($github, new \Goutte\Client(), $output);
         $githubUser = new Github\User($github, $output);
         $githubRepo = new Github\Repo($github, $output);
@@ -70,7 +71,7 @@ class S2bPopulateCommand extends BaseCommand
             if(isset($repos[$repo->getFullName()])) {
                 continue;
             }
-            $output->write(sprintf('Discover %s:', $repo->getName()));
+            $output->write(sprintf('Discover %s:', $repo->getFullName()));
             if(!$githubRepo->validateFiles($repo)) {
                 $output->writeLn(' IGNORED');
                 continue;

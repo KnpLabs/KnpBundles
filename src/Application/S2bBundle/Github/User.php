@@ -38,16 +38,7 @@ class User
 
     public function update(Entities\User $user)
     {
-        try {
-            $data = $this->github->getUserApi()->show($user->getName());
-        }
-        catch(\phpGitHubApiRequestException $e) {
-            if(404 == $e->getCode()) {
-                return false;
-            }
-            sleep(5);
-            return $this->update($user);
-        }
+        $data = $this->github->getUserApi()->show($user->getName());
 
         $user->setEmail(isset($data['email']) ? $data['email'] : null);
         $user->setFullName(isset($data['name']) ? $data['name'] : null);

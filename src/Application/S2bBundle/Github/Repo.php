@@ -62,9 +62,7 @@ class Repo
             if(404 == $e->getCode()) {
                 return false;
             }
-            $this->output->write(sprintf('{%s}', $e->getCode()));
-            sleep(5);
-            return $this->updateInfos($repo);
+            throw $e;
         }
 
         $repo->setDescription($data['description']);
@@ -86,9 +84,7 @@ class Repo
             if(404 == $e->getCode()) {
                 return false;
             }
-            $this->output->write(sprintf('{%s}', $e->getCode()));
-            sleep(5);
-            return $this->updateCommits($repo);
+            throw $e;
         }
         $repo->setLastCommits(array_slice($commits, 0, 10));
 
@@ -105,9 +101,7 @@ class Repo
             if(404 == $e->getCode()) {
                 return false;
             }
-            $this->output->write(sprintf('{%s}', $e->getCode()));
-            sleep(5);
-            return $this->updateFiles($repo);
+            throw $e;
         }
         if($repo instanceof Entities\Project && !isset($blobs['src/autoload.php'])) {
             return false;
@@ -141,9 +135,7 @@ class Repo
             if(404 == $e->getCode()) {
                 return false;
             }
-            $this->output->write(sprintf('{%s}', $e->getCode()));
-            sleep(5);
-            return $this->validateRepoFiles($repo);
+            throw $e;
         }
 
         return isset($blobs['src/autoload.php']);
@@ -159,9 +151,7 @@ class Repo
             if(404 == $e->getCode()) {
                 return false;
             }
-            $this->output->write(sprintf('{%s}', $e->getCode()));
-            sleep(5);
-            return $this->updateTags($repo);
+            throw $e;
         }
         $repo->setTags(array_keys($tags));
 
@@ -177,9 +167,7 @@ class Repo
             if(404 == $e->getCode()) {
                 return array();
             }
-            $this->output->write(sprintf('{%s}', $e->getCode()));
-            sleep(5);
-            return $this->getContributorNames($repo);
+            throw $e;
         }
         $names = array();
         foreach($contributors as $contributor) {
