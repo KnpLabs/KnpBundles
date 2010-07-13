@@ -9,7 +9,10 @@
 <h2>Welcome to the community driven Symfony2 Bundles website!</h2>
 <div class="home_text">
   <p>
-  As for now, <strong><?php echo $nbBundles ?></strong> Symfony2 Bundles are indexed. <a href="<?php echo $view->router->generate('bundle_list') ?>">View all bundles</a> or <a href="<?php echo $view->router->generate('search') ?>">search for bundles</a>!
+  As for now, we index
+    <a href="<?php echo $view->router->generate('bundle_list') ?>"><strong><?php echo $nbBundles ?></strong> Bundles</a>,
+    <a href="<?php echo $view->router->generate('project_list') ?>"><strong><?php echo $nbProjects ?></strong> Projects</a> &amp
+    <a href="<?php echo $view->router->generate('user_list') ?>"><strong><?php echo $nbUsers ?></strong> Developers</a>.
   </p>
   <p>
   Symfony2Bundles is a spontaneous community initiative! Its purpose is to help us to find the best Bundles.

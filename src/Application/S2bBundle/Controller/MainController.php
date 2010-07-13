@@ -9,10 +9,10 @@ class MainController extends Controller
 
     public function indexAction()
     {
-        $nbBundles = $this->container->getDoctrine_Orm_DefaultEntityManagerService()
-            ->getRepository('Application\S2bBundle\Entities\Bundle')
-            ->count();
-        return $this->render('S2bBundle:Main:index', array('nbBundles' => $nbBundles));
+        $nbBundles = $this->getRepository('Bundle')->count();
+        $nbProjects = $this->getRepository('Project')->count();
+        $nbUsers = $this->getRepository('User')->count();
+        return $this->render('S2bBundle:Main:index', compact('nbBundles', 'nbProjects', 'nbUsers'));
     }
 
     #TODO cache me!
@@ -37,5 +37,10 @@ class MainController extends Controller
         $response = $this->render('S2bBundle:Main:notFound');
         $response->setStatusCode(404);
         return $response;
+    }
+
+    protected function getRepository($class)
+    {
+        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entities\\'.$class);
     }
 }

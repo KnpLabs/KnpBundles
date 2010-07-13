@@ -55,4 +55,9 @@ class UserRepository extends EntityRepository
 
         return $query->execute();
     }
+
+    public function count()
+    {
+        return $this->_em->createQuery('SELECT COUNT(e.id) FROM '.$this->getEntityName().' e')->getSingleScalarResult();
+    }
 }
