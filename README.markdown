@@ -46,8 +46,8 @@ To configure your DB for your development and test environments, edit your `/s2b
 
 #### To generate migrations from your current schema
 
-    php s2b/console-dev doctrine:migrations:diff --bundle=Bundle\\s2bBundle
-    php s2b/console-dev doctrine:migrations:migrate --bundle=Bundle\\s2bBundle
+    php s2b/console-dev doctrine:migrations:diff --bundle=Application\\S2bBundle
+    php s2b/console-dev doctrine:migrations:migrate --bundle=Application\\S2bBundle
     php s2b/console-dev doctrine:generate:proxies
 
 #### Populate document collections from GitHub
@@ -55,7 +55,3 @@ To configure your DB for your development and test environments, edit your `/s2b
     php s2b/console s2b:populate
 
 This can take long time. GitHub API is limited to 60 calls per minute, so the commands needs to wait.
-
-## Participating
-
-Join the discussion on [Google Wave](https://wave.google.com/wave/waveref/googlewave.com/w+0CQKHWtqC).
