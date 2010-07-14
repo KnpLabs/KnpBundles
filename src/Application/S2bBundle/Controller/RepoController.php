@@ -79,7 +79,7 @@ class RepoController extends Controller
             }
         }
 
-        return $this->forward('S2bBundle:Bundle:list', array('sort' => 'score'));
+        return $this->forward('S2bBundle:Main:index', array('sort' => 'score'));
     }
 
     protected function addRepo($username, $name)
