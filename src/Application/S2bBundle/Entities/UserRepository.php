@@ -44,16 +44,22 @@ class UserRepository extends EntityRepository
         }
     }
 
-    public function findAllSortedBy($field, $nb = null)
+    public function findAllSortedBy($field)
     {
-        $qb = $this->createQueryBuilder('u');
-        $qb->orderBy('u.'.$field, 'name' === $field ? 'asc' : 'desc');
-        $query = $qb->getQuery();
-        if(null !== $nb) {
-            $query->setMaxResults($nb);
-        }
+        return $this->createQueryBuilder('u')
+            ->orderBy('u.'.$field, 'name' === $field ? 'asc' : 'desc')
+            ->getQuery()
+            ->getResult();
+    }
 
-        return $query->execute();
+    public function findAllWithProjectsSortedBy($field)
+    {
+        return $this->createQueryBuilder('u')
+            ->orderBy('u.'.$field, 'name' === $field ? 'asc' : 'desc')
+            ->leftJoin('u.repos', 'r')
+            ->select('u, r')
+            ->getQuery()
+            ->getResult();
     }
 
     public function count()
