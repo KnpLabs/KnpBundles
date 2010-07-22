@@ -75,6 +75,6 @@ class S2bKernel extends Kernel
             $container->setParameter('exception_listener.controller', 'S2bBundle:Main:notFound');
         }
 
-        return $configuration;
+        return $container;
     }
 }
