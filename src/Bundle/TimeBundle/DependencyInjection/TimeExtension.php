@@ -2,17 +2,17 @@
 
 namespace Bundle\TimeBundle\DependencyInjection;
 
-use Symfony\Components\DependencyInjection\Loader\LoaderExtension;
+use Symfony\Components\DependencyInjection\Extension\Extension;
 use Symfony\Components\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Components\DependencyInjection\BuilderConfiguration;
+use Symfony\Components\DependencyInjection\ContainerBuilder;
 
-class TimeExtension extends LoaderExtension
+class TimeExtension extends Extension
 {
 
-    public function helperLoad($config, BuilderConfiguration $configuration)
+    public function helperLoad($config, ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader(__DIR__.'/../Resources/config');
-        $configuration->merge($loader->load('helper.xml'));
+        $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
+        $loader->load('helper.xml');
     }
 
     /**
