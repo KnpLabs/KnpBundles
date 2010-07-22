@@ -76,7 +76,7 @@
     <ul>
         <?php foreach($repo->getLastCommits() as $commit): ?>
         <li>
-        <a href="<?php echo $commit['url'] ?>"><?php echo $commit['message'] ?></a><br />
+        <a href="<?php echo $commit['url'] ?>"><?php echo strtok($commit['message'], "\n\r"); ?></a><br />
         <span><?php echo $commit['author']['name'] ?> | <?php echo $view->time->ago(date_create($commit['committed_date'])) ?></span>
         </li>
         <?php endforeach ?>

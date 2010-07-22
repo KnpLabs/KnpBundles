@@ -64,7 +64,7 @@
             <a href="<?php echo $view->router->generate('repo_show', array('username' => $commit['repo_username'], 'name' => $commit['repo_name'])) ?>">
                 <?php echo $commit['repo_name'] ?>
             </a>
-            <?php echo $commit['message'] ?><br />
+            <?php echo strtok($commit['message'], "\n\r"); ?><br />
             <span><?php echo $view->time->ago(date_create($commit['committed_date'])) ?></span>
         </li>
     <?php endforeach; ?>
