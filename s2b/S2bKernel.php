@@ -3,8 +3,8 @@
 require_once __DIR__.'/../src/autoload.php';
 
 use Symfony\Framework\Kernel;
-use Symfony\Components\DependencyInjection\Loader\YamlFileLoader as ContainerLoader;
-use Symfony\Components\Routing\Loader\YamlFileLoader as RoutingLoader;
+use Symfony\Components\DependencyInjection\Loader\LoaderInterface;
+use Symfony\Components\DependencyInjection\ContainerBuilder;
 
 class S2bKernel extends Kernel
 {
@@ -65,23 +65,16 @@ class S2bKernel extends Kernel
         return $basePath.$environment.'.yml';
     }
 
-    public function registerContainerConfiguration()
+    public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader = new ContainerLoader($this->getBundleDirs());
+        $container = new ContainerBuilder();
 
-        $configuration = $loader->load($this->getLocalConfigurationFile($this->getEnvironment()));
+        $loader->load($this->getLocalConfigurationFile($this->getEnvironment()));
 
         if(!$this->isDebug()) {
-            $configuration->setParameter('exception_listener.controller', 'S2bBundle:Main:notFound');
+            $container->setParameter('exception_listener.controller', 'S2bBundle:Main:notFound');
         }
 
         return $configuration;
-    }
-
-    public function registerRoutes()
-    {
-        $loader = new RoutingLoader($this->getBundleDirs());
-
-        return $loader->load(__DIR__.'/config/routing.yml');
     }
 }
