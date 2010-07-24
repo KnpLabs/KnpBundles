@@ -6,3 +6,4 @@
 /web/*_dev.php
 /web/uploads
 .git*
+/src/vendor/Zend/documentation
