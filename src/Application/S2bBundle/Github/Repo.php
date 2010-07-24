@@ -65,10 +65,13 @@ class Repo
             throw $e;
         }
 
+        if($data['fork']) {
+            return false;
+        }
+
         $repo->setDescription($data['description']);
         $repo->setNbFollowers($data['watchers']);
         $repo->setNbForks($data['forks']);
-        $repo->setIsFork((bool)$data['fork']);
         $repo->setCreatedAt(new \DateTime($data['created_at']));
         $repo->setHomepage(empty($data['homepage']) ? null : $data['homepage']);
 
