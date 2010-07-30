@@ -13,6 +13,21 @@ class S2bKernel extends Kernel
         return __DIR__;
     }
 
+    public function boot()
+    {
+        Symfony\Components\OutputEscaper\Escaper::markClassesAsSafe(array(
+            'Symfony\Components\Form\Form',
+            'Symfony\Components\Form\Field'
+        ));
+
+        #TODO remove me 
+        foreach(array('ApplicationS2bBundleEntityUserProxy') as $class) {
+            @include_once(__DIR__.'/cache/'.$this->getEnvironment().'/doctrine/orm/Proxies/'.$class.'.php');
+        }
+        
+        return parent::boot();
+    }
+
     public function registerBundles()
     {
         $bundles = array(
