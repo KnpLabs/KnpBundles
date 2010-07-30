@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\S2bBundle\Entities;
+namespace Application\S2bBundle\Entity;
 use Symfony\Components\Validator\Constraints;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Components\Validator\Mapping\ClassMetadata;
@@ -8,7 +8,7 @@ use Symfony\Components\Validator\Mapping\ClassMetadata;
 /**
  * A user living on GitHub
  *
- * @Entity(repositoryClass="Application\S2bBundle\Entities\UserRepository")
+ * @Entity(repositoryClass="Application\S2bBundle\Entity\UserRepository")
  * @Table(
  *      name="user",
  *      uniqueConstraints={@UniqueConstraint(name="name_unique",columns={"name"})}

@@ -5,10 +5,10 @@ namespace Application\S2bBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller;
 use Symfony\Components\HttpKernel\Exception\HttpException;
 use Symfony\Components\HttpKernel\Exception\NotFoundHttpException;
-use Application\S2bBundle\Entities\Repo;
-use Application\S2bBundle\Entities\Bundle;
-use Application\S2bBundle\Entities\Project;
-use Application\S2bBundle\Entities\User;
+use Application\S2bBundle\Entity\Repo;
+use Application\S2bBundle\Entity\Bundle;
+use Application\S2bBundle\Entity\Project;
+use Application\S2bBundle\Entity\User;
 use Application\S2bBundle\Github;
 use Symfony\Components\Console\Output\NullOutput as Output;
 
@@ -118,7 +118,7 @@ class RepoController extends Controller
 
     protected function getRepository($class)
     {
-        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entities\\'.$class);
+        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entity\\'.$class);
     }
 
 }

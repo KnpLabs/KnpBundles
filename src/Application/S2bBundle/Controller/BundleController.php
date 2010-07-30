@@ -5,8 +5,8 @@ namespace Application\S2bBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller;
 use Symfony\Components\HttpKernel\Exception\HttpException;
 use Symfony\Components\HttpKernel\Exception\NotFoundHttpException;
-use Application\S2bBundle\Entities\Repo;
-use Application\S2bBundle\Entities\User;
+use Application\S2bBundle\Entity\Repo;
+use Application\S2bBundle\Entity\User;
 use Application\S2bBundle\Github;
 use Symfony\Components\Console\Output\NullOutput as Output;
 
@@ -90,12 +90,12 @@ class BundleController extends Controller
 
     protected function getBundleRepository()
     {
-        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entities\Bundle');
+        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entity\Bundle');
     }
 
     protected function getUserRepository()
     {
-        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entities\User');
+        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entity\User');
     }
 
 }

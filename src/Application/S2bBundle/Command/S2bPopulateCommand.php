@@ -2,8 +2,8 @@
 
 namespace Application\S2bBundle\Command;
 
-use Application\S2bBundle\Entities\Repo;
-use Application\S2bBundle\Entities\User;
+use Application\S2bBundle\Entity\Repo;
+use Application\S2bBundle\Entity\User;
 use Application\S2bBundle\Github;
 use Symfony\Bundle\FrameworkBundle\Command\Command as BaseCommand;
 use Symfony\Components\Console\Input\InputArgument;
@@ -52,11 +52,11 @@ class S2bPopulateCommand extends BaseCommand
 
         $dm = $this->container->getDoctrine_Orm_DefaultEntityManagerService();
         $repos = array();
-        foreach($dm->getRepository('Application\S2bBundle\Entities\Repo')->findAll() as $repo) {
+        foreach($dm->getRepository('Application\S2bBundle\Entity\Repo')->findAll() as $repo) {
             $repos[$repo->getFullName()] = $repo;
         }
         $users = array();
-        foreach($dm->getRepository('Application\S2bBundle\Entities\User')->findAll() as $user) {
+        foreach($dm->getRepository('Application\S2bBundle\Entity\User')->findAll() as $user) {
             $users[$user->getName()] = $user;
         }
         $validator = $this->container->getValidatorService();

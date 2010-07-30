@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\S2bBundle\Entities;
+namespace Application\S2bBundle\Entity;
 use Symfony\Components\Validator\Constraints;
 use Symfony\Components\Validator\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * An Open Source Repo living on GitHub
  *
- * @Entity(repositoryClass="Application\S2bBundle\Entities\RepoRepository")
+ * @Entity(repositoryClass="Application\S2bBundle\Entity\RepoRepository")
  * @Table(
  *      name="repo",
  *      indexes={@Index(name="discriminator", columns={"discr"})},

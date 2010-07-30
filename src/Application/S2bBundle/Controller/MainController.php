@@ -19,7 +19,7 @@ class MainController extends Controller
     public function timelineAction()
     {
         $commits = $this->container->getDoctrine_Orm_DefaultEntityManagerService()
-            ->getRepository('Application\S2bBundle\Entities\Repo')
+            ->getRepository('Application\S2bBundle\Entity\Repo')
             ->getLastCommits(5);
 
         return $this->render('S2bBundle:Main:timeline', array('commits' => $commits));
@@ -41,6 +41,6 @@ class MainController extends Controller
 
     protected function getRepository($class)
     {
-        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entities\\'.$class);
+        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entity\\'.$class);
     }
 }
