@@ -28,7 +28,7 @@ class User
 
     public function import($name)
     {
-        $user = new Entities\User();
+        $user = new Entity\User();
         $user->setName($name);
         if(!$this->update($user)) {
             return false;
@@ -36,7 +36,7 @@ class User
         return $user;
     }
 
-    public function update(Entities\User $user)
+    public function update(Entity\User $user)
     {
         $data = $this->github->getUserApi()->show($user->getName());
 

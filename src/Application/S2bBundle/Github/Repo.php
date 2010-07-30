@@ -26,7 +26,7 @@ class Repo
         $this->output = $output;
     }
 
-    public function update(Entities\Repo $repo)
+    public function update(Entity\Repo $repo)
     {
         if(!$this->updateInfos($repo)) {
             return false;
@@ -48,11 +48,11 @@ class Repo
     /**
      * Return true if the Repo exists on GitHub, false otherwise 
      * 
-     * @param Entities\Repo $repo 
+     * @param Entity\Repo $repo 
      * @param array $data 
      * @return boolean whether the Repo exists on GitHub
      */
-    public function updateInfos(Entities\Repo $repo)
+    public function updateInfos(Entity\Repo $repo)
     {
         $this->output->write(' infos');
         try {
@@ -75,7 +75,7 @@ class Repo
         return $repo;
     }
 
-    public function updateCommits(Entities\Repo $repo)
+    public function updateCommits(Entity\Repo $repo)
     {
         $this->output->write(' commits');
         try {
@@ -92,7 +92,7 @@ class Repo
         return $repo;
     }
 
-    public function updateFiles(Entities\Repo $repo)
+    public function updateFiles(Entity\Repo $repo)
     {
         $this->output->write(' files');
         try {
@@ -104,7 +104,7 @@ class Repo
             }
             throw $e;
         }
-        if($repo instanceof Entities\Project && !isset($blobs['src/autoload.php'])) {
+        if($repo instanceof Entity\Project && !isset($blobs['src/autoload.php'])) {
             return false;
         }
         foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
@@ -124,9 +124,9 @@ class Repo
         return $repo;
     }
 
-    public function validateFiles(Entities\Repo $repo)
+    public function validateFiles(Entity\Repo $repo)
     {
-        if($repo instanceof Entities\Bundle) {
+        if($repo instanceof Entity\Bundle) {
             return true;
         }
         try {
@@ -142,7 +142,7 @@ class Repo
         return isset($blobs['src/autoload.php']);
     }
 
-    public function updateTags(Entities\Repo $repo)
+    public function updateTags(Entity\Repo $repo)
     {
         $this->output->write(' tags');
         try {
@@ -159,7 +159,7 @@ class Repo
         return $repo;
     }
 
-    public function getContributorNames(Entities\Repo $repo)
+    public function getContributorNames(Entity\Repo $repo)
     {
         try {
             $contributors = $this->github->getRepoApi()->getRepoContributors($repo->getUsername(), $repo->getName());

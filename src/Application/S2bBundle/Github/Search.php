@@ -99,7 +99,7 @@ class Search
                     break 2;
                 }
                 foreach($links->extract('href') as $url) {
-                    if(!preg_match('#^http://github.com/(\w+/\w+).*$#', $url, $match)) {
+                    if(!preg_match('#^http://github.com/([\w-]+/[\w-]+).*$#', $url, $match)) {
                         continue;
                     }
                     $repo = Repo::create($match[1]);

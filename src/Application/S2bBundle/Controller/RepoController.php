@@ -72,7 +72,7 @@ class RepoController extends Controller
     {
         $url = $this->getRequest()->get('url');
 
-        if(preg_match('#^http://github.com/(\w+)/(\w+).*$#', $url, $match)) {
+        if(preg_match('#^http://github.com/([\w-]+)/([\w-]+).*$#', $url, $match)) {
             $repo = $this->addRepo($match[1], $match[2]);
             if($repo) {
                 return $this->redirect($this->generateUrl('repo_show', array('username' => $repo->getUsername(), 'name' => $repo->getName())));
