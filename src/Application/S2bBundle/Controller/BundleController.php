@@ -39,7 +39,7 @@ class BundleController extends Controller
 
     public function addAction()
     {
-        $url = $this->getRequest()->get('url');
+        $url = $this['request']->get('url');
 
         if(preg_match('#^http://github.com/(\w+)/(\w+Bundle).*$#', $url, $match)) {
             $repo = $this->addRepo($match[1], $match[2]);

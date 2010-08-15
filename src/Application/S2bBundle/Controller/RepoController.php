@@ -16,7 +16,7 @@ class RepoController extends Controller
 {
     public function searchAction()
     {
-        $query = preg_replace('(\W)', '', trim($this->getRequest()->get('q')));
+        $query = preg_replace('(\W)', '', trim($this['request']->get('q')));
 
         if(empty($query)) {
             return $this->render('S2bBundle:Repo:search');
@@ -33,7 +33,7 @@ class RepoController extends Controller
             }
         }
 
-        return $this->render('S2bBundle:Repo:searchResults', array('query' => $query, 'repos' => $repos, 'bundles' => $bundles, 'projects' => $projects, 'callback' => $this->getRequest()->get('callback')));
+        return $this->render('S2bBundle:Repo:searchResults', array('query' => $query, 'repos' => $repos, 'bundles' => $bundles, 'projects' => $projects, 'callback' => $this['request']->get('callback')));
     }
 
     public function showAction($username, $name)
@@ -42,7 +42,7 @@ class RepoController extends Controller
             throw new NotFoundHttpException(sprintf('The repo "%s/%s" does not exist', $username, $name));
         }
 
-        return $this->render('S2bBundle:'.$repo->getClass().':show', array('repo' => $repo, 'callback' => $this->getRequest()->get('callback')));
+        return $this->render('S2bBundle:'.$repo->getClass().':show', array('repo' => $repo, 'callback' => $this['request']->get('callback')));
     }
 
     public function listAction($sort, $class)
@@ -58,7 +58,7 @@ class RepoController extends Controller
         }
         $repos = $this->getRepository($class)->findAllSortedBy($sort);
 
-        return $this->render('S2bBundle:'.$class.':list', array('repos' => $repos, 'sort' => $sort, 'fields' => $fields, 'callback' => $this->getRequest()->get('callback')));
+        return $this->render('S2bBundle:'.$class.':list', array('repos' => $repos, 'sort' => $sort, 'fields' => $fields, 'callback' => $this['request']->get('callback')));
     }
 
     public function listLatestAction()
@@ -70,7 +70,7 @@ class RepoController extends Controller
 
     public function addAction()
     {
-        $url = $this->getRequest()->get('url');
+        $url = $this['request']->get('url');
 
         if(preg_match('#^http://github.com/([\w-]+)/([\w-]+).*$#', $url, $match)) {
             $repo = $this->addRepo($match[1], $match[2]);
