@@ -1,6 +1,6 @@
 <?php $view->extend('S2bBundle::layout') ?>
 
-<?php $view->slots->set('current_menu_item', 'api') ?>
+<?php $view->main_menu['Api']->setIsCurrent(true) ?>
 <?php $view->slots->set('title', 'Developer HTTP API') ?>
 <?php $view->slots->set('h1', '<span>Developer</span> API') ?>
 <?php $view->slots->set('description', 'Programmatic HTTP API to access Bundles and developers data') ?>

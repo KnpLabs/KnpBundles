@@ -1,5 +1,5 @@
 <?php $view->extend('S2bBundle::layout') ?>
-<?php $view->slots->set('current_menu_item', 'bundle_list') ?>
+<?php $view->main_menu['Bundles']->setIsCurrent(true) ?>
 
 <?php $view->output('S2bBundle:Bundle:bigList', array('repos' => $repos)) ?>
 
