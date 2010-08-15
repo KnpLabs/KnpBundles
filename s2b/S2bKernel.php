@@ -42,6 +42,7 @@ class S2bKernel extends Kernel
             // register your bundles here
             new Bundle\MarkdownBundle\MarkdownBundle(),
             new Bundle\TimeBundle\TimeBundle(),
+            new Bundle\MenuBundle\MenuBundle(),
 
             // register your applications here
             new Application\S2bBundle\S2bBundle()

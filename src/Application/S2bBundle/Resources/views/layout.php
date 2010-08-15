@@ -31,7 +31,7 @@
                 </p>
 
                 <div id="nav">
-                    <?php $view->output('S2bBundle:Main:menu', array('current' => $view->slots->get('current_menu_item', null))) ?>
+                    <?php echo $view->main_menu->render() ?>
                 </div>
 
                 <form id="quick-search" method="get" action="<?php echo $view->router->generate('search') ?>">
