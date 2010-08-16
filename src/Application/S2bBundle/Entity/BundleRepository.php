@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\S2bBundle\Entities;
+namespace Application\S2bBundle\Entity;
 
 class BundleRepository extends RepoRepository
 {

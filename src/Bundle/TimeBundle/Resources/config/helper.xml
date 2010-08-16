@@ -13,7 +13,7 @@
   <services>
 
     <service id="templating.helper.time" class="%templating.helper.time.class%">
-      <annotation name="templating.helper" alias="time" />
+      <tag name="templating.helper" alias="time" />
     </service>
     
   </services>

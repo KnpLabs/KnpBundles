@@ -1,5 +1,5 @@
 <?php $view->extend('S2bBundle::layout') ?>
-<?php $view->slots->set('current_menu_item', 'project_list') ?>
+<?php $view->main_menu['Projects']->setIsCurrent(true) ?>
 
 <?php $view->output('S2bBundle:Project:bigList', array('repos' => $repos)) ?>
 

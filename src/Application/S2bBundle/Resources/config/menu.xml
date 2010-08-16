@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://www.symfony-project.org/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="menu.main.class">Application\S2bBundle\Menu\MainMenu</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="menu.main" class="%menu.main.class%" shared="true">
+            <argument type="service" id="router" />
+        </service>
+
+        <service id="templating.helper.main_menu" class="%templating.helper.menu.class%">
+            <tag name="templating.helper" alias="main_menu" />
+            <argument type="service" id="menu.main" />
+            <argument>main_menu</argument>
+        </service>
+
+    </services>
+</container>

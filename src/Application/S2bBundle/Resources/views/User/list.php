@@ -1,5 +1,5 @@
 <?php $view->extend('S2bBundle::layout') ?>
-<?php $view->slots->set('current_menu_item', 'user_list') ?>
+<?php $view->main_menu['Developers']->setIsCurrent(true) ?>
 <?php $view->slots->set('h1', '<span>'.count($users).'</span> Developers') ?>
 <?php $view->slots->set('title', 'All '.count($users).' Developers') ?>
 <?php $view->slots->set('slogan', 'List of Symfony2 Bundle developers') ?>

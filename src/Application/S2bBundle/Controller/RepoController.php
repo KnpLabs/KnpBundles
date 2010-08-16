@@ -5,10 +5,10 @@ namespace Application\S2bBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller;
 use Symfony\Components\HttpKernel\Exception\HttpException;
 use Symfony\Components\HttpKernel\Exception\NotFoundHttpException;
-use Application\S2bBundle\Entities\Repo;
-use Application\S2bBundle\Entities\Bundle;
-use Application\S2bBundle\Entities\Project;
-use Application\S2bBundle\Entities\User;
+use Application\S2bBundle\Entity\Repo;
+use Application\S2bBundle\Entity\Bundle;
+use Application\S2bBundle\Entity\Project;
+use Application\S2bBundle\Entity\User;
 use Application\S2bBundle\Github;
 use Symfony\Components\Console\Output\NullOutput as Output;
 
@@ -16,7 +16,7 @@ class RepoController extends Controller
 {
     public function searchAction()
     {
-        $query = preg_replace('(\W)', '', trim($this->getRequest()->get('q')));
+        $query = preg_replace('(\W)', '', trim($this['request']->get('q')));
 
         if(empty($query)) {
             return $this->render('S2bBundle:Repo:search');
@@ -33,7 +33,7 @@ class RepoController extends Controller
             }
         }
 
-        return $this->render('S2bBundle:Repo:searchResults', array('query' => $query, 'repos' => $repos, 'bundles' => $bundles, 'projects' => $projects, 'callback' => $this->getRequest()->get('callback')));
+        return $this->render('S2bBundle:Repo:searchResults', array('query' => $query, 'repos' => $repos, 'bundles' => $bundles, 'projects' => $projects, 'callback' => $this['request']->get('callback')));
     }
 
     public function showAction($username, $name)
@@ -42,7 +42,7 @@ class RepoController extends Controller
             throw new NotFoundHttpException(sprintf('The repo "%s/%s" does not exist', $username, $name));
         }
 
-        return $this->render('S2bBundle:'.$repo->getClass().':show', array('repo' => $repo, 'callback' => $this->getRequest()->get('callback')));
+        return $this->render('S2bBundle:'.$repo->getClass().':show', array('repo' => $repo, 'callback' => $this['request']->get('callback')));
     }
 
     public function listAction($sort, $class)
@@ -58,7 +58,7 @@ class RepoController extends Controller
         }
         $repos = $this->getRepository($class)->findAllSortedBy($sort);
 
-        return $this->render('S2bBundle:'.$class.':list', array('repos' => $repos, 'sort' => $sort, 'fields' => $fields, 'callback' => $this->getRequest()->get('callback')));
+        return $this->render('S2bBundle:'.$class.':list', array('repos' => $repos, 'sort' => $sort, 'fields' => $fields, 'callback' => $this['request']->get('callback')));
     }
 
     public function listLatestAction()
@@ -70,9 +70,9 @@ class RepoController extends Controller
 
     public function addAction()
     {
-        $url = $this->getRequest()->get('url');
+        $url = $this['request']->get('url');
 
-        if(preg_match('#^http://github.com/(\w+)/(\w+).*$#', $url, $match)) {
+        if(preg_match('#^http://github.com/([\w-]+)/([\w-]+).*$#', $url, $match)) {
             $repo = $this->addRepo($match[1], $match[2]);
             if($repo) {
                 return $this->redirect($this->generateUrl('repo_show', array('username' => $repo->getUsername(), 'name' => $repo->getName())));
@@ -118,7 +118,7 @@ class RepoController extends Controller
 
     protected function getRepository($class)
     {
-        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entities\\'.$class);
+        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entity\\'.$class);
     }
 
 }

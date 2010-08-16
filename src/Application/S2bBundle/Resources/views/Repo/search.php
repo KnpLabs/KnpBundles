@@ -1,5 +1,5 @@
 <?php $view->extend('S2bBundle::layout') ?>
-<?php $view->slots->set('current_menu_item', 'search') ?>
+<?php $view->main_menu['Search']->setIsCurrent(true) ?>
 <?php $view->slots->set('h1', 'Search') ?>
 <?php $view->slots->set('title', $view->slots->get('title', 'Search Bundles and Projects')) ?>
 <?php $view->slots->set('slogan', $view->slots->get('slogan', 'Search for Open Source Bundles and Projects')) ?>

@@ -22,3 +22,6 @@
 [submodule "src/vendor/DoctrineMigrations"]
 	path = src/vendor/DoctrineMigrations
 	url = git://github.com/doctrine/migrations.git
+[submodule "src/Bundle/MenuBundle"]
+	path = src/Bundle/MenuBundle
+	url = git://github.com/knplabs/MenuBundle.git

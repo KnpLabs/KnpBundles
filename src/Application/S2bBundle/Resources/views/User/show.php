@@ -4,7 +4,7 @@
 <?php $view->slots->set('title', $user->getName().' - '.$user->getFullName()) ?>
 <?php $view->slots->set('description', $user->getFullName().' has '.$user->getNbBundles().' Symfony2 bundles') ?>
 <?php $view->slots->set('slogan', $user->getFullName() ? $user->getFullName() : ' ') ?>
-<?php $view->slots->set('current_menu_item', 'user_list') ?>
+<?php $view->main_menu['Developers']->setIsCurrent(true) ?>
 <?php $view->slots->set('logo', '<img alt="'.$user->getName().'" src="'.$view->assets->getUrl(Bundle\GravatarBundle\Api::getUrl($user->getEmail('esc_raw'), array('size' => 80, 'default' => 'mm'))).'" width="80" height="80" />') ?>
 
 <div class="post">
