@@ -19,6 +19,8 @@ time.helper: ~      # Enable the time helper
 
 menu.templating: ~
 
+gravatar.config: ~
+
 s2b.config: ~
 
 doctrine.orm:
