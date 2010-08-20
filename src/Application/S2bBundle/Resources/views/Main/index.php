@@ -1,18 +1,18 @@
 <?php $view->extend('S2bBundle::layout') ?>
 
-<?php $view->main_menu['Home']->setIsCurrent(true) ?>
-<?php $view->slots->set('title', 'Home') ?>
-<?php $view->slots->set('description', 'Comprehensive list of Symfony2 Bundles ordered by relevance and integrated with GitHub') ?>
-<?php $view->slots->set('slogan', 'Comprehensive list of Symfony2 Bundles ordered by relevance and integrated with GitHub') ?>
-<?php $view->slots->set('sidemenu', $view->actions->render('S2bBundle:Main:timeline')) ?>
+<?php $view['main_menu']['Home']->setIsCurrent(true) ?>
+<?php $view['slots']->set('title', 'Home') ?>
+<?php $view['slots']->set('description', 'Comprehensive list of Symfony2 Bundles ordered by relevance and integrated with GitHub') ?>
+<?php $view['slots']->set('slogan', 'Comprehensive list of Symfony2 Bundles ordered by relevance and integrated with GitHub') ?>
+<?php $view['slots']->set('sidemenu', $view['actions']->render('S2bBundle:Main:timeline')) ?>
 
 <h2>Welcome to the community driven Symfony2 Bundles website!</h2>
 <div class="home_text">
   <p>
   As for now, we index
-    <a href="<?php echo $view->router->generate('bundle_list') ?>"><strong><?php echo $nbBundles ?></strong> Bundles</a>,
-    <a href="<?php echo $view->router->generate('project_list') ?>"><strong><?php echo $nbProjects ?></strong> Projects</a> &amp
-    <a href="<?php echo $view->router->generate('user_list') ?>"><strong><?php echo $nbUsers ?></strong> Developers</a>.
+    <a href="<?php echo $view['router']->generate('bundle_list') ?>"><strong><?php echo $nbBundles ?></strong> Bundles</a>,
+    <a href="<?php echo $view['router']->generate('project_list') ?>"><strong><?php echo $nbProjects ?></strong> Projects</a> &amp
+    <a href="<?php echo $view['router']->generate('user_list') ?>"><strong><?php echo $nbUsers ?></strong> Developers</a>.
   </p>
   <p>
   Symfony2Bundles is a spontaneous community initiative! Its purpose is to help us to find the best Bundles.
