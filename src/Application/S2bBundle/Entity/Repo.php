@@ -1,8 +1,8 @@
 <?php
 
 namespace Application\S2bBundle\Entity;
-use Symfony\Components\Validator\Constraints;
-use Symfony\Components\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**

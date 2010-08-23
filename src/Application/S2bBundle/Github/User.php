@@ -1,7 +1,7 @@
 <?php
 
 namespace Application\S2bBundle\Github;
-use Symfony\Components\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Application\S2bBundle\Entity;
 
 class User

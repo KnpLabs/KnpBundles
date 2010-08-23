@@ -2,7 +2,7 @@
 
 namespace Application\S2bBundle\Menu;
 use Bundle\MenuBundle\Menu;
-use Symfony\Components\Routing\Router;
+use Symfony\Component\Routing\Router;
 
 class MainMenu extends Menu
 {

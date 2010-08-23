@@ -5,7 +5,7 @@
 <?php $view['slots']->set('description', $user->getFullName().' has '.$user->getNbBundles().' Symfony2 bundles') ?>
 <?php $view['slots']->set('slogan', $user->getFullName() ? $user->getFullName() : ' ') ?>
 <?php $view['main_menu']['Developers']->setIsCurrent(true) ?>
-<?php $view['slots']->set('logo', '<img alt="'.$user->getName().'" src="'.$view['gravatar']->render($user->getEmail('esc_raw'), 80, null, 'mm').'" width="80" height="80" />') ?>
+<?php $view['slots']->set('logo', '<img alt="'.$user->getName().'" src="'.$view['gravatar']->getUrl($user->getEmail('esc_raw'), 80, null, 'mm').'" width="80" height="80" />') ?>
 
 <div class="post">
 

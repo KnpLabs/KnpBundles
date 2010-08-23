@@ -2,7 +2,7 @@
 
 namespace Application\S2bBundle\Github;
 use Application\S2bBundle\Entity\Repo;
-use Symfony\Components\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Goutte\Client;
 
 class Search

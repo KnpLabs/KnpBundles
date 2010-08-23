@@ -3,7 +3,7 @@
 namespace Application\S2bBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller;
-use Symfony\Components\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UserController extends Controller
 {
