@@ -9,7 +9,7 @@ $loader->registerNamespaces(array(
     'Bundle'                    => __DIR__,
     'Doctrine\DBAL\Migrations'  => __DIR__.'/vendor/DoctrineMigrations/lib',
     'Doctrine\Common'           => __DIR__.'/vendor/Doctrine/lib/vendor/doctrine-common/lib',
-    'Doctrine\DBAL'             => __DIR__.'/vendor/Doctrine/lib/vendor/doctrine-dbal/lib',
+    'Doctrine\DBAL'             => __DIR__.'/vendor/doctrine-dbal/lib',
     'Doctrine'                  => __DIR__.'/vendor/Doctrine/lib',
     'Zend'                      => __DIR__.'/vendor/Zend/library',
 ));

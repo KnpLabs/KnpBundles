@@ -3,8 +3,8 @@
 require_once __DIR__.'/../src/autoload.php';
 
 use Symfony\Framework\Kernel;
-use Symfony\Components\DependencyInjection\Loader\LoaderInterface;
-use Symfony\Components\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class S2bKernel extends Kernel
 {
@@ -15,9 +15,9 @@ class S2bKernel extends Kernel
 
     public function boot()
     {
-        Symfony\Components\OutputEscaper\Escaper::markClassesAsSafe(array(
-            'Symfony\Components\Form\Form',
-            'Symfony\Components\Form\Field'
+        Symfony\Component\OutputEscaper\Escaper::markClassesAsSafe(array(
+            'Symfony\Component\Form\Form',
+            'Symfony\Component\Form\Field'
         ));
 
         #TODO remove me 

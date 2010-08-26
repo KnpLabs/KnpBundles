@@ -25,3 +25,6 @@
 [submodule "src/Bundle/MenuBundle"]
 	path = src/Bundle/MenuBundle
 	url = git://github.com/knplabs/MenuBundle.git
+[submodule "src/vendor/doctrine-dbal"]
+	path = src/vendor/doctrine-dbal
+	url = git://github.com/doctrine/dbal.git

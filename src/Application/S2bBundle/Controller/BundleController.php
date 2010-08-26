@@ -2,13 +2,13 @@
 
 namespace Application\S2bBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller;
-use Symfony\Components\HttpKernel\Exception\HttpException;
-use Symfony\Components\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Application\S2bBundle\Entity\Repo;
 use Application\S2bBundle\Entity\User;
 use Application\S2bBundle\Github;
-use Symfony\Components\Console\Output\NullOutput as Output;
+use Symfony\Component\Console\Output\NullOutput as Output;
 
 class BundleController extends Controller
 {

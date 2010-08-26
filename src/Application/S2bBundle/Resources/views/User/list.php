@@ -9,7 +9,7 @@
 <?php foreach($users as $user): ?>
     <li class="item">
         <a class="item-link" href="<?php echo $view['router']->generate('user_show', array('name' => $user->getName())) ?>">
-            <img class="gravatar" src="<?php echo $view['gravatar']->render($user->getEmail(), 32, null, 'mm') ?>" width="32" height="32" />
+            <img class="gravatar" src="<?php echo $view['gravatar']->getUrl($user->getEmail(), 32, null, 'mm') ?>" width="32" height="32" />
             <?php echo $user->getName() ?>
             <?php if($user->getFullName()): ?>
                 <span>(<?php echo $user->getFullName() ?>)</span>
