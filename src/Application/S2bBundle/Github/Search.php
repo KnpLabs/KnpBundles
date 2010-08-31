@@ -5,6 +5,11 @@ use Application\S2bBundle\Entity\Repo;
 use Symfony\Component\Console\Output\OutputInterface;
 use Goutte\Client;
 
+/**
+ * Searches a variety of sources (Github and Google) for Symfony2 bundles.
+ *
+ * @author Thibault Duplessis
+ */
 class Search
 {
     /**
@@ -36,7 +41,9 @@ class Search
     }
     
     /**
-     * Get a list of Symfony2 Repos from GitHub
+     * Get a list of Symfony2 Repos from GitHub & Google
+     *
+     * @integer limit $limit The maximum number of results to return
      */
     public function searchRepos($limit = 300)
     {
@@ -49,6 +56,7 @@ class Search
         }
         $repos = $this->searchReposOnGitHub('Symfony2', $repos, $limit);
         $repos = $this->searchReposOnGoogle($repos, $limit);
+
         return array_slice($repos, 0, $limit);
     }
 
@@ -74,6 +82,7 @@ class Search
             $this->output->write(' - '.$e->getMessage());
         }
         $this->output->writeLn('... DONE');
+
         return array_slice($repos, 0, $limit);
     }
 
@@ -122,6 +131,7 @@ class Search
             sleep(2);
         }
         $this->output->writeLn(' DONE');
+
         return $repos;
     }
 
