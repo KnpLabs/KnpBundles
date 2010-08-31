@@ -1,6 +1,7 @@
 #symfony2bundles.org
 
-Open-source code of the [symfony2bundles.org](http://symfony2bundles.org) website, written in Symfony2.
+Open-source code of the [symfony2bundles.org](http://symfony2bundles.org)
+website, written in Symfony2.
 
 ## Install
 
@@ -10,11 +11,14 @@ Open-source code of the [symfony2bundles.org](http://symfony2bundles.org) websit
     cd symfony2bundles
     git submodule update --init --recursive
 
-The last command requires Git >= 1.6. Alternatively, you can run `git submodule init` and `git submodule update`, and recurse manually in submodules.
+The last command requires Git >= 1.6. Alternatively, you can run
+`git submodule init` and `git submodule update`, and recurse manually in submodules.
 
 ### Configure
 
-To configure your DB for your development and test environments, edit your `/s2b/config/config_dev_local.yml` and `/s2b/config/config_test_local.yml` to add your specific DB settings:
+To configure your DB for your development and test environments, edit your
+`/s2b/config/config_dev_local.yml` and `/s2b/config/config_test_local.yml`
+to add your specific DB settings:
 
     imports:
       - { resource: config_dev.yml }
@@ -63,4 +67,5 @@ To configure your DB for your development and test environments, edit your `/s2b
 
     php s2b/console s2b:populate
 
-This can take long time. GitHub API is limited to 60 calls per minute, so the commands needs to wait.
+This can take long time. GitHub API is limited to 60 calls per minute,
+so the commands needs to wait.
