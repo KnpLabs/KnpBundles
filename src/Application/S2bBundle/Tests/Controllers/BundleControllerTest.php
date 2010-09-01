@@ -40,9 +40,9 @@ class BundleControllerTest extends WebTestCase
         $crawler = $client->submit($crawler->filter('form#quick-search button')->form(), array('q' => 'ImQuiteSureThisWillReturnNothing'));
         $this->assertTrue($client->getResponse()->isSuccessful());
         $this->assertEquals(0, $crawler->filter('.bundle-list li.item')->count());
-        $crawler = $client->submit($crawler->filter('form#quick-search button')->form(), array('q' => 'image'));
+        $crawler = $client->submit($crawler->filter('form#quick-search button')->form(), array('q' => '15'));
         $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertEquals(1, $crawler->filter('.repo-list li.item a:contains("ImagineBundle")')->count());
+        $this->assertEquals(2, $crawler->filter('.repo-list li.item')->count());
     }
 
     public function testLatest()
