@@ -504,4 +504,11 @@ class User
             'lastCommits' => $this->getLastCommits()
         );
     }
+
+    public function fromArray(array $data)
+    {
+        foreach($data as $key => $value) {
+            $this->{'set'.$key}($value);
+        }
+    }
 }

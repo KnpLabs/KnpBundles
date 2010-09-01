@@ -586,6 +586,14 @@ abstract class Repo
         );
     }
 
+    public function fromArray(array $data)
+    {
+        foreach($data as $key => $value) {
+            $this->{'set'.$key}($value);
+        }
+        $this->recalculateScore();
+    }
+
     public function __toString()
     {
         return $this->getUsername().'/'.$this->getName();
