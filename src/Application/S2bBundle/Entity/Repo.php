@@ -160,7 +160,7 @@ abstract class Repo
      * True if the Repo is a fork
      * @Column(type="boolean")
      */
-    protected $isFork = null;
+    protected $isFork = false;
 
     public function __construct($fullName = null)
     {
