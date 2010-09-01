@@ -303,16 +303,31 @@ abstract class Repo
         $this->score = (int) $score;
     }
 
+    /**
+     * Calculate the score of this repo based on several factors.
+     * The score is used as the default sort field in many places. 
+     * #TODO discuss me, improve me
+     * 
+     * @return null
+     */
     public function recalculateScore()
     {
+        // The more followers on GitHub, the better
         $score = $this->getNbFollowers();
+
+        // Forks are three times better than followers
         $score += 3 * $this->getNbForks();
+
+        // Small boost for recently updated repos
         if($this->getDaysSinceLastCommit() < 30) {
             $score += (30 - $this->getDaysSinceLastCommit()) / 5;
         }
-        if(strlen($this->getReadme()) > 500) {
+
+        // Small boost for repos that have a real README file
+        if(strlen($this->getReadme()) > 300) {
             $score += 5;
         }
+
         $this->setScore($score);
     }
 
