@@ -44,6 +44,15 @@ To configure your DB for your development and test environments, edit your `/s2b
     php s2b/console-dev doctrine:generate:proxies
     php s2b/console-test doctrine:generate:proxies
 
+#### Load data fixtures
+
+    php s2b/console-dev doctrine:data:load
+    php s2b/console-test doctrine:data:load
+
+#### Run the tests
+
+    phpunit -c s2b
+
 #### To generate migrations from your current schema
 
     php s2b/console-dev doctrine:migrations:diff --bundle=Application\\S2bBundle
