@@ -6,8 +6,7 @@ kernel.config:
     error_handler_level: null
 
 web.config:
-    validation:
-        enabled: true
+    validation: { enabled: true, annotations: true }
     router: { resource: "%kernel.root_dir%/config/routing.yml" }
 
 web.templating:

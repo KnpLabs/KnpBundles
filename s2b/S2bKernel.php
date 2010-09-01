@@ -49,6 +49,10 @@ class S2bKernel extends Kernel
             new Application\S2bBundle\S2bBundle()
         );
 
+        if ($this->isDebug()) {
+            $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
+        }
+
         return $bundles;
     }
 

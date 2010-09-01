@@ -6,4 +6,8 @@ zend.logger:
     path:     %kernel.logs_dir%/%kernel.environment%.log
 
 web.config:
+    profiler: { only_exceptions: false }
+
+webprofiler.config:
     toolbar: true
+    intercept_redirects: true
