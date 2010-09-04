@@ -65,7 +65,7 @@ to add your specific DB settings:
 
 #### Populate document collections from GitHub
 
-    php s2b/console s2b:populate
+    php s2b/console-dev s2b:populate
 
 This can take long time. GitHub API is limited to 60 calls per minute,
 so the commands needs to wait.
