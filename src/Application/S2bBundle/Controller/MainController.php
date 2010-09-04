@@ -12,15 +12,20 @@ class MainController extends Controller
         $nbBundles = $this->getRepository('Bundle')->count();
         $nbProjects = $this->getRepository('Project')->count();
         $nbUsers = $this->getRepository('User')->count();
-        $class = new \ReflectionClass("Application\S2bBundle\Entity\Repo");
-        $scoreMethod = $class->getMethod('recalculateScore');
-        $scoreMethodDefinition = $scoreMethod->getDocComment()."\n";
 
-        $file = $class->getFileName();
-        $contents = file($file);
-        for ($i = $scoreMethod->getStartLine()-1; $i < $scoreMethod->getEndLine(); $i++) {
-            $scoreMethodDefinition.= $contents[$i];
+        try {
+            $class = new \ReflectionClass("Application\S2bBundle\Entity\Repo");
+            $scoreMethod = $class->getMethod('recalculateScore');
+            $scoreMethodDefinition = $scoreMethod->getDocComment()."\n";
+            $file = $class->getFileName();
+            $contents = file($file);
+            for ($i = $scoreMethod->getStartLine()-1; $i < $scoreMethod->getEndLine(); $i++) {
+                $scoreMethodDefinition.= $contents[$i];
+            }
+        } catch (Exception $e) {
+            $scoreMethodDefinition = '';
         }
+
         return $this->render('S2bBundle:Main:index', compact('nbBundles', 'nbProjects', 'nbUsers', 'scoreMethodDefinition'));
     }
 
