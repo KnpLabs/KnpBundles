@@ -5,8 +5,10 @@ zend.logger:
     priority: debug
     path:     %kernel.logs_dir%/%kernel.environment%.log
 
+
 web.config:
     profiler: { only_exceptions: false }
+    router:   { resource: "%kernel.root_dir%/config/routing_dev.yml" }
 
 webprofiler.config:
     toolbar: true
