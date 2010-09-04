@@ -27,7 +27,7 @@
   Symfony2Bundles is Open Source! <a href="http://github.com/knplabs/symfony2bundles">Get the code</a> and contribute!
   This website is at early stages of development, and many things will change, especially the ranking algorithm:
   <pre>
-    <?php echo $scoreMethodDefinition ?>
+    <?php echo $view['actions']->output('S2bBundle:Main:getRankCode', array('standalone' => true, 'ignore_errors' => true)); ?>
   </pre>
   </p>
 <hr />

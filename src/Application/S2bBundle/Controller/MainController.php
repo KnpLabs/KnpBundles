@@ -13,12 +13,15 @@ class MainController extends Controller
         $nbProjects = $this->getRepository('Project')->count();
         $nbUsers = $this->getRepository('User')->count();
 
+        return $this->render('S2bBundle:Main:index', compact('nbBundles', 'nbProjects', 'nbUsers'));
+    }
+
+    public function getRankCodeAction()
+    {
         try {
-            $class = new \ReflectionClass("Application\S2bBundle\Entity\Repo");
-            $scoreMethod = $class->getMethod('recalculateScore');
+            $scoreMethod = new \ReflectionMethod('Application\S2bBundle\Entity\Repo', 'recalculateScore');
             $scoreMethodDefinition = $scoreMethod->getDocComment()."\n";
-            $file = $class->getFileName();
-            $contents = file($file);
+            $contents = file($scoreMethod->getDeclaringClass()->getFileName());
             for ($i = $scoreMethod->getStartLine()-1; $i < $scoreMethod->getEndLine(); $i++) {
                 $scoreMethodDefinition.= $contents[$i];
             }
@@ -26,7 +29,10 @@ class MainController extends Controller
             $scoreMethodDefinition = '';
         }
 
-        return $this->render('S2bBundle:Main:index', compact('nbBundles', 'nbProjects', 'nbUsers', 'scoreMethodDefinition'));
+        $response = $this->createResponse($scoreMethodDefinition);
+        // TODO: how could we ensure the cache is cleared if the code changes?
+        $response->setTtl('3600');
+        return $response;
     }
 
     #TODO cache me!
