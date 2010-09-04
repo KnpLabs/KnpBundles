@@ -31,7 +31,7 @@ class MainController extends Controller
 
         $response = $this->createResponse($scoreMethodDefinition);
         // TODO: how could we ensure the cache is cleared if the code changes?
-        $response->setTtl('3600');
+        $response->setTtl(3600);
         return $response;
     }
 
