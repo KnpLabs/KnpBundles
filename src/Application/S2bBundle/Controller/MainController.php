@@ -12,7 +12,16 @@ class MainController extends Controller
         $nbBundles = $this->getRepository('Bundle')->count();
         $nbProjects = $this->getRepository('Project')->count();
         $nbUsers = $this->getRepository('User')->count();
-        return $this->render('S2bBundle:Main:index', compact('nbBundles', 'nbProjects', 'nbUsers'));
+        $class = new \ReflectionClass("Application\S2bBundle\Entity\Repo");
+        $scoreMethod = $class->getMethod('recalculateScore');
+        $scoreMethodDefinition = $scoreMethod->getDocComment()."\n";
+
+        $file = $class->getFileName();
+        $contents = file($file);
+        for ($i = $scoreMethod->getStartLine()-1; $i < $scoreMethod->getEndLine(); $i++) {
+            $scoreMethodDefinition.= $contents[$i];
+        }
+        return $this->render('S2bBundle:Main:index', compact('nbBundles', 'nbProjects', 'nbUsers', 'scoreMethodDefinition'));
     }
 
     #TODO cache me!
