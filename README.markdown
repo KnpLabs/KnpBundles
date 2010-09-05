@@ -53,7 +53,7 @@ to add your specific DB settings:
     php s2b/console-dev doctrine:data:load
     php s2b/console-test doctrine:data:load
 
-#### Run the tests
+#### Run the tests (requires latest PHPUnit 3.5)
 
     phpunit -c s2b
 
