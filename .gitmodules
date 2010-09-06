@@ -28,3 +28,6 @@
 [submodule "src/vendor/doctrine-dbal"]
 	path = src/vendor/doctrine-dbal
 	url = git://github.com/doctrine/dbal.git
+[submodule "src/Bundle/OfflineBundle"]
+	path = src/Bundle/OfflineBundle
+	url = git://github.com/knplabs/OfflineBundle.git
