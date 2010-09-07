@@ -307,16 +307,17 @@ abstract class Repo
      * Calculate the score of this repo based on several factors.
      * The score is used as the default sort field in many places. 
      * #TODO discuss me, improve me
-     * 
-     * @return null
      */
     public function recalculateScore()
     {
-        // The more followers on GitHub, the better
+        // 1 follower = 1 point
         $score = $this->getNbFollowers();
 
-        // Forks are three times better than followers
+        // 1 fork = 3 points
         $score += 3 * $this->getNbForks();
+
+        // 1 contributor = 3 points
+        $score += 3 * $this->getNbContributors();
 
         // Small boost for recently updated repos
         if($this->getDaysSinceLastCommit() < 30) {
@@ -535,6 +536,16 @@ abstract class Repo
     public function getContributors()
     {
       return $this->contributors;
+    }
+
+    /**
+     * Get the number of contributors
+     *
+     * @return int
+     **/
+    public function getNbContributors()
+    {
+        return count($this->contributors);
     }
     
     /**
