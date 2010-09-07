@@ -31,3 +31,9 @@
 [submodule "src/Bundle/OfflineBundle"]
 	path = src/Bundle/OfflineBundle
 	url = git://github.com/knplabs/OfflineBundle.git
+[submodule "TestSessionBundle"]
+	path = TestSessionBundle
+	url = git://github.com/knplabs/TestSessionBundle.git
+[submodule "src/Bundle/TestSessionBundle"]
+	path = src/Bundle/TestSessionBundle
+	url = git://github.com/knplabs/TestSessionBundle.git
