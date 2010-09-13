@@ -2,9 +2,8 @@ imports:
     - { resource: config.yml }
 
 zend.logger:
-    priority: debug
+    priority: notice
     path:     %kernel.logs_dir%/%kernel.environment%.log
-
 
 web.config:
     profiler: { only_exceptions: false }
@@ -12,4 +11,4 @@ web.config:
 
 webprofiler.config:
     toolbar: true
-    intercept_redirects: true
+    intercept_redirects: false
