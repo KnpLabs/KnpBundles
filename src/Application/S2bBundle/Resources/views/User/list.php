@@ -15,15 +15,29 @@
                 <span>(<?php echo $user->getFullName() ?>)</span>
             <?php endif; ?>
         </a>
-        <ul class="bundles">
-        <?php foreach($user->getBundles() as $bundle): ?>
-            <li>
-                <a href="<?php echo $view['router']->generate('repo_show', array('username' => $user->getName(), 'name' => $bundle->getName())) ?>">
-                    <?php echo $bundle->getShortName() ?><span>Bundle</span><em><?php echo $bundle->getLastTagName() ?></em>
-                </a>
-            </li>
-        <?php endforeach; ?>
-        </ul>
+        <?php if($user->hasBundles()): ?>
+            <ul class="bundles">
+            <?php foreach($user->getBundles() as $bundle): ?>
+                <li>
+                    <a href="<?php echo $view['router']->generate('repo_show', array('username' => $user->getName(), 'name' => $bundle->getName())) ?>">
+                        <?php echo $bundle->getShortName() ?><span>Bundle</span><em><?php echo $bundle->getLastTagName() ?></em>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
+
+        <?php if($user->hasProjects()): ?>
+            <ul class="projects">
+            <?php foreach($user->getProjects() as $project): ?>
+                <li>
+                    <a href="<?php echo $view['router']->generate('repo_show', array('username' => $user->getName(), 'name' => $project->getName())) ?>">
+                        <?php echo $project->getName() ?><em><?php echo $project->getLastTagName() ?></em>
+                    </a>
+                </li>
+            <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
     </li>
 <?php endforeach; ?>
 </ul>
