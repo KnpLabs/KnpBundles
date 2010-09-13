@@ -702,21 +702,21 @@ ul.user-list img.gravatar,
 ul.repo-list img.gravatar {
     vertical-align: middle;
 }
-ul.user-list ul.bundles {
+ul.user-list ul.bundles,ul.user-list ul.projects {
     text-align: right;
     margin: 0;
 }
-ul.user-list ul.bundles li {
+ul.user-list ul.bundles li, ul.user-list ul.projects li {
     display: inline;
     margin-right: 10px;
 }
-ul.user-list ul.bundles a {
+ul.user-list ul.bundles a, ul.user-list ul.projects a {
     color: #444;
 }
 ul.user-list ul.bundles a span {
     color: #888;
 }
-ul.user-list ul.bundles a:hover {
+ul.user-list ul.bundles a:hover, ul.user-list ul.projects a:hover {
     text-decoration: underline;
 }
 

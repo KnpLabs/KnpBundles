@@ -229,6 +229,7 @@ class User
         return $names;
     }
 
+
     /**
      * Count the user repos
      *
@@ -247,6 +248,19 @@ class User
     public function getNbProjects()
     {
         return count($this->getProjects());
+    }
+
+    public function hasProjects()
+    {
+
+        return ($this->getNbProjects()>0);
+    }
+
+
+    public function hasBundles()
+    {
+
+        return ($this->getNbBundles()>0);
     }
 
     /**
