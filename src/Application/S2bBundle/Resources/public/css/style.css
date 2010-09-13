@@ -713,7 +713,7 @@ ul.user-list ul.bundles li, ul.user-list ul.projects li {
 ul.user-list ul.bundles a, ul.user-list ul.projects a {
     color: #444;
 }
-ul.user-list ul.bundles a span {
+ul.user-list ul.bundles a span, ul.user-list ul.projects a {
     color: #888;
 }
 ul.user-list ul.bundles a:hover, ul.user-list ul.projects a:hover {
