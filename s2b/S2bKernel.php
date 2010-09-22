@@ -2,7 +2,7 @@
 
 require_once __DIR__.'/../src/autoload.php';
 
-use Symfony\Framework\Kernel;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\DependencyInjection\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -31,7 +31,6 @@ class S2bKernel extends Kernel
     public function registerBundles()
     {
         $bundles = array(
-            new Symfony\Framework\KernelBundle(),
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
 
             // enable third-party bundles
