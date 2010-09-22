@@ -34,3 +34,6 @@
 [submodule "src/Bundle/TimeBundle"]
 	path = src/Bundle/TimeBundle
 	url = git://github.com/knplabs/TimeBundle.git
+[submodule "src/vendor/php-git-repo"]
+	path = src/vendor/php-git-repo
+	url = git://github.com/ornicar/php-git-repo.git
