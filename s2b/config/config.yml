@@ -25,9 +25,6 @@ gravatar.config: ~
 
 s2b.config: ~
 
-offline.config:
-    enable: true
-
 doctrine.orm:
   default_entity_manager:   default
   cache_driver:             apc           # array, apc, memcache, xcache

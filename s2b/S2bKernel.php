@@ -44,7 +44,6 @@ class S2bKernel extends Kernel
             new Bundle\TimeBundle\TimeBundle(),
             new Bundle\MenuBundle\MenuBundle(),
             new Bundle\GravatarBundle\GravatarBundle(),
-            new Bundle\OfflineBundle\OfflineBundle(),
             new Bundle\TestSessionBundle\TestSessionBundle(),
 
             // register your applications here
