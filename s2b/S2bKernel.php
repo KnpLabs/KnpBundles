@@ -78,8 +78,7 @@ class S2bKernel extends Kernel
         $basePath = __DIR__.'/config/config_';
         $file = $basePath.$environment.'_local.yml';
 
-        if(\file_exists($file))
-        {
+        if(\file_exists($file)) {
             return $file;
         }
 
