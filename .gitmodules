@@ -31,3 +31,6 @@
 [submodule "src/Bundle/TestSessionBundle"]
 	path = src/Bundle/TestSessionBundle
 	url = git://github.com/knplabs/TestSessionBundle.git
+[submodule "src/Bundle/TimeBundle"]
+	path = src/Bundle/TimeBundle
+	url = git://github.com/knplabs/TimeBundle.git
