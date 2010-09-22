@@ -1,19 +1,17 @@
-parameters:
-    kernel.include_core_classes: false
-
-kernel.config:
-    charset:             UTF-8
-    error_handler_level: null
-
-kernel.session:
-    lifetime: 2592000 # one month 
-
-web.config:
-    validation: { enabled: true, annotations: true }
-    router: { resource: "%kernel.root_dir%/config/routing.yml" }
-
-web.templating:
-    escaping:       htmlspecialchars
+app.config:
+    charset:       UTF-8
+    error_handler: null
+    csrf_secret:   betterPuttingThisInTheLocalConfigFile
+    router:        { resource: "%kernel.root_dir%/config/routing.yml" }
+    validation:    { enabled: true, annotations: true }
+    templating:
+        escaping:       htmlspecialchars
+    user:
+       default_locale: en
+       session:
+           name:     SYMFONY
+           type:     Native
+           lifetime: 3600
 
 markdown.parser: ~      # Enable the parser service
 
