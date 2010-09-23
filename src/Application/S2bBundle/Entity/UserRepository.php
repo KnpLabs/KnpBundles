@@ -57,7 +57,8 @@ class UserRepository extends EntityRepository
         return $this->createQueryBuilder('u')
             ->orderBy('u.'.$field, 'name' === $field ? 'asc' : 'desc')
             ->leftJoin('u.repos', 'r')
-            ->select('u, r')
+            ->leftJoin('u.contributionRepos', 'cr')
+            ->select('u, r, cr')
             ->getQuery()
             ->getResult();
     }
