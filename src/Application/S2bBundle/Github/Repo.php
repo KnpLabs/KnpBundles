@@ -30,7 +30,12 @@ class Repo
 
     public function update(Entity\Repo $repo)
     {
-        $this->gitRepoManager->getRepo($repo)->update();
+        try {
+            $this->gitRepoManager->getRepo($repo)->update();
+        }
+        catch(\GitRuntimeException $e) {
+            return false;
+        }
 
         if(!$this->updateInfos($repo)) {
             return false;
