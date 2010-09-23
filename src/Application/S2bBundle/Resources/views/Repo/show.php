@@ -74,7 +74,7 @@
 <h3>Last commits</h3>
 <div class="sidemenu">
     <ul>
-        <?php foreach($repo->getLastCommits() as $commit): ?>
+        <?php foreach($repo->getLastCommits(12) as $commit): ?>
         <li>
         <a href="<?php echo $commit['url'] ?>"><?php echo strtok($commit['message'], "\n\r"); ?></a><br />
         <span><?php echo $commit['author']['name'] ?> | <?php echo $view['time']->ago(date_create($commit['committed_date'])) ?></span>

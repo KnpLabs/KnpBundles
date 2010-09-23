@@ -242,9 +242,9 @@ abstract class Repo
      * Get lastCommits
      * @return array
      */
-    public function getLastCommits()
+    public function getLastCommits($nb = 10)
     {
-        return unserialize($this->lastCommits);
+        return array_slice(unserialize($this->lastCommits), 0, $nb);
     }
 
     /**

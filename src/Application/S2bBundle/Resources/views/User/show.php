@@ -26,7 +26,11 @@
         <div class="post-meta">
             <h4>Infos</h4>
             <ul>
-                <li class="time"><?php echo $user->getLastCommitAt() ? $view['time']->ago($user->getRawValue()->getLastCommitAt()) : '' ?></li>
+                <?php if($user->getLastCommitAt()): ?>
+                    <li class="time">Active <?php echo $view['time']->ago($user->getRawValue()->getLastCommitAt()) ?></li>
+                <?php else: ?>
+                    <li class="time">No recent activity</li>
+                <?php endif; ?>
                 <li class="lego"><?php echo $user->getNbBundles() ?> Bundles</li>
                 <li class="application"><?php echo $user->getNbProjects() ?> Projects</li>
                 <?php if($user->getCompany()): ?>
@@ -59,7 +63,7 @@
 <h3>Last commits</h3>
 <div class="sidemenu">
     <ol class="timeline">
-    <?php foreach ($user->getLastCommits() as $commit): ?>
+    <?php foreach ($user->getLastCommits(12) as $commit): ?>
         <li>
             <a href="<?php echo $view['router']->generate('repo_show', array('username' => $commit['repo_username'], 'name' => $commit['repo_name'])) ?>">
                 <?php echo $commit['repo_name'] ?>
