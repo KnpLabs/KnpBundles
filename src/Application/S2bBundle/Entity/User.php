@@ -322,6 +322,11 @@ class User
       return $this->contributionRepos;
     }
 
+    public function hasContributionRepos()
+    {
+        return !empty($this->contributionRepos);
+    }
+
     public function getContributionBundles()
     {
         $bundles = array();
@@ -334,6 +339,11 @@ class User
         return $bundles;
     }
 
+    public function getNbContributionBundles()
+    {
+        return count($this->getContributionBundles());
+    }
+
     public function getContributionProjects()
     {
         $projects = array();
@@ -344,6 +354,11 @@ class User
         }
 
         return $projects;
+    }
+
+    public function getNbContributionProjects()
+    {
+        return count($this->getContributionProjects());
     }
     
     /**

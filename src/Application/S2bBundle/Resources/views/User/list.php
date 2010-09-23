@@ -38,6 +38,21 @@
             <?php endforeach; ?>
             </ul>
         <?php endif; ?>
+
+        <?php $nbBundles = $user->getNbContributionBundles(); $nbProjects = $user->getNbContributionProjects();
+            ?><ul class="projects"><li><?php
+            if($nbBundles || $nbProjects):
+                ?>Contributes to <?php
+                if($nbBundles):
+                    echo $nbBundles ?> bundle<?php $nbBundles > 1 && print 's';
+                    if($nbProjects) echo ' and ';
+                endif;
+                if($nbProjects):
+                    echo $nbProjects ?> project<?php $nbProjects > 1 && print 's';
+                endif;
+            endif;
+            ?></li></ul><?php
+        ?>
     </li>
 <?php endforeach; ?>
 </ul>

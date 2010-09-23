@@ -139,7 +139,7 @@ class S2bPopulateCommand extends BaseCommand
             }
             $output->write($user->getName().str_repeat(' ', 40-strlen($user->getName())));
             if(!$githubUser->update($user)) {
-                $output->writeLn('No repo, remove user');
+                $output->writeLn('Remove user');
                 $dm->remove($user);
             }
             else {
