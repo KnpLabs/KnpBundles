@@ -403,7 +403,7 @@ class User
             $commits = array();
             foreach($this->getAllRepos() as $repo) {
                 foreach($repo->getLastCommits() as $commit) {
-                    if(isset($commit['author']['name']) && $commit['author']['name'] === $this->getName()) {
+                    if(isset($commit['author']['login']) && $commit['author']['login'] === $this->getName()) {
                         $commits[] = $commit;
                     }
                 }

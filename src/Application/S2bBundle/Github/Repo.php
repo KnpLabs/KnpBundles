@@ -85,6 +85,23 @@ class Repo
     public function updateCommits(Entity\Repo $repo)
     {
         $this->output->write(' commits');
+        try {
+            $commits = $this->github->getCommitApi()->getBranchCommits($repo->getUsername(), $repo->getName(), 'master');
+        }
+        catch(\phpGitHubApiRequestException $e) {
+            if(404 == $e->getCode()) {
+                return false;
+            }
+            throw $e;
+        }
+        $repo->setLastCommits(array_slice($commits, 0, 30));
+
+        return $repo;
+    }
+
+    public function updateCommitsFromGitRepo(Entity\Repo $repo)
+    {
+        $this->output->write(' commits');
         $commits = $this->gitRepoManager->getRepo($repo)->getCommits(30);
         $repo->setLastCommits($commits);
 
