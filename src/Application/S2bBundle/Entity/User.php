@@ -93,6 +93,11 @@ class User
      * @ManyToMany(targetEntity="Repo", mappedBy="contributors")
      */
     protected $contributionRepos = null;
+
+    /**
+     * local cache, not persisted
+     */
+    protected $lastCommitsCache = null;
     
     public function __construct()
     {
@@ -183,6 +188,11 @@ class User
     public function getRepos()
     {
         return $this->repos;
+    }
+
+    public function getAllRepos()
+    {
+        return array_merge($this->getRepos()->toArray(), $this->getContributionRepos()->toArray());
     }
 
     public function getBundles()
@@ -357,12 +367,12 @@ class User
      **/
     public function getLastCommitAt()
     {
-        $date = null;
-        foreach($this->getRepos() as $repo) {
-            if(null === $date || $repo->getLastCommitAt() > $date) {
-                $date = $repo->getLastCommitAt();
-            }
+        $lastCommits = $this->getLastCommits(1);
+        if(empty($lastCommits)) {
+            return null;
         }
+        $lastCommit = $lastCommits[0];
+        $date = new \DateTime($lastCommit['committed_date']);
 
         return $date;
     }
@@ -374,19 +384,22 @@ class User
      **/
     public function getLastCommits($nb = 10)
     {
-        $commits = array();
-        foreach(array_merge($this->getRepos()->toArray(), $this->getContributionRepos()->toArray()) as $repo) {
-            foreach($repo->getLastCommits() as $commit) {
-                if(isset($commit['author']['login']) && $commit['author']['login'] === $this->getName()) {
-                    $commits[] = $commit;
+        if(null === $this->lastCommitsCache) {
+            $commits = array();
+            foreach($this->getAllRepos() as $repo) {
+                foreach($repo->getLastCommits() as $commit) {
+                    if(isset($commit['author']['name']) && $commit['author']['name'] === $this->getName()) {
+                        $commits[] = $commit;
+                    }
                 }
             }
+            usort($commits, function($a, $b)
+            {
+                return strtotime($a['committed_date']) < strtotime($b['committed_date']);
+            });
+            $this->lastCommitsCache = $commits;
         }
-        usort($commits, function($a, $b)
-        {
-            return strtotime($a['committed_date']) < strtotime($b['committed_date']);
-        });
-        $commits = array_slice($commits, 0, $nb);
+        $commits = array_slice($this->lastCommitsCache, 0, $nb);
 
         return $commits;
     }

@@ -26,7 +26,7 @@
         <div class="post-meta">
             <h4>Infos</h4>
             <ul>
-                <li class="time"><?php echo $view['time']->ago($user->getLastCommitAt()->getRawValue()) ?></li>
+                <li class="time"><?php echo $user->getLastCommitAt() ? $view['time']->ago($user->getRawValue()->getLastCommitAt()) : '' ?></li>
                 <li class="lego"><?php echo $user->getNbBundles() ?> Bundles</li>
                 <li class="application"><?php echo $user->getNbProjects() ?> Projects</li>
                 <?php if($user->getCompany()): ?>

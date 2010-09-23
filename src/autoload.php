@@ -17,3 +17,6 @@ $loader->register();
 
 // Require php-github-api
 require_once(__DIR__.'/vendor/php-github-api/lib/phpGitHubApi.php');
+
+// Require php-git-repo
+require_once(__DIR__.'/vendor/php-git-repo/lib/phpGitRepo.php');

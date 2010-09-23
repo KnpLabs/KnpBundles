@@ -5,6 +5,7 @@ namespace Application\S2bBundle\Command;
 use Application\S2bBundle\Entity\Repo;
 use Application\S2bBundle\Entity\User;
 use Application\S2bBundle\Github;
+use Application\S2bBundle\Git;
 use Symfony\Bundle\FrameworkBundle\Command\Command as BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -45,7 +46,9 @@ class S2bPopulateCommand extends BaseCommand
         $github->setRequest(new Github\Request());
         $githubSearch = new Github\Search($github, new \Goutte\Client(), $output);
         $githubUser = new Github\User($github, $output);
-        $githubRepo = new Github\Repo($github, $output);
+        $gitRepoDir = $this->container->getParameter('kernel.cache_dir').'/repos';
+        $gitRepoManager = new Git\RepoManager($gitRepoDir);
+        $githubRepo = new Github\Repo($github, $output, $gitRepoManager);
 
         $foundRepos = $githubSearch->searchRepos(500, $output);
         $output->writeLn(sprintf('Found %d repo candidates', count($foundRepos)));
@@ -108,22 +111,6 @@ class S2bPopulateCommand extends BaseCommand
             }
             $output->writeLn(' '.$repo->getScore());
         }
-        
-        // Now update users with more precise GitHub data
-        $output->writeLn(sprintf('Will now update %d users', count($users)));
-        foreach($users as $user) {
-            if($dm->getUnitOfWork()->getEntityState($user) != UnitOfWork::STATE_MANAGED) {
-                continue;
-            }
-            $output->write($user->getName().str_repeat(' ', 40-strlen($user->getName())));
-            if(!$user->getNbRepos() || !$githubUser->update($user)) {
-                $output->writeLn('No repo, remove user');
-                $dm->remove($user);
-            }
-            else {
-                $output->writeLn('OK');
-            }
-        }
 
         $output->writeLn('Will now update contributors');
         foreach($repos as $repo) {
@@ -133,15 +120,31 @@ class S2bPopulateCommand extends BaseCommand
             $contributorNames = $githubRepo->getContributorNames($repo);
             $contributors = array();
             foreach($contributorNames as $contributorName) {
-                if(isset($users[$contributorName])) {
-                    $contributor = $users[$contributorName];
-                    if($dm->getUnitOfWork()->getEntityState($contributor) == UnitOfWork::STATE_MANAGED) {
-                        $contributors[] = $contributor;
-                    }
+                if(!isset($users[$contributorName])) {
+                    $user = $githubUser->import($contributorName);
+                    $users[$user->getName()] = $user;
+                    $dm->persist($user);
                 }
+                $contributors[] = $users[$contributorName];
             }
             $output->writeLn(sprintf('%s contributors: %s', $repo->getFullName(), implode(', ', $contributors)));
             $repo->setContributors($contributors);
+        }
+        
+        // Now update users with more precise GitHub data
+        $output->writeLn(sprintf('Will now update %d users', count($users)));
+        foreach($users as $user) {
+            if($dm->getUnitOfWork()->getEntityState($user) != UnitOfWork::STATE_MANAGED) {
+                continue;
+            }
+            $output->write($user->getName().str_repeat(' ', 40-strlen($user->getName())));
+            if(!$githubUser->update($user)) {
+                $output->writeLn('No repo, remove user');
+                $dm->remove($user);
+            }
+            else {
+                $output->writeLn('OK');
+            }
         }
 
         $output->writeLn('Will now flush changes to the database');

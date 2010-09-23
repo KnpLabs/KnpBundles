@@ -3,6 +3,7 @@
 namespace Application\S2bBundle\Github;
 use Symfony\Component\Console\Output\OutputInterface;
 use Application\S2bBundle\Entity;
+use Application\S2bBundle\Git;
 
 class Repo
 {
@@ -20,14 +21,17 @@ class Repo
      */
     protected $output = null;
     
-    public function __construct(\phpGitHubApi $github, OutputInterface $output)
+    public function __construct(\phpGitHubApi $github, OutputInterface $output, Git\RepoManager $gitRepoManager)
     {
         $this->github = $github;
         $this->output = $output;
+        $this->gitRepoManager = $gitRepoManager;
     }
 
     public function update(Entity\Repo $repo)
     {
+        $this->gitRepoManager->getRepo($repo)->update();
+
         if(!$this->updateInfos($repo)) {
             return false;
         }
@@ -81,16 +85,8 @@ class Repo
     public function updateCommits(Entity\Repo $repo)
     {
         $this->output->write(' commits');
-        try {
-            $commits = $this->github->getCommitApi()->getBranchCommits($repo->getUsername(), $repo->getName(), 'master');
-        }
-        catch(\phpGitHubApiRequestException $e) {
-            if(404 == $e->getCode()) {
-                return false;
-            }
-            throw $e;
-        }
-        $repo->setLastCommits(array_slice($commits, 0, 10));
+        $commits = $this->gitRepoManager->getRepo($repo)->getCommits(30);
+        $repo->setLastCommits($commits);
 
         return $repo;
     }
@@ -98,29 +94,14 @@ class Repo
     public function updateFiles(Entity\Repo $repo)
     {
         $this->output->write(' files');
-        try {
-            $blobs = $this->github->getObjectApi()->listBlobs($repo->getUsername(), $repo->getName(), 'master');
-        }
-        catch(\phpGitHubApiRequestException $e) {
-            if(404 == $e->getCode()) {
-                return false;
-            }
-            throw $e;
-        }
-        if($repo instanceof Entity\Project && !isset($blobs['src/autoload.php'])) {
+        $gitRepo = $this->gitRepoManager->getRepo($repo);
+        if($repo instanceof Entity\Project && !$gitRepo->hasFile('src/autoload.php')) {
             return false;
         }
+
         foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
-            if(isset($blobs[$readmeFilename])) {
-                $readmeSha = $blobs[$readmeFilename];
-                try {
-                    $readmeText = $this->github->getObjectApi()->getRawData($repo->getUsername(), $repo->getName(), $readmeSha);
-                    $repo->setReadme($readmeText);
-                }
-                catch(\phpGitHubApiRequestException $e) {
-                    $this->output->write(sprintf('{%s}', $e->getCode()));
-                }
-                break;
+            if($gitRepo->hasFile($readmeFilename)) {
+               $repo->setReadme($gitRepo->getFileContent($readmeFilename));
             }
         }
 
@@ -148,16 +129,9 @@ class Repo
     public function updateTags(Entity\Repo $repo)
     {
         $this->output->write(' tags');
-        try {
-            $tags = $this->github->getRepoApi()->getRepoTags($repo->getUsername(), $repo->getName());
-        }
-        catch(\phpGitHubApiRequestException $e) {
-            if(404 == $e->getCode()) {
-                return false;
-            }
-            throw $e;
-        }
-        $repo->setTags(array_keys($tags));
+        $gitRepo = $this->gitRepoManager->getRepo($repo);
+        $tags = $gitRepo->getGitRepo()->getTags();
+        $repo->setTags($tags);
 
         return $repo;
     }
