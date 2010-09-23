@@ -40,7 +40,7 @@ class MainController extends Controller
     {
         $commits = $this->container->getDoctrine_Orm_DefaultEntityManagerService()
             ->getRepository('Application\S2bBundle\Entity\Repo')
-            ->getLastCommits(5);
+            ->getLastCommits(12);
 
         return $this->render('S2bBundle:Main:timeline', array('commits' => $commits));
     }

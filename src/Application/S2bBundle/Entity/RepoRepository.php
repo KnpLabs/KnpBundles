@@ -49,7 +49,7 @@ class RepoRepository extends EntityRepository
         {
             return strtotime($a['committed_date']) < strtotime($b['committed_date']);
         });
-        $commits = array_slice($commits, 0, 5);
+        $commits = array_slice($commits, 0, $nb);
 
         return $commits;
     }
