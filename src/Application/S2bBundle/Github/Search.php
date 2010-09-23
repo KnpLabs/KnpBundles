@@ -55,7 +55,7 @@ class Search
             }
         }
         $repos = $this->searchReposOnGitHub('Symfony2', $repos, $limit);
-        //$repos = $this->searchReposOnGoogle($repos, $limit);
+        $repos = $this->searchReposOnGoogle($repos, $limit);
 
         return array_slice($repos, 0, $limit);
     }
