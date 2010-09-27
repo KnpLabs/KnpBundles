@@ -7,11 +7,10 @@ app.config:
     templating:
         escaping:       htmlspecialchars
     user:
-       default_locale: en
-       session:
-           name:     SYMFONY
-           type:     Native
-           lifetime: 3600
+        default_locale: en
+        name:     SYMFONY
+        type:     Native
+        lifetime: 3600
 
 markdown.parser: ~      # Enable the parser service
 
