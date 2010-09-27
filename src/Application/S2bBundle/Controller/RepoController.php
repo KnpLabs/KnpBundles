@@ -10,6 +10,7 @@ use Application\S2bBundle\Entity\Bundle;
 use Application\S2bBundle\Entity\Project;
 use Application\S2bBundle\Entity\User;
 use Application\S2bBundle\Github;
+use Application\S2bBundle\Git;
 use Symfony\Component\Console\Output\NullOutput as Output;
 
 class RepoController extends Controller
@@ -70,7 +71,7 @@ class RepoController extends Controller
 
     public function addAction()
     {
-        $url = $this['request']->get('url');
+        $url = $this['request']->request->get('url');
 
         if(preg_match('#^http://github.com/([\w-]+)/([\w-]+).*$#', $url, $match)) {
             $repo = $this->addRepo($match[1], $match[2]);
@@ -90,7 +91,9 @@ class RepoController extends Controller
         }
         $github = new \phpGithubApi();
         $github->setRequest(new Github\Request());
-        $githubRepo = new Github\Repo($github, new Output());
+        $gitRepoDir = $this->container->getParameter('kernel.cache_dir').'/repos';
+        $gitRepoManager = new Git\RepoManager($gitRepoDir);
+        $githubRepo = new Github\Repo($github, new Output(), $gitRepoManager);
 
         if(!$repo = $githubRepo->update(Repo::create($username.'/'.$name))) {
             return false;

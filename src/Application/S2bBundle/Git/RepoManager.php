@@ -25,8 +25,8 @@ class RepoManager
 
     public function getRepo(RepoEntity $repo)
     {
-        $dir = $this->getRepoDir($repo);
         if($this->hasRepo($repo)) {
+            $dir = $this->getRepoDir($repo);
             $gitRepo = new \phpGitRepo($dir);
         }
         else {
