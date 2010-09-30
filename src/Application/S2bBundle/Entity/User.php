@@ -22,7 +22,7 @@ class User
         $metadata->addPropertyConstraint('name', new Constraints\NotBlank());
         $metadata->addPropertyConstraint('name', new Constraints\MinLength(2));
     }
-    
+
     /**
      * @Column(name="id", type="integer")
      * @Id
@@ -98,7 +98,7 @@ class User
      * local cache, not persisted
      */
     protected $lastCommitsCache = null;
-    
+
     public function __construct()
     {
         $this->repos = new ArrayCollection();
@@ -312,14 +312,19 @@ class User
         $this->getRepos()->removeElement($repo);
         $repo->setUser(null);
     }
-    
+
     /**
      * Get contributionRepos
      * @return ArrayCollection
      */
     public function getContributionRepos()
     {
-      return $this->contributionRepos;
+        return $this->contributionRepos;
+    }
+
+    public function getContributionReposSortedByScore()
+    {
+        return $this->sortReposByScore($this->getContributionRepos()->toArray());
     }
 
     public function hasContributionRepos()
@@ -330,7 +335,7 @@ class User
     public function getContributionBundles()
     {
         $bundles = array();
-        foreach($this->getContributionRepos() as $repo) {
+        foreach($this->getContributionReposSortedByScore() as $repo) {
             if($repo instanceof Bundle) {
                 $bundles[] = $repo;
             }
@@ -347,7 +352,7 @@ class User
     public function getContributionProjects()
     {
         $projects = array();
-        foreach($this->getContributionRepos() as $repo) {
+        foreach($this->getContributionReposSortedByScore() as $repo) {
             if($repo instanceof Project) {
                 $projects[] = $repo;
             }
@@ -360,7 +365,7 @@ class User
     {
         return count($this->getContributionProjects());
     }
-    
+
     /**
      * Set contributionRepos
      * @param  ArrayCollection
@@ -368,12 +373,21 @@ class User
      */
     public function setContributionRepos(ArrayCollection $contributionRepos)
     {
-      $this->contributionRepos = $contributionRepos;
+        $this->contributionRepos = $contributionRepos;
     }
 
     public function getNbContributionRepos()
     {
         return $this->getContributionRepos()->count();
+    }
+
+    protected function sortReposByScore(array $repos)
+    {
+        uasort($repos, function($a, $b) {
+            return $a->getScore() > $b->getScore();
+        });
+
+        return $repos;
     }
 
     /**
@@ -409,9 +423,9 @@ class User
                 }
             }
             usort($commits, function($a, $b)
-            {
-                return strtotime($a['committed_date']) < strtotime($b['committed_date']);
-            });
+                    {
+                        return strtotime($a['committed_date']) < strtotime($b['committed_date']);
+                    });
             $this->lastCommitsCache = $commits;
         }
         $commits = array_slice($this->lastCommitsCache, 0, $nb);
