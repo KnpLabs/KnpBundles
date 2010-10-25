@@ -99,7 +99,10 @@ class Repo
             }
             throw $e;
         }
-        $repo->setLastCommits(array_slice((array)$commits, 0, 30));
+        if(empty($commits)) {
+            return false;
+        }
+        $repo->setLastCommits(array_slice($commits, 0, 30));
 
         return $repo;
     }
