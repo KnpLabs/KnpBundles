@@ -20,7 +20,7 @@ class Repo
      * @var OutputInterface
      */
     protected $output = null;
-    
+
     public function __construct(\phpGitHubApi $github, OutputInterface $output, Git\RepoManager $gitRepoManager)
     {
         $this->github = $github;
@@ -50,15 +50,15 @@ class Repo
             return false;
         }
         $repo->recalculateScore();
-         
+
         return $repo;
     }
 
     /**
-     * Return true if the Repo exists on GitHub, false otherwise 
-     * 
-     * @param Entity\Repo $repo 
-     * @param array $data 
+     * Return true if the Repo exists on GitHub, false otherwise
+     *
+     * @param Entity\Repo $repo
+     * @param array $data
      * @return boolean whether the Repo exists on GitHub
      */
     public function updateInfos(Entity\Repo $repo)
@@ -99,7 +99,7 @@ class Repo
             }
             throw $e;
         }
-        $repo->setLastCommits(array_slice($commits, 0, 30));
+        $repo->setLastCommits(array_slice((array)$commits, 0, 30));
 
         return $repo;
     }
@@ -178,7 +178,7 @@ class Repo
 
         return $names;
     }
-    
+
     /**
      * Get output
      * @return OutputInterface
@@ -187,7 +187,7 @@ class Repo
     {
       return $this->output;
     }
-    
+
     /**
      * Set output
      * @param  OutputInterface
@@ -197,7 +197,7 @@ class Repo
     {
       $this->output = $output;
     }
-    
+
     /**
      * Get github
      * @return \phpGitHubApi
@@ -206,7 +206,7 @@ class Repo
     {
         return $this->github;
     }
-    
+
     /**
      * Set github
      * @param  \phpGitHubApi
