@@ -99,6 +99,13 @@ class User
      */
     protected $lastCommitsCache = null;
 
+    /**
+     * Internal score of the User as the sum of his repos' scores
+     *
+     * @Column(type="integer")
+     */
+    protected $score = null;
+
     public function __construct()
     {
         $this->repos = new ArrayCollection();
@@ -179,6 +186,41 @@ class User
     public function setFullName($fullName)
     {
         $this->fullName = $fullName;
+    }
+
+    /**
+     * Get score
+     * @return int
+     */
+    public function getScore()
+    {
+        return $this->score;
+    }
+
+    /**
+     * Set score
+     * @param  int
+     * @return null
+     */
+    public function setScore($score)
+    {
+        $this->score = (int) $score;
+    }
+
+    /**
+     * Calculate the score of this user based on his repos' scores
+     */
+    public function recalculateScore()
+    {
+        $score = 0;
+        foreach($this->getRepos() as $repo) {
+            $score += $repo->getScore();
+        }
+        foreach($this->getProjects() as $project) {
+            $score += $project->getScore();
+        }
+
+        $this->setScore($score);
     }
 
     /**
@@ -550,7 +592,8 @@ class User
             'blog' => $this->getBlog(),
             'bundles' => $this->getBundleNames(),
             'projects' => $this->getProjectNames(),
-            'lastCommitAt' => $this->getLastCommitAt()->getTimestamp()
+            'lastCommitAt' => $this->getLastCommitAt()->getTimestamp(),
+            'score' => $this->getScore(),
         );
     }
 

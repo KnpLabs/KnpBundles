@@ -143,7 +143,8 @@ class S2bPopulateCommand extends BaseCommand
                 $dm->remove($user);
             }
             else {
-                $output->writeLn('OK');
+                $user->recalculateScore();
+                $output->writeLn('OK, score is '.$user->getScore());
             }
         }
 
