@@ -216,9 +216,6 @@ class User
         foreach($this->getRepos() as $repo) {
             $score += $repo->getScore();
         }
-        foreach($this->getProjects() as $project) {
-            $score += $project->getScore();
-        }
 
         $this->setScore($score);
     }
