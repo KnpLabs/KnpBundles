@@ -14,7 +14,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($repo->getGitRepo() instanceof \phpGitRepo);
     }
 
-    protected function getRepo($repoFullName = 'knplabs/DoctrineUserBundle')
+    protected function getRepo($repoFullName = 'FriendsOfSymfony/UserBundle')
     {
         $dir = sys_get_temp_dir().'/s2b_git_repos';
         $manager = new RepoManager($dir);

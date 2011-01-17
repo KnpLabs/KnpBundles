@@ -20,7 +20,7 @@ class RepoManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($gitRepo instanceof Repo);
     }
 
-    protected function getRepo($repoFullName = 'knplabs/DoctrineUserBundle')
+    protected function getRepo($repoFullName = 'FriendsOfSymfony/UserBundle')
     {
         $manager = $this->getManager();
         $repo = RepoEntity::create($repoFullName);
