@@ -14,7 +14,7 @@
   <testsuites>
     <testsuite name="symfony2bundles test suite">
         <directory>../src/Bundle/*/Tests</directory>
-        <directory>../src/Application/*/Tests</directory>
+        <!--<directory>../src/Application/*/Tests</directory> -->
     </testsuite>
   </testsuites>
 </phpunit>
