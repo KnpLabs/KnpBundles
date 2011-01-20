@@ -8,12 +8,12 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 /**
  * A user living on GitHub
  *
- * @Entity(repositoryClass="Application\S2bBundle\Entity\UserRepository")
- * @Table(
+ * @orm:Entity(repositoryClass="Application\S2bBundle\Entity\UserRepository")
+ * @orm:Table(
  *      name="user",
- *      uniqueConstraints={@UniqueConstraint(name="name_unique",columns={"name"})}
+ *      uniqueConstraints={@orm:UniqueConstraint(name="name_unique",columns={"name"})}
  * )
- * @HasLifecycleCallbacks
+ * @orm:HasLifecycleCallbacks
  */
 class User
 {

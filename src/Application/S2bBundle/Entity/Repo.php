@@ -11,8 +11,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @orm:Entity(repositoryClass="Application\S2bBundle\Entity\RepoRepository")
  * @orm:Table(
  *      name="repo",
- *      indexes={@Index(name="discriminator", columns={"discr"})},
- *      uniqueConstraints={@UniqueConstraint(name="full_name_unique",columns={"username", "name"})}
+ *      indexes={@orm:Index(name="discriminator", columns={"discr"})},
+ *      uniqueConstraints={@orm:UniqueConstraint(name="full_name_unique",columns={"username", "name"})}
  * )
  * @orm:InheritanceType("SINGLE_TABLE")
  * @orm:DiscriminatorColumn(name="discr", type="string")
@@ -136,8 +136,8 @@ abstract class Repo
      * Users who contributed to the Repo
      * @orm:ManyToMany(targetEntity="User", inversedBy="contributionRepos")
      * @orm:JoinTable(name="contribution",
-     *      joinColumns={@JoinColumn(name="repo_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="id")}
+     *      joinColumns={@orm:JoinColumn(name="repo_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@orm:JoinColumn(name="user_id", referencedColumnName="id")}
      *)
      *
      * @var ArrayCollection
