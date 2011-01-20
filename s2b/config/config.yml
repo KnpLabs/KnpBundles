@@ -23,6 +23,10 @@ gravatar.config: ~
 s2b.config: ~
 
 doctrine.orm:
+  mappings:
+    S2bBundle: ~
+
+doctrine.orm:
   default_entity_manager:   default
   cache_driver:             apc           # array, apc, memcache, xcache
   entity_managers:
