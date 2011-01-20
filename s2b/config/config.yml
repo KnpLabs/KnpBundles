@@ -23,16 +23,9 @@ gravatar.config: ~
 s2b.config: ~
 
 doctrine.orm:
-  mappings:
-    S2bBundle: ~
-
-doctrine.orm:
-  default_entity_manager:   default
-  cache_driver:             apc           # array, apc, memcache, xcache
-  entity_managers:
-    default:
-      connection:           default
-
+    auto_generate_proxy_classes: %kernel.debug%
+    mappings:
+      S2bBundle: ~
 # doctrine.dbal:
 #     dbname:   xxxxxxxx
 #     user:     root

@@ -8,16 +8,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * An Open Source Repo living on GitHub
  *
- * @Entity(repositoryClass="Application\S2bBundle\Entity\RepoRepository")
- * @Table(
+ * @orm:Entity(repositoryClass="Application\S2bBundle\Entity\RepoRepository")
+ * @orm:Table(
  *      name="repo",
  *      indexes={@Index(name="discriminator", columns={"discr"})},
  *      uniqueConstraints={@UniqueConstraint(name="full_name_unique",columns={"username", "name"})}
  * )
- * @InheritanceType("SINGLE_TABLE")
- * @DiscriminatorColumn(name="discr", type="string")
- * @DiscriminatorMap({"bundle" = "Bundle", "project" = "Project"})
- * @HasLifecycleCallbacks
+ * @orm:InheritanceType("SINGLE_TABLE")
+ * @orm:DiscriminatorColumn(name="discr", type="string")
+ * @orm:DiscriminatorMap({"bundle" = "Bundle", "project" = "Project"})
+ * @orm:HasLifecycleCallbacks
  */
 abstract class Repo
 {
@@ -39,9 +39,9 @@ abstract class Repo
     }
     
     /**
-     * @Column(name="id", type="integer")
-     * @Id
-     * @GeneratedValue(strategy="AUTO")
+     * @orm:Column(name="id", type="integer")
+     * @orm:Id
+     * @orm:GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
@@ -49,7 +49,7 @@ abstract class Repo
      * Repo name, e.g. "MarkdownBundle"
      * Like in GitHub, this name is not unique
      *
-     * @Column(type="string", length=127)
+     * @orm:Column(type="string", length=127)
      */
     protected $name = null;
 
@@ -57,36 +57,36 @@ abstract class Repo
      * The name of the user who owns this bundle
      * This value is redundant with the name of the referenced User, for performance reasons
      *
-     * @Column(type="string", length=127)
+     * @orm:Column(type="string", length=127)
      */
     protected $username = null;
 
     /**
      * User who owns the bundle
      *
-     * @ManyToOne(targetEntity="User", inversedBy="repos")
-     * @JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @orm:ManyToOne(targetEntity="User", inversedBy="repos")
+     * @orm:JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     protected $user = null;
 
     /**
      * Repo description
      *
-     * @Column(type="string", length=255)
+     * @orm:Column(type="string", length=255)
      */
     protected $description = null;
 
     /**
      * The website url, if any
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @orm:Column(type="string", length=255, nullable=true)
      */
     protected $homepage = null;
     
     /**
      * The bundle readme text extracted from source code
      *
-     * @Column(type="text", nullable=true)
+     * @orm:Column(type="text", nullable=true)
      */
     protected $readme = null;
 
@@ -94,48 +94,48 @@ abstract class Repo
      * Internal score of the Repo, based on several indicators
      * Defines the Repo position in lists and searches
      *
-     * @Column(type="integer")
+     * @orm:Column(type="integer")
      */
     protected $score = null;
 
     /**
      * Repo creation date (on this website)
      *
-     * @Column(type="datetime")
+     * @orm:Column(type="datetime")
      */
     protected $createdAt = null;
 
     /**
      * Repo update date (on this website)
      *
-     * @Column(type="datetime")
+     * @orm:Column(type="datetime")
      */
     protected $updatedAt = null;
 
     /**
      * Date of the last Git commit
      *
-     * @Column(type="date")
+     * @orm:Column(type="date")
      */
     protected $lastCommitAt = null;
 
     /**
      * The last commits on this bundle repo
      *
-     * @Column(type="text")
+     * @orm:Column(type="text")
      */
     protected $lastCommits = null;
 
     /**
      * Released tags are Git tags
-     * @Column(type="text")
+     * @orm:Column(type="text")
      */
     protected $tags = null;
 
     /**
      * Users who contributed to the Repo
-     * @ManyToMany(targetEntity="User", inversedBy="contributionRepos")
-     * @JoinTable(name="contribution",
+     * @orm:ManyToMany(targetEntity="User", inversedBy="contributionRepos")
+     * @orm:JoinTable(name="contribution",
      *      joinColumns={@JoinColumn(name="repo_id", referencedColumnName="id")},
      *      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="id")}
      *)
@@ -146,19 +146,19 @@ abstract class Repo
 
     /**
      * Number of GitHub followers
-     * @Column(type="integer")
+     * @orm:Column(type="integer")
      */
     protected $nbFollowers = null;
 
     /**
      * Number of GitHub forks
-     * @Column(type="integer")
+     * @orm:Column(type="integer")
      */
     protected $nbForks = null;
 
     /**
      * True if the Repo is a fork
-     * @Column(type="boolean")
+     * @orm:Column(type="boolean")
      */
     protected $isFork = false;
 

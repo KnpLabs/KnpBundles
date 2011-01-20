@@ -24,9 +24,9 @@ class User
     }
 
     /**
-     * @Column(name="id", type="integer")
-     * @Id
-     * @GeneratedValue(strategy="AUTO")
+     * @orm:Column(name="id", type="integer")
+     * @orm:Id
+     * @orm:GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
@@ -34,63 +34,63 @@ class User
      * User name, e.g. "ornicar"
      * Like in GitHub, this name is unique
      *
-     * @Column(type="string", length=127)
+     * @orm:Column(type="string", length=127)
      */
     protected $name = null;
 
     /**
      * User email
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @orm:Column(type="string", length=255, nullable=true)
      */
     protected $email = null;
 
     /**
      * Full name of the user, like "Thibault Duplessis"
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @orm:Column(type="string", length=255, nullable=true)
      */
     protected $fullName = null;
 
     /**
      * The user company name
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @orm:Column(type="string", length=255, nullable=true)
      */
     protected $company = null;
 
     /**
      * The user location
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @orm:Column(type="string", length=255, nullable=true)
      */
     protected $location = null;
 
     /**
      * The user blog url
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @orm:Column(type="string", length=255, nullable=true)
      */
     protected $blog = null;
 
     /**
      * User creation date (on this website)
      *
-     * @Column(type="datetime")
+     * @orm:Column(type="datetime")
      */
     protected $createdAt = null;
 
     /**
      * Repos the user owns
      *
-     * @OneToMany(targetEntity="Repo", mappedBy="user")
+     * @orm:OneToMany(targetEntity="Repo", mappedBy="user")
      */
     protected $repos = null;
 
     /**
      * Repos this User contributed to
      *
-     * @ManyToMany(targetEntity="Repo", mappedBy="contributors")
+     * @orm:ManyToMany(targetEntity="Repo", mappedBy="contributors")
      */
     protected $contributionRepos = null;
 
@@ -102,7 +102,7 @@ class User
     /**
      * Internal score of the User as the sum of his repos' scores
      *
-     * @Column(type="integer")
+     * @orm:Column(type="integer")
      */
     protected $score = null;
 
