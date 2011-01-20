@@ -15,10 +15,13 @@ class S2bKernel extends Kernel
 
     public function boot()
     {
+        //Wil be removed
+        /**
         Symfony\Component\OutputEscaper\Escaper::markClassesAsSafe(array(
             'Symfony\Component\Form\Form',
             'Symfony\Component\Form\Field'
         ));
+        **/
 
         #TODO remove me 
         foreach(array('ApplicationS2bBundleEntityUserProxy') as $class) {

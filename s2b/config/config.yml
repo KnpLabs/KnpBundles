@@ -14,7 +14,7 @@ app.config:
 
 markdown.parser: ~      # Enable the parser service
 
-time.helper: ~      # Enable the time helper
+#time.helper: ~      # Enable the time helper
 
 menu.templating: ~
 

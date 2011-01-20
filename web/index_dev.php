@@ -8,5 +8,8 @@ if (!in_array(@$_SERVER['REMOTE_ADDR'], array('127.0.0.1', '::1'))) {
 
 require_once __DIR__.'/../s2b/S2bKernel.php';
 
+use Symfony\Component\HttpFoundation\Request;
+
+// Run application
 $kernel = new S2bKernel('dev', true);
-$kernel->handle()->send();
+$kernel->handle(new Request())->send();
