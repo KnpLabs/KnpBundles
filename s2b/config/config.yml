@@ -23,11 +23,13 @@ gravatar.config: ~
 s2b.config: ~
 
 doctrine.orm:
-  default_entity_manager:   default
-  cache_driver:             apc           # array, apc, memcache, xcache
+  auto_generate_proxy_classes:      true
+  auto_generate_hydrator_classes:   true
+  default_entity_manager:           default
+  cache_driver:                     apc           # array, apc, memcache, xcache
   entity_managers:
     default:
-      connection:           default
+      connection:                   default
 
 # doctrine.dbal:
 #     dbname:   xxxxxxxx
