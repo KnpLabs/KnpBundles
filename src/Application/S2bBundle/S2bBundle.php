@@ -7,4 +7,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class S2bBundle extends BaseBundle
 {
+    public function getNamespace()
+    {
+        return __NAMESPACE__;
+    }
+
+    public function getPath()
+    {
+        return __DIR__;
+    }
 }
