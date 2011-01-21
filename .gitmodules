@@ -43,3 +43,6 @@
 [submodule "src/vendor/twig-extensions"]
 	path = src/vendor/twig-extensions
 	url = git://github.com/fabpot/Twig-extensions.git
+[submodule "src/vendor/DoctrineDataFixtures"]
+	path = src/vendor/DoctrineDataFixtures
+	url = git://github.com/doctrine/data-fixtures.git

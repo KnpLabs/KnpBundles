@@ -110,6 +110,8 @@ class User
     {
         $this->repos = new ArrayCollection();
         $this->contributionRepos = new ArrayCollection();
+        $this->createdAt = new \DateTime('NOW');
+        $this->updatedAt = new \DateTime('NOW');
     }
 
     /**
@@ -548,8 +550,8 @@ class User
     }
 
     /**
-     * getCreatedAt 
-     * 
+     * getCreatedAt
+     *
      * @return \DateTime
      */
     public function getCreatedAt()

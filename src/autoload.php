@@ -4,14 +4,15 @@ require_once __DIR__.'/vendor/Symfony/src/Symfony/Component/HttpFoundation/Unive
 
 $loader = new Symfony\Component\HttpFoundation\UniversalClassLoader();
 $loader->registerNamespaces(array(
-    'Symfony'                   => __DIR__.'/vendor/Symfony/src',
-    'Application'               => __DIR__,
-    'Bundle'                    => __DIR__,
-    'Doctrine\DBAL\Migrations'  => __DIR__.'/vendor/DoctrineMigrations/lib',
-    'Doctrine\Common'           => __DIR__.'/vendor/Doctrine/lib/vendor/doctrine-common/lib',
-    'Doctrine\DBAL'             => __DIR__.'/vendor/doctrine-dbal/lib',
-    'Doctrine'                  => __DIR__.'/vendor/Doctrine/lib',
-    'Zend'                      => __DIR__.'/vendor/Zend/library',
+    'Symfony'                       => __DIR__.'/vendor/Symfony/src',
+    'Application'                   => __DIR__,
+    'Bundle'                        => __DIR__,
+    'Doctrine\DBAL\Migrations'      => __DIR__.'/vendor/DoctrineMigrations/lib',
+    'Doctrine\Common'               => __DIR__.'/vendor/Doctrine/lib/vendor/doctrine-common/lib',
+    'Doctrine\Common\DataFixtures'  => __DIR__.'/vendor/DoctrineDataFixtures/lib',
+    'Doctrine\DBAL'                 => __DIR__.'/vendor/doctrine-dbal/lib',
+    'Doctrine'                      => __DIR__.'/vendor/Doctrine/lib',
+    'Zend'                          => __DIR__.'/vendor/Zend/library',
 ));
 
 $loader->registerPrefixes(array(

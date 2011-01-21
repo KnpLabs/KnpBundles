@@ -34,10 +34,10 @@ abstract class Repo
         if(preg_match('/Bundle$/', $fullName)) {
             return new Bundle($fullName);
         }
-        
+
         return new Project($fullName);
     }
-    
+
     /**
      * @orm:Column(name="id", type="integer")
      * @orm:Id
@@ -82,7 +82,7 @@ abstract class Repo
      * @orm:Column(type="string", length=255, nullable=true)
      */
     protected $homepage = null;
-    
+
     /**
      * The bundle readme text extracted from source code
      *
@@ -169,8 +169,10 @@ abstract class Repo
         }
 
         $this->contributors = new ArrayCollection();
+        $this->createdAt = new \DateTime('NOW');
+        $this->updatedAt = new \DateTime('NOW');
     }
-    
+
     /**
      * Get homepage
      * @return string
@@ -179,7 +181,7 @@ abstract class Repo
     {
       return $this->homepage;
     }
-    
+
     /**
      * Set homepage
      * @param  string
@@ -189,7 +191,7 @@ abstract class Repo
     {
       $this->homepage = $homepage;
     }
-    
+
     /**
      * Get isFork
      * @return bool
@@ -198,7 +200,7 @@ abstract class Repo
     {
       return $this->isFork;
     }
-    
+
     /**
      * Set isFork
      * @param  bool
@@ -305,7 +307,7 @@ abstract class Repo
 
     /**
      * Calculate the score of this repo based on several factors.
-     * The score is used as the default sort field in many places. 
+     * The score is used as the default sort field in many places.
      * #TODO discuss me, improve me
      */
     public function recalculateScore()
@@ -473,7 +475,7 @@ abstract class Repo
     }
 
     /**
-     * @param User $user 
+     * @param User $user
      */
     public function setUser(User $user = null)
     {
@@ -500,8 +502,8 @@ abstract class Repo
     }
 
     /**
-     * getCreatedAt 
-     * 
+     * getCreatedAt
+     *
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -520,15 +522,15 @@ abstract class Repo
     }
 
     /**
-     * getUpdatedAt 
-     * 
+     * getUpdatedAt
+     *
      * @return \DateTime
      */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
-    
+
     /**
      * Get contributors
      * @return ArrayCollection
@@ -547,7 +549,7 @@ abstract class Repo
     {
         return count($this->contributors);
     }
-    
+
     /**
      * Set contributors
      * @param  array
@@ -557,7 +559,7 @@ abstract class Repo
     {
       $this->contributors = new ArrayCollection($contributors);
     }
-    
+
     public function getContributorNames()
     {
         $names = array();
