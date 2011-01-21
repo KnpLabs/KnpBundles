@@ -38,7 +38,10 @@ for($it=1; $it<=$nbUsers; $it++) {
             )),
             'isFork' => false
         ));
+        ${'user'.$it.$repoClass}->recalculateScore();
     }
+
+    ${'user'.$it}->recalculateScore();
 }
 
 unset($date);
