@@ -1,0 +1,5 @@
+{% extends 'S2bBundle:Repo:show.twig.html' %}
+
+{% block h1 %}{{ repo.shortName }}<span>Bundle</span>{% endblock %}
+
+{% block git_command %}git submodule add {{ repo.gitUrl }} src/Bundle/{{ repo.name }}{% endblock %}
