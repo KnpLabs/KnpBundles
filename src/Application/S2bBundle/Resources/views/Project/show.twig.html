@@ -1,0 +1,5 @@
+{% extends 'S2bBundle:Repo:show.twig.html' %}
+
+{% block h1 %}{{ repo.name }}{% endblock %}
+
+{% block git_command %}git clone {{ repo.gitUrl }}{% endblock %}
