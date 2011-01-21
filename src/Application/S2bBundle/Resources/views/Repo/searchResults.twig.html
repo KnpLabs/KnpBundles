@@ -1,0 +1,21 @@
+{% extends 'S2bBundle:Repo:search.twig.html' %}
+
+{% block search_query %}{{ query }}{% endblock %}
+
+{% block title %}Search {{ query }}{% endblock %}
+
+{% block slogan %}{{ repos|length }} Repositor{{ repos|length > 1 ? 'ies' : 'y' }} found for <strong>{{ query }}</strong>{% endblock %}
+
+{% block description %}{{ repos|length }} Repositories found for {{ query }}{% endblock %}
+
+{% block content %}
+{% if bundles|length > 0 %}
+<h2 class="section-title">{{ bundles|length }} Bundle{{ bundles|length > 1 ? 's' : '' }}</h2>
+{% include 'S2bBundle:Bundle:bigList.twig.html' with {'repos': bundles} %}
+{% endif %}
+
+{% if project|length > 0 %}
+<h2 class="section-title">{{ project|length }} Project{{ project|length > 1 ? 's' : '' }}</h2>
+{% include 'S2bBundle:Project:bigList.twig.html' with {'repos': projects} %}
+{% endif %}
+{% endblock %}

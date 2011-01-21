@@ -1,0 +1,91 @@
+{% 'S2bBundle::layout.twig.html' %}
+
+{% block title %}{{ repo.name }} by {{ repo.username }}{% endblock %}
+
+{% block description %}{{ repo.description }}{% endblock %}
+
+{% block slogan %}{{ repo.description }}{% endblock %}
+
+{% block repo_name %}{{ repo.name }}{% endblock %}
+
+{% block repo_url %}{{ repo.gitHubUrl }}{% endblock %}
+
+{% block sidemenu %}
+<h3>Last commits</h3>
+<div class="sidemenu">
+    <ul>
+        {% for commit in repo.getLastCommits(12) %}
+        <li>
+            <a href="{{ commit.url }}"><?php echo strtok($commit['message'], "\n\r"); ?></a><br />
+            <span>{{ commit.author.name }} | {{ ago(commit.committed_date ) }}</span>
+        </li>
+        {% endforeach %}
+    </ul>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="post">
+
+    <div class="right">
+        <div class="post-install">
+            <pre>{% block git_command %}{% endblock %}</pre>
+        </div>
+
+        <div class="markdown">
+            {{ repo.readme|markdown|raw }}
+        </div>
+
+    </div>
+
+    <div class="left">
+
+        <div class="post-meta">
+            <h4>Infos</h4>
+            <ul>
+                <li class="user"><a href="{{ path('user_show', {'name': repo.username}) }}">{{ repo.username }}</a></li>
+                <li class="time">{{ ago(repo.lastCommitAt) }}</li>
+                <li class="watch">{{ repo.nbFollowers }} followers</li>
+                <li class="fork">{{ repo.nbForks }} forks</li>
+            </ul>
+        </div>
+
+        <div class="post-meta">
+            <h4>Links</h4>
+            <ul>
+                <li class="github"><a href="{{ repo.githubUrl }}">View source</a></li>
+                <li class="download"><a href="{{ repo.githubUrl }}/tarball/master">Download</a></li>
+                {{ if repo.homepage }}
+                <li class="homepage"><a href="{{ repo.homepage }}">Homepage</a></li>
+                {{ endif }}
+            </ul>
+        </div>
+
+        <?php if(count($repo->getContributors())): ?>
+        <div class="post-meta">
+            <h4>Contributors</h4>
+            <ul>
+                {% foreach contributor as repo.contributors %}
+                <li class="user"><a href="{{ path('user_show', {'name': contributor.name}) }}">{{ contributor.name }}</a></li>
+                {% endforeach %}
+            </ul>
+        </div>
+        <?php endif; ?>
+
+        <div class="post-meta">
+            <h4>Versions</h4>
+            {% if repo.tags|length > 0 %}
+            <ul>
+                {% for tag in repo.tags %}
+                <li class="version"><a href="{{ repo.githubUrl }}/tree/{{ tag }}">{{ tag }}</a></li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            No version released.
+            {% endif %}
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

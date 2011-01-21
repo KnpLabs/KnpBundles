@@ -1,0 +1,7 @@
+<ol>
+{% for repo in repos %}
+    <li>
+        <a title="{{ repo.description }}" href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}">{{ repo.name }}</a>
+    </li>
+<?php endforeach; ?>
+</ol>
