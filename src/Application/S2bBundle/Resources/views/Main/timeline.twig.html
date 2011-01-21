@@ -3,11 +3,9 @@
     <ol class="timeline">
     {% for commit in commits %}
         <li>
-        <a href="{{ path('repo_show', { 'username': commit.repo_username, 'name': commit.repo_name }) }}">
-                {{ commit.repo_name }}
-            </a>
+            <a href="{{ path('repo_show', { 'username': commit.repo_username, 'name': commit.repo_name }) }}">{{ commit.repo_name }}</a>
             {{ commit.message }}<br />
-            <span>{{ commit.author }} | <?php echo $view['time']->ago(date_create($commit['committed_date'])) ?></span>
+            <span>{{ commit.author }} | {{ ago(commit.committed_date) }}</span>
         </li>
     {% endfor %}
     </ol>

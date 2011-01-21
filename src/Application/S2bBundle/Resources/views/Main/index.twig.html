@@ -1,21 +1,21 @@
 {% extends "S2bBundle::layout.twig.html" %}
 
 {% block title %}Home{% endblock %}
-{% block description %}Comprehensive list of Symfony2 Bundles ordered by relevance and integrated with GitHub{% endblock %}
-{% block slogan %}Comprehensive list of Symfony2 Bundles ordered by relevance and integrated with GitHub{% endblock %}
 
-{% block content %}
+{% block description %}Comprehensive list of Symfony2 Bundles ordered by relevance and integrated with GitHub{% endblock %}
+
+{% block slogan %}Comprehensive list of Symfony2 Bundles ordered by relevance and integrated with GitHub{% endblock %}
 
 {% block sidemenu %}{% render "S2bBundle:Main:timeline" %}{% endblock %}
 
-    
+{% block content %}
 <h2>Welcome to the community driven Symfony2 Bundles website!</h2>
 <div class="home_text">
   <p>
   As for now, we index
-  <a href="{{ path('bundle_list') }}"><strong><?php echo $nbBundles ?></strong> Bundles</a>,
-  <a href="{{ path('project_list') }}"><strong><?php echo $nbProjects ?></strong> Projects</a> &amp
-  <a href="{{ path('user_list') }}"><strong><?php echo $nbUsers ?></strong> Developers</a>.
+  <a href="{{ path('bundle_list') }}"><strong><?php echo $nbBundles ?></strong>Bundles</a>,
+  <a href="{{ path('project_list') }}"><strong><?php echo $nbProjects ?></strong>Projects</a> &amp
+  <a href="{{ path('user_list') }}"><strong><?php echo $nbUsers ?></strong>Developers</a>.
   </p>
   <p>
   Symfony2Bundles is a spontaneous community initiative! Its purpose is to help us to find the best Bundles.
@@ -36,5 +36,4 @@
 <hr />
 Are you a Bundle developer? You should read about <a title="On symfony-reloaded.org" href="http://symfony-reloaded.org/guides/Bundles/Best-Practices">Bundle Best Practices</a> and <a title="On symfony-reloaded.org" href="http://symfony-reloaded.org/guides/Bundles/Configuration">Bundle Configuration</a>.
 </div>
-
 {% endblock %}

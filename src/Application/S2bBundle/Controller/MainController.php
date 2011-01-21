@@ -48,7 +48,7 @@ class MainController extends Controller
     {
         $text = file_get_contents(__DIR__.'/../Resources/doc/02-Api.markdown');
 
-        return $this->render('S2bBundle:Main:api', array('text' => $text));
+        return $this->render('S2bBundle:Main:api.twig.html', array('text' => $text));
     }
 
     public function notFoundAction()

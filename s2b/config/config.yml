@@ -17,9 +17,10 @@ twig.config:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
 
-markdown.parser: ~      # Enable the parser service
+markdown.parser:    ~ # Enable the parser service
+markdown.twig:      ~
 
-#time.helper: ~      # Enable the time helper
+time.config: ~      # Enable the time helper
 
 s2b.config: ~
 menu.twig: ~
