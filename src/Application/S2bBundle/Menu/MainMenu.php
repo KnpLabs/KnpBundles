@@ -2,13 +2,18 @@
 
 namespace Application\S2bBundle\Menu;
 use Bundle\MenuBundle\Menu;
-use Symfony\Component\Routing\Router;
+
+use Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\Routing\Router;
 
 class MainMenu extends Menu
 {
-    public function __construct(Router $router)
+    public function __construct(Request $request, Router $router)
     {
         parent::__construct();
+
+        $this->setCurrentUri($request->getRequestUri());
+
         $this->addChild('Home', $router->generate('homepage', array()));
         $this->addChild('Bundles', $router->generate('bundle_list', array()));
         $this->addChild('Projects', $router->generate('project_list', array()));

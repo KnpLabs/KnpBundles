@@ -27,7 +27,7 @@
                 </p>
 
                 <div id="nav">
-                    <?php echo $view['main_menu']->render() ?>
+                    {{ menu('main') }}
                 </div>
 
                 <form id="quick-search" method="get" action="{{ path('search') }} ?>">

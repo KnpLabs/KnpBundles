@@ -11,13 +11,9 @@
     <services>
 
         <service id="menu.main" class="%menu.main.class%" shared="true">
+            <tag name="menu" alias="main" />
+            <argument type="service" id="request" />
             <argument type="service" id="router" />
-        </service>
-
-        <service id="templating.helper.main_menu" class="%templating.helper.menu.class%">
-            <tag name="templating.helper" alias="main_menu" />
-            <argument type="service" id="menu.main" />
-            <argument>main_menu</argument>
         </service>
 
     </services>

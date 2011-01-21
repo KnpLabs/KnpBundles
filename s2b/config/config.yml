@@ -21,12 +21,12 @@ markdown.parser: ~      # Enable the parser service
 
 #time.helper: ~      # Enable the time helper
 
-menu.templating: ~
+s2b.config: ~
+menu.twig: ~
 
 #Twig need to be updated
 #gravatar.config: ~
 
-s2b.config: ~
 
 doctrine.orm:
     auto_generate_proxy_classes: %kernel.debug%
