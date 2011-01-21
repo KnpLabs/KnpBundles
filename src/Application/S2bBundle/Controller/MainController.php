@@ -61,6 +61,6 @@ class MainController extends Controller
 
     protected function getRepository($class)
     {
-        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entity\\'.$class);
+        return $this->get('doctrine.orm.entity_manager')->getRepository('Application\S2bBundle\Entity\\'.$class);
     }
 }
