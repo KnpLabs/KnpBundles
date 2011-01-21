@@ -37,3 +37,9 @@
 [submodule "src/vendor/php-git-repo"]
 	path = src/vendor/php-git-repo
 	url = git://github.com/ornicar/php-git-repo.git
+[submodule "src/vendor/twig"]
+	path = src/vendor/twig
+	url = git://github.com/fabpot/Twig.git
+[submodule "src/vendor/twig-extensions"]
+	path = src/vendor/twig-extensions
+	url = git://github.com/fabpot/Twig-extensions.git
