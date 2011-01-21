@@ -1,0 +1,24 @@
+{% extends "S2bBundle::layout.twig.html" %}
+
+
+{% block h1 %}<span>.count($repos).</span> Bundles{% endblock %}
+{% block title %}All '.count($repos).' Bundles{% endblock %}
+{% block description %}All Open Source Symfony2 Bundles sorted by {{ sort }}{% endblock %}
+{% block slogan %}All Open Source Bundles sorted by {{ sort }}{% endblock %}
+
+
+{% block sidemenu %}
+
+<?php $view->output('S2bBundle:Bundle:bigList', array('repos' => $repos)) ?>
+<h3>Sort by</h3>
+<div class="sidemenu uppercase">
+    <ul>
+    <?php foreach($fields as $field => $text): ?>
+        <li<?php $field == $sort && print ' class="current"' ?>>
+            <a href="<?php echo $view['router']->generate('bundle_list', array('sort' => $field)) ?>"><?php echo $text ?></a>
+        </li>
+    <?php endforeach ?>
+    </ul>
+</div>
+<?php $view->output('S2bBundle:Repo:add') ?>
+{% endblock %}

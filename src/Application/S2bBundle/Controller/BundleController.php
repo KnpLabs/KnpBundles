@@ -90,12 +90,12 @@ class BundleController extends Controller
 
     protected function getBundleRepository()
     {
-        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entity\Bundle');
+        return $this->get('doctrine.orm.entity_manager')->getRepository('Application\S2bBundle\Entity\Bundle');
     }
 
     protected function getUserRepository()
     {
-        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entity\User');
+        return $this->get('doctrine.orm.entity_manager')->getRepository('Application\S2bBundle\Entity\User');
     }
 
 }
