@@ -7,8 +7,9 @@
 {% block content %}
 
 <?php $view['main_menu']['Home']->setIsCurrent(true) ?>
-<?php $view['slots']->set('sidemenu', $view['actions']->render('S2bBundle:Main:timeline')) ?>
+{% block sidemenu %}{% render "S2bBundle:Main:timeline" %}{% endblock %}
 
+    
 <h2>Welcome to the community driven Symfony2 Bundles website!</h2>
 <div class="home_text">
   <p>

@@ -38,11 +38,10 @@ class MainController extends Controller
     #TODO cache me!
     public function timelineAction()
     {
-        $commits = $this->container->getDoctrine_Orm_DefaultEntityManagerService()
-            ->getRepository('Application\S2bBundle\Entity\Repo')
+        $commits = $this->getRepository('Repo')
             ->getLastCommits(12);
 
-        return $this->render('S2bBundle:Main:timeline', array('commits' => $commits));
+        return $this->render('S2bBundle:Main:timeline.twig.html', array('commits' => $commits));
     }
 
     public function apiAction()
