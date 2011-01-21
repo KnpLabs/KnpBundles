@@ -6,7 +6,6 @@
 
 {% block content %}
 
-<?php $view['main_menu']['Home']->setIsCurrent(true) ?>
 {% block sidemenu %}{% render "S2bBundle:Main:timeline" %}{% endblock %}
 
     
@@ -31,7 +30,7 @@
   Symfony2Bundles is Open Source! <a href="http://github.com/knplabs/symfony2bundles">Get the code</a> and contribute!
   This website is at early stages of development, and many things will change, especially the ranking algorithm:
   <pre>
-    <?php echo $view['actions']->output('S2bBundle:Main:getRankCode', array('standalone' => true, 'ignore_errors' => true)); ?>
+    {% render "S2bBundle:Main:getRankCode" with { 'standalone': 'true', 'ignore_errors': 'true' } %}
   </pre>
   </p>
 <hr />
