@@ -1,44 +1,39 @@
-
-<?php $view['assets']->setVersion('6') ?>
-<?php $view['stylesheets']->add('bundles/s2b/css/reset.css') ?>
-<?php $view['stylesheets']->add('bundles/s2b/vendor/tipsy/stylesheets/tipsy.css') ?>
-<?php $view['stylesheets']->add('bundles/s2b/css/style.css') ?>
-<?php $view['javascripts']->add('bundles/s2b/vendor/jquery.min.js') ?>
-<?php $view['javascripts']->add('bundles/s2b/vendor/tipsy/javascripts/jquery.tipsy.min.js') ?>
-<?php $view['javascripts']->add('bundles/s2b/js/ctrl.js') ?>
 <!DOCTYPE html>
 <html>
     <head>
         <script type="text/javascript">var _sf_startpt=(new Date()).getTime()</script>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title><?php $view['slots']->output('title') ?> | Symfony2 Bundles</title>
-        <meta content="<?php $view['slots']->output('description') ?>" name="description">
+        <title>{% block title %}{% endblock %} | Symfony2 Bundles</title>
+        <meta content="{% block description %}{% endblock %}" name="description">
         <link rel="shortcut icon" href="/favicon.png" type="image/png" />
-        <link href="<?php echo $view['router']->generate('latest', array('_format' => 'atom')) ?>" rel="alternate" title="ATOM" type="application/atom+xml" />
-        <?php echo $view['stylesheets'] ?>
+        <link href="{{ path('latest', { '_format': 'atom' }) }}" rel="alternate" title="ATOM" type="application/atom+xml" />
+
+        <link href="{{ asset('bundles/s2b/css/reset.css') }}" rel="stylesheet" type="text/css" media="screen" />
+        <link href="{{ asset('bundles/s2b/vendor/tipsy/stylesheets/tipsy.css') }}" rel="stylesheet" type="text/css" media="screen" />
+        <link href="{{ asset('bundles/s2b/css/style.css') }}" rel="stylesheet" type="text/css" media="screen" />
     </head>
     <body>
         <!--header -->
         <div id="header-wrap">
             <div id="header">
-                <a href="<?php echo $view['router']->generate('homepage') ?>" id="logo">
-                    <?php $view['slots']->output('logo', '<img alt="Symfony2Bundles" src="'.$view['assets']->getUrl('bundles/s2b/images/bundle76.png').'" width="76" height="76" />') ?>
+                <a href="{{ path('homepage') }}" id="logo">
+                    {% block logo %}<img alt="Symfony2Bundles" src="{{ asset('bundles/s2b/images/bundle76.png') }}" width="76" height="76" />{% endblock %}
                 </a>
                 <h1>
-                    <?php $view['slots']->output('h1', 'Symfony<span>2</span> Bundles') ?>
+                    {% block h1 %}Symfony<span>2</span> Bundles{% endblock %}
                 </h1>
                 <p class="slogan">
-                <?php $view['slots']->output('slogan', 'Find the Bundles you need for your Symfony project!') ?>
+                {% block slogan %}Find the Bundles you need for your Symfony project!{% endblock %}
                 </p>
 
                 <div id="nav">
                     <?php echo $view['main_menu']->render() ?>
                 </div>
 
-                <form id="quick-search" method="get" action="<?php echo $view['router']->generate('search') ?>">
+                <form id="quick-search" method="get" action="{{ path('search') }} ?>">
                     <fieldset class="search">
                         <label for="qsearch">Search:</label>
-                        <input class="tbox hint" id="qsearch" type="text" name="q" value="<?php $view['slots']->output('search_query', 'Search...') ?>" />
+                        <input class="tbox hint" id="qsearch" type="text" name="q" value="{% block search_query %}Search...{% endblock %}" />
                         <button class="btn" title="Submit Search">Search</button>
                     </fieldset>
                 </form>
@@ -103,12 +98,12 @@
             <p class="bottom-left">
                 Powered by <a href="http://www.symfony-reloaded.org/">Symfony2</a> &amp <a href="http://www.doctrine-project.org/">Doctrine2</a> |
                 Template by <a href="http://www.styleshout.com/">styleshout</a> |
-                Supported by <a class="knplabs" href="http://www.knplabs.com/" title="French web agency who loves Symfony2"><img alt="knpLabs logo" src="<?php echo $view['assets']->getUrl('bundles/s2b/images/knplabs20.png') ?>" /></a>
+                Supported by <a class="knplabs" href="http://www.knplabs.com/" title="French web agency who loves Symfony2"><img alt="knpLabs logo" src="{{ asset('bundles/s2b/images/knplabs20.png') }}" /></a>
             </p>
 
             <p class="bottom-right">
-                <a href="<?php echo $view['router']->generate('homepage') ?>">Home</a> |
-                <a href="<?php echo $view['router']->generate('latest', array('_format' => 'atom')) ?>">Syndication</a> |
+                <a href="{{ path('homepage') }}">Home</a> |
+                <a href="{{ path('latest', { '_format': 'atom' }) }}">Syndication</a> |
                 <a href="http://github.com/knplabs/symfony2bundles">Code</a> |
                 <a href="http://symfony2bundles.uservoice.com/">Feedback</a> |
                 <strong><a href="#header">Back to Top</a></strong>
@@ -116,7 +111,9 @@
 
             <!-- /footer-bottom-->
         </div>
-        <a class="fork_me" title="Fork <?php $view['slots']->output('repo_name', 'symfony2bundles') ?> on GitHub" href="<?php $view['slots']->output('repo_url', 'http://github.com/knplabs/symfony2bundles') ?>"><img src="http://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
-        <?php echo $view['javascripts'] ?>
+        <a class="fork_me" title="Fork {% block repo_name %}symfony2bundles{% endblock %} on GitHub" href="{% block repo_url %}http://github.com/knplabs/symfony2bundles{% endblock %}"><img src="http://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png" alt="Fork me on GitHub" /></a>
+        <script type="text/javascript" src="{{ asset('bundles/s2b/vendor/jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/s2b/vendor/tipsy/javascripts/jquery.tipsy.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('bundles/s2b/js/ctrl.js') }}"></script>
     </body>
 </html>
