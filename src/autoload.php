@@ -13,6 +13,11 @@ $loader->registerNamespaces(array(
     'Doctrine'                  => __DIR__.'/vendor/Doctrine/lib',
     'Zend'                      => __DIR__.'/vendor/Zend/library',
 ));
+
+$loader->registerPrefixes(array(
+    'Twig_Extensions_' => __DIR__.'/vendor/twig-extensions/lib',
+    'Twig_'            => __DIR__.'/vendor//twig/lib',
+));
 $loader->register();
 
 // Require php-github-api

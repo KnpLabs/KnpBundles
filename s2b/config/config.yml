@@ -4,13 +4,18 @@ app.config:
     csrf_secret:   betterPuttingThisInTheLocalConfigFile
     router:        { resource: "%kernel.root_dir%/config/routing.yml" }
     validation:    { enabled: true, annotations: true }
-    templating:
-        escaping:       htmlspecialchars
+    templating:    {} #assets_version: SomeVersionScheme
     user:
         default_locale: en
         name:     SYMFONY
         type:     Native
         lifetime: 3600
+
+
+# Twig Configuration
+twig.config:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
 
 markdown.parser: ~      # Enable the parser service
 
@@ -18,7 +23,8 @@ markdown.parser: ~      # Enable the parser service
 
 menu.templating: ~
 
-gravatar.config: ~
+#Twig need to be updated
+#gravatar.config: ~
 
 s2b.config: ~
 

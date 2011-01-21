@@ -13,28 +13,11 @@ class S2bKernel extends Kernel
         return __DIR__;
     }
 
-    public function boot()
-    {
-        //Wil be removed
-        /**
-        Symfony\Component\OutputEscaper\Escaper::markClassesAsSafe(array(
-            'Symfony\Component\Form\Form',
-            'Symfony\Component\Form\Field'
-        ));
-        **/
-
-        #TODO remove me 
-        foreach(array('ApplicationS2bBundleEntityUserProxy') as $class) {
-            @include_once(__DIR__.'/cache/'.$this->getEnvironment().'/doctrine/orm/Proxies/'.$class.'.php');
-        }
-        
-        return parent::boot();
-    }
-
     public function registerBundles()
     {
         $bundles = array(
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            new Symfony\Bundle\TwigBundle\TwigBundle(),
 
             // enable third-party bundles
             new Symfony\Bundle\ZendBundle\ZendBundle(),
@@ -45,7 +28,8 @@ class S2bKernel extends Kernel
             new Bundle\MarkdownBundle\MarkdownBundle(),
             new Bundle\TimeBundle\TimeBundle(),
             new Bundle\MenuBundle\MenuBundle(),
-            new Bundle\GravatarBundle\GravatarBundle(),
+            //Twig need to be updated
+            //new Bundle\GravatarBundle\GravatarBundle(),
             new Bundle\TestSessionBundle\TestSessionBundle(),
 
             // register your applications here

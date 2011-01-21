@@ -13,7 +13,7 @@ class MainController extends Controller
         $nbProjects = $this->getRepository('Project')->count();
         $nbUsers = $this->getRepository('User')->count();
 
-        return $this->render('S2bBundle:Main:index', compact('nbBundles', 'nbProjects', 'nbUsers'));
+        return $this->render('S2bBundle:Main:index.twig.html', compact('nbBundles', 'nbProjects', 'nbUsers'));
     }
 
     public function getRankCodeAction()

@@ -1,3 +1,4 @@
+
 <?php $view['assets']->setVersion('6') ?>
 <?php $view['stylesheets']->add('bundles/s2b/css/reset.css') ?>
 <?php $view['stylesheets']->add('bundles/s2b/vendor/tipsy/stylesheets/tipsy.css') ?>
@@ -52,12 +53,12 @@
 
                 <!-- main -->
                 <div id="main">
-                    <?php $view['slots']->output('_content') ?>
+                    {% block content %}{% endblock %}
                 </div>
 
                 <!-- sidebar -->
                 <div id="sidebar">
-                    <?php $view['slots']->output('sidemenu') ?>
+                    {% block sidemenu %}{% endblock %}
                 </div>
             </div>
         </div>
