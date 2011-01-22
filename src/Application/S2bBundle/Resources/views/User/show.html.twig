@@ -17,7 +17,7 @@
     {% for commit in user.getLastCommits(12) %}
         <li>
             <a href="{{ path('repo_show', {'username': commit.repo_username, 'name': commit.repo_name}) }}">{{ commit.repo_name }}</a>
-            <?php echo strtok($commit['message'], "\n\r"); ?><br />
+            {{ commit.message_first_line }}<br />
             <span>{{ ago(commit.committed_date) }}</span>
         </li>
     {% endfor %}

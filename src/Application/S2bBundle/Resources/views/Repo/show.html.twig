@@ -16,7 +16,7 @@
     <ul>
         {% for commit in repo.getLastCommits(12) %}
         <li>
-            <a href="{{ commit.url }}"><?php echo strtok($commit['message'], "\n\r"); ?></a><br />
+            <a href="{{ commit.url }}">{{ commit.message_first_line }}</a><br />
             <span>{{ commit.author }} | {{ ago(commit.committed_date) }}</span>
         </li>
         {% endfor %}
@@ -61,7 +61,6 @@
             </ul>
         </div>
 
-        <?php if(count($repo->getContributors())): ?>
         {% if repo.contributors|length > 0 %}
         <div class="post-meta">
             <h4>Contributors</h4>

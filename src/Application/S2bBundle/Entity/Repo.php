@@ -246,7 +246,12 @@ abstract class Repo
      */
     public function getLastCommits($nb = 10)
     {
-        return array_slice(unserialize($this->lastCommits), 0, $nb);
+        $lastCommits = array_slice(unserialize($this->lastCommits), 0, $nb);
+        foreach ($lastCommits as $i => $commit) {
+            $lastCommits[$i]['message_first_line'] = strtok($commit['message'], "\n\r");
+        }
+
+        return $lastCommits;
     }
 
     /**
