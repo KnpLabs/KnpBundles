@@ -5,11 +5,10 @@ app.config:
     router:        { resource: "%kernel.root_dir%/config/routing.yml" }
     validation:    { enabled: true, annotations: true }
     templating:    {} #assets_version: SomeVersionScheme
-    user:
+    session:
         default_locale: en
-        name:     SYMFONY
-        type:     Native
-        lifetime: 3600
+        lifetime:       3600
+        auto_start:     true
 
 
 # Twig Configuration
@@ -17,30 +16,33 @@ twig.config:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
 
+# Markdown Configuration
 markdown.parser:    ~ # Enable the parser service
 markdown.twig:      ~
 
+# Time Configuration
 time.config: ~      # Enable the time helper
 
-s2b.config: ~
+# Menu Configuration
 menu.twig: ~
 
-#Twig need to be updated
+# Symfony2Bundles Configuration
+s2b.config: ~
+
+# Gravatar Configuration
 gravatar.config: ~
 
-
+# Doctrine Configuration
 doctrine.orm:
     auto_generate_proxy_classes: %kernel.debug%
     mappings:
       S2bBundle: ~
+
+# 
+# PLEASE CONFIGURE IT IN YOUR LOCAL CONFIG FILE
+#
 # doctrine.dbal:
 #     dbname:   xxxxxxxx
 #     user:     root
-#     password: ~
-# 
-# doctrine.orm: ~
-# 
-# swift.mailer:
-#     transport: gmail
 #     username:  xxxxxxxx
 #     password:  xxxxxxxx
