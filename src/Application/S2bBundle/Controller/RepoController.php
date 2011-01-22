@@ -34,7 +34,9 @@ class RepoController extends Controller
             }
         }
 
-        return $this->render('S2bBundle:Repo:searchResults.html.twig', array(
+        $format = $this->get('request')->get('_format');
+
+        return $this->render('S2bBundle:Repo:searchResults.' . $format . '.twig', array(
             'query'     => $query,
             'repos'     => $repos,
             'bundles'   => $bundles,
@@ -49,7 +51,9 @@ class RepoController extends Controller
             throw new NotFoundHttpException(sprintf('The repo "%s/%s" does not exist', $username, $name));
         }
 
-        return $this->render('S2bBundle:'.$repo->getClass().':show.html.twig', array(
+        $format = $this->get('request')->get('_format');
+
+        return $this->render('S2bBundle:'.$repo->getClass().':show.' . $format . '.twig', array(
             'repo'      => $repo,
             'callback'  => $this->get('request')->get('callback')
         ));
@@ -70,7 +74,9 @@ class RepoController extends Controller
 
         $repos = $this->getRepository($class)->findAllSortedBy($sort);
 
-        return $this->render('S2bBundle:'.$class.':list.html.twig', array(
+        $format = $this->get('request')->get('_format');
+
+        return $this->render('S2bBundle:'.$class.':list.' . $format . '.twig', array(
             'repos'     => $repos,
             'sort'      => $sort,
             'fields'    => $fields,
@@ -82,7 +88,12 @@ class RepoController extends Controller
     {
         $repos = $this->getRepository('Repo')->findAllSortedBy('createdAt', 50);
 
-        return $this->render('S2bBundle:Repo:listLatest.html.twig', array('repos' => $repos));
+        $format = $this->get('request')->get('_format');
+
+        return $this->render('S2bBundle:Repo:listLatest.' . $format . '.twig', array(
+            'repos'     => $repos,
+            'callback'  => $this->get('request')->get('callback')
+        ));
     }
 
     public function addAction()

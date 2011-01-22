@@ -583,16 +583,16 @@ class User
     public function toSmallArray()
     {
         return array(
-            'name' => $this->getName(),
-            'email' => $this->getEmail(),
-            'fullName' => $this->getFullName(),
-            'company' => $this->getCompany(),
-            'location' => $this->getLocation(),
-            'blog' => $this->getBlog(),
-            'bundles' => $this->getBundleNames(),
-            'projects' => $this->getProjectNames(),
-            'lastCommitAt' => $this->getLastCommitAt()->getTimestamp(),
-            'score' => $this->getScore(),
+            'name'          => $this->getName(),
+            'email'         => $this->getEmail(),
+            'fullName'      => $this->getFullName(),
+            'company'       => $this->getCompany(),
+            'location'      => $this->getLocation(),
+            'blog'          => $this->getBlog(),
+            'bundles'       => $this->getBundleNames(),
+            'projects'      => $this->getProjectNames(),
+            'lastCommitAt'  => $this->getLastCommitAt() ? $this->getLastCommitAt()->getTimestamp() : null,
+            'score'         => $this->getScore(),
         );
     }
 

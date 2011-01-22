@@ -30,7 +30,7 @@
                     {{ menu('main') }}
                 </div>
 
-                <form id="quick-search" method="get" action="{{ path('search') }} ?>">
+                <form id="quick-search" method="get" action="{{ path('search') }}">
                     <fieldset class="search">
                         <label for="qsearch">Search:</label>
                         <input class="tbox hint" id="qsearch" type="text" name="q" value="{% block search_query %}Search...{% endblock %}" />

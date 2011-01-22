@@ -13,14 +13,24 @@ class UserController extends Controller
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        return $this->render('S2bBundle:User:show.html.twig', array('user' => $user, 'callback' => $this->get('request')->get('callback')));
+        $format = $this->get('request')->get('_format');
+
+        return $this->render('S2bBundle:User:show.' . $format . '.twig', array(
+            'user'      => $user,
+            'callback'  => $this->get('request')->get('callback')
+        ));
     }
 
     public function listAction()
     {
         $users = $this->getUserRepository()->findAllWithProjectsSortedBy('score');
 
-        return $this->render('S2bBundle:User:list.html.twig', array('users' => $users, 'callback' => $this->get('request')->get('callback')));
+        $format = $this->get('request')->get('_format');
+
+        return $this->render('S2bBundle:User:list.' . $format . '.twig', array(
+            'users'     => $users,
+            'callback'  => $this->get('request')->get('callback')
+        ));
     }
 
     public function bundlesAction($name)
@@ -29,7 +39,12 @@ class UserController extends Controller
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        return $this->render('S2bBundle:Bundle:list.html.twig', array('repos' => $user->getBundles(), 'callback' => $this->get('request')->get('callback')));
+        $format = $this->get('request')->get('_format');
+
+        return $this->render('S2bBundle:Bundle:list.' . $format . '.twig', array(
+            'repos'     => $user->getBundles(),
+            'callback'  => $this->get('request')->get('callback')
+        ));
     }
 
     public function projectsAction($name)
@@ -38,7 +53,12 @@ class UserController extends Controller
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        return $this->render('S2bBundle:Project:list.html.twig', array('repos' => $user->getProjects(), 'callback' => $this->get('request')->get('callback')));
+        $format = $this->get('request')->get('_format');
+
+        return $this->render('S2bBundle:Project:list.' . $format . '.twig', array(
+            'repos'     => $user->getProjects(),
+            'callback'  => $this->get('request')->get('callback')
+        ));
     }
 
     protected function getBundleRepository()

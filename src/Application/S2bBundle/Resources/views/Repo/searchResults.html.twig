@@ -14,8 +14,8 @@
 {% include 'S2bBundle:Bundle:bigList.html.twig' with {'repos': bundles} %}
 {% endif %}
 
-{% if project|length > 0 %}
-<h2 class="section-title">{{ project|length }} Project{{ project|length > 1 ? 's' : '' }}</h2>
+{% if projects|length > 0 %}
+<h2 class="section-title">{{ projects|length }} Project{{ projects|length > 1 ? 's' : '' }}</h2>
 {% include 'S2bBundle:Project:bigList.html.twig' with {'repos': projects} %}
 {% endif %}
 {% endblock %}

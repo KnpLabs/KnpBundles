@@ -1,10 +1,10 @@
-<?php print '<?xml version="1.0" encoding="UTF-8"?>'."\n" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xml:lang="en-US">
     <id>Symfony2 Bundles &amp; Projects</id>
     <link type="text/html" rel="alternate" href="{{ url('bundle_list', {'sort': 'createdAt'}) }}"/>
     <link type="application/atom+xml" rel="self" href="{{ url('latest', {'_format': 'atom'}) }}"/>
     <title>Symfony2 Bundles &amp; Projects</title>
-    <updated>{{ date|date('c') }}</updated>
+    <updated>{{ 'now'|date('c') }}</updated>
     {% for repo in repos %}
     <entry>
         <id>{{ repo.fullName }}</id>
