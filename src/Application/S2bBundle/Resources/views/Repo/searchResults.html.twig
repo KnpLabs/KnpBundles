@@ -1,4 +1,4 @@
-{% extends 'S2bBundle:Repo:search.twig.html' %}
+{% extends 'S2bBundle:Repo:search.html.twig' %}
 
 {% block search_query %}{{ query }}{% endblock %}
 
@@ -11,11 +11,11 @@
 {% block content %}
 {% if bundles|length > 0 %}
 <h2 class="section-title">{{ bundles|length }} Bundle{{ bundles|length > 1 ? 's' : '' }}</h2>
-{% include 'S2bBundle:Bundle:bigList.twig.html' with {'repos': bundles} %}
+{% include 'S2bBundle:Bundle:bigList.html.twig' with {'repos': bundles} %}
 {% endif %}
 
 {% if project|length > 0 %}
 <h2 class="section-title">{{ project|length }} Project{{ project|length > 1 ? 's' : '' }}</h2>
-{% include 'S2bBundle:Project:bigList.twig.html' with {'repos': projects} %}
+{% include 'S2bBundle:Project:bigList.html.twig' with {'repos': projects} %}
 {% endif %}
 {% endblock %}

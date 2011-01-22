@@ -1,4 +1,4 @@
-{% extends 'S2bBundle::layout.twig.html' %}
+{% extends 'S2bBundle::layout.html.twig' %}
 
 {% block h1 %}<span>{{ repos|length }}</span> Bundles{% endblock %}
 
@@ -23,9 +23,9 @@
     {% endfor %}
     </ul>
 </div>
-{% include 'S2bBundle:Repo:add.twig.html' %}
+{% include 'S2bBundle:Repo:add.html.twig' %}
 {% endblock %}
 
 {% block content %}
-{% include 'S2bBundle:Bundle:bigList.twig.html' with {'repos': repos} %}
+{% include 'S2bBundle:Bundle:bigList.html.twig' with {'repos': repos} %}
 {% endblock %}

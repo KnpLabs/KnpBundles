@@ -20,7 +20,7 @@ class RepoController extends Controller
         $query = preg_replace('(\W)', '', trim($this->get('request')->get('q')));
 
         if(empty($query)) {
-            return $this->render('S2bBundle:Repo:search');
+            return $this->render('S2bBundle:Repo:search.html.twig');
         }
 
         $repos = $this->getRepository('Repo')->search($query);
@@ -34,7 +34,13 @@ class RepoController extends Controller
             }
         }
 
-        return $this->render('S2bBundle:Repo:searchResults', array('query' => $query, 'repos' => $repos, 'bundles' => $bundles, 'projects' => $projects, 'callback' => $this->get('request')->get('callback')));
+        return $this->render('S2bBundle:Repo:searchResults.html.twig', array(
+            'query'     => $query,
+            'repos'     => $repos,
+            'bundles'   => $bundles,
+            'projects'  => $projects,
+            'callback'  => $this->get('request')->get('callback')
+        ));
     }
 
     public function showAction($username, $name)
@@ -43,30 +49,40 @@ class RepoController extends Controller
             throw new NotFoundHttpException(sprintf('The repo "%s/%s" does not exist', $username, $name));
         }
 
-        return $this->render('S2bBundle:'.$repo->getClass().':show', array('repo' => $repo, 'callback' => $this->get('request')->get('callback')));
+        return $this->render('S2bBundle:'.$repo->getClass().':show.html.twig', array(
+            'repo'      => $repo,
+            'callback'  => $this->get('request')->get('callback')
+        ));
     }
 
     public function listAction($sort, $class)
     {
         $fields = array(
-            'score' => 'score',
-            'name' => 'name',
-            'lastCommitAt' => 'last updated',
-            'createdAt' => 'last created'
+            'score'         => 'score',
+            'name'          => 'name',
+            'lastCommitAt'  => 'last updated',
+            'createdAt'     => 'last created'
         );
+
         if(!isset($fields[$sort])) {
             throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
         }
+
         $repos = $this->getRepository($class)->findAllSortedBy($sort);
 
-        return $this->render('S2bBundle:'.$class.':list.twig.html', array('repos' => $repos, 'sort' => $sort, 'fields' => $fields, 'callback' => $this->get('request')->get('callback')));
+        return $this->render('S2bBundle:'.$class.':list.html.twig', array(
+            'repos'     => $repos,
+            'sort'      => $sort,
+            'fields'    => $fields,
+            'callback'  => $this->get('request')->get('callback')
+        ));
     }
 
     public function listLatestAction()
     {
         $repos = $this->getRepository('Repo')->findAllSortedBy('createdAt', 50);
-        $response = $this->render('S2bBundle:Repo:listLatest', array('repos' => $repos));
-        return $response;
+
+        return $this->render('S2bBundle:Repo:listLatest.html.twig', array('repos' => $repos));
     }
 
     public function addAction()
@@ -98,7 +114,7 @@ class RepoController extends Controller
         if(!$repo = $githubRepo->update(Repo::create($username.'/'.$name))) {
             return false;
         }
-        
+
         if(!$user = $this->getUserRepository()->findOneByName($username)) {
             $githubUser = new Github\User(new \phpGithubApi(), new Output());
             if(!$user = $githubUser->import($username)) {

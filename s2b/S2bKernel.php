@@ -28,8 +28,7 @@ class S2bKernel extends Kernel
             new Bundle\MarkdownBundle\MarkdownBundle(),
             new Bundle\TimeBundle\TimeBundle(),
             new Bundle\MenuBundle\MenuBundle(),
-            //Twig need to be updated
-            //new Bundle\GravatarBundle\GravatarBundle(),
+            new Bundle\GravatarBundle\GravatarBundle(),
             new Bundle\TestSessionBundle\TestSessionBundle(),
 
             // register your applications here
@@ -53,7 +52,7 @@ class S2bKernel extends Kernel
     }
 
     /**
-     * Returns the config_{environment}_local.yml file or 
+     * Returns the config_{environment}_local.yml file or
      * the default config_{environment}.yml if it does not exist.
      * Useful to override development password.
      *

@@ -3,5 +3,5 @@
     <li>
         <a title="{{ repo.description }}" href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}">{{ repo.name }}</a>
     </li>
-<?php endforeach; ?>
+{% endfor %}
 </ol>

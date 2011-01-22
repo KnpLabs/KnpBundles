@@ -12,29 +12,28 @@ use Symfony\Component\Console\Output\NullOutput as Output;
 
 class BundleController extends Controller
 {
-
     public function listLastCreatedAction()
     {
         $repos = $this->getBundleRepository()->findAllSortedBy('createdAt', 5);
-        return $this->render('S2bBundle:Repo:smallList', array('repos' => $repos));
+        return $this->render('S2bBundle:Repo:smallList.html.twig', array('repos' => $repos));
     }
 
     public function listLastUpdatedAction()
     {
         $repos = $this->getBundleRepository()->findAllSortedBy('lastCommitAt', 5);
-        return $this->render('S2bBundle:Repo:smallList', array('repos' => $repos));
+        return $this->render('S2bBundle:Repo:smallList.html.twig', array('repos' => $repos));
     }
 
     public function listPopularAction()
     {
         $repos = $this->getBundleRepository()->findAllSortedBy('nbFollowers', 5);
-        return $this->render('S2bBundle:Repo:smallList', array('repos' => $repos));
+        return $this->render('S2bBundle:Repo:smallList.html.twig', array('repos' => $repos));
     }
 
     public function listBestScoreAction()
     {
         $repos = $this->getBundleRepository()->findAllSortedBy('score', 5);
-        return $this->render('S2bBundle:Repo:smallList', array('repos' => $repos));
+        return $this->render('S2bBundle:Repo:smallList.html.twig', array('repos' => $repos));
     }
 
     public function addAction()
@@ -65,7 +64,7 @@ class BundleController extends Controller
         if(!$repo = $githubRepo->update($repo)) {
             return false;
         }
-        
+
         if(!$user = $this->getUserRepository()->findOneByName($username)) {
             $githubUser = new Github\User(new \phpGithubApi(), new Output());
             if(!$user = $githubUser->import($username)) {
@@ -97,5 +96,4 @@ class BundleController extends Controller
     {
         return $this->get('doctrine.orm.entity_manager')->getRepository('Application\S2bBundle\Entity\User');
     }
-
 }

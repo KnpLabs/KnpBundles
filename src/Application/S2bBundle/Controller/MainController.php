@@ -13,7 +13,7 @@ class MainController extends Controller
         $nbProjects = $this->getRepository('Project')->count();
         $nbUsers = $this->getRepository('User')->count();
 
-        return $this->render('S2bBundle:Main:index.twig.html', compact('nbBundles', 'nbProjects', 'nbUsers'));
+        return $this->render('S2bBundle:Main:index.html.twig', compact('nbBundles', 'nbProjects', 'nbUsers'));
     }
 
     public function getRankCodeAction()
@@ -41,14 +41,14 @@ class MainController extends Controller
         $commits = $this->getRepository('Repo')
             ->getLastCommits(12);
 
-        return $this->render('S2bBundle:Main:timeline.twig.html', array('commits' => $commits));
+        return $this->render('S2bBundle:Main:timeline.html.twig', array('commits' => $commits));
     }
 
     public function apiAction()
     {
         $text = file_get_contents(__DIR__.'/../Resources/doc/02-Api.markdown');
 
-        return $this->render('S2bBundle:Main:api.twig.html', array('text' => $text));
+        return $this->render('S2bBundle:Main:api.html.twig', array('text' => $text));
     }
 
     public function notFoundAction()

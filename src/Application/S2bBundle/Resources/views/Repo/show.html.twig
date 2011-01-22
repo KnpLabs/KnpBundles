@@ -1,4 +1,4 @@
-{% 'S2bBundle::layout.twig.html' %}
+{% extends 'S2bBundle::layout.html.twig' %}
 
 {% block title %}{{ repo.name }} by {{ repo.username }}{% endblock %}
 
@@ -17,9 +17,9 @@
         {% for commit in repo.getLastCommits(12) %}
         <li>
             <a href="{{ commit.url }}"><?php echo strtok($commit['message'], "\n\r"); ?></a><br />
-            <span>{{ commit.author.name }} | {{ ago(commit.committed_date ) }}</span>
+            <span>{{ commit.author }} | {{ ago(commit.committed_date) }}</span>
         </li>
-        {% endforeach %}
+        {% endfor %}
     </ul>
 </div>
 {% endblock %}
@@ -55,22 +55,23 @@
             <ul>
                 <li class="github"><a href="{{ repo.githubUrl }}">View source</a></li>
                 <li class="download"><a href="{{ repo.githubUrl }}/tarball/master">Download</a></li>
-                {{ if repo.homepage }}
+                {% if repo.homepage %}
                 <li class="homepage"><a href="{{ repo.homepage }}">Homepage</a></li>
-                {{ endif }}
+                {% endif %}
             </ul>
         </div>
 
         <?php if(count($repo->getContributors())): ?>
+        {% if repo.contributors|length > 0 %}
         <div class="post-meta">
             <h4>Contributors</h4>
             <ul>
-                {% foreach contributor as repo.contributors %}
+                {% for contributor in repo.contributors %}
                 <li class="user"><a href="{{ path('user_show', {'name': contributor.name}) }}">{{ contributor.name }}</a></li>
-                {% endforeach %}
+                {% endfor %}
             </ul>
         </div>
-        <?php endif; ?>
+        {% endif %}
 
         <div class="post-meta">
             <h4>Versions</h4>

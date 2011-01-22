@@ -64,28 +64,28 @@
                 <div class="col-a">
                     <h3>Featured Bundles</h3>
                     <div class="footer-list">
-                        <?php $view['actions']->output('S2bBundle:Bundle:listBestScore') ?>
+                        {% render 'S2bBundle:Bundle:listBestScore' %}
                     </div>
                 </div>
 
                 <div class="col-a">
                     <h3>Popular Bundles</h3>
                     <div class="footer-list">
-                        <?php $view['actions']->output('S2bBundle:Bundle:listPopular') ?>
+                        {% render 'S2bBundle:Bundle:listPopular' %}
                     </div>
                 </div>
 
                 <div class="col-a">
                     <h3>New Bundles</h3>
                     <div class="footer-list">
-                        <?php $view['actions']->output('S2bBundle:Bundle:listLastCreated') ?>
+                        {% render 'S2bBundle:Bundle:listLastCreated' %}
                     </div>
                 </div>
 
                 <div class="col-a">
                     <h3>Just updated</h3>
                     <div class="footer-list">
-                        <?php $view['actions']->output('S2bBundle:Bundle:listLastUpdated') ?>
+                        {% render 'S2bBundle:Bundle:listLastUpdated' %}
                     </div>
                 </div>
 
