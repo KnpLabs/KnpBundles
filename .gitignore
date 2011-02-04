@@ -1,13 +1,7 @@
-/app/config/config*_local.yml
-/app/cache/*
-/app/logs/*
-/app/data
-/app/deploy.sh
-/app/alive.php
-/app/phpunit.xml
-
-# external software files
-.DS_Store
-tags
-*.autosave
-*.dia~
+app/config/config_*_local.yml
+app/cache/*
+app/logs/*
+app/data
+app/deploy.sh
+app/alive.php
+app/phpunit.xml
