@@ -1,0 +1,49 @@
+app.config:
+    charset:       UTF-8
+    error_handler: null
+    csrf_secret:   betterPuttingThisInTheLocalConfigFile
+    router:        { resource: "%kernel.root_dir%/config/routing.yml" }
+    validation:    { enabled: true, annotations: true }
+    templating:    { engines: ['twig', 'php'] } #assets_version: SomeVersionScheme
+    session:
+        default_locale: en
+        lifetime:       3600
+        auto_start:     true
+
+
+# Twig Configuration
+twig.config:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
+
+# Markdown Configuration
+markdown.parser:    ~ # Enable the parser service
+markdown.twig:      ~
+
+# Time Configuration
+time.config: ~      # Enable the time helper
+
+# Menu Configuration
+menu.templating: ~
+menu.twig: ~
+
+# Symfony2Bundles Configuration
+s2b.config: ~
+
+# Gravatar Configuration
+gravatar.config: ~
+
+# Doctrine Configuration
+doctrine.orm:
+    auto_generate_proxy_classes: %kernel.debug%
+    mappings:
+      S2bBundle: ~
+
+# 
+# PLEASE CONFIGURE IT IN YOUR LOCAL CONFIG FILE
+#
+# doctrine.dbal:
+#     dbname:   xxxxxxxx
+#     user:     root
+#     username:  xxxxxxxx
+#     password:  xxxxxxxx

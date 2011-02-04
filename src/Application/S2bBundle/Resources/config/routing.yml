@@ -9,12 +9,12 @@ repo_add:
     requirements:   { _method: "POST" }
 
 search:
-    pattern:        /search.:_format
+    pattern:        /search.{_format}
     defaults:       { _controller: S2bBundle:Repo:search, _format: html }
     requirements:   { _method: "GET", _format: "(html|json|js)" }
 
 latest:
-    pattern:        /latest.:_format
+    pattern:        /latest.{_format}
     defaults:       { _controller: S2bBundle:Repo:listLatest, class: Bundle }
     requirements:   { _method: "GET", _format: "(atom)" }
 
@@ -24,36 +24,36 @@ api:
     requirements:   { _method: "GET" }
 
 bundle_list:
-    pattern:        /bundle/:sort.:_format
+    pattern:        /bundle/{sort}.{_format}
     defaults:       { _controller: S2bBundle:Repo:list, class: Bundle, sort: score, _format: html }
     requirements:   { _method: "GET", _sort: "(score|name|createdAt|lastCommitAt)", _format: "(html|json|js)" }
 
 project_list:
-    pattern:        /project/:sort.:_format
+    pattern:        /project/{sort}.{_format}
     defaults:       { _controller: S2bBundle:Repo:list, class: Project, sort: score, _format: html }
     requirements:   { _method: "GET", _sort: "(score|name|createdAt|lastCommitAt)", _format: "(html|json|js)" }
 
 user_list:
-    pattern:        /developer/:sort.:_format
+    pattern:        /developer/{sort}.{_format}
     defaults:       { _controller: S2bBundle:User:list, sort: name, _format: html }
     requirements:   { _method: "GET", _sort: "(name)", _format: "(html|json|js)" }
 
 user_bundle_list:
-    pattern:        /:name/bundles.:_format
+    pattern:        /{name}/bundles.{_format}
     defaults:       { _controller: S2bBundle:User:bundles }
     requirements:   { _method: "GET", _format: "(json|js)" }
 
 user_projects_list:
-    pattern:        /:name/projects.:_format
+    pattern:        /{name}/projects.{_format}
     defaults:       { _controller: S2bBundle:User:projects }
     requirements:   { _method: "GET", _format: "(json|js)" }
 
 repo_show:
-    pattern:        /:username/:name.:_format
+    pattern:        /{username}/{name}.{_format}
     defaults:       { _controller: S2bBundle:Repo:show, _format: html }
     requirements:   { _method: "GET", _format: "(html|json|js)" }
 
 user_show:
-    pattern:        /:name.:_format
+    pattern:        /{name}.{_format}
     defaults:       { _controller: S2bBundle:User:show, _format: html }
     requirements:   { _method: "GET", _format: "(html|json|js)" }

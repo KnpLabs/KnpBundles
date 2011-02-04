@@ -8,12 +8,12 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 /**
  * A user living on GitHub
  *
- * @Entity(repositoryClass="Application\S2bBundle\Entity\UserRepository")
- * @Table(
+ * @orm:Entity(repositoryClass="Application\S2bBundle\Entity\UserRepository")
+ * @orm:Table(
  *      name="user",
- *      uniqueConstraints={@UniqueConstraint(name="name_unique",columns={"name"})}
+ *      uniqueConstraints={@orm:UniqueConstraint(name="name_unique",columns={"name"})}
  * )
- * @HasLifecycleCallbacks
+ * @orm:HasLifecycleCallbacks
  */
 class User
 {
@@ -24,9 +24,9 @@ class User
     }
 
     /**
-     * @Column(name="id", type="integer")
-     * @Id
-     * @GeneratedValue(strategy="AUTO")
+     * @orm:Column(name="id", type="integer")
+     * @orm:Id
+     * @orm:GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
@@ -34,63 +34,63 @@ class User
      * User name, e.g. "ornicar"
      * Like in GitHub, this name is unique
      *
-     * @Column(type="string", length=127)
+     * @orm:Column(type="string", length=127)
      */
     protected $name = null;
 
     /**
      * User email
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @orm:Column(type="string", length=255, nullable=true)
      */
     protected $email = null;
 
     /**
      * Full name of the user, like "Thibault Duplessis"
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @orm:Column(type="string", length=255, nullable=true)
      */
     protected $fullName = null;
 
     /**
      * The user company name
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @orm:Column(type="string", length=255, nullable=true)
      */
     protected $company = null;
 
     /**
      * The user location
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @orm:Column(type="string", length=255, nullable=true)
      */
     protected $location = null;
 
     /**
      * The user blog url
      *
-     * @Column(type="string", length=255, nullable=true)
+     * @orm:Column(type="string", length=255, nullable=true)
      */
     protected $blog = null;
 
     /**
      * User creation date (on this website)
      *
-     * @Column(type="datetime")
+     * @orm:Column(type="datetime")
      */
     protected $createdAt = null;
 
     /**
      * Repos the user owns
      *
-     * @OneToMany(targetEntity="Repo", mappedBy="user")
+     * @orm:OneToMany(targetEntity="Repo", mappedBy="user")
      */
     protected $repos = null;
 
     /**
      * Repos this User contributed to
      *
-     * @ManyToMany(targetEntity="Repo", mappedBy="contributors")
+     * @orm:ManyToMany(targetEntity="Repo", mappedBy="contributors")
      */
     protected $contributionRepos = null;
 
@@ -102,7 +102,7 @@ class User
     /**
      * Internal score of the User as the sum of his repos' scores
      *
-     * @Column(type="integer")
+     * @orm:Column(type="integer")
      */
     protected $score = null;
 
@@ -110,6 +110,8 @@ class User
     {
         $this->repos = new ArrayCollection();
         $this->contributionRepos = new ArrayCollection();
+        $this->createdAt = new \DateTime('NOW');
+        $this->updatedAt = new \DateTime('NOW');
     }
 
     /**
@@ -548,8 +550,8 @@ class User
     }
 
     /**
-     * getCreatedAt 
-     * 
+     * getCreatedAt
+     *
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -581,16 +583,16 @@ class User
     public function toSmallArray()
     {
         return array(
-            'name' => $this->getName(),
-            'email' => $this->getEmail(),
-            'fullName' => $this->getFullName(),
-            'company' => $this->getCompany(),
-            'location' => $this->getLocation(),
-            'blog' => $this->getBlog(),
-            'bundles' => $this->getBundleNames(),
-            'projects' => $this->getProjectNames(),
-            'lastCommitAt' => $this->getLastCommitAt()->getTimestamp(),
-            'score' => $this->getScore(),
+            'name'          => $this->getName(),
+            'email'         => $this->getEmail(),
+            'fullName'      => $this->getFullName(),
+            'company'       => $this->getCompany(),
+            'location'      => $this->getLocation(),
+            'blog'          => $this->getBlog(),
+            'bundles'       => $this->getBundleNames(),
+            'projects'      => $this->getProjectNames(),
+            'lastCommitAt'  => $this->getLastCommitAt() ? $this->getLastCommitAt()->getTimestamp() : null,
+            'score'         => $this->getScore(),
         );
     }
 

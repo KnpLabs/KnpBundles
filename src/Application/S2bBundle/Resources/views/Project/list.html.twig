@@ -1,0 +1,31 @@
+{% extends 'S2bBundle::layout.html.twig' %}
+
+{% block h1 %}<span>{{ repos|length }}</span> Projects{% endblock %}
+
+{% block title %}All {{ repos|length }} Projects{% endblock %}
+
+{% block slogan %}All Open Source Projects sorted by {{ fields[sort] }}{% endblock %}
+
+{% block description %}All Open Source Symfony2 Projects sorted by {{ sort }}{% endblock %}
+
+{% block sidemenu %}
+<h3>Sort by</h3>
+<div class="sidemenu uppercase">
+    <ul>
+    {% for field, text in fields %}
+      {% if field == sort %}
+      <li class="current">
+      {% else %}
+      <li>
+      {% endif %}
+          <a href="{{ path('project_list', {'sort': field}) }}">{{ text }}</a>
+      </li>
+    {% endfor %}
+    </ul>
+</div>
+{% include 'S2bBundle:Repo:add.html.twig' %}
+{% endblock %}
+
+{% block content %}
+{% include 'S2bBundle:Project:bigList.html.twig' with {'repos': repos} %}
+{% endblock %}

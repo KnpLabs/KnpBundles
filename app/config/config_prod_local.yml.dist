@@ -1,0 +1,8 @@
+imports:
+    - { resource: config_prod.yml }
+
+doctrine.dbal:
+    driver:   pdo_mysql
+    dbname:   s2b
+    user:     root
+    password: root

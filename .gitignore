@@ -1,10 +1,10 @@
-/s2b/config/config*_local.yml
-/s2b/config/config_test.yml
-/s2b/cache/*
-/s2b/logs/*
-/s2b/data
-/s2b/deploy.sh
-/web/alive.php
+/app/config/config*_local.yml
+/app/cache/*
+/app/logs/*
+/app/data
+/app/deploy.sh
+/app/alive.php
+/app/phpunit.xml
 
 # external software files
 .DS_Store

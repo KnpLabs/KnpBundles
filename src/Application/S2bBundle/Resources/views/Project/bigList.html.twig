@@ -1,0 +1,12 @@
+<ul class="repo-list clickable-list">
+{% for repo in repos %}
+    <li class="item">
+        <span class="score">{{ repo.score }}</span>
+        <a class="item-link" href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}">
+            <img class="gravatar" src="{{ asset('bundles/s2b/images/application32.png') }}" />
+            {{ repo.name }}<em>{{ repo.lastTagName }}</em>
+        </a>
+        <span class="description">{{ repo.description }}</span>
+    </li>
+{% endfor %}
+</ul>

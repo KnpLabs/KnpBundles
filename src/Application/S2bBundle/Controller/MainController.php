@@ -13,7 +13,7 @@ class MainController extends Controller
         $nbProjects = $this->getRepository('Project')->count();
         $nbUsers = $this->getRepository('User')->count();
 
-        return $this->render('S2bBundle:Main:index', compact('nbBundles', 'nbProjects', 'nbUsers'));
+        return $this->render('S2bBundle:Main:index.html.twig', compact('nbBundles', 'nbProjects', 'nbUsers'));
     }
 
     public function getRankCodeAction()
@@ -38,18 +38,17 @@ class MainController extends Controller
     #TODO cache me!
     public function timelineAction()
     {
-        $commits = $this->container->getDoctrine_Orm_DefaultEntityManagerService()
-            ->getRepository('Application\S2bBundle\Entity\Repo')
+        $commits = $this->getRepository('Repo')
             ->getLastCommits(12);
 
-        return $this->render('S2bBundle:Main:timeline', array('commits' => $commits));
+        return $this->render('S2bBundle:Main:timeline.html.twig', array('commits' => $commits));
     }
 
     public function apiAction()
     {
         $text = file_get_contents(__DIR__.'/../Resources/doc/02-Api.markdown');
 
-        return $this->render('S2bBundle:Main:api', array('text' => $text));
+        return $this->render('S2bBundle:Main:api.html.twig', array('text' => $text));
     }
 
     public function notFoundAction()
@@ -61,6 +60,6 @@ class MainController extends Controller
 
     protected function getRepository($class)
     {
-        return $this->container->getDoctrine_Orm_DefaultEntityManagerService()->getRepository('Application\S2bBundle\Entity\\'.$class);
+        return $this->get('doctrine.orm.entity_manager')->getRepository('Application\S2bBundle\Entity\\'.$class);
     }
 }

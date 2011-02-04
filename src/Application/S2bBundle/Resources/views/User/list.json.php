@@ -2,7 +2,7 @@
 
 $array = array();
 foreach($users as $user) {
-    $array[] = $user->getRawValue()->toSmallArray();
+    $array[] = $user->toSmallArray();
 }
 
 echo json_encode($array);

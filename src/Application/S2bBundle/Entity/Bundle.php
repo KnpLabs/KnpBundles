@@ -5,7 +5,7 @@ namespace Application\S2bBundle\Entity;
 /**
  * An Open Source Bundle living on GitHub
  *
- * @Entity(repositoryClass="Application\S2bBundle\Entity\BundleRepository")
+ * @orm:Entity(repositoryClass="Application\S2bBundle\Entity\BundleRepository")
  */
 class Bundle extends Repo
 {
