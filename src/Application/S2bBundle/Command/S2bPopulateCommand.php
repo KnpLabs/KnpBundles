@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\Output;
 use Doctrine\ORM\UnitOfWork;
 
 // Require Goutte
-require_once(__DIR__.'/../../../vendor/goutte/src/Goutte/Client.php');
+require_once(__DIR__.'/../../../../vendor/goutte/src/Goutte/Client.php');
 
 // Ugly fix to prevent Zend fatal error
 set_include_path(get_include_path().PATH_SEPARATOR.realpath(__DIR__.'/../../../vendor/zend/library'));

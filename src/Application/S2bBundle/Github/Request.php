@@ -2,13 +2,13 @@
 
 namespace Application\S2bBundle\Github;
 
-require_once __DIR__.'/../../../vendor/php-github-api/lib/request/phpGitHubApiRequest.php';
+require_once __DIR__.'/../../../../vendor/php-github-api/lib/request/phpGitHubApiRequest.php';
 
 class Request extends \phpGitHubApiRequest
 {
     /**
-     * How many times retry to communicate with GitHub before giving up 
-     * 
+     * How many times retry to communicate with GitHub before giving up
+     *
      * @var int
      */
     protected $maxTries = 2;
