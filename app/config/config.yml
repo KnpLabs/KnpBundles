@@ -28,7 +28,7 @@ menu.templating: ~
 menu.twig: ~
 
 # Symfony2Bundles Configuration
-s2b.config: ~
+symfony2bundles.config: ~
 
 # Gravatar Configuration
 gravatar.config: ~
@@ -37,7 +37,7 @@ gravatar.config: ~
 doctrine.orm:
     auto_generate_proxy_classes: %kernel.debug%
     mappings:
-      S2bBundle: ~
+      KnplabsSymfony2BundlesBundle: ~
 
 # 
 # PLEASE CONFIGURE IT IN YOUR LOCAL CONFIG FILE

@@ -1,0 +1,5 @@
+{% extends 'KnplabsSymfony2BundlesBundle:Repo:show.html.twig' %}
+
+{% block h1 %}{{ repo.name }}{% endblock %}
+
+{% block git_command %}git clone {{ repo.gitUrl }}{% endblock %}

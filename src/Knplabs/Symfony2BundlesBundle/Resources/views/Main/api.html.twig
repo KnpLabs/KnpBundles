@@ -1,0 +1,17 @@
+{% extends "KnplabsSymfony2BundlesBundle::layout.html.twig" %}
+
+{% block title %}Developer HTTP API{% endblock %}
+
+{% block h1 %}<span>Developer</span> API{% endblock %}
+
+{% block description %}Programmatic HTTP API to access Bundles and developers data{% endblock %}
+
+{% block slogan %}Programmatic HTTP API to access Bundles and developers data{% endblock %}
+
+{% block sidemenu %}{% render "KnplabsSymfony2BundlesBundle:Main:timeline" %}{% endblock %}
+
+{% block content %}
+<div class="doc_text markdown">
+    {{ text|markdown|raw }}
+</div>
+{% endblock %}

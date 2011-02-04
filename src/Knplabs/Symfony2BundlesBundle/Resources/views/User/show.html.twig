@@ -1,0 +1,77 @@
+{% extends 'KnplabsSymfony2BundlesBundle::layout.html.twig' %}
+
+{% block h1 %}{{ user.name }}{% endblock %}
+
+{% block title %}{{ user.name }} - {{ user.fullName }}{% endblock %}
+
+{% block description %}{{ user.fullName }} has {{ user.nbBundles }} Symfony2 bundles{% endblock %}
+
+{% block slogan %}{{ user.fullName ? user.fullName : ' ' }}{% endblock %}
+
+{% block logo %}<img alt="{{ user.name }}" src="{{ gravatar(user.email, 80, none, 'mm') }}" with="80" height="80" />{% endblock %}
+
+{% block sidemenu %}
+<h3>Last commits</h3>
+<div class="sidemenu">
+    <ol class="timeline">
+    {% for commit in user.getLastCommits(12) %}
+        <li>
+            <a href="{{ path('repo_show', {'username': commit.repo_username, 'name': commit.repo_name}) }}">{{ commit.repo_name }}</a>
+            {{ commit.message_first_line }}<br />
+            <span>{{ ago(commit.committed_date) }}</span>
+        </li>
+    {% endfor %}
+    </ol>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="post">
+    <div class="right">
+    {% macro user_codes(repos, type, manage) %}
+        {% if repos|length > 0 %}
+        <h2 class="section-title">I {{ manage ? 'manage' : 'contribute to' }} {{ repos|length }} {{ type }}{{ repos|length > 1 ? 's' : ''}}</h2>
+        {% include 'KnplabsSymfony2BundlesBundle:' ~ type ~ ':bigList.html.twig' with {'repos': repos} %}
+        {% endif %}
+    {% endmacro %}
+    {{ _self.user_codes(user.bundles, 'Bundle', true) }}
+    {{ _self.user_codes(user.contributionBundles, 'Bundle', false) }}
+    {{ _self.user_codes(user.projects, 'Project', true) }}
+    {{ _self.user_codes(user.contributionProjects, 'Project', false) }}
+    </div>
+
+    <div class="left">
+        <div class="post-meta">
+            <h4>Infos</h4>
+            <ul>
+                {% if user.lastCommitAt %}
+                <li class="time">Active {{ ago(user.lastCommitAt) }}</li>
+                {% else %}
+                <li class="time">No recent activity</li>
+                {% endif %}
+                <li class="lego">{{ user.nbBundles }} Bundle{{ user.nbBundles > 1 ? 's' : '' }}</li>
+                <li class="application">{{ user.nbProjects }} Project{{ user.nbProjects > 1 ? 's' : '' }}</li>
+                {% if user.company %}
+                <li class="company">{{ user.company }}</li>
+                {% endif %}
+                {% if user.location %}
+                <li class="location">{{ user.location }}</li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="post-meta">
+            <h4>Links</h4>
+            <ul>
+                <li class="github"><a href="{{ user.githubUrl }}">View on GitHub</a></li>
+                {% if user.blog %}
+                <li class="blog"><a href="{{ user.blog }}">Blog</a></li>
+                {% endif %}
+                {% if user.email %}
+                <li class="email"><a href="mailto:{{ user.obfuscatedEmail }}">Email</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -24,7 +24,7 @@ class AppKernel extends Kernel
             new Bundle\TestSessionBundle\TestSessionBundle(),
 
             // register your applications here
-            new Application\S2bBundle\S2bBundle()
+            new Knplabs\Symfony2BundlesBundle\KnplabsSymfony2BundlesBundle()
         );
 
         if ($this->isDebug()) {
