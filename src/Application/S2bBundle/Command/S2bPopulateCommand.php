@@ -15,10 +15,10 @@ use Symfony\Component\Console\Output\Output;
 use Doctrine\ORM\UnitOfWork;
 
 // Require Goutte
-require_once(__DIR__.'/../../../vendor/Goutte/src/Goutte/Client.php');
+require_once(__DIR__.'/../../../vendor/goutte/src/Goutte/Client.php');
 
 // Ugly fix to prevent Zend fatal error
-set_include_path(get_include_path().PATH_SEPARATOR.realpath(__DIR__.'/../../../vendor/Zend/library'));
+set_include_path(get_include_path().PATH_SEPARATOR.realpath(__DIR__.'/../../../vendor/zend/library'));
 
 /**
  * Update local database from web searches
@@ -130,7 +130,7 @@ class S2bPopulateCommand extends BaseCommand
             $output->writeLn(sprintf('%s contributors: %s', $repo->getFullName(), implode(', ', $contributors)));
             $repo->setContributors($contributors);
         }
-        
+
         // Now update users with more precise GitHub data
         $output->writeLn(sprintf('Will now update %d users', count($users)));
         foreach($users as $user) {

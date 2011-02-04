@@ -4,7 +4,7 @@ app.config:
     csrf_secret:   betterPuttingThisInTheLocalConfigFile
     router:        { resource: "%kernel.root_dir%/config/routing.yml" }
     validation:    { enabled: true, annotations: true }
-    templating:    {} #assets_version: SomeVersionScheme
+    templating:    { engines: ['twig', 'php'] } #assets_version: SomeVersionScheme
     session:
         default_locale: en
         lifetime:       3600
@@ -24,6 +24,7 @@ markdown.twig:      ~
 time.config: ~      # Enable the time helper
 
 # Menu Configuration
+menu.templating: ~
 menu.twig: ~
 
 # Symfony2Bundles Configuration

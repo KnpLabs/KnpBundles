@@ -10,10 +10,10 @@
 
     <services>
 
-        <service id="menu.main" class="%menu.main.class%" shared="true">
-            <tag name="menu" alias="main" />
-            <argument type="service" id="request" />
+        <service id="menu.main" class="%menu.main.class%">
+            <argument type="service" id="request" strict="false" />
             <argument type="service" id="router" />
+            <tag name="menu" alias="main" />
         </service>
 
     </services>

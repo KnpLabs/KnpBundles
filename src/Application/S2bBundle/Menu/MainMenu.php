@@ -1,10 +1,11 @@
 <?php
 
 namespace Application\S2bBundle\Menu;
-use Bundle\MenuBundle\Menu;
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\Routing\Router;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Router;
+
+use Knplabs\MenuBundle\Menu;
 
 class MainMenu extends Menu
 {

@@ -1,18 +1,10 @@
 <?php
 
-require_once __DIR__.'/../src/autoload.php';
-
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\DependencyInjection\Loader\LoaderInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class S2bKernel extends Kernel
+class AppKernel extends Kernel
 {
-    public function registerRootDir()
-    {
-        return __DIR__;
-    }
-
     public function registerBundles()
     {
         $bundles = array(
@@ -25,9 +17,9 @@ class S2bKernel extends Kernel
             new Symfony\Bundle\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
 
             // register your bundles here
-            new Bundle\MarkdownBundle\MarkdownBundle(),
-            new Bundle\TimeBundle\TimeBundle(),
-            new Bundle\MenuBundle\MenuBundle(),
+            new Knplabs\MarkdownBundle\KnplabsMarkdownBundle(),
+            new Knplabs\TimeBundle\KnplabsTimeBundle(),
+            new Knplabs\MenuBundle\KnplabsMenuBundle(),
             new Bundle\GravatarBundle\GravatarBundle(),
             new Bundle\TestSessionBundle\TestSessionBundle(),
 
@@ -42,13 +34,9 @@ class S2bKernel extends Kernel
         return $bundles;
     }
 
-    public function registerBundleDirs()
+    public function registerRootDir()
     {
-        return array(
-            'Application'        => __DIR__.'/../src/Application',
-            'Bundle'             => __DIR__.'/../src/Bundle',
-            'Symfony\\Bundle'    => __DIR__.'/../src/vendor/Symfony/src/Symfony/Bundle',
-        );
+        return __DIR__;
     }
 
     /**
@@ -73,14 +61,6 @@ class S2bKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $container = new ContainerBuilder();
-
         $loader->load($this->getLocalConfigurationFile($this->getEnvironment()));
-
-        if(!$this->isDebug()) {
-            $container->setParameter('exception_listener.controller', 'S2bBundle:Main:notFound');
-        }
-
-        return $container;
     }
 }

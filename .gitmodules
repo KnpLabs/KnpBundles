@@ -1,48 +1,51 @@
-[submodule "src/vendor/Symfony"]
-	path = src/vendor/Symfony
+[submodule "vendor/symfony"]
+	path = vendor/symfony
 	url = git://github.com/fabpot/symfony.git
-[submodule "src/vendor/Zend"]
-	path = src/vendor/Zend
+[submodule "vendor/zend"]
+	path = vendor/zend
 	url = git://github.com/zendframework/zf2.git
-[submodule "src/vendor/php-github-api"]
-	path = src/vendor/php-github-api
-	url = git://github.com/ornicar/php-github-api.git
-[submodule "src/Bundle/MarkdownBundle"]
-	path = src/Bundle/MarkdownBundle
-	url = git://github.com/knplabs/MarkdownBundle.git
-[submodule "src/Bundle/GravatarBundle"]
-	path = src/Bundle/GravatarBundle
-	url = git://github.com/ornicar/GravatarBundle.git
-[submodule "src/vendor/Goutte"]
-	path = src/vendor/Goutte
-	url = git://github.com/ornicar/Goutte.git
-[submodule "src/vendor/Doctrine"]
-	path = src/vendor/Doctrine
+[submodule "vendor/doctrine"]
+	path = vendor/doctrine
 	url = git://github.com/doctrine/doctrine2.git
-[submodule "src/vendor/DoctrineMigrations"]
-	path = src/vendor/DoctrineMigrations
-	url = git://github.com/doctrine/migrations.git
-[submodule "src/Bundle/MenuBundle"]
-	path = src/Bundle/MenuBundle
-	url = git://github.com/knplabs/MenuBundle.git
-[submodule "src/vendor/doctrine-dbal"]
-	path = src/vendor/doctrine-dbal
+[submodule "vendor/doctrine-common"]
+	path = vendor/doctrine-common
+	url = git://github.com/doctrine/common.git
+[submodule "vendor/doctrine-dbal"]
+	path = vendor/doctrine-dbal
 	url = git://github.com/doctrine/dbal.git
+[submodule "vendor/doctrine-data-fixtures"]
+	path = vendor/doctrine-data-fixtures
+	url = git://github.com/doctrine/data-fixtures.git
+[submodule "vendor/doctrine-migrations"]
+	path = vendor/doctrine-migrations
+	url = git://github.com/doctrine/migrations.git
+[submodule "vendor/twig"]
+	path = vendor/twig
+	url = git://github.com/fabpot/Twig.git
+[submodule "vendor/twig-extensions"]
+	path = vendor/twig-extensions
+	url = git://github.com/fabpot/Twig-extensions.git
+[submodule "vendor/php-github-api"]
+	path = vendor/php-github-api
+	url = git://github.com/ornicar/php-github-api.git
+[submodule "vendor/php-git-repo"]
+	path = vendor/php-git-repo
+	url = git://github.com/ornicar/php-git-repo.git
+[submodule "vendor/goutte"]
+	path = vendor/goutte
+	url = git://github.com/ornicar/Goutte.git
+[submodule "src/Knplabs/TimeBundle"]
+	path = src/Knplabs/TimeBundle
+	url = git://github.com/knplabs/TimeBundle.git
+[submodule "src/Knplabs/MarkdownBundle"]
+	path = src/Knplabs/MarkdownBundle
+	url = git://github.com/knplabs/MarkdownBundle.git
+[submodule "src/Knplabs/MenuBundle"]
+	path = src/Knplabs/MenuBundle
+	url = git://github.com/knplabs/MenuBundle.git
 [submodule "src/Bundle/TestSessionBundle"]
 	path = src/Bundle/TestSessionBundle
 	url = git://github.com/knplabs/TestSessionBundle.git
-[submodule "src/Bundle/TimeBundle"]
-	path = src/Bundle/TimeBundle
-	url = git://github.com/knplabs/TimeBundle.git
-[submodule "src/vendor/php-git-repo"]
-	path = src/vendor/php-git-repo
-	url = git://github.com/ornicar/php-git-repo.git
-[submodule "src/vendor/twig"]
-	path = src/vendor/twig
-	url = git://github.com/fabpot/Twig.git
-[submodule "src/vendor/twig-extensions"]
-	path = src/vendor/twig-extensions
-	url = git://github.com/fabpot/Twig-extensions.git
-[submodule "src/vendor/DoctrineDataFixtures"]
-	path = src/vendor/DoctrineDataFixtures
-	url = git://github.com/doctrine/data-fixtures.git
+[submodule "src/Bundle/GravatarBundle"]
+	path = src/Bundle/GravatarBundle
+	url = git://github.com/ornicar/GravatarBundle.git
