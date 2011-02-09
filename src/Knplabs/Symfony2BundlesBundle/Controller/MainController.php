@@ -2,18 +2,33 @@
 
 namespace Knplabs\Symfony2BundlesBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Templating\EngineInterface;
 
-class MainController extends Controller
+/**
+ * Main controller
+ *
+ * @package Symfony2Bundles
+ */
+class MainController
 {
+    protected $response;
+    protected $templating;
+
+    /**
+     * Constructor
+     *
+     * @param  EngineInterface $templating
+     */
+    public function __construct(Response $response, EngineInterface $templating)
+    {
+        $this->response = $response;
+        $this->templating = $templating;
+    }
 
     public function indexAction()
     {
-        $nbBundles = $this->getRepository('Bundle')->count();
-        $nbProjects = $this->getRepository('Project')->count();
-        $nbUsers = $this->getRepository('User')->count();
-
-        return $this->render('KnplabsSymfony2BundlesBundle:Main:index.html.twig', compact('nbBundles', 'nbProjects', 'nbUsers'));
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Main:index.html.twig', array(), $this->response);
     }
 
     public function getRankCodeAction()
@@ -29,37 +44,25 @@ class MainController extends Controller
             $scoreMethodDefinition = '';
         }
 
-        $response = $this->createResponse($scoreMethodDefinition);
+        $this->response->setContent($scoreMethodDefinition);
+        $this->response->setStatusCode(200);
         // TODO: how could we ensure the cache is cleared if the code changes?
-        $response->setTtl(3600);
-        return $response;
-    }
+        $this->response->setTtl(3600);
 
-    #TODO cache me!
-    public function timelineAction()
-    {
-        $commits = $this->getRepository('Repo')
-            ->getLastCommits(12);
-
-        return $this->render('KnplabsSymfony2BundlesBundle:Main:timeline.html.twig', array('commits' => $commits));
+        return $this->response;
     }
 
     public function apiAction()
     {
         $text = file_get_contents(__DIR__.'/../Resources/doc/02-Api.markdown');
 
-        return $this->render('KnplabsSymfony2BundlesBundle:Main:api.html.twig', array('text' => $text));
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Main:api.html.twig', compact($text), $this->response);
     }
 
     public function notFoundAction()
     {
-        $response = $this->render('KnplabsSymfony2BundlesBundle:Main:notFound');
-        $response->setStatusCode(404);
-        return $response;
-    }
+        $this->response->setStatusCode(404);
 
-    protected function getRepository($class)
-    {
-        return $this->get('doctrine.orm.entity_manager')->getRepository('Knplabs\Symfony2BundlesBundle\Entity\\'.$class);
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Main:notFoundAction.html.twig', array(), $this->response);
     }
 }

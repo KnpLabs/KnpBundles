@@ -12,6 +12,7 @@ class Symfony2BundlesExtension extends Extension
     public function configLoad($config, ContainerBuilder $container)
     {
         $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
+        $loader->load('controller.xml');
         $loader->load('menu.xml');
     }
 

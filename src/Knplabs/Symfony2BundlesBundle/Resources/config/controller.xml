@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://www.symfony-project.org/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="symfony2bundles.controller.main.class">Knplabs\Symfony2BundlesBundle\Controller\MainController</parameter>
+    </parameters>
+
+    <services>
+        <!-- Main controller -->
+        <service id="symfony2bundles.controller.main" class="%symfony2bundles.controller.main.class%">
+            <argument type="service" id="response" strict="false" />
+            <argument type="service" id="templating" />
+        </service>
+    </services>
+</container>

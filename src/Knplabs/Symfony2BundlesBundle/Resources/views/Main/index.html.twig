@@ -6,17 +6,9 @@
 
 {% block slogan %}Comprehensive list of Symfony2 Bundles ordered by relevance and integrated with GitHub{% endblock %}
 
-{% block sidemenu %}{% render "KnplabsSymfony2BundlesBundle:Main:timeline" %}{% endblock %}
-
 {% block content %}
 <h2>Welcome to the community driven Symfony2 Bundles website!</h2>
 <div class="home_text">
-  <p>
-  As for now, we index
-  <a href="{{ path('bundle_list') }}"><strong>{{ nbBundles }}</strong>Bundles</a>,
-  <a href="{{ path('project_list') }}"><strong>{{ nbProjects }}</strong>Projects</a> &amp
-  <a href="{{ path('user_list') }}"><strong>{{ nbUsers }}</strong>Developers</a>.
-  </p>
   <p>
   Symfony2Bundles is a spontaneous community initiative! Its purpose is to help us to find the best Bundles.
   </p>
@@ -30,7 +22,7 @@
   Symfony2Bundles is Open Source! <a href="http://github.com/knplabs/symfony2bundles">Get the code</a> and contribute!
   This website is at early stages of development, and many things will change, especially the ranking algorithm:
   <pre>
-    {% render "KnplabsSymfony2BundlesBundle:Main:getRankCode" with { 'standalone': 'true', 'ignore_errors': 'true' } %}
+    {% render "symfony2bundles.controller.main:getRankCodeAction" with { 'standalone': 'true', 'ignore_errors': 'true' } %}
   </pre>
   </p>
 <hr />

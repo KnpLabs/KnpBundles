@@ -1,6 +1,6 @@
 homepage:
     pattern:        /
-    defaults:       { _controller: KnplabsSymfony2BundlesBundle:Main:index }
+    defaults:       { _controller: symfony2bundles.controller.main:indexAction }
     requirements:   { _method: "GET" }
 
 repo_add:
@@ -20,7 +20,7 @@ latest:
 
 api:
     pattern:        /api
-    defaults:       { _controller: KnplabsSymfony2BundlesBundle:Main:api }
+    defaults:       { _controller: symfony2bundles.controller.main:apiAction }
     requirements:   { _method: "GET" }
 
 bundle_list:
