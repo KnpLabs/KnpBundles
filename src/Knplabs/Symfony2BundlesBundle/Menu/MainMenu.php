@@ -19,8 +19,5 @@ class MainMenu extends Menu
         $this->addChild('Bundles', $router->generate('bundle_list', array()));
         $this->addChild('Projects', $router->generate('project_list', array()));
         $this->addChild('Developers', $router->generate('user_list', array()));
-        $this->addChild('Search', $router->generate('search', array()));
-        $this->addChild('Api', $router->generate('api', array()));
-        $this->addChild('Feed', $router->generate('latest', array('_format' => 'atom')));
     }
 }
