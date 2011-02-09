@@ -9,9 +9,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class Symfony2BundlesExtension extends Extension
 {
 
-    public function configLoad($config, ContainerBuilder $container)
+    public function configLoad($configs, ContainerBuilder $container)
     {
         $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
+        $loader->load('model.xml');
         $loader->load('controller.xml');
         $loader->load('menu.xml');
     }

@@ -5,17 +5,17 @@ homepage:
 
 repo_add:
     pattern:        /repo/add
-    defaults:       { _controller: KnplabsSymfony2BundlesBundle:Repo:add }
+    defaults:       { _controller: symfony2bundles.controller.repo:addAction }
     requirements:   { _method: "POST" }
 
 search:
     pattern:        /search.{_format}
-    defaults:       { _controller: KnplabsSymfony2BundlesBundle:Repo:search, _format: html }
+    defaults:       { _controller: symfony2bundles.controller.repo:searchAction, _format: html }
     requirements:   { _method: "GET", _format: "(html|json|js)" }
 
 latest:
     pattern:        /latest.{_format}
-    defaults:       { _controller: KnplabsSymfony2BundlesBundle:Repo:listLatest, class: Bundle }
+    defaults:       { _controller: symfony2bundles.controller.repo:listLatestAction, class: Bundle }
     requirements:   { _method: "GET", _format: "(atom)" }
 
 api:
@@ -25,35 +25,35 @@ api:
 
 bundle_list:
     pattern:        /bundle/{sort}.{_format}
-    defaults:       { _controller: KnplabsSymfony2BundlesBundle:Repo:list, class: Bundle, sort: score, _format: html }
+    defaults:       { _controller: symfony2bundles.controller.repo:listAction, class: Bundle, sort: score, _format: html }
     requirements:   { _method: "GET", _sort: "(score|name|createdAt|lastCommitAt)", _format: "(html|json|js)" }
 
 project_list:
     pattern:        /project/{sort}.{_format}
-    defaults:       { _controller: KnplabsSymfony2BundlesBundle:Repo:list, class: Project, sort: score, _format: html }
+    defaults:       { _controller: symfony2bundles.controller.repo:listAction, class: Project, sort: score, _format: html }
     requirements:   { _method: "GET", _sort: "(score|name|createdAt|lastCommitAt)", _format: "(html|json|js)" }
 
 user_list:
     pattern:        /developer/{sort}.{_format}
-    defaults:       { _controller: KnplabsSymfony2BundlesBundle:User:list, sort: name, _format: html }
+    defaults:       { _controller: symfony2bundles.controller.user:listAction, sort: name, _format: html }
     requirements:   { _method: "GET", _sort: "(name)", _format: "(html|json|js)" }
 
 user_bundle_list:
     pattern:        /{name}/bundles.{_format}
-    defaults:       { _controller: KnplabsSymfony2BundlesBundle:User:bundles }
+    defaults:       { _controller: symfony2bundles.controller.user:bundlesAction }
     requirements:   { _method: "GET", _format: "(json|js)" }
 
 user_projects_list:
     pattern:        /{name}/projects.{_format}
-    defaults:       { _controller: KnplabsSymfony2BundlesBundle:User:projects }
+    defaults:       { _controller: symfony2bundles.controller.user:projectsAction }
     requirements:   { _method: "GET", _format: "(json|js)" }
 
 repo_show:
     pattern:        /{username}/{name}.{_format}
-    defaults:       { _controller: KnplabsSymfony2BundlesBundle:Repo:show, _format: html }
+    defaults:       { _controller: symfony2bundles.controller.repo:showAction, _format: html }
     requirements:   { _method: "GET", _format: "(html|json|js)" }
 
 user_show:
     pattern:        /{name}.{_format}
-    defaults:       { _controller: KnplabsSymfony2BundlesBundle:User:show, _format: html }
+    defaults:       { _controller: symfony2bundles.controller.user:showAction, _format: html }
     requirements:   { _method: "GET", _format: "(html|json|js)" }

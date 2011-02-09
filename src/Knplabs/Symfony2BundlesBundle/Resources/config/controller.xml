@@ -6,6 +6,10 @@
 
     <parameters>
         <parameter key="symfony2bundles.controller.main.class">Knplabs\Symfony2BundlesBundle\Controller\MainController</parameter>
+        <parameter key="symfony2bundles.controller.bundle.class">Knplabs\Symfony2BundlesBundle\Controller\BundleController</parameter>
+        <parameter key="symfony2bundles.controller.repo.class">Knplabs\Symfony2BundlesBundle\Controller\RepoController</parameter>
+        <parameter key="symfony2bundles.controller.user.class">Knplabs\Symfony2BundlesBundle\Controller\UserController</parameter>
+        <parameter key="symfony2bundles.repos_dir">%kernel.cache_dir%/repos</parameter>
     </parameters>
 
     <services>
@@ -13,6 +17,26 @@
         <service id="symfony2bundles.controller.main" class="%symfony2bundles.controller.main.class%">
             <argument type="service" id="response" strict="false" />
             <argument type="service" id="templating" />
+        </service>
+        <!-- Bundle controller -->
+        <service id="symfony2bundles.controller.bundle" class="%symfony2bundles.controller.bundle.class%">
+            <argument type="service" id="templating" />
+            <argument type="service" id="symfony2bundles.entity_manager" />
+        </service>
+        <!-- Repo controller -->
+        <service id="symfony2bundles.controller.repo" class="%symfony2bundles.controller.repo.class%">
+            <argument type="service" id="request" strict="false" />
+            <argument type="service" id="response" strict="false" />
+            <argument type="service" id="templating" />
+            <argument type="service" id="symfony2bundles.entity_manager" />
+            <argument type="service" id="http_kernel" />
+            <argument>%symfony2bundles.repos_dir%</argument>
+        </service>
+        <!-- User controller -->
+        <service id="symfony2bundles.controller.user" class="%symfony2bundles.controller.user.class%">
+            <argument type="service" id="request" strict="false" />
+            <argument type="service" id="templating" />
+            <argument type="service" id="symfony2bundles.entity_manager" />
         </service>
     </services>
 </container>

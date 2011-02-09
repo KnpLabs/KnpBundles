@@ -4,7 +4,7 @@
 
 {% block title %}All {{ repos|length }} Projects{% endblock %}
 
-{% block slogan %}All Open Source Projects sorted by {{ fields[sort] }}{% endblock %}
+{% block slogan %}All Open Source Projects sorted by {{ sortFields[sort] }}{% endblock %}
 
 {% block description %}All Open Source Symfony2 Projects sorted by {{ sort }}{% endblock %}
 
@@ -12,7 +12,7 @@
 <h3>Sort by</h3>
 <div class="sidemenu uppercase">
     <ul>
-    {% for field, text in fields %}
+    {% for field, text in sortFields %}
       {% if field == sort %}
       <li class="current">
       {% else %}
