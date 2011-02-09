@@ -18,7 +18,7 @@ class UserController extends Controller
 
     public function listAction()
     {
-        $users = $this->getUserRepository()->findAllWithProjectsSortedBy('score');
+        $users = $this->getUserRepository()->findAllWithProjectsSortedBy('name');
 
         return $this->render('S2bBundle:User:list', array('users' => $users, 'callback' => $this['request']->get('callback')));
     }
