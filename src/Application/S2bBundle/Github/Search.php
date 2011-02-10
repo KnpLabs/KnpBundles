@@ -32,14 +32,14 @@ class Search
      * @var OutputInterface
      */
     protected $output = null;
-    
+
     public function __construct(\phpGitHubApi $github, Client $browser, OutputInterface $output)
     {
         $this->github = $github;
         $this->browser = $browser;
         $this->output = $output;
     }
-    
+
     /**
      * Get a list of Symfony2 Repos from GitHub & Google
      *
@@ -143,7 +143,7 @@ class Search
     {
       return $this->browser;
     }
-    
+
     /**
      * Set browser
      * @param  Client
@@ -153,7 +153,7 @@ class Search
     {
       $this->browser = $browser;
     }
-    
+
     /**
      * Get output
      * @return OutputInterface
@@ -162,7 +162,7 @@ class Search
     {
       return $this->output;
     }
-    
+
     /**
      * Set output
      * @param  OutputInterface
@@ -172,7 +172,7 @@ class Search
     {
       $this->output = $output;
     }
-    
+
     /**
      * Get github
      * @return \phpGitHubApi
@@ -181,7 +181,7 @@ class Search
     {
         return $this->github;
     }
-    
+
     /**
      * Set github
      * @param  \phpGitHubApi

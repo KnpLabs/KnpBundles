@@ -11,14 +11,14 @@ class Repo
      * @var \phpGitRepo
      */
     protected $gitRepo = null;
-    
+
     /**
      * Repo entity
      *
      * @var RepoEntity
      */
     protected $entity = null;
-    
+
     public function __construct(RepoEntity $repoEntity, \phpGitRepo $gitRepo)
     {
         $this->entity = $repoEntity;
@@ -49,7 +49,7 @@ class Repo
     {
         return file_get_contents($this->gitRepo->getDir().'/'.$file);
     }
-    
+
     /**
      * Get gitRepo
      * @return \phpGitRepo
@@ -58,7 +58,7 @@ class Repo
     {
       return $this->gitRepo;
     }
-    
+
     /**
      * Set gitRepo
      * @param \phpGitRepo
@@ -68,7 +68,7 @@ class Repo
     {
       $this->gitRepo = $gitRepo;
     }
-    
+
     /**
      * Get entity
      * @return RepoEntity
@@ -77,7 +77,7 @@ class Repo
     {
       return $this->entity;
     }
-    
+
     /**
      * Set entity
      * @param  RepoEntity
