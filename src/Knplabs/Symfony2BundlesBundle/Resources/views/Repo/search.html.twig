@@ -1,17 +1,19 @@
 {% extends 'KnplabsSymfony2BundlesBundle::layout.html.twig' %}
 
+{% block body_attributes %}id="search"{% endblock %}
+
 {% block h1 %}Search{% endblock %}
 
 {% block title %}Search Bundles and Projects{% endblock %}
 
-{% block slogan %}Search for Open Source Bundles and Projects{% endblock %}
-
 {% block description %} Search for Open Source Bundles and Projects{% endblock %}
 
-{% block sidemenu %}
-{% include 'KnplabsSymfony2BundlesBundle:Repo:add.html.twig' %}
-{% endblock %}
-
 {% block content %}
-Please use the search input at the top right.<br />The engine will search in repository name, description and developer name.
+    <div id="main">
+        <p>Please use the search input at the top right.<br />
+        The engine will search in repository name, description and developer name.</p>
+    </div>
+    <div id="side">
+        {% render 'symfony2bundles.controller.bundle:listFeaturedAction' with {'max': 2} %}
+    </div>
 {% endblock %}

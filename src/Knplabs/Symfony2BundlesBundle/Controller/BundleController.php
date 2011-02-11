@@ -20,14 +20,21 @@ class BundleController
     {
         $bundles = $this->getBundleRepository()->findAllSortedBy('createdAt', 5);
 
-        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Bundle:smallList.html.twig', array('bundles' => $bundles));
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Bundle:listLastCreated.html.twig', array('bundles' => $bundles));
     }
 
     public function listBestScoreAction()
     {
         $bundles = $this->getBundleRepository()->findAllSortedBy('score', 5);
 
-        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Repo:smallList.html.twig', array('bundles' => $bundles));
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Bundle:listBestScore.html.twig', array('bundles' => $bundles));
+    }
+
+    public function listFeaturedAction($max = 3)
+    {
+        $bundles = $this->getBundleRepository()->findAllSortedBy('nbFollowers', $max);
+
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Bundle:listFeatured.html.twig', array('bundles' => $bundles));
     }
 
     /**

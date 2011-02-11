@@ -1,0 +1,22 @@
+{% extends 'KnplabsSymfony2BundlesBundle::layout.html.twig' %}
+
+{% block body_attributes %}id="repos-list"{% endblock %}
+
+{% block content %}
+    <div id="main">
+        <div id="sort">
+            <span class="sort-by">Sort by</span>
+            <ul class="tabs" id="repo-tabs">
+                {% for field, text in sortFields %}
+                <li{{ field == sort ? ' class="current"' : '' }}>
+                    <a href='{{ path('bundle_list', {'sort': field}) }}'>{{ text }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% include 'KnplabsSymfony2BundlesBundle:Repo:bigList.html.twig' with {'repos': repos} %}
+    </div>
+    <div id="side">
+        {% render 'symfony2bundles.controller.bundle:listFeaturedAction' with {'max': 2} %}
+    </div>
+{% endblock %}

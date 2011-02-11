@@ -1,5 +1,7 @@
 {% extends 'KnplabsSymfony2BundlesBundle:Repo:show.html.twig' %}
 
-{% block h1 %}{{ repo.shortName }}<span>Bundle</span>{% endblock %}
-
-{% block git_command %}git submodule add {{ repo.gitUrl }} src/Bundle/{{ repo.name }}{% endblock %}
+{% block breadcrumb %}
+    <a href="{{ path('homepage') }}">Home</a> &gt;
+    <a href="{{ path('bundle_list') }}">Bundles</a> &gt;
+    <span>{{ repo.name }}</span>
+{% endblock %}

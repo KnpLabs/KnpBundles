@@ -1,0 +1,19 @@
+<ul class="repos-list">
+    {% for repo in repos %}
+    <li class="repo">
+        <div class="generals">
+            <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">{{ repo.name }}</a>
+            <a href="{{ path('user_show', {'name': repo.username }) }}" class="owner">By {{ repo.username }}</a>
+            <p class="description">{{ repo.description }}</p>
+        </div>
+        <div class="details">
+            <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="button show">More details</a>
+            <ul class="infos">
+                <li>Score <span>{{ repo.score }}</span></li>
+                <li>Created the <span>{{ repo.createdAt|date('Y/m/d') }}</span></li>
+                <li>Nb of contributors <span>{{ repo.nbContributors }}</span></li>
+            </ul>
+        </div>
+    </li>
+    {% endfor %}
+</ul>

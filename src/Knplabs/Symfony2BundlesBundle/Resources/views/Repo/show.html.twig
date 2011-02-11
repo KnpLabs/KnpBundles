@@ -1,91 +1,41 @@
 {% extends 'KnplabsSymfony2BundlesBundle::layout.html.twig' %}
 
+{% block body_attributes %}id="repo-show"{% endblock %}
+
 {% block title %}{{ repo.name }} by {{ repo.username }}{% endblock %}
+
+{% block h1 %}{{ repo.name }}{% endblock %}
 
 {% block description %}{{ repo.description }}{% endblock %}
 
-{% block slogan %}{{ repo.description }}{% endblock %}
-
-{% block repo_name %}{{ repo.name }}{% endblock %}
-
-{% block repo_url %}{{ repo.gitHubUrl }}{% endblock %}
-
-{% block sidemenu %}
-<h3>Last commits</h3>
-<div class="sidemenu">
-    <ul>
-        {% for commit in repo.getLastCommits(12) %}
-        <li>
-            <a href="{{ commit.url }}">{{ commit.message_first_line }}</a><br />
-            <span>{{ commit.author }} | {{ ago(commit.committed_date) }}</span>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
-{% endblock %}
-
 {% block content %}
-<div class="post">
-
-    <div class="right">
-        <div class="post-install">
-            <pre>{% block git_command %}{% endblock %}</pre>
+    <div id="main">
+        <div class="actions">
+            <a class="button github" href="{{ repo.gitHubUrl }}">View on Github</a>
+            <a class="button problem" href="{{ repo.gitHubUrl }}/issues">Report problem</a>
         </div>
-
-        <div class="markdown">
-            {{ repo.readme|markdown|raw }}
+        <a class="user" href="{{ path('user_show', {'name': repo.username}) }}">by {{ repo.username }}</a>
+        <div class="details">
+            <ul class="infos">
+                <li>Score <span>{{ repo.score }}</span></li>
+                <li>Created the <span>{{ repo.createdAt|date('Y/m/d') }}</span></li>
+                <li>Nb of contributors <span>{{ repo.nbContributors }}</span></li>
+                <li>Nb of followers <span>{{ repo.nbFollowers }}</span></li>
+            </ul>
+            <p class="description">{{ repo.description }}</p>
         </div>
-
     </div>
-
-    <div class="left">
-
-        <div class="post-meta">
-            <h4>Infos</h4>
-            <ul>
-                <li class="user"><a href="{{ path('user_show', {'name': repo.username}) }}">{{ repo.username }}</a></li>
-                <li class="time">{{ ago(repo.lastCommitAt) }}</li>
-                <li class="watch">{{ repo.nbFollowers }} followers</li>
-                <li class="fork">{{ repo.nbForks }} forks</li>
-            </ul>
-        </div>
-
-        <div class="post-meta">
-            <h4>Links</h4>
-            <ul>
-                <li class="github"><a href="{{ repo.githubUrl }}">View source</a></li>
-                <li class="download"><a href="{{ repo.githubUrl }}/tarball/master">Download</a></li>
-                {% if repo.homepage %}
-                <li class="homepage"><a href="{{ repo.homepage }}">Homepage</a></li>
-                {% endif %}
-            </ul>
-        </div>
-
-        {% if repo.contributors|length > 0 %}
-        <div class="post-meta">
-            <h4>Contributors</h4>
-            <ul>
-                {% for contributor in repo.contributors %}
-                <li class="user"><a href="{{ path('user_show', {'name': contributor.name}) }}">{{ contributor.name }}</a></li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-
-        <div class="post-meta">
-            <h4>Versions</h4>
-            {% if repo.tags|length > 0 %}
-            <ul>
-                {% for tag in repo.tags %}
-                <li class="version"><a href="{{ repo.githubUrl }}/tree/{{ tag }}">{{ tag }}</a></li>
-                {% endfor %}
-            </ul>
-            {% else %}
-            No version released.
-            {% endif %}
-        </div>
-
+    <div id="side">
+        {% render 'symfony2bundles.controller.bundle:listFeaturedAction' with {'max': 2} %}
     </div>
-
-</div>
+    <div id="data">
+        <ul class="tabs">
+            <li class="current"><a href="#readme">Readme</a></li>
+        </ul>
+        <div id="readme" class="tab-content">
+            <div class="markdown">
+                {{ repo.readme|markdown|raw }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

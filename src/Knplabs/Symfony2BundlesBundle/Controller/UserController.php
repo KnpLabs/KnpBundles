@@ -15,6 +15,11 @@ class UserController extends Controller
     protected $templating;
     protected $em;
 
+    protected $sortFields = array(
+        'name'  => 'name',
+        'score' => 'score'
+    );
+
     public function __construct(Request $request, EngineInterface $templating, EntityManager $em)
     {
         $this->request = $request;
@@ -36,15 +41,21 @@ class UserController extends Controller
         ));
     }
 
-    public function listAction()
+    public function listAction($sort = 'name')
     {
-        $users = $this->getUserRepository()->findAllWithProjectsSortedBy('score');
+        if(!array_key_exists($sort, $this->sortFields)) {
+            throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
+        }
+
+        $users = $this->getUserRepository()->findAllWithProjectsSortedBy($sort);
 
         $format = $this->request->get('_format');
 
         return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:User:list.' . $format . '.twig', array(
-            'users'     => $users,
-            'callback'  => $this->request->get('callback')
+            'users'         => $users,
+            'sort'          => $sort,
+            'sortFields'    => $this->sortFields,
+            'callback'      => $this->request->get('callback')
         ));
     }
 

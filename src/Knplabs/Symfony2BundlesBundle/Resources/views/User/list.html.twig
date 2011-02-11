@@ -1,65 +1,48 @@
 {% extends 'KnplabsSymfony2BundlesBundle::layout.html.twig' %}
 
-{% block h1 %}<span>{{ users|length }}</span> Developers{% endblock %}
+{% block body_attributes %}id="developers-list"{% endblock %}
+
+{% block h1 %}All {{ users|length }} Developers{% endblock %}
 
 {% block title %}All {{ users|length }} Developers{% endblock %}
 
-{% block slogan %}List of Symfony2 Bundle developers{% endblock %}
-
 {% block description %}Symfony2 Bundle developers{% endblock %}
 
+{% block breadcrumb %}
+    <a href="{{ path('homepage') }}">Home</a> &gt;
+    <span>Developers</span>
+{% endblock %}
+
 {% block content %}
-<ul class="user-list clickable-list">
-{% for user in users %}
-    <li class="item">
-        <a class="item-link" href="{{ path('user_show', {'name': user.name}) }}">
-            <img class="gravatar" src="{{ gravatar(user.email, 32, none, 'mm') }}" width="32" height="32" />
-            {{ user.name }}
-            {% if user.fullName %}
-            <span>({{ user.fullName }})</span>
-            {% endif %}
-        </a>
-        {% if user.hasBundles() %}
-            <ul class="bundles">
-            {% for bundle in user.bundles %}
-                <li>
-                    <a href="{{ path('repo_show', {'username': user.name, 'name': bundle.name}) }}">
-                        {{ bundle.shortName }}<span>Bundle</span><em>{{ bundle.lastTagName }}</em>
-                    </a>
+    <div id="main">
+        <div id="sort">
+            <span class="sort-by">Sort by</span>
+            <ul class="tabs">
+                {% for field, text in sortFields %}
+                <li{{ field == sort ? ' class="current"' : '' }}>
+                    <a href='{{ path('user_list', {'sort': field}) }}'>{{ text }}</a>
                 </li>
-            {% endfor %}
+                {% endfor %}
             </ul>
-        {% endif %}
-
-        {% if user.hasProjects() %}
-            <ul class="projects">
-            {% for project in user.projects %}
-                <li>
-                    <a href="{{ path('repo_show', {'username': user.name, 'name': project.name}) }}">
-                        {{ project.name }}<em>{{ project.lastTagName }}</em>
-                    </a>
-                </li>
-            {% endfor %}
-            </ul>
-        {% endif %}
-
-        <ul class="projects">
-            <li>
-            {% if user.bundles|length + user.projects|length > 0 %}
-            Contributes to 
-            {% if user.bundles|length > 0 %}
-            {{ user.bundles|length }} bundle{{ user.bundles|length > 1 ? 's' : '' }}
-            {% if user.projects|length > 0 %}
-            and
-            {% endif %}
-            {% endif %}
-            {% if user.projects|length > 0 %}
-            {{ user.projects|length }} project{{ user.projects|length > 1 ? 's' : '' }}
-            {% endif %}
-            {% endif %}
+        </div>
+        <ul class="developers-list">
+            {% for user in users %}
+            <li class="developer">
+                <div class="generals">
+                    <a class="name" href="{{ url('user_show', {'name': user.name}) }}">{{ user.name }}</a>
+                    <span class="location">{{ user.location }}</span>
+                </div>
+                <div class="details">
+                    <a class="button more" href="{{ url('user_show', {'name': user.name}) }}">More details</a>
+                    <ul class="infos">
+                        <li>Last commit <span>{{ user.lastCommitAt|date('Y/m/d') }}</span></li>
+                    </ul>
+                </div>
             </li>
+            {% endfor %}
         </ul>
-    </li>
-{% endfor %}
-</ul>
+    </div>
+    <div id="side">
+        {% render 'symfony2bundles.controller.bundle:listFeaturedAction' with {'max': 2} %}
+    </div>
 {% endblock %}

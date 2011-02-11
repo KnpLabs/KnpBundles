@@ -1,5 +1,7 @@
 {% extends 'KnplabsSymfony2BundlesBundle:Repo:show.html.twig' %}
 
-{% block h1 %}{{ repo.name }}{% endblock %}
-
-{% block git_command %}git clone {{ repo.gitUrl }}{% endblock %}
+{% block breadcrumb %}
+    <a href="{{ path('homepage') }}">Home</a> &gt;
+    <a href="{{ path('project_list') }}">Projects</a> &gt;
+    <span>{{ repo.name }}</span>
+{% endblock %}
