@@ -120,8 +120,11 @@ class Repo
     {
         $this->output->write(' files');
         $gitRepo = $this->gitRepoManager->getRepo($repo);
-        if($repo instanceof Entity\Project && !$gitRepo->hasFile('src/autoload.php')) {
-            return false;
+        if($repo instanceof Entity\Project) {
+            $detector = new Symfony2Detector($gitRepo->getDir());
+            if(!$detector->isProject()) {
+                return false;
+            }
         }
 
         foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
@@ -131,24 +134,6 @@ class Repo
         }
 
         return $repo;
-    }
-
-    public function validateFiles(Entity\Repo $repo)
-    {
-        if($repo instanceof Entity\Bundle) {
-            return true;
-        }
-        try {
-            $blobs = $this->github->getObjectApi()->listBlobs($repo->getUsername(), $repo->getName(), 'master');
-        }
-        catch(\phpGitHubApiRequestException $e) {
-            if(404 == $e->getCode()) {
-                return false;
-            }
-            throw $e;
-        }
-
-        return isset($blobs['src/autoload.php']);
     }
 
     public function updateTags(Entity\Repo $repo)

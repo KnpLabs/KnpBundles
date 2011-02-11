@@ -69,10 +69,6 @@ class S2bPopulateCommand extends BaseCommand
                 continue;
             }
             $output->write(sprintf('Discover %s:', $repo->getFullName()));
-            if(!$githubRepo->validateFiles($repo)) {
-                $output->writeLn(' IGNORED');
-                continue;
-            }
             if(isset($users[$repo->getUsername()])) {
                 $user = $users[$repo->getUsername()];
             }
