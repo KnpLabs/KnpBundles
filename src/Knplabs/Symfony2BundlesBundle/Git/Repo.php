@@ -87,4 +87,14 @@ class Repo
     {
       $this->entity = $entity;
     }
+
+    /**
+     * Returns the git repository directory
+     *
+     * @return string
+     */
+    public function getDir()
+    {
+        return $this->gitRepo->getDir();
+    }
 }

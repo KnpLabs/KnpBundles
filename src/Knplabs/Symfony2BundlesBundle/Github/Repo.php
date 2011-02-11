@@ -4,6 +4,7 @@ namespace Knplabs\Symfony2BundlesBundle\Github;
 use Symfony\Component\Console\Output\OutputInterface;
 use Knplabs\Symfony2BundlesBundle\Entity;
 use Knplabs\Symfony2BundlesBundle\Git;
+use Knplabs\Symfony2BundlesBundle\Symfony2Detector;
 
 class Repo
 {
@@ -121,7 +122,7 @@ class Repo
         $this->output->write(' files');
         $gitRepo = $this->gitRepoManager->getRepo($repo);
         if($repo instanceof Entity\Project) {
-            $detector = new Symfony2Detector($gitRepo->getDir());
+            $detector = new Symfony2Detector($gitRepo->getGitRepo()->getDir());
             if(!$detector->isProject()) {
                 return false;
             }

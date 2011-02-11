@@ -47,7 +47,7 @@ class S2bPopulateCommand extends BaseCommand
         $foundRepos = $githubSearch->searchRepos(500, $output);
         $output->writeLn(sprintf('Found %d repo candidates', count($foundRepos)));
 
-        $dm = $this->container->getDoctrine_Orm_DefaultEntityManagerService();
+        $dm = $this->container->get('symfony2bundles.entity_manager');
         $repos = array();
         foreach($dm->getRepository('Knplabs\Symfony2BundlesBundle\Entity\Repo')->findAll() as $repo) {
             $repos[$repo->getFullName()] = $repo;
@@ -56,7 +56,7 @@ class S2bPopulateCommand extends BaseCommand
         foreach($dm->getRepository('Knplabs\Symfony2BundlesBundle\Entity\User')->findAll() as $user) {
             $users[$user->getName()] = $user;
         }
-        $validator = $this->container->getValidatorService();
+        $validator = $this->container->get('validator');
         $counters = array(
             'created' => 0,
             'updated' => 0,
