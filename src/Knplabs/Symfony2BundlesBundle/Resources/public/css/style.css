@@ -482,7 +482,7 @@ a img { border: none; }
             background: #f6f6f6;
         }
             #repo-show #main .infos span { float: right; color: #1d95a3; }
-        #repo-show #main .description { padding: 10px 10px 10px 210px; }
+        #repo-show #main .description { padding: 10px 10px 10px 210px; font-size: 14px; }
     #repo-show #side { float: right; width: 275px; margin: 5px; }
     #repo-show #data {
         clear: both; 
