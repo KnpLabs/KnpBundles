@@ -16,11 +16,11 @@ class BundleController
         $this->em = $em;
     }
 
-    public function listLastCreatedAction()
+    public function listNewestAction()
     {
         $bundles = $this->getBundleRepository()->findAllSortedBy('createdAt', 5);
 
-        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Bundle:listLastCreated.html.twig', array('bundles' => $bundles));
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Bundle:listNewest.html.twig', array('bundles' => $bundles));
     }
 
     public function listBestScoreAction()

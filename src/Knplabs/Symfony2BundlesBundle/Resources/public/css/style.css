@@ -345,7 +345,7 @@ a img { border: none; }
     .bundles_list .hot { position: absolute; top: 12px; left: 13px; }
     .bundles_list .description { font-size: 12px; }
 
-#last-created-bundles h2,
+#newest-bundles h2,
 #best-scored-bundles h2,
 #hot-bundles h2 {
     margin: 0;
@@ -360,9 +360,9 @@ a img { border: none; }
     -moz-border-radius: 12px 12px 0 0;
     -webkit-border-radius: 12px 12px 0 0;
 }
-    #last-created-bundles h2 { background: #1d95a3 url(../images/last_created_bundles_ico.png) no-repeat 12px 14px; }
+    #newest-bundles h2 { background: #1d95a3 url(../images/last_created_bundles_ico.png) no-repeat 12px 14px; }
     #last-creates-bundles a { color: #1d95a3; }
-        #last-created-bundles .bundles_list .number { background: #1d95a3; }
+        #newest-bundles .bundles_list .number { background: #1d95a3; }
     #best-scored-bundles h2 { background: #393939 url(../images/best_scored_bundles_ico.png) no-repeat 12px 9px; }
     #best-scored-bundles a { color: #393939; }
         #best-scored-bundles .bundles_list .number { background: #393939; }
@@ -439,10 +439,10 @@ a img { border: none; }
         -webkit-box-shadow: 0 0 10px rgba(127,127,127,.2);
         border-radius: 0 0 8px 8px;
     }
-    #homepage #last-created-bundles,
+    #homepage #newest-bundles,
     #homepage #best-scored-bundles,
     #homepage #hot-bundles { float: left; width: 275px; margin: 5px; }
-    #homepage #last-created-bundles { border-bottom: 4px solid #1d95a3; }
+    #homepage #newest-bundles { border-bottom: 4px solid #1d95a3; }
     #homepage #best-scored-bundles { border-bottom: 4px solid #393939; }
     #homepage #hot-bundles { border-bottom: 4px solid #ed9521; }
 
