@@ -75,10 +75,6 @@ class S2bPopulateCommand extends BaseCommand
                 continue;
             }
             $output->write(sprintf('Discover %s:', $repo->getFullName()));
-            if(!$githubRepo->validateFiles($repo)) {
-                $output->writeLn(' IGNORED');
-                continue;
-            }
             if(isset($users[$repo->getUsername()])) {
                 $user = $users[$repo->getUsername()];
             }
@@ -130,7 +126,7 @@ class S2bPopulateCommand extends BaseCommand
             $output->writeLn(sprintf('%s contributors: %s', $repo->getFullName(), implode(', ', $contributors)));
             $repo->setContributors($contributors);
         }
-        
+
         // Now update users with more precise GitHub data
         $output->writeLn(sprintf('Will now update %d users', count($users)));
         foreach($users as $user) {
