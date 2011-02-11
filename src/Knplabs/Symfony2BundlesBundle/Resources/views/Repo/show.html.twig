@@ -12,21 +12,17 @@
     <div id="main">
         <div class="actions">
             <a class="button github" href="{{ repo.gitHubUrl }}">View on Github</a>
-            <a class="button problem" href="{{ repo.gitHubUrl }}/issues">Report problem</a>
         </div>
         <a class="user" href="{{ path('user_show', {'name': repo.username}) }}">by {{ repo.username }}</a>
         <div class="details">
             <ul class="infos">
                 <li>Score <span>{{ repo.score }}</span></li>
-                <li>Created the <span>{{ repo.createdAt|date('Y/m/d') }}</span></li>
+                <li>Created the <span>{{ repo.createdAt|date('Y-m-d') }}</span></li>
                 <li>Nb of contributors <span>{{ repo.nbContributors }}</span></li>
                 <li>Nb of followers <span>{{ repo.nbFollowers }}</span></li>
             </ul>
             <p class="description">{{ repo.description }}</p>
         </div>
-    </div>
-    <div id="side">
-        {% render 'symfony2bundles.controller.bundle:listFeaturedAction' with {'max': 2} %}
     </div>
     <div id="data">
         <ul class="tabs">

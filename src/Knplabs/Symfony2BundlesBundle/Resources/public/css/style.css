@@ -176,7 +176,6 @@ a img { border: none; }
 #content { width: 860px; margin: 310px auto 0 auto; text-align: left; }
 
 #main {
-    float: left; 
     width: 560px; 
     margin: 0 5px; 
     background: #fff;
@@ -184,6 +183,7 @@ a img { border: none; }
     -moz-box-shadow: 0 0 10px rgba(127,127,127,.2);
     -webkit-box-shadow: 0 0 10px rgba(127,127,127,.2);
     border-radius: 0 0 8px 8px;
+    overflow: hidden;
 }
     #main h2 {
         margin: 20px 30px;
