@@ -24,6 +24,7 @@
             <p class="description">{{ repo.description }}</p>
         </div>
     </div>
+    {% if repo.readme %}
     <div id="data">
         <ul class="tabs">
             <li class="current"><a href="#readme">Readme</a></li>
@@ -34,4 +35,5 @@
             </div>
         </div>
     </div>
+    {% endif %}
 {% endblock %}
