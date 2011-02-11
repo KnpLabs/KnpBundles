@@ -6,12 +6,6 @@
 
 {% block description %}{{ user.fullName }} has {{ user.nbBundles }} Symfony2 bundles{% endblock %}
 
-{% block breadcrumb %}
-    <a href="{{ path('homepage') }}">Home</a> &gt;
-    <a href="{{ path('user_list') }}">Developers</a> &gt;
-    <span>{{ user.name }}</span>
-{% endblock %}
-
 {% block body_attributes %}id="developer-show"{% endblock %}
 
 {% block content %}

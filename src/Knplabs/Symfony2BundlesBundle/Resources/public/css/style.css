@@ -134,17 +134,6 @@ a img { border: none; }
     }
     #menu .home a:hover { background-position: bottom 10px; }
 
-/* ----- Breadcrumbs ----- */
-
-#breadcrumb {
-    clear: both;   
-    margin: 0;
-    padding: 3px;
-    font-size: 13px;
-}
-    #breadcrumb a { color: #000; text-decoration: underline; }
-    #breadcrumb span { color: #fff; }
-
 /* ----- Search Box ----- */
 
 #search-box {
