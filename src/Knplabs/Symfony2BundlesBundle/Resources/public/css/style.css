@@ -292,7 +292,7 @@ a img { border: none; }
 .bundles_list { font-size: 13px; line-height: 18px; }
     .bundles_list a {
         display: block;
-        height: 65px;
+        height: 85px;
         padding: 10px 10px 10px 40px;
         text-decoration: none;
         color: black;
