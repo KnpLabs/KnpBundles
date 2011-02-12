@@ -33,9 +33,8 @@
                     <span class="location">{{ user.location }}</span>
                 </div>
                 <div class="details">
-                    <a class="button more" href="{{ url('user_show', {'name': user.name}) }}">More details</a>
                     <ul class="infos">
-                        <li>Last commit <span>{{ user.lastCommitAt|date('Y/m/d') }}</span></li>
+                        <li>Last commit <span>{{ user.lastCommitAt|date('Y-m-d') }}</span></li>
                     </ul>
                 </div>
             </li>

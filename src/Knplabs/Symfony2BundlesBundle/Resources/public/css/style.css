@@ -282,6 +282,7 @@ a img { border: none; }
         border-radius: 8px 8px 0 0;
         -moz-border-radius: 8px 8px 0 0;
         -webkit-border-radius: 8px 8px 0 0;
+        text-decoration: none;
     }
         .tabs .current a { color: #000; background: #ededed; }
 
@@ -395,7 +396,7 @@ a img { border: none; }
     
     .repos-list .generals,
     .developers-list .generals
-    { float: left; width: 300px; overflow: hidden; padding-left: 0; }
+    { float: left; width: 600px; overflow: hidden; padding-left: 0; }
 
     .repos-list .image,
     .developers-list .image
@@ -412,21 +413,22 @@ a img { border: none; }
     }
     .repos-list .name,
     .developers-list .name { 
-        display: block; 
         font-size: 16px;
         font-weight: bold;
         color: #000;
-        text-decoration: none;
+        text-decoration: underline;
+        display: block;
     }
     .repos-list .owner,
     .developers-list .location {
         display: block;
+        margin-top: 5px;
         color: #1d95a3;
         text-decoration: none;
     }
-    .repos-list .description { font-size: 12px; }
+    .repos-list .description { font-size: 14px; margin-top: 5px; }
     .repos-list .infos,
-    .developers-list .infos { font-size: 13px; margin: 10px; }
+    .developers-list .infos { font-size: 13px; margin: 0 10px 10px 10px; }
         .repos-list .infos span,
         .developers-list .infos span { float: right; color: #1d95a3; }
 
