@@ -55,7 +55,7 @@ a img { border: none; }
 }
 
 #header-inner { 
-    width: 860px; 
+    width: 960px; 
     height: 310px; 
     margin: auto; 
     position: relative; 
@@ -173,10 +173,10 @@ a img { border: none; }
 
 /* ----- Content ----- */
 
-#content { width: 860px; margin: 310px auto 0 auto; text-align: left; }
+#content { width: 960px; margin: 310px auto 0 auto; text-align: left; }
 
 #main {
-    width: 560px; 
+    width: 960px; 
     margin: 0 5px; 
     background: #fff;
     box-shadow: 0 0 10px rgba(127,127,127,.2);
@@ -209,7 +209,7 @@ a img { border: none; }
 }
 
 #footer-inner {
-    width: 860px;
+    width: 960px;
     margin: auto;
     text-align: left;
     color: #fff;
@@ -441,10 +441,10 @@ a img { border: none; }
     }
     #homepage #newest-bundles,
     #homepage #best-scored-bundles,
-    #homepage #hot-bundles { float: left; width: 275px; margin: 5px; }
+    #homepage #hot-bundles { float: left; width: 300px; margin: 5px 10px; }
     #homepage #newest-bundles { border-bottom: 4px solid #1d95a3; }
-    #homepage #best-scored-bundles { border-bottom: 4px solid #393939; }
-    #homepage #hot-bundles { border-bottom: 4px solid #ed9521; }
+    #homepage #best-scored-bundles { border-bottom: 4px solid #393939; margin-left: 0;}
+    #homepage #hot-bundles { border-bottom: 4px solid #ed9521; margin-right: 0; }
 
 /* ----- Repos List ----- */
 
