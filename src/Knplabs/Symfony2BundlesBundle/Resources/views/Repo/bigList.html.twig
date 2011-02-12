@@ -5,6 +5,9 @@
             <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">
                 <img src="{{ gravatar(repo.user.email, 100) }}" alt="{{ repo.name }}" />
             </a>
+            <div class="bundlerank">
+                {{ repo.score }}
+            </div>
         </div>
         <div class="generals">
             <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">{{ repo.name }}</a>
@@ -13,8 +16,8 @@
         </div>
         <div class="details">
             <ul class="infos">
-                <li>Score <span>{{ repo.score }}</span></li>
-                <li>Developed since <span>{{ repo.createdAt|date('Y-m-d') }}</span></li>
+                <li>Bundle rank <span>{{ repo.score }}</span></li>
+                <li>Developed since <span>{{ repo.createdAt|date('Y-m') }}</span></li>
                 <li>Nb of contributors <span>{{ repo.nbContributors }}</span></li>
         </div>
     </li>

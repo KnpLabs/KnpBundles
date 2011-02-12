@@ -402,6 +402,17 @@ a img { border: none; }
     .developers-list .image
     { float: left; width: 100px; }
 
+    .bundlerank
+    {
+        text-align: center;
+        background: #DDD; 
+        color: #000;
+        border-radius: 6px;
+        -moz-border-radius: 6px;
+        -webkit-border-radius: 6px;
+        padding: 5px 0;
+    }
+    
     .repos-list .details,
     .developers-list .details { 
         float: right; 
