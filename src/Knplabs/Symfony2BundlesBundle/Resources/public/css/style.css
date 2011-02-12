@@ -388,9 +388,19 @@ a img { border: none; }
     .repos-list .generals,
     .developers-list .generals,
     .repos-list .details,
-    .developers-list .details { padding: 10px; }
+    .developers-list .details,
+    .repos-list .image,
+    .developers-list .image
+    { padding: 12px; }
+    
     .repos-list .generals,
-    .developers-list .generals { float: left; width: 300px; overflow: hidden; }
+    .developers-list .generals
+    { float: left; width: 300px; overflow: hidden; }
+
+    .repos-list .image,
+    .developers-list .image
+    { float: left; width: 140px; overflow: hidden; }
+
     .repos-list .details,
     .developers-list .details { 
         float: right; 

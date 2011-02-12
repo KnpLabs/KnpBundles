@@ -23,6 +23,11 @@
         <ul class="developers-list">
             {% for user in users %}
             <li class="developer">
+                <div class="image">
+                    <a href="{{ url('user_show', {'name': user.name}) }}" class="name">
+                        <img src="{{ gravatar(user.email, 140) }}" alt="{{ user.name }}, Symfony developer" />
+                    </a>
+                </div>
                 <div class="generals">
                     <a class="name" href="{{ url('user_show', {'name': user.name}) }}">{{ user.name }}</a>
                     <span class="location">{{ user.location }}</span>
