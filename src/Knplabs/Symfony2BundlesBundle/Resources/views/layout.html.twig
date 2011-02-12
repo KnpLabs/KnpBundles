@@ -8,6 +8,19 @@
     <link href="{{ path('latest', {'_format': 'atom'}) }}" rel="alternate" title="ATOM" type="application/atom+xml" />
     <link href="{{ asset('bundles/knplabssymfony2bundles/css/reset.css') }}" rel="stylesheet" type="text/css" media="screen" />
     <link href="{{ asset('bundles/knplabssymfony2bundles/css/style.css') }}" rel="stylesheet" type="text/css" media="screen" />
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-7062980-9']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
 </head>
 <body {% block body_attributes %}{% endblock %}>
     <div id="header">
