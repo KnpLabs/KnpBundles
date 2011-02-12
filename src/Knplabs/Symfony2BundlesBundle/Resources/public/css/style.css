@@ -122,18 +122,25 @@ a img { border: none; }
         -o-transition: all .25s ease-in-out;
         transition: all .25s ease-in-out;
     }
-    #menu a:hover {
+    #menu a:hover,
+    #menu li.current a
+    {
         background-color: #fff;
         color: #000;
     }
+    #menu .home {
+        padding-left: 5px;
+    }
     #menu .home a { 
-        padding-left: 40px; 
+        padding-left: 30px; 
         background-image: url(../images/menu_home.png); 
         background-repeat: no-repeat; 
         background-position: top 10px;
     }
-    #menu .home a:hover { background-position: bottom 10px; }
-
+    #menu .home a:hover,
+    #menu li.current.home a
+    { background-position: 0     -60px; }
+    
 /* ----- Search Box ----- */
 
 #search-box {
