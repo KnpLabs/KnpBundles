@@ -17,7 +17,7 @@ The last command requires Git >= 1.6. Alternatively, you can run
 ### Configure
 
 To configure your DB for your development and test environments, edit your
-`/s2b/config/config_dev_local.yml` and `/s2b/config/config_test_local.yml`
+`/app/config/config_dev_local.yml` and `/app/config/config_test_local.yml`
 to add your specific DB settings:
 
     imports:
@@ -27,7 +27,7 @@ to add your specific DB settings:
       connections:
         default:
           driver:               PDOMySql
-          dbname:               s2b
+          dbname:               app
           user:                 root
           password:             changeme
           host:                 localhost
@@ -35,37 +35,37 @@ to add your specific DB settings:
 
 #### Create database and tables
 
-    php s2b/console-dev doctrine:database:drop
-    php s2b/console-dev doctrine:database:create
-    php s2b/console-dev doctrine:schema:create
+    php app/console-dev doctrine:database:drop
+    php app/console-dev doctrine:database:create
+    php app/console-dev doctrine:schema:create
 
-    php s2b/console-test doctrine:database:drop
-    php s2b/console-test doctrine:database:create
-    php s2b/console-test doctrine:schema:create
+    php app/console-test doctrine:database:drop
+    php app/console-test doctrine:database:create
+    php app/console-test doctrine:schema:create
 
 #### Generate the doctrine proxies
 
-    php s2b/console-dev doctrine:generate:proxies
-    php s2b/console-test doctrine:generate:proxies
+    php app/console-dev doctrine:generate:proxies
+    php app/console-test doctrine:generate:proxies
 
 #### Load data fixtures
 
-    php s2b/console-dev doctrine:data:load
-    php s2b/console-test doctrine:data:load
+    php app/console-dev doctrine:data:load
+    php app/console-test doctrine:data:load
 
 #### Run the tests (requires latest PHPUnit 3.5)
 
-    phpunit -c s2b
+    phpunit -c app
 
 #### To generate migrations from your current schema
 
-    php s2b/console-dev doctrine:migrations:diff --bundle=Application\\S2bBundle
-    php s2b/console-dev doctrine:migrations:migrate --bundle=Application\\S2bBundle
-    php s2b/console-dev doctrine:generate:proxies
+    php app/console-dev doctrine:migrations:diff --bundle=Application\\S2bBundle
+    php app/console-dev doctrine:migrations:migrate --bundle=Application\\S2bBundle
+    php app/console-dev doctrine:generate:proxies
 
 #### Populate document collections from GitHub
 
-    php s2b/console-dev s2b:populate
+    php app/console-dev app:populate
 
 This can take long time. GitHub API is limited to 60 calls per minute,
 so the commands needs to wait.
