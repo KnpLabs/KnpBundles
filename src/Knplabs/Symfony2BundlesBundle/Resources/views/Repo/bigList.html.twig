@@ -1,6 +1,11 @@
 <ul class="repos-list">
     {% for repo in repos %}
     <li class="repo">
+        <div class="image">
+            <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">
+                <img src="{{ gravatar(repo.user.email, 100) }}" alt="{{ repo.name }}" />
+            </a>
+        </div>
         <div class="generals">
             <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">{{ repo.name }}</a>
             <a href="{{ path('user_show', {'name': repo.username }) }}" class="owner">By {{ repo.username }}</a>

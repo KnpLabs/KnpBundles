@@ -395,11 +395,11 @@ a img { border: none; }
     
     .repos-list .generals,
     .developers-list .generals
-    { float: left; width: 300px; overflow: hidden; }
+    { float: left; width: 300px; overflow: hidden; padding-left: 0; }
 
     .repos-list .image,
     .developers-list .image
-    { float: left; width: 140px; overflow: hidden; }
+    { float: left; width: 100px; }
 
     .repos-list .details,
     .developers-list .details { 
