@@ -184,7 +184,7 @@ h1 {
 
 #content { width: 960px; margin: 100px auto 0 auto; text-align: left; position: relative; background-color: #FFF;}
 
-#content-wrapper { background-color: #FFF; padding-bottom: 50px;}
+#content-wrapper { background-color: #FFF; padding-top: 10px; padding-bottom: 150px;}
 
 #main {
     width: 960px; 
@@ -197,7 +197,7 @@ h1 {
     overflow: hidden;
 }
     #main h2 {
-        margin: 40px 0px 20px 0px;
+        margin: 40px 0px 20px 10px;
         color: #1D95A3;
         font-size: 22px;
         font-weight: bold;
@@ -414,9 +414,11 @@ h1 {
     { float: left; width: 600px; overflow: hidden; padding-left: 0; }
 
 
-    .repos-list .generals .name
+    .repos-list .generals .name,
+    .developers-list .generals .name
     {
         font-size: 20px;
+        padding-bottom: 3px;
     }
 
     .repos-list .image,
