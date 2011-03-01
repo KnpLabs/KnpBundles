@@ -4,16 +4,19 @@
 
 {% block title %}{{ repo.name }} by {{ repo.username }}{% endblock %}
 
-{% block h1 %}{{ repo.name }}{% endblock %}
+{% block content_title %}
+<h1>{{ repo.name }}</h1>
+<div class="user">by <a href="{{ path('user_show', {'name': repo.username}) }}">{{ repo.username }}</a></div>
+<div class="actions">
+<a class="button github" href="{{ repo.gitHubUrl }}">View on Github</a>
+</div>
+{% endblock %}
 
 {% block description %}{{ repo.description }}{% endblock %}
 
 {% block content %}
     <div id="main">
-        <div class="actions">
-            <a class="button github" href="{{ repo.gitHubUrl }}">View on Github</a>
-        </div>
-        <a class="user" href="{{ path('user_show', {'name': repo.username}) }}">by {{ repo.username }}</a>
+        
         <div class="details">
             <ul class="infos">
                 <li>Score <span>{{ repo.score }}</span></li>

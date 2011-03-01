@@ -6,9 +6,9 @@
 
 body {
     margin: 0;
-    background: url(../images/body_bg.png) repeat-x;
     text-align: center;
-    font: 16px/1.2em Arial, sans-serif;
+    font: 16px/1.2em Helvetica, Verdana, sans-serif;
+    background-color: #000;
 }
 
 a img { border: none; }
@@ -51,50 +51,53 @@ a img { border: none; }
     position: absolute; 
     top: 0;
     width: 100%; 
-    background: url(../images/header_inner_bg.jpg) no-repeat center; 
+    background: -webkit-gradient(linear, left top, left bottom, from(#1D95A3), to(#FFF));
+    background: -moz-linear-gradient(top,#1D95A3,#FFF);
 }
 
 #header-inner { 
     width: 960px; 
-    height: 310px; 
+    height: 90px; 
     margin: auto; 
     position: relative; 
     text-align: left;
 }
-#title {
-    position: absolute;
-    bottom: 0;
-    left: -5px;
-    background: url(../images/h1_top.png) no-repeat top left;
+
+#content-title .user {
+    display: block;
+    padding: 0 20px 0 20px;
 }
-    #title h1 {
-        background: url(../images/h1_left.png) no-repeat bottom left;
-        padding: 0;
-        margin: 0;
-    }
-    #title span {
-        display: block;
-        padding: 10px 20px 5px 20px;
-        margin: 0;
-        font-size: 30px;
-        line-height: 36px;
-        color: #fff;
-        background: url(../images/h1_right.png) no-repeat bottom right;
-    }
+
+
+#content-title .user>a {
+    color: #e49211;
+    font-weight: bold;
+}
+
+h1 { 
+    display: block; 
+    padding: 10px 20px 0px 20px;
+    margin: 0; 
+    font-size: 30px;
+    line-height: 36px;
+    color: #000;
+}
 
 /* ----- Goodies ----- */
 
-#logo { position: absolute; top: 10px; left: 0; }
-#mascot { position: absolute; top: 10px; left: 250px; }
-#knplabs { position: absolute; top: 10px; right: 0; }
+#logo { position: absolute; top: 8px; left: 15px; }
+#logo img { width: 90px; }
+#mascot { position: absolute; top: 20px; right: 70px; width:220px;}
+#knplabs { position: absolute; top: 8px; right: 15px;}
+#knplabs img { width: 50px;}
 
 /* ----- Menu ----- */
 
 #menu, 
     #menu li { margin: 0; padding: 0; list-style: none; }
 #menu { 
-    margin-top: 175px;
-    float: left;
+    margin-top: 15px;
+    padding-left: 120px;
     height: 58px; 
     background: url(../images/menu_bg.png) repeat-x;
     border-radius: 12px;
@@ -108,7 +111,7 @@ a img { border: none; }
         float: left;
         border-right: 1px solid #616162;
     }
-    #menu li.first { margin-left: 5px; }
+    #menu li.first { border-left: 1px solid #616162; margin-left: 5px; }
     #menu li.last { margin-right: 5px; border-right: none; }
     #menu a {
         display: block;
@@ -125,29 +128,17 @@ a img { border: none; }
     #menu a:hover,
     #menu li.current a
     {
-        background-color: #fff;
-        color: #000;
+        color: #EDB443;
     }
-    #menu .home {
-        padding-left: 5px;
-    }
-    #menu .home a { 
-        padding-left: 30px; 
-        background-image: url(../images/menu_home.png); 
-        background-repeat: no-repeat; 
-        background-position: top 10px;
-    }
-    #menu .home a:hover,
-    #menu li.current.home a
-    { background-position: 0     -60px; }
+
     
 /* ----- Search Box ----- */
 
 #search-box {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    height: 35px;
+    top: 18px;
+    right: 70px;
+    height: 20px;
     padding: 0;
     border: none;
 }
@@ -155,18 +146,18 @@ a img { border: none; }
     #search-box input { 
         float: left;
         border: none;  
-        height: 35px; 
-        width: 218px;
+        height: 20px; 
+        width: 130px;
         padding: 0 0 0 15px;
         color: #666;
-        font-size: 16px;
+        font-size: 12px;
         margin: 0;
         outline: none;
         background: url(../images/search_text_bg.png) no-repeat left;
     }
     #search-box button {
         float: right;
-        height: 35px;
+        height: 20px;
         width: 43px;
         padding: 0;
         margin: 0;
@@ -180,11 +171,13 @@ a img { border: none; }
 
 /* ----- Content ----- */
 
-#content { width: 960px; margin: 310px auto 0 auto; text-align: left; }
+#content { width: 960px; margin: 100px auto 0 auto; text-align: left; position: relative; background-color: #FFF;}
+
+#content-wrapper { background-color: #FFF; padding-bottom: 50px;}
 
 #main {
     width: 960px; 
-    margin: 0 5px; 
+    margin: 20px 5px; 
     background: #fff;
     box-shadow: 0 0 10px rgba(127,127,127,.2);
     -moz-box-shadow: 0 0 10px rgba(127,127,127,.2);
@@ -194,10 +187,9 @@ a img { border: none; }
 }
     #main h2 {
         margin: 20px 30px;
-        color: #e49211;
+        color: #1D95A3;
         font-size: 18px;
         font-weight: bold;
-        text-decoration: underline;
     }
 
     #side { float: left; width: 275px; margin: 5px; }
@@ -205,14 +197,14 @@ a img { border: none; }
 /* ----- Footer ----- */
 
 #footer-wrapper {
-    margin: 10px 0 0 0;
+    margin: 0;
     background: #000 url(../images/footer_bg.png) repeat-x;
 }
 
 #footer {
     height: 200px;
     text-align: left;
-    background: url(../images/footer_inner_bg.png) no-repeat top;
+    border-top:  3px solid #37A3B0;
 }
 
 #footer-inner {
@@ -441,7 +433,7 @@ a img { border: none; }
     .developers-list .location {
         display: block;
         margin-top: 5px;
-        color: #1d95a3;
+        color: #e49211;
         text-decoration: none;
     }
     .repos-list .description { font-size: 14px; margin-top: 5px; }
@@ -459,7 +451,7 @@ a img { border: none; }
 #homepage {}
     #homepage #present {
         width: 520px;
-        margin: 0 5px 10px 5px;
+        margin: 10px 5px 10px 5px;
         padding: 20px;
         font-size: 14px;
         line-height: 24px;
@@ -468,6 +460,7 @@ a img { border: none; }
         -moz-box-shadow: 0 0 10px rgba(127,127,127,.2);
         -webkit-box-shadow: 0 0 10px rgba(127,127,127,.2);
         border-radius: 0 0 8px 8px;
+        position: relative;
     }
     #homepage #newest-bundles,
     #homepage #best-scored-bundles,
@@ -484,6 +477,7 @@ a img { border: none; }
 /* ----- Repo Show ----- */
 
 #repo-show {}
+        #content-title .actions { position: absolute; top:15px; right: 0px; }
         #repo-show #main .actions { float: right; margin: 10px; }
         #repo-show #main .button { margin: 0 0 0 5px; }
         #repo-show #main .user { 
