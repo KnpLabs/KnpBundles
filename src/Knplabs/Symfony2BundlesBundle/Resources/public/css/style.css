@@ -555,8 +555,15 @@ h1 {
         -webkit-border-radius: 4px;
     }
 
+        #repo-show .commits li {
+            padding: 5px 0px;
+        }
+
         #repo-show .commits span{
             font-weight: bold;
+        }
+        #repo-show .commits .infos{
+            font-style: italic;
         }
 
     #repo-show #side { float: right; width: 275px; margin: 5px; }

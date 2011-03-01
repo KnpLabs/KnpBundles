@@ -42,7 +42,7 @@
     <span>Latest commits</span>
     <ul>
     {% for commit in repo.lastCommits %}
-        <li>[{{ commit.committed_date|date('Y-m-d H:i') }}] <a href="{{ path('user_show', {'name': commit.repo_username }) }}">{{ commit.repo_username }}</a> - {{ commit.message_first_line }}</li>
+        <li>{{ commit.message_first_line }}<div class="infos">by <a href="{{ path('user_show', {'name': commit.repo_username }) }}">{{ commit.repo_username }}</a> {{ ago(commit.committed_date) }}</div></li>
     {% endfor %}
     <ul>
     </div>
