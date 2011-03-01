@@ -9,7 +9,7 @@
             <ul class="tabs" id="repo-tabs">
                 {% for field, text in sortFields %}
                 <li{{ field == sort ? ' class="current"' : '' }}>
-                    <a href='{{ path('bundle_list', {'sort': field}) }}'>{{ text }}</a>
+                    <a href='{% block route_list %}{{ path('bundle_list', {'sort': field}) }}{% endblock %}'>{{ text }}</a>
                 </li>
                 {% endfor %}
             </ul>
