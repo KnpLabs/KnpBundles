@@ -64,15 +64,24 @@ a img { border: none; }
     text-align: left;
 }
 
+#content-title .user-list li {
+    display: inline;
+}
+
 #content-title .user {
     display: block;
-    padding: 0 20px 0 20px;
+    padding: 0 0 0 20px;
 }
 
 
-#content-title .user>a {
+#content-title .user a {
     color: #e49211;
     font-weight: bold;
+}
+
+#content-title .contributor a {
+    color: #e49211;
+    font-weight: normal;
 }
 
 h1 { 
