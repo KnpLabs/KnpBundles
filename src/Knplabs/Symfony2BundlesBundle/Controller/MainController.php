@@ -56,7 +56,7 @@ class MainController
     {
         $text = file_get_contents(__DIR__.'/../Resources/doc/02-Api.markdown');
 
-        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Main:api.html.twig', compact($text), $this->response);
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Main:api.html.twig', array('text' => $text), $this->response);
     }
 
     public function notFoundAction()
