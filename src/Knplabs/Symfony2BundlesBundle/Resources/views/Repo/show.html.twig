@@ -37,6 +37,16 @@
             <p class="description">{{ repo.description }}</p>
         </div>
     </div>
+
+    <div class="commits">
+    <span>Latest commits</span>
+    <ul>
+    {% for commit in repo.lastCommits %}
+        <li>[{{ commit.committed_date|date('Y-m-d H:i') }}] <a href="{{ path('user_show', {'name': commit.repo_username }) }}">{{ commit.repo_username }}</a> - {{ commit.message_first_line }}</li>
+    {% endfor %}
+    <ul>
+    </div>
+
     {% if repo.readme %}
     <div id="data">
         <ul class="tabs">

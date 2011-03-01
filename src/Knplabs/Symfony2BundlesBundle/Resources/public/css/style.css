@@ -14,6 +14,10 @@ body {
 
 a img { border: none; }
 
+a {
+    color: #e49211;
+}
+
 /**
  *  UTILS
  * --------------------
@@ -193,7 +197,7 @@ h1 {
     box-shadow: 0 0 10px rgba(127,127,127,.2);
     -moz-box-shadow: 0 0 10px rgba(127,127,127,.2);
     -webkit-box-shadow: 0 0 10px rgba(127,127,127,.2);
-    border-radius: 0 0 8px 8px;
+    border-radius: 0 0 4px 4px;
     overflow: hidden;
 }
     #main h2 {
@@ -295,9 +299,9 @@ h1 {
         color: #fff;
         font-size: 14px;
         background: #393939;
-        border-radius: 8px 8px 0 0;
-        -moz-border-radius: 8px 8px 0 0;
-        -webkit-border-radius: 8px 8px 0 0;
+        border-radius: 4px 4px 0 0;
+        -moz-border-radius: 4px 4px 0 0;
+        -webkit-border-radius: 4px 4px 0 0;
         text-decoration: none;
     }
         .tabs .current a { color: #000; background: #ededed; }
@@ -397,9 +401,9 @@ h1 {
         font-size: 14px;
         background: #f6f6f6; 
         overflow: hidden;
-        border-radius: 12px;
-        -moz-border-radius: 12px;
-        -webkit-border-radius: 12px;
+        border-radius: 4px;
+        -moz-border-radius: 4px;
+        -webkit-border-radius: 4px;
     }
     .repos-list .generals,
     .developers-list .generals,
@@ -441,9 +445,9 @@ h1 {
         float: right; 
         width: 180px;
         background: #ebebeb; 
-        border-radius: 0 12px 12px 0;
-        -moz-border-radius: 0 12px 12px 0;
-        -webkit-border-radius: 0 12px 12px 0;
+        border-radius: 0 4px 4px 0;
+        -moz-border-radius: 0 4px 4px 0;
+        -webkit-border-radius: 0 4px 4px 0;
     }
     .repos-list .name,
     .developers-list .name { 
@@ -465,6 +469,7 @@ h1 {
     .developers-list .infos { font-size: 13px; margin: 0 10px 10px 10px; }
         .repos-list .infos span,
         .developers-list .infos span { float: right; color: #1d95a3; }
+
 
 /**
  *  SPECIFIC PAGES
@@ -502,6 +507,7 @@ h1 {
 
 #repo-show {}
         #content-title .actions { position: absolute; top:15px; right: 0px; }
+        #repo-show #main { float: left; width: 700px; }
         #repo-show #main .actions { float: right; margin: 10px; }
         #repo-show #main .button { margin: 0 0 0 5px; }
         #repo-show #main .user { 
@@ -516,9 +522,9 @@ h1 {
             clear: both;
             margin: 10px;
             background: #ededed;
-            border-radius: 8px;
-            -moz-border-radius: 8px;
-            -webkit-border-radius: 8px;
+            border-radius: 4px;
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
             overflow: hidden;
         }
         #repo-show #main .infos {
@@ -531,25 +537,48 @@ h1 {
         }
             #repo-show #main .infos span { float: right; color: #1d95a3; }
         #repo-show #main .description { padding: 20px 20px 20px 225px; font-size: 14px; }
+
+    #repo-show .commits {
+        width: 230px;
+        float:right;
+        margin: 20px 0px 10px 10px;
+        padding: 10px 0 10px 10px;
+        overflow: hidden;
+        font-size: 12px;
+
+
+        box-shadow: 0 0 10px rgba(127,127,127,.2);
+        -moz-box-shadow: 0 0 10px rgba(127,127,127,.2);
+        -webkit-box-shadow: 0 0 10px rgba(127,127,127,.2);
+        border-radius: 4px;
+        -moz-border-radius: 4px;
+        -webkit-border-radius: 4px;
+    }
+
+        #repo-show .commits span{
+            font-weight: bold;
+        }
+
     #repo-show #side { float: right; width: 275px; margin: 5px; }
     #repo-show #data {
-        clear: both; 
+        float:left;
+        width:680px;
         padding: 10px;
         margin: 5px;
         font-size: 14px;
         box-shadow: 0 0 10px rgba(127,127,127,.2);
         -moz-box-shadow: 0 0 10px rgba(127,127,127,.2);
         -webkit-box-shadow: 0 0 10px rgba(127,127,127,.2);
-        border-radius: 12px;
-        -moz-border-radius: 12px;
-        -webkit-border-radius: 12px;
+        border-radius: 4px;
+        -moz-border-radius: 4px;
+        -webkit-border-radius: 4px;
     }
     #repo-show .tab-content {
         padding: 10px;
         background: #ededed;
-        border-radius: 0 8px 8px 8px;
-        -moz-border-radius: 0 8px 8px 8px;
-        -webkit-border-radius: 0 8px 8px 8px;
+        border-radius: 0 4px 4px 4px;
+        -moz-border-radius: 0 4px 4px 4px;
+        -webkit-border-radius: 0 4px 4px 4px;
     }
 
 /* ----- Developers List ----- */
