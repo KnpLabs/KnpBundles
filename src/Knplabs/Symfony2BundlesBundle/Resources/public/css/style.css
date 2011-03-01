@@ -88,8 +88,8 @@ h1 {
 #logo { position: absolute; top: 8px; left: 15px; }
 #logo img { width: 90px; }
 #mascot { position: absolute; top: 20px; right: 70px; width:220px;}
-#knplabs { position: absolute; top: 8px; right: 15px;}
-#knplabs img { width: 50px;}
+#knplabs { position: absolute; top: 12px; right: 15px;}
+#knplabs img { width: 45px;}
 
 /* ----- Menu ----- */
 
