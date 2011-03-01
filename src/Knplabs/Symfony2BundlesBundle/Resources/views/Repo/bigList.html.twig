@@ -3,7 +3,7 @@
     <li class="repo">
         <div class="image">
             <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">
-                <img src="{{ gravatar(repo.user.email, 100) }}" alt="{{ repo.name }}" />
+                <img src="{{ gravatar(repo.user.email, 50) }}" alt="{{ repo.name }}" />
             </a>
             <div class="bundlerank">
                 {{ repo.score }}
@@ -11,7 +11,7 @@
         </div>
         <div class="generals">
             <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">{{ repo.name }}</a>
-            <a href="{{ path('user_show', {'name': repo.username }) }}" class="owner">by {{ repo.username }}</a>
+            by <a href="{{ path('user_show', {'name': repo.username }) }}" class="owner">{{ repo.username }}</a>
             <p class="description">{{ repo.description }}</p>
         </div>
         <div class="details">
