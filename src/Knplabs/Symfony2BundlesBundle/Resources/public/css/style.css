@@ -68,15 +68,13 @@ a {
     text-align: left;
 }
 
+#content-title .user-list {
+    padding-top: 10px;
+    padding-left:20px;
+}
 #content-title .user-list li {
     display: inline;
 }
-
-#content-title .user {
-    display: block;
-    padding: 0 0 0 20px;
-}
-
 
 #content-title .user a {
     color: #e49211;
@@ -168,7 +166,6 @@ h1 {
         font-size: 12px;
         margin: 0;
         outline: none;
-        background: url(../images/search_text_bg.png) no-repeat left;
     }
     #search-box button {
         float: right;
