@@ -554,6 +554,7 @@ h1 {
 
         #repo-show .commits li {
             padding: 5px 0px;
+            border-top: 1px solid #eee;
         }
 
         #repo-show .commits span{
