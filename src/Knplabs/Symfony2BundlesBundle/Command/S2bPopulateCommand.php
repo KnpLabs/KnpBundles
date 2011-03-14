@@ -101,6 +101,7 @@ class S2bPopulateCommand extends BaseCommand
             }
             $output->writeLn(' '.$repo->getScore());
         }
+        $dm->flush();
 
         $output->writeLn('Will now update contributors');
         foreach($repos as $repo) {
@@ -120,6 +121,7 @@ class S2bPopulateCommand extends BaseCommand
             $output->writeLn(sprintf('%s contributors: %s', $repo->getFullName(), implode(', ', $contributors)));
             $repo->setContributors($contributors);
         }
+        $dm->flush();
 
         // Now update users with more precise GitHub data
         $output->writeLn(sprintf('Will now update %d users', count($users)));
