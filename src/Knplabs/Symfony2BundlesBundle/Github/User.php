@@ -39,7 +39,15 @@ class User
 
     public function update(Entity\User $user)
     {
-        $data = $this->github->getUserApi()->show($user->getName());
+        try {
+            $data = $this->github->getUserApi()->show($user->getName());
+        } catch(\phpGitHubApiRequestException $e) {
+            if(404 == $e->getCode()) {
+                // User has been removed
+                return false;
+            }
+            return true;
+        }
 
         $user->setEmail(isset($data['email']) ? $data['email'] : null);
         $user->setFullName(isset($data['name']) ? $data['name'] : null);
