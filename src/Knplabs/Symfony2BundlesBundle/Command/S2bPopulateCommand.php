@@ -50,11 +50,11 @@ class S2bPopulateCommand extends BaseCommand
         $dm = $this->container->get('symfony2bundles.entity_manager');
         $repos = array();
         foreach($dm->getRepository('Knplabs\Symfony2BundlesBundle\Entity\Repo')->findAll() as $repo) {
-            $repos[$repo->getFullName()] = $repo;
+            $repos[strtolower($repo->getFullName())] = $repo;
         }
         $users = array();
         foreach($dm->getRepository('Knplabs\Symfony2BundlesBundle\Entity\User')->findAll() as $user) {
-            $users[$user->getName()] = $user;
+            $users[strtolower($user->getName())] = $user;
         }
         $validator = $this->container->get('validator');
         $counters = array(
@@ -65,21 +65,21 @@ class S2bPopulateCommand extends BaseCommand
 
         // create missing repos
         foreach($foundRepos as $repo) {
-            if(isset($repos[$repo->getFullName()])) {
+            if(isset($repos[strtolower($repo->getFullName())])) {
                 continue;
             }
             $output->write(sprintf('Discover %s:', $repo->getFullName()));
-            if(isset($users[$repo->getUsername()])) {
-                $user = $users[$repo->getUsername()];
+            if(isset($users[strtolower($repo->getUsername())])) {
+                $user = $users[strtolower($repo->getUsername())];
             }
             else {
                 $user = $githubUser->import($repo->getUsername());
-                $users[$user->getName()] = $user;
+                $users[strtolower($user->getName())] = $user;
                 $dm->persist($user);
             }
 
             $user->addRepo($repo);
-            $repos[$repo->getFullName()] = $repo;
+            $repos[strtolower($repo->getFullName())] = $repo;
             $dm->persist($repo);
             $output->writeLn(' ADDED');
             ++$counters['created'];
@@ -115,12 +115,12 @@ class S2bPopulateCommand extends BaseCommand
             $contributorNames = $githubRepo->getContributorNames($repo);
             $contributors = array();
             foreach($contributorNames as $contributorName) {
-                if(!isset($users[$contributorName])) {
+                if(!isset($users[strtolower($contributorName)])) {
                     $user = $githubUser->import($contributorName);
-                    $users[$user->getName()] = $user;
+                    $users[strtolower($user->getName())] = $user;
                     $dm->persist($user);
                 }
-                $contributors[] = $users[$contributorName];
+                $contributors[] = $users[strtolower($contributorName)];
             }
             $output->writeLn(sprintf('%s contributors: %s', $repo->getFullName(), implode(', ', $contributors)));
             $repo->setContributors($contributors);
