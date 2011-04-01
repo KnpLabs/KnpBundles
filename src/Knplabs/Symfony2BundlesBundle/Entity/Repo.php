@@ -72,7 +72,7 @@ abstract class Repo
     /**
      * Repo description
      *
-     * @orm:Column(type="string", length=255)
+     * @orm:Column(type="string", length=255, nullable=true)
      */
     protected $description = null;
 
