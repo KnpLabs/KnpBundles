@@ -93,7 +93,11 @@ class S2bPopulateCommand extends BaseCommand
             if($dm->getUnitOfWork()->getEntityState($repo) != UnitOfWork::STATE_MANAGED) {
                 continue;
             }
-            $output->write($repo->getFullName().str_repeat(' ', 50-strlen($repo->getFullName())));
+            $output->write($repo->getFullName());
+            $pad = 50 - strlen($repo->getFullName());
+            if ($pad > 0) {
+                $output->write(str_repeat(' ', $pad));
+            }
             if(!$githubRepo->update($repo)) {
                 $output->write(' - Fail, will be removed');
                 $repo->getUser()->removeRepo($repo);
