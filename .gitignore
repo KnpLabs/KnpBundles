@@ -5,3 +5,4 @@ app/data
 app/deploy.sh
 app/alive.php
 app/phpunit.xml
+web/bundles/*
