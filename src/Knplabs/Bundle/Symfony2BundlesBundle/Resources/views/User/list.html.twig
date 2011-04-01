@@ -1,0 +1,44 @@
+{% extends 'KnplabsSymfony2Bundles::layout.html.twig' %}
+
+{% block body_attributes %}id="developers-list"{% endblock %}
+
+{% block h1 %}All {{ users|length }} Symfony2 Developers{% endblock %}
+
+{% block title %}All {{ users|length }} Symfony2 Developers{% endblock %}
+
+{% block description %}Symfony2 Bundle developers{% endblock %}
+
+{% block content %}
+    <div id="main">
+        <div id="sort">
+            <span class="sort-by">Sort by</span>
+            <ul class="tabs">
+                {% for field, text in sortFields %}
+                <li{{ field == sort ? ' class="current"' : '' }}>
+                    <a href='{{ path('user_list', {'sort': field}) }}'>{{ text }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <ul class="developers-list">
+            {% for user in users %}
+            <li class="developer">
+                <div class="image">
+                    <a href="{{ url('user_show', {'name': user.name}) }}" class="name">
+                        <img src="{{ gravatar(user.email, 50) }}" alt="{{ user.name }}, Symfony developer" />
+                    </a>
+                </div>
+                <div class="generals">
+                    <a class="name" href="{{ url('user_show', {'name': user.name}) }}">{{ user.name }}</a>
+                    <span class="location">{{ user.location }}</span>
+                </div>
+                <div class="details">
+                    <ul class="infos">
+                        <li>Last commit <span>{{ user.lastCommitAt|date('Y-m-d') }}</span></li>
+                    </ul>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

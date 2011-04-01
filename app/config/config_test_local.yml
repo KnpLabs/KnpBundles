@@ -1,8 +1,11 @@
 imports:
     - { resource: config_test.yml }
 
-doctrine.dbal:
-    driver:   pdo_mysql
-    dbname:   s2b_test
-    user:     root
-    password: ~
+doctrine:
+    dbal:
+        connections:
+            default:
+                driver:   pdo_mysql
+                dbname:   s2b_test
+                user:     root
+                password: ~

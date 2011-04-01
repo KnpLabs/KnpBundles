@@ -1,7 +1,7 @@
 <?php
 
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\DependencyInjection\Loader\LoaderInterface;
+use Symfony\Component\Config\Loader\LoaderInterface;
 
 class AppKernel extends Kernel
 {
@@ -17,14 +17,13 @@ class AppKernel extends Kernel
             new Symfony\Bundle\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
 
             // register your bundles here
-            new Knplabs\MarkdownBundle\KnplabsMarkdownBundle(),
-            new Knplabs\TimeBundle\KnplabsTimeBundle(),
-            new Knplabs\MenuBundle\KnplabsMenuBundle(),
+            new Knplabs\Bundle\MarkdownBundle\KnplabsMarkdownBundle(),
+            new Knplabs\Bundle\TimeBundle\KnplabsTimeBundle(),
+            new Knplabs\Bundle\MenuBundle\KnplabsMenuBundle(),
             new Bundle\GravatarBundle\GravatarBundle(),
-            new Bundle\TestSessionBundle\TestSessionBundle(),
 
             // register your applications here
-            new Knplabs\Symfony2BundlesBundle\KnplabsSymfony2BundlesBundle()
+            new Knplabs\Bundle\Symfony2BundlesBundle\KnplabsSymfony2BundlesBundle()
         );
 
         if ($this->isDebug()) {

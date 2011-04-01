@@ -1,7 +1,9 @@
-app.config:
+framework:
     charset:       UTF-8
     error_handler: null
-    csrf_secret:   betterPuttingThisInTheLocalConfigFile
+    csrf_protection:
+        enabled:   true
+        secret:    betterPuttingThisInTheLocalConfigFile
     router:        { resource: "%kernel.root_dir%/config/routing.yml" }
     validation:    { enabled: true, annotations: true }
     templating:    { engines: ['twig', 'php'] } #assets_version: SomeVersionScheme
@@ -12,38 +14,42 @@ app.config:
 
 
 # Twig Configuration
-twig.config:
+twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
 
 # Markdown Configuration
-markdown.parser:    ~ # Enable the parser service
-markdown.twig:      ~
+knplabs_markdown:
+    parser: ~       # Enable the parser service
+    twig:   ~
 
 # Time Configuration
-time.config: ~      # Enable the time helper
+knplabs_time: ~     # Enable the time helper
 
 # Menu Configuration
-menu.templating: ~
-menu.twig: ~
+knplabs_menu:
+    twig: true
 
 # Symfony2Bundles Configuration
-symfony2bundles.config: ~
+knplabs_symfony2_bundles: ~
 
 # Gravatar Configuration
-gravatar.config: ~
+gravatar: ~
 
 # Doctrine Configuration
-doctrine.orm:
-    auto_generate_proxy_classes: %kernel.debug%
-    mappings:
-      KnplabsSymfony2BundlesBundle: ~
-
-# 
-# PLEASE CONFIGURE IT IN YOUR LOCAL CONFIG FILE
-#
-# doctrine.dbal:
-#     dbname:   xxxxxxxx
-#     user:     root
-#     username:  xxxxxxxx
-#     password:  xxxxxxxx
+doctrine:
+    dbal:
+        default_connection: default
+        connections:
+            default:
+                driver:   pdo_mysql
+                dbname:   s2b_prod
+                user:     root
+                password: ~
+    orm:
+        default_entity_manager: default
+        auto_generate_proxy_classes: %kernel.debug%
+        entity_managers:
+            default:
+                mappings:
+                  KnplabsSymfony2Bundles: ~

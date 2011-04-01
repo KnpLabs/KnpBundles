@@ -1,0 +1,62 @@
+{% extends 'KnplabsSymfony2Bundles::layout.html.twig' %}
+
+{% block body_attributes %}id="repo-show"{% endblock %}
+
+{% block title %}{{ repo.name }} by {{ repo.username }}{% endblock %}
+
+{% block content_title %}
+<h1>{{ repo.name }}</h1>
+<ul class="user-list">
+    <li class="user">
+        by <a href="{{ path('user_show', {'name': repo.username}) }}">{{ repo.username }}</a>{% if repo.nbContributors != 0 %},{% endif %}
+    </li>
+
+    {% if repo.nbContributors != 0 %}
+    {% for contributor in repo.contributors %}
+        <li class="contributor"><a href="{{ path('user_show', {'name': contributor}) }}">{{ contributor }}</a>{% if not loop.last %},{% endif %}</li>
+    {% endfor %}
+    {% endif %}
+</ul>
+<div class="actions">
+<a class="button github" href="{{ repo.gitHubUrl }}">View on Github</a>
+</div>
+{% endblock %}
+
+{% block description %}{{ repo.description }}{% endblock %}
+
+{% block content %}
+    <div id="main">
+        
+        <div class="details">
+            <ul class="infos">
+                <li>Score <span>{{ repo.score }}</span></li>
+                <li>Created the <span>{{ repo.createdAt|date('Y-m-d') }}</span></li>
+                <li>Nb of contributors <span>{{ repo.nbContributors }}</span></li>
+                <li>Nb of followers <span>{{ repo.nbFollowers }}</span></li>
+            </ul>
+            <p class="description">{{ repo.description }}</p>
+        </div>
+    </div>
+
+    <div class="commits">
+    <span>Latest commits</span>
+    <ul>
+    {% for commit in repo.lastCommits %}
+        <li>{{ commit.message_first_line }}<div class="infos">by <a href="{{ path('user_show', {'name': commit.repo_username }) }}">{{ commit.repo_username }}</a> {{ time_diff(commit.committed_date) }}</div></li>
+    {% endfor %}
+    <ul>
+    </div>
+
+    {% if repo.readme %}
+    <div id="data">
+        <ul class="tabs">
+            <li class="current"><a href="#readme">Readme</a></li>
+        </ul>
+        <div id="readme" class="tab-content">
+            <div class="markdown">
+                {{ repo.readme|markdown|raw }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

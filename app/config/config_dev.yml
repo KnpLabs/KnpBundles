@@ -1,18 +1,15 @@
 imports:
     - { resource: config.yml }
 
-zend.config:
-    loader:
-        priority: notice
-        path:     %kernel.logs_dir%/%kernel.environment%.log
-    logger:
-        path:     %kernel.logs_dir%/%kernel.environment%.log
-
-app.config:
+framework:
     router:   { resource: "%kernel.root_dir%/config/routing_dev.yml" }
-    profiler:
-        only_exceptions: false
+    profiler: { only_exceptions: false }
 
-webprofiler.config:
+web_profiler:
     toolbar: true
     intercept_redirects: false
+
+zend:
+    logger:
+        priority: debug
+        path:     %kernel.logs_dir%/%kernel.environment%.log

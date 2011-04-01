@@ -1,6 +1,6 @@
 [submodule "vendor/symfony"]
 	path = vendor/symfony
-	url = git://github.com/fabpot/symfony.git
+	url = git://github.com/symfony/symfony.git
 [submodule "vendor/zend"]
 	path = vendor/zend
 	url = git://github.com/zendframework/zf2.git
@@ -48,4 +48,19 @@
 	url = git://github.com/knplabs/TestSessionBundle.git
 [submodule "src/Bundle/GravatarBundle"]
 	path = src/Bundle/GravatarBundle
+	url = git://github.com/ornicar/GravatarBundle.git
+[submodule "vendor/bundles/Knplabs/Bundle/MarkdownBundle"]
+	path = vendor/bundles/Knplabs/Bundle/MarkdownBundle
+	url = git://github.com/knplabs/MarkdownBundle.git
+[submodule "vendor/bundles/Bundle"]
+	path = vendor/bundles/Bundle
+	url = git://github.com/ornicar/GravatarBundle.git
+[submodule "vendor/bundles/Knplabs/Bundle/TimeBundle"]
+	path = vendor/bundles/Knplabs/Bundle/TimeBundle
+	url = git://github.com/knplabs/TimeBundle.git
+[submodule "vendor/bundles/Knplabs/Bundle/MenuBundle"]
+	path = vendor/bundles/Knplabs/Bundle/MenuBundle
+	url = git://github.com/knplabs/MenuBundle.git
+[submodule "vendor/bundles/Bundle/GravatarBundle"]
+	path = vendor/bundles/Bundle/GravatarBundle
 	url = git://github.com/ornicar/GravatarBundle.git
