@@ -149,7 +149,7 @@ class RepoController
             return $repo;
         }
 
-        $github = new \phpGithubApi();
+        $github = new \Github_Client();
         $github->setRequest(new Github\Request());
         $gitRepoManager = new Git\RepoManager($this->reposDir);
         $githubRepo = new Github\Repo($github, new Output(), $gitRepoManager);
@@ -161,7 +161,7 @@ class RepoController
 
         $user = $this->getUserRepository()->findOneByName($username);
         if(!$user) {
-            $githubUser = new Github\User(new \phpGithubApi(), new Output());
+            $githubUser = new Github\User(new \Github_Client(), new Output());
             $user = $githubUser->import($username);
             if(!$user) {
                 return false;
@@ -184,7 +184,7 @@ class RepoController
 
     protected function getRepository($class)
     {
-        return $this->em->getRepository('Knplabs\\Bundle\\Symfony2BundlesBundle\\Entity\\'.$class);
+        return $this->em->getRepository('Knplabs\\Bundle\\Symfony2BundlesBundle\\Entity\\' . $class);
     }
 
 }

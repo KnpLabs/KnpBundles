@@ -10,7 +10,7 @@ class User
     /**
      * php-github-api instance used to request GitHub API
      *
-     * @var \phpGitHubApi
+     * @var \Github_Client
      */
     protected $github = null;
 
@@ -21,7 +21,7 @@ class User
      */
     protected $output = null;
 
-    public function __construct(\phpGitHubApi $github, OutputInterface $output)
+    public function __construct(\Github_Client $github, OutputInterface $output)
     {
         $this->github = $github;
         $this->output = $output;
@@ -41,7 +41,7 @@ class User
     {
         try {
             $data = $this->github->getUserApi()->show($user->getName());
-        } catch(\phpGitHubApiRequestException $e) {
+        } catch(\Github_HttpClient_Exception $e) {
             if(404 == $e->getCode()) {
                 // User has been removed
                 return false;
@@ -79,19 +79,19 @@ class User
 
     /**
      * Get github
-     * @return \phpGitHubApi
+     * @return \Github_Client
      */
-    public function getGitHubApi()
+    public function getGithubClient()
     {
         return $this->github;
     }
 
     /**
      * Set github
-     * @param  \phpGitHubApi
+     * @param  \Github_Client
      * @return null
      */
-    public function setGitHubApi($github)
+    public function setGithubClient($github)
     {
         $this->github = $github;
     }

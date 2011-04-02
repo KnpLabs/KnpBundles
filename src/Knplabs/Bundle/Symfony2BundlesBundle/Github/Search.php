@@ -1,7 +1,7 @@
 <?php
 
 namespace Knplabs\Bundle\Symfony2BundlesBundle\Github;
-se Knplabs\Bundle\Symfony2BundlesBundle\Entity\Repo;
+use Knplabs\Bundle\Symfony2BundlesBundle\Entity\Repo;
 use Symfony\Component\Console\Output\OutputInterface;
 use Goutte\Client;
 
@@ -15,7 +15,7 @@ class Search
     /**
      * php-github-api instance used to request GitHub API
      *
-     * @var \phpGitHubApi
+     * @var \Github_Client
      */
     protected $github = null;
 
@@ -33,7 +33,7 @@ class Search
      */
     protected $output = null;
 
-    public function __construct(\phpGitHubApi $github, Client $browser, OutputInterface $output)
+    public function __construct(\Github_Client $github, Client $browser, OutputInterface $output)
     {
         $this->github = $github;
         $this->browser = $browser;
@@ -175,19 +175,19 @@ class Search
 
     /**
      * Get github
-     * @return \phpGitHubApi
+     * @return \Github_Client
      */
-    public function getGitHubApi()
+    public function getGithubClient()
     {
         return $this->github;
     }
 
     /**
      * Set github
-     * @param  \phpGitHubApi
+     * @param  \Github_Client
      * @return null
      */
-    public function setGitHubApi($github)
+    public function setGithubClient($github)
     {
         $this->github = $github;
     }

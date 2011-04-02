@@ -36,7 +36,7 @@ class S2bPopulateCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $github = new \phpGitHubApi();
+        $github = new \Github_Client();
         $github->setRequest(new Github\Request());
         $githubSearch = new Github\Search($github, new \Goutte\Client(), $output);
         $githubUser = new Github\User($github, $output);

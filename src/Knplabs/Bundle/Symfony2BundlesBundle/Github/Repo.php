@@ -11,7 +11,7 @@ class Repo
     /**
      * php-github-api instance used to request GitHub API
      *
-     * @var \phpGitHubApi
+     * @var \Github_Client
      */
     protected $github = null;
 
@@ -22,7 +22,7 @@ class Repo
      */
     protected $output = null;
 
-    public function __construct(\phpGitHubApi $github, OutputInterface $output, Git\RepoManager $gitRepoManager)
+    public function __construct(\Github_Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager)
     {
         $this->github = $github;
         $this->output = $output;
@@ -67,8 +67,7 @@ class Repo
         $this->output->write(' infos');
         try {
             $data = $this->github->getRepoApi()->show($repo->getUsername(), $repo->getName());
-        }
-        catch(\phpGitHubApiRequestException $e) {
+        } catch(\Github_HttpClient_Exception $e) {
             if(404 == $e->getCode()) {
                 return false;
             }
@@ -93,8 +92,7 @@ class Repo
         $this->output->write(' commits');
         try {
             $commits = $this->github->getCommitApi()->getBranchCommits($repo->getUsername(), $repo->getName(), 'master');
-        }
-        catch(\phpGitHubApiRequestException $e) {
+        } catch(\Github_HttpClient_Exception $e) {
             if(404 == $e->getCode()) {
                 return false;
             }
@@ -151,8 +149,7 @@ class Repo
     {
         try {
             $contributors = $this->github->getRepoApi()->getRepoContributors($repo->getUsername(), $repo->getName());
-        }
-        catch(\phpGitHubApiRequestException $e) {
+        } catch(\Github_HttpClient_Exception $e) {
             if(404 == $e->getCode()) {
                 return array();
             }
@@ -189,19 +186,19 @@ class Repo
 
     /**
      * Get github
-     * @return \phpGitHubApi
+     * @return \Github_Client
      */
-    public function getGitHubApi()
+    public function getGithubClient()
     {
         return $this->github;
     }
 
     /**
      * Set github
-     * @param  \phpGitHubApi
+     * @param  \Github_Client
      * @return null
      */
-    public function setGitHubApi($github)
+    public function setGithubClient($github)
     {
         $this->github = $github;
     }

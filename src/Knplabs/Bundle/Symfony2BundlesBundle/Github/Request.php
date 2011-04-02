@@ -2,9 +2,7 @@
 
 namespace Knplabs\Bundle\Symfony2BundlesBundle\Github;
 
-require_once __DIR__.'/../../../../vendor/php-github-api/lib/request/phpGitHubApiRequest.php';
-
-class Request extends \phpGitHubApiRequest
+class Request extends \Github_Request
 {
     /**
      * How many times retry to communicate with GitHub before giving up
@@ -28,7 +26,7 @@ class Request extends \phpGitHubApiRequest
             try {
                 return parent::doSend($apiPath, $parameters, $httpMethod);
             }
-            catch(\phpGithubApiRequestException $e) {
+            catch(\Github_HttpClient_Exception $e) {
                 if(404 == $e->getCode()) {
                     throw $e;
                 }
