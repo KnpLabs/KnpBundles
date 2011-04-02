@@ -1,8 +1,9 @@
 <?php
 
-class SomeappKernel extends Kernel
+class AppKernel
 {
     public function registerBundles()
     {
+        return array();
     }
 }

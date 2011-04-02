@@ -1,10 +1,11 @@
 <?php
 
 namespace Knplabs\Bundle\Symfony2BundlesBundle\Github;
+
 use Symfony\Component\Console\Output\OutputInterface;
 use Knplabs\Bundle\Symfony2BundlesBundle\Entity;
 use Knplabs\Bundle\Symfony2BundlesBundle\Git;
-use Knplabs\Bundle\Symfony2BundlesBundle\Symfony2Detector;
+use Knplabs\Bundle\Symfony2BundlesBundle\Detector;
 
 class Repo
 {
@@ -117,11 +118,11 @@ class Repo
 
     public function updateFiles(Entity\Repo $repo)
     {
+        $detector = new Detector\Project();
         $this->output->write(' files');
         $gitRepo = $this->gitRepoManager->getRepo($repo);
         if($repo instanceof Entity\Project) {
-            $detector = new Symfony2Detector($gitRepo->getGitRepo()->getDir());
-            if(!$detector->isProject()) {
+            if(!$detector->matches($gitRepo)) {
                 return false;
             }
         }

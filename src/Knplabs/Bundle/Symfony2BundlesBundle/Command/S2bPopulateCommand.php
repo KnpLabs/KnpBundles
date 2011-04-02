@@ -56,7 +56,6 @@ class S2bPopulateCommand extends BaseCommand
         foreach($dm->getRepository('Knplabs\Bundle\Symfony2BundlesBundle\Entity\User')->findAll() as $user) {
             $users[strtolower($user->getName())] = $user;
         }
-        $validator = $this->container->get('validator');
         $counters = array(
             'created' => 0,
             'updated' => 0,
