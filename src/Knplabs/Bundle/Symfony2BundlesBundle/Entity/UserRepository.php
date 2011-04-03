@@ -54,13 +54,17 @@ class UserRepository extends EntityRepository
 
     public function findAllWithProjectsSortedBy($field)
     {
+        return $this->queryAllWithProjectsSortedBy($field)->getResult();
+    }
+
+    public function queryAllWithProjectsSortedBy($field)
+    {
         return $this->createQueryBuilder('u')
             ->orderBy('u.'.$field, 'name' === $field ? 'asc' : 'desc')
             ->leftJoin('u.repos', 'r')
             ->leftJoin('u.contributionRepos', 'cr')
             ->select('u, r, cr')
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
     }
 
     public function count()

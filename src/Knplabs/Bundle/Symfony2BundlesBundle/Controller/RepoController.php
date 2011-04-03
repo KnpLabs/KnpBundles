@@ -10,12 +10,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\EngineInterface;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query;
 use Knplabs\Bundle\Symfony2BundlesBundle\Entity\Repo;
 use Knplabs\Bundle\Symfony2BundlesBundle\Entity\Bundle;
 use Knplabs\Bundle\Symfony2BundlesBundle\Entity\Project;
 use Knplabs\Bundle\Symfony2BundlesBundle\Entity\User;
 use Knplabs\Bundle\Symfony2BundlesBundle\Github;
 use Knplabs\Bundle\Symfony2BundlesBundle\Git;
+use Zend\Paginator\Paginator;
 
 class RepoController
 {
@@ -23,6 +25,7 @@ class RepoController
     protected $em;
     protected $templating;
     protected $httpKernel;
+    protected $paginator;
     protected $reposDir;
     protected $response;
 
@@ -33,7 +36,7 @@ class RepoController
         'createdAt'     => 'last created'
     );
 
-    public function __construct(Request $request, EngineInterface $templating, EntityManager $em, HttpKernel $httpKernel, $reposDir, Response $response = null)
+    public function __construct(Request $request, EngineInterface $templating, EntityManager $em, HttpKernel $httpKernel, Paginator $paginator, $reposDir, Response $response = null)
     {
         if (null === $response) {
             $response = new Response();
@@ -43,6 +46,7 @@ class RepoController
         $this->templating = $templating;
         $this->em = $em;
         $this->httpKernel = $httpKernel;
+        $this->paginator = $paginator;
         $this->reposDir = $reposDir;
         $this->response = $response;
     }
@@ -98,9 +102,14 @@ class RepoController
             throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
         }
 
-        $repos = $this->getRepository($class)->findAllSortedBy($sort);
-
         $format = $this->request->get('_format');
+
+        if ('html' === $format) {
+            $query = $this->getRepository($class)->queryAllSortedBy($sort);
+            $repos = $this->getPaginator($query, $this->request->query->get('page', 1));
+        } else {
+            $repos = $this->getRepository($class)->findAllSortedBy($sort);
+        }
 
         return $this->templating->renderResponse('KnplabsSymfony2Bundles:'.$class.':list.' . $format . '.twig', array(
             'repos'         => $repos,
@@ -175,6 +184,25 @@ class RepoController
         $this->dm->flush();
 
         return $repo;
+    }
+
+    /**
+     * Returns the paginator instance configured for the given query and page
+     * number
+     *
+     * @param  Query   $query The query
+     * @param  integer $page  The current page number
+     *
+     * @return Paginator
+     */
+    protected function getPaginator(Query $query, $page)
+    {
+        $adapter = $this->paginator->getAdapter();
+        $adapter->setQuery($query);
+
+        $this->paginator->setCurrentPageNumber($page);
+
+        return $this->paginator;
     }
 
     protected function getUserRepository()

@@ -30,6 +30,10 @@ knplabs_time: ~     # Enable the time helper
 knplabs_menu:
     twig: true
 
+# Paginator Configuration
+knplabs_paginator:
+    templating: ~
+
 # Symfony2Bundles Configuration
 knplabs_symfony2_bundles: ~
 

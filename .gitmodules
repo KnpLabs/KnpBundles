@@ -46,3 +46,6 @@
 [submodule "vendor/bundles/Bundle/GravatarBundle"]
 	path = vendor/bundles/Bundle/GravatarBundle
 	url = git://github.com/ornicar/GravatarBundle.git
+[submodule "vendor/bundles/Knplabs/Bundle/PaginatorBundle"]
+	path = vendor/bundles/Knplabs/Bundle/PaginatorBundle
+	url = git://github.com/knplabs/PaginatorBundle.git

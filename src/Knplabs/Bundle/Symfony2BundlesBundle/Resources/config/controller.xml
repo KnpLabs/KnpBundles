@@ -28,6 +28,7 @@
             <argument type="service" id="templating" />
             <argument type="service" id="symfony2bundles.entity_manager" />
             <argument type="service" id="http_kernel" />
+            <argument type="service" id="symfony2bundles.paginator" />
             <argument>%symfony2bundles.repos_dir%</argument>
         </service>
         <!-- User controller -->
@@ -35,6 +36,7 @@
             <argument type="service" id="request" strict="false" />
             <argument type="service" id="templating" />
             <argument type="service" id="symfony2bundles.entity_manager" />
+            <argument type="service" id="symfony2bundles.paginator" />
         </service>
     </services>
 </container>

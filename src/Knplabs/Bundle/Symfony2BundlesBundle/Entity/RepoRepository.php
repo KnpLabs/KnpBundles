@@ -23,14 +23,22 @@ class RepoRepository extends EntityRepository
 
     public function findAllSortedBy($field, $nb = null)
     {
-        $qb = $this->createQueryBuilder('e');
-        $qb->orderBy('e.'.$field, 'name' === $field ? 'asc' : 'desc');
-        $query = $qb->getQuery();
+        $query = $this->queryAllSortedBy($field);
+
         if(null !== $nb) {
             $query->setMaxResults($nb);
         }
 
         return $query->execute();
+    }
+
+    public function queryAllSortedBy($field)
+    {
+        $qb = $this->createQueryBuilder('e');
+        $qb->orderBy('e.'.$field, 'name' === $field ? 'asc' : 'desc');
+        $query = $qb->getQuery();
+
+        return $query;
     }
 
     public function count()

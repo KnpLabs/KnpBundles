@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Knplabs\Bundle\MarkdownBundle\KnplabsMarkdownBundle(),
             new Knplabs\Bundle\TimeBundle\KnplabsTimeBundle(),
             new Knplabs\Bundle\MenuBundle\KnplabsMenuBundle(),
+            new Knplabs\Bundle\PaginatorBundle\KnplabsPaginatorBundle(),
             new Bundle\GravatarBundle\GravatarBundle(),
 
             // register your applications here
