@@ -105,10 +105,10 @@ class RepoController
         $format = $this->request->get('_format');
 
         if ('html' === $format) {
-            $query = $this->getRepository($class)->queryAllSortedBy($sort);
+            $query = $this->getRepository($class)->queryAllWithUsersAndContributorsSortedBy($sort);
             $repos = $this->getPaginator($query, $this->request->query->get('page', 1));
         } else {
-            $repos = $this->getRepository($class)->findAllSortedBy($sort);
+            $repos = $this->getRepository($class)->findAllWithUsersAndContributorsSortedBy($sort);
         }
 
         return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:'.$class.':list.' . $format . '.twig', array(

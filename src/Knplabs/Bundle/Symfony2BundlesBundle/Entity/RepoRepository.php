@@ -41,6 +41,37 @@ class RepoRepository extends EntityRepository
         return $query;
     }
 
+    /**
+     * Finds all the repos with their associated users and contributors, sorted
+     * by the specified field
+     *
+     * @param  string $field The name of the field to sort by
+     *
+     * @return \Doctrine\Common\Collection
+     */
+    public function findAllWithUsersAndContributorsSortedBy($field)
+    {
+        return $this->queryAllWithUsersAndContributorsSortedBy()->execute();
+    }
+
+    /**
+     * Returns the query to retrieve all the repos with their associated users
+     * and contributors, sorted by the specified field
+     *
+     * @param  string $field The name of the field to sort by
+     *
+     * @return \Doctrine\Query
+     */
+    public function queryAllWithUsersAndContributorsSortedBy($field)
+    {
+        return $this->createQueryBuilder('repo')
+            ->select('repo, user, contributors')
+            ->leftJoin('repo.user', 'user')
+            ->leftJoin('repo.contributors', 'contributors')
+            ->orderBy('repo.' . $field, 'name' === $field ? 'asc' : 'desc')
+            ->getQuery();
+    }
+
     public function count()
     {
         return $this->_em->createQuery('SELECT COUNT(e.id) FROM '.$this->getEntityName().' e')->getSingleScalarResult();
