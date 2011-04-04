@@ -303,6 +303,17 @@ h1 {
     }
         .tabs .current a { color: #000; background: #ededed; }
 
+/* ----- Pagination ----- */
+
+.pagination {
+    padding: 20px;
+    text-align: center;
+}
+    .pagination span.current,
+    .pagination a { display: inline-block; padding: 5px 10px; }
+    .pagination a { text-decoration: none; }
+    .pagination a:hover { text-decoration: underline; }
+
 /* ----- Bundles List ----- */
 
 .bundles_list,
