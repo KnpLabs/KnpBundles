@@ -2,18 +2,8 @@
 
 namespace Knplabs\Bundle\Symfony2BundlesBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle as BaseBundle;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class KnplabsSymfony2BundlesBundle extends BaseBundle
+class KnplabsSymfony2BundlesBundle extends Bundle
 {
-    public function getNamespace()
-    {
-        return __NAMESPACE__;
-    }
-
-    public function getPath()
-    {
-        return __DIR__;
-    }
 }

@@ -56,4 +56,4 @@ doctrine:
         entity_managers:
             default:
                 mappings:
-                  KnplabsSymfony2Bundles: ~
+                  KnplabsSymfony2BundlesBundle: ~

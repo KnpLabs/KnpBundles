@@ -13,6 +13,7 @@ $loader->registerNamespaces(array(
     'Doctrine\DBAL'                 => __DIR__.'/../vendor/doctrine-dbal/lib',
     'Doctrine'                      => __DIR__.'/../vendor/doctrine/lib',
     'Zend'                          => __DIR__.'/../vendor/zend/library',
+    'Monolog'                       => __DIR__.'/../vendor/monolog/src',
     'Goutte'                        => __DIR__.'/../vendor/goutte/src',
 ));
 

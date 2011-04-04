@@ -1,4 +1,4 @@
-{% extends 'KnplabsSymfony2Bundles::layout.html.twig' %}
+{% extends 'KnplabsSymfony2BundlesBundle::layout.html.twig' %}
 
 {% block h1 %}{{ user.name }}{% endblock %}
 
@@ -34,25 +34,25 @@
         {% if user.bundles|length > 0 %}
         <div class="bundles-i-manage">
             <h2>Bundles I manage</h2>
-            {% include 'KnplabsSymfony2Bundles:Bundle:mediumList.html.twig' with {'repos': user.bundles} %}           
+            {% include 'KnplabsSymfony2BundlesBundle:Bundle:mediumList.html.twig' with {'repos': user.bundles} %}           
         </div>
         {% endif %}
         {% if user.contributionBundles|length > 0 %}
         <div class="bundles-i-contribute-to">
             <h2>Bundles I contribute to</h2>
-            {% include 'KnplabsSymfony2Bundles:Bundle:mediumList.html.twig' with {'repos': user.contributionBundles} %}           
+            {% include 'KnplabsSymfony2BundlesBundle:Bundle:mediumList.html.twig' with {'repos': user.contributionBundles} %}           
         </div>
         {% endif %}
         {% if user.projects|length > 0 %}
         <div class="projects-i-manage">
             <h2>Projects I manage</h2>
-            {% include 'KnplabsSymfony2Bundles:Project:mediumList.html.twig' with {'repos': user.projects} %}           
+            {% include 'KnplabsSymfony2BundlesBundle:Project:mediumList.html.twig' with {'repos': user.projects} %}           
         </div>
         {% endif %}
         {% if user.contributionProjects|length > 0 %}
         <div class="projects-i-contribute-to">
             <h2>Projects I contribute to</h2>
-            {% include 'KnplabsSymfony2Bundles:Project:mediumList.html.twig' with {'repos': user.contributionProjects} %}           
+            {% include 'KnplabsSymfony2BundlesBundle:Project:mediumList.html.twig' with {'repos': user.contributionProjects} %}           
         </div>
         {% endif %}
     </div>

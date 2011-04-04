@@ -39,7 +39,7 @@ class UserController extends Controller
 
         $format = $this->request->get('_format');
 
-        return $this->templating->renderResponse('KnplabsSymfony2Bundles:User:show.' . $format . '.twig', array(
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:User:show.' . $format . '.twig', array(
             'user'      => $user,
             'callback'  => $this->request->get('callback')
         ));
@@ -60,7 +60,7 @@ class UserController extends Controller
             $users = $this->getUserRepository()->findAllWithProjectsSortedBy($sort);
         }
 
-        return $this->templating->renderResponse('KnplabsSymfony2Bundles:User:list.' . $format . '.twig', array(
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:User:list.' . $format . '.twig', array(
             'users'         => $users,
             'sort'          => $sort,
             'sortFields'    => $this->sortFields,
@@ -76,7 +76,7 @@ class UserController extends Controller
 
         $format = $this->request->get('_format');
 
-        return $this->templating->renderResponse('KnplabsSymfony2Bundles:Bundle:list.' . $format . '.twig', array(
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Bundle:list.' . $format . '.twig', array(
             'repos'     => $user->getBundles(),
             'callback'  => $this->request->get('callback')
         ));
@@ -90,7 +90,7 @@ class UserController extends Controller
 
         $format = $this->request->get('_format');
 
-        return $this->templating->renderResponse('KnplabsSymfony2Bundles:Project:list.' . $format . '.twig', array(
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Project:list.' . $format . '.twig', array(
             'repos'     => $user->getProjects(),
             'callback'  => $this->request->get('callback')
         ));

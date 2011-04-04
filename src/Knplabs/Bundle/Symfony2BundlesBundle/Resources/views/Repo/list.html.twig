@@ -1,4 +1,4 @@
-{% extends 'KnplabsSymfony2Bundles::layout.html.twig' %}
+{% extends 'KnplabsSymfony2BundlesBundle::layout.html.twig' %}
 
 {% block body_attributes %}id="repos-list"{% endblock %}
 
@@ -14,7 +14,7 @@
                 {% endfor %}
             </ul>
         </div>
-        {% include 'KnplabsSymfony2Bundles:Repo:bigList.html.twig' with {'repos': repos} %}
+        {% include 'KnplabsSymfony2BundlesBundle:Repo:bigList.html.twig' with {'repos': repos} %}
         {{ paginator_render(repos)|raw }}
     </div>
 {% endblock %}

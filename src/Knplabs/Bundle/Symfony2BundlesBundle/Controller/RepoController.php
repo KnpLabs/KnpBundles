@@ -56,7 +56,7 @@ class RepoController
         $query = preg_replace('(\W)', '', trim($this->request->get('q')));
 
         if(empty($query)) {
-            return $this->templating->renderResponse('KnplabsSymfony2Bundles:Repo:search.html.twig');
+            return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Repo:search.html.twig');
         }
 
         $repos = $this->getRepository('Repo')->search($query);
@@ -72,7 +72,7 @@ class RepoController
 
         $format = $this->request->get('_format');
 
-        return $this->templating->renderResponse('KnplabsSymfony2Bundles:Repo:searchResults.' . $format . '.twig', array(
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Repo:searchResults.' . $format . '.twig', array(
             'query'         => $query,
             'repos'         => $repos,
             'bundles'       => $bundles,
@@ -90,7 +90,7 @@ class RepoController
 
         $format = $this->request->get('_format');
 
-        return $this->templating->renderResponse('KnplabsSymfony2Bundles:'.$repo->getClass().':show.' . $format . '.twig', array(
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:'.$repo->getClass().':show.' . $format . '.twig', array(
             'repo'          => $repo,
             'callback'      => $this->request->get('callback')
         ));
@@ -111,7 +111,7 @@ class RepoController
             $repos = $this->getRepository($class)->findAllSortedBy($sort);
         }
 
-        return $this->templating->renderResponse('KnplabsSymfony2Bundles:'.$class.':list.' . $format . '.twig', array(
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:'.$class.':list.' . $format . '.twig', array(
             'repos'         => $repos,
             'sort'          => $sort,
             'sortFields'    => $this->sortFields,
@@ -125,7 +125,7 @@ class RepoController
 
         $format = $this->request->get('_format');
 
-        return $this->templating->renderResponse('KnplabsSymfony2Bundles:Repo:listLatest.' . $format . '.twig', array(
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Repo:listLatest.' . $format . '.twig', array(
             'repos'         => $repos,
             'callback'      => $this->request->get('callback')
         ));
@@ -148,7 +148,7 @@ class RepoController
             }
         }
 
-        $this->httpKernel->forward('KnplabsSymfony2Bundles:Main:index', array('sort' => 'score'));
+        $this->httpKernel->forward('KnplabsSymfony2BundlesBundle:Main:index', array('sort' => 'score'));
     }
 
     protected function addRepo($username, $name)

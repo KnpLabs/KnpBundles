@@ -32,7 +32,7 @@ class MainController
 
     public function indexAction()
     {
-        return $this->templating->renderResponse('KnplabsSymfony2Bundles:Main:index.html.twig', array(), $this->response);
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Main:index.html.twig', array(), $this->response);
     }
 
     public function getRankCodeAction()
@@ -60,13 +60,13 @@ class MainController
     {
         $text = file_get_contents(__DIR__.'/../Resources/doc/02-Api.markdown');
 
-        return $this->templating->renderResponse('KnplabsSymfony2Bundles:Main:api.html.twig', array('text' => $text), $this->response);
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Main:api.html.twig', array('text' => $text), $this->response);
     }
 
     public function notFoundAction()
     {
         $this->response->setStatusCode(404);
 
-        return $this->templating->renderResponse('KnplabsSymfony2Bundles:Main:notFoundAction.html.twig', array(), $this->response);
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Main:notFoundAction.html.twig', array(), $this->response);
     }
 }
