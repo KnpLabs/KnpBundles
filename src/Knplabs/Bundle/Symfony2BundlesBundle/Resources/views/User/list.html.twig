@@ -2,9 +2,9 @@
 
 {% block body_attributes %}id="developers-list"{% endblock %}
 
-{% block h1 %}All {{ users|length }} Symfony2 Developers{% endblock %}
+{% block h1 %}All {{ users.totalItemCount }} Symfony2 Developers{% endblock %}
 
-{% block title %}All {{ users|length }} Symfony2 Developers{% endblock %}
+{% block title %}All {{ users.totalItemCount }} Symfony2 Developers{% endblock %}
 
 {% block description %}Symfony2 Bundle developers{% endblock %}
 
