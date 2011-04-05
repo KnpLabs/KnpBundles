@@ -3,6 +3,7 @@
 namespace Knplabs\Bundle\Symfony2BundlesBundle\Detector;
 
 use Knplabs\Bundle\Symfony2BundlesBundle\Detector\Criterion\CriterionInterface;
+use Knplabs\Bundle\Symfony2BundlesBundle\Git\Repo;
 
 /**
  * Abstract detector class based on the criteria system

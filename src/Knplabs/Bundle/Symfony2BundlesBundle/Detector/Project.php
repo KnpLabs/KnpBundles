@@ -1,6 +1,6 @@
 <?php
 
-namespace Knplabs\Bundle\Symfony2BundlesBundle;
+namespace Knplabs\Bundle\Symfony2BundlesBundle\Detector;
 
 class Project extends Detector
 {
