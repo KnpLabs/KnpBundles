@@ -9,7 +9,7 @@
         <parameter key="symfony2bundles.controller.bundle.class">Knplabs\Bundle\Symfony2BundlesBundle\Controller\BundleController</parameter>
         <parameter key="symfony2bundles.controller.repo.class">Knplabs\Bundle\Symfony2BundlesBundle\Controller\RepoController</parameter>
         <parameter key="symfony2bundles.controller.user.class">Knplabs\Bundle\Symfony2BundlesBundle\Controller\UserController</parameter>
-        <parameter key="symfony2bundles.repos_dir">%kernel.cache_dir%/repos</parameter>
+        <parameter key="symfony2bundles.repos_dir">%kernel.root_dir%/repos</parameter>
     </parameters>
 
     <services>
