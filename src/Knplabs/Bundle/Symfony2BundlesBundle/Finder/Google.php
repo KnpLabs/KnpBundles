@@ -17,20 +17,25 @@ class Google implements FinderInterface
     const PARAMETER_START  = 'start';
     const RESULTS_PER_PAGE = 10;
 
-    private $client;
     private $query;
     private $limit;
+    private $client;
 
     /**
      * Construct
      *
      * @param  string $query
      */
-    public function __construct(Client $client, $query = null, $limit = 100)
+    public function __construct($query = null, $limit = 300, Client $client = null)
     {
+        $this->setQuery($query);
+        $this->setLimit($limit);
+
+        if (null === $client) {
+            $client = new Client();
+        }
+
         $this->client = $client;
-        $this->query = $query;
-        $this->limit = $limit;
     }
 
     /**
@@ -40,7 +45,7 @@ class Google implements FinderInterface
      */
     public function setQuery($query)
     {
-        $this->query = $query;
+        $this->query = strval($query);
     }
 
     /**
@@ -50,7 +55,7 @@ class Google implements FinderInterface
      */
     public function setLimit($limit)
     {
-        $this->limit = $limit;
+        $this->limit = intval($limit);
     }
 
     /**
@@ -63,16 +68,24 @@ class Google implements FinderInterface
         }
 
         $repositories = array();
-        foreach (range(1, $this->getNumPages()) as $page) {
-            $page = $this->getNumPages();
 
-            $repositories = array_merge(
-                $repositories,
-                $extract
-            );
+        $page = 0;
+
+        while (count($repositories) < $this->limit) {
+            $page++;
+
+            if (0 === $results) {
+                break;
+            }
+
+            foreach ($results as $result) {
+                if (in_array($repositories, $result)) {
+                    $repositories[] = $result;
+                }
+            }
         }
 
-        return array_unique($repositories);
+        return array_slice($repositories, 0, $this->limit);
     }
 
     /**
