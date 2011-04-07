@@ -58,6 +58,6 @@ class Aggregate implements FinderInterface
             );
         }
 
-        return $repositories;
+        return array_unique($repositories);
     }
 }
