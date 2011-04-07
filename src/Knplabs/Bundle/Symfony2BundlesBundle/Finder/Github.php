@@ -9,7 +9,7 @@ use Github_Client;
  *
  * @package Symfony2Bundles
  */
-class Github implements Finder
+class Github implements FinderInterface
 {
     private $query;
     private $limit;
@@ -79,7 +79,7 @@ class Github implements Finder
 
             foreach ($results as $result) {
                 $repository = $result['owner'] . '/' . $result['name'];
-                if (!in_array($repositories, $repository)) {
+                if (!in_array($repository, $repositories)) {
                     $repositories[] = $repository;
                 }
             }

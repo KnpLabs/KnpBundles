@@ -31,7 +31,7 @@ class Aggregate implements FinderInterface
     {
         $this->finders = new \SplObjectStorage();
         foreach ($finders as $finder) {
-            $this->addFinder(FinderInterface $finder);
+            $this->addFinder($finder);
         }
     }
 

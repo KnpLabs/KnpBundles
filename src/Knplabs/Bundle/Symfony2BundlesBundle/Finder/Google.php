@@ -74,12 +74,14 @@ class Google implements FinderInterface
         while (count($repositories) < $this->limit) {
             $page++;
 
-            if (0 === $results) {
+            $results = $this->findPage($page);
+
+            if (0 === count($results)) {
                 break;
             }
 
             foreach ($results as $result) {
-                if (in_array($repositories, $result)) {
+                if (in_array($result, $repositories)) {
                     $repositories[] = $result;
                 }
             }
@@ -114,11 +116,11 @@ class Google implements FinderInterface
     {
         $repositories = array();
         $crawler = $this->client->request('GET', $this->buildUrl($page));
-        $urls = $this->extractUrlsFromCrawler($crawler);
+        $urls = $this->extractPageUrls($crawler);
 
         foreach ($urls as $url) {
-            $repository = $this->extractRepositoryFromUrl($url);
-            if (null !== $repository && !in_array($repositories, $repository)) {
+            $repository = $this->extractUrlRepository($url);
+            if (null !== $repository && !in_array($repository, $repositories)) {
                 $repositories[] = $repository;
             }
         }
@@ -135,7 +137,7 @@ class Google implements FinderInterface
      */
     private function extractPageUrls(Crawler $crawler)
     {
-        return $crawler->filter('#search h3 a')->extract('href');
+        return $crawler->filter('#center_col ol li h3 a')->extract('href');
     }
 
     /**
