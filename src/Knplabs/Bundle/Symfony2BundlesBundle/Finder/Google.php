@@ -58,6 +58,10 @@ class Google implements FinderInterface
      */
     public function find()
     {
+        if (empty($this->query)) {
+            throw new \LogicException('You must specify a query to find repositories.');
+        }
+
         $repositories = array();
         foreach (range(1, $this->getNumPages()) as $page) {
             $page = $this->getNumPages();
