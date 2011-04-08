@@ -149,20 +149,10 @@ class Google implements FinderInterface
      */
     private function extractUrlRepository($url)
     {
-        if (preg_match('/https?:\/\/(www.)?github.com\/(?<username>\w+)\/(?<repository>\w+)/', $url, $matches)) {
+        if (preg_match('/https?:\/\/(www.)?github.com\/(?<username>[\w_-]+)\/(?<repository>[\w_-]+)/', $url, $matches)) {
             return $matches['username'] . '/' . $matches['repository'];
         }
 
         return null;
-    }
-
-    /**
-     * Returns the number of pages to fetch depending on the limit
-     *
-     * @return  integer
-     */
-    public function getNumPages()
-    {
-        return ceil($this->limit / self::RESULTS_PER_PAGE);
     }
 }

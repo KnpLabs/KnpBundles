@@ -11,7 +11,7 @@ class GoogleTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildUrl($query, $arguments, $expected)
     {
-        $finder = new Google($this->getMock('Goutte\Client', array(), array(), '', false), $query);
+        $finder = new Google($query);
 
         $method = new \ReflectionMethod($finder, 'buildUrl');
         $method->setAccessible(true);
@@ -42,7 +42,7 @@ class GoogleTest extends \PHPUnit_Framework_TestCase
     {
         $crawler = new Crawler($node);
 
-        $finder = new Google($this->getMock('Goutte\Client', array(), array(), '', false), 'Symfony2');
+        $finder = new Google('Symfony2');
 
         $method = new \ReflectionMethod($finder, 'extractPageUrls');
         $method->setAccessible(true);
@@ -73,7 +73,7 @@ class GoogleTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtractUrlRepository($url, $expected)
     {
-        $finder = new Google($this->getMock('Goutte\Client', array(), array(), '', false), 'Symfony2');
+        $finder = new Google('Symfony2');
 
         $method = new \ReflectionMethod($finder, 'extractUrlRepository');
         $method->setAccessible(true);
@@ -87,6 +87,14 @@ class GoogleTest extends \PHPUnit_Framework_TestCase
             array(
                 'https://github.com/foo/bar',
                 'foo/bar'
+            ),
+            array(
+                'https://github.com/dashed-username/dashed-repository',
+                'dashed-username/dashed-repository'
+            ),
+            array(
+                'https://github.com/underscored_username/underscored_repository',
+                'underscored_username/underscored_repository'
             ),
             array(
                 'https://github.com/foo',
