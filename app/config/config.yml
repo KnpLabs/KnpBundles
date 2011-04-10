@@ -11,6 +11,7 @@ framework:
         default_locale: en
         lifetime:       3600
         auto_start:     true
+    translator:    ~
 
 
 # Twig Configuration
