@@ -33,7 +33,7 @@
 	url = git://github.com/ornicar/php-git-repo.git
 [submodule "vendor/goutte"]
 	path = vendor/goutte
-	url = git://github.com/ornicar/Goutte.git
+	url = git://github.com/fabpot/Goutte.git
 [submodule "vendor/bundles/Knplabs/Bundle/MarkdownBundle"]
 	path = vendor/bundles/Knplabs/Bundle/MarkdownBundle
 	url = git://github.com/knplabs/MarkdownBundle.git
