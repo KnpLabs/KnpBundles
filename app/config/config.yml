@@ -1,12 +1,10 @@
 framework:
-    charset:       UTF-8
-    error_handler: null
-    csrf_protection:
-        enabled:   true
-        secret:    betterPuttingThisInTheLocalConfigFile
-    router:        { resource: "%kernel.root_dir%/config/routing.yml" }
-    validation:    { enabled: true, annotations: true }
-    templating:    { engines: ['twig', 'php'] } #assets_version: SomeVersionScheme
+    charset:          UTF-8
+    csrf_protection:  true
+    secret:           betterPuttingThisInTheLocalConfigFile
+    router:           { resource: "%kernel.root_dir%/config/routing.yml" }
+    validation:       { enabled: true, enable_annotations: true }
+    templating:       { engines: ['twig', 'php'] }
     session:
         default_locale: en
         lifetime:       3600
