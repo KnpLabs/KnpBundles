@@ -15,7 +15,14 @@ class RepoManager
 
     protected $filesystem = null;
 
-    public function __construct($dir)
+    /**
+     * git executable
+     *
+     * @var string
+     */
+    protected $gitExecutable;
+
+    public function __construct($dir, $gitExecutable)
     {
         $this->dir = $dir;
         $this->filesystem = new Filesystem();
@@ -27,7 +34,7 @@ class RepoManager
     {
         if($this->hasRepo($repo)) {
             $dir = $this->getRepoDir($repo);
-            $gitRepo = new \phpGitRepo($dir);
+            $gitRepo = new \phpGitRepo($dir, false, array('git_executable' => $this->gitExecutable));
         }
         else {
             $gitRepo = $this->createGitRepo($repo);
@@ -46,7 +53,7 @@ class RepoManager
     {
         $dir = $this->getRepoDir($repo);
         $this->filesystem->mkdir($dir);
-        $gitRepo = \phpGitRepo::create($dir);
+        $gitRepo = \phpGitRepo::create($dir, false, array('git_executable' => $this->gitExecutable));
         $gitRepo->git('remote add origin '.$repo->getGitUrl());
         $gitRepo->git('pull origin master');
 

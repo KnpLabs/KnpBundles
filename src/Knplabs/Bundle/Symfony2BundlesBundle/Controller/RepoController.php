@@ -27,6 +27,7 @@ class RepoController
     protected $httpKernel;
     protected $paginator;
     protected $reposDir;
+    protected $gitExecutable;
     protected $response;
 
     protected $sortFields = array(
@@ -36,7 +37,7 @@ class RepoController
         'createdAt'     => 'last created'
     );
 
-    public function __construct(Request $request, EngineInterface $templating, EntityManager $em, HttpKernel $httpKernel, Paginator $paginator, $reposDir, Response $response = null)
+    public function __construct(Request $request, EngineInterface $templating, EntityManager $em, HttpKernel $httpKernel, Paginator $paginator, $reposDir, $gitExecutable, Response $response = null)
     {
         if (null === $response) {
             $response = new Response();
@@ -48,6 +49,7 @@ class RepoController
         $this->httpKernel = $httpKernel;
         $this->paginator = $paginator;
         $this->reposDir = $reposDir;
+        $this->gitExecutable = $gitExecutable;
         $this->response = $response;
     }
 
@@ -160,7 +162,7 @@ class RepoController
 
         $github = new \Github_Client();
         $github->setRequest(new Github\Request());
-        $gitRepoManager = new Git\RepoManager($this->reposDir);
+        $gitRepoManager = new Git\RepoManager($this->reposDir, false, array('gitExecutable' => $this->gitExecutable));
         $githubRepo = new Github\Repo($github, new Output(), $gitRepoManager);
 
         $repo = $githubRepo->update(Repo::create($username.'/'.$name));

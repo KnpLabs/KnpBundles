@@ -30,6 +30,7 @@
             <argument type="service" id="http_kernel" />
             <argument type="service" id="symfony2bundles.paginator" />
             <argument>%symfony2bundles.repos_dir%</argument>
+            <argument>%symfony2bundles.git_bin%</argument>
         </service>
         <!-- User controller -->
         <service id="symfony2bundles.controller.user" class="%symfony2bundles.controller.user.class%">
