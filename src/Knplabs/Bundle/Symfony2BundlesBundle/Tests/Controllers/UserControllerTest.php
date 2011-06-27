@@ -8,7 +8,7 @@ class UserControllerTest extends WebTestCase
 {
     public function testListAll()
     {
-        $client = $this->createClient();
+        $client = self::createClient();
         $crawler = $client->request('GET', $this->generateUrl($client, 'user_list'));
         $this->assertTrue($client->getResponse()->isSuccessful());
 
@@ -20,7 +20,7 @@ class UserControllerTest extends WebTestCase
 
     public function testShow()
     {
-        $client = $this->createClient();
+        $client = self::createClient();
         $crawler = $client->request('GET', $this->generateUrl($client, 'user_list'));
         $crawler = $client->click($crawler->filter('li.developer a.name')->first()->link());
         $this->assertTrue($client->getResponse()->isSuccessful());

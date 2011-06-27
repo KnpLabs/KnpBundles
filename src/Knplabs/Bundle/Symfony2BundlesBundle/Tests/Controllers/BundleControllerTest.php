@@ -8,7 +8,7 @@ class BundleControllerTest extends WebTestCase
 {
     public function testListAll()
     {
-        $client = $this->createClient();
+        $client = self::createClient();
         $crawler = $client->request('GET', '/bundle');
         $this->assertTrue($client->getResponse()->isSuccessful());
 
@@ -20,7 +20,7 @@ class BundleControllerTest extends WebTestCase
 
     public function testShow()
     {
-        $client = $this->createClient();
+        $client = self::createClient();
         $crawler = $client->request('GET', '/bundle');
         $crawler = $client->click($crawler->filter('li.repo a.name')->first()->link());
         $this->assertTrue($client->getResponse()->isSuccessful());
@@ -31,20 +31,20 @@ class BundleControllerTest extends WebTestCase
 
     public function testSearch()
     {
-        $client = $this->createClient();
+        $client = self::createClient();
         $crawler = $client->request('GET', '/search');
         $this->assertTrue($client->getResponse()->isSuccessful());
         $crawler = $client->submit($crawler->filter('form#search-box button')->form(), array('q' => 'ImQuiteSureThisWillReturnNothing'));
         $this->assertTrue($client->getResponse()->isSuccessful());
         $this->assertEquals(0, $crawler->filter('.repos-list li.repo')->count());
-        $crawler = $client->submit($crawler->filter('form#search-box button')->form(), array('q' => '15'));
+        $crawler = $client->submit($crawler->filter('form#search-box button')->form(), array('q' => 'FooBundle'));
         $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertEquals(2, $crawler->filter('.repos-list li.repo')->count());
+        $this->assertEquals(15, $crawler->filter('.repos-list li.repo')->count());
     }
 
     public function testLatest()
     {
-        $client = $this->createClient();
+        $client = self::createClient();
         $crawler = $client->request('GET', '/latest.atom');
         $this->assertTrue($client->getResponse()->isSuccessful());
         $this->assertRegexp('/^<\?xml/', $client->getResponse()->getContent());

@@ -8,7 +8,7 @@ class MainControllerTest extends WebTestCase
 {
     public function testIndex()
     {
-        $client = $this->createClient();
+        $client = self::createClient();
         $crawler = $client->request('GET', '/');
         $this->assertTrue($client->getResponse()->isSuccessful());
 
@@ -18,7 +18,7 @@ class MainControllerTest extends WebTestCase
 
     public function testApi()
     {
-        $client = $this->createClient();
+        $client = self::createClient();
         $crawler = $client->request('GET', '/api');
         $this->assertTrue($client->getResponse()->isSuccessful());
 
@@ -28,7 +28,7 @@ class MainControllerTest extends WebTestCase
 
     public function testMenu()
     {
-        $menu = $this->createClient()->request('GET', '/')->filter('#menu');
+        $menu = self::createClient()->request('GET', '/')->filter('#menu');
         $this->assertEquals(1, $menu->count());
 
         $this->assertEquals('home current first', $menu->filter('li')->first()->attr('class'));
