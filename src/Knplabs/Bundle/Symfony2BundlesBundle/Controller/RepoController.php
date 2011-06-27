@@ -26,7 +26,6 @@ class RepoController
     protected $templating;
     protected $httpKernel;
     protected $paginator;
-    protected $reposDir;
     protected $gitExecutable;
     protected $response;
 
@@ -37,7 +36,7 @@ class RepoController
         'createdAt'     => 'last created'
     );
 
-    public function __construct(Request $request, EngineInterface $templating, EntityManager $em, HttpKernel $httpKernel, Paginator $paginator, $reposDir, $gitExecutable, Response $response = null)
+    public function __construct(Request $request, EngineInterface $templating, EntityManager $em, HttpKernel $httpKernel, Paginator $paginator, $gitExecutable, Response $response = null)
     {
         if (null === $response) {
             $response = new Response();
@@ -48,7 +47,6 @@ class RepoController
         $this->em = $em;
         $this->httpKernel = $httpKernel;
         $this->paginator = $paginator;
-        $this->reposDir = $reposDir;
         $this->gitExecutable = $gitExecutable;
         $this->response = $response;
     }
