@@ -9,10 +9,10 @@ website, written in Symfony2.
 
     git clone git://github.com/knplabs/symfony2bundles.git
     cd symfony2bundles
-    git submodule update --init --recursive
+    git submodule update --init
 
 The last command requires Git >= 1.6. Alternatively, you can run
-`git submodule init` and `git submodule update`, and recurse manually in submodules.
+`git submodule init` and `git submodule update`.
 
 ### Configure
 
@@ -35,23 +35,23 @@ to add your specific DB settings:
 
 #### Create database and tables
 
-    php app/console-dev doctrine:database:drop
-    php app/console-dev doctrine:database:create
-    php app/console-dev doctrine:schema:create
+    php app/console doctrine:database:drop
+    php app/console doctrine:database:create
+    php app/console doctrine:schema:create
 
-    php app/console-test doctrine:database:drop
-    php app/console-test doctrine:database:create
-    php app/console-test doctrine:schema:create
+    php app/console -e test doctrine:database:drop
+    php app/console -e test doctrine:database:create
+    php app/console -e test doctrine:schema:create
 
 #### Generate the doctrine proxies
 
-    php app/console-dev doctrine:generate:proxies
-    php app/console-test doctrine:generate:proxies
+    php app/console cache:warmup
+    php app/console -e test cache:warmup
 
 #### Load data fixtures
 
-    php app/console-dev doctrine:data:load
-    php app/console-test doctrine:data:load
+    php app/console doctrine:data:load
+    php app/console -e test doctrine:data:load
 
 #### Run the tests (requires latest PHPUnit 3.5)
 
@@ -59,13 +59,13 @@ to add your specific DB settings:
 
 #### To generate migrations from your current schema
 
-    php app/console-dev doctrine:migrations:diff --bundle=Application\\S2bBundle
-    php app/console-dev doctrine:migrations:migrate --bundle=Application\\S2bBundle
-    php app/console-dev doctrine:generate:proxies
+    php app/console doctrine:migrations:diff --bundle=Application\\S2bBundle
+    php app/console doctrine:migrations:migrate --bundle=Application\\S2bBundle
+    php app/console cache:warmup
 
 #### Populate document collections from GitHub
 
-    php app/console-dev app:populate
+    php app/console s2b:populate
 
 This can take long time. GitHub API is limited to 60 calls per minute,
 so the commands needs to wait.
