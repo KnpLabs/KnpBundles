@@ -52,3 +52,9 @@
 [submodule "vendor/monolog"]
 	path = vendor/monolog
 	url = git://github.com/Seldaek/monolog.git
+[submodule "vendor/bundles/Symfony/Bundle/DoctrineFixturesBundle"]
+	path = vendor/bundles/Symfony/Bundle/DoctrineFixturesBundle
+	url = git://github.com/symfony/DoctrineFixturesBundle.git
+[submodule "vendor/bundles/Symfony/Bundle/DoctrineMigrationsBundle"]
+	path = vendor/bundles/Symfony/Bundle/DoctrineMigrationsBundle
+	url = git://github.com/symfony/DoctrineMigrationsBundle.git

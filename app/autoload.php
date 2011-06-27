@@ -4,7 +4,7 @@ use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
-    'Symfony'                       => __DIR__.'/../vendor/symfony/src',
+    'Symfony'                       => array(__DIR__.'/../vendor/symfony/src', __DIR__.'/../vendor/bundles'),
     'Knplabs'                       => array(__DIR__.'/../src', __DIR__.'/../vendor/bundles'),
     'Bundle'                        => __DIR__.'/../vendor/bundles',
     'Doctrine\DBAL\Migrations'      => __DIR__.'/../vendor/doctrine-migrations/lib',
