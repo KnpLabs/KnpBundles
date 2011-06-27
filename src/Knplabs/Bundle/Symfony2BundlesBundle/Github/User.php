@@ -31,6 +31,7 @@ class User
     {
         $user = new Entity\User();
         $user->setName($name);
+        $user->setScore(0);
         if(!$this->update($user)) {
             return false;
         }
