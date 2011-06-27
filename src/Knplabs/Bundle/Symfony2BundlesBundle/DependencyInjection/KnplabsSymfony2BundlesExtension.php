@@ -26,21 +26,6 @@ class KnplabsSymfony2BundlesExtension extends Extension
         $container->setParameter('symfony2bundles.git_bin', $config['git_bin']);
     }
 
-    /**
-     * Returns the base path for the XSD files.
-     *
-     * @return string The XSD base path
-     */
-    public function getXsdValidationBasePath()
-    {
-        return null;
-    }
-
-    public function getNamespace()
-    {
-        return 'http://www.symfony.com/schema/dic/symfony';
-    }
-
     private function getConfigTree()
     {
         $tb = new TreeBuilder();

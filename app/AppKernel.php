@@ -35,11 +35,6 @@ class AppKernel extends Kernel
         return $bundles;
     }
 
-    public function registerRootDir()
-    {
-        return __DIR__;
-    }
-
     /**
      * Returns the config_{environment}_local.yml file or
      * the default config_{environment}.yml if it does not exist.
