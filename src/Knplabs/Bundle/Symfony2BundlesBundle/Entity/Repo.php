@@ -1,6 +1,8 @@
 <?php
 
 namespace Knplabs\Bundle\Symfony2BundlesBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -8,16 +10,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * An Open Source Repo living on GitHub
  *
- * @orm:Entity(repositoryClass="Knplabs\Bundle\Symfony2BundlesBundle\Entity\RepoRepository")
- * @orm:Table(
+ * @ORM\Entity(repositoryClass="Knplabs\Bundle\Symfony2BundlesBundle\Entity\RepoRepository")
+ * @ORM\Table(
  *      name="repo",
- *      indexes={@orm:Index(name="discriminator", columns={"discr"})},
- *      uniqueConstraints={@orm:UniqueConstraint(name="full_name_unique",columns={"username", "name"})}
+ *      indexes={@ORM\Index(name="discriminator", columns={"discr"})},
+ *      uniqueConstraints={@ORM\UniqueConstraint(name="full_name_unique",columns={"username", "name"})}
  * )
- * @orm:InheritanceType("SINGLE_TABLE")
- * @orm:DiscriminatorColumn(name="discr", type="string")
- * @orm:DiscriminatorMap({"bundle" = "Bundle", "project" = "Project"})
- * @orm:HasLifecycleCallbacks
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="discr", type="string")
+ * @ORM\DiscriminatorMap({"bundle" = "Bundle", "project" = "Project"})
+ * @ORM\HasLifecycleCallbacks
  */
 abstract class Repo
 {
@@ -39,9 +41,9 @@ abstract class Repo
     }
 
     /**
-     * @orm:Column(name="id", type="integer")
-     * @orm:Id
-     * @orm:GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
@@ -49,7 +51,7 @@ abstract class Repo
      * Repo name, e.g. "MarkdownBundle"
      * Like in GitHub, this name is not unique
      *
-     * @orm:Column(type="string", length=127)
+     * @ORM\Column(type="string", length=127)
      */
     protected $name = null;
 
@@ -57,36 +59,36 @@ abstract class Repo
      * The name of the user who owns this bundle
      * This value is redundant with the name of the referenced User, for performance reasons
      *
-     * @orm:Column(type="string", length=127)
+     * @ORM\Column(type="string", length=127)
      */
     protected $username = null;
 
     /**
      * User who owns the bundle
      *
-     * @orm:ManyToOne(targetEntity="User", inversedBy="repos")
-     * @orm:JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="repos")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     protected $user = null;
 
     /**
      * Repo description
      *
-     * @orm:Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $description = null;
 
     /**
      * The website url, if any
      *
-     * @orm:Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $homepage = null;
 
     /**
      * The bundle readme text extracted from source code
      *
-     * @orm:Column(type="text", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $readme = null;
 
@@ -94,50 +96,50 @@ abstract class Repo
      * Internal score of the Repo, based on several indicators
      * Defines the Repo position in lists and searches
      *
-     * @orm:Column(type="integer")
+     * @ORM\Column(type="integer")
      */
     protected $score = null;
 
     /**
      * Repo creation date (on this website)
      *
-     * @orm:Column(type="datetime")
+     * @ORM\Column(type="datetime")
      */
     protected $createdAt = null;
 
     /**
      * Repo update date (on this website)
      *
-     * @orm:Column(type="datetime")
+     * @ORM\Column(type="datetime")
      */
     protected $updatedAt = null;
 
     /**
      * Date of the last Git commit
      *
-     * @orm:Column(type="date")
+     * @ORM\Column(type="date")
      */
     protected $lastCommitAt = null;
 
     /**
      * The last commits on this bundle repo
      *
-     * @orm:Column(type="text")
+     * @ORM\Column(type="text")
      */
     protected $lastCommits = null;
 
     /**
      * Released tags are Git tags
-     * @orm:Column(type="text")
+     * @ORM\Column(type="text")
      */
     protected $tags = null;
 
     /**
      * Users who contributed to the Repo
-     * @orm:ManyToMany(targetEntity="User", inversedBy="contributionRepos")
-     * @orm:JoinTable(name="contribution",
-     *      joinColumns={@orm:JoinColumn(name="repo_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@orm:JoinColumn(name="user_id", referencedColumnName="id")}
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="contributionRepos")
+     * @ORM\JoinTable(name="contribution",
+     *      joinColumns={@ORM\JoinColumn(name="repo_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
      *)
      *
      * @var ArrayCollection
@@ -146,19 +148,19 @@ abstract class Repo
 
     /**
      * Number of GitHub followers
-     * @orm:Column(type="integer")
+     * @ORM\Column(type="integer")
      */
     protected $nbFollowers = null;
 
     /**
      * Number of GitHub forks
-     * @orm:Column(type="integer")
+     * @ORM\Column(type="integer")
      */
     protected $nbForks = null;
 
     /**
      * True if the Repo is a fork
-     * @orm:Column(type="boolean")
+     * @ORM\Column(type="boolean")
      */
     protected $isFork = false;
 
@@ -576,13 +578,13 @@ abstract class Repo
         return $names;
     }
 
-    /** @PreUpdate */
+    /** @ORM\PreUpdate */
     public function markAsUpdated()
     {
         $this->updatedAt = new \DateTime();
     }
 
-    /** @PrePersist */
+    /** @ORM\PrePersist */
     public function markAsCreated()
     {
         $this->createdAt = $this->updatedAt = new \DateTime();

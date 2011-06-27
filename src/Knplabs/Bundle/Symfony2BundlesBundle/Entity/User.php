@@ -1,6 +1,8 @@
 <?php
 
 namespace Knplabs\Bundle\Symfony2BundlesBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -8,12 +10,12 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 /**
  * A user living on GitHub
  *
- * @orm:Entity(repositoryClass="Knplabs\Bundle\Symfony2BundlesBundle\Entity\UserRepository")
- * @orm:Table(
+ * @ORM\Entity(repositoryClass="Knplabs\Bundle\Symfony2BundlesBundle\Entity\UserRepository")
+ * @ORM\Table(
  *      name="user",
- *      uniqueConstraints={@orm:UniqueConstraint(name="name_unique",columns={"name"})}
+ *      uniqueConstraints={@ORM\UniqueConstraint(name="name_unique",columns={"name"})}
  * )
- * @orm:HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks
  */
 class User
 {
@@ -24,9 +26,9 @@ class User
     }
 
     /**
-     * @orm:Column(name="id", type="integer")
-     * @orm:Id
-     * @orm:GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
@@ -34,63 +36,63 @@ class User
      * User name, e.g. "ornicar"
      * Like in GitHub, this name is unique
      *
-     * @orm:Column(type="string", length=127)
+     * @ORM\Column(type="string", length=127)
      */
     protected $name = null;
 
     /**
      * User email
      *
-     * @orm:Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $email = null;
 
     /**
      * Full name of the user, like "Thibault Duplessis"
      *
-     * @orm:Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $fullName = null;
 
     /**
      * The user company name
      *
-     * @orm:Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $company = null;
 
     /**
      * The user location
      *
-     * @orm:Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $location = null;
 
     /**
      * The user blog url
      *
-     * @orm:Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $blog = null;
 
     /**
      * User creation date (on this website)
      *
-     * @orm:Column(type="datetime")
+     * @ORM\Column(type="datetime")
      */
     protected $createdAt = null;
 
     /**
      * Repos the user owns
      *
-     * @orm:OneToMany(targetEntity="Repo", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Repo", mappedBy="user")
      */
     protected $repos = null;
 
     /**
      * Repos this User contributed to
      *
-     * @orm:ManyToMany(targetEntity="Repo", mappedBy="contributors")
+     * @ORM\ManyToMany(targetEntity="Repo", mappedBy="contributors")
      */
     protected $contributionRepos = null;
 
@@ -102,7 +104,7 @@ class User
     /**
      * Internal score of the User as the sum of his repos' scores
      *
-     * @orm:Column(type="integer")
+     * @ORM\Column(type="integer")
      */
     protected $score = null;
 
@@ -569,7 +571,7 @@ class User
         $this->createdAt = $createdAt;
     }
 
-    /** @PrePersist */
+    /** @ORM\PrePersist */
     public function markAsCreated()
     {
         $this->createdAt = new \DateTime();
