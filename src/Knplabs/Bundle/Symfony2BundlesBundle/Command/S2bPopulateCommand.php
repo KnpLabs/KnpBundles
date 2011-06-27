@@ -6,7 +6,7 @@ use Knplabs\Bundle\Symfony2BundlesBundle\Entity\Repo;
 use Knplabs\Bundle\Symfony2BundlesBundle\Entity\User;
 use Knplabs\Bundle\Symfony2BundlesBundle\Github;
 use Knplabs\Bundle\Symfony2BundlesBundle\Git;
-use Symfony\Bundle\FrameworkBundle\Command\Command as BaseCommand;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,7 +17,7 @@ use Doctrine\ORM\UnitOfWork;
 /**
  * Update local database from web searches
  */
-class S2bPopulateCommand extends BaseCommand
+class S2bPopulateCommand extends ContainerAwareCommand
 {
     /**
      * @see Command
@@ -39,14 +39,14 @@ class S2bPopulateCommand extends BaseCommand
         $github = new \Github_Client();
         $githubSearch = new Github\Search($github, new \Goutte\Client(), $output);
         $githubUser = new Github\User($github, $output);
-        $gitRepoDir = $this->container->getParameter('kernel.cache_dir').'/repos';
-        $gitRepoManager = new Git\RepoManager($gitRepoDir, false, array('gitExecutable' => $this->container->getParameter('symfony2bundles.git_bin')));
+        $gitRepoDir = $this->getContainer()->getParameter('kernel.cache_dir').'/repos';
+        $gitRepoManager = new Git\RepoManager($gitRepoDir, false, array('gitExecutable' => $this->getContainer()->getParameter('symfony2bundles.git_bin')));
         $githubRepo = new Github\Repo($github, $output, $gitRepoManager);
 
         $foundRepos = $githubSearch->searchRepos(500, $output);
         $output->writeLn(sprintf('Found %d repo candidates', count($foundRepos)));
 
-        $dm = $this->container->get('symfony2bundles.entity_manager');
+        $dm = $this->getContainer()->get('symfony2bundles.entity_manager');
         $repos = array();
         foreach($dm->getRepository('Knplabs\Bundle\Symfony2BundlesBundle\Entity\Repo')->findAll() as $repo) {
             $repos[strtolower($repo->getFullName())] = $repo;
