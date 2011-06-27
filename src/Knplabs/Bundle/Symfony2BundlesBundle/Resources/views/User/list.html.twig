@@ -40,6 +40,6 @@
             </li>
             {% endfor %}
         </ul>
-        {{ paginator_render(users)|raw }}
+        {{ users|paginate }}
     </div>
 {% endblock %}

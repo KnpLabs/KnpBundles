@@ -11,7 +11,7 @@
     <services>
         <!-- Paginator -->
         <service id="symfony2bundles.paginator" class="%symfony2bundles.paginator.class%">
-            <argument type="service" id="knplabs_paginator.adapter" />
+            <argument type="service" id="knplabs_paginator.adapter" strict="false" />
         </service>
     </services>
 </container>

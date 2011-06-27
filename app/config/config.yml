@@ -20,7 +20,6 @@ twig:
 # Markdown Configuration
 knplabs_markdown:
     parser: ~       # Enable the parser service
-    twig:   ~
 
 # Time Configuration
 knplabs_time: ~     # Enable the time helper

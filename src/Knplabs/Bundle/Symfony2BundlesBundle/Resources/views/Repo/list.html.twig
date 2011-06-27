@@ -15,6 +15,6 @@
             </ul>
         </div>
         {% include 'KnplabsSymfony2BundlesBundle:Repo:bigList.html.twig' with {'repos': repos} %}
-        {{ paginator_render(repos)|raw }}
+        {{ repos|paginate }}
     </div>
 {% endblock %}
