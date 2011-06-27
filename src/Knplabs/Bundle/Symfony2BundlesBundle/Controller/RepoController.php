@@ -133,61 +133,6 @@ class RepoController
         ));
     }
 
-    public function addAction()
-    {
-        $url = $this->request->request->get('url');
-
-        if(preg_match('#^http://github.com/([\w-]+)/([\w-]+).*$#', $url, $match)) {
-            $repo = $this->addRepo($match[1], $match[2]);
-            if($repo) {
-                $url = $this->router->generate('repo_show', array(
-                    'username'  => $repo->getUsername(),
-                    'name'      => $repo->getName()
-                ));
-                $this->response->setRedirect($url, 302);
-
-                return $this->response;
-            }
-        }
-
-        $this->httpKernel->forward('KnplabsSymfony2BundlesBundle:Main:index', array('sort' => 'score'));
-    }
-
-    protected function addRepo($username, $name)
-    {
-        $repo = $this->getRepository('Repo')->findOneByUsernameAndName($username, $name);
-        if($repo) {
-            return $repo;
-        }
-
-        $github = new \Github_Client();
-        $github->setRequest(new Github\Request());
-        $gitRepoManager = new Git\RepoManager($this->reposDir, false, array('gitExecutable' => $this->gitExecutable));
-        $githubRepo = new Github\Repo($github, new Output(), $gitRepoManager);
-
-        $repo = $githubRepo->update(Repo::create($username.'/'.$name));
-        if(!$repo) {
-            return false;
-        }
-
-        $user = $this->getUserRepository()->findOneByName($username);
-        if(!$user) {
-            $githubUser = new Github\User(new \Github_Client(), new Output());
-            $user = $githubUser->import($username);
-            if(!$user) {
-                return false;
-            }
-        }
-
-        $user->addRepo($repo);
-
-        $this->dm->persist($repo);
-        $this->dm->persist($user);
-        $this->dm->flush();
-
-        return $repo;
-    }
-
     /**
      * Returns the paginator instance configured for the given query and page
      * number

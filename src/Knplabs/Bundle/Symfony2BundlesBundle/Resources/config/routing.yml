@@ -3,11 +3,6 @@ homepage:
     defaults:       { _controller: symfony2bundles.controller.main:indexAction }
     requirements:   { _method: "GET" }
 
-repo_add:
-    pattern:        /repo/add
-    defaults:       { _controller: symfony2bundles.controller.repo:addAction }
-    requirements:   { _method: "POST" }
-
 search:
     pattern:        /search.{_format}
     defaults:       { _controller: symfony2bundles.controller.repo:searchAction, _format: html }
