@@ -25,6 +25,7 @@ class RepoManager
     public function __construct($dir, $gitExecutable)
     {
         $this->dir = $dir;
+        $this->gitExecutable = $gitExecutable;
         $this->filesystem = new Filesystem();
 
         $this->filesystem->mkdir($this->dir);
