@@ -4,7 +4,7 @@ framework:
     secret:           betterPuttingThisInTheLocalConfigFile
     router:           { resource: "%kernel.root_dir%/config/routing.yml" }
     validation:       { enabled: true, enable_annotations: true }
-    templating:       { engines: ['twig', 'php'] }
+    templating:       { engines: ['twig'] }
     session:
         default_locale: en
         lifetime:       3600
