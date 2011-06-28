@@ -51,7 +51,7 @@ class RepoRepository extends EntityRepository
      */
     public function findAllWithUsersAndContributorsSortedBy($field)
     {
-        return $this->queryAllWithUsersAndContributorsSortedBy()->execute();
+        return $this->queryAllWithUsersAndContributorsSortedBy($field)->execute();
     }
 
     /**
