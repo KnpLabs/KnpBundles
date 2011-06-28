@@ -39,19 +39,19 @@ to add your specific DB settings:
     php app/console doctrine:database:create
     php app/console doctrine:schema:create
 
-    php app/console -e test doctrine:database:drop
-    php app/console -e test doctrine:database:create
-    php app/console -e test doctrine:schema:create
+    php app/console --env=test doctrine:database:drop
+    php app/console --env=test doctrine:database:create
+    php app/console --env=test doctrine:schema:create
 
 #### Generate the doctrine proxies
 
     php app/console cache:warmup
-    php app/console -e test cache:warmup
+    php app/console --env=test cache:warmup
 
 #### Load data fixtures
 
-    php app/console doctrine:data:load
-    php app/console -e test doctrine:data:load
+    php app/console doctrine:fixtures:load
+    php app/console --env=test doctrine:fixtures:load
 
 #### Run the tests (requires latest PHPUnit 3.5)
 
@@ -59,8 +59,8 @@ to add your specific DB settings:
 
 #### To generate migrations from your current schema
 
-    php app/console doctrine:migrations:diff --bundle=Application\\S2bBundle
-    php app/console doctrine:migrations:migrate --bundle=Application\\S2bBundle
+    php app/console doctrine:migrations:diff
+    php app/console doctrine:migrations:migrate
     php app/console cache:warmup
 
 #### Populate document collections from GitHub
