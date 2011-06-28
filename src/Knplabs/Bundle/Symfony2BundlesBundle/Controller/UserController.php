@@ -35,11 +35,11 @@ class UserController
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        $format = $this->request->get('_format');
+        $format = $this->request->attributes->get('_format');
 
         return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:User:show.'.$format.'.twig', array(
             'user'      => $user,
-            'callback'  => $this->request->get('callback')
+            'callback'  => $this->request->query->get('callback')
         ));
     }
 
@@ -49,7 +49,7 @@ class UserController
             throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
         }
 
-        $format = $this->request->get('_format');
+        $format = $this->request->attributes->get('_format');
 
         if ('html' === $format) {
             $query = $this->getUserRepository()->queryAllWithProjectsSortedBy($sort);
@@ -62,7 +62,7 @@ class UserController
             'users'         => $users,
             'sort'          => $sort,
             'sortFields'    => $this->sortFields,
-            'callback'      => $this->request->get('callback')
+            'callback'      => $this->request->query->get('callback')
         ));
     }
 
@@ -72,11 +72,11 @@ class UserController
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        $format = $this->request->get('_format');
+        $format = $this->request->attributes->get('_format');
 
         return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Bundle:list.'.$format.'.twig', array(
             'repos'     => $user->getBundles(),
-            'callback'  => $this->request->get('callback')
+            'callback'  => $this->request->query->get('callback')
         ));
     }
 
@@ -86,11 +86,11 @@ class UserController
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        $format = $this->request->get('_format');
+        $format = $this->request->attributes->get('_format');
 
         return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Project:list.'.$format.'.twig', array(
             'repos'     => $user->getProjects(),
-            'callback'  => $this->request->get('callback')
+            'callback'  => $this->request->query->get('callback')
         ));
     }
 

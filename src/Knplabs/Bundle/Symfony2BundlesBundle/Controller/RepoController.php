@@ -48,7 +48,7 @@ class RepoController
 
     public function searchAction()
     {
-        $query = preg_replace('(\W)', '', trim($this->request->get('q')));
+        $query = preg_replace('(\W)', '', trim($this->request->query->get('q')));
 
         if (empty($query)) {
             return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Repo:search.html.twig');
@@ -64,14 +64,14 @@ class RepoController
             }
         }
 
-        $format = $this->request->get('_format');
+        $format = $this->request->attributes->get('_format');
 
         return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Repo:searchResults.'.$format.'.twig', array(
             'query'         => $query,
             'repos'         => $repos,
             'bundles'       => $bundles,
             'projects'      => $projects,
-            'callback'      => $this->request->get('callback')
+            'callback'      => $this->request->query->get('callback')
         ));
     }
 
@@ -82,11 +82,11 @@ class RepoController
             throw new NotFoundHttpException(sprintf('The repo "%s/%s" does not exist', $username, $name));
         }
 
-        $format = $this->request->get('_format');
+        $format = $this->request->attributes->get('_format');
 
         return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:'.$repo->getClass().':show.'.$format.'.twig', array(
             'repo'          => $repo,
-            'callback'      => $this->request->get('callback')
+            'callback'      => $this->request->query->get('callback')
         ));
     }
 
@@ -96,7 +96,7 @@ class RepoController
             throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
         }
 
-        $format = $this->request->get('_format');
+        $format = $this->request->attributes->get('_format');
 
         if ('html' === $format) {
             $query = $this->getRepository($class)->queryAllWithUsersAndContributorsSortedBy($sort);
@@ -109,7 +109,7 @@ class RepoController
             'repos'         => $repos,
             'sort'          => $sort,
             'sortFields'    => $this->sortFields,
-            'callback'      => $this->request->get('callback')
+            'callback'      => $this->request->query->get('callback')
         ));
     }
 
@@ -117,11 +117,11 @@ class RepoController
     {
         $repos = $this->getRepository('Repo')->findAllSortedBy('createdAt', 50);
 
-        $format = $this->request->get('_format');
+        $format = $this->request->attributes->get('_format');
 
         return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Repo:listLatest.'.$format.'.twig', array(
             'repos'         => $repos,
-            'callback'      => $this->request->get('callback')
+            'callback'      => $this->request->query->get('callback')
         ));
     }
 
