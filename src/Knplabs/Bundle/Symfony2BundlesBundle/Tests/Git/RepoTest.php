@@ -3,7 +3,6 @@
 namespace Knplabs\Bundle\Symfony2BundlesBundle\Tests\Git;
 
 use Knplabs\Bundle\Symfony2BundlesBundle\Git\RepoManager;
-use Knplabs\Bundle\Symfony2BundlesBundle\Git\Repo;
 use Knplabs\Bundle\Symfony2BundlesBundle\Entity\Repo as RepoEntity;
 
 class RepoTest extends \PHPUnit_Framework_TestCase

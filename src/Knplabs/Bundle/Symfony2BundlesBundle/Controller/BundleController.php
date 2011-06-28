@@ -2,9 +2,6 @@
 
 namespace Knplabs\Bundle\Symfony2BundlesBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Templating\EngineInterface;
 use Doctrine\ORM\EntityManager;
 

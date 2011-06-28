@@ -11,12 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\EngineInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
-use Knplabs\Bundle\Symfony2BundlesBundle\Entity\Repo;
 use Knplabs\Bundle\Symfony2BundlesBundle\Entity\Bundle;
-use Knplabs\Bundle\Symfony2BundlesBundle\Entity\Project;
-use Knplabs\Bundle\Symfony2BundlesBundle\Entity\User;
-use Knplabs\Bundle\Symfony2BundlesBundle\Github;
-use Knplabs\Bundle\Symfony2BundlesBundle\Git;
 use Zend\Paginator\Paginator;
 
 class RepoController

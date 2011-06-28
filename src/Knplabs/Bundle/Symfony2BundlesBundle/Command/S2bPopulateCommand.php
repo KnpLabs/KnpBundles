@@ -2,16 +2,11 @@
 
 namespace Knplabs\Bundle\Symfony2BundlesBundle\Command;
 
-use Knplabs\Bundle\Symfony2BundlesBundle\Entity\Repo;
-use Knplabs\Bundle\Symfony2BundlesBundle\Entity\User;
 use Knplabs\Bundle\Symfony2BundlesBundle\Github;
 use Knplabs\Bundle\Symfony2BundlesBundle\Git;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Output\Output;
 use Doctrine\ORM\UnitOfWork;
 
 /**
