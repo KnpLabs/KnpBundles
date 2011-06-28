@@ -36,7 +36,7 @@ class S2bPopulateCommand extends ContainerAwareCommand
         $githubSearch = new Github\Search($github, new \Goutte\Client(), $output);
         $githubUser = new Github\User($github, $output);
         $gitRepoDir = $this->getContainer()->getParameter('kernel.cache_dir').'/repos';
-        $gitRepoManager = new Git\RepoManager($gitRepoDir, false, array('gitExecutable' => $this->getContainer()->getParameter('symfony2bundles.git_bin')));
+        $gitRepoManager = new Git\RepoManager($gitRepoDir, $this->getContainer()->getParameter('symfony2bundles.git_bin'));
         $githubRepo = new Github\Repo($github, $output, $gitRepoManager);
 
         $foundRepos = $githubSearch->searchRepos(500, $output);
