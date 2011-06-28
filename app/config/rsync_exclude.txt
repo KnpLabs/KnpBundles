@@ -3,8 +3,10 @@
 /app/cache/*
 /app/logs/*
 /app/config/config_prod_local.yml
+/app/config/config_dev_local.yml
 /app/deploy.sh
 /web/*_dev.php
 /web/uploads
 .git*
-/src/vendor/Zend/documentation
+/vendor/zend/documentation
+/vendor/*/tests
