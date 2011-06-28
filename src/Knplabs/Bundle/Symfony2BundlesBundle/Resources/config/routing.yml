@@ -31,7 +31,7 @@ project_list:
 user_list:
     pattern:        /developer/{sort}.{_format}
     defaults:       { _controller: symfony2bundles.controller.user:listAction, sort: name, _format: html }
-    requirements:   { _method: "GET", sort: "(name)", _format: "(html|json|js)" }
+    requirements:   { _method: "GET", sort: "(name|score)", _format: "(html|json|js)" }
 
 user_bundle_list:
     pattern:        /{name}/bundles.{_format}
