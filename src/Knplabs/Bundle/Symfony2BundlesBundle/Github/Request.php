@@ -7,7 +7,7 @@ class Request extends \Github_Request
     /**
      * How many times retry to communicate with GitHub before giving up
      *
-     * @var int
+     * @var integer
      */
     protected $maxTries = 2;
 
@@ -22,11 +22,10 @@ class Request extends \Github_Request
      */
     public function doSend($apiPath, array $parameters = array(), $httpMethod = 'GET')
     {
-        for($tries = 1; $tries <= $this->maxTries; $tries++) {
+        for ($tries = 1; $tries <= $this->maxTries; $tries++) {
             try {
                 return parent::doSend($apiPath, $parameters, $httpMethod);
-            }
-            catch(\Github_HttpClient_Exception $e) {
+            } catch(\Github_HttpClient_Exception $e) {
                 if(404 == $e->getCode()) {
                     throw $e;
                 }

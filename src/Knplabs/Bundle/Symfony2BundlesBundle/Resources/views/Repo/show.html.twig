@@ -11,14 +11,14 @@
         by <a href="{{ path('user_show', {'name': repo.username}) }}">{{ repo.username }}</a>{% if repo.nbContributors != 0 %},{% endif %}
     </li>
 
-    {% if repo.nbContributors != 0 %}
-    {% for contributor in repo.contributors %}
+    {%- if repo.nbContributors != 0 %}
+    {%- for contributor in repo.contributors %}
         <li class="contributor"><a href="{{ path('user_show', {'name': contributor}) }}">{{ contributor }}</a>{% if not loop.last %},{% endif %}</li>
-    {% endfor %}
-    {% endif %}
+    {%- endfor %}
+    {%- endif %}
 </ul>
 <div class="actions">
-<a class="button github" href="{{ repo.gitHubUrl }}">View on Github</a>
+    <a class="button github" href="{{ repo.gitHubUrl }}">View on Github</a>
 </div>
 {% endblock %}
 
@@ -26,7 +26,7 @@
 
 {% block content %}
     <div id="main">
-        
+
         <div class="details">
             <ul class="infos">
                 <li>Score <span>{{ repo.score }}</span></li>
@@ -41,9 +41,9 @@
     <div class="commits">
     <span>Latest commits</span>
     <ul>
-    {% for commit in repo.lastCommits %}
+    {%- for commit in repo.lastCommits %}
         <li>{{ commit.message_first_line }}<div class="infos">by <a href="{{ path('user_show', {'name': commit.author.login }) }}">{{ commit.author.login }}</a> {{ time_diff(commit.committed_date) }}</div></li>
-    {% endfor %}
+    {%- endfor %}
     <ul>
     </div>
 
@@ -54,7 +54,7 @@
         </ul>
         <div id="readme" class="tab-content">
             <div class="markdown">
-                {{ repo.readme|markdown|raw }}
+                {{ repo.readme|markdown }}
             </div>
         </div>
     </div>

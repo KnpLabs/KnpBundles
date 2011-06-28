@@ -69,7 +69,7 @@ class Collection implements CriterionInterface
                         return false;
                     }
                 case self::STRATEGY_MAJORITY:
-                    $score+= $result ? 1 : -1;
+                    $score += $result ? 1 : -1;
                     break;
                 case self::STRATEGY_ANY:
                     if ($result) {

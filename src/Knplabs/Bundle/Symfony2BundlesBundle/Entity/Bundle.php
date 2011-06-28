@@ -13,6 +13,7 @@ class Bundle extends Repo
 {
     /**
      * Get the first part of the name, without Bundle
+     *
      * @return string
      */
     public function getShortName()

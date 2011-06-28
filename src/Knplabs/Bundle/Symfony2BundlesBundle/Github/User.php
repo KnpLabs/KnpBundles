@@ -32,7 +32,7 @@ class User
         $user = new Entity\User();
         $user->setName($name);
         $user->setScore(0);
-        if(!$this->update($user)) {
+        if (!$this->update($user)) {
             return false;
         }
         return $user;
@@ -61,6 +61,7 @@ class User
 
     /**
      * Get output
+     *
      * @return OutputInterface
      */
     public function getOutput()
@@ -70,6 +71,7 @@ class User
 
     /**
      * Set output
+     *
      * @param  OutputInterface
      * @return null
      */
@@ -80,6 +82,7 @@ class User
 
     /**
      * Get github
+     *
      * @return \Github_Client
      */
     public function getGithubClient()
@@ -89,6 +92,7 @@ class User
 
     /**
      * Set github
+     *
      * @param  \Github_Client
      * @return null
      */
@@ -96,5 +100,4 @@ class User
     {
         $this->github = $github;
     }
-
 }

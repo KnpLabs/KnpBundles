@@ -36,7 +36,7 @@ class Data implements FixtureInterface
             $user = new Entity\User();
             $user->fromArray(array(
                 'name'      => $name,
-                'email'     => strtolower(str_replace(' ', '.', $fullName)) . '@foomail.bar',
+                'email'     => strtolower(str_replace(' ', '.', $fullName)).'@foomail.bar',
                 'fullName'  => $fullName,
                 'company'   => ($i%2) ? 'Company '.$i : null,
                 'location'  => ($i%2) ? 'Location '.$i : null,
@@ -62,7 +62,7 @@ class Data implements FixtureInterface
 
                 $repo = new $fullClassName();
                 $repo->fromArray(array(
-                    'name'          => ucfirst($user->getName()) . 'Foo' . $repoClass,
+                    'name'          => ucfirst($user->getName()).'Foo'.$repoClass,
                     'username'      => $user->getName(),
                     'user'          => $user,
                     'description'   => 'Description of my '.$repoClass,
@@ -82,7 +82,7 @@ class Data implements FixtureInterface
                             'url'               => 'http://github.com',
                             'committed_date'    => '2010-05-16T09:58:32-09:00',
                             'authored_date'     => '2010-05-16T09:58:32-09:00',
-                            'message'           => 'Fix something on this ' . $repoClass,
+                            'message'           => 'Fix something on this '.$repoClass,
                         ),
                         array(
                             'author'            => array(
@@ -93,7 +93,7 @@ class Data implements FixtureInterface
                             'url'               => 'http://github.com',
                             'committed_date'    => '2010-05-16T09:58:32-07:00',
                             'authored_date'     => '2010-05-16T09:58:32-07:00',
-                            'message'           => 'Commit something on this ' . $repoClass,
+                            'message'           => 'Commit something on this '.$repoClass,
                         ),
                     ),
                     'isFork'        => false,

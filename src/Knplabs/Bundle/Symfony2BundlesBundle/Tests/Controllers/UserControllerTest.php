@@ -30,5 +30,4 @@ class UserControllerTest extends WebTestCase
     {
         return $client->getContainer()->get('router')->generate($route, $params);
     }
-
 }

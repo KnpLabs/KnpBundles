@@ -19,5 +19,4 @@ class KnplabsSymfony2BundlesBundle extends Bundle
         $container->registerExtension(new KnplabsSymfony2BundlesExtension());
         $container->addCompilerPass(new FinderPass());
     }
-
 }

@@ -74,7 +74,7 @@ class RepoRepository extends EntityRepository
 
     public function count()
     {
-        return $this->_em->createQuery('SELECT COUNT(e.id) FROM '.$this->getEntityName().' e')->getSingleScalarResult();
+        return $this->getEntityManager()->createQuery('SELECT COUNT(e.id) FROM '.$this->getEntityName().' e')->getSingleScalarResult();
     }
 
     public function getLastCommits($nb)
@@ -108,8 +108,7 @@ class RepoRepository extends EntityRepository
                 ->setParameter('name', $name)
                 ->getQuery()
                 ->getSingleResult();
-        }
-        catch(NoResultException $e) {
+        } catch(NoResultException $e) {
             return null;
         }
     }

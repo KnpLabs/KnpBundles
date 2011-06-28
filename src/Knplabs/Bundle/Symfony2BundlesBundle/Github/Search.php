@@ -1,6 +1,7 @@
 <?php
 
 namespace Knplabs\Bundle\Symfony2BundlesBundle\Github;
+
 use Knplabs\Bundle\Symfony2BundlesBundle\Entity\Repo;
 use Symfony\Component\Console\Output\OutputInterface;
 use Goutte\Client;
@@ -43,14 +44,14 @@ class Search
     /**
      * Get a list of Symfony2 Repos from GitHub & Google
      *
-     * @integer limit $limit The maximum number of results to return
+     * @param integer $limit The maximum number of results to return
      */
     public function searchRepos($limit = 300)
     {
         $repos = array();
         $repos = $this->searchReposOnGitHub('Bundle', $repos, $limit);
-        foreach($repos as $index => $repo) {
-            if(!preg_match('/Bundle$/', $repo->getName())) {
+        foreach ($repos as $index => $repo) {
+            if (!preg_match('/Bundle$/', $repo->getName())) {
                 unset($repos[$index]);
             }
         }
@@ -76,12 +77,11 @@ class Search
                 $page++;
                 $this->output->write('...'.count($repos));
             }
-            while(count($repos) < $limit);
-        }
-        catch(\Exception $e) {
+            while (count($repos) < $limit);
+        } catch(\Exception $e) {
             $this->output->write(' - '.$e->getMessage());
         }
-        $this->output->writeLn('... DONE');
+        $this->output->writeln('... DONE');
 
         return array_slice($repos, 0, $limit);
     }
@@ -92,42 +92,41 @@ class Search
         $maxBatch = 5;
         $maxPage = 5;
         $pageNumber = 1;
-        for($batch = 1; $batch <= $maxBatch; $batch++) {
-            for($page = 1; $page <= $maxPage; $page++) {
+        for ($batch = 1; $batch <= $maxBatch; $batch++) {
+            for ($page = 1; $page <= $maxPage; $page++) {
                 $url = sprintf('http://www.google.com/search?q=%s&start=%d',
                     urlencode('site:github.com Symfony2 Bundle'),
                     (1 === $pageNumber) ? '' : $pageNumber
                 );
                 $crawler = $this->browser->request('GET', $url);
                 $links = $crawler->filter('#center_col ol li h3 a');
-                if(0 != $links->count()) {
+                if (0 != $links->count()) {
                     $this->output->write('.');
-                }
-                else {
+                } else {
                     $this->output->write(sprintf(' - No link - [%s]', $this->browser->getResponse()->getStatus()));
                     break 2;
                 }
-                foreach($links->extract('href') as $url) {
-                    if(!preg_match('#^http://github.com/([\w-]+/[\w-]+).*$#', $url, $match)) {
+                foreach ($links->extract('href') as $url) {
+                    if (!preg_match('#^http://github.com/([\w-]+/[\w-]+).*$#', $url, $match)) {
                         continue;
                     }
                     $repo = Repo::create($match[1]);
                     $alreadyFound = false;
-                    foreach($repos as $_repo) {
-                        if($repo->getName() == $_repo->getName()) {
+                    foreach ($repos as $_repo) {
+                        if ($repo->getName() == $_repo->getName()) {
                             $alreadyFound = true;
                             break;
                         }
                     }
-                    if(!$alreadyFound) {
+                    if (!$alreadyFound) {
                         $repos[] = $repo;
                         $this->output->write(sprintf('!'));
                     }
                 }
                 $pageNumber++;
-                usleep(500*1000);
+                usleep(500 * 1000);
             }
-            $this->output->write(sprintf('%d/%d', 10*($pageNumber - 1), $maxBatch*$maxPage*10));
+            $this->output->write(sprintf('%d/%d', 10 * ($pageNumber - 1), $maxBatch * $maxPage * 10));
             sleep(2);
         }
         $this->output->writeLn(' DONE');
@@ -137,6 +136,7 @@ class Search
 
     /**
      * Get browser
+     *
      * @return Client
      */
     public function getBrowser()
@@ -156,6 +156,7 @@ class Search
 
     /**
      * Get output
+     *
      * @return OutputInterface
      */
     public function getOutput()
@@ -165,6 +166,7 @@ class Search
 
     /**
      * Set output
+     *
      * @param  OutputInterface
      * @return null
      */
@@ -175,6 +177,7 @@ class Search
 
     /**
      * Get github
+     *
      * @return \Github_Client
      */
     public function getGithubClient()
@@ -184,6 +187,7 @@ class Search
 
     /**
      * Set github
+     *
      * @param  \Github_Client
      * @return null
      */
@@ -191,5 +195,4 @@ class Search
     {
         $this->github = $github;
     }
-
 }

@@ -118,6 +118,7 @@ class User
 
     /**
      * Get blog
+     *
      * @return string
      */
     public function getBlog()
@@ -127,6 +128,7 @@ class User
 
     /**
      * Set blog
+     *
      * @param  string
      * @return null
      */
@@ -137,6 +139,7 @@ class User
 
     /**
      * Get location
+     *
      * @return string
      */
     public function getLocation()
@@ -146,6 +149,7 @@ class User
 
     /**
      * Set location
+     *
      * @param  string
      * @return null
      */
@@ -156,6 +160,7 @@ class User
 
     /**
      * Get company
+     *
      * @return string
      */
     public function getCompany()
@@ -165,6 +170,7 @@ class User
 
     /**
      * Set company
+     *
      * @param  string
      * @return null
      */
@@ -175,6 +181,7 @@ class User
 
     /**
      * Get fullName
+     *
      * @return string
      */
     public function getFullName()
@@ -184,6 +191,7 @@ class User
 
     /**
      * Set fullName
+     *
      * @param  string
      * @return null
      */
@@ -194,7 +202,8 @@ class User
 
     /**
      * Get score
-     * @return int
+     *
+     * @return integer
      */
     public function getScore()
     {
@@ -203,7 +212,8 @@ class User
 
     /**
      * Set score
-     * @param  int
+     *
+     * @param  integer
      * @return null
      */
     public function setScore($score)
@@ -226,6 +236,7 @@ class User
 
     /**
      * Get repos
+     *
      * @return ArrayCollection
      */
     public function getRepos()
@@ -241,8 +252,8 @@ class User
     public function getBundles()
     {
         $bundles = array();
-        foreach($this->getRepos() as $repo) {
-            if($repo instanceof Bundle) {
+        foreach ($this->getRepos() as $repo) {
+            if ($repo instanceof Bundle) {
                 $bundles[] = $repo;
             }
         }
@@ -253,7 +264,7 @@ class User
     public function getBundleNames()
     {
         $names = array();
-        foreach($this->getBundles() as $bundle) {
+        foreach ($this->getBundles() as $bundle) {
             $names[] = $bundle->getName();
         }
 
@@ -263,8 +274,8 @@ class User
     public function getProjects()
     {
         $projects = array();
-        foreach($this->getRepos() as $repo) {
-            if($repo instanceof Project) {
+        foreach ($this->getRepos() as $repo) {
+            if ($repo instanceof Project) {
                 $projects[] = $repo;
             }
         }
@@ -275,7 +286,7 @@ class User
     public function getProjectNames()
     {
         $names = array();
-        foreach($this->getProjects() as $project) {
+        foreach ($this->getProjects() as $project) {
             $names[] = $project->getName();
         }
 
@@ -286,8 +297,8 @@ class User
     /**
      * Count the user repos
      *
-     * @return int
-     **/
+     * @return integer
+     */
     public function getNbRepos()
     {
         return $this->getRepos()->count();
@@ -306,25 +317,25 @@ class User
     public function hasProjects()
     {
 
-        return ($this->getNbProjects()>0);
+        return ($this->getNbProjects() > 0);
     }
 
 
     public function hasBundles()
     {
 
-        return ($this->getNbBundles()>0);
+        return ($this->getNbBundles() > 0);
     }
 
     /**
      * Get the names of this user repos
      *
      * @return array
-     **/
+     */
     public function getRepoNames()
     {
         $names = array();
-        foreach($this->getRepos() as $repo) {
+        foreach ($this->getRepos() as $repo) {
             $names[] = $repo->getName();
         }
 
@@ -335,10 +346,10 @@ class User
      * Add a repo to this user repos
      *
      * @return null
-     **/
+     */
     public function addRepo(Repo $repo)
     {
-        if($this->getRepos()->contains($repo)) {
+        if ($this->getRepos()->contains($repo)) {
             throw new \OverflowException(sprintf('User %s already owns the %s repo', $this->getName(), $repo->getName()));
         }
         $this->getRepos()->add($repo);
@@ -349,7 +360,7 @@ class User
      * Remove a repo from this user repos
      *
      * @return null
-     **/
+     */
     public function removeRepo(Repo $repo)
     {
         $this->getRepos()->removeElement($repo);
@@ -358,6 +369,7 @@ class User
 
     /**
      * Get contributionRepos
+     *
      * @return ArrayCollection
      */
     public function getContributionRepos()
@@ -378,8 +390,8 @@ class User
     public function getContributionBundles()
     {
         $bundles = array();
-        foreach($this->getContributionReposSortedByScore() as $repo) {
-            if($repo instanceof Bundle) {
+        foreach ($this->getContributionReposSortedByScore() as $repo) {
+            if ($repo instanceof Bundle) {
                 $bundles[] = $repo;
             }
         }
@@ -395,8 +407,8 @@ class User
     public function getContributionProjects()
     {
         $projects = array();
-        foreach($this->getContributionReposSortedByScore() as $repo) {
-            if($repo instanceof Project) {
+        foreach ($this->getContributionReposSortedByScore() as $repo) {
+            if ($repo instanceof Project) {
                 $projects[] = $repo;
             }
         }
@@ -411,6 +423,7 @@ class User
 
     /**
      * Set contributionRepos
+     *
      * @param  ArrayCollection
      * @return null
      */
@@ -435,12 +448,13 @@ class User
 
     /**
      * Get the date of the last commit
+     *
      * @return \DateTime
-     **/
+     */
     public function getLastCommitAt()
     {
         $lastCommits = $this->getLastCommits(1);
-        if(empty($lastCommits)) {
+        if (empty($lastCommits)) {
             return null;
         }
         $lastCommit = $lastCommits[0];
@@ -453,14 +467,14 @@ class User
      * Get the more recent commits by this user
      *
      * @return array
-     **/
+     */
     public function getLastCommits($nb = 10)
     {
-        if(null === $this->lastCommitsCache) {
+        if (null === $this->lastCommitsCache) {
             $commits = array();
-            foreach($this->getAllRepos() as $repo) {
-                foreach($repo->getLastCommits() as $commit) {
-                    if(isset($commit['author']['login']) && $commit['author']['login'] === $this->getName()) {
+            foreach ($this->getAllRepos() as $repo) {
+                foreach ($repo->getLastCommits() as $commit) {
+                    if (isset($commit['author']['login']) && $commit['author']['login'] === $this->getName()) {
                         $commits[] = $commit;
                     }
                 }
@@ -478,6 +492,7 @@ class User
 
     /**
      * Get email
+     *
      * @return string
      */
     public function getEmail()
@@ -489,7 +504,7 @@ class User
      * Get an obfuscated email, less likely to be deciphered by spambots
      *
      * @return string
-     **/
+     */
     public function getObfuscatedEmail()
     {
         $text = $this->getEmail();
@@ -499,9 +514,9 @@ class User
                 $result .= substr($text, $i, 1);
             } else {
                 if (mt_rand(0, 1)) {
-                    $result .= '&#' . ord(substr($text, $i, 1)) . ';';
+                    $result .= '&#'.ord(substr($text, $i, 1)).';';
                 } else {
-                    $result .= '&#x' . sprintf("%x", ord(substr($text, $i, 1))) . ';';
+                    $result .= '&#x'.sprintf("%x", ord(substr($text, $i, 1))).';';
                 }
             }
         }
@@ -514,6 +529,7 @@ class User
 
     /**
      * Set email
+     *
      * @param  string
      * @return null
      */
@@ -526,7 +542,7 @@ class User
      * User url on GitHub
      *
      * @return string
-     **/
+     */
     public function getGithubUrl()
     {
         return sprintf('http://github.com/%s', $this->getName());
@@ -534,6 +550,7 @@ class User
 
     /**
      * Get name
+     *
      * @return string
      */
     public function getName()
@@ -543,6 +560,7 @@ class User
 
     /**
      * Set name
+     *
      * @param  string
      * @return null
      */
@@ -565,7 +583,7 @@ class User
      * Set the user creation date
      *
      * @return null
-     **/
+     */
     public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
@@ -607,7 +625,7 @@ class User
 
     public function fromArray(array $data)
     {
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
             $this->{'set'.$key}($value);
         }
     }

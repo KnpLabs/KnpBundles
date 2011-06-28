@@ -22,38 +22,38 @@
                 <span class="avatar"><img class="gravatar" src="{{ gravatar(user.email, 74, none, 'mm') }}" width="74" height="74" /></span>
                 <ul class="links">
                     <li><a href="{{ user.githubUrl }}">View on github</a></li>
-                    {% if user.email %}
+                    {%- if user.email %}
                     <li><a href="mailto:{{ user.obfuscatedEmail }}">Email</a></li>
-                    {% endif %}
-                    {% if user.blog %}
+                    {%- endif %}
+                    {%- if user.blog %}
                     <li><a href="{{ user.blog }}">Blog</a></li>
-                    {% endif %}
+                    {%- endif %}
                 </ul>
             </div>
         </div>
-        {% if user.bundles|length > 0 %}
+        {%- if user.bundles|length > 0 %}
         <div class="bundles-i-manage">
             <h2>Bundles I manage</h2>
-            {% include 'KnplabsSymfony2BundlesBundle:Bundle:mediumList.html.twig' with {'repos': user.bundles} %}           
+            {% include 'KnplabsSymfony2BundlesBundle:Bundle:mediumList.html.twig' with {'repos': user.bundles} %}
         </div>
-        {% endif %}
-        {% if user.contributionBundles|length > 0 %}
+        {%- endif %}
+        {%- if user.contributionBundles|length > 0 %}
         <div class="bundles-i-contribute-to">
             <h2>Bundles I contribute to</h2>
-            {% include 'KnplabsSymfony2BundlesBundle:Bundle:mediumList.html.twig' with {'repos': user.contributionBundles} %}           
+            {% include 'KnplabsSymfony2BundlesBundle:Bundle:mediumList.html.twig' with {'repos': user.contributionBundles} %}
         </div>
-        {% endif %}
-        {% if user.projects|length > 0 %}
+        {%- endif %}
+        {%- if user.projects|length > 0 %}
         <div class="projects-i-manage">
             <h2>Projects I manage</h2>
-            {% include 'KnplabsSymfony2BundlesBundle:Project:mediumList.html.twig' with {'repos': user.projects} %}           
+            {% include 'KnplabsSymfony2BundlesBundle:Project:mediumList.html.twig' with {'repos': user.projects} %}
         </div>
-        {% endif %}
+        {%- endif %}
         {% if user.contributionProjects|length > 0 %}
         <div class="projects-i-contribute-to">
             <h2>Projects I contribute to</h2>
-            {% include 'KnplabsSymfony2BundlesBundle:Project:mediumList.html.twig' with {'repos': user.contributionProjects} %}           
+            {% include 'KnplabsSymfony2BundlesBundle:Project:mediumList.html.twig' with {'repos': user.contributionProjects} %}
         </div>
-        {% endif %}
+        {%- endif %}
     </div>
 {% endblock %}

@@ -33,7 +33,7 @@ abstract class Repo
 
     public static function create($fullName)
     {
-        if(preg_match('/Bundle$/', $fullName)) {
+        if (preg_match('/Bundle$/', $fullName)) {
             return new Bundle($fullName);
         }
 
@@ -130,12 +130,14 @@ abstract class Repo
 
     /**
      * Released tags are Git tags
+     *
      * @ORM\Column(type="text")
      */
     protected $tags = null;
 
     /**
      * Users who contributed to the Repo
+     *
      * @ORM\ManyToMany(targetEntity="User", inversedBy="contributionRepos")
      * @ORM\JoinTable(name="contribution",
      *      joinColumns={@ORM\JoinColumn(name="repo_id", referencedColumnName="id")},
@@ -148,25 +150,28 @@ abstract class Repo
 
     /**
      * Number of GitHub followers
+     *
      * @ORM\Column(type="integer")
      */
     protected $nbFollowers = null;
 
     /**
      * Number of GitHub forks
+     *
      * @ORM\Column(type="integer")
      */
     protected $nbForks = null;
 
     /**
      * True if the Repo is a fork
+     *
      * @ORM\Column(type="boolean")
      */
     protected $isFork = false;
 
     public function __construct($fullName = null)
     {
-        if($fullName) {
+        if ($fullName) {
             list($this->username, $this->name) = explode('/', $fullName);
         }
 
@@ -177,6 +182,7 @@ abstract class Repo
 
     /**
      * Get homepage
+     *
      * @return string
      */
     public function getHomepage()
@@ -186,6 +192,7 @@ abstract class Repo
 
     /**
      * Set homepage
+     *
      * @param  string
      * @return null
      */
@@ -196,6 +203,7 @@ abstract class Repo
 
     /**
      * Get isFork
+     *
      * @return bool
      */
     public function getIsFork()
@@ -205,6 +213,7 @@ abstract class Repo
 
     /**
      * Set isFork
+     *
      * @param  bool
      * @return null
      */
@@ -215,6 +224,7 @@ abstract class Repo
 
     /**
      * Get tags
+     *
      * @return array
      */
     public function getTags()
@@ -224,6 +234,7 @@ abstract class Repo
 
     /**
      * Set tags
+     *
      * @param  array
      * @return null
      */
@@ -235,7 +246,7 @@ abstract class Repo
     public function getLastTagName()
     {
         $tags = $this->getTags();
-        if(empty($tags)) {
+        if (empty($tags)) {
             return null;
         }
 
@@ -244,6 +255,7 @@ abstract class Repo
 
     /**
      * Get lastCommits
+     *
      * @return array
      */
     public function getLastCommits($nb = 10)
@@ -258,6 +270,7 @@ abstract class Repo
 
     /**
      * Set lastCommits
+     *
      * @param  array
      * @return null
      */
@@ -295,7 +308,8 @@ abstract class Repo
 
     /**
      * Get score
-     * @return int
+     *
+     * @return integer
      */
     public function getScore()
     {
@@ -304,7 +318,7 @@ abstract class Repo
 
     /**
      * Set score
-     * @param  int
+     * @param  integer
      * @return null
      */
     public function setScore($score)
@@ -314,6 +328,7 @@ abstract class Repo
 
     /**
      * Calculate the score of this repo based on several factors.
+     *
      * The score is used as the default sort field in many places.
      * #TODO discuss me, improve me
      */
@@ -329,7 +344,7 @@ abstract class Repo
         $score += 3 * $this->getNbContributors();
 
         // Small boost for recently updated repos
-        if($this->getDaysSinceLastCommit() < 30) {
+        if ($this->getDaysSinceLastCommit() < 30) {
             $score += (30 - $this->getDaysSinceLastCommit()) / 5;
         }
 
@@ -343,6 +358,7 @@ abstract class Repo
 
     /**
      * Get the date of the last commit
+     *
      * @return \DateTime
      */
     public function getLastCommitAt()
@@ -352,6 +368,7 @@ abstract class Repo
 
     /**
      * Set lastCommitAt
+     *
      * @param  \DateTime
      * @return null
      */
@@ -362,8 +379,9 @@ abstract class Repo
 
     /**
      * Returns the number of days elapsed since the last commit on the master branch
-     * @return int
-     **/
+     *
+     * @return integer
+     */
     public function getDaysSinceLastCommit()
     {
         return date_create()->diff($this->getLastCommitAt())->format('%d');
@@ -371,7 +389,8 @@ abstract class Repo
 
     /**
      * Get forks
-     * @return int
+     *
+     * @return integer
      */
     public function getNbForks()
     {
@@ -380,7 +399,8 @@ abstract class Repo
 
     /**
      * Set forks
-     * @param  int
+     *
+     * @param  integer
      * @return null
      */
     public function setNbForks($nbForks)
@@ -390,7 +410,8 @@ abstract class Repo
 
     /**
      * Get followers
-     * @return int
+     *
+     * @return integer
      */
     public function getNbFollowers()
     {
@@ -399,7 +420,8 @@ abstract class Repo
 
     /**
      * Set followers
-     * @param  int
+     *
+     * @param  integer
      * @return null
      */
     public function setNbFollowers($nbFollowers)
@@ -409,6 +431,7 @@ abstract class Repo
 
     /**
      * Get the GitHub url of this repo
+     *
      * @return string
      */
     public function getGitHubUrl()
@@ -420,7 +443,7 @@ abstract class Repo
      * Get the Git repo url
      *
      * @return string
-     **/
+     */
     public function getGitUrl()
     {
         return sprintf('git://github.com/%s/%s.git', $this->getUsername(), $this->getName());
@@ -428,6 +451,7 @@ abstract class Repo
 
     /**
      * Get full name, including username
+     *
      * @return string
      */
     public function getFullName()
@@ -437,6 +461,7 @@ abstract class Repo
 
     /**
      * Get name
+     *
      * @return string
      */
     public function getName()
@@ -446,6 +471,7 @@ abstract class Repo
 
     /**
      * Set name
+     *
      * @param  string
      * @return null
      */
@@ -456,6 +482,7 @@ abstract class Repo
 
     /**
      * Get username
+     *
      * @return string
      */
     public function getUsername()
@@ -465,6 +492,7 @@ abstract class Repo
 
     /**
      * Set username
+     *
      * @param  string
      * @return null
      */
@@ -491,6 +519,7 @@ abstract class Repo
 
     /**
      * Get description
+     *
      * @return string
      */
     public function getDescription()
@@ -500,6 +529,7 @@ abstract class Repo
 
     /**
      * Set description
+     *
      * @param  string
      * @return null
      */
@@ -509,7 +539,7 @@ abstract class Repo
     }
 
     /**
-     * getCreatedAt
+     * Get the repo creation date
      *
      * @return \DateTime
      */
@@ -522,14 +552,14 @@ abstract class Repo
      * Set the repo creation date
      *
      * @return null
-     **/
+     */
     public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }
 
     /**
-     * getUpdatedAt
+     * Get the repo update date
      *
      * @return \DateTime
      */
@@ -540,6 +570,7 @@ abstract class Repo
 
     /**
      * Get contributors
+     *
      * @return ArrayCollection
      */
     public function getContributors()
@@ -550,8 +581,8 @@ abstract class Repo
     /**
      * Get the number of contributors
      *
-     * @return int
-     **/
+     * @return integer
+     */
     public function getNbContributors()
     {
         return count($this->contributors);
@@ -559,6 +590,7 @@ abstract class Repo
 
     /**
      * Set contributors
+     *
      * @param  array
      * @return null
      */
@@ -594,7 +626,7 @@ abstract class Repo
      * Get an array representing the Repo
      *
      * @return array
-     **/
+     */
     public function toBigArray()
     {
         return $this->toSmallArray() + array(
@@ -623,7 +655,7 @@ abstract class Repo
 
     public function fromArray(array $data)
     {
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
             $this->{'set'.$key}($value);
         }
         $this->recalculateScore();
@@ -637,6 +669,7 @@ abstract class Repo
     public function getClass()
     {
         $class = get_class($this);
+
         return substr($class, strrpos($class, '\\')+1);
     }
 }

@@ -13,15 +13,15 @@
         <div id="sort">
             <span class="sort-by">Sort by</span>
             <ul class="tabs">
-                {% for field, text in sortFields %}
+                {%- for field, text in sortFields %}
                 <li{{ field == sort ? ' class="current"' : '' }}>
                     <a href='{{ path('user_list', {'sort': field}) }}'>{{ text }}</a>
                 </li>
-                {% endfor %}
+                {%- endfor %}
             </ul>
         </div>
         <ul class="developers-list">
-            {% for user in users %}
+            {%- for user in users %}
             <li class="developer">
                 <div class="image">
                     <a href="{{ url('user_show', {'name': user.name}) }}" class="name">
@@ -38,7 +38,7 @@
                     </ul>
                 </div>
             </li>
-            {% endfor %}
+            {%- endfor %}
         </ul>
         {{ users|paginate }}
     </div>

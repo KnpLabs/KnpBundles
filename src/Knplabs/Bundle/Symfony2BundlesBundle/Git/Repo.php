@@ -1,6 +1,7 @@
 <?php
 
 namespace Knplabs\Bundle\Symfony2BundlesBundle\Git;
+
 use Knplabs\Bundle\Symfony2BundlesBundle\Entity\Repo as RepoEntity;
 
 class Repo
@@ -33,7 +34,7 @@ class Repo
     public function getCommits($nb)
     {
         $commits = $this->getGitRepo()->getCommits(12);
-        foreach($commits as $key => $commit) {
+        foreach ($commits as $key => $commit) {
             $commits[$key]['url'] = $this->entity->getGithubUrl().'/commit/'.$commit['id'];
         }
 
@@ -52,6 +53,7 @@ class Repo
 
     /**
      * Get gitRepo
+     *
      * @return \phpGitRepo
      */
     public function getGitRepo()
@@ -61,6 +63,7 @@ class Repo
 
     /**
      * Set gitRepo
+     *
      * @param \phpGitRepo
      * @return null
      */
@@ -71,6 +74,7 @@ class Repo
 
     /**
      * Get entity
+     *
      * @return RepoEntity
      */
     public function getRepoEntity()
@@ -80,6 +84,7 @@ class Repo
 
     /**
      * Set entity
+     *
      * @param  RepoEntity
      * @return null
      */

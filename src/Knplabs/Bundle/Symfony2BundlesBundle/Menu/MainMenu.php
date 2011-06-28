@@ -3,13 +3,13 @@
 namespace Knplabs\Bundle\Symfony2BundlesBundle\Menu;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Knplabs\Bundle\MenuBundle\Menu;
 
 class MainMenu extends Menu
 {
-    public function __construct(Request $request, Router $router)
+    public function __construct(Request $request, UrlGeneratorInterface $router)
     {
         parent::__construct(array(
             'id'    => 'menu'

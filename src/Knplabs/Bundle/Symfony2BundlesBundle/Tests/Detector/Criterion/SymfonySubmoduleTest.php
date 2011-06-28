@@ -16,7 +16,6 @@ class SymfonySubmoduleTest extends CriterionTest
         $criterion = new SymfonySubmodule();
 
         $this->assertEquals($expected, $criterion->matches($repo));
-
     }
 
     public function getMatches()

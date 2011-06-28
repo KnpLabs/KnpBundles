@@ -42,9 +42,9 @@ class MainController
             $scoreMethodDefinition = $scoreMethod->getDocComment()."\n";
             $contents = file($scoreMethod->getDeclaringClass()->getFileName());
             for ($i = $scoreMethod->getStartLine()-1; $i < $scoreMethod->getEndLine(); $i++) {
-                $scoreMethodDefinition.= $contents[$i];
+                $scoreMethodDefinition .= $contents[$i];
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $scoreMethodDefinition = '';
         }
 

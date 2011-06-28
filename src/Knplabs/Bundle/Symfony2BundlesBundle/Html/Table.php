@@ -4,21 +4,19 @@ namespace Knplabs\Bundle\Symfony2BundlesBundle\Html;
 
 class Table
 {
-    protected
-        $head = array(),
-        $body = array(),
-        $foot = array(),
-        $useStrip = false,
-        $stripCount=0;
+    protected $head = array();
+    protected $body = array();
+    protected $foot = array();
+    protected $useStrip = false;
+    protected $stripCount=0;
 
     public function useStrip($value = null)
     {
-        if (null === $value)
-        {
+        if (null === $value) {
             return $this->useStrip;
         }
 
-        $this->useStrip = (bool) $value;
+        $this->useStrip = (Boolean) $value;
     }
 
     public function clearBody()
@@ -48,8 +46,7 @@ class Table
 
     protected function renderPart(array $rows, $partTag, $cellTag)
     {
-        if (empty($rows))
-        {
+        if (empty($rows)) {
             return '';
         }
 
@@ -57,8 +54,7 @@ class Table
 
         $html = '<'.$partTag.'>';
 
-        foreach($rows as $row)
-        {
+        foreach ($rows as $row) {
             $html .= $this->renderRow($row, $cellTag);
         }
 
@@ -69,12 +65,9 @@ class Table
 
     protected function renderRow(array $row, $cellTag)
     {
-        if ($this->useStrip && 'td' === $cellTag)
-        {
+        if ($this->useStrip && 'td' === $cellTag) {
             $open = '<tr class="'.((++$this->stripCount % 2) ? 'even' : 'odd').'">';
-        }
-        else
-        {
+        } else {
             $open = '<tr>';
         }
 
@@ -104,13 +97,11 @@ class Table
 
     protected function validateRowArgs($args)
     {
-        if(1 == count($args))
-        {
+        if (1 == count($args)) {
             $args = (array) $args[0];
         }
 
-        foreach($args as $index => $arg)
-        {
+        foreach ($args as $index => $arg) {
             $args[$index] = (string) $arg;
         }
 

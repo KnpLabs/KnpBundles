@@ -34,8 +34,7 @@ class Repo
     {
         try {
             $this->gitRepoManager->getRepo($repo)->update();
-        }
-        catch(\GitRuntimeException $e) {
+        } catch(\GitRuntimeException $e) {
             return false;
         }
 
@@ -118,17 +117,17 @@ class Repo
 
     public function updateFiles(Entity\Repo $repo)
     {
-        $detector = new Detector\Project();
         $this->output->write(' files');
         $gitRepo = $this->gitRepoManager->getRepo($repo);
-        if($repo instanceof Entity\Project) {
+        if ($repo instanceof Entity\Project) {
+            $detector = new Detector\Project();
             if(!$detector->matches($gitRepo)) {
                 return false;
             }
         }
 
         foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
-            if($gitRepo->hasFile($readmeFilename)) {
+            if ($gitRepo->hasFile($readmeFilename)) {
                $repo->setReadme($gitRepo->getFileContent($readmeFilename));
             }
         }
@@ -157,8 +156,8 @@ class Repo
             throw $e;
         }
         $names = array();
-        foreach($contributors as $contributor) {
-            if($repo->getUsername() != $contributor['login']) {
+        foreach ($contributors as $contributor) {
+            if ($repo->getUsername() != $contributor['login']) {
                 $names[] = $contributor['login'];
             }
         }
@@ -168,6 +167,7 @@ class Repo
 
     /**
      * Get output
+     *
      * @return OutputInterface
      */
     public function getOutput()
@@ -177,6 +177,7 @@ class Repo
 
     /**
      * Set output
+     *
      * @param  OutputInterface
      * @return null
      */
@@ -187,6 +188,7 @@ class Repo
 
     /**
      * Get github
+     *
      * @return \Github_Client
      */
     public function getGithubClient()
@@ -196,6 +198,7 @@ class Repo
 
     /**
      * Set github
+     *
      * @param  \Github_Client
      * @return null
      */
@@ -203,5 +206,4 @@ class Repo
     {
         $this->github = $github;
     }
-
 }

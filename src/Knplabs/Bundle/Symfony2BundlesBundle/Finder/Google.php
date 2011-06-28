@@ -22,9 +22,11 @@ class Google implements FinderInterface
     private $client;
 
     /**
-     * Construct
+     * Constructor
      *
-     * @param  string $query
+     * @param string  $query
+     * @param integer $limit
+     * @param Client  $client
      */
     public function __construct($query = null, $limit = 300, Client $client = null)
     {
@@ -51,7 +53,7 @@ class Google implements FinderInterface
     /**
      * Defines the limit of results to fetch
      *
-     * @param  integer $limit
+     * @param integer $limit
      */
     public function setLimit($limit)
     {

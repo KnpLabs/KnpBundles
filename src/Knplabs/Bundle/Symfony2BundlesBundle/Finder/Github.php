@@ -18,9 +18,9 @@ class Github implements FinderInterface
     /**
      * Constructor
      *
-     * @param  Github_Api_Repo $api
-     * @param  string          $query
-     * @param  string          $language
+     * @param string        $query
+     * @param integer       $limit
+     * @param Github_Client $client
      */
     public function __construct($query, $limit = 300, Github_Client $client = null)
     {

@@ -55,24 +55,23 @@ class RepoController
     {
         $query = preg_replace('(\W)', '', trim($this->request->get('q')));
 
-        if(empty($query)) {
+        if (empty($query)) {
             return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Repo:search.html.twig');
         }
 
         $repos = $this->getRepository('Repo')->search($query);
         $bundles = $projects = array();
-        foreach($repos as $repo) {
-            if($repo instanceof Bundle) {
+        foreach ($repos as $repo) {
+            if ($repo instanceof Bundle) {
                 $bundles[] = $repo;
-            }
-            else {
+            } else {
                 $projects[] = $repo;
             }
         }
 
         $format = $this->request->get('_format');
 
-        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Repo:searchResults.' . $format . '.twig', array(
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Repo:searchResults.'.$format.'.twig', array(
             'query'         => $query,
             'repos'         => $repos,
             'bundles'       => $bundles,
@@ -84,13 +83,13 @@ class RepoController
     public function showAction($username, $name)
     {
         $repo = $this->getRepository('Repo')->findOneByUsernameAndName($username, $name);
-        if(!$repo) {
+        if (!$repo) {
             throw new NotFoundHttpException(sprintf('The repo "%s/%s" does not exist', $username, $name));
         }
 
         $format = $this->request->get('_format');
 
-        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:'.$repo->getClass().':show.' . $format . '.twig', array(
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:'.$repo->getClass().':show.'.$format.'.twig', array(
             'repo'          => $repo,
             'callback'      => $this->request->get('callback')
         ));
@@ -98,7 +97,7 @@ class RepoController
 
     public function listAction($sort, $class)
     {
-        if(!array_key_exists($sort, $this->sortFields)) {
+        if (!array_key_exists($sort, $this->sortFields)) {
             throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
         }
 
@@ -111,7 +110,7 @@ class RepoController
             $repos = $this->getRepository($class)->findAllWithUsersAndContributorsSortedBy($sort);
         }
 
-        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:'.$class.':list.' . $format . '.twig', array(
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:'.$class.':list.'.$format.'.twig', array(
             'repos'         => $repos,
             'sort'          => $sort,
             'sortFields'    => $this->sortFields,
@@ -125,7 +124,7 @@ class RepoController
 
         $format = $this->request->get('_format');
 
-        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Repo:listLatest.' . $format . '.twig', array(
+        return $this->templating->renderResponse('KnplabsSymfony2BundlesBundle:Repo:listLatest.'.$format.'.twig', array(
             'repos'         => $repos,
             'callback'      => $this->request->get('callback')
         ));
@@ -157,7 +156,7 @@ class RepoController
 
     protected function getRepository($class)
     {
-        return $this->em->getRepository('Knplabs\\Bundle\\Symfony2BundlesBundle\\Entity\\' . $class);
+        return $this->em->getRepository('Knplabs\\Bundle\\Symfony2BundlesBundle\\Entity\\'.$class);
     }
 
 }

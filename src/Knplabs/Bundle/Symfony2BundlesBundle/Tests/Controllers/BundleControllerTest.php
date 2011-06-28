@@ -49,6 +49,4 @@ class BundleControllerTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isSuccessful());
         $this->assertRegexp('/^<\?xml/', $client->getResponse()->getContent());
     }
-
 }
-

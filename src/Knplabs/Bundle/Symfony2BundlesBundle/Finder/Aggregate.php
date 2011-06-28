@@ -15,7 +15,7 @@ class Aggregate implements FinderInterface
     /**
      * Constructor
      *
-     * @param  array $finders An optional array of finders
+     * @param array $finders An optional array of finders
      */
     public function __construct(array $finders = array())
     {
@@ -25,7 +25,7 @@ class Aggregate implements FinderInterface
     /**
      * Defines the finders. It clears the current finders list
      *
-     * @param  array $finders An array of finders
+     * @param array $finders An array of finders
      */
     public function setFinders(array $finders)
     {
@@ -38,7 +38,7 @@ class Aggregate implements FinderInterface
     /**
      * Adds a finder
      *
-     * @param  FinderInterface $finder
+     * @param FinderInterface $finder
      */
     public function addFinder(FinderInterface $finder)
     {

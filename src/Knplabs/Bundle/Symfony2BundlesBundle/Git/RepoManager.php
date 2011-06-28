@@ -1,6 +1,7 @@
 <?php
 
 namespace Knplabs\Bundle\Symfony2BundlesBundle\Git;
+
 use Knplabs\Bundle\Symfony2BundlesBundle\Entity\Repo as RepoEntity;
 use Symfony\Component\HttpKernel\Util\Filesystem;
 
@@ -36,8 +37,7 @@ class RepoManager
         if($this->hasRepo($repo)) {
             $dir = $this->getRepoDir($repo);
             $gitRepo = new \phpGitRepo($dir, false, array('git_executable' => $this->gitExecutable));
-        }
-        else {
+        } else {
             $gitRepo = $this->createGitRepo($repo);
         }
 
@@ -47,6 +47,7 @@ class RepoManager
     public function hasRepo(RepoEntity $repo)
     {
         $dir = $this->getRepoDir($repo);
+
         return is_dir($dir.'/.git');
     }
 
@@ -68,6 +69,7 @@ class RepoManager
 
     /**
      * Get dir
+     *
      * @return string
      */
     public function getDir()
@@ -77,6 +79,7 @@ class RepoManager
 
     /**
      * Set dir
+     *
      * @param  string
      * @return null
      */
