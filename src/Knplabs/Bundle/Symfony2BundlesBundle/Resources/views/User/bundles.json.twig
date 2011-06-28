@@ -1,1 +1,17 @@
-{% include 'KnplabsSymfony2BundlesBundle:User:bundles.json.php' with {'repos': repos} %}
+{% set array = [] %}
+{% for bundle in bundles %}
+{% set array = array|merge({
+    'name':         bundlename,
+    'username':     bundle.username,
+    'description':  bundle.description,
+    'score':        bundle.score,
+    'followers':    bundle.followers,
+    'forks':        bundle.forks,
+    'createdAt':    bundle.createdAt|date('U'),
+    'lastCommitAt': bundle.lastCommitAt|date('U'),
+    'tags':         bundle.tags,
+    'lastCommits':  bundle.lastCommits,
+    'readme':       bundle.readme
+}) %}
+{% endfor %}
+{{ array|json_encode }}

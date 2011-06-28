@@ -1,1 +1,5 @@
-{% include 'KnplabsSymfony2BundlesBundle:User:list.js.php' with {'users': users, 'callback': callback} %}
+{% set array = [] %}
+{% for user in users %}
+{% set array = array|merge([user.toSmallArray]) %}
+{% endfor %}
+{{ '%s(%s)'|format(callback, array|json_encode) }}

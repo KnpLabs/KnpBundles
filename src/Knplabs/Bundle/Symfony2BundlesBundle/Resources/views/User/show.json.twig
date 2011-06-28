@@ -1,1 +1,1 @@
-{% include 'KnplabsSymfony2BundlesBundle:User:show.json.php' with {'user': user} %}
+{{ user.toBigArray|json_encode }}

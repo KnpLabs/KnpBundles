@@ -1,1 +1,5 @@
-{% include 'KnplabsSymfony2BundlesBundle:User:list.json.php' with {'users': users} %}
+{% set array = [] %}
+{% for user in users %}
+{% set array = array|merge([user.toSmallArray]) %}
+{% endfor %}
+{{ array|json_encode }}

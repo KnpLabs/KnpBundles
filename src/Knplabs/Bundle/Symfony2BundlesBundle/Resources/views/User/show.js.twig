@@ -1,1 +1,1 @@
-{% include 'KnplabsSymfony2BundlesBundle:User:show.js.php' with {'user': user, 'callback': callback} %}
+{{ '%s(%s)'|format(callback, user.toBigArray|json_encode) }}

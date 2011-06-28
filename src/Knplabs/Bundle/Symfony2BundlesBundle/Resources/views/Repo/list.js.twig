@@ -1,1 +1,5 @@
-{% include 'KnplabsSymfony2BundlesBundle:Repo:list.js.php' with {'repos': repos, 'callback': callback} %}
+{% set array = [] %}
+{% for repo in repos %}
+{% set array = array|merge([repo.toSmallArray]) %}
+{% endfor %}
+{{ '%s(%s)'|format(callback, array|json_encode) }}
