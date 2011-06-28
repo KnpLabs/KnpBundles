@@ -2,4 +2,4 @@
 {% for user in users %}
 {% set array = array|merge([user.toSmallArray]) %}
 {% endfor %}
-{{ '%s(%s)'|format(callback, array|json_encode) }}
+{{ '%s(%s)'|format(callback, array|json_encode)|raw }}

@@ -14,4 +14,4 @@
     'readme':       bundle.readme
 }) %}
 {% endfor %}
-{{ array|json_encode }}
+{{ array|json_encode|raw }}

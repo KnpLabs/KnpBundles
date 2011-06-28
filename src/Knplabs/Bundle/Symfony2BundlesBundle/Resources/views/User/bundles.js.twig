@@ -14,4 +14,4 @@
     'readme':       bundle.readme
 }) %}
 {% endfor %}
-{{ '%s(%s)'|format(callback, array|json_encode) }}
+{{ '%s(%s)'|format(callback, array|json_encode)|raw }}
