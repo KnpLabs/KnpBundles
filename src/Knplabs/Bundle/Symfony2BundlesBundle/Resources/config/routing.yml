@@ -21,17 +21,17 @@ api:
 bundle_list:
     pattern:        /bundle/{sort}.{_format}
     defaults:       { _controller: symfony2bundles.controller.repo:listAction, class: Bundle, sort: score, _format: html }
-    requirements:   { _method: "GET", _sort: "(score|name|createdAt|lastCommitAt)", _format: "(html|json|js)" }
+    requirements:   { _method: "GET", sort: "(score|name|createdAt|lastCommitAt)", _format: "(html|json|js)" }
 
 project_list:
     pattern:        /project/{sort}.{_format}
     defaults:       { _controller: symfony2bundles.controller.repo:listAction, class: Project, sort: score, _format: html }
-    requirements:   { _method: "GET", _sort: "(score|name|createdAt|lastCommitAt)", _format: "(html|json|js)" }
+    requirements:   { _method: "GET", sort: "(score|name|createdAt|lastCommitAt)", _format: "(html|json|js)" }
 
 user_list:
     pattern:        /developer/{sort}.{_format}
     defaults:       { _controller: symfony2bundles.controller.user:listAction, sort: name, _format: html }
-    requirements:   { _method: "GET", _sort: "(name)", _format: "(html|json|js)" }
+    requirements:   { _method: "GET", sort: "(name)", _format: "(html|json|js)" }
 
 user_bundle_list:
     pattern:        /{name}/bundles.{_format}
@@ -46,7 +46,7 @@ user_projects_list:
 repo_show:
     pattern:        /{username}/{name}.{_format}
     defaults:       { _controller: symfony2bundles.controller.repo:showAction, _format: html }
-    requirements:   { _method: "GET", _format: "(html|json|js)" }
+    requirements:   { _method: "GET", _format: "(html|json|js)", name: ".+" }
 
 user_show:
     pattern:        /{name}.{_format}
