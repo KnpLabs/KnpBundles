@@ -1,0 +1,18 @@
+{% extends 'KnpSymfony2BundlesBundle::layout.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block h1 %}Discover Symfony2 Bundles{% endblock %}
+
+{% block body_attributes %}id="homepage"{% endblock %}
+
+{% block content %}
+    <div id="present">
+        A bundle is a set of PHP classes which can be easily plugged with Symfony2. 
+        In Symfony2 everything is a bundle, the core of Symfony2 itself is made of bundles.
+    </div>
+    <img src="{{ asset('bundles/knpsymfony2bundles/images/mascot.png') }}" alt="Mascot" id="mascot" />
+    {% render 'symfony2bundles.controller.bundle:listBestScoreAction' %}
+    {% render 'symfony2bundles.controller.bundle:listNewestAction' %}
+    {% render 'symfony2bundles.controller.bundle:listFeaturedAction' %}
+{% endblock %}

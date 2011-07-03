@@ -1,0 +1,19 @@
+{% extends "KnpSymfony2BundlesBundle::layout.html.twig" %}
+
+{% block title %}Developer HTTP API{% endblock %}
+
+{% block h1 %}<span>Developer</span> API{% endblock %}
+
+{% block description %}Programmatic HTTP API to access Bundles and developers data{% endblock %}
+
+{% block slogan %}Programmatic HTTP API to access Bundles and developers data{% endblock %}
+
+{% block content %}
+<div id="api">
+    <div id="main">
+        <div class="doc_text markdown">
+            {{ text|markdown }}
+        </div>
+    </div>
+</div>
+{% endblock %}

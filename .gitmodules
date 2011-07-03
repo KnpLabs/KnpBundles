@@ -34,21 +34,21 @@
 [submodule "vendor/goutte"]
 	path = vendor/goutte
 	url = git://github.com/fabpot/Goutte.git
-[submodule "vendor/bundles/Knplabs/Bundle/MarkdownBundle"]
-	path = vendor/bundles/Knplabs/Bundle/MarkdownBundle
-	url = git://github.com/knplabs/MarkdownBundle.git
-[submodule "vendor/bundles/Knplabs/Bundle/TimeBundle"]
-	path = vendor/bundles/Knplabs/Bundle/TimeBundle
-	url = git://github.com/knplabs/TimeBundle.git
-[submodule "vendor/bundles/Knplabs/Bundle/MenuBundle"]
-	path = vendor/bundles/Knplabs/Bundle/MenuBundle
-	url = git://github.com/knplabs/MenuBundle.git
+[submodule "vendor/bundles/Knp/Bundle/MarkdownBundle"]
+	path = vendor/bundles/Knp/Bundle/MarkdownBundle
+	url = git://github.com/knplabs/KnpMarkdownBundle.git
+[submodule "vendor/bundles/Knp/Bundle/TimeBundle"]
+	path = vendor/bundles/Knp/Bundle/TimeBundle
+	url = git://github.com/knplabs/KnpTimeBundle.git
+[submodule "vendor/bundles/Knp/Bundle/MenuBundle"]
+	path = vendor/bundles/Knp/Bundle/MenuBundle
+	url = git://github.com/knplabs/KnpMenuBundle.git
 [submodule "vendor/bundles/Bundle/GravatarBundle"]
 	path = vendor/bundles/Bundle/GravatarBundle
 	url = git://github.com/ornicar/GravatarBundle.git
-[submodule "vendor/bundles/Knplabs/Bundle/PaginatorBundle"]
-	path = vendor/bundles/Knplabs/Bundle/PaginatorBundle
-	url = git://github.com/knplabs/PaginatorBundle.git
+[submodule "vendor/bundles/Knp/Bundle/PaginatorBundle"]
+	path = vendor/bundles/Knp/Bundle/PaginatorBundle
+	url = git://github.com/knplabs/KnpPaginatorBundle.git
 [submodule "vendor/monolog"]
 	path = vendor/monolog
 	url = git://github.com/Seldaek/monolog.git

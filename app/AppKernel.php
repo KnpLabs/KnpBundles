@@ -18,14 +18,14 @@ class AppKernel extends Kernel
             new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
 
             // register your bundles here
-            new Knplabs\Bundle\MarkdownBundle\KnplabsMarkdownBundle(),
-            new Knplabs\Bundle\TimeBundle\KnplabsTimeBundle(),
-            new Knplabs\Bundle\MenuBundle\KnplabsMenuBundle(),
-            new Knplabs\Bundle\PaginatorBundle\KnplabsPaginatorBundle(),
+            new Knp\Bundle\MarkdownBundle\KnpMarkdownBundle(),
+            new Knp\Bundle\TimeBundle\KnpTimeBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Bundle\GravatarBundle\GravatarBundle(),
 
             // register your applications here
-            new Knplabs\Bundle\Symfony2BundlesBundle\KnplabsSymfony2BundlesBundle()
+            new Knp\Bundle\Symfony2BundlesBundle\KnpSymfony2BundlesBundle()
         );
 
         if ($this->isDebug()) {

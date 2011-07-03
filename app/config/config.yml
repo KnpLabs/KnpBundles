@@ -18,22 +18,22 @@ twig:
     strict_variables: %kernel.debug%
 
 # Markdown Configuration
-knplabs_markdown:
+knp_markdown:
     parser: ~       # Enable the parser service
 
 # Time Configuration
-knplabs_time: ~     # Enable the time helper
+knp_time: ~     # Enable the time helper
 
 # Menu Configuration
-knplabs_menu:
+knp_menu:
     twig: true
 
 # Paginator Configuration
-knplabs_paginator:
+knp_paginator:
     templating: ~
 
 # Symfony2Bundles Configuration
-knplabs_symfony2_bundles: ~
+knp_symfony2_bundles: ~
 
 # Gravatar Configuration
 gravatar: ~
@@ -54,4 +54,4 @@ doctrine:
         entity_managers:
             default:
                 mappings:
-                  KnplabsSymfony2BundlesBundle: ~
+                  KnpSymfony2BundlesBundle: ~

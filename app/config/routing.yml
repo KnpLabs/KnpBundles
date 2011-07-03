@@ -1,2 +1,2 @@
 symfony2bundles:
-    resource: "@KnplabsSymfony2BundlesBundle/Resources/config/routing.yml"
+    resource: "@KnpSymfony2BundlesBundle/Resources/config/routing.yml"

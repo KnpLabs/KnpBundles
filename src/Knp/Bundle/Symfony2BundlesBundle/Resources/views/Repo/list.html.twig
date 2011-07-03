@@ -1,0 +1,20 @@
+{% extends 'KnpSymfony2BundlesBundle::layout.html.twig' %}
+
+{% block body_attributes %}id="repos-list"{% endblock %}
+
+{% block content %}
+    <div id="main">
+        <div id="sort">
+            <span class="sort-by">Sort by</span>
+            <ul class="tabs" id="repo-tabs">
+                {%- for field, text in sortFields %}
+                <li{{ field == sort ? ' class="current"' : '' }}>
+                    <a href='{% block route_list %}{{ path('bundle_list', {'sort': field}) }}{% endblock %}'>{{ text }}</a>
+                </li>
+                {%- endfor %}
+            </ul>
+        </div>
+        {% include 'KnpSymfony2BundlesBundle:Repo:bigList.html.twig' with {'repos': repos} %}
+        {{ repos|paginate }}
+    </div>
+{% endblock %}
