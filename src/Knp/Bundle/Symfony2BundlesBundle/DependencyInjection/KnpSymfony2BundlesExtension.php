@@ -22,7 +22,7 @@ class KnpSymfony2BundlesExtension extends Extension
 
         $processor = new Processor();
         $config = $processor->process($this->getConfigTree(), $configs);
-        $container->setParameter('symfony2bundles.git_bin', $config['git_bin']);
+        $container->setParameter('knp_symfony2bundles.git_bin', $config['git_bin']);
     }
 
     private function getConfigTree()

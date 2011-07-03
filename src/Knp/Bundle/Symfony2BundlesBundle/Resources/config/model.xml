@@ -6,6 +6,6 @@
 
     <services>
         <!-- Entity manager -->
-        <service id="symfony2bundles.entity_manager" alias="doctrine.orm.entity_manager" />
+        <service id="knp_symfony2bundles.entity_manager" alias="doctrine.orm.entity_manager" />
     </services>
 </container>

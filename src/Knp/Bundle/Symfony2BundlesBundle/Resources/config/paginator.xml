@@ -5,12 +5,12 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="symfony2bundles.paginator.class">Zend\Paginator\Paginator</parameter>
+        <parameter key="knp_symfony2bundles.paginator.class">Zend\Paginator\Paginator</parameter>
     </parameters>
 
     <services>
         <!-- Paginator -->
-        <service id="symfony2bundles.paginator" class="%symfony2bundles.paginator.class%">
+        <service id="knp_symfony2bundles.paginator" class="%knp_symfony2bundles.paginator.class%">
             <argument type="service" id="knp_paginator.adapter" strict="false" />
         </service>
     </services>

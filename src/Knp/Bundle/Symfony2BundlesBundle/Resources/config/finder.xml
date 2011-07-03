@@ -5,38 +5,38 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="symfony2bundles.finder.aggregate.class">Knp\Bundle\Symfony2BundlesBundle\Finder\Aggregate</parameter>
-        <parameter key="symfony2bundles.finder.google.class">Knp\Bundle\Symfony2BundlesBundle\Finder\Google</parameter>
-        <parameter key="symfony2bundles.finder.github.class">Knp\Bundle\Symfony2BundlesBundle\Finder\Github</parameter>
+        <parameter key="knp_symfony2bundles.finder.aggregate.class">Knp\Bundle\Symfony2BundlesBundle\Finder\Aggregate</parameter>
+        <parameter key="knp_symfony2bundles.finder.google.class">Knp\Bundle\Symfony2BundlesBundle\Finder\Google</parameter>
+        <parameter key="knp_symfony2bundles.finder.github.class">Knp\Bundle\Symfony2BundlesBundle\Finder\Github</parameter>
     </parameters>
 
     <services>
-        <service id="symfony2bundles.finder" class="%symfony2bundles.finder.aggregate.class%" />
+        <service id="knp_symfony2bundles.finder" class="%knp_symfony2bundles.finder.aggregate.class%" />
 
         <!-- Search "site:github.com Symfony2 Bundle" on Google -->
-        <service class="%symfony2bundles.finder.google.class%" public="false">
-        	<tag name="symfony2bundles.finder" />
+        <service class="%knp_symfony2bundles.finder.google.class%" public="false">
+        	<tag name="knp_symfony2bundles.finder" />
             <argument>site:github.com Symfony2 Bundle</argument>
             <argument>300</argument>
         </service>
 
         <!-- Search "site:github.com Symfony2 Project" on Google -->
-        <service class="%symfony2bundles.finder.google.class%" public="false">
-        	<tag name="symfony2bundles.finder" />
+        <service class="%knp_symfony2bundles.finder.google.class%" public="false">
+        	<tag name="knp_symfony2bundles.finder" />
             <argument>site:github.com Symfony2 Project</argument>
             <argument>300</argument>
         </service>
 
         <!-- Search "Symfony2 Bundle" on Github -->
-        <service class="%symfony2bundles.finder.github.class%" public="false">
-            <tag name="symfony2bundles.finder" />
+        <service class="%knp_symfony2bundles.finder.github.class%" public="false">
+            <tag name="knp_symfony2bundles.finder" />
             <argument>Symfony2 Bundle</argument>
             <argument>300</argument>
         </service>
 
         <!-- Search "Symfony2 Project" on Github -->
-        <service class="%symfony2bundles.finder.github.class%" public="false">
-            <tag name="symfony2bundles.finder" />
+        <service class="%knp_symfony2bundles.finder.github.class%" public="false">
+            <tag name="knp_symfony2bundles.finder" />
             <argument>Symfony2 Project</argument>
             <argument>300</argument>
         </service>
