@@ -78,7 +78,7 @@ class Repo
             return false;
         }
 
-        $repo->setDescription($data['description']);
+        $repo->setDescription(empty($data['description']) ? null : $data['description']);
         $repo->setNbFollowers($data['watchers']);
         $repo->setNbForks($data['forks']);
         $repo->setCreatedAt(new \DateTime($data['created_at']));
