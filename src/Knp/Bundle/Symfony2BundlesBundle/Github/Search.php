@@ -67,7 +67,7 @@ class Search
         try {
             $page = 1;
             do {
-                $found = $this->github->getRepoApi()->search($query, 'php', $page);
+                $found = $this->github->getRepoApi()->search($query, '', $page);
                 if(empty($found)) {
                     break;
                 }
