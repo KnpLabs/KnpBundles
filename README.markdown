@@ -53,6 +53,10 @@ to add your specific DB settings:
     php app/console doctrine:fixtures:load
     php app/console --env=test doctrine:fixtures:load
 
+### Publish the assets
+
+    php app/console assets:install --symlink web
+
 #### Run the tests (requires latest PHPUnit 3.5)
 
     phpunit -c app
