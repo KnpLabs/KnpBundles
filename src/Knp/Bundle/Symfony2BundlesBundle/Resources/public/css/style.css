@@ -287,21 +287,21 @@ h1 {
 
 /* ----- Tabs ----- */
 
-.tabs { overflow: hidden; }
+.tabs { overflow: hidden; margin-left: 12px;}
     .tabs li { float: left; }
     .tabs a {
         display: block;
         margin: 0 4px 0 0;
         padding: 5px 15px;
-        color: #fff;
+        color: #000;
         font-size: 14px;
-        background: #393939;
+        background: #ededed;
         border-radius: 4px 4px 0 0;
         -moz-border-radius: 4px 4px 0 0;
         -webkit-border-radius: 4px 4px 0 0;
         text-decoration: none;
     }
-        .tabs .current a { color: #000; background: #ededed; }
+        .tabs .current a { color: #fff; background: #393939; }
 
 /* ----- Pagination ----- */
 
@@ -424,7 +424,10 @@ h1 {
     .repos-list .generals,
     .developers-list .generals
     { float: left; width: 600px; overflow: hidden; padding-left: 0; }
-
+    
+    .repo-title {
+        margin: 5px 0 10px 0;
+    }
 
     .repos-list .generals .name,
     .developers-list .generals .name
@@ -446,6 +449,7 @@ h1 {
         -moz-border-radius: 6px;
         -webkit-border-radius: 6px;
         padding: 5px 0;
+        margin-bottom: 10px;
     }
     
     .repos-list .details,
@@ -461,9 +465,8 @@ h1 {
     .developers-list .name { 
         font-size: 16px;
         font-weight: bold;
-        color: #000;
+        color: #E49211;
         text-decoration: none;
-        display: block;
     }
     .repos-list .owner,
     .developers-list .location {

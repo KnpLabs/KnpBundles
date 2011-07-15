@@ -28,7 +28,7 @@
     </div>
     <div id="header">
         <div id="header-inner">
-            <a href="{{ path('homepage') }}" title="Back to the homepage" id="logo">
+            <a href="{{ path('bundle_list') }}" title="Back to the homepage" id="logo">
                 <img src="{{ asset('bundles/knpsymfony2bundles/images/logo.png') }}" alt="Symfony2 Bundles" />
             </a>
             <a href="http://www.knplabs.com" title="KnpLabs - Quality. Innovation. Excitement" id="knplabs">
@@ -56,16 +56,12 @@
         <div id="footer">
             <div id="footer-inner">
                 <dl>
-                    <dt><a href="{{ path('homepage') }}">Home</a></dt>
-                </dl>
-                <dl>
                     <dt><a href="{{ path('bundle_list') }}">Bundles</a></dt>
                     <dd>
                         <ul>
-                            <li><a href="{{ path('bundle_list', {'sort': 'score'}) }}">by score</a></li>
-                            <li><a href="{{ path('bundle_list', {'sort': 'name'}) }}">by name</a></li>
-                            <li><a href="{{ path('bundle_list', {'sort': 'lastCommitAt'}) }}">by last commit date</a></li>
-                            <li><a href="{{ path('bundle_list', {'sort': 'createdAt'}) }}">by creation date</a></li>
+                            <li><a href="{{ path('bundle_list', {'sort': 'best'}) }}">by score</a></li>
+                            <li><a href="{{ path('bundle_list', {'sort': 'updated'}) }}">by last commit date</a></li>
+                            <li><a href="{{ path('bundle_list', {'sort': 'newest'}) }}">by creation date</a></li>
                         </ul>
                     </dd>
                 </dl>
@@ -73,7 +69,7 @@
                     <dt><a href="{{ path('project_list') }}">Projects</a></dt>
                     <dd>
                         <ul>
-                            <li><a href="{{ path('project_list', {'sort': 'score'}) }}">by score</a></li>
+                            <li><a href="{{ path('project_list', {'sort': 'best'}) }}">by score</a></li>
                             <li><a href="{{ path('project_list', {'sort': 'name'}) }}">by name</a></li>
                             <li><a href="{{ path('project_list', {'sort': 'lastCommitAt'}) }}">by last commit date</a></li>
                             <li><a href="{{ path('project_list', {'sort': 'createdAt'}) }}">by creation date</a></li>
@@ -85,7 +81,7 @@
                     <dd>
                         <ul>
                             <li><a href="{{ path('user_list', {'sort': 'name'}) }}">by name</a></li>
-                            <li><a href="{{ path('user_list', {'sort': 'score'}) }}">by score</a></li>
+                            <li><a href="{{ path('user_list', {'sort': 'best'}) }}">by score</a></li>
                         </ul>
                     </dd>
                 </dl>

@@ -25,10 +25,15 @@ class RepoController
     protected $response;
 
     protected $sortFields = array(
-        'score'         => 'score',
-        'name'          => 'name',
-        'lastCommitAt'  => 'last updated',
-        'createdAt'     => 'last created'
+        'best'          => 'score',
+        'updated'       => 'updatedAt',
+        'newest'        => 'createdAt'
+    );
+
+    protected $sortLegends = array(
+        'best'          => 'Best score',
+        'updated'       => 'Last update',
+        'newest'        => 'Newest'
     );
 
     public function __construct(Request $request, EngineInterface $templating, EntityManager $em, HttpKernel $httpKernel, Paginator $paginator, $gitExecutable, Response $response = null)
@@ -64,7 +69,7 @@ class RepoController
             }
         }
 
-        $format = $this->request->attributes->get('_format');
+        $format = $this->request->attributes->get('format');
 
         return $this->templating->renderResponse('KnpSymfony2BundlesBundle:Repo:searchResults.'.$format.'.twig', array(
             'query'         => $query,
@@ -82,7 +87,7 @@ class RepoController
             throw new NotFoundHttpException(sprintf('The repo "%s/%s" does not exist', $username, $name));
         }
 
-        $format = $this->request->attributes->get('_format');
+        $format = $this->request->attributes->get('format');
 
         return $this->templating->renderResponse('KnpSymfony2BundlesBundle:'.$repo->getClass().':show.'.$format.'.twig', array(
             'repo'          => $repo,
@@ -93,22 +98,28 @@ class RepoController
     public function listAction($sort, $class)
     {
         if (!array_key_exists($sort, $this->sortFields)) {
-            throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
+            throw new HttpException(406, sprintf('%s is not a valid sorting field', $sort));
         }
 
-        $format = $this->request->attributes->get('_format');
-
+        $format = $this->request->query->get('format', 'html');
+        if (!in_array($format, array('html', 'json', 'js'))) {
+            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
+        }
+        $this->request->setRequestFormat($format);
+        
+        $sortField = $this->sortFields[$sort];
+        
         if ('html' === $format) {
-            $query = $this->getRepository($class)->queryAllWithUsersAndContributorsSortedBy($sort);
+            $query = $this->getRepository($class)->queryAllWithUsersAndContributorsSortedBy($sortField);
             $repos = $this->getPaginator($query, $this->request->query->get('page', 1));
         } else {
-            $repos = $this->getRepository($class)->findAllWithUsersAndContributorsSortedBy($sort);
+            $repos = $this->getRepository($class)->findAllWithUsersAndContributorsSortedBy($sortField);
         }
 
         return $this->templating->renderResponse('KnpSymfony2BundlesBundle:'.$class.':list.'.$format.'.twig', array(
             'repos'         => $repos,
             'sort'          => $sort,
-            'sortFields'    => $this->sortFields,
+            'sortLegends'   => $this->sortLegends,
             'callback'      => $this->request->query->get('callback')
         ));
     }
@@ -117,7 +128,7 @@ class RepoController
     {
         $repos = $this->getRepository('Repo')->findAllSortedBy('createdAt', 50);
 
-        $format = $this->request->attributes->get('_format');
+        $format = $this->request->attributes->get('format');
 
         return $this->templating->renderResponse('KnpSymfony2BundlesBundle:Repo:listLatest.'.$format.'.twig', array(
             'repos'         => $repos,

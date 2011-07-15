@@ -2,23 +2,25 @@
     {% for repo in repos %}
     <li class="repo">
         <div class="image">
-            <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">
-                <img src="{{ gravatar(repo.user.email, 50) }}" alt="{{ repo.name }}" />
-            </a>
             <div class="bundlerank">
                 {{ repo.score }}
             </div>
+            <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">
+                <img src="{{ gravatar(repo.user.email, 50) }}" alt="{{ repo.name }}" />
+            </a>
         </div>
         <div class="generals">
-            <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">{{ repo.name }}</a>
-            by <a href="{{ path('user_show', {'name': repo.username }) }}" class="owner">{{ repo.username }}</a>
+            <div class="repo-title">
+                <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">{{ repo.name }}</a>
+                by <a href="{{ path('user_show', {'name': repo.username }) }}" class="owner">{{ repo.username }}</a>
+            </div>
             <p class="description">{{ repo.description }}</p>
         </div>
         <div class="details">
             <ul class="infos">
-                <li>Bundle rank <span>{{ repo.score }}</span></li>
-                <li>Developed since <span>{{ repo.createdAt|date('Y-m') }}</span></li>
-                <li>Nb of contributors <span>{{ repo.nbContributors }}</span></li>
+                <li>Created <span>{{ repo.createdAt|date('Y-m-d') }}</span></li>
+                <li>Last update <span>{{ repo.updatedAt|date('Y-m-d') }}</span></li>
+            </ul>
         </div>
     </li>
     {% endfor %}
