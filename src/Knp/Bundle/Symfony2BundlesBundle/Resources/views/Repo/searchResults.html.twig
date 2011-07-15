@@ -12,20 +12,13 @@
 
 {% block content %}
     <div id="main">
-    {%- if bundles|length > 0 %}
         <div id="search-result-bundles">
             <h2>{{ bundles|length }} Bundle{{ bundles|length > 1 ? 's' : '' }}</h2>
             {% include 'KnpSymfony2BundlesBundle:Bundle:bigList.html.twig' with {'repos': bundles} %}
         </div>
-    {%- endif %}
-    {%- if projects|length > 0 %}
         <div id="search-result-projects">
             <h2 class="section-title">{{ projects|length }} Project{{ projects|length > 1 ? 's' : '' }}</h2>
             {% include 'KnpSymfony2BundlesBundle:Project:bigList.html.twig' with {'repos': projects} %}
         </div>
-    {%- endif %}
-    </div>
-    <div id="side">
-        {% render 'knp_symfony2bundles.controller.bundle:listFeaturedAction' with {'max': 2} %}
     </div>
 {% endblock %}

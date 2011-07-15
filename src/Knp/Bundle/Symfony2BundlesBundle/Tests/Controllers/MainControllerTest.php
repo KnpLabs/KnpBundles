@@ -31,8 +31,8 @@ class MainControllerTest extends WebTestCase
         $menu = self::createClient()->request('GET', '/')->filter('#menu');
         $this->assertEquals(1, $menu->count());
 
-        $this->assertEquals('home current first', $menu->filter('li')->first()->attr('class'));
-        $this->assertEquals('Home', $menu->filter('li')->first()->filter('a')->text());
+        $this->assertEquals('current first', $menu->filter('li')->first()->attr('class'));
+        $this->assertEquals('Bundles', $menu->filter('li')->first()->filter('a')->text());
         $this->assertEquals('last', $menu->filter('li')->last()->attr('class'));
     }
 }

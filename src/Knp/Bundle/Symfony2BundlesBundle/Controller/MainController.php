@@ -30,11 +30,6 @@ class MainController
         $this->response = $response;
     }
 
-    public function indexAction()
-    {
-        return $this->templating->renderResponse('KnpSymfony2BundlesBundle:Main:index.html.twig', array(), $this->response);
-    }
-
     public function getRankCodeAction()
     {
         try {

@@ -69,7 +69,11 @@ class RepoController
             }
         }
 
-        $format = $this->request->attributes->get('format');
+        $format = $this->request->query->get('format', 'html');
+        if (!in_array($format, array('html', 'json', 'js'))) {
+            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
+        }
+        $this->request->setRequestFormat($format);
 
         return $this->templating->renderResponse('KnpSymfony2BundlesBundle:Repo:searchResults.'.$format.'.twig', array(
             'query'         => $query,
@@ -87,7 +91,11 @@ class RepoController
             throw new NotFoundHttpException(sprintf('The repo "%s/%s" does not exist', $username, $name));
         }
 
-        $format = $this->request->attributes->get('format');
+        $format = $this->request->query->get('format', 'html');
+        if (!in_array($format, array('html', 'json', 'js'))) {
+            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
+        }
+        $this->request->setRequestFormat($format);
 
         return $this->templating->renderResponse('KnpSymfony2BundlesBundle:'.$repo->getClass().':show.'.$format.'.twig', array(
             'repo'          => $repo,
@@ -128,14 +136,18 @@ class RepoController
     {
         $repos = $this->getRepository('Repo')->findAllSortedBy('createdAt', 50);
 
-        $format = $this->request->attributes->get('format');
+        $format = $this->request->query->get('format', 'atom');
+        if (!in_array($format, array('atom'))) {
+            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
+        }
+        $this->request->setRequestFormat($format);
 
         return $this->templating->renderResponse('KnpSymfony2BundlesBundle:Repo:listLatest.'.$format.'.twig', array(
             'repos'         => $repos,
             'callback'      => $this->request->query->get('callback')
         ));
     }
-
+    
     /**
      * Returns the paginator instance configured for the given query and page
      * number

@@ -1,9 +1,9 @@
 {% extends 'KnpSymfony2BundlesBundle:Repo:list.html.twig' %}
 
-{% block h1 %}All {{ repos.totalItemCount }} Projects{% endblock %}
+{% block h1 %}Discover {{ repos.totalItemCount }} Symfony2 Projects{% endblock %}
 
-{% block title %}All {{ repos.totalItemCount }} Projects{% endblock %}
+{% block title %}Discover {{ repos.totalItemCount }} Symfony2 Projects{% endblock %}
 
-{% block description %}All Open Source Symfony2 Projects sorted by {{ sort }}{% endblock %}
+{% block description %}All Open Source Symfony 2 Projects sorted by {{ sort }}{% endblock %}
 
 {% block route_list %}{{ path('project_list', {'sort': field}) }}{% endblock %}

@@ -54,10 +54,8 @@ a {
 
 #header { 
     position: absolute; 
-    top: 0;
+    top: 10px;
     width: 100%; 
-    background: -webkit-gradient(linear, left top, left bottom, from(#1D95A3), to(#FFF));
-    background: -moz-linear-gradient(top,#1D95A3,#FFF);
 }
 
 #header-inner { 
@@ -68,11 +66,13 @@ a {
     text-align: left;
 }
 
-#content-title .user-list {
-    padding-top: 10px;
-    padding-left:20px;
+.user-list {
+    margin-bottom: 20px;
+    font-size: 12px;
+    width: 650px;
+    float: left;
 }
-#content-title .user-list li {
+.user-list li {
     display: inline;
 }
 
@@ -88,7 +88,7 @@ a {
 
 h1 { 
     display: block; 
-    padding: 10px 20px 0px 20px;
+    padding: 20px 20px 20px 0px;
     margin: 0; 
     font-size: 30px;
     line-height: 36px;
@@ -109,12 +109,16 @@ h1 {
     #menu li { margin: 0; padding: 0; list-style: none;}
 #menu { 
     margin-top: 15px;
-    padding-left: 120px;
     height: 58px; 
-    background: url(../images/menu_bg.png) repeat-x;
-    border-radius: 12px;
-    -moz-border-radius: 12px;
-    -webkit-border-radius: 12px;
+    background: #5B5B5B;
+    background: -moz-linear-gradient(center top , #5B5B5B, #060606) repeat scroll 0 0 transparent;
+    background: -webkit-gradient(linear, left top, left bottom, from(#5B5B5B), to(#060606));
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    overflow: hidden;
+    padding: 0;
+    width: 100%;
 }
     #menu li {
         height: 20px;
@@ -123,12 +127,12 @@ h1 {
         float: left;
         border-right: 1px solid #616162;
     }
-    #menu li.first { border-left: 1px solid #616162; margin-left: 5px; }
+    #menu li.first { border-left: 1px solid #616162; margin-left: 120px; }
     #menu li.last { margin-right: 5px; border-right: none; }
     #menu a {
         display: block;
         margin: -19px 10px 0 10px;
-        padding: 17px 19px;
+        padding: 17px 9px;
         color: #fff;
         font: 16px/24px Arial, sans-serif;
         font-weight: bold;
@@ -183,23 +187,25 @@ h1 {
 
 /* ----- Content ----- */
 
-#content { width: 960px; margin: 100px auto 0 auto; text-align: left; position: relative; background-color: #FFF;}
+#content {
+    width: 920px; margin: 100px auto 0 auto; text-align: left; position: relative; background-color: #FFF;
+    padding: 0 20px;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border: 1px solid #DDDDDD;
+}
 
-#content-wrapper { background-color: #FFF; padding-top: 10px; padding-bottom: 150px;}
+#content-wrapper { background-color: #EFEFEF; padding-top: 20px; padding-bottom: 20px;}
 
 #main {
-    width: 960px; 
-    margin: 20px 5px; 
+    width: 100%; 
+    margin: 0px; 
     background: #fff;
-    box-shadow: 0 0 10px rgba(127,127,127,.2);
-    -moz-box-shadow: 0 0 10px rgba(127,127,127,.2);
-    -webkit-box-shadow: 0 0 10px rgba(127,127,127,.2);
-    border-radius: 0 0 4px 4px;
     overflow: hidden;
 }
     #main h2 {
-        margin: 40px 0px 20px 10px;
-        color: #1D95A3;
+        margin: 40px 0px 20px 0px;
         font-size: 22px;
         font-weight: bold;
     }
@@ -251,23 +257,14 @@ h1 {
 }
 .markdown ul { margin: 0; padding: 0; }
 .markdown ul li { list-style: disc inside; }
-.markdown p { margin: 20px 0; }
-.markdown h1 { font-size: 2em; font-weight: bold; margin: 20px 0; }
+.markdown p { margin: 10px 0; }
+.markdown h1 { font-size: 2em; font-weight: bold; margin: 10px 0; padding: 0; }
 .markdown h2 { font-size: 1.8em; font-weight: bold; margin: 20px 0; }
 .markdown h3 { font-size: 1.4em; font-weight: bold; margin: 20px 0; }
 .markdown h4 { font-size: 1.2em; margin: 20px 0; }
 .markdown pre {
-    margin: 20px 0;
-    background: #222;
-    color: #fff;
-    padding: 1em;
+    border: 1px solid #BEDCE7;
     overflow: auto;
-    text-shadow: 0 0 1px rgba(0,0,0, .2);
-    -moz-text-shadow: 0 0 1px rgba(0,0,0, .2);
-    -webkit-text-shadow: 0 0 1px rgba(0,0,0, .2);
-    border-radius: 8px;
-    -moz-border-radius: 8px;
-    -webkit-border-radius: 8px;
 }
 
 /* ----- Buttons ----- */
@@ -278,7 +275,7 @@ h1 {
     padding: 0 15px;
     background: #000 url('../images/black_button_bg.png') repeat-x; 
     color: #eee;
-    font-size: 14px;
+    font-size: 12px;
     text-decoration: none;
     border-radius: 12px;
     -moz-border-radius: 12px;
@@ -287,7 +284,7 @@ h1 {
 
 /* ----- Tabs ----- */
 
-.tabs { overflow: hidden; margin-left: 12px;}
+.tabs { overflow: hidden; margin-left: 0;}
     .tabs li { float: left; }
     .tabs a {
         display: block;
@@ -295,11 +292,13 @@ h1 {
         padding: 5px 15px;
         color: #000;
         font-size: 14px;
-        background: #ededed;
+        background: #fafafa;
         border-radius: 4px 4px 0 0;
         -moz-border-radius: 4px 4px 0 0;
         -webkit-border-radius: 4px 4px 0 0;
         text-decoration: none;
+        border: 1px solid #393939;
+        border-bottom: 1px solid #CCC;
     }
         .tabs .current a { color: #fff; background: #393939; }
 
@@ -325,7 +324,7 @@ h1 {
         padding: 10px 10px 10px 40px;
         text-decoration: none;
         color: #393939;
-        background: #ededed; 
+        background: #fafafa; 
         -webkit-transition: all .25s ease-in-out;
         -moz-transition: all .25s ease-in-out;
         -o-transition: all .25s ease-in-out;
@@ -389,9 +388,9 @@ h1 {
     -moz-border-radius: 12px 12px 0 0;
     -webkit-border-radius: 12px 12px 0 0;
 }
-    #newest-bundles h2 { background: #1d95a3 url(../images/last_created_bundles_ico.png) no-repeat 12px 14px; }
-    #last-creates-bundles a { color: #1d95a3; }
-        #newest-bundles .bundles_list .number { background: #1d95a3; }
+    #newest-bundles h2 { background: #E49211 url(../images/last_created_bundles_ico.png) no-repeat 12px 14px; }
+    #last-creates-bundles a { color: #E49211; }
+        #newest-bundles .bundles_list .number { background: #E49211; }
     #best-scored-bundles h2 { background: #393939 url(../images/best_scored_bundles_ico.png) no-repeat 12px 9px; }
     #best-scored-bundles a { color: #393939; }
         #best-scored-bundles .bundles_list .number { background: #393939; }
@@ -405,8 +404,9 @@ h1 {
     .repos-list .repo,
     .developers-list .developer { 
         position: relative;
-        margin: 10px; 
+        margin: 10px 0; 
         font-size: 14px;
+        border: 1px solid #dddddd;
         background: #f6f6f6; 
         overflow: hidden;
         border-radius: 4px;
@@ -423,7 +423,7 @@ h1 {
     
     .repos-list .generals,
     .developers-list .generals
-    { float: left; width: 600px; overflow: hidden; padding-left: 0; }
+    { float: left; width: 600px; overflow: hidden; padding: 10px;}
     
     .repo-title {
         margin: 5px 0 10px 0;
@@ -479,7 +479,7 @@ h1 {
     .repos-list .infos,
     .developers-list .infos { font-size: 13px; margin: 0 10px 10px 10px; }
         .repos-list .infos span,
-        .developers-list .infos span { float: right; color: #1d95a3; }
+        .developers-list .infos span { float: right; font-style: italic; }
 
 
 /**
@@ -505,37 +505,44 @@ h1 {
     #homepage #newest-bundles,
     #homepage #best-scored-bundles,
     #homepage #hot-bundles { float: left; width: 306px; margin: 5px 10px; }
-    #homepage #newest-bundles { border-bottom: 4px solid #1d95a3; }
+    #homepage #newest-bundles { border-bottom: 4px solid #E49211; }
     #homepage #best-scored-bundles { border-bottom: 4px solid #393939; margin-left: 0;}
     #homepage #hot-bundles { border-bottom: 4px solid #ed9521; margin-right: 0; }
 
 /* ----- Repos List ----- */
 
 #repos-list {}
-    #repos-list #main { padding-top: 10px; }
 
 /* ----- Repo Show ----- */
 
 #repo-show {}
-        #content-title .actions { position: absolute; top:15px; right: 0px; }
-        #repo-show #main { float: left; width: 700px; }
+        #repo-title { overflow: hidden; line-height: 70px;}
+        #repo-title h1 { float: left; }
+        #repo-show #main { float: left; width: 650px; }
         #repo-show #main .actions { float: right; margin: 10px; }
         #repo-show #main .button { margin: 0 0 0 5px; }
         #repo-show #main .user { 
             float: left;
             display: block; 
             padding: 10px 20px; 
-            color: #1d95a3; 
+            color: #E49211; 
             text-decoration: none;
             font-style: italic;
         }
+        #developer-show .gravatar {
+            top: 20px;
+            right: 20px;
+            position: absolute;
+        }
         #repo-show #main .details {
             clear: both;
-            margin: 10px;
-            background: #ededed;
-            border-radius: 4px;
-            -moz-border-radius: 4px;
-            -webkit-border-radius: 4px;
+            margin: 0px 0 10px 0px;
+
+            background: #FAFAFA;
+            border-top: 0px solid #DDDDDD;
+            border-bottom: 5px solid #DDDDDD;
+            border-left: 5px solid #DDDDDD;
+            border-right: none;
             overflow: hidden;
         }
         #repo-show #main .infos {
@@ -546,32 +553,26 @@ h1 {
             font-size: 13px;
             background: #f6f6f6;
         }
-            #repo-show #main .infos span { float: right; color: #1d95a3; }
-        #repo-show #main .description { padding: 20px 20px 20px 225px; font-size: 14px; }
+            #repo-show #main .infos span { float: right; color: #E49211; }
+        #repo-show #main .description { padding: 20px 10px; font-size: 16px; }
 
     #repo-show .commits {
-        width: 230px;
-        float:right;
-        margin: 20px 0px 10px 10px;
-        padding: 10px 0 10px 10px;
+        width: 220px;
+        float: right;
+        margin: 0px 20px 10px 00px;
+        padding: 0px 0 10px 10px;
         overflow: hidden;
         font-size: 12px;
-
-
-        box-shadow: 0 0 10px rgba(127,127,127,.2);
-        -moz-box-shadow: 0 0 10px rgba(127,127,127,.2);
-        -webkit-box-shadow: 0 0 10px rgba(127,127,127,.2);
-        border-radius: 4px;
-        -moz-border-radius: 4px;
-        -webkit-border-radius: 4px;
     }
-
+        #repo-show .commits ul {
+            margin-bottom: 20px;
+        }
         #repo-show .commits li {
             padding: 5px 0px;
             border-top: 1px solid #eee;
         }
 
-        #repo-show .commits span{
+        #repo-show .commits h3 {
             font-weight: bold;
         }
         #repo-show .commits .infos{
@@ -581,23 +582,12 @@ h1 {
     #repo-show #side { float: right; width: 275px; margin: 5px; }
     #repo-show #data {
         float:left;
-        width:680px;
+        width:628px;
+        margin: 0 0 20px 0px;
+        font-size: 12px;
         padding: 10px;
-        margin: 5px;
-        font-size: 14px;
-        box-shadow: 0 0 10px rgba(127,127,127,.2);
-        -moz-box-shadow: 0 0 10px rgba(127,127,127,.2);
-        -webkit-box-shadow: 0 0 10px rgba(127,127,127,.2);
-        border-radius: 4px;
-        -moz-border-radius: 4px;
-        -webkit-border-radius: 4px;
-    }
-    #repo-show .tab-content {
-        padding: 10px;
-        background: #ededed;
-        border-radius: 0 4px 4px 4px;
-        -moz-border-radius: 0 4px 4px 4px;
-        -webkit-border-radius: 0 4px 4px 4px;
+        background: #fafafa;
+        border: 1px solid #DDDDDD;
     }
 
 /* ----- Developers List ----- */
@@ -608,11 +598,11 @@ h1 {
 /* ----- Developer show ----- */
 
 #developer-show {}
-        #developer-show #main .card { overflow: hidden; margin: 10px; }
-        #developer-show #main .card .stats { float: left; margin: 0 0 0 10px; }
+        #developer-show #main .card { overflow: hidden; margin: 10px 0; }
+        #developer-show #main .card .stats { float: left; margin: 0 0 0 0px; }
         #developer-show #main .card .location { font-size: 18px; margin: 10px 0; font-style: italic; }
         #developer-show #main .card .stats { font-size: 13px; }
-            #developer-show #main .card .stats span { color: #1d95a3; float: right; }
+        #developer-show #main .card .stats span { float: right; font-weight: bold; margin-left: 20px;}
         #developer-show #main .card .about { 
             float: right; 
             width: 240px;
@@ -630,7 +620,7 @@ h1 {
         }
             #developer-show #main .card .avatar img { margin: 11px; }
         #developer-show #main .card .about .links { padding: 20px 0 20px 110px; font-size: 14px; }
-            #developer-show #main .card .about .links a { color: #1d95a3; }
+            #developer-show #main .card .about .links a { color: #E49211; }
             #developer-show #main .repo .details { padding: 40px; }
 
 /* ----- Search ----- */
@@ -644,22 +634,3 @@ h1 {
 
 /* ----- API ----- */
 
-#api {}
-    #api #main { padding: 20px; }
-
-/* ------ Oh yes fork me ----*/
-.ribbon {
-  background-color: #a00;
-  overflow: hidden;
-}
-.ribbon a {
-  border: 1px solid #faa;
-  color: #fff;
-  display: block;
-  font: bold 81.25% 'Helvetiva Neue', Helvetica, Arial, sans-serif;
-  margin: 0.05em 0;
-  padding: 0.5em 3.5em;
-  text-align: center;
-  text-decoration: none;
-  z-index:1000;
-}

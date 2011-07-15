@@ -2,11 +2,10 @@
     {%- for repo in repos %}
     <li class="repo">
         <div class="generals">
-            <a class="name">{{ repo.name }}</a>
+            <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">
+                {{ repo.name }}
+            </a>
             <p class="description">{{ repo.description }}</p>
-        </div>
-        <div class="details">
-            <a class="button" href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}">More details</a>
         </div>
     </li>
     {%- endfor %}

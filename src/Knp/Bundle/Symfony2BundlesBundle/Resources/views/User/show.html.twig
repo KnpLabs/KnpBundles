@@ -1,6 +1,13 @@
 {% extends 'KnpSymfony2BundlesBundle::layout.html.twig' %}
 
-{% block h1 %}{{ user.name }}{% endblock %}
+{% block content_title %}
+<div id="repo-title">
+    <h1>{{ user.name }}</h1>
+    <div class="actions" style="float:left">
+        <a class="button github" href="{{ user.gitHubUrl }}">View on Github</a>
+    </div>
+</div>
+{% endblock %}
 
 {% block title %}{{ user.name }} - {{ user.fullName }}{% endblock %}
 
@@ -10,26 +17,17 @@
 
 {% block content %}
     <div id="main">
+        <img class="gravatar" src="{{ gravatar(user.email, 150, none, 'mm') }}" width="150" height="150" />
         <div class="card">
             <ul class="stats">
-                <li class="location">Location: {{ user.location }}</li>
-                <li>Num followers <span>{{ user.name }}</span></li>
-                <li>Last commit <span>{{ user.lastCommitAt|date('Y/m/d') }}</span></li>
+                <li>Location: <span>{{ user.location }}</span></li>
+                <li>Last commit <span>{{ user.lastCommitAt|date('Y-m-d') }}</span></li>
                 <li>Num bundles <span>{{ user.nbBundles }}</span></li>
                 <li>Num projects <span>{{ user.nbProjects }}</span></li>
+                {% if user.blog %}
+                <li>My website <span><a href="{{ user.blog }}">{{ user.blog }}</a></span></li>
+                {% endif %}
             </ul>
-            <div class="about">
-                <span class="avatar"><img class="gravatar" src="{{ gravatar(user.email, 74, none, 'mm') }}" width="74" height="74" /></span>
-                <ul class="links">
-                    <li><a href="{{ user.githubUrl }}">View on github</a></li>
-                    {%- if user.email %}
-                    <li><a href="mailto:{{ user.obfuscatedEmail }}">Email</a></li>
-                    {%- endif %}
-                    {%- if user.blog %}
-                    <li><a href="{{ user.blog }}">Blog</a></li>
-                    {%- endif %}
-                </ul>
-            </div>
         </div>
         {%- if user.bundles|length > 0 %}
         <div class="bundles-i-manage">

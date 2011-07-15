@@ -6,22 +6,22 @@ As for now, the only supported formats are JSON and JavaScript (JSONP)
 
 ### JSON
 
-Add the ".json" extension at the end of the url path.
+Add the "?format=json" parameter at the end of the url path.
 The response content-type will be "application/json".
 
-    $ curl http://symfony2bundles.org/bundle/score.json
+    $ curl http://symfony2bundles.org/best?format=json
 
 ### JavaScript (JSONP)
 
-Add the ".js" extension at the end of the url path, and a "callback" parameter to wrap the data.
+Use the "js" format parameter and a "callback" parameter to wrap the data.
 The response content-type will be "application/javascript".
 
-    $ curl http://symfony2bundles.org/bundle/score.js?callback=doSomething
+    $ curl http://symfony2bundles.org/best?format=js&callback=doSomething
 
 jQuery provides an easy way to deal with jsonp, removing the need for a callback:
 
     $.ajax({
-        url:        "http://symfony2bundles.org/bundle/score.js",
+        url:        "http://symfony2bundles.org/best?format=js",
         dataType:   "jsonp",
         success:    function(data) { ... }
     });
@@ -30,12 +30,17 @@ jQuery provides an easy way to deal with jsonp, removing the need for a callback
 
 ### List all Bundles
 
-You must precise a sort field. Possible values are score, name, createdAt, lastCommitAt
+To get the list of bundles sorted by a given field, use:
 
-    bundle/:sort.:format
+    # the best bundles first
+    $ curl http://symfony2bundles.org/best?format=json
+    
+    # the newest bundles first
+    $ curl http://symfony2bundles.org/newest?format=json
 
-    $ curl http://symfony2bundles.org/bundle/score.json
-
+    # the bundles updated recently first
+    $ curl http://symfony2bundles.org/updated?format=json
+    
 Return a list of Bundles:
 
     - type: Bundle
@@ -59,9 +64,9 @@ Return a list of Bundles:
 
 When requesting only one Bundle, you get more informations such as last commits, readme and documentation.
 
-    :username/:name/.:format
+    :username/:name
 
-    $ curl http://symfony2bundles.org/avalanche123/MicroKernelBundle.json
+    $ curl http://symfony2bundles.org/avalanche123/MicroKernelBundle?format=json
 
 Return informations about one Bundle:
 
@@ -86,11 +91,16 @@ Return informations about one Bundle:
 
 ### List all Projects
 
-You must precise a sort field. Possible values are score, name, createdAt, lastCommitAt
+To get the list of bundles sorted by a given field, use:
 
-    project/:sort.:format
+    # the best projects first
+    $ curl http://symfony2bundles.org/project/best?format=json
+    
+    # the newest projects first
+    $ curl http://symfony2bundles.org/project/newest?format=json
 
-    $ curl http://symfony2bundles.org/project/score.json
+    # the projects updated recently first
+    $ curl http://symfony2bundles.org/project/updated?format=json
 
 Return a list of Projects:
 
@@ -113,9 +123,9 @@ Return a list of Projects:
 
 When requesting only one Project, you get more informations such as last commits, readme and documentation.
 
-    :username/:name/.:format
+    :username/:name
 
-    $ curl http://symfony2bundles.org/knplabs/symfony2bundles.json
+    $ curl http://symfony2bundles.org/knplabs/symfony2bundles?format=json
 
 Return informations about one Project:
 
@@ -139,9 +149,9 @@ Return informations about one Project:
 
 ## Search 
 
-    search.:format?q=:query
+    search?format=:format&q=:query
 
-    $ curl http://symfony2bundles.org/search.json?q=mongo
+    $ curl http://symfony2bundles.org/search?format=json&q=mongo
 
 Return a list of bundles and projects:
 
@@ -164,11 +174,7 @@ Return a list of bundles and projects:
 
 ### List developers
 
-You must precise a sort field. Possible values are name.
-
-    developer/:sort.:format
-
-    $ curl http://symfony2bundles.org/developer/name.json
+    $ curl http://symfony2bundles.org/developer/name?format=json
 
 Return a list of developers:
 
@@ -187,9 +193,7 @@ Return a list of developers:
 
 When requesting only one user, you get more informations such as last commits.
 
-    :name.:format
-
-    $ curl http://symfony2bundles.org/ornicar.json
+    $ curl http://symfony2bundles.org/ornicar?format=json
 
 Return informations about one developer.
 
@@ -211,9 +215,9 @@ Return informations about one developer.
 
 Get a list of the Bundles a given developer owns. 
 
-    :name/bundles.:format
+    :name/bundles
 
-    $ curl http://symfony2bundles.org/knplabs/bundles.json
+    $ curl http://symfony2bundles.org/knplabs/bundles?format=json
 
 Return a list of Bundles:
 
@@ -240,9 +244,9 @@ Return a list of Bundles.
 
 Get a list of the Projects a given developer owns. 
 
-    :name/projects.:format
+    :name/projects
 
-    $ curl http://symfony2bundles.org/knplabs/projects.json
+    $ curl http://symfony2bundles.org/knplabs/projects?format=json
 
 Return a list of Projects.
 

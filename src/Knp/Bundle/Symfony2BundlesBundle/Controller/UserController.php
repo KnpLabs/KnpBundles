@@ -17,8 +17,14 @@ class UserController
     protected $paginator;
 
     protected $sortFields = array(
-        'name'  => 'name',
-        'score' => 'score'
+        'name'          => 'name',
+        'best'          => 'score',
+        'best'          => 'score',
+    );
+
+    protected $sortLegends = array(
+        'name'          => 'Alphabetical',
+        'best'          => 'Best score',
     );
 
     public function __construct(Request $request, EngineInterface $templating, EntityManager $em, Paginator $paginator)
@@ -35,7 +41,11 @@ class UserController
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        $format = $this->request->attributes->get('_format');
+        $format = $this->request->query->get('format', 'html');
+        if (!in_array($format, array('html', 'json', 'js'))) {
+            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
+        }
+        $this->request->setRequestFormat($format);
 
         return $this->templating->renderResponse('KnpSymfony2BundlesBundle:User:show.'.$format.'.twig', array(
             'user'      => $user,
@@ -49,19 +59,25 @@ class UserController
             throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
         }
 
-        $format = $this->request->attributes->get('_format');
+        $format = $this->request->query->get('format', 'html');
+        if (!in_array($format, array('html', 'json', 'js'))) {
+            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
+        }
+        $this->request->setRequestFormat($format);
+
+        $sortField = $this->sortFields[$sort];
 
         if ('html' === $format) {
-            $query = $this->getUserRepository()->queryAllWithProjectsSortedBy($sort);
+            $query = $this->getUserRepository()->queryAllWithProjectsSortedBy($sortField);
             $users = $this->getPaginator($query, $this->request->query->get('page', 1));
         } else {
-            $users = $this->getUserRepository()->findAllWithProjectsSortedBy($sort);
+            $users = $this->getUserRepository()->findAllWithProjectsSortedBy($sortField);
         }
 
         return $this->templating->renderResponse('KnpSymfony2BundlesBundle:User:list.'.$format.'.twig', array(
             'users'         => $users,
             'sort'          => $sort,
-            'sortFields'    => $this->sortFields,
+            'sortLegends'   => $this->sortLegends,
             'callback'      => $this->request->query->get('callback')
         ));
     }
@@ -72,7 +88,11 @@ class UserController
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        $format = $this->request->attributes->get('_format');
+        $format = $this->request->query->get('format', 'html');
+        if (!in_array($format, array('html', 'json', 'js'))) {
+            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
+        }
+        $this->request->setRequestFormat($format);
 
         return $this->templating->renderResponse('KnpSymfony2BundlesBundle:Bundle:list.'.$format.'.twig', array(
             'repos'     => $user->getBundles(),
@@ -86,7 +106,11 @@ class UserController
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        $format = $this->request->attributes->get('_format');
+        $format = $this->request->query->get('format', 'html');
+        if (!in_array($format, array('html', 'json', 'js'))) {
+            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
+        }
+        $this->request->setRequestFormat($format);
 
         return $this->templating->renderResponse('KnpSymfony2BundlesBundle:Project:list.'.$format.'.twig', array(
             'repos'     => $user->getProjects(),
