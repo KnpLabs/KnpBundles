@@ -22,7 +22,7 @@
 
     </script>
 </head>
-<body {% block body_attributes %}{% endblock %}>
+<body {% block body_attributes %}{% endblock %} onload="onload()">
     <div id="header">
         <div id="header-inner">
             <a href="{{ path('bundle_list') }}" title="Back to the homepage" id="logo">
@@ -90,5 +90,10 @@
     <script src="http://yandex.st/highlightjs/6.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
     <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        function onload() {
+            document.getElementById('search-query').focus();
+        }
+    </script>
     </body>
 </html>
