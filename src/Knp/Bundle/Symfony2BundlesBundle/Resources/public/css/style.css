@@ -10,6 +10,8 @@ body {
     font: 16px/1.2em Helvetica, Verdana, sans-serif;
     background-color: #000;
     color: #393939;
+    margin: 0;
+    padding: 0;
 }
 
 a img { border: none; }
@@ -53,14 +55,14 @@ a {
 /* ----- Header ----- */
 
 #header { 
-    position: absolute; 
-    top: 10px;
     width: 100%; 
+    background: #5B5B5B;
+    background: -moz-linear-gradient(center top , #5B5B5B, #060606) repeat scroll 0 0 transparent;
+    background: -webkit-gradient(linear, left top, left bottom, from(#5B5B5B), to(#060606));
 }
 
 #header-inner { 
     width: 960px; 
-    height: 90px; 
     margin: auto; 
     position: relative; 
     text-align: left;
@@ -108,14 +110,7 @@ h1 {
 #menu, 
     #menu li { margin: 0; padding: 0; list-style: none;}
 #menu { 
-    margin-top: 15px;
     height: 58px; 
-    background: #5B5B5B;
-    background: -moz-linear-gradient(center top , #5B5B5B, #060606) repeat scroll 0 0 transparent;
-    background: -webkit-gradient(linear, left top, left bottom, from(#5B5B5B), to(#060606));
-    border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
     overflow: hidden;
     padding: 0;
     width: 100%;
@@ -152,31 +147,32 @@ h1 {
 /* ----- Search Box ----- */
 
 #search-box {
-    position: absolute;
-    top: 18px;
-    right: 70px;
     height: 20px;
     padding: 0;
     border: none;
+    margin: 0px auto 30px auto;
+    width: 670px;
 }
     #search-box label { display: none; }
     #search-box input { 
         float: left;
         border: none;  
-        height: 20px; 
-        width: 130px;
-        padding: 0 0 0 15px;
+        height: 25px; 
+        width: 618px;
+        padding: 1px 7px 1px 7px;
         color: #666;
-        font-size: 12px;
+        font-size: 17px;
         margin: 0;
         outline: none;
+        border: 1px solid #DDDDDD;
     }
     #search-box button {
         float: right;
         height: 20px;
-        width: 43px;
+        width: 25px;
         padding: 0;
         margin: 0;
+        margin-top: 3px;
         overflow: hidden;
         text-indent: -999px;
         border: none;
@@ -188,7 +184,7 @@ h1 {
 /* ----- Content ----- */
 
 #content {
-    width: 920px; margin: 100px auto 0 auto; text-align: left; position: relative; background-color: #FFF;
+    width: 920px; margin: 0px auto 0 auto; text-align: left; position: relative; background-color: #FFF;
     padding: 0 20px;
     border-radius: 8px;
     -moz-border-radius: 8px;
@@ -196,7 +192,7 @@ h1 {
     border: 1px solid #DDDDDD;
 }
 
-#content-wrapper { background-color: #EFEFEF; padding-top: 20px; padding-bottom: 20px;}
+#content-wrapper { background-color: #EFEFEF; padding-top: 20px; padding-bottom: 20px; padding-top: 20px;}
 
 #main {
     width: 100%; 

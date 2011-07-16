@@ -32,14 +32,15 @@
                 <img src="{{ asset('bundles/knpsymfony2bundles/images/knplabs.png') }}" alt="KnpLabs" />
             </a>
             {{ menu('main') }}
-            <form method="get" action="{{ path('search') }}" id="search-box">
-                <label for="search-query">Search:</label>
-                <input type="text" id="search-query" name="q" value="{% block search_query %}{% endblock %}" />
-                <button id="search-btn" title="Submit search">Search</button>
-            </form>
         </div>
     </div><!-- /#header -->
+
     <div id="content-wrapper">
+        <form method="get" action="{{ path('search') }}" id="search-box">
+            <label for="search-query">Search:</label>
+            <input type="text" id="search-query" name="q" value="{% block search_query %}{% endblock %}" />
+            <button id="search-btn" title="Submit search">Search</button>
+        </form>
         <div id="content" class="clearfix">
             <div id="content-title">
                 {% block content_title %}</h1>
