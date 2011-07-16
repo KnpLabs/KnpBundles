@@ -8,8 +8,8 @@
 <div id="repo-title">
     <h1>{{ repo.name }}</h1>
     <div class="actions">
-        <div id="repo-gplusone"><g:plusone></g:plusone></div>
-        <a class="button github" style="float:right; margin-top: 20px; margin-right: 40px;" href="{{ repo.gitHubUrl }}">View and download on Github</a>
+        <div id="repo-gplusone"><g:plusone {% if repo.homepage %}href="{{ repo.homepage }}"{% endif %}></g:plusone></div>
+        <a class="button github" style="float:right; margin-top: 0px; margin-right: 40px;" href="{{ repo.gitHubUrl }}">View and download on Github</a>
     </div>
 </div>
 {% endblock %}

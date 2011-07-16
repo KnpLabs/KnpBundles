@@ -3,8 +3,9 @@
 {% block content_title %}
 <div id="repo-title">
     <h1>{{ user.name }}</h1>
-    <div class="actions" style="float:left">
-        <a class="button github" href="{{ user.gitHubUrl }}">View on Github</a>
+    <div class="actions">
+        <div id="repo-gplusone"><g:plusone {% if user.blog %}href="{{ user.blog }}"{% endif %}></g:plusone></div>
+        <a class="button github" style="float:right; margin-top: 0px; margin-right: 40px;" href="{{ user.gitHubUrl }}">View on Github</a>
     </div>
 </div>
 {% endblock %}

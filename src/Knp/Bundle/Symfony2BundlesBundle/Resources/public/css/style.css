@@ -512,9 +512,9 @@ h1 {
 /* ----- Repo Show ----- */
 
 #repo-show {}
-        #repo-title { overflow: hidden; line-height: 70px;}
-        #repo-title h1 { float: left; }
-        #repo-gplusone { margin-top: 8px; float: left; height: 70px;}
+        #repo-title { overflow: hidden; line-height: 24px; padding: 20px 0 20px 0;}
+        #repo-title h1 { float: left; line-height: 24px; margin: 0; padding: 0;}
+        #repo-gplusone { float: left; margin-left: 10px;}
         #repo-show #main { float: left; width: 650px; }
         #repo-show #main .actions { float: right; margin: 10px; }
         #repo-show #main .button { margin: 0 0 0 5px; }
@@ -527,8 +527,8 @@ h1 {
             font-style: italic;
         }
         #developer-show .gravatar {
-            top: 20px;
-            right: 20px;
+            top: 60px;
+            right: 40px;
             position: absolute;
         }
         #repo-show #main .details {
