@@ -97,6 +97,8 @@ h1 {
     color: #393939;
 }
 
+#global-gplusone { position: absolute; right: 40px; top: 16px; }
+
 /* ----- Goodies ----- */
 
 #logo { position: absolute; top: 8px; left: 15px; }
