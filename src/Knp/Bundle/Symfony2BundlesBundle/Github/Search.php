@@ -57,15 +57,19 @@ class Search
         $this->output->writeln(sprintf('%d repos found!', count($repos) - $nb));
         $nb = count($repos);
         
-        // DELETE-ME
-        // $repos = $this->searchReposOnGitHub('Bundle', $repos, $limit);
-        // foreach ($repos as $index => $repo) {
-        //     if (!preg_match('/Bundle$/', $repo->getName())) {
-        //         unset($repos[$index]);
-        //     }
-        // }
-        // $repos = $this->searchReposOnGitHub('Symfony2', $repos, $limit);
-        // $repos = $this->searchReposOnGoogle($repos, $limit);
+        $repos = $this->searchReposOnGitHub('Bundle', $repos, $limit);
+        foreach ($repos as $index => $repo) {
+            if (!preg_match('/Bundle$/', $repo->getName())) {
+                unset($repos[$index]);
+            }
+        }
+        $repos = $this->searchReposOnGitHub('Symfony2', $repos, $limit);
+        $this->output->writeln(sprintf('%d repos found!', count($repos) - $nb));
+        $nb = count($repos);
+
+        $repos = $this->searchReposOnGoogle($repos, $limit);
+        $this->output->writeln(sprintf('%d repos found!', count($repos) - $nb));
+        $nb = count($repos);
 
         return array_slice($repos, 0, $limit);
     }
@@ -163,7 +167,6 @@ class Search
                             continue;
                         }
                         $alreadyFound[$url] = true;
-                        echo $url . "\n";
                         // The url is perhaps directly a github url
                         if(preg_match('#https?://github.com/([^/]+/.*)$#', $url, $m)) {
                             $name = $m[1];

@@ -22,11 +22,13 @@
         <ul class="developers-list">
             {%- for user in users %}
             <li class="developer">
+                {# {% if user.email %} #}
                 <div class="image">
                     <a href="{{ url('user_show', {'name': user.name}) }}" class="name">
-                        <img src="{{ gravatar(user.email, 50) }}" alt="{{ user.name }}, Symfony developer" />
+                        <img src="{{ gravatar(user.email, 50, none, 'identicon') }}" alt="{{ user.name }}, Symfony developer" />
                     </a>
                 </div>
+                {# {% endif %} #}
                 <div class="generals">
                     <a class="name" href="{{ url('user_show', {'name': user.name}) }}">{{ user.name }}</a>
                     {%- if user.location %}

@@ -18,7 +18,9 @@
 
 {% block content %}
     <div id="main">
-        <img class="gravatar" src="{{ gravatar(user.email, 150, none, 'mm') }}" width="150" height="150" />
+        {% if user.email %}
+        <img class="gravatar" src="{{ gravatar(user.email, 150, none, 'identicon') }}" width="150" height="150" />
+        {% endif %}
         <div class="card">
             <ul class="stats">
                 <li>Location: <span>{{ user.location }}</span></li>
