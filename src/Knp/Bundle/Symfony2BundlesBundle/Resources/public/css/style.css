@@ -514,6 +514,7 @@ h1 {
 #repo-show {}
         #repo-title { overflow: hidden; line-height: 70px;}
         #repo-title h1 { float: left; }
+        #repo-gplusone { margin-top: 8px; float: left; height: 70px;}
         #repo-show #main { float: left; width: 650px; }
         #repo-show #main .actions { float: right; margin: 10px; }
         #repo-show #main .button { margin: 0 0 0 5px; }
