@@ -1,6 +1,7 @@
 /web/uploads/*
 /web/bundles/*
 /app/cache/*
+/app/repos/*
 /app/logs/*
 /app/config/config_prod_local.yml
 /app/config/config_dev_local.yml
@@ -10,3 +11,4 @@
 .git*
 /vendor/zend/documentation
 /vendor/*/tests
+.DS_Store

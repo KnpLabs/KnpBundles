@@ -178,6 +178,12 @@ abstract class Repo
         $this->contributors = new ArrayCollection();
         $this->createdAt = new \DateTime('NOW');
         $this->updatedAt = new \DateTime('NOW');
+        $this->score = 0;
+        $this->lastCommitAt = new \DateTime('2010-01-01');
+        $this->lastCommits = serialize(array());
+        $this->tags = serialize(array());
+        $this->nbFollowers = 0;
+        $this->nbForks = 0;
     }
 
     /**

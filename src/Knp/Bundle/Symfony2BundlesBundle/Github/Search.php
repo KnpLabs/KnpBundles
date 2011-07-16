@@ -10,9 +10,11 @@ use Goutte\Client;
  * Searches a variety of sources (Github and Google) for Symfony2 bundles.
  *
  * @author Thibault Duplessis
+ * @author Matthieu Bontemps
  */
 class Search
 {
+    
     /**
      * php-github-api instance used to request GitHub API
      *
@@ -49,14 +51,21 @@ class Search
     public function searchRepos($limit = 300)
     {
         $repos = array();
-        $repos = $this->searchReposOnGitHub('Bundle', $repos, $limit);
-        foreach ($repos as $index => $repo) {
-            if (!preg_match('/Bundle$/', $repo->getName())) {
-                unset($repos[$index]);
-            }
-        }
-        $repos = $this->searchReposOnGitHub('Symfony2', $repos, $limit);
-        $repos = $this->searchReposOnGoogle($repos, $limit);
+        $nb = 0;
+        
+        $repos = $this->searchReposOnTwitter('(#symfony2bundles OR #symfony2 OR #symfony) github filter:links', $repos, $limit);
+        $this->output->writeln(sprintf('%d repos found!', count($repos) - $nb));
+        $nb = count($repos);
+        
+        // DELETE-ME
+        // $repos = $this->searchReposOnGitHub('Bundle', $repos, $limit);
+        // foreach ($repos as $index => $repo) {
+        //     if (!preg_match('/Bundle$/', $repo->getName())) {
+        //         unset($repos[$index]);
+        //     }
+        // }
+        // $repos = $this->searchReposOnGitHub('Symfony2', $repos, $limit);
+        // $repos = $this->searchReposOnGoogle($repos, $limit);
 
         return array_slice($repos, 0, $limit);
     }
@@ -72,7 +81,8 @@ class Search
                     break;
                 }
                 foreach($found as $repo) {
-                    $repos[] = Repo::create($repo['username'].'/'.$repo['name']);
+                    $name = $repo['username'].'/'.$repo['name'];
+                    $repos[strtolower($name)] = Repo::create($name);
                 }
                 $page++;
                 $this->output->write('...'.count($repos));
@@ -110,16 +120,10 @@ class Search
                     if (!preg_match('#^http://github.com/([\w-]+/[\w-]+).*$#', $url, $match)) {
                         continue;
                     }
-                    $repo = Repo::create($match[1]);
-                    $alreadyFound = false;
-                    foreach ($repos as $_repo) {
-                        if ($repo->getName() == $_repo->getName()) {
-                            $alreadyFound = true;
-                            break;
-                        }
-                    }
-                    if (!$alreadyFound) {
-                        $repos[] = $repo;
+                    $name = $match[1];
+                    if(!isset($repos[strtolower($name)])) {
+                        $repo = Repo::create($name);
+                        $repos[strtolower($name)] = $repo;
                         $this->output->write(sprintf('!'));
                     }
                 }
@@ -131,6 +135,55 @@ class Search
         }
         $this->output->writeLn(' DONE');
 
+        return $repos;
+    }
+
+    protected function searchReposOnTwitter($query, array $repos, $limit)
+    {
+        $this->output->write(sprintf('Search "%s" on Twitter', $query));
+        
+        $url = sprintf('http://search.twitter.com/search.json?q=%s&rpp=%d', urlencode($query), 100);
+        $this->browser->request('GET', $url);
+        $data = $this->browser->getResponse()->getContent();
+        $data = json_decode($data, true);
+
+        $alreadyFound = array();
+        
+        if($data) {
+            $results = $data['results'];
+            foreach ($results as $result) {
+                $tweet = $result['text'];
+
+                // Search urls in the tweet
+                if(preg_match_all("#https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?#i", $tweet, $m)) {
+                    $urls = $m[0];                
+                    foreach ($urls as $url) {
+                        $url = rtrim($url, '.');
+                        if(isset($alreadyFound[$url])) {
+                            continue;
+                        }
+                        $alreadyFound[$url] = true;
+                        echo $url . "\n";
+                        // The url is perhaps directly a github url
+                        if(preg_match('#https?://github.com/([^/]+/.*)$#', $url, $m)) {
+                            $name = $m[1];
+                            $repos[strtolower($name)] = Repo::create($name);
+
+                        // Or a redirect/multi-redirect link => we parse the resulting github page
+                        } else {
+                            $html = file_get_contents($url);
+
+                            if(preg_match('#<title>([a-z0-9-_]+/[^\'"/ ]+) - GitHub</title>#i', $html, $m)) {
+                                $name = $m[1];
+                                $repos[strtolower($name)] = Repo::create($name);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $this->output->writeln('... DONE');
+        
         return $repos;
     }
 

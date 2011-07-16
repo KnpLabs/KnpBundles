@@ -26,14 +26,14 @@ class RepoController
 
     protected $sortFields = array(
         'best'          => 'score',
-        'updated'       => 'updatedAt',
+        'updated'       => 'lastCommitAt',
         'newest'        => 'createdAt'
     );
 
     protected $sortLegends = array(
         'best'          => 'Best score',
-        'updated'       => 'Last update',
-        'newest'        => 'Newest'
+        'updated'       => 'Updated recently',
+        'newest'        => 'New'
     );
 
     public function __construct(Request $request, EngineInterface $templating, EntityManager $em, HttpKernel $httpKernel, Paginator $paginator, $gitExecutable, Response $response = null)

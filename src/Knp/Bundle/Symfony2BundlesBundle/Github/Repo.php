@@ -51,7 +51,6 @@ class Repo
             return false;
         }
         $repo->recalculateScore();
-
         return $repo;
     }
 
@@ -75,7 +74,11 @@ class Repo
         }
 
         if($data['fork']) {
-            return false;
+            if($data['watchers'] >= 30) {
+                // Let's try to keep a forked repo with lots of watchers
+            } else {
+                return false;
+            }
         }
 
         $repo->setDescription(empty($data['description']) ? null : $data['description']);
@@ -206,4 +209,5 @@ class Repo
     {
         $this->github = $github;
     }
+    
 }

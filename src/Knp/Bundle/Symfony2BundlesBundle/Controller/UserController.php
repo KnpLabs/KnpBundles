@@ -19,7 +19,6 @@ class UserController
     protected $sortFields = array(
         'name'          => 'name',
         'best'          => 'score',
-        'best'          => 'score',
     );
 
     protected $sortLegends = array(
