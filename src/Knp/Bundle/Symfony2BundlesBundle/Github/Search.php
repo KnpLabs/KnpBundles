@@ -152,13 +152,13 @@ class Search
 
         $alreadyFound = array();
 
-        if($data) {
+        if ($data) {
             $results = $data['results'];
             foreach ($results as $result) {
                 $tweet = $result['text'];
 
                 // Search urls in the tweet
-                if(preg_match_all("#https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?#i", $tweet, $m)) {
+                if (preg_match_all("#https?://([-\w\.]+)+(:\d+)?(/([\w/_\.]*(\?\S+)?)?)?#i", $tweet, $m)) {
                     $urls = $m[0];
                     foreach ($urls as $url) {
                         $url = rtrim($url, '.');
@@ -167,7 +167,7 @@ class Search
                         }
                         $alreadyFound[$url] = true;
                         // The url is perhaps directly a github url
-                        if (preg_match('#https?://github.com/([^/]+/.*)$#', $url, $m)) {
+                        if (preg_match('#^https?://github.com/([^/]+/[^/]+)(/.*)?#', $url, $m)) {
                             $name = $m[1];
                             $repos[strtolower($name)] = Repo::create($name);
 
@@ -175,7 +175,7 @@ class Search
                         } else {
                             $html = file_get_contents($url);
 
-                            if(preg_match('#<title>([a-z0-9-_]+/[^\'"/ ]+) - GitHub</title>#i', $html, $m)) {
+                            if (preg_match('#<title>([a-z0-9-_]+/[^\'"/ ]+) - GitHub</title>#i', $html, $m)) {
                                 $name = $m[1];
                                 $repos[strtolower($name)] = Repo::create($name);
                             }
