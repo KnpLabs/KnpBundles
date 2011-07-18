@@ -106,6 +106,7 @@
                     if (++curPosition < listCount) {
                             $('.repo').eq(curPosition-1).css('border','none');
                             $('.repo').eq(curPosition).css('border','1px solid #333333');
+                            $('html,body').animate({ scrollTop: $('.repo').eq(curPosition).offset().top }, 'normal');
                     } else {
                         curPosition--;
                     }
@@ -115,6 +116,7 @@
                     if (--curPosition >= 0) {
                             $('.repo').eq(curPosition+1).css('border','none');
                             $('.repo').eq(curPosition).css('border','1px solid #333333');
+                            $('html,body').animate({ scrollTop: $('.repo').eq(curPosition).offset().top }, 'normal');
                     } else{
                         curPosition++;
                     }
