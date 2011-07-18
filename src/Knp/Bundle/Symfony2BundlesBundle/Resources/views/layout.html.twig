@@ -33,7 +33,7 @@
             </a>
             {{ menu('main') }}
             <div id="global-gplusone"><g:plusone href="http://symfony2bundles.org/"></g:plusone></div>
-            
+
         </div>
     </div><!-- /#header -->
 
@@ -88,11 +88,40 @@
     </div><!-- /#footer-wrapper -->
     <link rel="stylesheet" href="http://yandex.st/highlightjs/6.0/styles/github.min.css">
     <script src="http://yandex.st/highlightjs/6.0/highlight.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
     <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
     <script type="text/javascript" charset="utf-8">
         function onload() {
-            document.getElementById('search-query').focus();
+            //code to control keyboard navigation
+            var listCount = $('.repo').size();
+            var curPosition = 0;
+            $('.repo').first().css('border','1px solid #333333');
+            document.onkeydown=function(e) {
+                if (e.which == 83) {
+                    document.getElementById('search-query').focus();
+
+                    return false;
+                } else if (e.which == 40) {
+                    if (++curPosition < listCount) {
+                            $('.repo').eq(curPosition-1).css('border','none');
+                            $('.repo').eq(curPosition).css('border','1px solid #333333');
+                    } else {
+                        curPosition--;
+                    }
+
+                    return false;
+                } else if (e.which == 38) {
+                    if (--curPosition >= 0) {
+                            $('.repo').eq(curPosition+1).css('border','none');
+                            $('.repo').eq(curPosition).css('border','1px solid #333333');
+                    } else{
+                        curPosition++;
+                    }
+
+                    return false;
+                }
+            }
         }
     </script>
     </body>
