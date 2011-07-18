@@ -84,9 +84,9 @@ class Updater
                 continue;
             }
 
-            $lastUpdateHappend = $now - $repo->getUpdatedAt()->getTimestamp();
+            $lastUpdateHappened = $now - $repo->getUpdatedAt()->getTimestamp();
 
-            if ($lastUpdateHappend < 60*60*3 && count($repo->getLastCommits()) > 0) {
+            if ($lastUpdateHappened < 60*60*3 && count($repo->getLastCommits()) > 0) {
                 continue;
             }
 
