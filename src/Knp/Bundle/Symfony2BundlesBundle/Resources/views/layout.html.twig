@@ -114,6 +114,7 @@
                 return false;
             });
 
+
             $(document).bind('keydown', 'up', function(){
                 if (--curPosition >= 0) {
                         $('.repo').eq(curPosition+1).css('border','1px solid #DDDDDD');
@@ -122,6 +123,12 @@
                 } else{
                     curPosition++;
                 }
+
+                return false;
+            });
+
+            $(document).bind('keydown', 'return', function() {
+                document.location = $('.repo').eq(curPosition).children('.generals').children('.repo-title').children('.name').attr('href');
 
                 return false;
             });
