@@ -126,11 +126,6 @@ class Updater
                 continue;
             }
 
-            $lastUpdateHappend = $now - $user->getUpdatedAt()->getTimestamp();
-            if ($lastUpdateHappend < 60*60*3) {
-                continue;
-            }
-
             $this->output->write($user->getName().str_repeat(' ', 40-strlen($user->getName())));
             if (!$this->githubUserApi->update($user)) {
                 $this->output->writeln('Remove user');
