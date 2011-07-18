@@ -55,6 +55,9 @@ class Search
         $repos = $this->searchReposOnTwitter('(#symfony2bundles OR #symfony2 OR #symfony) github filter:links', $repos, $limit);
         $this->output->writeln(sprintf('%d repos found!', count($repos) - $nb));
         $nb = count($repos);
+        if ($nb >= $limit) {
+            return array_slice($repos, 0, $limit);
+        }
 
         $repos = $this->searchReposOnGitHub('Bundle', $repos, $limit);
         foreach ($repos as $index => $repo) {
@@ -65,6 +68,9 @@ class Search
         $repos = $this->searchReposOnGitHub('Symfony2', $repos, $limit);
         $this->output->writeln(sprintf('%d repos found!', count($repos) - $nb));
         $nb = count($repos);
+        if ($nb >= $limit) {
+            return array_slice($repos, 0, $limit);
+        }
 
         $repos = $this->searchReposOnGoogle($repos, $limit);
         $this->output->writeln(sprintf('%d repos found!', count($repos) - $nb));
@@ -89,8 +95,7 @@ class Search
                 }
                 $page++;
                 $this->output->write('...'.count($repos));
-            }
-            while (count($repos) < $limit);
+            } while (count($repos) < $limit);
         } catch (\Exception $e) {
             $this->output->write(' - '.$e->getMessage());
         }
@@ -131,12 +136,16 @@ class Search
                     }
                 }
                 $pageNumber++;
+                if (count($repos) >= $limit) {
+                    // No need to keep searching and waiting.
+                    break 2;
+                }
                 usleep(500 * 1000);
             }
             $this->output->write(sprintf('%d/%d', 10 * ($pageNumber - 1), $maxBatch * $maxPage * 10));
             sleep(2);
         }
-        $this->output->writeLn(' DONE');
+        $this->output->writeln(' DONE');
 
         return $repos;
     }
