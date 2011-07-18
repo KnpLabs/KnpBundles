@@ -4,6 +4,7 @@ namespace Knp\Bundle\Symfony2BundlesBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Knp\Bundle\Symfony2BundlesBundle\Updater\Updater;
 
@@ -19,6 +20,7 @@ class S2bPopulateCommand extends ContainerAwareCommand
     {
         $this
             ->setDefinition(array())
+            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'The maximal number of new repositories considered by the update', 1000)
             ->setName('s2b:populate')
         ;
     }
@@ -37,7 +39,7 @@ class S2bPopulateCommand extends ContainerAwareCommand
 
         $updater = new Updater($em, $gitRepoDir, $gitBin, $output);
         $updater->setUp();
-        $repos = $updater->searchNewRepos(1000);
+        $repos = $updater->searchNewRepos((int) $input->getOption('limit'));
         $updater->createMissingRepos($repos);
         $em->flush();
         $updater->updateReposData();
