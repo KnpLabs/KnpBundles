@@ -12,6 +12,7 @@ function onload() {
     $('.' + className).first().addClass('active');
 
     $(document).bind('keydown', 's', function() { $('#search-query').focus(); return false; });
+    $('#search-query').bind('keydown', 'esc', function() { $('#search-query').blur(); return false; });
 
     $(document).bind('keydown', 'down', function() {
         moveElement(className, 'down');
