@@ -1,33 +1,32 @@
+//code to control keyboard navigation
+var curPosition = 0;
+
 function onload() {
-    //code to control keyboard navigation
-    var listCount = $('.repo').size();
-    var curPosition = 0;
 
     $('.repo').first().css('border','1px solid blue');
 
     $(document).bind('keydown', 's', function() { $('#search-query').focus(); return false; });
 
     $(document).bind('keydown', 'down', function() {
-        if (++curPosition < listCount) {
-            $('.repo').eq(curPosition-1).css('border','1px solid #DDDDDD');
-            $('.repo').eq(curPosition).css('border','1px solid blue');
-            moveToElement($('.repo').eq(curPosition));
-        } else {
-            curPosition--;
-        }
+        moveElement('repo', 'down');
+
+        return false;
+    });
+
+    $(document).bind('keydown', 'j', function() {
+        moveElement('repo', 'down');
 
         return false;
     });
 
 
     $(document).bind('keydown', 'up', function(){
-        if (--curPosition >= 0) {
-                $('.repo').eq(curPosition+1).css('border','1px solid #DDDDDD');
-                $('.repo').eq(curPosition).css('border','1px solid blue');
-                moveToElement($('.repo').eq(curPosition));
-        } else{
-            curPosition++;
-        }
+        moveElement('repo', 'up');
+
+        return false;
+    });
+    $(document).bind('keydown', 'k', function(){
+        moveElement('repo', 'up');
 
         return false;
     });
@@ -39,10 +38,29 @@ function onload() {
     });
 }
 
-function moveToElement(elem)
+function moveElement(className ,direction)
 {
+    var elem = $('.' + className);
+    var listCount = elem.size();
+
+    if (direction == 'down') {
+        if (++curPosition < listCount) {
+            elem.eq(curPosition-1).css('border','1px solid #DDDDDD');
+            elem.eq(curPosition).css('border','1px solid blue');
+        } else {
+            curPosition--;
+        }
+    } else {
+        if (--curPosition >= 0) {
+                elem.eq(curPosition+1).css('border','1px solid #DDDDDD');
+                elem.eq(curPosition).css('border','1px solid blue');
+        } else{
+            curPosition++;
+        }
+    }
+
     //check if the element is in view, if not move to it
-    if (elem.viewportOffset().top > $(window).height() || elem.viewportOffset().top < 0) {
-        $('html, body').animate({scrollTop: elem.offset().top}, 500);
+    if (elem.eq(curPosition).viewportOffset().top > $(window).height() || elem.eq(curPosition).viewportOffset().top < 0) {
+        $('html, body').animate({scrollTop: elem.eq(curPosition).offset().top}, 500);
     }
 }
