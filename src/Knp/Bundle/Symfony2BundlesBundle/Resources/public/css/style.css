@@ -98,6 +98,7 @@ h1 {
 }
 
 #global-gplusone { position: absolute; right: 40px; top: 16px; }
+#global-tip { margin-bottom: 10px; margin-top: 5px; color: #666; font-size: 13px;}
 
 /* ----- Goodies ----- */
 
@@ -149,10 +150,10 @@ h1 {
 /* ----- Search Box ----- */
 
 #search-box {
-    height: 20px;
+    height: 28px;
     padding: 0;
     border: none;
-    margin: 0px auto 30px auto;
+    margin: 0px auto 5px auto;
     width: 670px;
 }
     #search-box label { display: none; }
@@ -186,7 +187,7 @@ h1 {
 /* ----- Content ----- */
 
 #content {
-    width: 920px; margin: 0px auto 0 auto; text-align: left; position: relative; background-color: #FFF;
+    width: 920px; margin: 20px auto 0 auto; text-align: left; position: relative; background-color: #FFF;
     padding: 0 20px;
     border-radius: 8px;
     -moz-border-radius: 8px;
