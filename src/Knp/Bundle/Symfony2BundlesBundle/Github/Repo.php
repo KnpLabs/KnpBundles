@@ -95,7 +95,7 @@ class Repo
     {
         $this->output->write(' commits');
         try {
-            $commits = $this->github->getCommitApi()->getBranchCommits($repo->getUsername(), $repo->getName(), 'master');
+            $commits = $this->github->getCommitApi()->getBranchCommits($repo->getUsername(), $repo->getName(), 'HEAD');
         } catch (\Github_HttpClient_Exception $e) {
             if (404 == $e->getCode()) {
                 return false;
