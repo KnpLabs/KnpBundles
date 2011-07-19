@@ -414,7 +414,10 @@ h1 {
     }
     .repos-list .active,
     .developers-list .active {
-        border: 1px solid #0000ff;
+        border: 1px solid #565656;
+        box-shadow: 0 0 5px rgba(127,127,127,.5);
+        -moz-box-shadow: 0 0 5px rgba(127,127,127,.5);
+        -webkit-box-shadow: 0 0 5px rgba(127,127,127,.5);
     }
     .repos-list .generals,
     .developers-list .generals,
