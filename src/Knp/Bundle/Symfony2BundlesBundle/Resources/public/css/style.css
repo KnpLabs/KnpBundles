@@ -54,17 +54,17 @@ a {
 
 /* ----- Header ----- */
 
-#header { 
-    width: 100%; 
+#header {
+    width: 100%;
     background: #5B5B5B;
     background: -moz-linear-gradient(center top , #5B5B5B, #060606) repeat scroll 0 0 transparent;
     background: -webkit-gradient(linear, left top, left bottom, from(#5B5B5B), to(#060606));
 }
 
-#header-inner { 
-    width: 960px; 
-    margin: auto; 
-    position: relative; 
+#header-inner {
+    width: 960px;
+    margin: auto;
+    position: relative;
     text-align: left;
 }
 
@@ -88,10 +88,10 @@ a {
     font-weight: normal;
 }
 
-h1 { 
-    display: block; 
+h1 {
+    display: block;
     padding: 20px 20px 20px 0px;
-    margin: 0; 
+    margin: 0;
     font-size: 30px;
     line-height: 36px;
     color: #393939;
@@ -109,10 +109,10 @@ h1 {
 
 /* ----- Menu ----- */
 
-#menu, 
+#menu,
     #menu li { margin: 0; padding: 0; list-style: none;}
-#menu { 
-    height: 58px; 
+#menu {
+    height: 58px;
     overflow: hidden;
     padding: 0;
     width: 100%;
@@ -145,7 +145,7 @@ h1 {
         color: #EDB443;
     }
 
-    
+
 /* ----- Search Box ----- */
 
 #search-box {
@@ -156,10 +156,10 @@ h1 {
     width: 670px;
 }
     #search-box label { display: none; }
-    #search-box input { 
+    #search-box input {
         float: left;
-        border: none;  
-        height: 25px; 
+        border: none;
+        height: 25px;
         width: 618px;
         padding: 1px 7px 1px 7px;
         color: #666;
@@ -197,8 +197,8 @@ h1 {
 #content-wrapper { background-color: #EFEFEF; padding-top: 20px; padding-bottom: 20px; padding-top: 20px;}
 
 #main {
-    width: 100%; 
-    margin: 0px; 
+    width: 100%;
+    margin: 0px;
     background: #fff;
     overflow: hidden;
 }
@@ -267,11 +267,11 @@ h1 {
 
 /* ----- Buttons ----- */
 
-.button { 
+.button {
     display: inline-block;
     line-height: 28px;
     padding: 0 15px;
-    background: #000 url('../images/black_button_bg.png') repeat-x; 
+    background: #000 url('../images/black_button_bg.png') repeat-x;
     color: #eee;
     font-size: 12px;
     text-decoration: none;
@@ -322,7 +322,7 @@ h1 {
         padding: 10px 10px 10px 40px;
         text-decoration: none;
         color: #393939;
-        background: #fafafa; 
+        background: #fafafa;
         -webkit-transition: all .25s ease-in-out;
         -moz-transition: all .25s ease-in-out;
         -o-transition: all .25s ease-in-out;
@@ -331,15 +331,15 @@ h1 {
     .bundles_list a:hover {
         background: #fafafa;
     }
-    .bundles_list .bundle { 
+    .bundles_list .bundle {
         position: relative;
-        margin: 4px 0; 
+        margin: 4px 0;
     }
     .bundles_list .name { display: block; font-weight: bold; font-size: 14px; }
     .bundles_list .number {
         position: absolute;
         top: 10px;
-        left: 10px; 
+        left: 10px;
         display: block;
         width: 25px;
         height: 25px;
@@ -400,16 +400,20 @@ h1 {
     #sort .sort-by { float: left; padding: 5px 20px; }
 
     .repos-list .repo,
-    .developers-list .developer { 
+    .developers-list .developer {
         position: relative;
-        margin: 10px 0; 
+        margin: 10px 0;
         font-size: 14px;
         border: 1px solid #dddddd;
-        background: #f6f6f6; 
+        background: #f6f6f6;
         overflow: hidden;
         border-radius: 4px;
         -moz-border-radius: 4px;
         -webkit-border-radius: 4px;
+    }
+    .repos-list .active,
+    .developers-list .active {
+        border: 1px solid #0000ff;
     }
     .repos-list .generals,
     .developers-list .generals,
@@ -418,11 +422,11 @@ h1 {
     .repos-list .image,
     .developers-list .image
     { padding: 12px; }
-    
+
     .repos-list .generals,
     .developers-list .generals
     { float: left; width: 600px; overflow: hidden; padding: 10px;}
-    
+
     .repo-title {
         margin: 5px 0 10px 0;
     }
@@ -441,7 +445,7 @@ h1 {
     .bundlerank
     {
         text-align: center;
-        background: #DDD; 
+        background: #DDD;
         color: #000;
         border-radius: 6px;
         -moz-border-radius: 6px;
@@ -449,18 +453,18 @@ h1 {
         padding: 5px 0;
         margin-bottom: 10px;
     }
-    
+
     .repos-list .details,
-    .developers-list .details { 
-        float: right; 
+    .developers-list .details {
+        float: right;
         width: 180px;
-        background: #ebebeb; 
+        background: #ebebeb;
         border-radius: 0 4px 4px 0;
         -moz-border-radius: 0 4px 4px 0;
         -webkit-border-radius: 0 4px 4px 0;
     }
     .repos-list .name,
-    .developers-list .name { 
+    .developers-list .name {
         font-size: 16px;
         font-weight: bold;
         color: #E49211;
@@ -520,11 +524,11 @@ h1 {
         #repo-show #main { float: left; width: 650px; }
         #repo-show #main .actions { float: right; margin: 10px; }
         #repo-show #main .button { margin: 0 0 0 5px; }
-        #repo-show #main .user { 
+        #repo-show #main .user {
             float: left;
-            display: block; 
-            padding: 10px 20px; 
-            color: #E49211; 
+            display: block;
+            padding: 10px 20px;
+            color: #E49211;
             text-decoration: none;
             font-style: italic;
         }
@@ -602,8 +606,8 @@ h1 {
         #developer-show #main .card .location { font-size: 18px; margin: 10px 0; font-style: italic; }
         #developer-show #main .card .stats { font-size: 13px; }
         #developer-show #main .card .stats span { float: right; font-weight: bold; margin-left: 20px;}
-        #developer-show #main .card .about { 
-            float: right; 
+        #developer-show #main .card .about {
+            float: right;
             width: 240px;
             overflow: hidden;
             background: #ebebeb;
