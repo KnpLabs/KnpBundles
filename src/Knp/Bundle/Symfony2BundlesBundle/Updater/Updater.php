@@ -89,33 +89,43 @@ class Updater
             if ($lastUpdateHappened < 60*60*3 && count($repo->getLastCommits()) > 0) {
                 continue;
             }
-
-            $this->output->writeln("Repo $repo has score ".$repo->getScore());
-
-            $this->output->write($repo->getFullName());
-            $pad = 50 - strlen($repo->getFullName());
-            if ($pad > 0) {
-                $this->output->write(str_repeat(' ', $pad));
+            
+            while (true) {
+                $this->output->writeln("\n\n#################### Updating ".$repo);
+                try {
+                    $this->updateRepoData($repo);
+                    break;
+                } catch(\Github_HttpClient_Exception $e) {
+                    $this->output->writeln("Got a Github exception, sleeping for a few secs before trying again");
+                    sleep(60);
+                }
             }
-            if (!$this->githubRepoApi->update($repo)) {
-                $this->output->write(' - Fail, will be removed');
-                $repo->getUser()->removeRepo($repo);
-                $this->em->remove($repo);
-            }
-            $this->output->writeln(' '.$repo->getScore());
-            $this->em->flush();
-            sleep(1);
-
-            $contributorNames = $this->githubRepoApi->getContributorNames($repo);
-            $contributors = array();
-            foreach ($contributorNames as $contributorName) {
-                $contributors[] = $this->getOrCreateUser($contributorName);
-            }
-            $this->output->writeln(sprintf('%s contributors: %s', $repo->getFullName(), implode(', ', $contributors)));
-            $repo->setContributors($contributors);
-            $this->em->flush();
-            sleep(1);
         }
+    }
+    
+    public function updateRepoData($repo)
+    {
+        $this->output->write($repo->getFullName());
+        $pad = 50 - strlen($repo->getFullName());
+        if ($pad > 0) {
+            $this->output->write(str_repeat(' ', $pad));
+        }
+        if (!$this->githubRepoApi->update($repo)) {
+            $this->output->write(' - Fail, will be removed');
+            $repo->getUser()->removeRepo($repo);
+            $this->em->remove($repo);
+        }
+        $this->output->writeln(' '.$repo->getScore());
+        $this->em->flush();
+
+        $contributorNames = $this->githubRepoApi->getContributorNames($repo);
+        $contributors = array();
+        foreach ($contributorNames as $contributorName) {
+            $contributors[] = $this->getOrCreateUser($contributorName);
+        }
+        $this->output->writeln(sprintf('%s contributors: %s', $repo->getFullName(), implode(', ', $contributors)));
+        $repo->setContributors($contributors);
+        $this->em->flush();
     }
 
     public function updateUsers()
@@ -126,14 +136,23 @@ class Updater
                 continue;
             }
 
-            $this->output->write($user->getName().str_repeat(' ', 40-strlen($user->getName())));
-            if (!$this->githubUserApi->update($user)) {
-                $this->output->writeln('Remove user');
-                $this->em->remove($user);
-            } else {
-                $user->recalculateScore();
-                $this->output->writeln('OK, score is '.$user->getScore());
+            while (true) {
+                try {
+                    $this->output->write($user->getName().str_repeat(' ', 40-strlen($user->getName())));
+                    if (!$this->githubUserApi->update($user)) {
+                        $this->output->writeln('Remove user');
+                        $this->em->remove($user);
+                    } else {
+                        $user->recalculateScore();
+                        $this->output->writeln('OK, score is '.$user->getScore());
+                    }
+                    break;
+                } catch(\Github_HttpClient_Exception $e) {
+                    $this->output->writeln("Got a Github exception, sleeping for a few secs before trying again");
+                    sleep(60);
+                }
             }
+            
         }
     }
 
