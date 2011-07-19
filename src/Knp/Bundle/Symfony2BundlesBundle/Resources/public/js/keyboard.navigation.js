@@ -3,36 +3,46 @@ var curPosition = 0;
 
 function onload() {
 
-    $('.repo').first().addClass('active');
+    if ($('.repo').length > 0) {
+        var className = 'repo';
+    } else if ($('.developer').length > 0) {
+        var className = 'developer';
+    }
+
+    $('.' + className).first().addClass('active');
 
     $(document).bind('keydown', 's', function() { $('#search-query').focus(); return false; });
 
     $(document).bind('keydown', 'down', function() {
-        moveElement('repo', 'down');
+        moveElement(className, 'down');
 
         return false;
     });
 
     $(document).bind('keydown', 'j', function() {
-        moveElement('repo', 'down');
+        moveElement(className, 'down');
 
         return false;
     });
 
 
     $(document).bind('keydown', 'up', function(){
-        moveElement('repo', 'up');
+        moveElement(className, 'up');
 
         return false;
     });
     $(document).bind('keydown', 'k', function(){
-        moveElement('repo', 'up');
+        moveElement(className, 'up');
 
         return false;
     });
 
     $(document).bind('keydown', 'return', function() {
-        document.location = $('.repo').eq(curPosition).children('.generals').children('.repo-title').children('.name').attr('href');
+        if (className == 'repo') {
+            document.location = $('.' + className).eq(curPosition).children('.generals').children('.repo-title').children('.name').attr('href');
+        } else if (className == 'developer') {
+            document.location = $('.' + className).eq(curPosition).children('.generals').children('.name').attr('href');
+        }
 
         return false;
     });
