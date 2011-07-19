@@ -22,7 +22,7 @@
 
     </script>
 </head>
-<body {% block body_attributes %}{% endblock %} onload="onload()">
+<body {% block body_attributes %}{% endblock %}>
     <div id="header">
         <div id="header-inner">
             <a href="{{ path('bundle_list') }}" title="Back to the homepage" id="logo">
@@ -45,7 +45,7 @@
         </form>
         <div id="content" class="clearfix">
             <div id="content-title">
-                {% block content_title %}</h1>
+                {% block content_title %}
                 <h1>{% block h1 %}{% endblock %}</h1>
                 {% endblock %}
             </div>
