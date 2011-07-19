@@ -3,7 +3,7 @@ var curPosition = 0;
 
 function onload() {
 
-    $('.repo').first().css('border','1px solid blue');
+    $('.repo').first().addClass('active');
 
     $(document).bind('keydown', 's', function() { $('#search-query').focus(); return false; });
 
@@ -42,18 +42,18 @@ function moveElement(className ,direction)
 {
     var elem = $('.' + className);
     var listCount = elem.size();
-
     if (direction == 'down') {
         if (++curPosition < listCount) {
-            elem.eq(curPosition-1).css('border','1px solid #DDDDDD');
-            elem.eq(curPosition).css('border','1px solid blue');
+            console.log(curPosition);
+            elem.eq(curPosition-1).removeClass('active');
+            elem.eq(curPosition).addClass('active');
         } else {
             curPosition--;
         }
     } else {
         if (--curPosition >= 0) {
-                elem.eq(curPosition+1).css('border','1px solid #DDDDDD');
-                elem.eq(curPosition).css('border','1px solid blue');
+            elem.eq(curPosition+1).removeClass('active');
+            elem.eq(curPosition).addClass('active');
         } else{
             curPosition++;
         }
