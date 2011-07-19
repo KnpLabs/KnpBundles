@@ -346,9 +346,6 @@ abstract class Repo
         // 1 fork = 3 points
         $score += 3 * $this->getNbForks();
 
-        // 1 contributor = 3 points
-        $score += 3 * $this->getNbContributors();
-
         // Small boost for recently updated repos
         if ($this->getDaysSinceLastCommit() < 30) {
             $score += (30 - $this->getDaysSinceLastCommit()) / 5;

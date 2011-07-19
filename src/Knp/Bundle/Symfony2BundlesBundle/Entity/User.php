@@ -113,7 +113,6 @@ class User
         $this->repos = new ArrayCollection();
         $this->contributionRepos = new ArrayCollection();
         $this->createdAt = new \DateTime('NOW');
-        $this->updatedAt = new \DateTime('NOW');
     }
 
     /**
@@ -316,14 +315,12 @@ class User
 
     public function hasProjects()
     {
-
         return ($this->getNbProjects() > 0);
     }
 
 
     public function hasBundles()
     {
-
         return ($this->getNbBundles() > 0);
     }
 

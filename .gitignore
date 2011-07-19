@@ -1,6 +1,7 @@
 app/config/config_*_local.yml
 app/cache/*
 app/logs/*
+app/repos
 app/data
 app/deploy.sh
 app/alive.php

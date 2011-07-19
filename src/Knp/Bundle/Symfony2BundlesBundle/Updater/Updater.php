@@ -17,19 +17,19 @@ class Updater
     private $users;
     private $em;
     private $output;
-    
-    function __construct($em, $gitRepoDir, $gitBin, $output)
+
+    public function __construct($em, $gitRepoDir, $gitBin, $output)
     {
         $this->output = $output;
         $this->em = $em;
         $this->githubClient = new \Github_Client();
         $this->githubSearch = new Github\Search($this->githubClient, new \Goutte\Client(), $this->output);
         $this->githubUserApi = new Github\User($this->githubClient, $this->output);
-        
+
         $this->gitRepoManager = new Git\RepoManager($gitRepoDir, $gitBin);
         $this->githubRepoApi = new Github\Repo($this->githubClient, $this->output, $this->gitRepoManager);
     }
-    
+
     public function setUp()
     {
         $this->repos = array();
@@ -37,21 +37,22 @@ class Updater
             $this->repos[strtolower($repo->getFullName())] = $repo;
         }
         $this->output->writeln(sprintf('Loaded %d repos from the DB', count($this->repos)));
-        
+
         $this->users = array();
         foreach ($this->em->getRepository('Knp\Bundle\Symfony2BundlesBundle\Entity\User')->findAll() as $user) {
             $this->users[strtolower($user->getName())] = $user;
         }
         $this->output->writeln(sprintf('Loaded %d users from the DB', count($this->users)));
     }
-    
+
     public function searchNewRepos($nb)
     {
         $foundRepos = $this->githubSearch->searchRepos($nb, $this->output);
         $this->output->writeln(sprintf('Found %d repo candidates', count($foundRepos)));
+
         return $foundRepos;
     }
-    
+
     public function createMissingRepos($foundRepos)
     {
         $added = 0;
@@ -72,7 +73,7 @@ class Updater
 
         $this->output->writeln(sprintf('%d created', $added));
     }
-    
+
     public function updateReposData()
     {
         $this->output->writeln('Will now update commits, files and tags');
@@ -82,41 +83,51 @@ class Updater
             if ($this->em->getUnitOfWork()->getEntityState($repo) != UnitOfWork::STATE_MANAGED) {
                 continue;
             }
-            
-            $lastUpdateHappend = $now - $repo->getUpdatedAt()->getTimestamp();
 
-            if ($lastUpdateHappend < 60*60*3 && count($repo->getLastCommits()) > 0) {
+            $lastUpdateHappened = $now - $repo->getUpdatedAt()->getTimestamp();
+
+            if ($lastUpdateHappened < 60*60*3 && count($repo->getLastCommits()) > 0) {
                 continue;
             }
             
-            $this->output->writeln("Repo $repo has score ".$repo->getScore());
-            
-            $this->output->write($repo->getFullName());
-            $pad = 50 - strlen($repo->getFullName());
-            if ($pad > 0) {
-                $this->output->write(str_repeat(' ', $pad));
+            while (true) {
+                $this->output->writeln("\n\n#################### Updating ".$repo);
+                try {
+                    $this->updateRepoData($repo);
+                    break;
+                } catch(\Github_HttpClient_Exception $e) {
+                    $this->output->writeln("Got a Github exception, sleeping for a few secs before trying again");
+                    sleep(60);
+                }
             }
-            if (!$this->githubRepoApi->update($repo)) {
-                $this->output->write(' - Fail, will be removed');
-                $repo->getUser()->removeRepo($repo);
-                $this->em->remove($repo);
-            }
-            $this->output->writeln(' '.$repo->getScore());
-            $this->em->flush();
-            sleep(1);
-            
-            $contributorNames = $this->githubRepoApi->getContributorNames($repo);
-            $contributors = array();
-            foreach ($contributorNames as $contributorName) {
-                $contributors[] = $this->getOrCreateUser($contributorName);
-            }
-            $this->output->writeln(sprintf('%s contributors: %s', $repo->getFullName(), implode(', ', $contributors)));
-            $repo->setContributors($contributors);
-            $this->em->flush();
-            sleep(1);
         }
     }
     
+    public function updateRepoData($repo)
+    {
+        $this->output->write($repo->getFullName());
+        $pad = 50 - strlen($repo->getFullName());
+        if ($pad > 0) {
+            $this->output->write(str_repeat(' ', $pad));
+        }
+        if (!$this->githubRepoApi->update($repo)) {
+            $this->output->write(' - Fail, will be removed');
+            $repo->getUser()->removeRepo($repo);
+            $this->em->remove($repo);
+        }
+        $this->output->writeln(' '.$repo->getScore());
+        $this->em->flush();
+
+        $contributorNames = $this->githubRepoApi->getContributorNames($repo);
+        $contributors = array();
+        foreach ($contributorNames as $contributorName) {
+            $contributors[] = $this->getOrCreateUser($contributorName);
+        }
+        $this->output->writeln(sprintf('%s contributors: %s', $repo->getFullName(), implode(', ', $contributors)));
+        $repo->setContributors($contributors);
+        $this->em->flush();
+    }
+
     public function updateUsers()
     {
         $this->output->writeln(sprintf('Will now update %d users', count($this->users)));
@@ -125,33 +136,37 @@ class Updater
                 continue;
             }
 
-            $lastUpdateHappend = $now - $user->getUpdatedAt()->getTimestamp();
-            if ($lastUpdateHappend < 60*60*3) {
-                continue;
+            while (true) {
+                try {
+                    $this->output->write($user->getName().str_repeat(' ', 40-strlen($user->getName())));
+                    if (!$this->githubUserApi->update($user)) {
+                        $this->output->writeln('Remove user');
+                        $this->em->remove($user);
+                    } else {
+                        $user->recalculateScore();
+                        $this->output->writeln('OK, score is '.$user->getScore());
+                    }
+                    break;
+                } catch(\Github_HttpClient_Exception $e) {
+                    $this->output->writeln("Got a Github exception, sleeping for a few secs before trying again");
+                    sleep(60);
+                }
             }
-
-            $this->output->write($user->getName().str_repeat(' ', 40-strlen($user->getName())));
-            if (!$this->githubUserApi->update($user)) {
-                $this->output->writeln('Remove user');
-                $this->em->remove($user);
-            } else {
-                $user->recalculateScore();
-                $this->output->writeln('OK, score is '.$user->getScore());
-            }
+            
         }
     }
-    
+
     private function getOrCreateUser($username)
     {
         if (isset($this->users[strtolower($username)])) {
             $user = $this->users[strtolower($username)];
-            
         } else {
             $this->output->write(sprintf('Add user %s:', $username));
             $user = $this->githubUserApi->import($username);
             $this->users[strtolower($user->getName())] = $user;
             $this->em->persist($user);
         }
+
         return $user;
     }
 }

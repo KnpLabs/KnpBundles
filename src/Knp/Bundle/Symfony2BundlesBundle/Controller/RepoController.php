@@ -114,9 +114,9 @@ class RepoController
             throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
         }
         $this->request->setRequestFormat($format);
-        
+
         $sortField = $this->sortFields[$sort];
-        
+
         if ('html' === $format) {
             $query = $this->getRepository($class)->queryAllWithUsersAndContributorsSortedBy($sortField);
             $repos = $this->getPaginator($query, $this->request->query->get('page', 1));
@@ -147,7 +147,7 @@ class RepoController
             'callback'      => $this->request->query->get('callback')
         ));
     }
-    
+
     /**
      * Returns the paginator instance configured for the given query and page
      * number
@@ -176,5 +176,4 @@ class RepoController
     {
         return $this->em->getRepository('Knp\\Bundle\\Symfony2BundlesBundle\\Entity\\'.$class);
     }
-
 }

@@ -11,7 +11,7 @@ use Knp\Bundle\Symfony2BundlesBundle\Updater\Updater;
 /**
  * Update local database from web searches
  */
-class S2bPopulateCommand extends ContainerAwareCommand
+class S2bAddSearchedReposCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -21,7 +21,7 @@ class S2bPopulateCommand extends ContainerAwareCommand
         $this
             ->setDefinition(array())
             ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'The maximal number of new repositories considered by the update', 1000)
-            ->setName('s2b:populate')
+            ->setName('s2b:add:searched-repos')
         ;
     }
 
@@ -41,10 +41,6 @@ class S2bPopulateCommand extends ContainerAwareCommand
         $updater->setUp();
         $repos = $updater->searchNewRepos((int) $input->getOption('limit'));
         $updater->createMissingRepos($repos);
-        $em->flush();
-        $updater->updateReposData();
-        $em->flush();
-        $updater->updateUsers();
         $em->flush();
     }
 }

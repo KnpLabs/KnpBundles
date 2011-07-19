@@ -14,18 +14,18 @@ class BundleControllerTest extends WebTestCase
 
         $this->assertRegexp('/\d+ Bundles/', str_replace("\n", '', trim($crawler->filter('h1')->text())));
     }
-    
+
     public function testShow()
     {
         $client = self::createClient();
         $crawler = $client->request('GET', '/');
         $crawler = $client->click($crawler->filter('li.repo a.name')->first()->link());
         $this->assertTrue($client->getResponse()->isSuccessful());
-    
+
         $this->assertRegexp('/^[\w\d]+Bundle$/', str_replace("\n", '', trim($crawler->filter('h1')->text())));
         $this->assertEquals(1, $crawler->filter('div.markdown')->count());
     }
-    
+
     public function testSearch()
     {
         $client = self::createClient();
@@ -38,7 +38,7 @@ class BundleControllerTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isSuccessful());
         $this->assertEquals(15, $crawler->filter('.repos-list li.repo')->count());
     }
-    
+
     public function testLatest()
     {
         $client = self::createClient();

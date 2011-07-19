@@ -34,23 +34,24 @@ class Repo
     {
         try {
             $this->gitRepoManager->getRepo($repo)->update();
-        } catch(\GitRuntimeException $e) {
+        } catch (\GitRuntimeException $e) {
             return false;
         }
 
-        if(!$this->updateInfos($repo)) {
+        if (!$this->updateInfos($repo)) {
             return false;
         }
-        if(!$this->updateFiles($repo)) {
+        if (!$this->updateFiles($repo)) {
             return false;
         }
-        if(!$this->updateCommits($repo)) {
+        if (!$this->updateCommits($repo)) {
             return false;
         }
-        if(!$this->updateTags($repo)) {
+        if (!$this->updateTags($repo)) {
             return false;
         }
         $repo->recalculateScore();
+
         return $repo;
     }
 
@@ -66,15 +67,15 @@ class Repo
         $this->output->write(' infos');
         try {
             $data = $this->github->getRepoApi()->show($repo->getUsername(), $repo->getName());
-        } catch(\Github_HttpClient_Exception $e) {
-            if(404 == $e->getCode()) {
+        } catch (\Github_HttpClient_Exception $e) {
+            if (404 == $e->getCode()) {
                 return false;
             }
             throw $e;
         }
 
         if($data['fork']) {
-            if($data['watchers'] >= 30) {
+            if ($data['watchers'] >= 30) {
                 // Let's try to keep a forked repo with lots of watchers
             } else {
                 return false;
@@ -95,13 +96,13 @@ class Repo
         $this->output->write(' commits');
         try {
             $commits = $this->github->getCommitApi()->getBranchCommits($repo->getUsername(), $repo->getName(), 'master');
-        } catch(\Github_HttpClient_Exception $e) {
-            if(404 == $e->getCode()) {
+        } catch (\Github_HttpClient_Exception $e) {
+            if (404 == $e->getCode()) {
                 return false;
             }
             throw $e;
         }
-        if(empty($commits)) {
+        if (empty($commits)) {
             return false;
         }
         $repo->setLastCommits(array_slice($commits, 0, 30));
@@ -124,7 +125,7 @@ class Repo
         $gitRepo = $this->gitRepoManager->getRepo($repo);
         if ($repo instanceof Entity\Project) {
             $detector = new Detector\Project();
-            if(!$detector->matches($gitRepo)) {
+            if (!$detector->matches($gitRepo)) {
                 return false;
             }
         }
@@ -152,8 +153,8 @@ class Repo
     {
         try {
             $contributors = $this->github->getRepoApi()->getRepoContributors($repo->getUsername(), $repo->getName());
-        } catch(\Github_HttpClient_Exception $e) {
-            if(404 == $e->getCode()) {
+        } catch (\Github_HttpClient_Exception $e) {
+            if (404 == $e->getCode()) {
                 return array();
             }
             throw $e;
@@ -175,7 +176,7 @@ class Repo
      */
     public function getOutput()
     {
-      return $this->output;
+        return $this->output;
     }
 
     /**
@@ -186,7 +187,7 @@ class Repo
      */
     public function setOutput($output)
     {
-      $this->output = $output;
+        $this->output = $output;
     }
 
     /**
@@ -209,5 +210,4 @@ class Repo
     {
         $this->github = $github;
     }
-    
 }
