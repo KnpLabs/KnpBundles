@@ -51,6 +51,7 @@ class User
         }
 
         $user->setEmail(isset($data['email']) ? $data['email'] : null);
+        $user->setGravatarHash(isset($data['gravatar_id']) ? $data['gravatar_id'] : null);
         $user->setFullName(isset($data['name']) ? $data['name'] : null);
         $user->setCompany(isset($data['company']) ? $data['company'] : null);
         $user->setLocation(isset($data['location']) ? $data['location'] : null);

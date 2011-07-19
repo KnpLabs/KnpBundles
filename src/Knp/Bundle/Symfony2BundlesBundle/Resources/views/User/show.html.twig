@@ -18,8 +18,8 @@
 
 {% block content %}
     <div id="main">
-        {% if user.email %}
-        <img class="gravatar" src="{{ gravatar(user.email, 150, none, 'identicon') }}" width="150" height="150" />
+        {% if user.gravatarHash %}
+        <img class="gravatar" src="{{ gravatar_hash(user.gravatarHash, 150, none, 'identicon') }}" width="150" height="150" />
         {% endif %}
         <div class="card">
             <ul class="stats">

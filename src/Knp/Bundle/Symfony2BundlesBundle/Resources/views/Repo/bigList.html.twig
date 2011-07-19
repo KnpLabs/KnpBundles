@@ -5,9 +5,9 @@
             <div class="bundlerank">
                 {{ repo.score }}
             </div>
-            {% if repo.user.email %}
+            {% if repo.user.gravatarHash %}
             <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">
-                <img src="{{ gravatar(repo.user.email, 50, none, 'identicon') }}" alt="{{ repo.name }}" />
+                <img src="{{ gravatar_hash(repo.user.gravatarHash, 50, none, 'identicon') }}" alt="{{ repo.name }}" />
             </a>
             {% endif %}
         </div>

@@ -48,6 +48,13 @@ class User
     protected $email = null;
 
     /**
+     * User email
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $gravatarHash = null;
+
+    /**
      * Full name of the user, like "Thibault Duplessis"
      *
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -113,6 +120,26 @@ class User
         $this->repos = new ArrayCollection();
         $this->contributionRepos = new ArrayCollection();
         $this->createdAt = new \DateTime('NOW');
+    }
+
+    /**
+     * Get the gravatar hash
+     *
+     * @return string
+     */
+    public function getGravatarHash()
+    {
+        return $this->gravatarHash;
+    }
+
+    /**
+     * Set the gravatar hash
+     *
+     * @param string $gravatarHash
+     */
+    public function setGravatarHash($gravatarHash)
+    {
+        $this->gravatarHash = $gravatarHash;
     }
 
     /**
@@ -602,6 +629,7 @@ class User
         return array(
             'name'          => $this->getName(),
             'email'         => $this->getEmail(),
+            'gravatarHash'  => $this->getGravatarHash(),
             'fullName'      => $this->getFullName(),
             'company'       => $this->getCompany(),
             'location'      => $this->getLocation(),
