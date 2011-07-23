@@ -1,9 +1,6 @@
 [submodule "vendor/symfony"]
 	path = vendor/symfony
 	url = git://github.com/symfony/symfony.git
-[submodule "vendor/zend"]
-	path = vendor/zend
-	url = git://github.com/zendframework/zf2.git
 [submodule "vendor/doctrine"]
 	path = vendor/doctrine
 	url = git://github.com/doctrine/doctrine2.git
@@ -58,3 +55,24 @@
 [submodule "vendor/bundles/Symfony/Bundle/DoctrineMigrationsBundle"]
 	path = vendor/bundles/Symfony/Bundle/DoctrineMigrationsBundle
 	url = git://github.com/symfony/DoctrineMigrationsBundle.git
+[submodule "vendor/Zend/Paginator"]
+	path = vendor/Zend/Paginator
+	url = git://github.com/knplabs/zend-paginator.git
+[submodule "vendor/Zend/Loader"]
+	path = vendor/Zend/Loader
+	url = git://github.com/knplabs/zend-loader.git
+[submodule "vendor/Zend/Http"]
+	path = vendor/Zend/Http
+	url = git://github.com/knplabs/zend-http.git
+[submodule "vendor/Zend/Uri"]
+	path = vendor/Zend/Uri
+	url = git://github.com/knplabs/zend-uri.git
+[submodule "vendor/Zend/Validator"]
+	path = vendor/Zend/Validator
+	url = git://github.com/knplabs/zend-validator.git
+[submodule "vendor/Zend/Tool"]
+	path = vendor/Zend/Tool
+	url = git://github.com/knplabs/zend-tool.git
+[submodule "vendor/zend-registry"]
+	path = vendor/zend-registry
+	url = git://github.com/knplabs/zend-registry.git
