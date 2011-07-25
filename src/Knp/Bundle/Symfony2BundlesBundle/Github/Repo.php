@@ -75,7 +75,7 @@ class Repo
         }
 
         if($data['fork']) {
-            if ($data['watchers'] >= 30) {
+            if ($data['watchers'] >= 10) {
                 // Let's try to keep a forked repo with lots of watchers
             } else {
                 return false;
