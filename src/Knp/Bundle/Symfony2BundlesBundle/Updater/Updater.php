@@ -148,6 +148,8 @@ class Updater
             $this->output->write(' - Fail, will be removed');
             $repo->getUser()->removeRepo($repo);
             $this->em->remove($repo);
+            $this->em->flush();
+            return false;
         }
         $this->output->writeln(' '.$repo->getScore());
         $this->em->flush();
