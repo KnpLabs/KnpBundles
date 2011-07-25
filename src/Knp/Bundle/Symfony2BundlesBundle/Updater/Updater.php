@@ -127,17 +127,17 @@ class Updater
             while (true) {
                 $this->output->writeln("\n\n#################### Updating ".$repo);
                 try {
-                    $this->updateRepoData($repo);
+                    $this->updateRepo($repo);
                     break;
                 } catch(\Github_HttpClient_Exception $e) {
-                    $this->output->writeln("Got a Github exception, sleeping for a few secs before trying again");
+                    $this->output->writeln("Got a Github exception $e, sleeping for a few secs before trying again");
                     sleep(60);
                 }
             }
         }
     }
     
-    public function updateRepoData($repo)
+    public function updateRepo(RepoEntity $repo)
     {
         $this->output->write($repo->getFullName());
         $pad = 50 - strlen($repo->getFullName());
