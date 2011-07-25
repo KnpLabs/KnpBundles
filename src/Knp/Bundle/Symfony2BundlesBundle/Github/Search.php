@@ -182,7 +182,11 @@ class Search
 
                         // Or a redirect/multi-redirect link => we parse the resulting github page
                         } else {
-                            $html = file_get_contents($url);
+                            try {
+                                $html = file_get_contents($url);
+                            } catch (\ErrorException $e) {
+                                continue;
+                            }
 
                             if (preg_match('#<title>([a-z0-9-_]+/[^\'"/ ]+) - GitHub</title>#i', $html, $m)) {
                                 $name = $m[1];
