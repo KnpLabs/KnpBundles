@@ -5,6 +5,7 @@ namespace Knp\Bundle\Symfony2BundlesBundle\Updater;
 use Knp\Bundle\Symfony2BundlesBundle\Github;
 use Knp\Bundle\Symfony2BundlesBundle\Git;
 use Doctrine\ORM\UnitOfWork;
+use Knp\Bundle\Symfony2BundlesBundle\Entity\Repo as RepoEntity;
 
 class Updater
 {
@@ -72,6 +73,39 @@ class Updater
         }
 
         $this->output->writeln(sprintf('%d created', $added));
+    }
+    
+    /**
+     * Add or update a repo
+     *
+     * @param string A full repo name like knplabs/KnpMenuBundle
+     * @return Repo
+     */
+    public function addRepo($fullName)
+    {
+        list($username, $repoName) = explode('/', $fullName);
+        
+        if (!isset($this->users[strtolower($username)])) {
+            $user = $this->getOrCreateUser($username);
+            $this->users[strtolower($username)] = $user;
+        } else {
+            $user = $this->users[strtolower($username)];
+        }
+
+        if (!isset($this->repos[strtolower($fullName)])) {
+            $repo = RepoEntity::create($fullName);
+            $this->em->persist($repo);
+            $user->addRepo($repo);
+            $this->repos[strtolower($fullName)] = $repo;
+        } else {
+            $repo = $this->repos[strtolower($fullName)];
+        }
+
+        $this->em->flush();
+        
+        $this->updateRepo($repo);
+        
+        return $repo;
     }
 
     public function updateReposData()
