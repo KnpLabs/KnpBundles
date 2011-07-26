@@ -3,6 +3,7 @@
 namespace Knp\Bundle\Symfony2BundlesBundle\Github;
 
 use Knp\Bundle\Symfony2BundlesBundle\Entity\Repo;
+use Knp\Bundle\Symfony2BundlesBundle\Entity\Bundle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Goutte\Client;
 
@@ -59,12 +60,7 @@ class Search
             return array_slice($repos, 0, $limit);
         }
 
-        $repos = $this->searchReposOnGitHub('Bundle', $repos, $limit);
-        foreach ($repos as $index => $repo) {
-            if (!preg_match('/Bundle$/', $repo->getName())) {
-                unset($repos[$index]);
-            }
-        }
+        $repos = $this->searchReposOnGitHub('Bundle', $repos, $limit, function($repo) { return $repo instanceof Bundle; });
         $repos = $this->searchReposOnGitHub('Symfony2', $repos, $limit);
         $this->output->writeln(sprintf('%d repos found!', count($repos) - $nb));
         $nb = count($repos);
@@ -79,7 +75,7 @@ class Search
         return array_slice($repos, 0, $limit);
     }
 
-    protected function searchReposOnGitHub($query, array $repos, $limit)
+    protected function searchReposOnGitHub($query, array $repos, $limit, $filter = null)
     {
         $this->output->write(sprintf('Search "%s" on Github', $query));
         try {
@@ -91,7 +87,10 @@ class Search
                 }
                 foreach ($found as $repo) {
                     $name = $repo['username'].'/'.$repo['name'];
-                    $repos[strtolower($name)] = Repo::create($name);
+                    $entity = Repo::create($name);
+                    if (null === $filter || call_user_func($filter, $entity)) {
+                        $repos[strtolower($name)] = $entity;
+                    }
                 }
                 $page++;
                 $this->output->write('...'.count($repos));
