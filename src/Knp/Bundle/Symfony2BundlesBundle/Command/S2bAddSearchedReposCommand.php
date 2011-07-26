@@ -32,7 +32,7 @@ class S2bAddSearchedReposCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $gitRepoDir = $this->getContainer()->getParameter('kernel.root_dir').'/repos';
+        $gitRepoDir = $this->getContainer()->getParameter('knp_symfony2bundles.repos_dir');
         $gitBin = $this->getContainer()->getParameter('knp_symfony2bundles.git_bin');
 
         $em = $this->getContainer()->get('knp_symfony2bundles.entity_manager');
