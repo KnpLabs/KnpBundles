@@ -100,7 +100,7 @@ class Search
         }
         $this->output->writeln('... DONE');
 
-        return array_slice($repos, 0, $limit);
+        return $repos;
     }
 
     protected function searchReposOnGoogle(array $repos, $limit)
