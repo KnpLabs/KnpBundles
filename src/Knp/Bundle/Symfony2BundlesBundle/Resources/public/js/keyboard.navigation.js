@@ -12,32 +12,39 @@
 
         $('.' + className).first().addClass('active');
 
-        $(document).bind('keydown', 's', function() { $('#search-query').focus(); return false; });
-        $('#search-query').bind('keydown', 'esc', function() { $('#search-query').blur(); return false; });
+        $(document).bind('keydown', 's', focusSearch);
+        $(document).bind('keydown', '/', focusSearch);
+        
+        $('#search-query').bind('keydown', 'esc', function() {
+            $('#search-query').blur();
+            return false;
+        });
 
         $(document).bind('keydown', 'down', function() {
             moveElement(className, 'down');
-
             return false;
         });
 
         $(document).bind('keydown', 'j', function() {
             moveElement(className, 'down');
-
             return false;
         });
 
 
         $(document).bind('keydown', 'up', function(){
             moveElement(className, 'up');
-
             return false;
         });
         $(document).bind('keydown', 'k', function(){
             moveElement(className, 'up');
-
             return false;
         });
+
+        $(document).bind('keydown', 'right', gotoNextPage);
+        $(document).bind('keydown', 'l', gotoNextPage);
+
+        $(document).bind('keydown', 'left', gotoPreviousPage);
+        $(document).bind('keydown', 'h', gotoPreviousPage);
 
         $(document).bind('keydown', 'return', function() {
             if (className == 'repo') {
@@ -75,5 +82,30 @@
         if ((elem.eq(curPosition).viewportOffset().top + elem.eq(curPosition).height()) > $(window).height() || elem.eq(curPosition).viewportOffset().top < 0) {
             $('html, body').animate({scrollTop: elem.eq(curPosition).offset().top}, 500);
         }
+    }
+    
+    // Focus on the search field
+    function focusSearch()
+    {
+        $('#search-query').focus();
+        return false;
+    }
+    
+    function gotoNextPage()
+    {
+        var url;
+        if (url = $('div.pagination span.next a').attr('href')) {
+            document.location = url;
+        }
+        return false;
+    }
+
+    function gotoPreviousPage()
+    {
+        var url;
+        if (url = $('div.pagination span.previous a').attr('href')) {
+            document.location = url;
+        }
+        return false;
     }
 })(jQuery)
