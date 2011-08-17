@@ -596,6 +596,16 @@ h1 {
         background: #fafafa;
         border: 1px solid #DDDDDD;
     }
+    
+    #repo-show #disqus_thread {
+        font-size: 12px;
+        background: none repeat scroll 0 0 #FAFAFA;
+        border: 1px solid #DDDDDD;
+        padding: 0 10px 0 10px;
+        float: left;
+        margin: 0 0 20px 0;
+        width: 628px;
+    }
 
 /* ----- Developers List ----- */
 
