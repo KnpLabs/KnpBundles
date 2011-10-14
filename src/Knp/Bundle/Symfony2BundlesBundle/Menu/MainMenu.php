@@ -4,12 +4,12 @@ namespace Knp\Bundle\Symfony2BundlesBundle\Menu;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
+use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Knp\Bundle\MenuBundle\Menu;
 
 class MainMenu extends Menu
 {
-    public function __construct(Request $request, UrlGeneratorInterface $router)
+    public function __construct(Request $request, UrlGeneratorInterface $router, Translator $translator)
     {
         parent::__construct(array(
             'id'    => 'menu'
@@ -17,9 +17,8 @@ class MainMenu extends Menu
 
         $this->setCurrentUri($request->getRequestUri());
 
-        $this->addChild('Bundles', $router->generate('bundle_list', array()));
-        $this->addChild('Projects', $router->generate('project_list', array()));
-        $this->addChild('Developers', $router->generate('user_list', array()));
-        $this->addChild('Commercial services', 'http://www.knplabs.com/');
+        $this->addChild($translator->trans('menu.bundles'), $router->generate('bundle_list', array()));
+        $this->addChild($translator->trans('menu.projects'), $router->generate('project_list', array()));
+        $this->addChild($translator->trans('menu.users'), $router->generate('user_list', array()));
     }
 }

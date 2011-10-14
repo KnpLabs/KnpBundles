@@ -22,8 +22,8 @@ class UserController
     );
 
     protected $sortLegends = array(
-        'name'          => 'Alphabetical',
-        'best'          => 'Best score',
+        'name'          => 'users.sort.name',
+        'best'          => 'users.sort.best',
     );
 
     public function __construct(Request $request, EngineInterface $templating, EntityManager $em, Paginator $paginator)

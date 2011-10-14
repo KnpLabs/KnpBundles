@@ -14,14 +14,14 @@
         <div class="generals">
             <div class="repo-title">
                 <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">{{ repo.name }}</a>
-                by <a href="{{ path('user_show', {'name': repo.username }) }}" class="owner">{{ repo.username }}</a>
+                {% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': repo.username }) }}" class="owner">{{ repo.username }}</a>
             </div>
             <p class="description">{{ repo.description }}</p>
         </div>
         <div class="details">
             <ul class="infos">
-                <li>Created <span>{{ repo.createdAt|date('Y-m-d') }}</span></li>
-                <li>Last commit <span>{{ repo.lastCommitAt|date('Y-m-d') }}</span></li>
+                <li>{% trans %}bundles.list.createdAt{% endtrans %} <span>{{ repo.createdAt|date('date_format'|trans) }}</span></li>
+                <li>{% trans %}bundles.list.lastCommit{% endtrans %} <span>{{ repo.lastCommitAt|date('date_format'|trans) }}</span></li>
             </ul>
         </div>
     </li>

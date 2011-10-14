@@ -1,0 +1,92 @@
+date_format: "Y-m-d"
+
+menu:
+    bundles: "Bundles"
+    projects: "Projects"
+    users: "Developers"
+
+search:
+    label: "Search:"
+    tooltip:
+        0: "Press 's' or '/' to focus the search field ('esc' will unfocus)."
+        1: "Use ↓ / j, ↑ / k and 'enter' to navigate. Use → / l, ← / h to paginate."
+
+footer:
+    code: "Show the code on Github"
+
+credits:
+    lead_dev: "Powered by Knp Symfony2 developers"'
+
+bundles:
+    meta:
+        title: "Discover %count% Symfony2 Bundles"
+        description: "All Open Source Symfony 2 Bundles sorted by %sort%"
+    title: "Discover %count% Symfony2 Bundles"
+    sort:
+        best: "Best score"
+        updated: "Updated recently"
+        newest: "New"
+
+bundles.show:
+    meta:
+        title: "%name% by %username%"
+    github: "View and download on github"
+    infos:
+        title: "Infos"
+        score: "Score:"
+        created: "Created"
+        contributors: "Nb of contributors:"
+        followers: "Nb of followers:"
+    latest_commits:
+        title: "Latest commits"
+        by: "By"
+    users:
+        by: "by"
+
+bundles.list:
+    by: " by "
+    createdAt: "Created at "
+    lastCommit: "Last commit "
+    
+projects:
+    meta:
+        title: "Discover %count% Symfony2 Projects"
+        description: "All Open Source Symfony 2 Projects sorted by %sort%"
+    title: "Discover %count% Symfony2 Projects"
+
+users:
+    meta:
+        title: "Discover %count% Symfony2 Developers"
+        description: "All Open Source Symfony 2 Developers sorted by %sort%"
+    title: "Discover %count% Symfony2 Developers"
+    sort:
+        name: "Alphabetical"
+        best: "Best score"
+
+users.show:
+    meta:
+        description: "%username% has created %nb% Symfony2 bundles"
+    github: "View on Github"
+    stats:
+        location: "Location: "
+        lastCommit: "Last commit: "
+        nbBundles: "Nb of bundles: "
+        nbProjects: "Nb of projects: "
+        blog: "Website: "
+    bundles_manage: "Bundles I manage:"
+    bundles_contribute: "Bundles I contribute to:"
+    projects_manage: "Projects I manage:"
+    projects_contribute: "Projects I contribute to:"
+
+users.list:
+    location: " from "
+    lastCommit: "Last commit "
+
+api:
+    meta:
+        title: "Developer HTTP API"
+        description: "Programmatic HTTP API to access Bundles and developers data"
+    title: "Deleveloper API"
+
+notFound:
+    title: "404 - Page not found"

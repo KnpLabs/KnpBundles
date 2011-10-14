@@ -2,11 +2,11 @@
 
 {% block body_attributes %}id="developers-list"{% endblock %}
 
-{% block h1 %}Discover {{ users.totalItemCount }} Symfony2 Developers{% endblock %}
+{% block title %}{% trans with {'%count%': users.totalItemCount, '%sort%': sort} %}users.meta.title{% endtrans %}{% endblock %}
 
-{% block title %}Discover {{ users.totalItemCount }} Symfony2 Developers{% endblock %}
+{% block description %}{% trans with {'%count%': users.totalItemCount, '%sort%': sort} %}users.meta.description{% endtrans %}{% endblock %}
 
-{% block description %}Symfony 2 developers{% endblock %}
+{% block h1 %}{% trans with {'%count%': users.totalItemCount, '%sort%': sort} %}users.title{% endtrans %}{% endblock %}
 
 {% block content %}
     <div id="main">
@@ -14,7 +14,7 @@
             <ul class="tabs">
                 {%- for field, text in sortLegends %}
                 <li{{ field == sort ? ' class="current"' : '' }}>
-                    <a href='{{ path('user_list', {'sort': field}) }}'>{{ text }}</a>
+                    <a href='{{ path('user_list', {'sort': field}) }}'>{{ text|trans }}</a>
                 </li>
                 {%- endfor %}
             </ul>
@@ -22,23 +22,21 @@
         <ul class="developers-list">
             {%- for user in users %}
             <li class="developer">
-                {# {% if user.email %} #}
                 <div class="image">
                     <a href="{{ url('user_show', {'name': user.name}) }}" class="name">
                         <img src="{{ gravatar_hash(user.gravatarHash, 50, none, 'identicon') }}" alt="{{ user.name }}, Symfony developer" />
                     </a>
                 </div>
-                {# {% endif %} #}
                 <div class="generals">
                     <a class="name" href="{{ url('user_show', {'name': user.name}) }}">{{ user.name }}</a>
                     {%- if user.location %}
-                    from
+                    {% trans %}users.list.location{% endtrans %}
                     <span class="location">{{ user.location }}</span>
                     {%- endif %}
                 </div>
                 <div class="details">
                     <ul class="infos">
-                        <li>Last commit <span>{{ user.lastCommitAt|date('Y-m-d') }}</span></li>
+                        <li>{% trans %}users.list.lastCommit{% endtrans %} <span>{{ user.lastCommitAt|date('date_format'|trans) }}</span></li>
                     </ul>
                 </div>
             </li>

@@ -2,14 +2,14 @@
 
 {% block body_attributes %}id="repo-show"{% endblock %}
 
-{% block title %}{{ repo.name }} by {{ repo.username }}{% endblock %}
+{% block title %}{% trans with {'name': repo.name, 'username': repo.username} %}bundles.show.meta.title{% endtrans %}{% endblock %}
 
 {% block content_title %}
 <div id="repo-title">
     <h1>{{ repo.name }}</h1>
     <div class="actions">
         <div id="repo-gplusone"><g:plusone {% if repo.homepage %}href="{{ repo.homepage }}"{% endif %}></g:plusone></div>
-        <a class="button github" style="float:right; margin-top: 0px; margin-right: 40px;" href="{{ repo.gitHubUrl }}">View and download on Github</a>
+        <a class="button github" style="float:right; margin-top: 0px; margin-right: 40px;" href="{{ repo.gitHubUrl }}">{% trans %}bundles.show.github{% endtrans %}</a>
     </div>
 </div>
 {% endblock %}
@@ -18,18 +18,18 @@
 
 {% block content %}
     <div class="commits">
-        <h3>Infos</h3>
+        <h3>{% trans %}bundles.show.infos.title{% endtrans %}</h3>
         <ul>
-            <li>Score: <span>{{ repo.score }}</span></li>
-            <li>Created <span>{{ repo.createdAt|date('Y-m-d') }}</span></li>
-            <li>Nb of contributors: <span>{{ repo.nbContributors }}</span></li>
-            <li>Nb of followers: <span>{{ repo.nbFollowers }}</span></li>
+            <li>{% trans %}bundles.show.infos.score{% endtrans %} <span>{{ repo.score }}</span></li>
+            <li>{% trans %}bundles.show.infos.created{% endtrans %} <span>{{ repo.createdAt|date('date_format'|trans) }}</span></li>
+            <li>{% trans %}bundles.show.infos.contributors{% endtrans %} <span>{{ repo.nbContributors }}</span></li>
+            <li>{% trans %}bundles.show.infos.followers{% endtrans %} <span>{{ repo.nbFollowers }}</span></li>
         </ul>
 
-        <h3>Latest commits</h3>
+        <h3>{% trans %}bundles.show.latest_commits.title{% endtrans %}</h3>
         <ul>
         {%- for commit in repo.lastCommits %}
-            <li>{{ commit.message_first_line }}<div class="infos">by <a href="{{ path('user_show', {'name': commit.author.login }) }}">{{ commit.author.login }}</a> {{ time_diff(commit.committed_date) }}</div></li>
+            <li>{{ commit.message_first_line }}<div class="infos">{% trans %}bundles.show.latest_commits.by{% endtrans %} <a href="{{ path('user_show', {'name': commit.author.login }) }}">{{ commit.author.login }}</a> {{ time_diff(commit.committed_date) }}</div></li>
         {%- endfor %}
         <ul>
     </div>
@@ -42,7 +42,7 @@
 
     <ul class="user-list">
         <li class="user">
-            by <a href="{{ path('user_show', {'name': repo.username}) }}">{{ repo.username }}</a>{% if repo.nbContributors != 0 %},{% endif %}
+            {% trans %}bundles.show.users.by{% endtrans %} <a href="{{ path('user_show', {'name': repo.username}) }}">{{ repo.username }}</a>{% if repo.nbContributors != 0 %},{% endif %}
         </li>
 
         {%- if repo.nbContributors != 0 %}

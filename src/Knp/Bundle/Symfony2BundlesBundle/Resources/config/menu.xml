@@ -12,6 +12,7 @@
         <service id="menu.main" class="%menu.main.class%">
             <argument type="service" id="request" strict="false" />
             <argument type="service" id="router" />
+            <argument type="service" id="translator" />
             <tag name="menu" alias="main" />
         </service>
     </services>

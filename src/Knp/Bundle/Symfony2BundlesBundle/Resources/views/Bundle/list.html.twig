@@ -1,7 +1,7 @@
 {% extends 'KnpSymfony2BundlesBundle:Repo:list.html.twig' %}
 
-{% block h1 %}Discover {{ repos.totalItemCount }} Symfony2 Bundles{% endblock %}
+{% block title %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}bundles.meta.title{% endtrans %}{% endblock %}
 
-{% block title %}Discover {{ repos.totalItemCount }} Symfony2 Bundles{% endblock %}
+{% block description %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}bundles.meta.description{% endtrans %}{% endblock %}
 
-{% block description %}All Open Source Symfony 2 Bundles sorted by {{ sort }}{% endblock %}
+{% block h1 %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}bundles.title{% endtrans %}{% endblock %}

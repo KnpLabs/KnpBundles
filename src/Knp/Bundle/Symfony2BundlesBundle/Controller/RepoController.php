@@ -31,9 +31,9 @@ class RepoController
     );
 
     protected $sortLegends = array(
-        'best'          => 'Best score',
-        'updated'       => 'Updated recently',
-        'newest'        => 'New'
+        'best'          => 'bundles.sort.best',
+        'updated'       => 'bundles.sort.updated',
+        'newest'        => 'bundles.sort.newest'
     );
 
     public function __construct(Request $request, EngineInterface $templating, EntityManager $em, HttpKernel $httpKernel, Paginator $paginator, $gitExecutable, Response $response = null)

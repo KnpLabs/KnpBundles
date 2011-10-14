@@ -39,11 +39,11 @@
 
     <div id="content-wrapper">
         <form method="get" action="{{ path('search') }}" id="search-box">
-            <label for="search-query">Search:</label>
+            <label for="search-query">{% trans %}search.label{% endtrans %}</label>
             <input type="text" id="search-query" name="q" value="{% block search_query %}{% endblock %}" />
-            <button id="search-btn" title="Submit search">Search</button>
+            <button id="search-btn">Search</button>
         </form>
-        <div id="global-tip">Press 's' or '/' to focus the search field ('esc' will unfocus).<br>Use ↓ / j, ↑ / k and 'enter' to navigate. Use → / l, ← / h to paginate.</div>
+        <div id="global-tip">{% trans %}search.tooltip.0{% endtrans %}<br>{% trans %}search.tooltip.1{% endtrans %}</div>
         
         <div id="content" class="clearfix">
             <div id="content-title">
@@ -61,7 +61,7 @@
                     <dt><a href="{{ path('bundle_list') }}">Symfony2 Bundles</a></dt>
                     <dd>
                         <ul>
-                            <li><a href="https://github.com/knplabs/symfony2bundles">Show the code on Github</a></li>
+                            <li><a href="https://github.com/knplabs/symfony2bundles">{% trans %}footer.code{% endtrans %}</a></li>
                             <li><a href="{{ path('api') }}">API</a></li>
                         </ul>
                     </dd>
@@ -80,8 +80,7 @@
                 <dl class="right">
                     <dt>Symfony2Bundles</dt>
                     <dd>
-                        <li>powered by KnpLabs' <a href="http://www.knplabs.com">Symfony2 developers</a></li>
-                        <li>designed and created by <a href="http://www.poska.fr" title="Website design, webdesign, css / html">web studio Poska</a></li>
+                        <li><a href="http://knplabs.com">{% trans %}credits.lead_dev{% endtrans %}</a></li>
                     </dd>
                 </dl>
 
