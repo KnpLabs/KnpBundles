@@ -184,10 +184,21 @@ h1 {
     }
     #search-box button:hover { cursor: pointer; }
 
+#locales {
+    float: right;
+    font-size: 12px;
+}
+#locales a {
+/*    display: block;*/
+}
 /* ----- Content ----- */
 
+.center {
+    width: 920px; margin: 0 auto; 
+}
+
 #content {
-    width: 920px; margin: 20px auto 0 auto; text-align: left; position: relative; background-color: #FFF;
+    margin-top: 20px; text-align: left; position: relative; background-color: #FFF;
     padding: 0 20px;
     border-radius: 8px;
     -moz-border-radius: 8px;

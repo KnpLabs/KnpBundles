@@ -12,6 +12,7 @@ $loader->registerNamespaces(array(
     'Doctrine\Common\DataFixtures'  => __DIR__.'/../vendor/doctrine-data-fixtures/lib',
     'Doctrine\DBAL'                 => __DIR__.'/../vendor/doctrine-dbal/lib',
     'Doctrine'                      => __DIR__.'/../vendor/doctrine/lib',
+    'JMS'                           => __DIR__.'/../vendor/bundles',
     'Zend'                          => array(__DIR__.'/../vendor', __DIR__.'/../vendor/zend-registry'),
     'Monolog'                       => __DIR__.'/../vendor/monolog/src',
     'Goutte'                        => __DIR__.'/../vendor/goutte/src',

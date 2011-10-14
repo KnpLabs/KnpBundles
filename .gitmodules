@@ -76,3 +76,6 @@
 [submodule "vendor/zend-registry"]
 	path = vendor/zend-registry
 	url = git://github.com/knplabs/zend-registry.git
+[submodule "vendor/bundles/JMS/I18nRoutingBundle"]
+	path = vendor/bundles/JMS/I18nRoutingBundle
+	url = https://github.com/schmittjoh/JMSI18nRoutingBundle.git

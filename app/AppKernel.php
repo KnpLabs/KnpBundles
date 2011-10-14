@@ -23,6 +23,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Bundle\GravatarBundle\GravatarBundle(),
+            new JMS\I18nRoutingBundle\JMSI18nRoutingBundle(),
 
             // register your applications here
             new Knp\Bundle\Symfony2BundlesBundle\KnpSymfony2BundlesBundle()

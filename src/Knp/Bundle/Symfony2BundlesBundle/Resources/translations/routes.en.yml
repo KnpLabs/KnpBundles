@@ -1,0 +1,10 @@
+search: /search
+latest: /latest
+api: /api
+project_list: '/project/{sort}'
+user_list: '/developer/{sort}'
+bundle_list: '/{sort}'
+user_bundle_list: '/{name}/bundles'
+user_projects_list: '/{name}/projects'
+user_show: '/{name}/profile'
+repo_show: '/{username}/{name}'

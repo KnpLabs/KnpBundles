@@ -1,9 +1,17 @@
+{% set locale_urls = {
+    'en': path(app.request.get('_route'), {'_route': null, '_controller': null, '_locale': 'en'} + app.request.attributes.all),
+    'fr': path(app.request.get('_route'), {'_route': null, '_controller': null, '_locale': 'fr'} + app.request.attributes.all),
+} %}
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <title>{% block title %}{% endblock %} | Symfony2 Bundles</title>
     <meta name="description" content="{% block description %}{% endblock %}" />
+    <link rel="canonical" href="{{ locale_urls.en }}" />
+    <link rel="alternate" hreflang="fr" href="{{ locale_urls.fr }}" />
+    <link rel="alternate" hreflang="en" href="{{ locale_urls.en }}" />
+
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/png" />
     <link href="{{ path('latest', {'format': 'atom'}) }}" rel="alternate" title="ATOM" type="application/atom+xml" />
     <link href="{{ asset('bundles/knpsymfony2bundles/css/reset.css') }}" rel="stylesheet" type="text/css" media="screen" />
@@ -38,21 +46,30 @@
     </div><!-- /#header -->
 
     <div id="content-wrapper">
-        <form method="get" action="{{ path('search') }}" id="search-box">
-            <label for="search-query">{% trans %}search.label{% endtrans %}</label>
-            <input type="text" id="search-query" name="q" value="{% block search_query %}{% endblock %}" />
-            <button id="search-btn">Search</button>
-        </form>
-        <div id="global-tip">{% trans %}search.tooltip.0{% endtrans %}<br>{% trans %}search.tooltip.1{% endtrans %}</div>
-        
-        <div id="content" class="clearfix">
-            <div id="content-title">
-                {% block content_title %}
-                <h1>{% block h1 %}{% endblock %}</h1>
-                {% endblock %}
+        <div class="center">
+            {# TODO: Improve me #}
+            <div id="locales">
+                <a hreflang="en" href="{{ locale_urls.en }}">En</a>
+                |
+                <a hreflang="fr" href="{{ locale_urls.fr }}">Fr</a>
             </div>
-            {% block content %}{% endblock %}
-        </div><!-- /#content -->
+
+            <form method="get" action="{{ path('search') }}" id="search-box">
+                <label for="search-query">{% trans %}search.label{% endtrans %}</label>
+                <input type="text" id="search-query" name="q" value="{% block search_query %}{% endblock %}" />
+                <button id="search-btn">Search</button>
+            </form>
+            <div id="global-tip">{% trans %}search.tooltip.0{% endtrans %}<br>{% trans %}search.tooltip.1{% endtrans %}</div>
+        
+            <div id="content" class="clearfix">
+                <div id="content-title">
+                    {% block content_title %}
+                    <h1>{% block h1 %}{% endblock %}</h1>
+                    {% endblock %}
+                </div>
+                {% block content %}{% endblock %}
+            </div><!-- /#content -->
+        </div>
     </div>
     <div id="footer-wrapper">
         <div id="footer">
