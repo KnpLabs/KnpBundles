@@ -4,13 +4,18 @@ menu:
     bundles: "Bundles"
     projects: "Projets"
     users: "Développeurs"
-    knp:
-        training:
-            label: Formation Symfony
-            url: 'http://knplabs.fr/formation/symfony2'
-        dev:
-            label: Consulting Symfony2
-            url: 'http://knplabs.fr/service/symfony2'
+    name: "KnpBundles ?"
+    training: "Suivez une formation à Symfony par Knp !"
+    consulting: "Trouvez de bons développeurs Symfony !"
+    knplabs: "− KnpLabs"
+    urls:
+        name: "http://knplabs.fr/blog/symfony2bundles-becomes-knpbundle"
+        training: "http://knplabs.fr/formation/symfony2"
+        consulting: "http://knplabs.fr/service/symfony2"
+        knplabs: "http://knplabs.fr"
+
+header:
+    baseline: "La liste non-officielle des bundles Symfony2"
 
 search:
     label: "Rechercher :"
@@ -22,7 +27,7 @@ footer:
     code: "Voir le code sur Github"
 
 credits:
-    lead_dev: "Créé par les développeurs Symfony2 de Knp"
+    lead_dev: "Créé par l'équipe KnpLabs"
 
 bundles:
     meta:

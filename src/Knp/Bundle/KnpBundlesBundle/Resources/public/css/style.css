@@ -102,34 +102,39 @@ h1 {
 
 /* ----- Goodies ----- */
 
-#logo { position: absolute; top: 8px; left: 15px; }
-#logo img { width: 90px; }
-#mascot { position: absolute; top: 20px; right: 45px; width:220px;}
+#logo { position: absolute; top: 13px; left: 0px; text-decoration: none;}
+#logo img { width: 200px; }
+#logo #baseline { color: #fff; font-size: 11px; font-family: verdana; position: relative; top: -5px;}
 #knplabs { position: absolute; top: 12px; right: 15px;}
 #knplabs img { width: 45px;}
+#promo { position: absolute; font-size: 13px; right: 0; top: 10px;}
+#promo a {display: block; color: #fff; text-decoration: none; font-family: Arial;}
+#promo a .external {color: #EDB443; }
+#promo a:hover {color: #EDB443;}
 
 /* ----- Menu ----- */
 
 #menu,
     #menu li { margin: 0; padding: 0; list-style: none;}
 #menu {
-    height: 58px;
+    height: 80px;
     overflow: hidden;
     padding: 0;
     width: 100%;
+    margin-left: 260px;
 }
     #menu li {
         height: 20px;
-        margin: 19px 0;
+        margin: 30px 0;
         display: block;
         float: left;
-        border-right: 1px solid #616162;
+        border-right: 2px solid #616162;
     }
-    #menu li.first { border-left: 1px solid #616162; margin-left: 120px; }
+    #menu li.first {  }
     #menu li.last { margin-right: 5px; border-right: none; }
     #menu a {
         display: block;
-        margin: -19px 10px 0 10px;
+        margin: -19px 5px 0 5px;
         padding: 17px 5px;
         color: #fff;
         font: 16px/24px Arial, sans-serif;
@@ -194,7 +199,7 @@ h1 {
 /* ----- Content ----- */
 
 .center {
-    width: 920px; margin: 0 auto; 
+    width: 960px; margin: 0 auto; 
 }
 
 #content {

@@ -20,5 +20,7 @@ class MainMenu extends Menu
         $this->addChild($translator->trans('menu.bundles'), $router->generate('bundle_list', array()));
         $this->addChild($translator->trans('menu.projects'), $router->generate('project_list', array()));
         $this->addChild($translator->trans('menu.users'), $router->generate('user_list', array()));
+        $this->addChild($translator->trans('menu.name'), $translator->trans('menu.urls.name'));
+
     }
 }

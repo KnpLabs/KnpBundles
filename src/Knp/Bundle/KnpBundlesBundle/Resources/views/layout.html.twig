@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>{% block title %}{% endblock %} | Symfony2 Bundles</title>
+    <title>{% block title %}{% endblock %} | KnpBundles</title>
     <meta name="description" content="{% block description %}{% endblock %}" />
     <link rel="canonical" href="{{ locale_urls.en }}" />
     <link rel="alternate" hreflang="fr" href="{{ locale_urls.fr }}" />
@@ -33,12 +33,16 @@
 <body {% block body_attributes %}{% endblock %}>
     <div id="header">
         <div id="header-inner">
-            <a href="{{ path('bundle_list') }}" title="Back to the homepage" id="logo">
-                <img src="{{ asset('bundles/knpbundles/images/logo.png') }}" alt="Symfony2 Bundles" />
+            <a href="{{ path('bundle_list') }}" title="KnpBundles" id="logo">
+                <img src="{{ asset('bundles/knpbundles/images/knpbundles.png') }}" alt="Knp Bundles: {{ 'header.baseline'|trans }}" />
+                <div id="baseline">{{ 'header.baseline'|trans }}</div>
             </a>
-            <a href="http://knplabs.com" title="KnpLabs - Quality. Innovation. Excitement" id="knplabs">
-                <img src="{{ asset('bundles/knpbundles/images/knplabs.png') }}" alt="KnpLabs" />
-            </a>
+            
+            <div id="promo">
+                <a href="{{ 'menu.urls.training'|trans }}">{{ 'menu.training'|trans }}</a>
+                <a href="{{ 'menu.urls.consulting'|trans }}">{{ 'menu.consulting'|trans }}</a>
+                <a href="{{ 'menu.urls.knplabs'|trans }}">{{ 'menu.knplabs'|trans }}</a>
+            </div>
             {{ menu('main') }}
         </div>
     </div><!-- /#header -->
@@ -73,7 +77,7 @@
         <div id="footer">
             <div id="footer-inner">
                 <dl>
-                    <dt><a href="{{ path('bundle_list') }}">Symfony2 Bundles</a></dt>
+                    <dt><a href="{{ path('bundle_list') }}">KnpBundles</a></dt>
                     <dd>
                         <ul>
                             <li><a href="https://github.com/knplabs/knpbundles">{% trans %}footer.code{% endtrans %}</a></li>
