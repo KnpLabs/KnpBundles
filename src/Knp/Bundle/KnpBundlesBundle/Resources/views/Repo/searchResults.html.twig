@@ -1,0 +1,24 @@
+{% extends 'KnpBundlesBundle:Repo:search.html.twig' %}
+
+{% block body_attributes %}id="search-result"{% endblock %}
+
+{% block search_query %}{{ query }}{% endblock %}
+
+{% block title %}Search {{ query }}{% endblock %}
+
+{% block h1 %}Search "{{ query }}"{% endblock %}
+
+{% block description %}{{ repos|length }} Repositories found for {{ query }}{% endblock %}
+
+{% block content %}
+    <div id="main">
+        <div id="search-result-bundles">
+            <h2>{{ bundles|length }} Bundle{{ bundles|length > 1 ? 's' : '' }}</h2>
+            {% include 'KnpBundlesBundle:Bundle:bigList.html.twig' with {'repos': bundles} %}
+        </div>
+        <div id="search-result-projects">
+            <h2 class="section-title">{{ projects|length }} Project{{ projects|length > 1 ? 's' : '' }}</h2>
+            {% include 'KnpBundlesBundle:Project:bigList.html.twig' with {'repos': projects} %}
+        </div>
+    </div>
+{% endblock %}

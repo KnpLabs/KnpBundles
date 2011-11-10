@@ -1,0 +1,14 @@
+<div id="hot-bundles">
+    <h2>What's hot?</h2>
+    <ul class="bundles_list">
+        {%- for bundle in bundles %}
+        <li class="bundle">
+            <a href="{{ path('repo_show', {'username': bundle.username, 'name': bundle.name}) }}">
+                <span class="name">{{ bundle.name }}</span>
+                <span class="hot"><img src="{{ asset('bundles/knpbundles/images/heart.png') }}" alt="" /></span>
+                <span class="description">{{ bundle.description }}</span>
+            </a>
+        </li>
+        {%- endfor %}
+    </ul>
+</div>

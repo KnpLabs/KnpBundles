@@ -1,4 +1,4 @@
-set :application,           "symfony2bundles"
+set :application,           "knpbundles"
 set :domain,                "#{application}.org"
 set :deploy_to,             "/#{application}"
 

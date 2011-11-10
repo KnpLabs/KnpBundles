@@ -1,0 +1,7 @@
+{% extends 'KnpBundlesBundle:Repo:list.html.twig' %}
+
+{% block title %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}bundles.meta.title{% endtrans %}{% endblock %}
+
+{% block description %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}bundles.meta.description{% endtrans %}{% endblock %}
+
+{% block h1 %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}bundles.title{% endtrans %}{% endblock %}

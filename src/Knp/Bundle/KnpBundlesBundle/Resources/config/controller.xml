@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="knp_bundles.controller.main.class">Knp\Bundle\KnpBundlesBundle\Controller\MainController</parameter>
+        <parameter key="knp_bundles.controller.bundle.class">Knp\Bundle\KnpBundlesBundle\Controller\BundleController</parameter>
+        <parameter key="knp_bundles.controller.repo.class">Knp\Bundle\KnpBundlesBundle\Controller\RepoController</parameter>
+        <parameter key="knp_bundles.controller.user.class">Knp\Bundle\KnpBundlesBundle\Controller\UserController</parameter>
+    </parameters>
+
+    <services>
+        <!-- Main controller -->
+        <service id="knp_bundles.controller.main" class="%knp_bundles.controller.main.class%">
+            <argument type="service" id="templating" />
+        </service>
+        <!-- Bundle controller -->
+        <service id="knp_bundles.controller.bundle" class="%knp_bundles.controller.bundle.class%">
+            <argument type="service" id="templating" />
+            <argument type="service" id="knp_bundles.entity_manager" />
+        </service>
+        <!-- Repo controller -->
+        <service id="knp_bundles.controller.repo" class="%knp_bundles.controller.repo.class%">
+            <argument type="service" id="request" strict="false" />
+            <argument type="service" id="templating" />
+            <argument type="service" id="knp_bundles.entity_manager" />
+            <argument type="service" id="http_kernel" />
+            <argument type="service" id="knp_bundles.paginator" />
+            <argument>%knp_bundles.git_bin%</argument>
+        </service>
+        <!-- User controller -->
+        <service id="knp_bundles.controller.user" class="%knp_bundles.controller.user.class%">
+            <argument type="service" id="request" strict="false" />
+            <argument type="service" id="templating" />
+            <argument type="service" id="knp_bundles.entity_manager" />
+            <argument type="service" id="knp_bundles.paginator" />
+        </service>
+    </services>
+</container>

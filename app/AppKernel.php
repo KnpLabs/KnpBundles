@@ -26,7 +26,7 @@ class AppKernel extends Kernel
             new JMS\I18nRoutingBundle\JMSI18nRoutingBundle(),
 
             // register your applications here
-            new Knp\Bundle\Symfony2BundlesBundle\KnpSymfony2BundlesBundle()
+            new Knp\Bundle\KnpBundlesBundle\KnpBundlesBundle()
         );
 
         if ($this->isDebug()) {

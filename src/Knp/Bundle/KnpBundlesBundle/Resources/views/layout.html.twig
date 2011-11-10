@@ -1,0 +1,122 @@
+{% set locale_urls = {
+    'en': url(app.request.get('_route'), {'_route': null, '_controller': null, '_locale': 'en'} + app.request.attributes.all),
+    'fr': url(app.request.get('_route'), {'_route': null, '_controller': null, '_locale': 'fr'} + app.request.attributes.all),
+} %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}{% endblock %} | Symfony2 Bundles</title>
+    <meta name="description" content="{% block description %}{% endblock %}" />
+    <link rel="canonical" href="{{ locale_urls.en }}" />
+    <link rel="alternate" hreflang="fr" href="{{ locale_urls.fr }}" />
+    <link rel="alternate" hreflang="en" href="{{ locale_urls.en }}" />
+
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/png" />
+    <link href="{{ path('latest', {'format': 'atom'}) }}" rel="alternate" title="ATOM" type="application/atom+xml" />
+    <link href="{{ asset('bundles/knpbundles/css/reset.css') }}" rel="stylesheet" type="text/css" media="screen" />
+    <link href="{{ asset('bundles/knpbundles/css/style.css') }}" rel="stylesheet" type="text/css" media="screen" />
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-7062980-9']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+</head>
+<body {% block body_attributes %}{% endblock %}>
+    <div id="header">
+        <div id="header-inner">
+            <a href="{{ path('bundle_list') }}" title="Back to the homepage" id="logo">
+                <img src="{{ asset('bundles/knpbundles/images/logo.png') }}" alt="Symfony2 Bundles" />
+            </a>
+            <a href="http://knplabs.com" title="KnpLabs - Quality. Innovation. Excitement" id="knplabs">
+                <img src="{{ asset('bundles/knpbundles/images/knplabs.png') }}" alt="KnpLabs" />
+            </a>
+            {{ menu('main') }}
+            <div id="global-gplusone"><g:plusone href="http://bundles.knplabs.org/"></g:plusone></div>
+
+        </div>
+    </div><!-- /#header -->
+
+    <div id="content-wrapper">
+        <div class="center">
+            {# TODO: Improve me #}
+            <div id="locales">
+                <a hreflang="en" href="{{ locale_urls.en }}">En</a>
+                |
+                <a hreflang="fr" href="{{ locale_urls.fr }}">Fr</a>
+            </div>
+
+            <form method="get" action="{{ path('search') }}" id="search-box">
+                <label for="search-query">{% trans %}search.label{% endtrans %}</label>
+                <input type="text" id="search-query" name="q" value="{% block search_query %}{% endblock %}" />
+                <button id="search-btn">Search</button>
+            </form>
+            <div id="global-tip">{% trans %}search.tooltip.0{% endtrans %}<br>{% trans %}search.tooltip.1{% endtrans %}</div>
+        
+            <div id="content" class="center clearfix">
+                <div id="content-title">
+                    {% block content_title %}
+                    <h1>{% block h1 %}{% endblock %}</h1>
+                    {% endblock %}
+                </div>
+                {% block content %}{% endblock %}
+            </div><!-- /#content -->
+        </div>
+    </div>
+    <div id="footer-wrapper">
+        <div id="footer">
+            <div id="footer-inner">
+                <dl>
+                    <dt><a href="{{ path('bundle_list') }}">Symfony2 Bundles</a></dt>
+                    <dd>
+                        <ul>
+                            <li><a href="https://github.com/knplabs/knpbundles">{% trans %}footer.code{% endtrans %}</a></li>
+                            <li><a href="{{ path('api') }}">API</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt><a href="http://knplabs.com">Knp Labs</a></dt>
+                    <dd>
+                        <ul>
+                            <li><a href="http://knplabs.com/training/symfony2">Symfony training (World)</a></li>
+                            <li><a href="http://knplabs.fr/formation/symfony2" hreflang="fr" lang="fr">Formation Symfony (France)</a></li>
+                            <li><a href="http://knplabs.co.uk/training/symfony2">Symfony training (UK)</a></li>
+
+                            <li><a href="http://twitter.com/knplabs">Knp on Twitter</a></li>
+                            <li><a href="http://behat.org">Behat: BDD framework for PHP</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+                <dl class="right">
+                    <dt>KnpBundles</dt>
+                    <dd>
+                        <li><a href="http://knplabs.com">{% trans %}credits.lead_dev{% endtrans %}</a></li>
+                        <ul style="font-size: 11px; ">
+                        <li><a style="text-decoration: none;" hreflang="en" href="http://knplabs.com">KnpLabs World</a></li>
+                        <li><a style="text-decoration: none;" hreflang="fr" href="http://knplabs.fr">KnpLabs France</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+
+            </div>
+        </div>
+    </div><!-- /#footer-wrapper -->
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/6.0/styles/github.min.css">
+    <script src="http://yandex.st/highlightjs/6.0/highlight.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+    <script src="{{ asset('bundles/knpbundles/js/jquery.hotkeys.js') }}"></script>
+    <script src="{{ asset('bundles/knpbundles/js/jquery.ba-viewportoffset.min.js') }}"></script>
+    <script src="{{ asset('bundles/knpbundles/js/keyboard.navigation.js') }}"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+    </body>
+</html>

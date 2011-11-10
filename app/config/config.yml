@@ -32,8 +32,8 @@ knp_menu:
 knp_paginator:
     templating: ~
 
-# Symfony2Bundles Configuration
-knp_symfony2_bundles: ~
+# KnpBundles Configuration
+knp_bundles: ~
 
 # Gravatar Configuration
 gravatar: ~
@@ -54,7 +54,7 @@ doctrine:
         entity_managers:
             default:
                 mappings:
-                  KnpSymfony2BundlesBundle: ~
+                  KnpBundlesBundle: ~
 
 jms_i18n_routing:
     default_locale: en

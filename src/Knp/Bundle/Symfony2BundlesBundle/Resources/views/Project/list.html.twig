@@ -1,9 +1,0 @@
-{% extends 'KnpSymfony2BundlesBundle:Repo:list.html.twig' %}
-
-{% block title %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}projects.meta.title{% endtrans %}{% endblock %}
-
-{% block description %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}projects.meta.description{% endtrans %}{% endblock %}
-
-{% block h1 %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}projects.title{% endtrans %}{% endblock %}
-
-{% block route_list %}{{ path('project_list', {'sort': field}) }}{% endblock %}

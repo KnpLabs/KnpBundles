@@ -1,0 +1,19 @@
+{% extends "KnpBundlesBundle::layout.html.twig" %}
+
+{% block title %}{% trans %}api.meta.title{% endtrans %}{% endblock %}
+
+{% block h1 %}{% trans %}api.title{% endtrans %}{% endblock %}
+
+{% block description %}{% trans %}api.description{% endtrans %}{% endblock %}
+
+{% block slogan %}{% trans %}api.slogan{% endtrans %}{% endblock %}
+
+{% block content %}
+<div id="api">
+    <div id="main">
+        <div class="doc_text markdown">
+            {{ text|markdown }}
+        </div>
+    </div>
+</div>
+{% endblock %}
