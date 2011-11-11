@@ -1,0 +1,9 @@
+parameters:
+    secret:            ThisTokenIsNotSoSecretChangeIt
+    database_driver:   pdo_sqlite
+    database_host:     ~
+    database_port:     ~
+    database_name:     ~
+    database_user:     root
+    database_password: ~
+    database_path:     %kernel.root_dir%/db/db-%kernel.environment%.sql

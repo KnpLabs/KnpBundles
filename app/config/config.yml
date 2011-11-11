@@ -1,7 +1,10 @@
+imports:
+    - { resource: parameters.yml }
+
 framework:
     charset:          UTF-8
     csrf_protection:  true
-    secret:           betterPuttingThisInTheLocalConfigFile
+    secret:           %secret%
     router:           { resource: "%kernel.root_dir%/config/routing.yml" }
     validation:       { enabled: true, enable_annotations: true }
     templating:       { engines: ['twig'] }
@@ -41,13 +44,14 @@ ornicar_gravatar: ~
 # Doctrine Configuration
 doctrine:
     dbal:
-        default_connection: default
-        connections:
-            default:
-                driver:   pdo_mysql
-                dbname:   s2b_prod
-                user:     root
-                password: ~
+        driver:   %database_driver%
+        host:     %database_host%
+        path:     %database_path%
+        port:     %database_port%
+        dbname:   %database_name%
+        user:     %database_user%
+        password: %database_password%
+        charset:  UTF8
     orm:
         default_entity_manager: default
         auto_generate_proxy_classes: %kernel.debug%

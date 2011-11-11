@@ -36,28 +36,8 @@ class AppKernel extends Kernel
         return $bundles;
     }
 
-    /**
-     * Returns the config_{environment}_local.yml file or
-     * the default config_{environment}.yml if it does not exist.
-     * Useful to override development password.
-     *
-     * @param string Environment
-     * @return The configuration file path
-     */
-    protected function getLocalConfigurationFile($environment)
-    {
-        $basePath = __DIR__.'/config/config_';
-        $file = $basePath.$environment.'_local.yml';
-
-        if(\file_exists($file)) {
-            return $file;
-        }
-
-        return $basePath.$environment.'.yml';
-    }
-
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load($this->getLocalConfigurationFile($this->getEnvironment()));
+        $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
     }
 }
