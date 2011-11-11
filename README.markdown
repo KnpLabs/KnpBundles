@@ -1,9 +1,13 @@
-#bundles.knplabs.org
+# bundles.knplabs.org
 
 Open-source code of the [bundles.knplabs.org](http://bundles.knplabs.org)
 website, written in Symfony2.
 
 Any ideas are welcome!
+
+Please note that this service was previously called Symfony2Bundles but we had
+to change the name due to [trademark issues](http://knplabs.com/blog/symfony2bundles-becomes-knpbundle).
+
 
 ## Install
 
@@ -18,22 +22,9 @@ The last command requires Git >= 1.6. Alternatively, you can run
 
 ### Configure
 
-To configure your DB for your development and test environments, edit your
-`/app/config/config_dev_local.yml` and `/app/config/config_test_local.yml`
-to add your specific DB settings:
-
-    imports:
-      - { resource: config_dev.yml }
-
-    doctrine.dbal:
-      connections:
-        default:
-          driver:               PDOMySql
-          dbname:               app
-          user:                 root
-          password:             changeme
-          host:                 localhost
-          port:                 ~
+To configure your database in your development environment, copy
+`/app/config/parameters.yml.dist` to `/app/config/parameters.yml` and 
+edit it according to your database settings.
 
 #### Create database and tables
 
