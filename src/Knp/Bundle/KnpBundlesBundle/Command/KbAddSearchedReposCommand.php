@@ -8,7 +8,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Knp\Bundle\KnpBundlesBundle\Updater\Updater;
 
-class AddRepoCommand extends ContainerAwareCommand
+/**
+ * Update local database from web searches
+ */
+class KbAddSearchedReposCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -17,8 +20,8 @@ class AddRepoCommand extends ContainerAwareCommand
     {
         $this
             ->setDefinition(array())
-            ->addArgument('reponame')
-            ->setName('s2b:add:repo')
+            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'The maximal number of new repositories considered by the update', 1000)
+            ->setName('kb:add:searched-repos')
         ;
     }
 
@@ -36,7 +39,8 @@ class AddRepoCommand extends ContainerAwareCommand
 
         $updater = new Updater($em, $gitRepoDir, $gitBin, $output);
         $updater->setUp();
-        $repos = $updater->addRepo($input->getArgument('reponame'));
+        $repos = $updater->searchNewRepos((int) $input->getOption('limit'));
+        $updater->createMissingRepos($repos);
         $em->flush();
     }
 }

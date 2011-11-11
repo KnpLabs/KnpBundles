@@ -8,10 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Knp\Bundle\KnpBundlesBundle\Updater\Updater;
 
-/**
- * Update local database from web searches
- */
-class S2bPopulateCommand extends ContainerAwareCommand
+class KbUpdateReposCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -20,8 +17,7 @@ class S2bPopulateCommand extends ContainerAwareCommand
     {
         $this
             ->setDefinition(array())
-            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'The maximal number of new repositories considered by the update', 1000)
-            ->setName('s2b:populate')
+            ->setName('kb:update:repos')
         ;
     }
 
@@ -39,12 +35,7 @@ class S2bPopulateCommand extends ContainerAwareCommand
 
         $updater = new Updater($em, $gitRepoDir, $gitBin, $output);
         $updater->setUp();
-        $repos = $updater->searchNewRepos((int) $input->getOption('limit'));
-        $updater->createMissingRepos($repos);
-        $em->flush();
         $updater->updateReposData();
-        $em->flush();
-        $updater->updateUsers();
         $em->flush();
     }
 }

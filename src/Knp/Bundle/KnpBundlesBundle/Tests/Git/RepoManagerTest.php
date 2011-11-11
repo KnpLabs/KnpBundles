@@ -31,7 +31,7 @@ class RepoManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function getManager()
     {
-        $dir = sys_get_temp_dir().'/s2b_git_repos';
+        $dir = sys_get_temp_dir().'/kb_git_repos';
         $manager = new RepoManager($dir, $_SERVER['GIT_BIN']);
 
         return $manager;

@@ -1,13 +1,15 @@
-#symfony2bundles.org
+#bundles.knplabs.org
 
-Open-source code of the [symfony2bundles.org](http://symfony2bundles.org)
+Open-source code of the [bundles.knplabs.org](http://bundles.knplabs.org)
 website, written in Symfony2.
+
+Any ideas are welcome!
 
 ## Install
 
 ### Get the code
 
-    git clone git://github.com/knplabs/symfony2bundles.git
+    git clone git://github.com/knplabs/knpbundles.git
     cd symfony2bundles
     git submodule update --init
 
@@ -43,11 +45,6 @@ to add your specific DB settings:
     php app/console --env=test doctrine:database:create
     php app/console --env=test doctrine:schema:create
 
-#### Generate the doctrine proxies
-
-    php app/console cache:warmup
-    php app/console --env=test cache:warmup
-
 #### Load data fixtures
 
     php app/console doctrine:fixtures:load
@@ -57,7 +54,7 @@ to add your specific DB settings:
 
     php app/console assets:install --symlink web
 
-#### Run the tests (requires latest PHPUnit 3.5)
+#### Run the tests (requires PHPUnit >= 3.5)
 
     phpunit -c app
 
@@ -69,7 +66,7 @@ to add your specific DB settings:
 
 #### Populate document collections from GitHub
 
-    php app/console s2b:populate
+    php app/console kb:populate
 
 This can take long time. GitHub API is limited to 60 calls per minute,
 so the commands needs to wait.

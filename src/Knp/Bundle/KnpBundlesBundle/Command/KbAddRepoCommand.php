@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Knp\Bundle\KnpBundlesBundle\Updater\Updater;
 
-class S2bUpdateReposCommand extends ContainerAwareCommand
+class KbAddRepoCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -17,7 +17,8 @@ class S2bUpdateReposCommand extends ContainerAwareCommand
     {
         $this
             ->setDefinition(array())
-            ->setName('s2b:update:repos')
+            ->addArgument('reponame')
+            ->setName('kb:add:repo')
         ;
     }
 
@@ -35,7 +36,7 @@ class S2bUpdateReposCommand extends ContainerAwareCommand
 
         $updater = new Updater($em, $gitRepoDir, $gitBin, $output);
         $updater->setUp();
-        $updater->updateReposData();
+        $repos = $updater->addRepo($input->getArgument('reponame'));
         $em->flush();
     }
 }
