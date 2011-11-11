@@ -1,0 +1,8 @@
+services:
+    twig.extension.knp.locale_routing:
+        class: Knp\Bundle\KnpBundlesBundle\Twig\Extension\LocaleRoutingTwigExtension
+        tags:
+            - { name: twig.extension }
+        arguments:
+            - @router
+

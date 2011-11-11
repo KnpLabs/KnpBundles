@@ -1,16 +1,12 @@
-{% set locale_urls = {
-    'en': url(app.request.get('_route'), {'_route': null, '_controller': null, '_locale': 'en'} + app.request.attributes.all),
-    'fr': url(app.request.get('_route'), {'_route': null, '_controller': null, '_locale': 'fr'} + app.request.attributes.all),
-} %}
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <title>{% block title %}{% endblock %} | KnpBundles</title>
     <meta name="description" content="{% block description %}{% endblock %}" />
-    <link rel="canonical" href="{{ locale_urls.en }}" />
-    <link rel="alternate" hreflang="fr" href="{{ locale_urls.fr }}" />
-    <link rel="alternate" hreflang="en" href="{{ locale_urls.en }}" />
+    <link rel="canonical" href="{{ locale_url(app.request, 'en') }}" />
+    <link rel="alternate" hreflang="fr" href="{{ locale_url(app.request, 'fr') }}" />
+    <link rel="alternate" hreflang="en" href="{{ locale_url(app.request, 'en') }}" />
 
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/png" />
     <link href="{{ path('latest', {'format': 'atom'}) }}" rel="alternate" title="ATOM" type="application/atom+xml" />
@@ -49,17 +45,16 @@
 
     <div id="content-wrapper">
         <div class="center">
-            {# TODO: Improve me #}
             <div id="locales">
-                <a hreflang="en" href="{{ locale_urls.en }}">En</a>
+                <a hreflang="en" href="{{ locale_url(app.request, 'en') }}">En</a>
                 |
-                <a hreflang="fr" href="{{ locale_urls.fr }}">Fr</a>
+                <a hreflang="fr" href="{{ locale_url(app.request, 'fr') }}">Fr</a>
             </div>
 
             <form method="get" action="{{ path('search') }}" id="search-box">
                 <label for="search-query">{% trans %}search.label{% endtrans %}</label>
                 <input type="text" id="search-query" name="q" value="{% block search_query %}{% endblock %}" />
-                <button id="search-btn">Search</button>
+                <button id="search-btn">{% trans %}search.label{% endtrans %}</button>
             </form>
             <div id="global-tip">{% trans %}search.tooltip.0{% endtrans %}<br>{% trans %}search.tooltip.1{% endtrans %}</div>
         

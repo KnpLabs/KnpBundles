@@ -5,6 +5,7 @@ namespace Knp\Bundle\KnpBundlesBundle\DependencyInjection;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
@@ -19,6 +20,9 @@ class KnpBundlesExtension extends Extension
         $loader->load('model.xml');
         $loader->load('controller.xml');
         $loader->load('menu.xml');
+
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('twig.yml');
 
         $processor = new Processor();
         $config = $processor->process($this->getConfigTree(), $configs);
