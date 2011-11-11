@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\kbBundle\Tests\Controller;
+namespace Knp\Bundle\KnpBundlesBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -22,7 +22,7 @@ class MainControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/api');
         $this->assertTrue($client->getResponse()->isSuccessful());
 
-        $this->assertEquals(1, $crawler->filter('h1:contains("Developer API")')->count());
+        $this->assertEquals(1, $crawler->filter('h1:contains("API")')->count());
         $this->assertEquals(1, $crawler->filter('h3:contains("List all Bundles")')->count());
     }
 
