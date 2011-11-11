@@ -35,6 +35,7 @@ class Repo
         try {
             $this->gitRepoManager->getRepo($repo)->update();
         } catch (\GitRuntimeException $e) {
+            echo $e;
             return false;
         }
 

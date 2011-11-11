@@ -5,8 +5,8 @@ framework:
     router:           { resource: "%kernel.root_dir%/config/routing.yml" }
     validation:       { enabled: true, enable_annotations: true }
     templating:       { engines: ['twig'] }
+    default_locale: en
     session:
-        default_locale: en
         lifetime:       3600
         auto_start:     true
     translator:    { fallback: en }
@@ -36,7 +36,7 @@ knp_paginator:
 knp_bundles: ~
 
 # Gravatar Configuration
-gravatar: ~
+ornicar_gravatar: ~
 
 # Doctrine Configuration
 doctrine:

@@ -10,7 +10,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
     public function testGetGitRepo()
     {
         $repo = $this->getRepo();
-        $this->assertTrue($repo->getGitRepo() instanceof \phpGitRepo);
+        $this->assertTrue($repo->getGitRepo() instanceof \PHPGit_Repository);
     }
 
     protected function getRepo($repoFullName = 'FriendsOfSymfony/UserBundle')

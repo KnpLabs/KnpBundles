@@ -19,10 +19,10 @@ class KnpBundlesExtension extends Extension
         $loader->load('paginator.xml');
         $loader->load('model.xml');
         $loader->load('controller.xml');
-        $loader->load('menu.xml');
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('twig.yml');
+        $loader->load('menus.yml');
 
         $processor = new Processor();
         $config = $processor->process($this->getConfigTree(), $configs);

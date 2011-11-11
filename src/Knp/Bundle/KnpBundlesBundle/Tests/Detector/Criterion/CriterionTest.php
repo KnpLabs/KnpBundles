@@ -11,7 +11,7 @@ abstract class CriterionTest extends \PHPUnit_Framework_TestCase
 
     protected function getGitRepo($directory)
     {
-        $repo = $this->getMock('phpGitRepo', array(), array(), '', false);
+        $repo = $this->getMock('PHPGit_Repository', array(), array(), '', false);
         $repo->expects($this->any())
             ->method('getDir')
             ->will($this->returnValue($directory));

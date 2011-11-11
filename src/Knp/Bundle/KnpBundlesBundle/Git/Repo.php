@@ -9,7 +9,7 @@ class Repo
     /**
      * Git repository wrapper
      *
-     * @var \phpGitRepo
+     * @var \PHPGit_Repository
      */
     protected $gitRepo = null;
 
@@ -20,7 +20,7 @@ class Repo
      */
     protected $entity = null;
 
-    public function __construct(RepoEntity $repoEntity, \phpGitRepo $gitRepo)
+    public function __construct(RepoEntity $repoEntity, \PHPGit_Repository $gitRepo)
     {
         $this->entity = $repoEntity;
         $this->gitRepo = $gitRepo;
@@ -54,7 +54,7 @@ class Repo
     /**
      * Get gitRepo
      *
-     * @return \phpGitRepo
+     * @return \PHPGit_Repository
      */
     public function getGitRepo()
     {
@@ -64,7 +64,7 @@ class Repo
     /**
      * Set gitRepo
      *
-     * @param \phpGitRepo
+     * @param \PHPGit_Repository
      * @return null
      */
     public function setGitRepo($gitRepo)

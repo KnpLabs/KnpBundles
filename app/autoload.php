@@ -1,29 +1,39 @@
 <?php
 
 use Symfony\Component\ClassLoader\UniversalClassLoader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
     'Symfony'                       => array(__DIR__.'/../vendor/symfony/src', __DIR__.'/../vendor/bundles'),
-    'Knp'                           => array(__DIR__.'/../src', __DIR__.'/../vendor/bundles'),
-    'Bundle'                        => __DIR__.'/../vendor/bundles',
+    'Knp\Bundle\KnpBundlesBundle'   => __DIR__.'/../src',
+    'Knp\Bundle'                    => __DIR__.'/../vendor/bundles',
+    'Knp\Menu'                      => __DIR__.'/../vendor/knp-menu/src',
+    'Ornicar\GravatarBundle'        => __DIR__.'/../vendor/bundles',
     'Doctrine\DBAL\Migrations'      => __DIR__.'/../vendor/doctrine-migrations/lib',
     'Doctrine\Common'               => __DIR__.'/../vendor/doctrine-common/lib',
     'Doctrine\Common\DataFixtures'  => __DIR__.'/../vendor/doctrine-data-fixtures/lib',
     'Doctrine\DBAL'                 => __DIR__.'/../vendor/doctrine-dbal/lib',
     'Doctrine'                      => __DIR__.'/../vendor/doctrine/lib',
     'JMS'                           => __DIR__.'/../vendor/bundles',
-    'Zend'                          => array(__DIR__.'/../vendor', __DIR__.'/../vendor/zend-registry'),
+    'Zend'                          => __DIR__.'/../vendor/zend/library',
     'Monolog'                       => __DIR__.'/../vendor/monolog/src',
     'Goutte'                        => __DIR__.'/../vendor/goutte/src',
 ));
 
 $loader->registerPrefixes(array(
-    'Twig_Extensions_' => __DIR__.'/../vendor/twig-extensions/lib',
-    'Twig_'            => __DIR__.'/../vendor/twig/lib',
-    'Github_'          => __DIR__.'/../vendor/php-github-api/lib'
+    'Twig_Extensions_'              => __DIR__.'/../vendor/twig-extensions/lib',
+    'Twig_'                         => __DIR__.'/../vendor/twig/lib',
+    'Github_'                       => __DIR__.'/../vendor/php-github-api/lib',
+    'PHPGit_'                       => __DIR__.'/../vendor/php-git-repo/lib'
 ));
 $loader->register();
 
-// Require php-git-repo
-require_once(__DIR__.'/../vendor/php-git-repo/lib/phpGitRepo.php');
+// Registering the annotations
+AnnotationRegistry::registerLoader(function($class) use ($loader) {
+    $loader->loadClass($class);
+    return class_exists($class, false);
+});
+AnnotationRegistry::registerFile(
+    __DIR__.'/../vendor/doctrine/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
+);

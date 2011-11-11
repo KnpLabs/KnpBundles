@@ -4,6 +4,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Git;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Repo as RepoEntity;
 use Symfony\Component\HttpKernel\Util\Filesystem;
+use PHPGit_Repository;
 
 class RepoManager
 {
@@ -36,7 +37,7 @@ class RepoManager
     {
         if($this->hasRepo($repo)) {
             $dir = $this->getRepoDir($repo);
-            $gitRepo = new \phpGitRepo($dir, false, array('git_executable' => $this->gitExecutable));
+            $gitRepo = new PHPGit_Repository($dir, false, array('git_executable' => $this->gitExecutable));
         } else {
             $gitRepo = $this->createGitRepo($repo);
         }
@@ -55,7 +56,7 @@ class RepoManager
     {
         $dir = $this->getRepoDir($repo);
         $this->filesystem->mkdir($dir);
-        $gitRepo = \phpGitRepo::create($dir, false, array('git_executable' => $this->gitExecutable));
+        $gitRepo = PHPGit_Repository::create($dir, false, array('git_executable' => $this->gitExecutable));
         $gitRepo->git('remote add origin '.$repo->getGitUrl());
         $gitRepo->git('pull origin HEAD');
 

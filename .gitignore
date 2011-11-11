@@ -8,3 +8,4 @@ app/alive.php
 app/phpunit.xml
 web/bundles/*
 app/DoctrineMigrations/*
+/vendor/

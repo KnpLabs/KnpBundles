@@ -39,7 +39,7 @@
                 <a href="{{ 'menu.urls.consulting'|trans }}">{{ 'menu.consulting'|trans }}</a>
                 <a href="{{ 'menu.urls.knplabs'|trans }}">{{ 'menu.knplabs'|trans }}</a>
             </div>
-            {{ menu('main') }}
+            {{ knp_menu_render(knp_menu_get('main').setAttribute('id', 'menu')) }}
         </div>
     </div><!-- /#header -->
 

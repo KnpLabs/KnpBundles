@@ -22,7 +22,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\TimeBundle\KnpTimeBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
-            new Bundle\GravatarBundle\GravatarBundle(),
+            new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
             new JMS\I18nRoutingBundle\JMSI18nRoutingBundle(),
 
             // register your applications here

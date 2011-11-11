@@ -1,0 +1,102 @@
+[symfony]
+    git=http://github.com/symfony/symfony.git
+
+[twig]
+    git=http://github.com/fabpot/Twig.git
+    version=origin/master
+
+[twig-extensions]
+    git=http://github.com/fabpot/Twig-extensions.git
+
+[monolog]
+    git=http://github.com/Seldaek/monolog.git
+    version=1.0.2
+
+[doctrine-common]
+    git=http://github.com/doctrine/common.git
+    version=origin/master
+
+[doctrine-dbal]
+    git=http://github.com/doctrine/dbal.git
+    version=origin/master
+
+[doctrine]
+    git=http://github.com/doctrine/doctrine2.git
+    version=origin/master
+
+[doctrine-data-fixtures]
+    git=http://github.com/doctrine/data-fixtures.git
+
+[doctrine-migrations]
+    git=http://github.com/doctrine/migrations.git
+
+[DoctrineFixturesBundle]
+    git=http://github.com/symfony/DoctrineFixturesBundle.git
+    target=bundles/Symfony/Bundle/DoctrineFixturesBundle
+
+[DoctrineMigrationsBundle]
+    git=http://github.com/symfony/DoctrineMigrationsBundle.git
+    target=bundles/Symfony/Bundle/DoctrineMigrationsBundle
+
+[assetic]
+    git=http://github.com/kriswallsmith/assetic.git
+    version=v1.0.2
+
+[JMSI18nBundle]
+    git=http://github.com/schmittjoh/JMSI18nRoutingBundle.git
+    target=bundles/JMS/I18nRoutingBundle
+
+[SensioDistributionBundle]
+    git=http://github.com/sensio/SensioDistributionBundle.git
+    target=bundles/Sensio/Bundle/DistributionBundle
+
+[SensioGeneratorBundle]
+    git=http://github.com/sensio/SensioGeneratorBundle.git
+    target=bundles/Sensio/Bundle/GeneratorBundle
+
+[AsseticBundle]
+    git=http://github.com/symfony/AsseticBundle.git
+    target=bundles/Symfony/Bundle/AsseticBundle
+    version=v1.0.1
+
+[ZendFramework]
+    git=git://git.zendframework.com/zf.git
+    target=zend
+
+[KnpMarkdownBundle]
+    git=http://github.com/knplabs/KnpMarkdownBundle.git
+    target=bundles/Knp/Bundle/MarkdownBundle
+
+[KnpTimeBundle]
+    git=http://github.com/knplabs/KnpTimeBundle.git
+    target=bundles/Knp/Bundle/TimeBundle
+
+[KnpMarkdownBundle]
+    git=http://github.com/knplabs/KnpMarkdownBundle.git
+    target=bundles/Knp/Bundle/MarkdownBundle
+
+[KnpMenu]
+    git=http://github.com/knplabs/KnpMenu.git
+    target=knp-menu
+
+[KnpMenuBundle]
+    git=http://github.com/knplabs/KnpMenuBundle.git
+    target=bundles/Knp/Bundle/MenuBundle
+
+[KnpPaginatorBundle]
+    git=http://github.com/knplabs/KnpPaginatorBundle.git
+    target=bundles/Knp/Bundle/PaginatorBundle
+
+[goutte]
+    git=http://github.com/fabpot/Goutte.git
+
+[php-git-repo]
+    git=http://github.com/ornicar/php-git-repo.git
+
+[php-github-api]
+    git=http://github.com/ornicar/php-github-api.git
+
+[OrnicarGravatarBundle]
+    git=http://github.com/ornicar/GravatarBundle.git
+    target=bundles/Ornicar/GravatarBundle
+
