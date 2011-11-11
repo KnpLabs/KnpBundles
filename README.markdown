@@ -1,4 +1,4 @@
-# bundles.knplabs.org
+# KnpBundles
 
 Open-source code of the [bundles.knplabs.org](http://bundles.knplabs.org)
 website, written in Symfony2.
