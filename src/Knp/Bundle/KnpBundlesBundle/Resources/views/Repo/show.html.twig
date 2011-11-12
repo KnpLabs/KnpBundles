@@ -46,7 +46,7 @@
         </li>
 
         {%- if repo.nbContributors != 0 %}
-            <li class="contributor-others-switch">&amp; <a href="">others…</a></li>
+            <li class="contributor-others-switch">{% trans %}bundles.show.users.and{% endtrans %} <a href="#">{% trans %}bundles.show.users.contributors{% endtrans %}</a></li>
             {%- for contributor in repo.contributors %}
                 <li class="contributor"><a href="{{ path('user_show', {'name': contributor}) }}">{{ contributor }}</a>
             {%- endfor %}

@@ -27,6 +27,7 @@ footer:
     code: "Voir le code sur Github"
 
 credits:
+    title: "Crédits"
     lead_dev: "Créé par l'équipe KnpLabs"
 
 bundles:
@@ -54,6 +55,8 @@ bundles.show:
         by: "Par"
     users:
         by: "par"
+        and: "&"
+        contributors: "contributeurs…"
 
 bundles.list:
     by: " par "

@@ -27,7 +27,8 @@ footer:
     code: "Show the code on Github"
 
 credits:
-    lead_dev: "Powered by Knp developers"'
+    title: "Credits"
+    lead_dev: "Powered by Knp developers"
 
 bundles:
     meta:
@@ -54,6 +55,8 @@ bundles.show:
         by: "By"
     users:
         by: "by"
+        and: "&"
+        contributors: "contributors…"
 
 bundles.list:
     by: " by "
