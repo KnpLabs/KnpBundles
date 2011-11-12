@@ -33,6 +33,7 @@ class LocaleRoutingTwigExtension extends \Twig_Extension
         $parameters = $request->attributes->all();
         unset($parameters['_route']);
         unset($parameters['_controller']);
+        unset($parameters['_route_params']);
 
         $parameters = array_merge($parameters, $request->query->all());
         $parameters['_locale'] = $locale;
@@ -47,6 +48,7 @@ class LocaleRoutingTwigExtension extends \Twig_Extension
         $parameters = $request->attributes->all();
         unset($parameters['_route']);
         unset($parameters['_controller']);
+        unset($parameters['_route_params']);
 
         $parameters = array_merge($parameters, $request->query->all());
         $parameters['_locale'] = $locale;
