@@ -7,6 +7,7 @@
 /app/phpunit.xml
 /web/bundles/*
 /app/DoctrineMigrations/*
+/src/Knp/Bundle/KnpBundlesBundle/DoctrineMigrations/*
 /vendor/
 /app/config/parameters.yml
 /app/config/parameters.*.yml
