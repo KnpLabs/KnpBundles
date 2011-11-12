@@ -8,6 +8,7 @@ use Symfony\Component\Templating\EngineInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Zend\Paginator\Paginator;
+use Knp\Menu\MenuItem;
 
 class UserController
 {
@@ -15,6 +16,7 @@ class UserController
     protected $templating;
     protected $em;
     protected $paginator;
+    protected $mainMenu;
 
     protected $sortFields = array(
         'name'          => 'name',
@@ -26,12 +28,13 @@ class UserController
         'best'          => 'users.sort.best',
     );
 
-    public function __construct(Request $request, EngineInterface $templating, EntityManager $em, Paginator $paginator)
+    public function __construct(Request $request, EngineInterface $templating, EntityManager $em, Paginator $paginator, MenuItem $mainMenu)
     {
         $this->request = $request;
         $this->templating = $templating;
         $this->em = $em;
         $this->paginator = $paginator;
+        $this->mainMenu = $mainMenu;
     }
 
     public function showAction($name)
@@ -45,6 +48,8 @@ class UserController
             throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
         }
         $this->request->setRequestFormat($format);
+
+        $this->mainMenu->getChild('users')->setCurrent(true);
 
         return $this->templating->renderResponse('KnpBundlesBundle:User:show.'.$format.'.twig', array(
             'user'      => $user,
@@ -65,6 +70,7 @@ class UserController
         $this->request->setRequestFormat($format);
 
         $sortField = $this->sortFields[$sort];
+        $this->mainMenu->getChild('users')->setCurrent(true);
 
         if ('html' === $format) {
             $query = $this->getUserRepository()->queryAllWithProjectsSortedBy($sortField);

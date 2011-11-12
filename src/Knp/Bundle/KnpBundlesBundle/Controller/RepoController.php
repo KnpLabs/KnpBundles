@@ -12,7 +12,9 @@ use Symfony\Component\Templating\EngineInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Knp\Bundle\KnpBundlesBundle\Entity\Project;
 use Zend\Paginator\Paginator;
+use Knp\Menu\MenuItem;
 
 class RepoController
 {
@@ -23,6 +25,7 @@ class RepoController
     protected $paginator;
     protected $gitExecutable;
     protected $response;
+    protected $mainMenu;
 
     protected $sortFields = array(
         'best'          => 'score',
@@ -36,7 +39,7 @@ class RepoController
         'newest'        => 'bundles.sort.newest'
     );
 
-    public function __construct(Request $request, EngineInterface $templating, EntityManager $em, HttpKernel $httpKernel, Paginator $paginator, $gitExecutable, Response $response = null)
+    public function __construct(Request $request, EngineInterface $templating, EntityManager $em, HttpKernel $httpKernel, Paginator $paginator, MenuItem $mainMenu, $gitExecutable, Response $response = null)
     {
         if (null === $response) {
             $response = new Response();
@@ -49,6 +52,7 @@ class RepoController
         $this->paginator = $paginator;
         $this->gitExecutable = $gitExecutable;
         $this->response = $response;
+        $this->mainMenu = $mainMenu;
     }
 
     public function searchAction()
@@ -97,6 +101,8 @@ class RepoController
         }
         $this->request->setRequestFormat($format);
 
+        $this->highlightMenu($repo instanceof Bundle);
+
         return $this->templating->renderResponse('KnpBundlesBundle:'.$repo->getClass().':show.'.$format.'.twig', array(
             'repo'          => $repo,
             'callback'      => $this->request->query->get('callback')
@@ -123,6 +129,8 @@ class RepoController
         } else {
             $repos = $this->getRepository($class)->findAllWithUsersAndContributorsSortedBy($sortField);
         }
+
+        $this->highlightMenu('Bundle' == $class);
 
         return $this->templating->renderResponse('KnpBundlesBundle:'.$class.':list.'.$format.'.twig', array(
             'repos'         => $repos,
@@ -175,5 +183,14 @@ class RepoController
     protected function getRepository($class)
     {
         return $this->em->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\'.$class);
+    }
+    
+    protected function highlightMenu($highlightBundlesMenu)
+    {
+        if ($highlightBundlesMenu) {
+            $this->mainMenu->getChild('bundles')->setCurrent(true);
+        } else {
+            $this->mainMenu->getChild('projects')->setCurrent(true);
+        }
     }
 }

@@ -22,20 +22,22 @@
             <argument type="service" id="knp_bundles.entity_manager" />
         </service>
         <!-- Repo controller -->
-        <service id="knp_bundles.controller.repo" class="%knp_bundles.controller.repo.class%">
+        <service id="knp_bundles.controller.repo" class="%knp_bundles.controller.repo.class%" scope="request">
             <argument type="service" id="request" strict="false" />
             <argument type="service" id="templating" />
             <argument type="service" id="knp_bundles.entity_manager" />
             <argument type="service" id="http_kernel" />
             <argument type="service" id="knp_bundles.paginator" />
+            <argument type="service" id="knp_bundles.menu.main" />
             <argument>%knp_bundles.git_bin%</argument>
         </service>
         <!-- User controller -->
-        <service id="knp_bundles.controller.user" class="%knp_bundles.controller.user.class%">
+        <service id="knp_bundles.controller.user" class="%knp_bundles.controller.user.class%" scope="request">
             <argument type="service" id="request" strict="false" />
             <argument type="service" id="templating" />
             <argument type="service" id="knp_bundles.entity_manager" />
             <argument type="service" id="knp_bundles.paginator" />
+            <argument type="service" id="knp_bundles.menu.main" />
         </service>
     </services>
 </container>
