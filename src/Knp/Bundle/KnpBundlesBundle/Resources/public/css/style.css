@@ -77,7 +77,18 @@ a {
 .user-list li {
     display: inline;
 }
-
+.user-list li.contributor {
+    display: inline;
+}
+.user-list.hide-contributors li.contributor {
+    display: none;
+}
+.user-list .contributor-others-switch {
+    display: none;
+}
+.user-list.hide-contributors .contributor-others-switch {
+    display: inline;
+}
 #content-title .user a {
     color: #e49211;
     font-weight: bold;

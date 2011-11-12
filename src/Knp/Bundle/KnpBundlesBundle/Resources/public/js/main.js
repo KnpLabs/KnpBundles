@@ -3,7 +3,13 @@
     var curPosition = 0;
 
     $(function() {
+        // Show/hide contributors
+        $('.contributor-others-switch').click(function() {
+            $('.user-list').removeClass('hide-contributors');
+            return false;
+        });
 
+        // keyboard navigation
         if ($('.repo').length > 0) {
             var className = 'repo';
         } else if ($('.developer').length > 0) {

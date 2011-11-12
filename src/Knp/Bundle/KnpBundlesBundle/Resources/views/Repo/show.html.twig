@@ -40,15 +40,16 @@
         </div>
     </div>
 
-    <ul class="user-list">
+    <ul class="user-list hide-contributors">
         <li class="user">
-            {% trans %}bundles.show.users.by{% endtrans %} <a href="{{ path('user_show', {'name': repo.username}) }}">{{ repo.username }}</a>{% if repo.nbContributors != 0 %},{% endif %}
+            {% trans %}bundles.show.users.by{% endtrans %} <a href="{{ path('user_show', {'name': repo.username}) }}">{{ repo.username }}</a>
         </li>
 
         {%- if repo.nbContributors != 0 %}
-        {%- for contributor in repo.contributors %}
-            <li class="contributor"><a href="{{ path('user_show', {'name': contributor}) }}">{{ contributor }}</a>{% if not loop.last %},{% endif %}</li>
-        {%- endfor %}
+            <li class="contributor-others-switch">&amp; <a href="">others…</a></li>
+            {%- for contributor in repo.contributors %}
+                <li class="contributor"><a href="{{ path('user_show', {'name': contributor}) }}">{{ contributor }}</a>
+            {%- endfor %}
         {%- endif %}
     </ul>
 

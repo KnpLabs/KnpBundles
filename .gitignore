@@ -8,6 +8,6 @@
 /web/bundles/*
 /app/DoctrineMigrations/*
 /src/Knp/Bundle/KnpBundlesBundle/DoctrineMigrations/*
-/vendor/
+/vendor/*
 /app/config/parameters.yml
 /app/config/parameters.*.yml
