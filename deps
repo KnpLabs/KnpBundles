@@ -91,7 +91,7 @@
     git=http://github.com/fabpot/Goutte.git
 
 [php-git-repo]
-    git=http://github.com/ornicar/php-git-repo.git
+    git=http://github.com/mbontemps/php-git-repo.git
 
 [php-github-api]
     git=http://github.com/ornicar/php-github-api.git
