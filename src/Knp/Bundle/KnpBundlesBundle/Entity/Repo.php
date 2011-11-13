@@ -140,8 +140,8 @@ abstract class Repo
      *
      * @ORM\ManyToMany(targetEntity="User", inversedBy="contributionRepos")
      * @ORM\JoinTable(name="contribution",
-     *      joinColumns={@ORM\JoinColumn(name="repo_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")}
+     *      joinColumns={@ORM\JoinColumn(name="repo_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")}
      *)
      *
      * @var ArrayCollection
