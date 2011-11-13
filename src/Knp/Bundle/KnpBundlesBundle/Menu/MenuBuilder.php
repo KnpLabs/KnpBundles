@@ -26,7 +26,6 @@ class MenuBuilder
         $menu->addChild('bundles', array('route' => 'bundle_list'))->setLabel($translator->trans('menu.bundles'));
         $menu->addChild('projects', array('route' => 'project_list'))->setLabel($translator->trans('menu.projects'));
         $menu->addChild('users', array('route' => 'user_list'))->setLabel($translator->trans('menu.users'));
-        $menu->addChild('name', array('uri' => $translator->trans('menu.urls.name')))->setLabel($translator->trans('menu.name'));
 
         return $menu;
     }

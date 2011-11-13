@@ -2,6 +2,7 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Templating\EngineInterface;
@@ -10,14 +11,8 @@ use Doctrine\ORM\Query;
 use Zend\Paginator\Paginator;
 use Knp\Menu\MenuItem;
 
-class UserController
+class UserController extends Controller
 {
-    protected $request;
-    protected $templating;
-    protected $em;
-    protected $paginator;
-    protected $mainMenu;
-
     protected $sortFields = array(
         'name'          => 'name',
         'best'          => 'score',
@@ -28,32 +23,23 @@ class UserController
         'best'          => 'users.sort.best',
     );
 
-    public function __construct(Request $request, EngineInterface $templating, EntityManager $em, Paginator $paginator, MenuItem $mainMenu)
-    {
-        $this->request = $request;
-        $this->templating = $templating;
-        $this->em = $em;
-        $this->paginator = $paginator;
-        $this->mainMenu = $mainMenu;
-    }
-
     public function showAction($name)
     {
         if (!$user = $this->getUserRepository()->findOneByNameWithRepos($name)) {
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        $format = $this->request->query->get('format', 'html');
+        $format = $this->get('request')->query->get('format', 'html');
         if (!in_array($format, array('html', 'json', 'js'))) {
             throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
         }
-        $this->request->setRequestFormat($format);
+        $this->get('request')->setRequestFormat($format);
 
-        $this->mainMenu->getChild('users')->setCurrent(true);
+        $this->get('knp_bundles.menu.main')->getChild('users')->setCurrent(true);
 
-        return $this->templating->renderResponse('KnpBundlesBundle:User:show.'.$format.'.twig', array(
+        return $this->render('KnpBundlesBundle:User:show.'.$format.'.twig', array(
             'user'      => $user,
-            'callback'  => $this->request->query->get('callback')
+            'callback'  => $this->get('request')->query->get('callback')
         ));
     }
 
@@ -63,27 +49,27 @@ class UserController
             throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
         }
 
-        $format = $this->request->query->get('format', 'html');
+        $format = $this->get('request')->query->get('format', 'html');
         if (!in_array($format, array('html', 'json', 'js'))) {
             throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
         }
-        $this->request->setRequestFormat($format);
+        $this->get('request')->setRequestFormat($format);
 
         $sortField = $this->sortFields[$sort];
-        $this->mainMenu->getChild('users')->setCurrent(true);
+        $this->get('knp_bundles.menu.main')->getChild('users')->setCurrent(true);
 
         if ('html' === $format) {
             $query = $this->getUserRepository()->queryAllWithProjectsSortedBy($sortField);
-            $users = $this->getPaginator($query, $this->request->query->get('page', 1));
+            $users = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
         } else {
             $users = $this->getUserRepository()->findAllWithProjectsSortedBy($sortField);
         }
 
-        return $this->templating->renderResponse('KnpBundlesBundle:User:list.'.$format.'.twig', array(
+        return $this->render('KnpBundlesBundle:User:list.'.$format.'.twig', array(
             'users'         => $users,
             'sort'          => $sort,
             'sortLegends'   => $this->sortLegends,
-            'callback'      => $this->request->query->get('callback')
+            'callback'      => $this->get('request')->query->get('callback')
         ));
     }
 
@@ -93,15 +79,15 @@ class UserController
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        $format = $this->request->query->get('format', 'html');
+        $format = $this->get('request')->query->get('format', 'html');
         if (!in_array($format, array('html', 'json', 'js'))) {
             throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
         }
-        $this->request->setRequestFormat($format);
+        $this->get('request')->setRequestFormat($format);
 
-        return $this->templating->renderResponse('KnpBundlesBundle:Bundle:list.'.$format.'.twig', array(
+        return $this->render('KnpBundlesBundle:Bundle:list.'.$format.'.twig', array(
             'repos'     => $user->getBundles(),
-            'callback'  => $this->request->query->get('callback')
+            'callback'  => $this->get('request')->query->get('callback')
         ));
     }
 
@@ -111,15 +97,15 @@ class UserController
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        $format = $this->request->query->get('format', 'html');
+        $format = $this->get('request')->query->get('format', 'html');
         if (!in_array($format, array('html', 'json', 'js'))) {
             throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
         }
-        $this->request->setRequestFormat($format);
+        $this->get('request')->setRequestFormat($format);
 
-        return $this->templating->renderResponse('KnpBundlesBundle:Project:list.'.$format.'.twig', array(
+        return $this->render('KnpBundlesBundle:Project:list.'.$format.'.twig', array(
             'repos'     => $user->getProjects(),
-            'callback'  => $this->request->query->get('callback')
+            'callback'  => $this->get('request')->query->get('callback')
         ));
     }
 
@@ -134,21 +120,21 @@ class UserController
      */
     protected function getPaginator(Query $query, $page)
     {
-        $adapter = $this->paginator->getAdapter();
+        $adapter = $this->get('knp_bundles.paginator')->getAdapter();
         $adapter->setQuery($query);
 
-        $this->paginator->setCurrentPageNumber($page);
+        $this->get('knp_bundles.paginator')->setCurrentPageNumber($page);
 
-        return $this->paginator;
+        return $this->get('knp_bundles.paginator');
     }
 
     protected function getBundleRepository()
     {
-        return $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle');
+        return $this->get('knp_bundles.entity_manager')->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle');
     }
 
     protected function getUserRepository()
     {
-        return $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\User');
+        return $this->get('knp_bundles.entity_manager')->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\User');
     }
 }

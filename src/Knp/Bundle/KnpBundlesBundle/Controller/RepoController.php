@@ -2,6 +2,7 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -16,17 +17,8 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Project;
 use Zend\Paginator\Paginator;
 use Knp\Menu\MenuItem;
 
-class RepoController
+class RepoController extends Controller
 {
-    protected $request;
-    protected $em;
-    protected $templating;
-    protected $httpKernel;
-    protected $paginator;
-    protected $gitExecutable;
-    protected $response;
-    protected $mainMenu;
-
     protected $sortFields = array(
         'best'          => 'score',
         'updated'       => 'lastCommitAt',
@@ -39,28 +31,12 @@ class RepoController
         'newest'        => 'bundles.sort.newest'
     );
 
-    public function __construct(Request $request, EngineInterface $templating, EntityManager $em, HttpKernel $httpKernel, Paginator $paginator, MenuItem $mainMenu, $gitExecutable, Response $response = null)
-    {
-        if (null === $response) {
-            $response = new Response();
-        }
-
-        $this->request = $request;
-        $this->templating = $templating;
-        $this->em = $em;
-        $this->httpKernel = $httpKernel;
-        $this->paginator = $paginator;
-        $this->gitExecutable = $gitExecutable;
-        $this->response = $response;
-        $this->mainMenu = $mainMenu;
-    }
-
     public function searchAction()
     {
-        $query = preg_replace('(\W)', '', trim($this->request->query->get('q')));
+        $query = preg_replace('(\W)', '', trim($this->get('request')->query->get('q')));
 
         if (empty($query)) {
-            return $this->templating->renderResponse('KnpBundlesBundle:Repo:search.html.twig');
+            return $this->render('KnpBundlesBundle:Repo:search.html.twig');
         }
 
         $repos = $this->getRepository('Repo')->search($query);
@@ -73,18 +49,18 @@ class RepoController
             }
         }
 
-        $format = $this->request->query->get('format', 'html');
+        $format = $this->get('request')->query->get('format', 'html');
         if (!in_array($format, array('html', 'json', 'js'))) {
             throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
         }
-        $this->request->setRequestFormat($format);
+        $this->get('request')->setRequestFormat($format);
 
-        return $this->templating->renderResponse('KnpBundlesBundle:Repo:searchResults.'.$format.'.twig', array(
+        return $this->render('KnpBundlesBundle:Repo:searchResults.'.$format.'.twig', array(
             'query'         => $query,
             'repos'         => $repos,
             'bundles'       => $bundles,
             'projects'      => $projects,
-            'callback'      => $this->request->query->get('callback')
+            'callback'      => $this->get('request')->query->get('callback')
         ));
     }
 
@@ -95,17 +71,17 @@ class RepoController
             throw new NotFoundHttpException(sprintf('The repo "%s/%s" does not exist', $username, $name));
         }
 
-        $format = $this->request->query->get('format', 'html');
+        $format = $this->get('request')->query->get('format', 'html');
         if (!in_array($format, array('html', 'json', 'js'))) {
             throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
         }
-        $this->request->setRequestFormat($format);
+        $this->get('request')->setRequestFormat($format);
 
         $this->highlightMenu($repo instanceof Bundle);
 
-        return $this->templating->renderResponse('KnpBundlesBundle:'.$repo->getClass().':show.'.$format.'.twig', array(
+        return $this->render('KnpBundlesBundle:'.$repo->getClass().':show.'.$format.'.twig', array(
             'repo'          => $repo,
-            'callback'      => $this->request->query->get('callback')
+            'callback'      => $this->get('request')->query->get('callback')
         ));
     }
 
@@ -115,28 +91,28 @@ class RepoController
             throw new HttpException(406, sprintf('%s is not a valid sorting field', $sort));
         }
 
-        $format = $this->request->query->get('format', 'html');
+        $format = $this->get('request')->query->get('format', 'html');
         if (!in_array($format, array('html', 'json', 'js'))) {
             throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
         }
-        $this->request->setRequestFormat($format);
+        $this->get('request')->setRequestFormat($format);
 
         $sortField = $this->sortFields[$sort];
 
         if ('html' === $format) {
             $query = $this->getRepository($class)->queryAllWithUsersAndContributorsSortedBy($sortField);
-            $repos = $this->getPaginator($query, $this->request->query->get('page', 1));
+            $repos = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
         } else {
             $repos = $this->getRepository($class)->findAllWithUsersAndContributorsSortedBy($sortField);
         }
 
         $this->highlightMenu('Bundle' == $class);
 
-        return $this->templating->renderResponse('KnpBundlesBundle:'.$class.':list.'.$format.'.twig', array(
+        return $this->render('KnpBundlesBundle:'.$class.':list.'.$format.'.twig', array(
             'repos'         => $repos,
             'sort'          => $sort,
             'sortLegends'   => $this->sortLegends,
-            'callback'      => $this->request->query->get('callback')
+            'callback'      => $this->get('request')->query->get('callback')
         ));
     }
 
@@ -144,15 +120,15 @@ class RepoController
     {
         $repos = $this->getRepository('Repo')->findAllSortedBy('createdAt', 50);
 
-        $format = $this->request->query->get('format', 'atom');
+        $format = $this->get('request')->query->get('format', 'atom');
         if (!in_array($format, array('atom'))) {
             throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
         }
-        $this->request->setRequestFormat($format);
+        $this->get('request')->setRequestFormat($format);
 
-        return $this->templating->renderResponse('KnpBundlesBundle:Repo:listLatest.'.$format.'.twig', array(
+        return $this->render('KnpBundlesBundle:Repo:listLatest.'.$format.'.twig', array(
             'repos'         => $repos,
-            'callback'      => $this->request->query->get('callback')
+            'callback'      => $this->get('request')->query->get('callback')
         ));
     }
 
@@ -167,12 +143,12 @@ class RepoController
      */
     protected function getPaginator(Query $query, $page)
     {
-        $adapter = $this->paginator->getAdapter();
+        $adapter = $this->get('knp_bundles.paginator')->getAdapter();
         $adapter->setQuery($query);
 
-        $this->paginator->setCurrentPageNumber($page);
+        $this->get('knp_bundles.paginator')->setCurrentPageNumber($page);
 
-        return $this->paginator;
+        return $this->get('knp_bundles.paginator');
     }
 
     protected function getUserRepository()
@@ -182,15 +158,15 @@ class RepoController
 
     protected function getRepository($class)
     {
-        return $this->em->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\'.$class);
+        return $this->get('knp_bundles.entity_manager')->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\'.$class);
     }
     
     protected function highlightMenu($highlightBundlesMenu)
     {
         if ($highlightBundlesMenu) {
-            $this->mainMenu->getChild('bundles')->setCurrent(true);
+            $this->get('knp_bundles.menu.main')->getChild('bundles')->setCurrent(true);
         } else {
-            $this->mainMenu->getChild('projects')->setCurrent(true);
+            $this->get('knp_bundles.menu.main')->getChild('projects')->setCurrent(true);
         }
     }
 }

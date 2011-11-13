@@ -4,15 +4,15 @@ menu:
     bundles: "Bundles"
     projects: "Projects"
     users: "Developers"
-    name: "Why the new name?"
-    training: "Get a Symfony training by Knp!"
-    consulting: "Find good Symfony developers!"
-    knplabs: "− KnpLabs"
-    urls:
-        name: "http://knplabs.com/blog/symfony2bundles-becomes-knpbundle"
-        training: "http://knplabs.com/training/symfony2"
-        consulting: "http://knplabs.com/service/symfony2"
-        knplabs: "http://knplabs.com"
+
+    promo:
+        nb: 2
+        0:
+            text: "Get a [Symfony training]| from KnpLabs!"
+            url: "http://knplabs.com/training/symfony2"
+        1:
+            text: "Find a [Symfony ninja]| at KnpLabs!"
+            url: "http://knplabs.com/"
 
 header:
     baseline: "The unofficial list of bundles for Symfony2"
@@ -25,6 +25,9 @@ search:
 
 footer:
     code: "Show the code on Github"
+    symfony2bundles:
+        url: "http://knplabs.com/blog/symfony2bundles-becomes-knpbundle"
+        label: "Why renaming Symfony2Bundles?"
 
 credits:
     title: "Credits"

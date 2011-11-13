@@ -1,49 +1,49 @@
 search:
     pattern:        /search
-    defaults:       { _controller: knp_bundles.controller.repo:searchAction }
+    defaults:       { _controller: KnpBundlesBundle:Repo:search }
     requirements:   { _method: "GET"}
 
 latest:
     pattern:        /latest
-    defaults:       { _controller: knp_bundles.controller.repo:listLatestAction, class: Bundle }
+    defaults:       { _controller: KnpBundlesBundle:Repo:listLatest, class: Bundle }
     requirements:   { _method: "GET" }
 
 api:
     pattern:        /api
-    defaults:       { _controller: knp_bundles.controller.main:apiAction }
+    defaults:       { _controller: KnpBundlesBundle:Main:api }
     requirements:   { _method: "GET" }
 
 project_list:
     pattern:        /project/{sort}
-    defaults:       { _controller: knp_bundles.controller.repo:listAction, class: Project, sort: best }
+    defaults:       { _controller: KnpBundlesBundle:Repo:list, class: Project, sort: best }
     requirements:   { _method: "GET", sort: "(best|updated|newest)"}
 
 user_list:
     pattern:        /developer/{sort}
-    defaults:       { _controller: knp_bundles.controller.user:listAction, sort: name }
+    defaults:       { _controller: KnpBundlesBundle:User:list, sort: name }
     requirements:   { _method: "GET", sort: "(name|best)"}
 
 bundle_list:
     pattern:        /{sort}
-    defaults:       { _controller: knp_bundles.controller.repo:listAction, class: Bundle, sort: best }
+    defaults:       { _controller: KnpBundlesBundle:Repo:list, class: Bundle, sort: best }
     requirements:   { _method: "GET", sort: "(best|updated|newest)"}
 
 user_bundle_list:
     pattern:        /{name}/bundles
-    defaults:       { _controller: knp_bundles.controller.user:bundlesAction }
+    defaults:       { _controller: KnpBundlesBundle:User:bundles }
     requirements:   { _method: "GET", format: "(json|js)" }
 
 user_projects_list:
     pattern:        /{name}/projects
-    defaults:       { _controller: knp_bundles.controller.user:projectsAction }
+    defaults:       { _controller: KnpBundlesBundle:User:projects }
     requirements:   { _method: "GET", format: "(json|js)" }
 
 user_show:
     pattern:        /{name}/profile 
-    defaults:       { _controller: knp_bundles.controller.user:showAction }
+    defaults:       { _controller: KnpBundlesBundle:User:show }
     requirements:   { _method: "GET"}
 
 repo_show:
     pattern:        /{username}/{name}
-    defaults:       { _controller: knp_bundles.controller.repo:showAction }
+    defaults:       { _controller: KnpBundlesBundle:Repo:show }
     requirements:   { _method: "GET", format: "(html|json|js)", name: ".+" }

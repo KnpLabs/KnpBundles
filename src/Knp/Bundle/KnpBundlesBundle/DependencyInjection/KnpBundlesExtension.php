@@ -18,7 +18,6 @@ class KnpBundlesExtension extends Extension
         $loader->load('finder.xml');
         $loader->load('paginator.xml');
         $loader->load('model.xml');
-        $loader->load('controller.xml');
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('twig.yml');

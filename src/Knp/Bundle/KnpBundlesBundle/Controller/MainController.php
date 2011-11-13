@@ -3,33 +3,15 @@
 namespace Knp\Bundle\KnpBundlesBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Templating\EngineInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Main controller
  *
  * @package KnpBundles
  */
-class MainController
+class MainController extends Controller
 {
-    protected $templating;
-    protected $response;
-
-    /**
-     * Constructor
-     *
-     * @param  EngineInterface $templating
-     */
-    public function __construct(EngineInterface $templating, Response $response = null)
-    {
-        if (null === $response) {
-            $response = new Response();
-        }
-
-        $this->templating = $templating;
-        $this->response = $response;
-    }
-
     public function getRankCodeAction()
     {
         try {
@@ -43,6 +25,7 @@ class MainController
             $scoreMethodDefinition = '';
         }
 
+        $this->response = $this->get('response');
         $this->response->setContent($scoreMethodDefinition);
         $this->response->setStatusCode(200);
         // TODO: how could we ensure the cache is cleared if the code changes?
@@ -55,13 +38,28 @@ class MainController
     {
         $text = file_get_contents(__DIR__.'/../Resources/doc/02-Api.markdown');
 
-        return $this->templating->renderResponse('KnpBundlesBundle:Main:api.html.twig', array('text' => $text), $this->response);
+        return $this->render('KnpBundlesBundle:Main:api.html.twig', array('text' => $text));
     }
 
     public function notFoundAction()
     {
-        $this->response->setStatusCode(404);
+        $this->get('response')->setStatusCode(404);
 
-        return $this->templating->renderResponse('KnpBundlesBundle:Main:notFoundAction.html.twig', array(), $this->response);
+        return $this->render('KnpBundlesBundle:Main:notFoundAction.html.twig', array());
+    }
+
+    public function bannerAction()
+    {
+        $translator = $this->get('translator');
+        $maxId = $translator->trans('menu.promo.nb');
+        $id = rand(0, $maxId - 1);
+        $url = $translator->trans('menu.promo.'.$id.'.url');
+        $text = $translator->trans('menu.promo.'.$id.'.text');
+        
+        return $this->render('KnpBundlesBundle:Main:banner.html.twig', array(
+            'url' => $url,
+            'id' => $id,
+            'text' => $text,
+        ));
     }
 }
