@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\Project;
+use Knp\Bundle\KnpBundlesBundle\Entity\Link;
 use Zend\Paginator\Paginator;
 use Knp\Menu\MenuItem;
 
@@ -130,6 +131,41 @@ class RepoController extends Controller
             'repos'         => $repos,
             'callback'      => $this->get('request')->query->get('callback')
         ));
+    }
+    
+    public function addLinkAction(Request $request)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            return $this->redirect($this->generateUrl('bundle_list'));
+        }
+        
+        $url = $request->request->get('url');
+        $repoId = (int)$request->request->get('repo_id');
+        $repo = $this->getRepository('Repo')->find($repoId);
+        
+        if ($repo->hasLink($url)) {
+            $error = true;
+            $errorMessage = 'links.errors.linkExists';
+        } elseif (!preg_match('$(http|https|ftp)://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?$', $url)) {
+            $error = true;
+            $errorMessage = 'links.errors.enterValidUrl';
+        } else {
+            $link = new Link($url);
+            $link->setRepo($repo);
+            $repo->addLink($link);
+            
+            $em = $this->get('doctrine')->getEntityManager();
+            $em->persist($link);
+            $em->persist($repo);
+            $em->flush();
+            
+            $error = false;
+        } 
+        
+        return $this->render('KnpBundlesBundle:Repo:links.html.twig', 
+                             array('repo' => $repo, 'error' => $error, 
+                                   'errorMessage' => isset($errorMessage) ? $errorMessage : null, 
+                                   'url' => $url));
     }
 
     /**

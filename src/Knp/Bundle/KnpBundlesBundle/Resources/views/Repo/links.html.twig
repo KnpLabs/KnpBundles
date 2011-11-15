@@ -1,0 +1,17 @@
+<div id="links-data">
+{% if repo.nbLinks != 0 %}
+    <p>{% trans %}links.existingLinks{% endtrans %}</p>
+    <ul>
+    {% for link in repo.links %}
+        <li><a href="{{ link.url }}" target="blank" rel="nofollow">{{ link.title }}</a>
+    {% endfor %}    
+    </ul>
+    <p>{% trans %}links.addLink{% endtrans %}</p>
+    {% include 'KnpBundlesBundle:Repo:addLinkForm.html.twig' %}
+{% else %}
+    <div>
+        <p>{% trans %}links.noLinks{% endtrans %}</p>
+        {% include 'KnpBundlesBundle:Repo:addLinkForm.html.twig' %}
+    </div>
+{% endif %}
+</div>

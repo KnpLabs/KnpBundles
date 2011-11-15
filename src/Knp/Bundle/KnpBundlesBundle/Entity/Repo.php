@@ -72,6 +72,13 @@ abstract class Repo
     protected $user = null;
 
     /**
+    * Links for the repo
+    *
+    * @ORM\OneToMany(targetEntity="Link", mappedBy="repo")
+    */
+    protected $links = null;    
+    
+    /**
      * Repo description
      *
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -176,6 +183,7 @@ abstract class Repo
         }
 
         $this->contributors = new ArrayCollection();
+        $this->links = new ArrayCollection();
         $this->createdAt = new \DateTime('NOW');
         $this->updatedAt = new \DateTime('NOW');
         $this->score = 0;
@@ -185,7 +193,13 @@ abstract class Repo
         $this->nbFollowers = 0;
         $this->nbForks = 0;
     }
-
+    
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    
     /**
      * Get homepage
      *
@@ -571,6 +585,53 @@ abstract class Repo
         return $this->updatedAt;
     }
 
+    /**
+    * Get links
+    *
+    * @return ArrayCollection
+    */
+    public function getLinks()
+    {
+        return $this->links;
+    }
+    
+    /**
+    * Get the number of links
+    *
+    * @return integer
+    */
+    public function getNbLinks()
+    {
+        return count($this->links);
+    }
+    
+    public function hasLink($url)
+    {
+        foreach ($this->getLinks() as $link) {
+            if ($link->getUrl() == $url) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+    * Set links
+    *
+    * @param  array
+    * @return null
+    */
+    public function setLinks(array $links)
+    {
+        $this->links = new ArrayCollection($links);
+    }
+    
+    public function addLink(Link $link)
+    {
+        $this->links[] = $link;
+    }
+    
     /**
      * Get contributors
      *

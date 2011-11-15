@@ -634,6 +634,52 @@ h1 {
         margin: 0 0 20px 0;
         width: 628px;
     }
+    
+    #repo-show #links {
+        float:left;
+        width:628px;
+        margin: 0 0 20px 0px;
+        font-size: 12px;
+        padding: 10px;
+        background: #fafafa;
+        border: 1px solid #DDDDDD;
+    }
+    #repo-show #links ul {
+        padding-bottom: 10px;
+    }
+    #repo-show #links ul li {
+        margin-left: 10px;
+    }
+
+/* ----- Add link form ----- */
+    #add-url label {
+        float: left;
+        line-height: 29px;
+        margin-right: 10px;
+    }
+    #add-url input {
+        float: left;
+        border: none;
+        height: 25px;
+        width: 318px;
+        padding: 1px 7px 1px 7px;
+        color: #666;
+        font-size: 14px;
+        margin: 0;
+        outline: none;
+        border: 1px solid #DDDDDD;
+    }
+    #add-url button {
+        float: left;
+        margin-left: 10px;
+        height: 29px;
+        line-height: 29px;
+    }
+    #add-url button:hover { cursor: pointer; }
+    #add-url .error { 
+        color: red;
+        padding-top: 5px; 
+    }
 
 /* ----- Developers List ----- */
 
