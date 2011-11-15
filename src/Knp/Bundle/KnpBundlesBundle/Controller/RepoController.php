@@ -132,18 +132,19 @@ class RepoController extends Controller
             'callback'      => $this->get('request')->query->get('callback')
         ));
     }
-    
+
     public function addLinkAction(Request $request)
     {
         if (!$request->isXmlHttpRequest()) {
             return $this->redirect($this->generateUrl('bundle_list'));
         }
         
-        $url = $request->request->get('url');
-        $repoId = (int)$request->request->get('repo_id');
+        $content = json_decode($request->getContent());
+        $url = $content->url;
+        $repoId = (int)$content->repo_id;
         $repo = $this->getRepository('Repo')->find($repoId);
         
-        if ($repo->hasLink($url)) {
+        if ($repo && $repo->hasLink($url)) {
             $error = true;
             $errorMessage = 'links.errors.linkExists';
         } elseif (!preg_match('$(http|https|ftp)://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?$', $url)) {
@@ -151,21 +152,19 @@ class RepoController extends Controller
             $errorMessage = 'links.errors.enterValidUrl';
         } else {
             $link = new Link($url);
-            $link->setRepo($repo);
             $repo->addLink($link);
             
             $em = $this->get('doctrine')->getEntityManager();
-            $em->persist($link);
             $em->persist($repo);
             $em->flush();
             
             $error = false;
+            $errorMessage = '';
         } 
         
         return $this->render('KnpBundlesBundle:Repo:links.html.twig', 
-                             array('repo' => $repo, 'error' => $error, 
-                                   'errorMessage' => isset($errorMessage) ? $errorMessage : null, 
-                                   'url' => $url));
+                                array('repo' => $repo, 'error' => $error, 
+                                      'errorMessage' => $errorMessage, 'url' => $url));
     }
 
     /**
@@ -196,7 +195,7 @@ class RepoController extends Controller
     {
         return $this->get('knp_bundles.entity_manager')->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\'.$class);
     }
-    
+
     protected function highlightMenu($highlightBundlesMenu)
     {
         if ($highlightBundlesMenu) {

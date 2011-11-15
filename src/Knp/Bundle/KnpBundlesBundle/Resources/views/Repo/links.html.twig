@@ -3,7 +3,7 @@
     <p>{% trans %}links.existingLinks{% endtrans %}</p>
     <ul>
     {% for link in repo.links %}
-        <li><a href="{{ link.url }}" target="blank" rel="nofollow">{{ link.title }}</a>
+        <li><a href="{{ link.url }}" target="blank" rel="nofollow">{{ link.title | default(link.url) }}</a>
     {% endfor %}    
     </ul>
     <p>{% trans %}links.addLink{% endtrans %}</p>

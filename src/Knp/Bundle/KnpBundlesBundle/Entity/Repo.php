@@ -74,7 +74,7 @@ abstract class Repo
     /**
     * Links for the repo
     *
-    * @ORM\OneToMany(targetEntity="Link", mappedBy="repo")
+    * @ORM\OneToMany(targetEntity="Link", mappedBy="repo", cascade={"persist"})
     */
     protected $links = null;    
     
@@ -198,7 +198,6 @@ abstract class Repo
     {
         return $this->id;
     }
-    
     
     /**
      * Get homepage
@@ -588,7 +587,7 @@ abstract class Repo
     /**
     * Get links
     *
-    * @return ArrayCollection
+    * @return Collection
     */
     public function getLinks()
     {
@@ -616,20 +615,15 @@ abstract class Repo
         return false;
     }
     
-    /**
-    * Set links
-    *
-    * @param  array
-    * @return null
-    */
-    public function setLinks(array $links)
+    public function setLinks($links)
     {
         $this->links = new ArrayCollection($links);
     }
-    
+
     public function addLink(Link $link)
     {
         $this->links[] = $link;
+        $link->setRepo($this);
     }
     
     /**

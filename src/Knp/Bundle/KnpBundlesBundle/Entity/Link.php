@@ -18,11 +18,6 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  */
 class Link
 {
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-        $metadata->addPropertyConstraint('url', new Constraints\NotBlank());
-    }
-
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -35,14 +30,14 @@ class Link
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $title = null;
+    protected $title;
 
     /**
      * Link url
      *
      * @ORM\Column(type="string", length=255)
      */
-    protected $url = null;
+    protected $url;
 
 
     /**
@@ -51,14 +46,17 @@ class Link
      * @ORM\ManyToOne(targetEntity="Repo", inversedBy="links")
      * @ORM\JoinColumn(name="repo_id", referencedColumnName="id", nullable=false)
      */
-    protected $repo = null;
+    protected $repo;
 
     public function __construct($url, $title = null)
     {
-        $this->setUrl($url);
-        if (!is_null($title)) {
-            $this->setTitle($title);
-        }
+        $this->url = $url;
+        $this->title = $title;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('url', new Constraints\NotBlank());
     }
 
     /**
@@ -68,7 +66,7 @@ class Link
      */
     public function getTitle()
     {
-        return !is_null($this->title) ? $this->title : $this->getUrl();
+        return $this->title;
     }
 
     /**
