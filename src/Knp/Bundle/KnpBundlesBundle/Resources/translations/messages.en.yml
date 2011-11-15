@@ -116,3 +116,6 @@ links:
     existingLinks: "Existing links:"
     addLink: "You can add new link to this repo:"
     noLinks: "No links were added to this repo. Add the first link."
+    
+addRepo:
+    addRepoManually: "Add GitHub repo manually"    

@@ -139,11 +139,10 @@ class RepoController extends Controller
             return $this->redirect($this->generateUrl('bundle_list'));
         }
         
-        $content = json_decode($request->getContent());
-        $url = $content->url;
-        $repoId = (int)$content->repo_id;
+        $url = $request->request->get('url');
+        $repoId = (int)$request->request->get('repo_id');
         $repo = $this->getRepository('Repo')->find($repoId);
-        
+
         if ($repo && $repo->hasLink($url)) {
             $error = true;
             $errorMessage = 'links.errors.linkExists';
@@ -161,7 +160,7 @@ class RepoController extends Controller
             $error = false;
             $errorMessage = '';
         } 
-        
+
         return $this->render('KnpBundlesBundle:Repo:links.html.twig', 
                                 array('repo' => $repo, 'error' => $error, 
                                       'errorMessage' => $errorMessage, 'url' => $url));

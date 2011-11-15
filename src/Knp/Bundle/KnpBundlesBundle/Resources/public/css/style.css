@@ -199,7 +199,7 @@ h1 {
         outline: none;
         background: url(../images/search_button_bg.png) no-repeat;
     }
-    #search-box button:hover { cursor: pointer; }
+    #search-box { cursor: pointer; }
 
 #locales {
     float: right;
@@ -635,7 +635,7 @@ h1 {
         width: 628px;
     }
     
-    #repo-show #links {
+    #links {
         float:left;
         width:628px;
         margin: 0 0 20px 0;
@@ -644,10 +644,10 @@ h1 {
         background: #fafafa;
         border: 1px solid #DDDDDD;
     }
-    #repo-show #links ul {
+    #links ul {
         padding-bottom: 10px;
     }
-    #repo-show #links ul li {
+    #links ul li {
         margin-left: 10px;
     }
 
@@ -713,6 +713,11 @@ h1 {
         #developer-show #main .card .about .links { padding: 20px 0 20px 110px; font-size: 14px; }
             #developer-show #main .card .about .links a { color: #E49211; }
             #developer-show #main .repo .details { padding: 40px; }
+
+/* ----- Add repo ----- */
+#add-repo-btn {
+    float: right;        
+}
 
 /* ----- Search ----- */
 

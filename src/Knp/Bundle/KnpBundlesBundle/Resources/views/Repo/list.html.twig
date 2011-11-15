@@ -5,6 +5,7 @@
 {% block content %}
     <div id="main">
         <div id="sort">
+            <a class="button" id="add-repo-btn" href="">{% trans %}addRepo.addRepoManually{% endtrans %}</a>
             <ul class="tabs" id="repo-tabs">
                 {%- for field, text in sortLegends %}
                 <li{{ field == sort ? ' class="current"' : '' }}>

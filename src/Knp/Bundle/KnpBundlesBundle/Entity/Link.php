@@ -5,7 +5,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * A link to repo manuals and how-to
@@ -36,9 +36,9 @@ class Link
      * Link url
      *
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     protected $url;
-
 
     /**
      * Repo the link is for
@@ -52,11 +52,6 @@ class Link
     {
         $this->url = $url;
         $this->title = $title;
-    }
-
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-        $metadata->addPropertyConstraint('url', new Constraints\NotBlank());
     }
 
     /**

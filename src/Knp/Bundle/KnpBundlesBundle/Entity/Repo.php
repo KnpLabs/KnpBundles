@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * An Open Source Repo living on GitHub
@@ -183,7 +184,7 @@ abstract class Repo
         }
 
         $this->contributors = new ArrayCollection();
-        $this->links = new ArrayCollection();
+        $this->links = new Collection();
         $this->createdAt = new \DateTime('NOW');
         $this->updatedAt = new \DateTime('NOW');
         $this->score = 0;
@@ -615,9 +616,9 @@ abstract class Repo
         return false;
     }
     
-    public function setLinks($links)
+    public function setLinks(Collection $links)
     {
-        $this->links = new ArrayCollection($links);
+        $this->links = $links;
     }
 
     public function addLink(Link $link)
