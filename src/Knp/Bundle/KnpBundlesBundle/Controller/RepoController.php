@@ -161,9 +161,9 @@ class RepoController extends Controller
             $errorMessage = '';
         } 
 
-        return $this->render('KnpBundlesBundle:Repo:links.html.twig', 
-                                array('repo' => $repo, 'error' => $error, 
-                                      'errorMessage' => $errorMessage, 'url' => $url));
+        $data = array('repo' => $repo, 'error' => $error, 'errorMessage' => $errorMessage, 'url' => $url);
+        
+        return $this->render('KnpBundlesBundle:Repo:links.html.twig', $data);
     }
 
     /**
