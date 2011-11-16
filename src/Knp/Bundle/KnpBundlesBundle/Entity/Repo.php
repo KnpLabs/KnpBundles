@@ -343,9 +343,6 @@ abstract class Repo
         // 1 follower = 1 point
         $score = $this->getNbFollowers();
 
-        // 1 fork = 3 points
-        $score += 3 * $this->getNbForks();
-
         // Small boost for recently updated repos
         if ($this->getDaysSinceLastCommit() < 30) {
             $score += (30 - $this->getDaysSinceLastCommit()) / 5;
@@ -387,7 +384,7 @@ abstract class Repo
      */
     public function getDaysSinceLastCommit()
     {
-        return date_create()->diff($this->getLastCommitAt())->format('%d');
+        return date_create()->diff($this->getLastCommitAt())->days;
     }
 
     /**
