@@ -173,8 +173,8 @@ class RepoController extends Controller
         if ($request->request->has('repo') ) {
             $repo = $request->request->get('repo');
 
-            if (preg_match('/^[A-Za-z0-9-]+\/[A-Za-z0-9-]+$/', $repo)) {
-                $updater = $this->get('updater');
+            if (preg_match('/^[A-Za-z0-9-\.]+\/[A-Za-z0-9-\.]+$/', $repo)) {
+                $updater = $this->get('knp_bundles.updater');
                 $updater->setUp();
                 try {
                     $repos = $updater->addRepo($repo, false);

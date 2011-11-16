@@ -22,6 +22,7 @@ class KnpBundlesExtension extends Extension
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('twig.yml');
         $loader->load('menus.yml');
+        $loader->load('services.yml');
 
         $processor = new Processor();
         $config = $processor->process($this->getConfigTree(), $configs);

@@ -7,12 +7,10 @@
 {% endblock %}
 
 {% block content %}
-    {% set hasError = error is defined and error %}
     <div id="add-repo">
         <p id="introduction">{% trans %}addRepo.introText{% endtrans %}</p>
 
-        {% set hasError = error is defined and error %}
-        {% if hasError %}
+        {% if error %}
         <div class="error">
           {{ errorMessage | trans }}
         </div>
@@ -20,7 +18,7 @@
 
         <form action="{{ path('add_repo') }}" method="post">
         <label for="repo">Enter GitHub repo URL: <span class="prefilled">https://github.com/</span></label>
-        <input type="text" id="repo" name="repo" value="{% if hasError %}{{ repo }}{% endif %}" />
+        <input type="text" id="repo" name="repo" value="{% if error %}{{ repo }}{% endif %}" />
         <button id="add-repo-btn" class="button" type="submit">Add Repo</button>
         </form>
     </div>

@@ -7,8 +7,8 @@ use Knp\Bundle\KnpBundlesBundle\Git;
 use Doctrine\ORM\UnitOfWork;
 use Knp\Bundle\KnpBundlesBundle\Entity\Repo as RepoEntity;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
-use Knp\Bundle\KnpBundlesBundle\Updater\Exception\RepoNotFoundException;
 
 class Updater
 {
@@ -22,7 +22,7 @@ class Updater
     private $em;
     private $output;
 
-    public function __construct($em, $gitRepoDir, $gitBin, $output = false)
+    public function __construct($em, $gitRepoDir, $gitBin, OutputInterface $output = null)
     {
         $this->output = $output ?: new NullOutput();
         $this->em = $em;
@@ -203,7 +203,7 @@ class Updater
             $user = $this->users[strtolower($username)];
         } else {
             $this->output->write(sprintf('Add user %s:', $username));
-            if (!($user = $this->githubUserApi->import($username))) {
+            if (!$user = $this->githubUserApi->import($username)) {
                 throw new UserNotFoundException();
             }
             $this->users[strtolower($user->getName())] = $user;
