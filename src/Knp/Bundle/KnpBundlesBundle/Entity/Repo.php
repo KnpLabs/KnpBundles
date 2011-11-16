@@ -184,7 +184,7 @@ abstract class Repo
         }
 
         $this->contributors = new ArrayCollection();
-        $this->links = new Collection();
+        $this->links = new ArrayCollection();
         $this->createdAt = new \DateTime('NOW');
         $this->updatedAt = new \DateTime('NOW');
         $this->score = 0;

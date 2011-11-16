@@ -1,0 +1,27 @@
+{% extends 'KnpBundlesBundle::layout.html.twig' %}
+
+{% block title %}{% trans %}addRepo.addRepo{% endtrans %}{% endblock %}
+
+{% block content_title %}
+    <h1>{% trans %}addRepo.addRepo{% endtrans %}</h1>
+{% endblock %}
+
+{% block content %}
+    {% set hasError = error is defined and error %}
+    <div id="add-repo">
+        <p id="introduction">{% trans %}addRepo.introText{% endtrans %}</p>
+
+        {% set hasError = error is defined and error %}
+        {% if hasError %}
+        <div class="error">
+          {{ errorMessage | trans }}
+        </div>
+        {% endif %}
+
+        <form action="{{ path('add_repo') }}" method="post">
+        <label for="repo">Enter GitHub repo URL: <span class="prefilled">https://github.com/</span></label>
+        <input type="text" id="repo" name="repo" value="{% if hasError %}{{ repo }}{% endif %}" />
+        <button id="add-repo-btn" class="button" type="submit">Add Repo</button>
+        </form>
+    </div>
+{% endblock %}

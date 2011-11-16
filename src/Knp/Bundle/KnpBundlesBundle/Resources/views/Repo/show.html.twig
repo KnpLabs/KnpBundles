@@ -14,7 +14,13 @@
 </div>
 {% endblock %}
 
-{% block description %}{{ repo.description }}{% endblock %}
+{% if repo.description is null %}
+{% set description = 'repo.noDescription' | trans %}
+{% else %}
+{% set description = repo.description %}
+{% endif %}
+
+{% block description %}{{ description }}{% endblock %}
 
 {% block content %}
     <div class="commits">
@@ -36,7 +42,7 @@
 
     <div id="main">
         <div class="details">
-            <p class="description">{{ repo.description }}</p>
+            <p class="description">{{ description }}</p>
         </div>
     </div>
 

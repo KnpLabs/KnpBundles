@@ -118,4 +118,11 @@ links:
     noLinks: "No links were added to this repo. Add the first link."
     
 addRepo:
-    addRepoManually: "Add GitHub repo manually"    
+    addRepoManually: "Add GitHub repo manually"
+    addRepo: "Add GitHub repo"
+    introText: "You can add GitHub repo manually by entering its url. Basic info will be available immediately while some additional info should be fetched in some hours. Please be patient."
+    invalidRepoName: "Please enter a valid repo name (e.g. knplabs/KnpBundles)"
+    userNotFound: "Specified user was not found on GitHub"
+
+repo:
+    noDescription: "We're fetching informations about this repo. In a few hours, you'll know everything about it."

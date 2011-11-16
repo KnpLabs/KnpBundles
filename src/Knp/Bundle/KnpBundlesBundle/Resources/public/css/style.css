@@ -674,8 +674,8 @@ h1 {
         margin-left: 10px;
         height: 29px;
         line-height: 29px;
+        cursor: pointer;
     }
-    #add-url button:hover { cursor: pointer; }
     #add-url .error { 
         color: red;
         padding-top: 5px; 
@@ -715,10 +715,47 @@ h1 {
             #developer-show #main .repo .details { padding: 40px; }
 
 /* ----- Add repo ----- */
-#add-repo-btn {
-    float: right;        
+#add-repo-btn { float: right; }
+#add-repo p#introduction {
+    padding-bottom: 10px;
+    font-size: 12px;
 }
-
+#add-repo label {
+    float: left;
+    line-height: 29px;
+    margin-right: 5px;
+    font-size: 14px;
+}
+#add-repo input {
+    float: left;
+    border: none;
+    height: 25px;
+    width: 318px;
+    padding: 1px 7px 1px 7px;
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+    margin-bottom: 20px;
+    outline: none;
+    border: 1px solid #DDDDDD;
+}
+#add-repo button {
+    float: left;
+    margin-left: 10px;
+    height: 29px;
+    line-height: 29px;
+    cursor: pointer;
+}
+#add-repo .error { 
+    color: red;
+    padding-top: 5px;
+    font-size: 12px;
+}
+#add-repo span.prefilled {
+    font-size: 14px;
+    line-height: 29px;
+    margin-left: 20px;
+}
 /* ----- Search ----- */
 
 #search {}

@@ -1,5 +1,6 @@
 imports:
     - { resource: parameters.yml }
+    - { resource: @KnpBundlesBundle/Resources/config/services.yml }
 
 framework:
     charset:          UTF-8
