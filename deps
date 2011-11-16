@@ -60,7 +60,7 @@
     version=v1.0.1
 
 [ZendFramework]
-    git=git://git.zendframework.com/zf.git
+    git=http://github.com/zendframework/zf2
     target=zend
 
 [KnpMarkdownBundle]
