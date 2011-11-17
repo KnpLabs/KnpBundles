@@ -86,7 +86,7 @@
 
         //check if the element is in view, if not move to it
         if ((elem.eq(curPosition).viewportOffset().top + elem.eq(curPosition).height()) > $(window).height() || elem.eq(curPosition).viewportOffset().top < 0) {
-            $('html, body').animate({scrollTop: elem.eq(curPosition).offset().top}, 500);
+            $('html, body').animate({scrollTop: elem.eq(curPosition).offset().top}, {duration: 500, queue: false});
         }
     }
     
