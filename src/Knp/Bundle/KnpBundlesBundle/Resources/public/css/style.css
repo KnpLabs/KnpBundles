@@ -199,7 +199,7 @@ h1 {
         outline: none;
         background: url(../images/search_button_bg.png) no-repeat;
     }
-    #search-box button:hover { cursor: pointer; }
+    #search-box { cursor: pointer; }
 
 #locales {
     float: right;
@@ -634,6 +634,52 @@ h1 {
         margin: 0 0 20px 0;
         width: 628px;
     }
+    
+    #links {
+        float:left;
+        width:628px;
+        margin: 0 0 20px 0;
+        font-size: 12px;
+        padding: 10px;
+        background: #fafafa;
+        border: 1px solid #DDDDDD;
+    }
+    #links ul {
+        padding-bottom: 10px;
+    }
+    #links ul li {
+        margin-left: 10px;
+    }
+
+/* ----- Add link form ----- */
+    #add-url label {
+        float: left;
+        line-height: 29px;
+        margin-right: 10px;
+    }
+    #add-url input {
+        float: left;
+        border: none;
+        height: 25px;
+        width: 318px;
+        padding: 1px 7px 1px 7px;
+        color: #666;
+        font-size: 14px;
+        margin: 0;
+        outline: none;
+        border: 1px solid #DDDDDD;
+    }
+    #add-url button {
+        float: left;
+        margin-left: 10px;
+        height: 29px;
+        line-height: 29px;
+        cursor: pointer;
+    }
+    #add-url .error { 
+        color: red;
+        padding-top: 5px; 
+    }
 
 /* ----- Developers List ----- */
 
@@ -668,6 +714,48 @@ h1 {
             #developer-show #main .card .about .links a { color: #E49211; }
             #developer-show #main .repo .details { padding: 40px; }
 
+/* ----- Add repo ----- */
+#add-repo-btn { float: right; }
+#add-repo p#introduction {
+    padding-bottom: 10px;
+    font-size: 12px;
+}
+#add-repo label {
+    float: left;
+    line-height: 29px;
+    margin-right: 5px;
+    font-size: 14px;
+}
+#add-repo input {
+    float: left;
+    border: none;
+    height: 25px;
+    width: 318px;
+    padding: 1px 7px 1px 7px;
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+    margin-bottom: 20px;
+    outline: none;
+    border: 1px solid #DDDDDD;
+}
+#add-repo button {
+    float: left;
+    margin-left: 10px;
+    height: 29px;
+    line-height: 29px;
+    cursor: pointer;
+}
+#add-repo .error { 
+    color: red;
+    padding-top: 5px;
+    font-size: 12px;
+}
+#add-repo span.prefilled {
+    font-size: 14px;
+    line-height: 29px;
+    margin-left: 20px;
+}
 /* ----- Search ----- */
 
 #search {}

@@ -6,6 +6,9 @@ use Knp\Bundle\KnpBundlesBundle\Github;
 use Knp\Bundle\KnpBundlesBundle\Git;
 use Doctrine\ORM\UnitOfWork;
 use Knp\Bundle\KnpBundlesBundle\Entity\Repo as RepoEntity;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 
 class Updater
 {
@@ -19,9 +22,9 @@ class Updater
     private $em;
     private $output;
 
-    public function __construct($em, $gitRepoDir, $gitBin, $output)
+    public function __construct($em, $gitRepoDir, $gitBin, OutputInterface $output = null)
     {
-        $this->output = $output;
+        $this->output = $output ?: new NullOutput();
         $this->em = $em;
         $this->githubClient = new \Github_Client();
         $this->githubSearch = new Github\Search($this->githubClient, new \Goutte\Client(), $this->output);
@@ -81,7 +84,7 @@ class Updater
      * @param string A full repo name like knplabs/KnpMenuBundle
      * @return Repo
      */
-    public function addRepo($fullName)
+    public function addRepo($fullName, $updateRepo = true)
     {
         list($username, $repoName) = explode('/', $fullName);
         
@@ -103,8 +106,10 @@ class Updater
 
         $this->em->flush();
         
-        $this->updateRepo($repo);
-        
+        if ($updateRepo) {
+            $this->updateRepo($repo);
+        }
+
         return $repo;
     }
 
@@ -198,7 +203,9 @@ class Updater
             $user = $this->users[strtolower($username)];
         } else {
             $this->output->write(sprintf('Add user %s:', $username));
-            $user = $this->githubUserApi->import($username);
+            if (!$user = $this->githubUserApi->import($username)) {
+                throw new UserNotFoundException();
+            }
             $this->users[strtolower($user->getName())] = $user;
             $this->em->persist($user);
         }

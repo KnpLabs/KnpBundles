@@ -14,8 +14,11 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\Project;
+use Knp\Bundle\KnpBundlesBundle\Entity\Link;
 use Zend\Paginator\Paginator;
 use Knp\Menu\MenuItem;
+use Knp\Bundle\KnpBundlesBundle\Updater\Updater;
+use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 
 class RepoController extends Controller
 {
@@ -132,6 +135,73 @@ class RepoController extends Controller
         ));
     }
 
+    public function addLinkAction(Request $request)
+    {
+        if (!$request->isXmlHttpRequest()) {
+            return $this->redirect($this->generateUrl('bundle_list'));
+        }
+        
+        $url = $request->request->get('url');
+        $repoId = (int)$request->request->get('repo_id');
+        $repo = $this->getRepository('Repo')->find($repoId);
+
+        if ($repo && $repo->hasLink($url)) {
+            $error = true;
+            $errorMessage = 'links.errors.linkExists';
+        } elseif (!preg_match('$(http|https|ftp)://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?$', $url)) {
+            $error = true;
+            $errorMessage = 'links.errors.enterValidUrl';
+        } else {
+            $link = new Link($url);
+            $repo->addLink($link);
+            
+            $em = $this->get('doctrine')->getEntityManager();
+            $em->persist($repo);
+            $em->flush();
+            
+            $error = false;
+            $errorMessage = '';
+        } 
+
+        $data = array('repo' => $repo, 'error' => $error, 'errorMessage' => $errorMessage, 'url' => $url);
+
+        return $this->render('KnpBundlesBundle:Repo:links.html.twig', $data);
+    }
+
+    public function addAction(Request $request)
+    {
+        if ($request->request->has('repo') ) {
+            $repo = $request->request->get('repo');
+
+            if (preg_match('/^[A-Za-z0-9-\.]+\/[A-Za-z0-9-\.]+$/', $repo)) {
+                $updater = $this->get('knp_bundles.updater');
+                $updater->setUp();
+                try {
+                    $repos = $updater->addRepo($repo, false);
+    
+                    $repoParts = explode('/', $repo);
+                    $params = array('username' => $repoParts[0], 'name' => $repoParts[1]);
+    
+                    return $this->redirect($this->generateUrl('repo_show', $params));
+                } catch (UserNotFoundException $e) {
+                    $error = true;
+                    $errorMessage = 'addRepo.userNotFound';
+                }
+            } else {
+                $error = true;
+                $errorMessage = 'addRepo.invalidRepoName';
+            }
+        } else {
+            $repo = '';
+            $error = false;
+            $errorMessage = '';
+        }
+
+        $data = array('repo' => $repo, 'error' => $error, 'errorMessage' => $errorMessage);
+        
+        return $this->render('KnpBundlesBundle:Repo:add.html.twig', $data);
+    }
+
     /**
      * Returns the paginator instance configured for the given query and page
      * number
@@ -160,7 +230,7 @@ class RepoController extends Controller
     {
         return $this->get('knp_bundles.entity_manager')->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\'.$class);
     }
-    
+
     protected function highlightMenu($highlightBundlesMenu)
     {
         if ($highlightBundlesMenu) {

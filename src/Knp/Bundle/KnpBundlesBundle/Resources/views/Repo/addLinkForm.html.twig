@@ -1,0 +1,12 @@
+<form method="post" action="{{ path('add_link') }}" id="add-url">
+    {% set hasError = error is defined and error %}
+    {% if hasError %}
+    <div class="error">
+      {{ errorMessage | trans }}
+    </div>
+    {% endif %}
+    <label for="url">URL:</label>
+    <input type="text" id="url" name="url" value="{% if hasError %}{{ url }}{% else %}http://{% endif %}" />
+    <input type="hidden" id="repo-id" name="repo-id" value="{{ repo.id }}" />
+    <button id="add-link-btn" class="button" type="submit">Add URL</button>
+</form>

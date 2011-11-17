@@ -1,0 +1,7 @@
+parameters:
+    knp_bundles.updater.class:    Knp\Bundle\KnpBundlesBundle\Updater\Updater
+
+services:
+    knp_bundles.updater:
+        class:                    %knp_bundles.updater.class%
+        arguments:                [@knp_bundles.entity_manager, %knp_bundles.git_bin%, %knp_bundles.repos_dir%]

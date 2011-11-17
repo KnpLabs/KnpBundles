@@ -61,6 +61,20 @@
 
             return false;
         });
+
+        // Add repo url
+        $('#links').delegate('form', 'submit', function() {
+            repo_id = $('#repo-id').val();
+            url = $('#url').val();
+
+            $.post( $('form#add-url').attr( 'action' ), { "url": url, "repo_id": repo_id },
+                function(data) {
+    	            $('#links').html(data);
+    	        }
+    	    );
+
+            return false;
+        });
     });
 
     function moveElement(className ,direction)
