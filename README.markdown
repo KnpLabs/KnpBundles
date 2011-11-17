@@ -23,7 +23,7 @@ edit it according to your database settings.
 
 ### Install vendors
 
-    ./bin/vendors install
+    php bin/vendors install
 
 #### Create database and tables
 
