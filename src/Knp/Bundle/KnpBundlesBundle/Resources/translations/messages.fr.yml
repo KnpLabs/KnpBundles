@@ -14,9 +14,6 @@ menu:
             text: "Trouvez un [ninja Symfony]|chez KnpLabs !"
             url: "http://knplabs.fr/"
 
-header:
-    baseline: "La liste non-officielle des bundles Symfony2"
-
 search:
     label: "Rechercher :"
     tooltip:
@@ -28,6 +25,8 @@ footer:
     symfony2bundles:
         url: "http://knplabs.fr/blog/symfony2bundles-becomes-knpbundle"
         label: "Pourquoi renommer Symfony2Bundles ?"
+    language:
+        title: "Langue"
 
 credits:
     title: "Crédits"

@@ -28,34 +28,28 @@
 </head>
 <body {% block body_attributes %}{% endblock %}>
     <div id="header">
-        <div id="header-inner">
-            <a href="{{ path('bundle_list') }}" title="KnpBundles" id="logo">
-                <img src="{{ asset('bundles/knpbundles/images/knpbundles.png') }}" alt="Knp Bundles: {{ 'header.baseline'|trans }}" />
-                <div id="baseline">{{ 'header.baseline'|trans }}</div>
-            </a>
-
-            {% render 'KnpBundlesBundle:Main:banner' %}
-
+        <div class="center">
             {{ knp_menu_render(knp_menu_get('main').setAttribute('id', 'menu')) }}
         </div>
     </div><!-- /#header -->
-
-    <div id="content-wrapper">
+    <div id="header2">
         <div class="center">
-            <div id="locales">
-                <a hreflang="en" href="{{ locale_url(app.request, 'en') }}">En</a>
-                |
-                <a hreflang="fr" href="{{ locale_url(app.request, 'fr') }}">Fr</a>
-            </div>
+            <a href="{{ path('bundle_list') }}" title="KnpBundles" id="logo">
+                <img src="{{ asset('bundles/knpbundles/images/knpbundles.png') }}" alt="Knp Bundles: {{ 'header.baseline'|trans }}" />
+            </a>
 
             <form method="get" action="{{ path('search') }}" id="search-box">
                 <label for="search-query">{% trans %}search.label{% endtrans %}</label>
                 <input type="text" id="search-query" name="q" value="{% block search_query %}{% endblock %}" />
                 <button id="search-btn">{% trans %}search.label{% endtrans %}</button>
             </form>
-            <div id="global-tip">{% trans %}search.tooltip.0{% endtrans %}<br>{% trans %}search.tooltip.1{% endtrans %}</div>
-        
-            <div id="content" class="center clearfix">
+
+            {% render 'KnpBundlesBundle:Main:banner' %}
+        </div>
+    </div>
+    <div id="content-wrapper">
+        <div class="center">
+            <div id="content" class="clearfix">
                 <div id="content-title">
                     {% block content_title %}
                     <h1>{% block h1 %}{% endblock %}</h1>
@@ -89,6 +83,15 @@
 
                             <li><a href="http://twitter.com/knplabs">Knp on Twitter</a></li>
                             <li><a href="http://behat.org">Behat: BDD framework for PHP</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+                <dl>
+                    <dt>{% trans %}footer.language.title{% endtrans %}</dt>
+                    <dd>
+                        <ul>
+                            <li><a hreflang="en" href="{{ locale_url(app.request, 'en') }}">{% trans %}footer.language.en{% endtrans %}</a></li>
+                            <li><a hreflang="fr" href="{{ locale_url(app.request, 'fr') }}">{% trans %}footer.language.fr{% endtrans %}</a></li>
                         </ul>
                     </dd>
                 </dl>

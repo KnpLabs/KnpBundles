@@ -14,9 +14,6 @@ menu:
             text: "Find a [Symfony ninja]| at KnpLabs!"
             url: "http://knplabs.com/"
 
-header:
-    baseline: "The unofficial list of bundles for Symfony2"
-
 search:
     label: "Search:"
     tooltip:
@@ -28,6 +25,10 @@ footer:
     symfony2bundles:
         url: "http://knplabs.com/blog/symfony2bundles-becomes-knpbundle"
         label: "Why renaming Symfony2Bundles?"
+    language:
+        title: "Langue"
+        en: "English"
+        fr: "Français"
 
 credits:
     title: "Credits"
