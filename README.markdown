@@ -14,17 +14,16 @@ to change the name due to [trademark issues](http://knplabs.com/blog/symfony2bun
 ### Get the code
 
     git clone git://github.com/knplabs/knpbundles.git
-    cd symfony2bundles
-    git submodule update --init
-
-The last command requires Git >= 1.6. Alternatively, you can run
-`git submodule init` and `git submodule update`.
 
 ### Configure
 
 To configure your database in your development environment, copy
 `/app/config/parameters.yml.dist` to `/app/config/parameters.yml` and 
 edit it according to your database settings.
+
+### Install vendors
+
+    php bin/vendors install
 
 #### Create database and tables
 
