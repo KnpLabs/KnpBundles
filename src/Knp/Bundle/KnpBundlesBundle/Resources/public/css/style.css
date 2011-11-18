@@ -76,7 +76,7 @@ h1{display:block;padding:20px 20px 20px 0px;margin:0;font-size:22px;line-height:
 
 /* ----- Content ----- */
 .center{width:960px;margin:0 auto;}
-#content{margin-top:10px;text-align:left;position:relative;background-color:#FFF;padding:0 20px;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;border:1px solid #DDDDDD;}
+#content{margin-top:10px;text-align:left;position:relative;background-color:#FFF;padding:0 20px;border:1px solid #DDDDDD;}
 #content-wrapper{background-color:#EFEFEF;padding-top:20px;padding-bottom:20px;padding-top:20px;}
 #main{width:100%;margin:0px;background:#fff;overflow:hidden;}
 #main h2{margin:40px 0px 20px 0px;font-size:22px;font-weight:bold;}
@@ -107,7 +107,15 @@ h1{display:block;padding:20px 20px 20px 0px;margin:0;font-size:22px;line-height:
 .markdown h4{font-size:1.2em;margin:20px 0;}
 .markdown pre{border:1px solid #BEDCE7;overflow:auto;}
 /* ----- Buttons ----- */
-.button{display:inline-block;line-height:28px;padding:0 15px;background:#000 url('../images/black_button_bg.png') repeat-x;color:#eee;font-size:12px;text-decoration:none;border-radius:12px;-moz-border-radius:12px;-webkit-border-radius:12px;}
+.button{display:inline-block;line-height:28px;padding:0 15px;color:#eee;font-size:12px;text-decoration:none;
+    background: #060311;
+    background: -webkit-gradient(linear, left top, left bottom, from(#060311), to(#000000)); /* Saf4+, Chrome */
+    background: -webkit-linear-gradient(top, #060311, #000000); /* Chrome 10+, Saf5.1+ */
+    background: -moz-linear-gradient(top, #060311, #000000); /* FF3.6+ */
+    background: -ms-linear-gradient(top, #060311, #000000); /* IE10 */
+    background: -o-linear-gradient(top, #060311, #000000); /* Opera 11.10+ */
+    background: linear-gradient(top, #060311, #000000); /* W3C */
+}
 /* ----- Tabs ----- */
 .tabs{overflow:hidden;margin-left:0;}
 .tabs li{float:left;}
@@ -148,9 +156,9 @@ h1{display:block;padding:20px 20px 20px 0px;margin:0;font-size:22px;line-height:
 /* ----- Repos & Repositories List ----- */
 #sort .sort-by{float:left;padding:5px 20px;}
 .repos-list .repo,
-.developers-list .developer{position:relative;margin:10px 0;font-size:14px;border:1px solid #dddddd;background:#f6f6f6;overflow:hidden;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;}
+.developers-list .developer{position:relative;margin:10px 0;font-size:14px;border:1px solid #dddddd;background:#f6f6f6;overflow:hidden;}
 .repos-list .active,
-.developers-list .active{border:1px solid #565656;box-shadow:0 0 5px rgba(127,127,127,.5);-moz-box-shadow:0 0 5px rgba(127,127,127,.5);-webkit-box-shadow:0 0 5px rgba(127,127,127,.5);}
+.developers-list .active{border-top:1px solid #565656;border-bottom:1px solid #565656;box-shadow:0 0 5px rgba(127,127,127,.5);-moz-box-shadow:0 0 5px rgba(127,127,127,.5);-webkit-box-shadow:0 0 5px rgba(127,127,127,.5);}
 .repos-list .generals,
 .developers-list .generals,
 .repos-list .details,
