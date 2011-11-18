@@ -209,7 +209,7 @@ abstract class Repo
      */
     public function getHomepage()
     {
-      return $this->homepage;
+        return $this->homepage;
     }
 
     /**
@@ -220,7 +220,7 @@ abstract class Repo
      */
     public function setHomepage($homepage)
     {
-      $this->homepage = $homepage;
+        $this->homepage = $homepage;
     }
 
     /**
@@ -230,7 +230,7 @@ abstract class Repo
      */
     public function getIsFork()
     {
-      return $this->isFork;
+        return $this->isFork;
     }
 
     /**
@@ -241,7 +241,7 @@ abstract class Repo
      */
     public function setIsFork($isFork)
     {
-      $this->isFork = $isFork;
+        $this->isFork = $isFork;
     }
 
     /**
@@ -251,7 +251,7 @@ abstract class Repo
      */
     public function getUsesTravisCi()
     {
-      return $this->usesTravisCi;
+        return $this->usesTravisCi;
     }
 
     /**
@@ -262,7 +262,7 @@ abstract class Repo
      */
     public function setUsesTravisCi($uses)
     {
-      $this->usesTravisCi = $uses;
+        $this->usesTravisCi = $uses;
     }
 
     /**
@@ -272,7 +272,7 @@ abstract class Repo
      */
     public function getTravisCiBuildStatus()
     {
-      return $this->travisCiBuildStatus;
+        return $this->travisCiBuildStatus;
     }
 
     /**
@@ -283,7 +283,7 @@ abstract class Repo
      */
     public function setTravisCiBuildStatus($status)
     {
-      $this->travisCiBuildStatus = $status;
+        $this->travisCiBuildStatus = $status;
     }
     
     /**

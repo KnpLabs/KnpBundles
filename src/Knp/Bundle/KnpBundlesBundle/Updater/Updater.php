@@ -167,7 +167,7 @@ class Updater
         $this->em->flush();
         
         if ($repo->getUsesTravisCi()) {
-          $this->travisRepoApi->update($repo);
+            $this->travisRepoApi->update($repo);
         }
     }
 
