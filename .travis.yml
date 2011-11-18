@@ -3,9 +3,13 @@ language: php
 php:
   - 5.3
 
-before_script: |
-    php bin/vendors install && 
-    ./bin/prepare-test-env.sh &&
-    cp app/config/parameters.yml.test app/config/parameters.yml
+before_script:
+    - cp app/config/parameters.yml.test app/config/parameters.yml
+    - php bin/vendors install
+    - ./bin/prepare-test-env.sh
 
 script: phpunit --coverage-text -c app/
+
+branches:
+    except:
+        - experimental
