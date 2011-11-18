@@ -1,0 +1,13 @@
+parameters:
+    secret:            xF0FqBZkEt72eJvTKiqgixcK
+    database_driver:   pdo_sqlite
+    database_host:     ~
+    database_port:     ~
+    database_name:     kb
+    database_user:     root
+    database_password: ~
+    database_path:     %kernel.root_dir%/db-%kernel.environment%.sql
+
+    knp_bundles.github.client_id: b46912af13ee7cb7ecd3
+    knp_bundles.github.client_secret: 116f5427707fcc2a3f7c630dd356be61500b2e18
+    
