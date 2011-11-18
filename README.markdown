@@ -5,9 +5,10 @@ website, written in Symfony2.
 
 Any ideas are welcome!
 
+[![Build Status](https://secure.travis-ci.org/knplabs/knpbundles.png)](http://travis-ci.org/knplabs/knpbundles)
+
 Please note that this service was previously called Symfony2Bundles but we had
 to change the name due to [trademark issues](http://knplabs.com/blog/symfony2bundles-becomes-knpbundle).
-
 
 ## Install
 
