@@ -412,7 +412,7 @@ abstract class Repo
         }
 
         // Medium boost for repos that uses travis ci
-        if($this->usesTravisCi) {
+        if($this->getUsesTravisCi()) {
             $score += 20;
         }
         
@@ -509,7 +509,7 @@ abstract class Repo
      */
     public function getTravisUrl()
     {
-        return ($this->usesTravisCi) ? sprintf('http://travis-ci.org/%s/%s', $this->getUsername(), $this->getName()) : false;
+        return $this->getUsesTravisCi() ? sprintf('http://travis-ci.org/%s/%s', $this->getUsername(), $this->getName()) : false;
     }
 
     /**
