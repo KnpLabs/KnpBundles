@@ -24,6 +24,7 @@
             <li>{% trans %}bundles.show.infos.created{% endtrans %} <span>{{ repo.createdAt|date('date_format'|trans) }}</span></li>
             <li>{% trans %}bundles.show.infos.contributors{% endtrans %} <span>{{ repo.nbContributors }}</span></li>
             <li>{% trans %}bundles.show.infos.followers{% endtrans %} <span>{{ repo.nbFollowers }}</span></li>
+            <li>{% trans %}bundles.show.infos.buildStatus{% endtrans %} <span><a href="http://travis-ci.org/{{ repo.fullName}}">{{ ("travis.buildStatus." ~ repo.travisCiBuildStatus)|trans }}</a></span></li>
         </ul>
 
         <h3>{% trans %}bundles.show.latest_commits.title{% endtrans %}</h3>

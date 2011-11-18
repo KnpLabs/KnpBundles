@@ -22,6 +22,9 @@
             <ul class="infos">
                 <li>{% trans %}bundles.list.createdAt{% endtrans %} <span>{{ repo.createdAt|date('date_format'|trans) }}</span></li>
                 <li>{% trans %}bundles.list.lastCommit{% endtrans %} <span>{{ repo.lastCommitAt|date('date_format'|trans) }}</span></li>
+                {% if repo.usesTravisCi %}
+                  <li>{% trans %}bundles.list.buildStatus{% endtrans %}<span><a href="http://travis-ci.org/{{ repo.fullName}}">{{ ("travis.buildStatus." ~ repo.travisCiBuildStatus)|trans }}</a></span></li>
+                {% endif %}
             </ul>
         </div>
     </li>

@@ -169,6 +169,20 @@ abstract class Repo
      */
     protected $isFork = false;
 
+    /**
+     * True if the Repo uses Travis CI
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $usesTravisCi = false;
+	
+    /**
+     * Travis Ci last build status
+     *
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    protected $travisCiBuildStatus = null;
+        
     public function __construct($fullName = null)
     {
         if ($fullName) {
@@ -184,6 +198,8 @@ abstract class Repo
         $this->tags = serialize(array());
         $this->nbFollowers = 0;
         $this->nbForks = 0;
+        $this->usesTravisCi = false;
+        $this->travisCiBuildStatus = null;
     }
 
     /**
@@ -228,6 +244,48 @@ abstract class Repo
       $this->isFork = $isFork;
     }
 
+    /**
+     * Get whether repo uses Travis CI
+     *
+     * @return bool
+     */
+    public function getUsesTravisCi()
+    {
+      return $this->usesTravisCi;
+    }
+
+    /**
+     * Set whether repo uses Travis CI
+     *
+     * @param  bool
+     * @return null
+     */
+    public function setUsesTravisCi($uses)
+    {
+      $this->usesTravisCi = $uses;
+    }
+
+    /**
+     * Get Travis Ci last build status
+     *
+     * @return string
+     */
+    public function getTravisCiBuildStatus()
+    {
+      return $this->travisCiBuildStatus;
+    }
+
+    /**
+     * Set Travis Ci last build status
+     *
+     * @param  string
+     * @return null
+     */
+    public function setTravisCiBuildStatus($status)
+    {
+      $this->travisCiBuildStatus = $status;
+    }
+    
     /**
      * Get tags
      *
@@ -353,6 +411,11 @@ abstract class Repo
             $score += 5;
         }
 
+        // Medium boost for repos that uses travis ci
+        if($this->usesTravisCi) {
+            $score += 20;
+        }
+        
         $this->setScore($score);
     }
 

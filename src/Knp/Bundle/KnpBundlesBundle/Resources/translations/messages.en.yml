@@ -76,6 +76,7 @@ bundles.show:
         created: "Created"
         contributors: "Nb of contributors:"
         followers: "Nb of followers:"
+        buildStatus: "Build status:"
     latest_commits:
         title: "Latest commits"
         by: "By"
@@ -93,6 +94,7 @@ bundles.list:
         best: "Best score"
         featured: "What's hot?"
         newest: "Newest bundles"
+    buildStatus: "Build status "
     
 projects:
     meta:
@@ -136,3 +138,9 @@ api:
 
 notFound:
     title: "404 - Page not found"
+
+travis:
+    buildStatus:
+        passing: "Passing"
+        failing: "Failing"
+        unknown: "Unknown"
