@@ -57,9 +57,9 @@ credits:
 
 bundles:
     meta:
-        title: "Discover %count% Symfony2 Bundles"
+        title: "Discover %count% bundles for Symfony2"
         description: "All Open Source Symfony 2 Bundles sorted by %sort%"
-    title: "%count% Symfony2 bundles [belong to KnpBundles' unofficial selection]"
+    title: "%count% bundles for Symfony2 [belong to KnpBundles' unofficial selection]"
     sort:
         trending: "Trending"
         best: "Best score"
@@ -98,13 +98,13 @@ projects:
     meta:
         title: "Discover %count% Symfony2 Projects"
         description: "All Open Source Symfony 2 Projects sorted by %sort%"
-    title: "%count% Symfony2 projects [belong to KnpBundles' unofficial selection]"
+    title: "%count% projects in Symfony2 [belong to KnpBundles' unofficial selection]"
 
 users:
     meta:
         title: "Discover %count% Symfony2 Developers"
         description: "All Open Source Symfony 2 Developers sorted by %sort%"
-    title: "%count% Symfony2 developers [belong to KnpBundles' unofficial selection]"
+    title: "%count% developers using Symfony2 [belong to KnpBundles' unofficial selection]"
     sort:
         name: "Alphabetical"
         best: "Best score"

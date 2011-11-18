@@ -19,15 +19,15 @@ menu:
 
 search:
     list:
-        title: "Search"
+        title: "Recherche"
         meta:
-            title: "Search Bundles and Projects"
-            description: "Search for Open Source Bundles and Projects"
+            title: "Rechercher des bundles et des projets sous Symfony2"
+            description: "Trouvez des bundles et projets open-source sous Symfony2"
     results:
-        title: "Search '%query%'"
+        title: "Recherche de '%query%'"
         meta:
-            title: "Search %query%"
-            description: "%count% Repositories found for %query%"
+            title: "Recherche de %query%"
+            description: "%count% repositories pour %query%"
     label: "Rechercher :"
     tooltip:
         0: "Appuyez sur 's' ou '/' pour effectuer une recherche ('esc' pour enlever le focus)."
@@ -57,9 +57,9 @@ credits:
 
 bundles:
     meta:
-        title: "%count% bundles Symfony2 sont sur la liste non-officielle de KnpBundles"
+        title: "%count% bundles pour Symfony2 sont sur la liste non-officielle de KnpBundles"
         description: "Tous les bundles Symfony2 open-sources triés par %sort%"
-    title: "%count% bundles Symfony2 [appartiennent à la sélection non-officielle de KnpBundles]"
+    title: "%count% bundles pour Symfony2 [appartiennent à la sélection non-officielle de KnpBundles]"
     sort:
         trending: "Trending"
         best: "Meilleur score"
@@ -97,14 +97,14 @@ bundles.list:
 projects:
     meta:
         title: "Découvrez %count% projets Symfony2"
-        description: "Tous les projets open-source Symfony 2 Projects triés par %sort%"
-    title: "%count% projets Symfony2 [appartiennent à la sélection non-officielle de KnpBundles]"
+        description: "Tous les projets open-source Symfony 2 triés par %sort%"
+    title: "%count% projets sur Symfony2 [appartiennent à la sélection non-officielle de KnpBundles]"
 
 users:
     meta:
         title: "Découvrez tous les %count% développeurs Symfony2"
-        description: "Tous les développeurs Symfony qui aiment l'open-source, triés par %sort%"
-    title: "%count% développeurs Symfony2 [appartiennent à la sélection non-officielle de KnpBundles]"
+        description: "Tous les développeurs utilisant Symfony qui aiment l'open-source, triés par %sort%"
+    title: "%count% développeurs utilisant Symfony2 [appartiennent à la sélection non-officielle de KnpBundles]"
     sort:
         name: "Alphabétique"
         best: "Meilleur score"
