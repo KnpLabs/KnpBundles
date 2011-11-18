@@ -29,9 +29,10 @@ footer:
         url: "http://knplabs.com/blog/symfony2bundles-becomes-knpbundle"
         label: "Why renaming Symfony2Bundles?"
     language:
-        title: "Langue"
+        title: "Language"
         en: "English"
         fr: "Français"
+        pl: "Polski"
 
 credits:
     title: "Credits"
