@@ -18,10 +18,24 @@ menu:
             url: "http://knplabs.fr/service/symfony-support"
 
 search:
+    list:
+        title: "Search"
+        meta:
+            title: "Search Bundles and Projects"
+            description: "Search for Open Source Bundles and Projects"
+    results:
+        title: "Search '%query%'"
+        meta:
+            title: "Search %query%"
+            description: "%count% Repositories found for %query%"
     label: "Rechercher :"
     tooltip:
         0: "Appuyez sur 's' ou '/' pour effectuer une recherche ('esc' pour enlever le focus)."
         1: "Utilisez ↓ / j, ↑ / k et 'entrée' pour naviguer. Utilisez → / l, ← / h pour changer de page."
+    content:
+        description:
+            part1: "Please use the search input at the top right."
+            part2: "The engine will search in repository name, description and developer name."
 
 header:
     baseline: "Bundles pour Symfony2"
@@ -47,6 +61,7 @@ bundles:
         description: "Tous les bundles Symfony2 open-sources triés par %sort%"
     title: "%count% bundles Symfony2 [appartiennent à la sélection non-officielle de KnpBundles]"
     sort:
+        trending: "Trending"
         best: "Meilleur score"
         updated: "Mis à jour récemment"
         newest: "Nouveaux"
@@ -73,6 +88,11 @@ bundles.list:
     by: " par "
     createdAt: "Créé le "
     lastCommit: "Dernier commit "
+    recentCommits: "Recent commits"
+    title:
+        best: "Best score"
+        featured: "What's hot?"
+        newest: "Newest bundles"
     
 projects:
     meta:

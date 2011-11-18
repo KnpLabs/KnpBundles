@@ -4,11 +4,11 @@
 
 {% block search_query %}{{ query }}{% endblock %}
 
-{% block title %}Search {{ query }}{% endblock %}
+{% block title %}{% trans with {'%query%': query} %}search.results.meta.title{% endtrans %}{% endblock %}
 
-{% block h1 %}Search "{{ query }}"{% endblock %}
+{% block h1 %}{% trans with {'%query%': query} %}search.results.title{% endtrans %}{% endblock %}
 
-{% block description %}{{ repos|length }} Repositories found for {{ query }}{% endblock %}
+{% block description %}{% trans with {'%count%': repos|length, '%query%': query} %}search.results.meta.description{% endtrans %}{% endblock %}
 
 {% block content %}
     <div id="main">
