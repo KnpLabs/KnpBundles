@@ -54,8 +54,8 @@ a{color:#EEB342;}
 
 #promo{float:right;font-size:13px;height:60px;position:relative;}
 #promo a.img{position:absolute; bottom:0;height:56px;}
-#promo .bulle{background:#fff;margin-left:50px;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;color:#000;padding:5px;border:1px solid silver; margin-top:3px;}
-#promo a .external{color:#EDB443;}
+#promo .bulle{background:#ffffff;margin-left:50px;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;color:#000;padding:5px;border:1px solid silver; margin-top:3px;}
+#promo .bulle a{font-weight: bold; border-bottom: 1px solid #EDB443;text-decoration: none;}
 #promo a:hover{color:#EDB443;}
 
 .user-list{margin-bottom:20px;font-size:12px;width:650px;float:left;}
