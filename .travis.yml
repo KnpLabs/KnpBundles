@@ -1,0 +1,11 @@
+language: php
+
+php:
+  - 5.3
+
+before_script: |
+    php bin/vendors install && 
+    ./bin/prepare-test-env.sh &&
+    cp app/config/parameters.yml.test app/config/parameters.yml
+
+script: phpunit --coverage-text -c app/
