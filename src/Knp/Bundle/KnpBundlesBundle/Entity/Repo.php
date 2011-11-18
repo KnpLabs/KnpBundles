@@ -169,6 +169,20 @@ abstract class Repo
      */
     protected $isFork = false;
 
+    /**
+     * True if the Repo uses Travis CI
+     *
+     * @ORM\Column(type="boolean")
+     */
+    protected $usesTravisCi = false;
+	
+    /**
+     * Travis Ci last build status
+     *
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    protected $travisCiBuildStatus = null;
+        
     public function __construct($fullName = null)
     {
         if ($fullName) {
@@ -184,6 +198,8 @@ abstract class Repo
         $this->tags = serialize(array());
         $this->nbFollowers = 0;
         $this->nbForks = 0;
+        $this->usesTravisCi = false;
+        $this->travisCiBuildStatus = null;
     }
 
     /**
@@ -193,7 +209,7 @@ abstract class Repo
      */
     public function getHomepage()
     {
-      return $this->homepage;
+        return $this->homepage;
     }
 
     /**
@@ -204,7 +220,7 @@ abstract class Repo
      */
     public function setHomepage($homepage)
     {
-      $this->homepage = $homepage;
+        $this->homepage = $homepage;
     }
 
     /**
@@ -214,7 +230,7 @@ abstract class Repo
      */
     public function getIsFork()
     {
-      return $this->isFork;
+        return $this->isFork;
     }
 
     /**
@@ -225,9 +241,51 @@ abstract class Repo
      */
     public function setIsFork($isFork)
     {
-      $this->isFork = $isFork;
+        $this->isFork = $isFork;
     }
 
+    /**
+     * Get whether repo uses Travis CI
+     *
+     * @return bool
+     */
+    public function getUsesTravisCi()
+    {
+        return $this->usesTravisCi;
+    }
+
+    /**
+     * Set whether repo uses Travis CI
+     *
+     * @param  bool
+     * @return null
+     */
+    public function setUsesTravisCi($uses)
+    {
+        $this->usesTravisCi = $uses;
+    }
+
+    /**
+     * Get Travis Ci last build status
+     *
+     * @return string
+     */
+    public function getTravisCiBuildStatus()
+    {
+        return $this->travisCiBuildStatus;
+    }
+
+    /**
+     * Set Travis Ci last build status
+     *
+     * @param  string
+     * @return null
+     */
+    public function setTravisCiBuildStatus($status)
+    {
+        $this->travisCiBuildStatus = $status;
+    }
+    
     /**
      * Get tags
      *
@@ -353,6 +411,11 @@ abstract class Repo
             $score += 5;
         }
 
+        // Medium boost for repos that uses travis ci
+        if($this->getUsesTravisCi()) {
+            $score += 20;
+        }
+        
         $this->setScore($score);
     }
 
@@ -437,6 +500,16 @@ abstract class Repo
     public function getGitHubUrl()
     {
         return sprintf('http://github.com/%s/%s', $this->getUsername(), $this->getName());
+    }
+
+    /**
+     * Get the Travis Ci url of this repo
+     *
+     * @return string
+     */
+    public function getTravisUrl()
+    {
+        return $this->getUsesTravisCi() ? sprintf('http://travis-ci.org/%s/%s', $this->getUsername(), $this->getName()) : false;
     }
 
     /**

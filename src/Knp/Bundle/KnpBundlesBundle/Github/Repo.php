@@ -136,6 +136,8 @@ class Repo
             }
         }
 
+        $repo->setUsesTravisCi($gitRepo->hasFile(".travis.yml"));
+        
         return $repo;
     }
 
