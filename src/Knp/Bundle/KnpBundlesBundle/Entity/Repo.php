@@ -503,6 +503,16 @@ abstract class Repo
     }
 
     /**
+     * Get the Travis Ci url of this repo
+     *
+     * @return string
+     */
+    public function getTravisUrl()
+    {
+        return ($this->usesTravisCi) ? sprintf('http://travis-ci.org/%s/%s', $this->getUsername(), $this->getName()) : false;
+    }
+
+    /**
      * Get the Git repo url
      *
      * @return string
