@@ -12,7 +12,7 @@ class UserControllerTest extends WebTestCase
         $crawler = $client->request('GET', $this->generateUrl($client, 'user_list'));
         $this->assertTrue($client->getResponse()->isSuccessful());
 
-        $this->assertRegexp('/\d+ Symfony2 Developers$/', str_replace("\n", '', trim($crawler->filter('h1')->text())));
+        $this->assertRegexp('/\d+ Symfony2 developers/i', str_replace("\n", '', trim($crawler->filter('h1')->text())));
 
         $crawler = $client->request('GET', $this->generateUrl($client, 'user_list', array('sort' => 'name')));
         $this->assertTrue($client->getResponse()->isSuccessful());

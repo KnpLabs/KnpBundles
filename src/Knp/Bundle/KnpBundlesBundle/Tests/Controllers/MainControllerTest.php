@@ -12,7 +12,7 @@ class MainControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/');
         $this->assertTrue($client->getResponse()->isSuccessful());
 
-        $this->assertEquals(1, $crawler->filter('h1:contains("Symfony2 Bundles")')->count());
+        $this->assertEquals(1, $crawler->filter('h1:contains("Symfony2 bundles")')->count());
         $this->assertEquals(1, $crawler->filter('input#search-query')->count());
     }
 
