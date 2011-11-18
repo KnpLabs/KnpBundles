@@ -30,6 +30,9 @@ footer:
         label: "Pourquoi renommer Symfony2Bundles ?"
     language:
         title: "Langue"
+        en: "English"
+        fr: "Français"
+        pl: "Polski"
 
 credits:
     title: "Crédits"
