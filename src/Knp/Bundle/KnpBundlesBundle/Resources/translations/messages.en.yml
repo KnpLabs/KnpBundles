@@ -6,13 +6,16 @@ menu:
     users: "Developers"
 
     promo:
-        nb: 2
+        nb: 3
         0:
-            text: "Get a [Symfony training]| from KnpLabs!"
+            text: "Get a [training]| by KnpLabs' ninjas!"
             url: "http://knplabs.com/training/symfony2"
         1:
-            text: "Find a [Symfony ninja]| at KnpLabs!"
+            text: "Work with [ninja developers]| at KnpLabs!"
             url: "http://knplabs.com/"
+        2:
+            text: "Get [coding assistance]|from a KnpLabs ninja!"
+            url: "http://knplabs.com/service/symfony-support"
 
 search:
     label: "Search:"
@@ -42,7 +45,7 @@ bundles:
     meta:
         title: "Discover %count% Symfony2 Bundles"
         description: "All Open Source Symfony 2 Bundles sorted by %sort%"
-    title: "Discover %count% Symfony2 Bundles"
+    title: "%count% Symfony2 bundles [belong to KnpBundles' unofficial selection]"
     sort:
         best: "Best score"
         updated: "Updated recently"
@@ -75,13 +78,13 @@ projects:
     meta:
         title: "Discover %count% Symfony2 Projects"
         description: "All Open Source Symfony 2 Projects sorted by %sort%"
-    title: "Discover %count% Symfony2 Projects"
+    title: "%count% Symfony2 projects [belong to KnpBundles' unofficial selection]"
 
 users:
     meta:
         title: "Discover %count% Symfony2 Developers"
         description: "All Open Source Symfony 2 Developers sorted by %sort%"
-    title: "Discover %count% Symfony2 Developers"
+    title: "%count% Symfony2 developers [belong to KnpBundles' unofficial selection]"
     sort:
         name: "Alphabetical"
         best: "Best score"

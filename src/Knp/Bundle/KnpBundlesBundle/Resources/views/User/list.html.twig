@@ -6,7 +6,7 @@
 
 {% block description %}{% trans with {'%count%': users.totalItemCount, '%sort%': sort} %}users.meta.description{% endtrans %}{% endblock %}
 
-{% block h1 %}{% trans with {'%count%': users.totalItemCount, '%sort%': sort} %}users.title{% endtrans %}{% endblock %}
+{% block h1 %}{% trans with {'%count%': users.totalItemCount, '%sort%': sort, '[': '<span>', ']': '</span>'} %}users.title{% endtrans %}{% endblock %}
 
 {% block content %}
     <div id="main">

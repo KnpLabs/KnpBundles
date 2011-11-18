@@ -6,13 +6,16 @@ menu:
     users: "Développeurs"
 
     promo:
-        nb: 2
+        nb: 3
         0:
-            text: "Suivez une [formation Symfony]|par KnpLabs !"
+            text: "Suivez une [formation]|par les ninjas KnpLabs !"
             url: "http://knplabs.fr/"
         1:
-            text: "Trouvez un [ninja Symfony]|chez KnpLabs !"
+            text: "Avec KnpLabs, confiez votre projet| à des [développeurs ninjas] !"
             url: "http://knplabs.fr/"
+        2:
+            text: "Demandez à un ninja KnpLabs| d'[accompagner votre projet] !"
+            url: "http://knplabs.fr/service/symfony-support"
 
 search:
     label: "Rechercher :"
@@ -40,9 +43,9 @@ credits:
 
 bundles:
     meta:
-        title: "Découvrez %count% Bundles pour Symfony2"
+        title: "%count% bundles Symfony2 sont sur la liste non-officielle de KnpBundles"
         description: "Tous les bundles Symfony2 open-sources triés par %sort%"
-    title: "Découvrez %count% Bundles pour Symfony2"
+    title: "%count% bundles Symfony2 [appartiennent à la sélection non-officielle de KnpBundles]"
     sort:
         best: "Meilleur score"
         updated: "Mis à jour récemment"
@@ -75,13 +78,13 @@ projects:
     meta:
         title: "Découvrez %count% projets Symfony2"
         description: "Tous les projets open-source Symfony 2 Projects triés par %sort%"
-    title: "Découvrez %count% projets Symfony2"
+    title: "%count% projets Symfony2 [appartiennent à la sélection non-officielle de KnpBundles]"
 
 users:
     meta:
         title: "Découvrez tous les %count% développeurs Symfony2"
         description: "Tous les développeurs Symfony qui aiment l'open-source, triés par %sort%"
-    title: "Découvrez %count% développeurs Symfony2"
+    title: "%count% développeurs Symfony2 [appartiennent à la sélection non-officielle de KnpBundles]"
     sort:
         name: "Alphabétique"
         best: "Meilleur score"
@@ -108,7 +111,7 @@ users.list:
 api:
     meta:
         title: "API pour développeurs"
-        description: "L'API knpbundles pour accéder à la liste des bundles"
+        description: "L'API knpbundles pour accéder à la liste des bundles"
     title: "L'API knpbundles"
 
 notFound:

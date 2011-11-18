@@ -4,6 +4,6 @@
 
 {% block description %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}projects.meta.description{% endtrans %}{% endblock %}
 
-{% block h1 %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}projects.title{% endtrans %}{% endblock %}
+{% block h1 %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort, '[': '<span>', ']': '</span>'} %}projects.title{% endtrans %}{% endblock %}
 
 {% block route_list %}{{ path('project_list', {'sort': field}) }}{% endblock %}

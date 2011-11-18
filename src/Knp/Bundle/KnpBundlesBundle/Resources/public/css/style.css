@@ -67,6 +67,7 @@ a{color:#EEB342;}
 #content-title .user a{color:#EEB342;font-weight:bold;}
 #content-title .contributor a{color:#EEB342;font-weight:normal;}
 h1{display:block;padding:20px 20px 20px 0px;margin:0;font-size:22px;line-height:22px;color:#393939;}
+h1 span{ font-size: 12px;color: #888;}
 #global-gplusone{position:absolute;right:40px;top:16px;}
 #global-tip{margin-bottom:10px;margin-top:5px;color:#666;font-size:13px;}
 /* ----- Goodies ----- */

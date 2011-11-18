@@ -4,4 +4,4 @@
 
 {% block description %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}bundles.meta.description{% endtrans %}{% endblock %}
 
-{% block h1 %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}bundles.title{% endtrans %}{% endblock %}
+{% block h1 %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort, '[': '<span>', ']': '</span>'} %}bundles.title{% endtrans %}{% endblock %}
