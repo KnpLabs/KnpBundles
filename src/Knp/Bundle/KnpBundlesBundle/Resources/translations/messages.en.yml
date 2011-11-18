@@ -20,6 +20,9 @@ search:
         0: "Press 's' or '/' to focus the search field ('esc' will unfocus)."
         1: "Use ↓ / j, ↑ / k and 'enter' to navigate. Use → / l, ← / h to paginate."
 
+header:
+    baseline: "Bundles for Symfony2"
+
 footer:
     code: "Show the code on Github"
     symfony2bundles:

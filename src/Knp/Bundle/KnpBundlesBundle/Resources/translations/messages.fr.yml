@@ -20,6 +20,9 @@ search:
         0: "Appuyez sur 's' ou '/' pour effectuer une recherche ('esc' pour enlever le focus)."
         1: "Utilisez ↓ / j, ↑ / k et 'entrée' pour naviguer. Utilisez → / l, ← / h pour changer de page."
 
+header:
+    baseline: "Bundles pour Symfony2"
+
 footer:
     code: "Voir le code sur Github"
     symfony2bundles:
