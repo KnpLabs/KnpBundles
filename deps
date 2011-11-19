@@ -59,10 +59,6 @@
     target=bundles/Symfony/Bundle/AsseticBundle
     version=v1.0.1
 
-[ZendFramework]
-    git=http://github.com/zendframework/zf2
-    target=zend
-
 [KnpMarkdownBundle]
     git=http://github.com/knplabs/KnpMarkdownBundle.git
     target=bundles/Knp/Bundle/MarkdownBundle
@@ -100,3 +96,5 @@
     git=http://github.com/ornicar/GravatarBundle.git
     target=bundles/Ornicar/GravatarBundle
 
+[knp-components]
+    git=http://github.com/knplabs/knp-components.git

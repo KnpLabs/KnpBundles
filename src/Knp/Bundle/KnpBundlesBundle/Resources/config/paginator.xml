@@ -11,7 +11,7 @@
     <services>
         <!-- Paginator -->
         <service id="knp_bundles.paginator" class="%knp_bundles.paginator.class%">
-            <argument type="service" id="knp_paginator.adapter" strict="false" />
+            <argument type="service" id="knp_paginator" strict="false" />
         </service>
     </services>
 </container>

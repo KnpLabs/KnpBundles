@@ -143,12 +143,14 @@ class RepoController extends Controller
      */
     protected function getPaginator(Query $query, $page)
     {
-        $adapter = $this->get('knp_bundles.paginator')->getAdapter();
-        $adapter->setQuery($query);
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $query,
+            $page,
+            10
+        );
 
-        $this->get('knp_bundles.paginator')->setCurrentPageNumber($page);
-
-        return $this->get('knp_bundles.paginator');
+        return $pagination;
     }
 
     protected function getUserRepository()

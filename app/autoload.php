@@ -9,6 +9,7 @@ $loader->registerNamespaces(array(
     'Knp\Bundle\KnpBundlesBundle'   => __DIR__.'/../src',
     'Knp\Bundle'                    => __DIR__.'/../vendor/bundles',
     'Knp\Menu'                      => __DIR__.'/../vendor/knp-menu/src',
+    'Knp\Component'                 => __DIR__.'/../vendor/knp-components/src',
     'Ornicar\GravatarBundle'        => __DIR__.'/../vendor/bundles',
     'Doctrine\DBAL\Migrations'      => __DIR__.'/../vendor/doctrine-migrations/lib',
     'Doctrine\Common'               => __DIR__.'/../vendor/doctrine-common/lib',
@@ -16,7 +17,6 @@ $loader->registerNamespaces(array(
     'Doctrine\DBAL'                 => __DIR__.'/../vendor/doctrine-dbal/lib',
     'Doctrine'                      => __DIR__.'/../vendor/doctrine/lib',
     'JMS'                           => __DIR__.'/../vendor/bundles',
-    'Zend'                          => __DIR__.'/../vendor/zend/library',
     'Monolog'                       => __DIR__.'/../vendor/monolog/src',
     'Goutte'                        => __DIR__.'/../vendor/goutte/src',
 ));

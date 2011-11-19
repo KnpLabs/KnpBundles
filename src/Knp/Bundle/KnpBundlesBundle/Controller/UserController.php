@@ -118,15 +118,17 @@ class UserController extends Controller
      *
      * @return Paginator
      */
-    protected function getPaginator(Query $query, $page)
-    {
-        $adapter = $this->get('knp_bundles.paginator')->getAdapter();
-        $adapter->setQuery($query);
+     protected function getPaginator(Query $query, $page)
+     {
+         $paginator = $this->get('knp_paginator');
+         $pagination = $paginator->paginate(
+             $query,
+             $page,
+             10
+         );
 
-        $this->get('knp_bundles.paginator')->setCurrentPageNumber($page);
-
-        return $this->get('knp_bundles.paginator');
-    }
+         return $pagination;
+     }
 
     protected function getBundleRepository()
     {

@@ -42,6 +42,6 @@
             </li>
             {%- endfor %}
         </ul>
-        {{ users|paginate }}
+        {{ users.render()|raw }}
     </div>
 {% endblock %}
