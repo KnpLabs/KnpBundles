@@ -15,7 +15,7 @@ use Knp\Bundle\KnpBundlesBundle\Entity;
 /**
  * Updates repo based on status from travis. 
  */
-class Repo
+class Travis
 {
     /**
      * Output buffer
@@ -39,22 +39,24 @@ class Repo
     {
         $this->output->write(' travis status');
 
-        $status = $this->getRepositoryStatus($repo);
+        $status = $this->getTravisDataForRepo($repo);
+
         if (!$status) {
-            $repo->setTravisCiBuildStatus("unknown");
+            $repo->setTravisCiBuildStatus(null);
             $this->output->write(' failed');
+
             return false;
         }
 
-        switch ($status->last_build_status) {
+        switch ($status['last_build_status']) {
             case 0:
-                $repo->setTravisCiBuildStatus("passing");
+                $repo->setTravisCiBuildStatus(true);
                 break;
             case 1:
-                $repo->setTravisCiBuildStatus("failing");
+                $repo->setTravisCiBuildStatus(false);
                 break;
             default:
-                $repo->setTravisCiBuildStatus("unknown");
+                $repo->setTravisCiBuildStatus(null);
                 break;        
           }
     }
@@ -65,9 +67,9 @@ class Repo
      * @param Entity\Repo $repo
      * @return array
      */
-    protected function getRepositoryStatus(Entity\Repo $repo)
+    protected function getTravisDataForRepo(Entity\Repo $repo)
     {
-        return $this->get($repo->getUser()."/".$repo->getName());
+        return $this->getTravisData($repo->getUser()."/".$repo->getUsername());
     }
   
     /**
@@ -76,7 +78,7 @@ class Repo
      * @param string $url
      * @return array
      */
-    protected function get($url)
+    protected function getTravisData($url)
     {
         $curl = curl_init();
 
@@ -89,13 +91,12 @@ class Repo
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_TIMEOUT => 60
         );
-
         curl_setopt_array($curl, $curlOptions);
 
         $response = curl_exec($curl);
 
         curl_close($curl);
 
-        return $response ? json_decode($response) : false;
+        return json_decode($response, true);
     }
 }
