@@ -28,7 +28,8 @@ class Repo
 
     public function update()
     {
-        $this->getGitRepo()->git('pull origin HEAD');
+        $this->getGitRepo()->git('fetch origin');
+        $this->getGitRepo()->git('reset --hard FETCH_HEAD');
     }
 
     public function getCommits($nb)
