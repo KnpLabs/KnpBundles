@@ -13,3 +13,7 @@ script: phpunit --coverage-text -c app/
 branches:
     except:
         - experimental
+
+notifications:
+    email:
+        - travis@knplabs.com
