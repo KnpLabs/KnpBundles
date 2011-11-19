@@ -47,6 +47,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
         );
         $travis->expects($this->any())
             ->method('getTravisData')
+            ->with($this->equalTo('lorem/ipsum'))
             ->will($this->returnValue($travisData));
 
         $repo = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Repo', array('getName', 'getUsername'));

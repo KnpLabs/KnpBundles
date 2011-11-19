@@ -69,7 +69,7 @@ class Travis
      */
     protected function getTravisDataForRepo(Entity\Repo $repo)
     {
-        return $this->getTravisData($repo->getUser()."/".$repo->getUsername());
+        return $this->getTravisData($repo->getUsername()."/".$repo->getName());
     }
   
     /**
@@ -94,7 +94,6 @@ class Travis
         curl_setopt_array($curl, $curlOptions);
 
         $response = curl_exec($curl);
-
         curl_close($curl);
 
         return json_decode($response, true);
