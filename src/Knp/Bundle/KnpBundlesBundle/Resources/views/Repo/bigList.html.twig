@@ -23,7 +23,9 @@
                 <li>{% trans %}bundles.list.createdAt{% endtrans %} <span>{{ repo.createdAt|date('date_format'|trans) }}</span></li>
                 <li>{% trans %}bundles.list.lastCommit{% endtrans %} <span>{{ repo.lastCommitAt|date('date_format'|trans) }}</span></li>
                 {% if repo.usesTravisCi %}
-                  <li>{% trans %}bundles.list.buildStatus{% endtrans %}<span><a href="{{ repo.travisUrl }}">{{ ("travis.buildStatus." ~ repo.travisCiBuildStatus)|trans }}</a></span></li>
+                <li class="info-travis">
+                    <img src="https://secure.travis-ci.org/{{ repo.username }}/{{ repo.name }}.png"></img>
+                 </li>
                 {% endif %}
             </ul>
         </div>

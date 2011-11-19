@@ -4,7 +4,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Updater;
 
 use Knp\Bundle\KnpBundlesBundle\Github;
 use Knp\Bundle\KnpBundlesBundle\Git;
-use Knp\Bundle\KnpBundlesBundle\Travis;
+use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
 use Doctrine\ORM\UnitOfWork;
 use Knp\Bundle\KnpBundlesBundle\Entity\Repo as RepoEntity;
 
@@ -15,7 +15,7 @@ class Updater
     private $githubRepoApi;
     private $githubSearch;
     private $gitRepoManager;
-    private $travisRepoApi;
+    private $travis;
     private $repos;
     private $users;
     private $em;
@@ -31,7 +31,7 @@ class Updater
 
         $this->gitRepoManager = new Git\RepoManager($gitRepoDir, $gitBin);
         $this->githubRepoApi = new Github\Repo($this->githubClient, $this->output, $this->gitRepoManager);
-        $this->travisRepoApi = new Travis\Repo($this->output);
+        $this->travis = new Travis($this->output);
     }
 
     public function setUp()
@@ -167,7 +167,7 @@ class Updater
         $this->em->flush();
         
         if ($repo->getUsesTravisCi()) {
-            $this->travisRepoApi->update($repo);
+            $this->travis->update($repo);
         }
     }
 

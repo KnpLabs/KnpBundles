@@ -179,7 +179,7 @@ abstract class Repo
     /**
      * Travis Ci last build status
      *
-     * @ORM\Column(type="string", length=10, nullable=true)
+     * @ORM\Column(type="boolean", nullable=true)
      */
     protected $travisCiBuildStatus = null;
         
@@ -411,11 +411,16 @@ abstract class Repo
             $score += 5;
         }
 
-        // Medium boost for repos that uses travis ci
+        // Small boost for repos that uses travis ci
         if($this->getUsesTravisCi()) {
-            $score += 20;
+            $score += 5;
         }
-        
+
+        // Small boost for repos with passing tests according to Travis
+        if($this->getTravisCiBuildStatus()) {
+            $score += 5;
+        }
+
         $this->setScore($score);
     }
 

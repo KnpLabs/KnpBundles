@@ -183,6 +183,7 @@ h1 span{ font-size: 12px;color: #888;}
 .repos-list .description{font-size:14px;margin-top:5px;}
 .repos-list .infos,
 .developers-list .infos{font-size:13px;margin:0 10px 10px 10px;}
+.repos-list .infos .info-travis{text-align: center; margin-top: 15px;}
 .repos-list .infos span,
 .developers-list .infos span{float:right;font-style:italic;}
 /**

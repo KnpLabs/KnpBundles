@@ -28,6 +28,7 @@ class Data implements FixtureInterface
     public function load($manager)
     {
         $users = array();
+        $trilean = array(true, false, null);
 
         $i = 0;
         foreach ($this->names as $name => $fullName) {
@@ -69,6 +70,8 @@ class Data implements FixtureInterface
                     'homepage'      => ($i%2) ? $repoClass.$i.'.com' : null,
                     'readme'        => str_repeat("README of the ".$repoClass." number ".$i."\n", 20),
                     'tags'          => ($i%2) ? array('1.0', '1.1') : array(),
+                    'usesTravisCi'  => ($i%2) ? false : true,
+                    'travisCiBuildStatus'  => ($i%2 == 0) ? $trilean[$i%3] : null,
                     'nbFollowers'   => $i*10,
                     'nbForks'       => $i,
                     'lastCommitAt'  => new \DateTime('-'.($i*4).' day'),
