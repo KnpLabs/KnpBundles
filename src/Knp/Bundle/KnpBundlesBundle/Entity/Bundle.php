@@ -187,6 +187,13 @@ class Bundle
      */
     protected $trend1 = null;
 
+    /**
+     * Composer name
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $composerName = null;
+    
     public function __construct($fullName = null)
     {
         if ($fullName) {
@@ -206,6 +213,7 @@ class Bundle
         $this->usesTravisCi = false;
         $this->travisCiBuildStatus = null;
         $this->trend1 = 0;
+        $this->composerName = null;
     }
 
     /**
@@ -290,6 +298,27 @@ class Bundle
     public function setTravisCiBuildStatus($status)
     {
         $this->travisCiBuildStatus = $status;
+    }
+
+    /**
+     * Get Composer name
+     *
+     * @return string
+     */
+    public function getComposerName()
+    {
+        return $this->composerName;
+    }
+
+    /**
+     * Set Composer name
+     *
+     * @param  string
+     * @return null
+     */
+    public function setComposerName($name)
+    {
+        $this->composerName = $name;
     }
     
     /**
@@ -437,6 +466,11 @@ class Bundle
             $score += 5;
         }
 
+        // Small boost for repos that provide composer package
+        if($this->getComposerName()) {
+            $score += 5;
+        }
+
         $this->setScore($score);
     }
 
@@ -534,7 +568,17 @@ class Bundle
     }
 
     /**
-     * Get the Git bundle url
+     * Get the Packagist url of this repo
+     *
+     * @return string
+     */
+    public function getPackagistUrl()
+    {
+        return $this->getComposerName() ? sprintf('http://packagist.org/packages/%s', $this->getComposerName()) : false;
+    }
+    
+    /**
+     * Get the Git repo url
      *
      * @return string
      */

@@ -253,6 +253,7 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 #bundle-show .chart-bundle{border:1px solid #DDD;width:648px; overflow: hidden;margin-bottom:20px;background:#FAFAFA;}
 #bundle-show .chart-bundle h2{margin: 10px 0 0 10px;font-size: 14px;font-weight: bold;}
 #bundle-show .chart-bundle .chart{height:200px;}
+#bundle-show #composer{float:left;width:628px;margin:0 0 20px 0px;font-size:16px;padding:10px;background:#fafafa;border:1px solid #DDDDDD;}
 /* ----- Developers List ----- */
 #developers-list{}
 #developers-list #main{padding-top:10px;}

@@ -81,6 +81,7 @@ bundles.show:
         buildStatus: "Build status:"
     contributors:
         title: "Contributors"
+        composerName: "Composer name:"
     latest_commits:
         title: "Latest commits"
         by: "By"
