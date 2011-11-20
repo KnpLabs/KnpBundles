@@ -153,6 +153,9 @@ class Updater
             $this->em->remove($repo);
             $this->em->flush();
             return false;
+        } else {
+            $score = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')->setScore(new \DateTime(), $repo, $repo->getScore());
+            $this->em->persist($score);
         }
         $this->output->writeln(' '.$repo->getScore());
         $this->em->flush();

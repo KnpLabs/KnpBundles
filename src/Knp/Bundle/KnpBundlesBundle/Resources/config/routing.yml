@@ -13,6 +13,11 @@ api:
     defaults:       { _controller: KnpBundlesBundle:Main:api }
     requirements:   { _method: "GET" }
 
+evolution:
+    pattern:        /evolution
+    defaults:       { _controller: KnpBundlesBundle:Repo:evolution }
+    requirements:   { _method: "GET" }
+
 project_list:
     pattern:        /project/{sort}
     defaults:       { _controller: KnpBundlesBundle:Repo:list, class: Project, sort: best }

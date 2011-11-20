@@ -1,0 +1,36 @@
+{% extends 'KnpBundlesBundle::layout.html.twig' %}
+
+{% block body_attributes %}id="progress"{% endblock %}
+
+{% block title %}{% trans %}evolution.meta.title{% endtrans %}{% endblock %}
+
+{% block h1 %}{% trans %}evolution.title{% endtrans %}{% endblock %}
+
+{% block description %}{% trans %}evolution.description{% endtrans %}{% endblock %}
+
+{% block content %}
+    <div id="main">
+        {{ 'evolution.text'|trans|markdown }}
+
+        <div id="chart_div" style="width:960px; height: 400px;"></div>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+          google.load("visualization", "1", {packages:["corechart"]});
+          google.setOnLoadCallback(drawChart);
+          function drawChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Date');
+            data.addColumn('number', 'Score');
+            data.addRows({{ scores|length }});
+            {% for score in scores -%}
+            data.setValue({{ loop.index0 }}, 0, '{{ score.date }}');
+            data.setValue({{ loop.index0 }}, 1, {{ score.sumValues }});
+            {% endfor %}
+
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            chart.draw(data, {width: 960, height: 400, legend: 'none', hAxis: {showTextEvery: 1}});
+          }
+        </script>
+
+    </div>
+{% endblock %}

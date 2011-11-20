@@ -4,6 +4,7 @@ menu:
     bundles: "Bundles"
     projects: "Projects"
     users: "Developers"
+    evolution: "Evolution"
 
     promo:
         nb: 3
@@ -138,6 +139,15 @@ api:
 
 notFound:
     title: "404 - Page not found"
+
+evolution:
+    meta:
+        title: "Symfony ecosystem evolution"
+        description: "Discover the evolution of the size of the Symfony2 ecosystem"
+    title: "Evolution of the Symfony ecosystem"
+    text: |
+        This shows the daily sum of the scores of all bundles.  
+        It reflects how much the Symfony community is growing − in size and in quality.
 
 travis:
     buildStatus:

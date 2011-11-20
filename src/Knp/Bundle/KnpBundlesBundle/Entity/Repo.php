@@ -101,6 +101,13 @@ abstract class Repo
     protected $score = null;
 
     /**
+     * Internal scores
+     *
+     * @ORM\OneToMany(targetEntity="Score", mappedBy="repo")
+     */
+    protected $scores = null;
+
+    /**
      * Repo creation date (on this website)
      *
      * @ORM\Column(type="datetime")
@@ -193,6 +200,7 @@ abstract class Repo
         $this->createdAt = new \DateTime('NOW');
         $this->updatedAt = new \DateTime('NOW');
         $this->score = 0;
+        $this->scores = new ArrayCollection();;
         $this->lastCommitAt = new \DateTime('2010-01-01');
         $this->lastCommits = serialize(array());
         $this->tags = serialize(array());
@@ -391,6 +399,16 @@ abstract class Repo
     }
 
     /**
+     * Get all historical scores indexed by date
+     *
+     * @return array
+     */
+    public function getScores()
+    {
+        return $this->scores;
+    }
+
+    /**
      * Calculate the score of this repo based on several factors.
      *
      * The score is used as the default sort field in many places.
@@ -556,6 +574,16 @@ abstract class Repo
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * Get id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

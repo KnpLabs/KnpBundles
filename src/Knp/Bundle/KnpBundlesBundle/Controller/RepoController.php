@@ -116,6 +116,15 @@ class RepoController extends Controller
         ));
     }
 
+    public function evolutionAction()
+    {
+        $scores = $this->getRepository('Score')->getScoreSumEvolution();
+
+        return $this->render('KnpBundlesBundle:Repo:evolution.html.twig', array(
+            'scores' => $scores,
+        ));
+    }
+
     public function listLatestAction()
     {
         $repos = $this->getRepository('Repo')->findAllSortedBy('createdAt', 50);

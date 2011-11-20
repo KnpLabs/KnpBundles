@@ -4,6 +4,7 @@ menu:
     bundles: "Bundles"
     projects: "Projets"
     users: "Développeurs"
+    evolution: "Evolution"
 
     promo:
         nb: 3
@@ -83,6 +84,8 @@ bundles.show:
         by: "par"
         and: "&"
         contributors: "contributeurs…"
+    chart:
+        title: "Evolution du score"
 
 bundles.list:
     by: " par "
@@ -136,3 +139,12 @@ api:
 
 notFound:
     title: "404 - Page non trouvée"
+
+evolution:
+    meta:
+        title: "Evolution de l'écosystème Symfony"
+        description: "Découvrez l'évolution de la taille de la communauté Symfony2"
+    title: "Evolution de l'écosystème Symfony"
+    text: |
+        Ce graphe montre la somme des scores de tous les bundles Symfony.  
+        Il reflète la croissance de la communauté − aussi bien en taille qu'en qualité.
