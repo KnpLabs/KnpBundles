@@ -98,3 +98,6 @@
 
 [knp-components]
     git=http://github.com/knplabs/knp-components.git
+
+[zf]
+    git=http://github.com/zendframework/zf2.git

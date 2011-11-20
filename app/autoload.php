@@ -19,6 +19,7 @@ $loader->registerNamespaces(array(
     'JMS'                           => __DIR__.'/../vendor/bundles',
     'Monolog'                       => __DIR__.'/../vendor/monolog/src',
     'Goutte'                        => __DIR__.'/../vendor/goutte/src',
+    'Zend'                          => __DIR__.'/../vendor/zf/library',
 ));
 
 $loader->registerPrefixes(array(
