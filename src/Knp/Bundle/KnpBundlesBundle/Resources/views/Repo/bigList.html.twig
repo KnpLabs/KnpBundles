@@ -24,7 +24,9 @@
                 <li>{% trans %}bundles.list.lastCommit{% endtrans %} <span>{{ repo.lastCommitAt|date('date_format'|trans) }}</span></li>
                 {% if repo.usesTravisCi %}
                 <li class="info-travis">
-                    <img src="https://secure.travis-ci.org/{{ repo.username }}/{{ repo.name }}.png"></img>
+                    <a href="http://travis-ci.org/{{ repo.username }}/{{ repo.name }}">
+                        <img src="https://secure.travis-ci.org/{{ repo.username }}/{{ repo.name }}.png" alt="Travis CI"></img>
+                    </a>
                  </li>
                 {% endif %}
             </ul>
