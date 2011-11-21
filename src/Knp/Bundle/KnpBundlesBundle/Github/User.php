@@ -55,11 +55,28 @@ class User
         $user->setFullName(isset($data['name']) ? $data['name'] : null);
         $user->setCompany(isset($data['company']) ? $data['company'] : null);
         $user->setLocation(isset($data['location']) ? $data['location'] : null);
-        $user->setBlog(isset($data['blog']) ? $data['blog'] : null);
+        $user->setBlog(isset($data['blog']) ? $this->fixUrl($data['blog']) : null);
 
         return true;
     }
 
+    /**
+     * Fixes url.
+     * Adds http protocol by default, when no protocol is specified.
+     * 
+     * @param string $url
+     * @return string 
+     */
+    protected function fixUrl($url)
+    {
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+        if ($scheme === null) {
+            return "http://".$url;
+        }
+
+        return $url;
+    }
+    
     /**
      * Get output
      *
@@ -67,7 +84,7 @@ class User
      */
     public function getOutput()
     {
-      return $this->output;
+        return $this->output;
     }
 
     /**
@@ -78,7 +95,7 @@ class User
      */
     public function setOutput($output)
     {
-      $this->output = $output;
+        $this->output = $output;
     }
 
     /**
