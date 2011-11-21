@@ -56,9 +56,7 @@ class RepoManager
     {
         $dir = $this->getRepoDir($repo);
         $this->filesystem->mkdir($dir);
-        $gitRepo = PHPGit_Repository::create($dir, false, array('git_executable' => $this->gitExecutable));
-        $gitRepo->git('remote add origin '.$repo->getGitUrl());
-        $gitRepo->git('pull origin HEAD');
+        $gitRepo = PHPGit_Repository::cloneUrl($dir, $repo->getGitUrl(), false, array('git_executable' => $this->gitExecutable));
 
         return $gitRepo;
     }

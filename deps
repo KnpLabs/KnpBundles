@@ -88,6 +88,7 @@
 
 [php-git-repo]
     git=http://github.com/mbontemps/php-git-repo.git
+    version=origin/cloneUrl
 
 [php-github-api]
     git=http://github.com/ornicar/php-github-api.git
