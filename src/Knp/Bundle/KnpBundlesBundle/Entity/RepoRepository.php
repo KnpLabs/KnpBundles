@@ -64,12 +64,16 @@ class RepoRepository extends EntityRepository
      */
     public function queryAllWithUsersAndContributorsSortedBy($field)
     {
-        return $this->createQueryBuilder('repo')
+        $q = $this->createQueryBuilder('repo')
             ->select('repo, user, contributors')
             ->leftJoin('repo.user', 'user')
             ->leftJoin('repo.contributors', 'contributors')
-            ->orderBy('repo.' . $field, 'name' === $field ? 'asc' : 'desc')
+            ->addOrderBy('repo.' . $field, 'name' === $field ? 'asc' : 'desc')
+            ->addOrderBy('repo.score', 'desc')
+            ->addOrderBy('repo.lastCommitAt', 'desc')
             ->getQuery();
+
+        return $q;
     }
 
     public function count()
@@ -111,5 +115,39 @@ class RepoRepository extends EntityRepository
         } catch(NoResultException $e) {
             return null;
         }
+    }
+
+    public function updateTrends()
+    {
+        // Reset trends
+        $q = $this->_em->createQuery('UPDATE Knp\Bundle\KnpBundlesBundle\Entity\Repo r SET r.trend1 = 0');
+        $q->execute();
+
+        // Update trends.
+        // TODO: Improve me
+        $sql = <<<EOF
+UPDATE repo
+JOIN
+  (SELECT repo_id, value AS startScore
+    FROM score
+    WHERE
+      date = CURRENT_DATE - 1
+      ) startRange
+  ON startRange.repo_id = repo.id
+  JOIN
+  (SELECT repo_id, value AS endScore
+    FROM score
+    WHERE
+      date = CURRENT_DATE
+      AND value >= 15
+    ) endRange
+  ON startRange.repo_id = endRange.repo_id
+SET repo.trend1 = (endScore - startScore)
+WHERE repo.description != '';
+EOF;
+        $conn = $this->_em->getConnection();
+        $nbRows = $conn->executeUpdate($sql);
+
+        return $nbRows;
     }
 }

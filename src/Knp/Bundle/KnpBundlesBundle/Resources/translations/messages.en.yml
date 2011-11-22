@@ -66,6 +66,7 @@ bundles:
         best: "Best score"
         updated: "Updated recently"
         newest: "New"
+        trend: "Trending"
 
 bundles.show:
     meta:
