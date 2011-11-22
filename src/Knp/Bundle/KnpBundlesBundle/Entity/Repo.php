@@ -189,7 +189,14 @@ abstract class Repo
      * @ORM\Column(type="boolean", nullable=true)
      */
     protected $travisCiBuildStatus = null;
-        
+
+    /**
+     * Composer name
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $composerName = null;
+    
     public function __construct($fullName = null)
     {
         if ($fullName) {
@@ -208,6 +215,7 @@ abstract class Repo
         $this->nbForks = 0;
         $this->usesTravisCi = false;
         $this->travisCiBuildStatus = null;
+        $this->composerName = null;
     }
 
     /**
@@ -292,6 +300,27 @@ abstract class Repo
     public function setTravisCiBuildStatus($status)
     {
         $this->travisCiBuildStatus = $status;
+    }
+
+    /**
+     * Get Composer name
+     *
+     * @return string
+     */
+    public function getComposerName()
+    {
+        return $this->composerName;
+    }
+
+    /**
+     * Set Composer name
+     *
+     * @param  string
+     * @return null
+     */
+    public function setComposerName($name)
+    {
+        $this->composerName = $name;
     }
     
     /**
@@ -439,6 +468,11 @@ abstract class Repo
             $score += 5;
         }
 
+        // Small boost for repos that provide composer package
+        if($this->getComposerName()) {
+            $score += 5;
+        }
+
         $this->setScore($score);
     }
 
@@ -535,6 +569,16 @@ abstract class Repo
         return $this->getUsesTravisCi() ? sprintf('http://travis-ci.org/%s/%s', $this->getUsername(), $this->getName()) : false;
     }
 
+    /**
+     * Get the Packagist url of this repo
+     *
+     * @return string
+     */
+    public function getPackagistUrl()
+    {
+        return $this->getComposerName() ? sprintf('http://packagist.org/packages/%s', $this->getComposerName()) : false;
+    }
+    
     /**
      * Get the Git repo url
      *

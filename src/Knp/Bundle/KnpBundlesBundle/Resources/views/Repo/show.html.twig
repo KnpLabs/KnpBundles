@@ -60,6 +60,12 @@
         {%- endif %}
     </ul>
 
+  {% if repo.composerName %}
+    <div id="composer">
+    {% trans %}bundles.show.infos.composerName{% endtrans %} <a href="{{ repo.packagistUrl }}">{{ repo.composerName }}</a>
+    </div>
+  {% endif %}
+
     {% if repo.readme %}
     <div id="data">
         <div id="readme">

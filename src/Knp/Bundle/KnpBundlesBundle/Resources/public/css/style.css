@@ -220,6 +220,7 @@ h1 span{ font-size: 12px;color: #888;}
 #repo-show .commits h3{font-weight:bold;}
 #repo-show .commits .infos{font-style:italic;}
 #repo-show #side{float:right;width:275px;margin:5px;}
+#repo-show #composer{float:left;width:628px;margin:0 0 20px 0px;font-size:16px;padding:10px;background:#fafafa;border:1px solid #DDDDDD;}
 #repo-show #data{float:left;width:628px;margin:0 0 20px 0px;font-size:12px;padding:10px;background:#fafafa;border:1px solid #DDDDDD;}
 #repo-show #disqus_thread{font-size:12px;background:none repeat scroll 0 0 #FAFAFA;border:1px solid #DDDDDD;padding:0 10px 0 10px;float:left;margin:0 0 20px 0;width:628px;}
 /* ----- Developers List ----- */

@@ -15,6 +15,11 @@
             <div class="repo-title">
                 <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">{{ repo.name }}</a>
                 {% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': repo.username }) }}" class="owner">{{ repo.username }}</a>
+              {% if repo.composerName %}
+              <a href="{{ repo.packagistUrl }}">
+                  <img src="{{ asset('bundles/knpbundles/images/packagist.png') }}" alt="Packagist" />
+              </a>
+              {% endif %}
             </div>
             <p class="description">{{ repo.description }}</p>
         </div>

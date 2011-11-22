@@ -137,10 +137,26 @@ class Repo
         }
 
         $repo->setUsesTravisCi($gitRepo->hasFile('.travis.yml'));
-        
+
+        $this->updateComposerFile($gitRepo, $repo);
+
         return $repo;
     }
 
+    private function updateComposerFile($gitRepo, Entity\Repo $repo)
+    {
+        $composerFilename = 'composer.json';
+
+        $composerName = null;
+        if ($gitRepo->hasFile($composerFilename)) {
+            $composer = json_decode($gitRepo->getFileContent($composerFilename));
+
+            $composerName = isset($composer->name) ? $composer->name : null;
+        }
+
+        $repo->setComposerName($composerName);
+    }
+    
     public function updateTags(Entity\Repo $repo)
     {
         $this->output->write(' tags');
