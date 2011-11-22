@@ -56,7 +56,7 @@ class RepoManager
     {
         $dir = $this->getRepoDir($repo);
         $this->filesystem->mkdir($dir);
-        $gitRepo = PHPGit_Repository::cloneUrl($dir, $repo->getGitUrl(), false, array('git_executable' => $this->gitExecutable));
+        $gitRepo = PHPGit_Repository::cloneUrl($repo->getGitUrl(), $dir, false, array('git_executable' => $this->gitExecutable));
 
         return $gitRepo;
     }
