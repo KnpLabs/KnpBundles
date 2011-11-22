@@ -63,9 +63,9 @@ class User
     /**
      * Fixes url.
      * Adds http protocol by default, when no protocol is specified.
-     * 
+     *
      * @param string $url
-     * @return string 
+     * @return string
      */
     protected function fixUrl($url)
     {
@@ -76,7 +76,7 @@ class User
 
         return $url;
     }
-    
+
     /**
      * Get output
      *
