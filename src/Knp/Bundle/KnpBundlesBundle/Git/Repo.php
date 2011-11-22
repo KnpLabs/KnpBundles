@@ -29,7 +29,7 @@ class Repo
     public function update()
     {
         $this->getGitRepo()->git('fetch origin');
-        $this->getGitRepo()->git('reset --hard FETCH_HEAD');
+        $this->getGitRepo()->git('reset --hard origin/HEAD');
     }
 
     public function getCommits($nb)
