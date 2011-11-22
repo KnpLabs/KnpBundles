@@ -46,4 +46,33 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($data['blog'], $userEntity->getBlog());
     }
 
+    public function testUpdateBadUrl()
+    {
+        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+
+        $data = array(
+            'blog' => 'knplabs.com',
+        );
+
+        $github = $this->getMock('Github_Client', array('getUserApi'));
+
+        $githubUserApi = $this->getMock('Github_Api_User', array('show'), array($github));
+        $githubUserApi->expects($this->any())
+            ->method('show')
+            ->with($this->equalTo('lorem'))
+            ->will($this->returnValue($data));
+
+        $github->expects($this->any())
+            ->method('getUserApi')
+            ->will($this->returnValue($githubUserApi));
+
+        $userEntity = new UserEntity;
+        $userEntity->setName('lorem');
+
+        $githubUser = new GithubUser($github, $output);
+        $ret = $githubUser->update($userEntity);
+
+        $this->assertEquals('http://knplabs.com', $userEntity->getBlog());
+    }
+
 }
