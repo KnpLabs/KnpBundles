@@ -9,6 +9,13 @@
             return false;
         });
 
+        // Menu
+        $('.dropdown-menu').hover(function() {
+            $(this).addClass('open');
+        }, function() {
+          $(this).removeClass('open');
+        });
+        
         // keyboard navigation
         if ($('.repo').length > 0) {
             var className = 'repo';

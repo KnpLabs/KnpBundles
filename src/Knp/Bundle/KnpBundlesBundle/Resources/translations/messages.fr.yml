@@ -60,7 +60,7 @@ bundles:
     meta:
         title: "%count% bundles pour Symfony2 sont sur la liste non-officielle de KnpBundles"
         description: "Tous les bundles Symfony2 open-sources triés par %sort%"
-    title: "%count% bundles pour Symfony2 [appartiennent à la sélection non-officielle de KnpBundles]"
+    title: "%count% bundles pour Symfony2"
     sort:
         trending: "Trending"
         best: "Meilleur score"
@@ -102,13 +102,13 @@ projects:
     meta:
         title: "Découvrez %count% projets Symfony2"
         description: "Tous les projets open-source Symfony 2 triés par %sort%"
-    title: "%count% projets sur Symfony2 [appartiennent à la sélection non-officielle de KnpBundles]"
+    title: "%count% projets sur Symfony2"
 
 users:
     meta:
         title: "Découvrez tous les %count% développeurs Symfony2"
         description: "Tous les développeurs utilisant Symfony qui aiment l'open-source, triés par %sort%"
-    title: "%count% développeurs utilisant Symfony2 [appartiennent à la sélection non-officielle de KnpBundles]"
+    title: "%count% développeurs utilisant Symfony2"
     sort:
         name: "Alphabétique"
         best: "Meilleur score"

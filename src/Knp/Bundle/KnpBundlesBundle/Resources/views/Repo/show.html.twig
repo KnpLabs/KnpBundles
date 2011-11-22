@@ -3,62 +3,72 @@
 {% block body_attributes %}id="repo-show"{% endblock %}
 
 {% block title %}{% trans with {'%name%': repo.name, '%username%': repo.username} %}bundles.show.meta.title{% endtrans %}{% endblock %}
-
-{% block content_title %}
-<div id="repo-title">
-    <h1>{{ repo.name }}</h1>
-    <div class="actions">
-        <div id="repo-gplusone"><g:plusone {% if repo.homepage %}href="{{ repo.homepage }}"{% endif %}></g:plusone></div>
-        <a class="button github" style="float:right; margin-top: 0px; margin-right: 40px;" href="{{ repo.gitHubUrl }}">{% trans %}bundles.show.github{% endtrans %}</a>
-    </div>
-</div>
-{% endblock %}
-
 {% block description %}{{ repo.description }}{% endblock %}
 
 {% block content %}
-    <div class="commits">
-        <h3>{% trans %}bundles.show.infos.title{% endtrans %}</h3>
-        <ul>
-            <li>{% trans %}bundles.show.infos.score{% endtrans %} <span>{{ repo.score }}</span></li>
-            <li>{% trans %}bundles.show.infos.created{% endtrans %} <span>{{ repo.createdAt|date('date_format'|trans) }}</span></li>
-            <li>{% trans %}bundles.show.infos.contributors{% endtrans %} <span>{{ repo.nbContributors }}</span></li>
-            <li>{% trans %}bundles.show.infos.followers{% endtrans %} <span>{{ repo.nbFollowers }}</span></li>
-            {% if repo.usesTravisCi %}
-            <li class="info-travis">
-                <a href="{{ repo.travisUrl }}">
-                    <img src="https://secure.travis-ci.org/{{ repo.username }}/{{ repo.name }}.png"></img>
-                </a>
-             </li>
-            {% endif %}
-        </ul>
+    <div class="col-right">
 
-        <h3>{% trans %}bundles.show.latest_commits.title{% endtrans %}</h3>
-        <ul>
-        {%- for commit in repo.lastCommits %}
-            <li>{{ commit.message_first_line }}<div class="infos">{% trans %}bundles.show.latest_commits.by{% endtrans %} <a href="{{ path('user_show', {'name': commit.author.login }) }}">{{ commit.author.login }}</a> {{ time_diff(commit.committed_date) }}</div></li>
-        {%- endfor %}
-        <ul>
+        <div class="box">
+            <h3>{% trans %}bundles.show.infos.title{% endtrans %}</h3>
+            <ul>
+                <li>{% trans %}bundles.show.infos.score{% endtrans %} <span>{{ repo.score }}</span></li>
+                <li>{% trans %}bundles.show.infos.created{% endtrans %} <span>{{ repo.createdAt|date('date_format'|trans) }}</span></li>
+                <li>{% trans %}bundles.show.infos.contributors{% endtrans %} <span>{{ repo.nbContributors }}</span></li>
+                <li>{% trans %}bundles.show.infos.followers{% endtrans %} <span>{{ repo.nbFollowers }}</span></li>
+                {% if repo.usesTravisCi %}
+                <li class="info-travis">
+                    <a href="{{ repo.travisUrl }}">
+                        <img src="https://secure.travis-ci.org/{{ repo.username }}/{{ repo.name }}.png"></img>
+                    </a>
+                 </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="box">
+            <h3>{% trans %}bundles.show.contributors.title{% endtrans %}</h3>
+            <ul class="user-list hide-contributors">
+                <li class="user">
+                    {% trans %}bundles.show.users.by{% endtrans %} <a href="{{ path('user_show', {'name': repo.username}) }}">{{ repo.username }}</a>
+                </li>
+
+                {%- if repo.nbContributors != 0 %}
+                    <li class="contributor-others-switch">{% trans %}bundles.show.users.and{% endtrans %} <a href="#">{% trans %}bundles.show.users.contributors{% endtrans %}</a></li>
+                    {%- for contributor in repo.contributors %}
+                        <li class="contributor"><a href="{{ path('user_show', {'name': contributor}) }}">{{ contributor }}</a>
+                    {%- endfor %}
+                {%- endif %}
+            </ul>
+        </div>
+
+        <div class="box">
+            <h3>{% trans %}bundles.show.latest_commits.title{% endtrans %}</h3>
+            <ul>
+            {%- for commit in repo.lastCommits %}
+                <li>{{ commit.message_first_line }}<div class="infos">{% trans %}bundles.show.latest_commits.by{% endtrans %} <a href="{{ path('user_show', {'name': commit.author.login }) }}">{{ commit.author.login }}</a> {{ time_diff(commit.committed_date) }}</div></li>
+            {%- endfor %}
+            <ul>
+        </div>
+        
     </div>
 
     <div id="main">
-        <div class="details">
+        <div id="repo-title">
+            <div class="bundlerank">
+                {{ repo.score }}
+            </div>
+            <h1>
+                {{ repo.name }}
+                <span class="username">{% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': repo.username}) }}">{{ repo.username }}</a></span>
+            </h1>
             <p class="description">{{ repo.description }}</p>
         </div>
+
+        <div class="actions">
+            <a class="button github" href="{{ repo.gitHubUrl }}">{% trans %}bundles.show.github{% endtrans %}</a>
+            <a class="button github" href="{{ repo.gitHubUrl }}/issues">{% trans %}bundles.show.issues{% endtrans %}</a>
+        </div>
     </div>
-
-    <ul class="user-list hide-contributors">
-        <li class="user">
-            {% trans %}bundles.show.users.by{% endtrans %} <a href="{{ path('user_show', {'name': repo.username}) }}">{{ repo.username }}</a>
-        </li>
-
-        {%- if repo.nbContributors != 0 %}
-            <li class="contributor-others-switch">{% trans %}bundles.show.users.and{% endtrans %} <a href="#">{% trans %}bundles.show.users.contributors{% endtrans %}</a></li>
-            {%- for contributor in repo.contributors %}
-                <li class="contributor"><a href="{{ path('user_show', {'name': contributor}) }}">{{ contributor }}</a>
-            {%- endfor %}
-        {%- endif %}
-    </ul>
 
     {% if repo.readme %}
     <div id="data">

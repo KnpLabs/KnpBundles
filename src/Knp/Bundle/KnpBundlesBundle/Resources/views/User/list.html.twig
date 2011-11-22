@@ -1,42 +1,50 @@
 {% extends 'KnpBundlesBundle::layout.html.twig' %}
 
-{% block body_attributes %}id="developers-list"{% endblock %}
+{% block body_attributes %}class="repos-list developers-list"{% endblock %}
 
 {% block title %}{% trans with {'%count%': users.totalItemCount, '%sort%': sort} %}users.meta.title{% endtrans %}{% endblock %}
 
 {% block description %}{% trans with {'%count%': users.totalItemCount, '%sort%': sort} %}users.meta.description{% endtrans %}{% endblock %}
 
-{% block h1 %}{% trans with {'%count%': users.totalItemCount, '%sort%': sort, '[': '<span>', ']': '</span>'} %}users.title{% endtrans %}{% endblock %}
-
 {% block content %}
-    <div id="main">
-        <div id="sort">
-            <ul class="tabs">
+    <div class="content-title">
+        <h1>{% trans with {'%count%': users.totalItemCount, '%sort%': sort, '[': '<span>', ']': '</span>'} %}users.title{% endtrans %}</h1>
+        <div class="dropdown-menu group">
+            <a class="label">{{ sortLegends[sort]|trans }}</a>
+            <ul class="dropdown-menu-list">
                 {%- for field, text in sortLegends %}
-                <li{{ field == sort ? ' class="current"' : '' }}>
-                    <a href='{{ path('user_list', {'sort': field}) }}'>{{ text|trans }}</a>
-                </li>
+                <li><a href='{% block route_list %}{{ path('user_list', {'sort': field}) }}{% endblock %}'>{{ text|trans }}</a></li>
                 {%- endfor %}
             </ul>
         </div>
-        <ul class="developers-list">
+    </div>
+    <div id="main">
+        <ul class="big-list">
             {%- for user in users %}
-            <li class="developer">
-                <div class="image">
+            <li class="repo user {% if loop.first %}first{% endif %}">
+                <div class="img">
+                    {% if user.gravatarHash %}
                     <a href="{{ url('user_show', {'name': user.name}) }}" class="name">
                         <img src="{{ gravatar_hash(user.gravatarHash, 50, none, 'identicon') }}" alt="{{ user.name }}, Symfony developer" />
                     </a>
+                    {% else %}
+                    &nbsp;
+                    {% endif %}
                 </div>
                 <div class="generals">
-                    <a class="name" href="{{ url('user_show', {'name': user.name}) }}">{{ user.name }}</a>
-                    {%- if user.location %}
-                    {% trans %}users.list.location{% endtrans %}
-                    <span class="location">{{ user.location }}</span>
-                    {%- endif %}
-                </div>
-                <div class="details">
-                    <ul class="infos">
-                        <li>{% trans %}users.list.lastCommit{% endtrans %} <span>{{ user.lastCommitAt|date('date_format'|trans) }}</span></li>
+                    <div class="repo-title">
+                        <a href="{{ path('user_show', {'name': user.name}) }}" class="name">{{ user.name }}</a>
+                    </div>
+                    <p class="description">{{ user.fullName|default('−') }}</p>
+
+                    <ul class="details">
+                        <li>
+                            {%- if user.location %}
+                            {% trans %}users.list.location{% endtrans %}
+                            <span class="location">{{ user.location }}</span>
+                            {%- endif %}
+                        </li>
+                        <li>{% trans %}bundles.list.createdAt{% endtrans %} <span>{{ user.createdAt|date('date_format'|trans) }}</span></li>
                     </ul>
                 </div>
             </li>

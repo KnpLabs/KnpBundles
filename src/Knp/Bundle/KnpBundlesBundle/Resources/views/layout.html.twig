@@ -38,11 +38,12 @@
             <a href="{{ path('bundle_list') }}" title="KnpBundles" id="logo">
                 <img src="{{ asset('bundles/knpbundles/images/knpbundles.png') }}" alt="Knp Bundles: {{ 'header.baseline'|trans }}" />
             </a>
+            <div id="baseline">The Unofficial Selection</div>
 
             <form method="get" action="{{ path('search') }}" id="search-box">
                 <label for="search-query">{% trans %}search.label{% endtrans %}</label>
                 <input type="text" id="search-query" name="q" value="{% block search_query %}{% endblock %}" />
-                <button id="search-btn">{% trans %}search.label{% endtrans %}</button>
+                <button id="search-btn" class="button">{% trans %}search.label{% endtrans %}</button>
             </form>
 
             {% render 'KnpBundlesBundle:Main:banner' %}
@@ -51,11 +52,6 @@
     <div id="content-wrapper">
         <div class="center">
             <div id="content" class="clearfix">
-                <div id="content-title">
-                    {% block content_title %}
-                    <h1>{% block h1 %}{% endblock %}</h1>
-                    {% endblock %}
-                </div>
                 {% block content %}{% endblock %}
             </div><!-- /#content -->
         </div>

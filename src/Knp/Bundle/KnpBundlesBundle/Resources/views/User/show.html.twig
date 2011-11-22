@@ -1,15 +1,5 @@
 {% extends 'KnpBundlesBundle::layout.html.twig' %}
 
-{% block content_title %}
-<div id="repo-title">
-    <h1>{{ user.name }}</h1>
-    <div class="actions">
-        <div id="repo-gplusone"><g:plusone {% if user.blog %}href="{{ user.blog }}"{% endif %}></g:plusone></div>
-        <a class="button github" style="float:right; margin-top: 0px; margin-right: 40px;" href="{{ user.gitHubUrl }}">{% trans %}users.show.github{% endtrans %}</a>
-    </div>
-</div>
-{% endblock %}
-
 {% block title %}{{ user.name }} - {{ user.fullName }}{% endblock %}
 
 {% block description %}{% trans with {'%username%': user.fullName, '%nb%': user.nbBundles} %}bundles.show.infos.score{% endtrans %}{% endblock %}
@@ -17,10 +7,12 @@
 {% block body_attributes %}id="developer-show"{% endblock %}
 
 {% block content %}
+    <div class="content-title"><h1>{{ user.name }}</h1></div>
     <div id="main">
-        {% if user.gravatarHash %}
-        <img class="gravatar" src="{{ gravatar_hash(user.gravatarHash, 150, none, 'identicon') }}" width="150" height="150" />
-        {% endif %}
+        <div class="actions">
+            <div id="repo-gplusone"><g:plusone {% if user.blog %}href="{{ user.blog }}"{% endif %}></g:plusone></div>
+            <a class="button github" href="{{ user.gitHubUrl }}">{% trans %}users.show.github{% endtrans %}</a>
+        </div>
         <div class="card">
             <ul class="stats">
                 <li>{% trans %}users.show.stats.location{% endtrans %} <span>{{ user.location }}</span></li>

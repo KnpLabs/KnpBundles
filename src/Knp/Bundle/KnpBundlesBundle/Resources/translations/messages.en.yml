@@ -60,7 +60,7 @@ bundles:
     meta:
         title: "Discover %count% bundles for Symfony2"
         description: "All Open Source Symfony 2 Bundles sorted by %sort%"
-    title: "%count% bundles for Symfony2 [belong to KnpBundles' unofficial selection]"
+    title: "%count% bundles for Symfony2"
     sort:
         trending: "Trending"
         best: "Best score"
@@ -71,7 +71,8 @@ bundles:
 bundles.show:
     meta:
         title: "%name% by %username%"
-    github: "View and download on github"
+    github: "Download"
+    issues: "Report an Issue"
     infos:
         title: "Infos"
         score: "Score:"
@@ -79,6 +80,8 @@ bundles.show:
         contributors: "Nb of contributors:"
         followers: "Nb of followers:"
         buildStatus: "Build status:"
+    contributors:
+        title: "Contributors"
     latest_commits:
         title: "Latest commits"
         by: "By"
@@ -102,13 +105,13 @@ projects:
     meta:
         title: "Discover %count% Symfony2 Projects"
         description: "All Open Source Symfony 2 Projects sorted by %sort%"
-    title: "%count% projects in Symfony2 [belong to KnpBundles' unofficial selection]"
+    title: "%count% projects in Symfony2"
 
 users:
     meta:
         title: "Discover %count% Symfony2 Developers"
         description: "All Open Source Symfony 2 Developers sorted by %sort%"
-    title: "%count% developers using Symfony2 [belong to KnpBundles' unofficial selection]"
+    title: "%count% developers using Symfony2"
     sort:
         name: "Alphabetical"
         best: "Best score"

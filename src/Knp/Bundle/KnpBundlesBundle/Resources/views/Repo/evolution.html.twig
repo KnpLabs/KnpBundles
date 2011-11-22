@@ -4,11 +4,11 @@
 
 {% block title %}{% trans %}evolution.meta.title{% endtrans %}{% endblock %}
 
-{% block h1 %}{% trans %}evolution.title{% endtrans %}{% endblock %}
-
 {% block description %}{% trans %}evolution.description{% endtrans %}{% endblock %}
 
 {% block content %}
+    <h1>{% trans %}evolution.title{% endtrans %}</h1>
+
     <div id="main">
         {{ 'evolution.text'|trans|markdown }}
 

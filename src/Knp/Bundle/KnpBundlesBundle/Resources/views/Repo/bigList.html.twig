@@ -1,26 +1,17 @@
-<ul class="repos-list">
+<ul class="big-list">
     {% for repo in repos %}
-    <li class="repo">
-        <div class="image">
-            <div class="bundlerank">
-                {{ repo.score }}
-            </div>
-            {% if repo.user.gravatarHash %}
-            <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">
-                <img src="{{ gravatar_hash(repo.user.gravatarHash, 50, none, 'identicon') }}" alt="{{ repo.name }}" />
-            </a>
-            {% endif %}
+    <li class="repo {% if loop.first %}first{% endif %}">
+        <div class="bundlerank">
+            {{ repo.score }}
         </div>
         <div class="generals">
             <div class="repo-title">
                 <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}" class="name">{{ repo.name }}</a>
-                {% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': repo.username }) }}" class="owner">{{ repo.username }}</a>
             </div>
-            <p class="description">{{ repo.description }}</p>
-        </div>
-        <div class="details">
-            <ul class="infos">
-                <li>{% trans %}bundles.list.createdAt{% endtrans %} <span>{{ repo.createdAt|date('date_format'|trans) }}</span></li>
+            <p class="description">{{ repo.description|default('−') }}</p>
+            
+            <ul class="details">
+                <li>{% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': repo.username }) }}" class="owner">{{ repo.username }}</a></li>
                 <li>{% trans %}bundles.list.lastCommit{% endtrans %} <span>{{ repo.lastCommitAt|date('date_format'|trans) }}</span></li>
                 {% if repo.usesTravisCi %}
                 <li class="info-travis">
@@ -30,6 +21,11 @@
                  </li>
                 {% endif %}
             </ul>
+        </div>
+        <div class="img">
+            {% if repo.user.gravatarHash %}
+            <a href="{{ path('repo_show', {'username': repo.username, 'name': repo.name}) }}"><img src="{{ gravatar_hash(repo.user.gravatarHash, 50, none, 'identicon') }}" alt="{{ repo.name }}" /></a>
+            {% endif %}
         </div>
     </li>
     {% endfor %}

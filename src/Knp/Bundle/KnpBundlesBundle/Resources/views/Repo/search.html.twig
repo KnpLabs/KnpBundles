@@ -2,13 +2,12 @@
 
 {% block body_attributes %}id="search"{% endblock %}
 
-{% block h1 %}{% trans %}search.list.title{% endtrans %}{% endblock %}
-
 {% block title %}{% trans %}search.list.meta.title{% endtrans %}{% endblock %}
 
 {% block description %}{% trans %}search.list.meta.description{% endtrans %}{% endblock %}
 
 {% block content %}
+    <h1>{% trans %}search.list.title{% endtrans %}</h1>
     <div id="main">
         <p>{% trans %}search.content.description.part1{% endtrans %}<br />
         {% trans %}search.content.description.part2{% endtrans %}</p>
