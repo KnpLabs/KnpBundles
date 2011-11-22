@@ -13,7 +13,10 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity(repositoryClass="Knp\Bundle\KnpBundlesBundle\Entity\RepoRepository")
  * @ORM\Table(
  *      name="repo",
- *      indexes={@ORM\Index(name="discriminator", columns={"discr"})},
+ *      indexes={
+ *          @ORM\Index(name="discriminator", columns={"discr"}),
+ *          @ORM\Index(name="trend1", columns={"trend1"})
+ *      },
  *      uniqueConstraints={@ORM\UniqueConstraint(name="full_name_unique",columns={"username", "name"})}
  * )
  * @ORM\InheritanceType("SINGLE_TABLE")
@@ -190,6 +193,12 @@ abstract class Repo
      */
     protected $travisCiBuildStatus = null;
         
+    /**
+     * Trend over the last day. Max is better.
+     * @ORM\Column(type="integer")
+     */
+    protected $trend1 = null;
+
     public function __construct($fullName = null)
     {
         if ($fullName) {
@@ -208,6 +217,7 @@ abstract class Repo
         $this->nbForks = 0;
         $this->usesTravisCi = false;
         $this->travisCiBuildStatus = null;
+        $this->trend1 = 0;
     }
 
     /**
@@ -692,6 +702,16 @@ abstract class Repo
     public function getNbContributors()
     {
         return count($this->contributors);
+    }
+
+    /**
+     * Get the trend over the last day
+     *
+     * @return integer
+     */
+    public function getTrend1()
+    {
+        return $this->trend1;
     }
 
     /**

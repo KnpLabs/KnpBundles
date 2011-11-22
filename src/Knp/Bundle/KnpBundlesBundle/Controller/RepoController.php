@@ -20,15 +20,17 @@ use Knp\Menu\MenuItem;
 class RepoController extends Controller
 {
     protected $sortFields = array(
+        'trend'         => 'trend1',
         'best'          => 'score',
         'updated'       => 'lastCommitAt',
-        'newest'        => 'createdAt'
+        'newest'        => 'createdAt',
     );
 
     protected $sortLegends = array(
+        'trend'         => 'bundles.sort.trend',
         'best'          => 'bundles.sort.best',
         'updated'       => 'bundles.sort.updated',
-        'newest'        => 'bundles.sort.newest'
+        'newest'        => 'bundles.sort.newest',
     );
 
     public function searchAction()
@@ -98,7 +100,7 @@ class RepoController extends Controller
         $this->get('request')->setRequestFormat($format);
 
         $sortField = $this->sortFields[$sort];
-
+        
         if ('html' === $format) {
             $query = $this->getRepository($class)->queryAllWithUsersAndContributorsSortedBy($sortField);
             $repos = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
