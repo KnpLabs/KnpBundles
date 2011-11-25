@@ -83,7 +83,7 @@ class ScoreRepository extends EntityRepository
     {
 
         return $this->createQueryBuilder('s')
-            ->select('s.date, SUM(s.value) AS scoreCount')
+            ->select('s.date, COUNT(s.id) AS number')
             ->groupBy('s.date')
             ->orderBy('s.date', 'asc')
             ->getQuery()
