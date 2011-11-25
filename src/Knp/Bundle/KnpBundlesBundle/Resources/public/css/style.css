@@ -237,7 +237,7 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 #repo-show #main .user{float:left;display:block;padding:10px 20px;color:#d89d14;text-decoration:none;font-style:italic;}
 #developer-show .gravatar{top:60px;right:40px;position:absolute;}
 #repo-show #main .details{clear:both;margin:0px 0 10px 0px;overflow:hidden;}
-#repo-show #main .description{padding:0px;font-size:14px;}
+#repo-show #main .description{padding:0px;font-size:14px;padding-left:60px;}
 #repo-show #main .infos{float:left;margin:0;padding:20px;width:160px;font-size:13px;background:#f6f6f6;}
 #repo-show #main .infos span{float:right;color:#d89d14;}
 #repo-show .col-right{width:280px;float:right;}
