@@ -89,6 +89,8 @@ bundles.show:
         by: "by"
         and: "&"
         contributors: "contributors…"
+    chart:
+        title: "Score evolution"
 
 bundles.list:
     by: " by "

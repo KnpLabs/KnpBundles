@@ -25,6 +25,41 @@
             </ul>
         </div>
 
+        {% if repo.scores|length > 1 %}
+        {% set chartDimensions = [280, 200] %}
+        <div class="box no-padding">
+            <h3>{{ 'bundles.show.chart.title'|trans }}</h3>
+            <div id="chart" class="chart" style="width:{{ chartDimensions.0 }}px;height:{{ chartDimensions.1 }}px;"></div>
+            <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+            <script type="text/javascript">
+              google.load("visualization", "1", {packages:["corechart"]});
+              google.setOnLoadCallback(drawChart);
+              function drawChart() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Date');
+                data.addColumn('number', 'Score');
+                data.addRows({{ repo.scores|length }});
+                {% for score in repo.scores -%}
+                data.setValue({{ loop.index0 }}, 0, '{{ score.date.format('Y-m-d') }}');
+                data.setValue({{ loop.index0 }}, 1, {{ score.value }});
+                {% endfor %}
+
+                var chart = new google.visualization.LineChart(document.getElementById('chart'));
+                chart.draw(data, {
+                    width: {{ chartDimensions.0 }},
+                    height: {{ chartDimensions.1 }},
+                    legend: 'none',
+                    backgroundColor: '#FAFAFA',
+                    colors: ['#4183C4'],
+                    hAxis: {
+                        textPosition: 'none'
+                    }
+                });
+              }
+            </script>
+        </div>
+        {% endif %}
+
         <div class="box">
             <h3>{% trans %}bundles.show.contributors.title{% endtrans %}</h3>
             <ul class="user-list hide-contributors">
