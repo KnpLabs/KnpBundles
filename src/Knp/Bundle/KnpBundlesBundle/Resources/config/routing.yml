@@ -1,11 +1,11 @@
 search:
     pattern:        /search
-    defaults:       { _controller: KnpBundlesBundle:Repo:search }
+    defaults:       { _controller: KnpBundlesBundle:Bundle:search }
     requirements:   { _method: "GET"}
 
 latest:
     pattern:        /latest
-    defaults:       { _controller: KnpBundlesBundle:Repo:listLatest, class: Bundle }
+    defaults:       { _controller: KnpBundlesBundle:Bundle:listLatest }
     requirements:   { _method: "GET" }
 
 api:
@@ -15,13 +15,8 @@ api:
 
 evolution:
     pattern:        /evolution
-    defaults:       { _controller: KnpBundlesBundle:Repo:evolution }
+    defaults:       { _controller: KnpBundlesBundle:Bundle:evolution }
     requirements:   { _method: "GET" }
-
-project_list:
-    pattern:        /project/{sort}
-    defaults:       { _controller: KnpBundlesBundle:Repo:list, class: Project, sort: trend }
-    requirements:   { _method: "GET", sort: "(best|updated|newest|trend)"}
 
 user_list:
     pattern:        /developer/{sort}
@@ -30,7 +25,7 @@ user_list:
 
 bundle_list:
     pattern:        /{sort}
-    defaults:       { _controller: KnpBundlesBundle:Repo:list, class: Bundle, sort: trend }
+    defaults:       { _controller: KnpBundlesBundle:Bundle:list, sort: trend }
     requirements:   { _method: "GET", sort: "(best|updated|newest|trend)"}
 
 user_bundle_list:
@@ -38,17 +33,12 @@ user_bundle_list:
     defaults:       { _controller: KnpBundlesBundle:User:bundles }
     requirements:   { _method: "GET", format: "(json|js)" }
 
-user_projects_list:
-    pattern:        /{name}/projects
-    defaults:       { _controller: KnpBundlesBundle:User:projects }
-    requirements:   { _method: "GET", format: "(json|js)" }
-
 user_show:
     pattern:        /{name}/profile 
     defaults:       { _controller: KnpBundlesBundle:User:show }
     requirements:   { _method: "GET"}
 
-repo_show:
+bundle_show:
     pattern:        /{username}/{name}
-    defaults:       { _controller: KnpBundlesBundle:Repo:show }
+    defaults:       { _controller: KnpBundlesBundle:Bundle:show }
     requirements:   { _method: "GET", format: "(html|json|js)", name: ".+" }

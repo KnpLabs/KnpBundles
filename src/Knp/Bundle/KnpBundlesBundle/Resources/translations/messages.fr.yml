@@ -2,7 +2,6 @@ date_format: "d/m/Y"
 
 menu:
     bundles: "Bundles"
-    projects: "Projets"
     users: "Développeurs"
     evolution: "Evolution"
 
@@ -98,12 +97,6 @@ bundles.list:
         featured: "What's hot?"
         newest: "Newest bundles"
     
-projects:
-    meta:
-        title: "Découvrez %count% projets Symfony2"
-        description: "Tous les projets open-source Symfony 2 triés par %sort%"
-    title: "%count% projets sur Symfony2"
-
 users:
     meta:
         title: "Découvrez tous les %count% développeurs Symfony2"
@@ -121,12 +114,9 @@ users.show:
         location: "Lieu : "
         lastCommit: "Dernier commit : "
         nbBundles: "Nb de bundles : "
-        nbProjects: "Nb de projets : "
         blog: "Site web : "
     bundles_manage: "Les bundles que je gère :"
     bundles_contribute: "Les bundles auxquels je contribue :"
-    projects_manage: "Les projets que je gère :"
-    projects_contribute: "Les projets auxquels je contribue :"
 
 users.list:
     location: " de "

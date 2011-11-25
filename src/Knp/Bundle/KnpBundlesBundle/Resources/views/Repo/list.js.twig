@@ -1,5 +1,0 @@
-{% set array = [] %}
-{% for repo in repos %}
-{% set array = array|merge([repo.toSmallArray]) %}
-{% endfor %}
-{{ '%s(%s)'|format(callback, array|json_encode)|raw }}

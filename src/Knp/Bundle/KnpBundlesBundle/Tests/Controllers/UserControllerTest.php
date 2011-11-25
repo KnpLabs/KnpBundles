@@ -22,7 +22,7 @@ class UserControllerTest extends WebTestCase
     {
         $client = self::createClient();
         $crawler = $client->request('GET', $this->generateUrl($client, 'user_list'));
-        $crawler = $client->click($crawler->filter('li.developer a.name')->first()->link());
+        $crawler = $client->click($crawler->filter('li.user a.name')->first()->link());
         $this->assertTrue($client->getResponse()->isSuccessful());
     }
 

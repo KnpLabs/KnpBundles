@@ -1,7 +1,26 @@
-{% extends 'KnpBundlesBundle:Repo:list.html.twig' %}
+{% extends 'KnpBundlesBundle::layout.html.twig' %}
 
-{% block title %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}bundles.meta.title{% endtrans %}{% endblock %}
+{% block body_attributes %}class="bundles-list"{% endblock %}
 
-{% block description %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort} %}bundles.meta.description{% endtrans %}{% endblock %}
+{% block title %}{% trans with {'%count%': bundles.totalItemCount, '%sort%': sort} %}bundles.meta.title{% endtrans %}{% endblock %}
 
-{% block h1 %}{% trans with {'%count%': repos.totalItemCount, '%sort%': sort, '[': '<span>', ']': '</span>'} %}bundles.title{% endtrans %}{% endblock %}
+{% block description %}{% trans with {'%count%': bundles.totalItemCount, '%sort%': sort} %}bundles.meta.description{% endtrans %}{% endblock %}
+
+{% block content %}
+    <div class="content-title">
+        <h1>{% trans with {'%count%': bundles.totalItemCount, '%sort%': sort, '[': '<span>', ']': '</span>'} %}bundles.title{% endtrans %}</h1>
+        <div class="dropdown-menu group">
+            <a class="label">{{ sortLegends[sort]|trans }}</a>
+            <ul class="dropdown-menu-list">
+                {%- for field, text in sortLegends %}
+                <li><a href='{% block route_list %}{{ path('bundle_list', {'sort': field}) }}{% endblock %}'>{{ text|trans }}</a></li>
+                {%- endfor %}
+            </ul>
+        </div>
+    </div>
+    <div id="main">
+        {% include 'KnpBundlesBundle:Bundle:bigList.html.twig' with {'bundles': bundles} %}
+        {{ bundles.render()|raw }}
+    </div>
+{% endblock %}
+

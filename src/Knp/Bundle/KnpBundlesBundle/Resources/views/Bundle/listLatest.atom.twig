@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xml:lang="en-US">
+    <id>Symfony2 Bundles</id>
+    <link type="text/html" rel="alternate" href="{{ url('bundle_list', {'sort': 'newest'}) }}"/>
+    <link type="application/atom+xml" rel="self" href="{{ url('latest', {'format': 'atom'}) }}"/>
+    <title>Symfony2 Bundles</title>
+    <updated>{{ 'now'|date('c') }}</updated>
+    {%- for bundle in bundles %}
+    <entry>
+        <id>{{ bundle.fullName }}</id>
+        <published>{{ bundle.createdAt|date('c') }}</published>
+        <updated>{{ bundle.lastCommitAt|date('c') }}</updated>
+        <link type="text/html" rel="alternate" href="{{ url('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}"/>
+        <title>{{ bundle.name }}</title>
+        <author>
+            <name>{{ bundle.username }}</name>
+            <uri>https://github.com/{{ bundle.username }}</uri>
+        </author>
+        <content type="html">
+            &lt;strong&gt;{{ bundle.description }}&lt;/strong&gt;&lt;br /&gt;
+        </content>
+    </entry>
+    {%- endfor %}
+</feed>

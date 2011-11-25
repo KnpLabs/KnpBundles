@@ -13,7 +13,7 @@ class RepoNameRegExpTest extends CriterionTest
     {
         $repo = $this->getRepo('foobar');
 
-        $entity = $repo->getRepoEntity();
+        $entity = $repo->getBundleEntity();
         $entity->setName($name);
 
         $criterion = new RepoNameRegExp($regexp);

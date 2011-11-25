@@ -2,7 +2,6 @@ date_format: "Y-m-d"
 
 menu:
     bundles: "Paczki"
-    projects: "Projekty"
     users: "Developerzy"
 
     promo:
@@ -18,8 +17,8 @@ search:
     list:
         title: "Wyszukiwarka"
         meta:
-            title: "Search Bundles and Projects"
-            description: "Search for Open Source Bundles and Projects"
+            title: "Search Bundles"
+            description: "Search for Open Source Bundles"
     results:
         title: "Search '%query%'"
         meta:
@@ -91,12 +90,6 @@ bundles.list:
         featured: "Co nowego?"
         newest: "Najnowsze paczki"
     
-projects:
-    meta:
-        title: "Odkryj %count% Projektów Symfony2"
-        description: "Wszystkie Open Sourcowe Projekty Symfony2 sortowane wg. %sort%"
-    title: "Odkryj %count% Projektów Symfony2"
-
 users:
     meta:
         title: "Odkryj %count% Developerów Symfony2"
@@ -114,12 +107,9 @@ users.show:
         location: "Lokalizacja: "
         lastCommit: "Ostatni commit: "
         nbBundles: "Liczba paczek: "
-        nbProjects: "Liczba projektów: "
         blog: "Strona WWW: "
     bundles_manage: "Paczki którymi zarządzam:"
     bundles_contribute: "Paczki które wspieram:"
-    projects_manage: "Projekty którymi zarządzam:"
-    projects_contribute: "Projekty które wspieram:"
 
 users.list:
     location: " z "

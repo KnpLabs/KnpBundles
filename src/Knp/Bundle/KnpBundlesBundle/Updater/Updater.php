@@ -6,7 +6,7 @@ use Knp\Bundle\KnpBundlesBundle\Github;
 use Knp\Bundle\KnpBundlesBundle\Git;
 use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
 use Doctrine\ORM\UnitOfWork;
-use Knp\Bundle\KnpBundlesBundle\Entity\Repo as RepoEntity;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 class Updater
 {
@@ -16,7 +16,7 @@ class Updater
     private $githubSearch;
     private $gitRepoManager;
     private $travis;
-    private $repos;
+    private $bundles;
     private $users;
     private $em;
     private $output;
@@ -36,11 +36,11 @@ class Updater
 
     public function setUp()
     {
-        $this->repos = array();
-        foreach ($this->em->createQuery('SELECT r FROM KnpBundlesBundle:Repo r ORDER BY r.updatedAt DESC')->execute() as $repo) {
-            $this->repos[strtolower($repo->getFullName())] = $repo;
+        $this->bundles = array();
+        foreach ($this->em->createQuery('SELECT b FROM KnpBundlesBundle:Bundle b ORDER BY b.updatedAt DESC')->execute() as $bundle) {
+            $this->bundles[strtolower($bundle->getFullName())] = $bundle;
         }
-        $this->output->writeln(sprintf('Loaded %d repos from the DB', count($this->repos)));
+        $this->output->writeln(sprintf('Loaded %d bundles from the DB', count($this->bundles)));
 
         $this->users = array();
         foreach ($this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\User')->findAll() as $user) {
@@ -49,28 +49,28 @@ class Updater
         $this->output->writeln(sprintf('Loaded %d users from the DB', count($this->users)));
     }
 
-    public function searchNewRepos($nb)
+    public function searchNewBundles($nb)
     {
-        $foundRepos = $this->githubSearch->searchRepos($nb, $this->output);
-        $this->output->writeln(sprintf('Found %d repo candidates', count($foundRepos)));
+        $foundBundles = $this->githubSearch->searchBundles($nb, $this->output);
+        $this->output->writeln(sprintf('Found %d bundle candidates', count($foundBundles)));
 
-        return $foundRepos;
+        return $foundBundles;
     }
 
-    public function createMissingRepos($foundRepos)
+    public function createMissingBundles($foundBundles)
     {
         $added = 0;
 
-        foreach ($foundRepos as $repo) {
-            if (isset($this->repos[strtolower($repo->getFullName())])) {
+        foreach ($foundBundles as $bundle) {
+            if (isset($this->bundles[strtolower($bundle->getFullName())])) {
                 continue;
             }
-            $this->output->write(sprintf('Discover repo %s: ', $repo->getFullName()));
-            $user = $this->getOrCreateUser($repo->getUsername());
+            $this->output->write(sprintf('Discover bundle %s: ', $bundle->getFullName()));
+            $user = $this->getOrCreateUser($bundle->getUsername());
 
-            $user->addRepo($repo);
-            $this->repos[strtolower($repo->getFullName())] = $repo;
-            $this->em->persist($repo);
+            $user->addBundle($bundle);
+            $this->bundles[strtolower($bundle->getFullName())] = $bundle;
+            $this->em->persist($bundle);
             $this->output->writeln(' ADDED');
             ++$added;
         }
@@ -84,9 +84,9 @@ class Updater
      * @param string A full repo name like knplabs/KnpMenuBundle
      * @return Repo
      */
-    public function addRepo($fullName)
+    public function addBundle($fullName)
     {
-        list($username, $repoName) = explode('/', $fullName);
+        list($username, $bundleName) = explode('/', $fullName);
         
         if (!isset($this->users[strtolower($username)])) {
             $user = $this->getOrCreateUser($username);
@@ -95,42 +95,36 @@ class Updater
             $user = $this->users[strtolower($username)];
         }
 
-        if (!isset($this->repos[strtolower($fullName)])) {
-            $repo = RepoEntity::create($fullName);
-            $this->em->persist($repo);
-            $user->addRepo($repo);
-            $this->repos[strtolower($fullName)] = $repo;
+        if (!isset($this->bundles[strtolower($fullName)])) {
+            $bundle = new Bundle($fullName);
+            $this->em->persist($bundle);
+            $user->addBundle($bundle);
+            $this->bundles[strtolower($fullName)] = $bundle;
         } else {
-            $repo = $this->repos[strtolower($fullName)];
+            $bundle = $this->bundles[strtolower($fullName)];
         }
 
         $this->em->flush();
         
-        $this->updateRepo($repo);
+        $this->updateRepo($bundle);
         
-        return $repo;
+        return $bundle;
     }
 
-    public function updateReposData()
+    public function updateBundlesData()
     {
         $this->output->writeln('Will now update commits, files and tags');
         // Now update repos with more precise GitHub data
         $now = time();
-        foreach (array_reverse($this->repos) as $repo) {
-            if ($this->em->getUnitOfWork()->getEntityState($repo) != UnitOfWork::STATE_MANAGED) {
+        foreach (array_reverse($this->bundles) as $bundle) {
+            if ($this->em->getUnitOfWork()->getEntityState($bundle) != UnitOfWork::STATE_MANAGED) {
                 continue;
             }
 
-            $lastUpdateHappened = $now - $repo->getUpdatedAt()->getTimestamp();
-
-            if ($lastUpdateHappened < 60*60*3 && count($repo->getLastCommits()) > 0) {
-                continue;
-            }
-            
             while (true) {
-                $this->output->writeln("\n\n#################### Updating ".$repo);
+                $this->output->writeln("\n\n#################### Updating ".$bundle);
                 try {
-                    $this->updateRepo($repo);
+                    $this->updateRepo($bundle);
                     break;
                 } catch(\Github_HttpClient_Exception $e) {
                     $this->output->writeln("Got a Github exception $e, sleeping for a few secs before trying again");
@@ -140,37 +134,37 @@ class Updater
         }
     }
     
-    public function updateRepo(RepoEntity $repo)
+    public function updateRepo(Bundle $bundle)
     {
-        $this->output->write($repo->getFullName());
-        $pad = 50 - strlen($repo->getFullName());
+        $this->output->write($bundle->getFullName());
+        $pad = 50 - strlen($bundle->getFullName());
         if ($pad > 0) {
             $this->output->write(str_repeat(' ', $pad));
         }
-        if (!$this->githubRepoApi->update($repo)) {
+        if (!$this->githubRepoApi->update($bundle)) {
             $this->output->write(' - Fail, will be removed');
-            $repo->getUser()->removeRepo($repo);
-            $this->em->remove($repo);
+            $bundle->getUser()->removeBundle($bundle);
+            $this->em->remove($bundle);
             $this->em->flush();
             return false;
         } else {
-            $score = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')->setScore(new \DateTime(), $repo, $repo->getScore());
+            $score = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')->setScore(new \DateTime(), $bundle, $bundle->getScore());
             $this->em->persist($score);
         }
-        $this->output->writeln(' '.$repo->getScore());
+        $this->output->writeln(' '.$bundle->getScore());
         $this->em->flush();
 
-        $contributorNames = $this->githubRepoApi->getContributorNames($repo);
+        $contributorNames = $this->githubRepoApi->getContributorNames($bundle);
         $contributors = array();
         foreach ($contributorNames as $contributorName) {
             $contributors[] = $this->getOrCreateUser($contributorName);
         }
-        $this->output->writeln(sprintf('%s contributors: %s', $repo->getFullName(), implode(', ', $contributors)));
-        $repo->setContributors($contributors);
+        $this->output->writeln(sprintf('%s contributors: %s', $bundle->getFullName(), implode(', ', $contributors)));
+        $bundle->setContributors($contributors);
         $this->em->flush();
         
-        if ($repo->getUsesTravisCi()) {
-            $this->travis->update($repo);
+        if ($bundle->getUsesTravisCi()) {
+            $this->travis->update($bundle);
         }
     }
 

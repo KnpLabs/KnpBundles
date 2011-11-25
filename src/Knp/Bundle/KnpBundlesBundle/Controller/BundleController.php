@@ -13,11 +13,9 @@ use Symfony\Component\Templating\EngineInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
-use Knp\Bundle\KnpBundlesBundle\Entity\Project;
-use Zend\Paginator\Paginator;
 use Knp\Menu\MenuItem;
 
-class RepoController extends Controller
+class BundleController extends Controller
 {
     protected $sortFields = array(
         'trend'         => 'trend1',
@@ -38,18 +36,10 @@ class RepoController extends Controller
         $query = preg_replace('(\W)', '', trim($this->get('request')->query->get('q')));
 
         if (empty($query)) {
-            return $this->render('KnpBundlesBundle:Repo:search.html.twig');
+            return $this->render('KnpBundlesBundle:Bundle:search.html.twig');
         }
 
-        $repos = $this->getRepository('Repo')->search($query);
-        $bundles = $projects = array();
-        foreach ($repos as $repo) {
-            if ($repo instanceof Bundle) {
-                $bundles[] = $repo;
-            } else {
-                $projects[] = $repo;
-            }
-        }
+        $bundles = $this->getRepository('Bundle')->search($query);
 
         $format = $this->get('request')->query->get('format', 'html');
         if (!in_array($format, array('html', 'json', 'js'))) {
@@ -57,20 +47,19 @@ class RepoController extends Controller
         }
         $this->get('request')->setRequestFormat($format);
 
-        return $this->render('KnpBundlesBundle:Repo:searchResults.'.$format.'.twig', array(
+        return $this->render('KnpBundlesBundle:Bundle:searchResults.'.$format.'.twig', array(
             'query'         => $query,
-            'repos'         => $repos,
             'bundles'       => $bundles,
-            'projects'      => $projects,
+            'bundles'       => $bundles,
             'callback'      => $this->get('request')->query->get('callback')
         ));
     }
 
     public function showAction($username, $name)
     {
-        $repo = $this->getRepository('Repo')->findOneByUsernameAndName($username, $name);
-        if (!$repo) {
-            throw new NotFoundHttpException(sprintf('The repo "%s/%s" does not exist', $username, $name));
+        $bundle = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);
+        if (!$bundle) {
+            throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
         }
 
         $format = $this->get('request')->query->get('format', 'html');
@@ -79,15 +68,15 @@ class RepoController extends Controller
         }
         $this->get('request')->setRequestFormat($format);
 
-        $this->highlightMenu($repo instanceof Bundle);
+        $this->highlightMenu($bundle instanceof Bundle);
 
-        return $this->render('KnpBundlesBundle:'.$repo->getClass().':show.'.$format.'.twig', array(
-            'repo'          => $repo,
+        return $this->render('KnpBundlesBundle:Bundle:show.'.$format.'.twig', array(
+            'bundle'        => $bundle,
             'callback'      => $this->get('request')->query->get('callback')
         ));
     }
 
-    public function listAction($sort, $class)
+    public function listAction($sort)
     {
         if (!array_key_exists($sort, $this->sortFields)) {
             throw new HttpException(406, sprintf('%s is not a valid sorting field', $sort));
@@ -102,16 +91,16 @@ class RepoController extends Controller
         $sortField = $this->sortFields[$sort];
         
         if ('html' === $format) {
-            $query = $this->getRepository($class)->queryAllWithUsersAndContributorsSortedBy($sortField);
-            $repos = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
+            $query = $this->getRepository('Bundle')->queryAllWithUsersAndContributorsSortedBy($sortField);
+            $bundles = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
         } else {
-            $repos = $this->getRepository($class)->findAllWithUsersAndContributorsSortedBy($sortField);
+            $bundles = $this->getRepository('Bundle')->findAllWithUsersAndContributorsSortedBy($sortField);
         }
 
-        $this->highlightMenu('Bundle' == $class);
+        $this->highlightMenu();
 
-        return $this->render('KnpBundlesBundle:'.$class.':list.'.$format.'.twig', array(
-            'repos'         => $repos,
+        return $this->render('KnpBundlesBundle:Bundle:list.'.$format.'.twig', array(
+            'bundles'       => $bundles,
             'sort'          => $sort,
             'sortLegends'   => $this->sortLegends,
             'callback'      => $this->get('request')->query->get('callback')
@@ -120,11 +109,11 @@ class RepoController extends Controller
 
     public function evolutionAction()
     {
-        $repository = $this->getRepository('Score'); 
-        $sums = $repository->getScoreSumEvolution();
-        $counts = $repository->getScoreCountEvolution();
+        $bundlesitory = $this->getRepository('Score'); 
+        $sums = $bundlesitory->getScoreSumEvolution();
+        $counts = $bundlesitory->getScoreCountEvolution();
 
-        return $this->render('KnpBundlesBundle:Repo:evolution.html.twig', array(
+        return $this->render('KnpBundlesBundle:Bundle:evolution.html.twig', array(
             'score_sums'      => $sums,
             'score_counts'    => $counts,
         ));
@@ -132,7 +121,7 @@ class RepoController extends Controller
 
     public function listLatestAction()
     {
-        $repos = $this->getRepository('Repo')->findAllSortedBy('createdAt', 50);
+        $bundles = $this->getRepository('Bundle')->findAllSortedBy('createdAt', 50);
 
         $format = $this->get('request')->query->get('format', 'atom');
         if (!in_array($format, array('atom'))) {
@@ -140,8 +129,8 @@ class RepoController extends Controller
         }
         $this->get('request')->setRequestFormat($format);
 
-        return $this->render('KnpBundlesBundle:Repo:listLatest.'.$format.'.twig', array(
-            'repos'         => $repos,
+        return $this->render('KnpBundlesBundle:Bundle:listLatest.'.$format.'.twig', array(
+            'bundles'       => $bundles,
             'callback'      => $this->get('request')->query->get('callback')
         ));
     }
@@ -177,12 +166,8 @@ class RepoController extends Controller
         return $this->get('knp_bundles.entity_manager')->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\'.$class);
     }
     
-    protected function highlightMenu($highlightBundlesMenu)
+    protected function highlightMenu()
     {
-        if ($highlightBundlesMenu) {
-            $this->get('knp_bundles.menu.main')->getChild('bundles')->setCurrent(true);
-        } else {
-            $this->get('knp_bundles.menu.main')->getChild('projects')->setCurrent(true);
-        }
+        $this->get('knp_bundles.menu.main')->getChild('bundles')->setCurrent(true);
     }
 }

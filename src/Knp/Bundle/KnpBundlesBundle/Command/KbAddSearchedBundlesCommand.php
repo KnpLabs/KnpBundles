@@ -8,7 +8,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Knp\Bundle\KnpBundlesBundle\Updater\Updater;
 
-class KbAddRepoCommand extends ContainerAwareCommand
+/**
+ * Update local database from web searches
+ */
+class KbAddSearchedBundlesCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -17,8 +20,8 @@ class KbAddRepoCommand extends ContainerAwareCommand
     {
         $this
             ->setDefinition(array())
-            ->addArgument('reponame')
-            ->setName('kb:add:repo')
+            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'The maximal number of new bundles considered by the update', 1000)
+            ->setName('kb:add:searched-bundles')
         ;
     }
 
@@ -29,14 +32,15 @@ class KbAddRepoCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $gitRepoDir = $this->getContainer()->getParameter('knp_bundles.repos_dir');
+        $gitRepoDir = $this->getContainer()->getParameter('knp_bundles.bundles_dir');
         $gitBin = $this->getContainer()->getParameter('knp_bundles.git_bin');
 
         $em = $this->getContainer()->get('knp_bundles.entity_manager');
 
         $updater = new Updater($em, $gitRepoDir, $gitBin, $output);
         $updater->setUp();
-        $repos = $updater->addRepo($input->getArgument('reponame'));
+        $bundles = $updater->searchNewBundles((int) $input->getOption('limit'));
+        $updater->createMissingBundles($bundles);
         $em->flush();
     }
 }

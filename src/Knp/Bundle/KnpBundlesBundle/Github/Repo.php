@@ -30,43 +30,43 @@ class Repo
         $this->gitRepoManager = $gitRepoManager;
     }
 
-    public function update(Entity\Repo $repo)
+    public function update(Entity\Bundle $bundle)
     {
         try {
-            $this->gitRepoManager->getRepo($repo)->update();
+            $this->gitRepoManager->getRepo($bundle)->update();
         } catch (\GitRuntimeException $e) {
             return false;
         }
 
-        if (!$this->updateInfos($repo)) {
+        if (!$this->updateInfos($bundle)) {
             return false;
         }
-        if (!$this->updateFiles($repo)) {
+        if (!$this->updateFiles($bundle)) {
             return false;
         }
-        if (!$this->updateCommits($repo)) {
+        if (!$this->updateCommits($bundle)) {
             return false;
         }
-        if (!$this->updateTags($repo)) {
+        if (!$this->updateTags($bundle)) {
             return false;
         }
-        $repo->recalculateScore();
+        $bundle->recalculateScore();
 
-        return $repo;
+        return $bundle;
     }
 
     /**
      * Return true if the Repo exists on GitHub, false otherwise
      *
-     * @param Entity\Repo $repo
+     * @param Entity\Bundle $bundle
      * @param array $data
      * @return boolean whether the Repo exists on GitHub
      */
-    public function updateInfos(Entity\Repo $repo)
+    public function updateInfos(Entity\Bundle $bundle)
     {
         $this->output->write(' infos');
         try {
-            $data = $this->github->getRepoApi()->show($repo->getUsername(), $repo->getName());
+            $data = $this->github->getRepoApi()->show($bundle->getUsername(), $bundle->getName());
         } catch (\Github_HttpClient_Exception $e) {
             if (404 == $e->getCode()) {
                 return false;
@@ -82,20 +82,20 @@ class Repo
             }
         }
 
-        $repo->setDescription(empty($data['description']) ? null : $data['description']);
-        $repo->setNbFollowers($data['watchers']);
-        $repo->setNbForks($data['forks']);
-        $repo->setCreatedAt(new \DateTime($data['created_at']));
-        $repo->setHomepage(empty($data['homepage']) ? null : $data['homepage']);
+        $bundle->setDescription(empty($data['description']) ? null : $data['description']);
+        $bundle->setNbFollowers($data['watchers']);
+        $bundle->setNbForks($data['forks']);
+        $bundle->setCreatedAt(new \DateTime($data['created_at']));
+        $bundle->setHomepage(empty($data['homepage']) ? null : $data['homepage']);
 
-        return $repo;
+        return $bundle;
     }
 
-    public function updateCommits(Entity\Repo $repo)
+    public function updateCommits(Entity\Bundle $bundle)
     {
         $this->output->write(' commits');
         try {
-            $commits = $this->github->getCommitApi()->getBranchCommits($repo->getUsername(), $repo->getName(), 'HEAD');
+            $commits = $this->github->getCommitApi()->getBranchCommits($bundle->getUsername(), $bundle->getName(), 'HEAD');
         } catch (\Github_HttpClient_Exception $e) {
             if (404 == $e->getCode()) {
                 return false;
@@ -105,56 +105,50 @@ class Repo
         if (empty($commits)) {
             return false;
         }
-        $repo->setLastCommits(array_slice($commits, 0, 30));
+        $bundle->setLastCommits(array_slice($commits, 0, 30));
 
-        return $repo;
+        return $bundle;
     }
 
-    public function updateCommitsFromGitRepo(Entity\Repo $repo)
+    public function updateCommitsFromGitRepo(Entity\Bundle $bundle)
     {
         $this->output->write(' commits');
-        $commits = $this->gitRepoManager->getRepo($repo)->getCommits(30);
-        $repo->setLastCommits($commits);
+        $commits = $this->gitRepoManager->getRepo($bundle)->getCommits(30);
+        $bundle->setLastCommits($commits);
 
-        return $repo;
+        return $bundle;
     }
 
-    public function updateFiles(Entity\Repo $repo)
+    public function updateFiles(Entity\Bundle $bundle)
     {
         $this->output->write(' files');
-        $gitRepo = $this->gitRepoManager->getRepo($repo);
-        if ($repo instanceof Entity\Project) {
-            $detector = new Detector\Project();
-            if (!$detector->matches($gitRepo)) {
-                return false;
-            }
-        }
+        $gitRepo = $this->gitRepoManager->getRepo($bundle);
 
         foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
             if ($gitRepo->hasFile($readmeFilename)) {
-               $repo->setReadme($gitRepo->getFileContent($readmeFilename));
+               $bundle->setReadme($gitRepo->getFileContent($readmeFilename));
             }
         }
 
-        $repo->setUsesTravisCi($gitRepo->hasFile('.travis.yml'));
+        $bundle->setUsesTravisCi($gitRepo->hasFile('.travis.yml'));
         
-        return $repo;
+        return $bundle;
     }
 
-    public function updateTags(Entity\Repo $repo)
+    public function updateTags(Entity\Bundle $bundle)
     {
         $this->output->write(' tags');
-        $gitRepo = $this->gitRepoManager->getRepo($repo);
+        $gitRepo = $this->gitRepoManager->getRepo($bundle);
         $tags = $gitRepo->getGitRepo()->getTags();
-        $repo->setTags($tags);
+        $bundle->setTags($tags);
 
-        return $repo;
+        return $bundle;
     }
 
-    public function getContributorNames(Entity\Repo $repo)
+    public function getContributorNames(Entity\Bundle $bundle)
     {
         try {
-            $contributors = $this->github->getRepoApi()->getRepoContributors($repo->getUsername(), $repo->getName());
+            $contributors = $this->github->getRepoApi()->getRepoContributors($bundle->getUsername(), $bundle->getName());
         } catch (\Github_HttpClient_Exception $e) {
             if (404 == $e->getCode()) {
                 return array();
@@ -163,7 +157,7 @@ class Repo
         }
         $names = array();
         foreach ($contributors as $contributor) {
-            if ($repo->getUsername() != $contributor['login']) {
+            if ($bundle->getUsername() != $contributor['login']) {
                 $names[] = $contributor['login'];
             }
         }

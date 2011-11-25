@@ -1,1 +1,5 @@
-{% include 'KnpBundlesBundle:Repo:list.json.twig' with {'repos': repos} %}
+{% set array = [] %}
+{% for bundle in bundles %}
+{% set array = array|merge([bundle.toSmallArray]) %}
+{% endfor %}
+{{ array|json_encode|raw }}

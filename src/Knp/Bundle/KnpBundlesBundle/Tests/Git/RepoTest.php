@@ -3,7 +3,7 @@
 namespace Knp\Bundle\KnpBundlesBundle\Tests\Git;
 
 use Knp\Bundle\KnpBundlesBundle\Git\RepoManager;
-use Knp\Bundle\KnpBundlesBundle\Entity\Repo as RepoEntity;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 class RepoTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,7 +17,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
     {
         $dir = sys_get_temp_dir().'/kb_git_repos';
         $manager = new RepoManager($dir, $_SERVER['GIT_BIN']);
-        $repo = RepoEntity::create($repoFullName);
+        $repo = new Bundle($repoFullName);
         $gitRepo = $manager->getRepo($repo);
 
         return $gitRepo;

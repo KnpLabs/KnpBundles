@@ -2,7 +2,7 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Git;
 
-use Knp\Bundle\KnpBundlesBundle\Entity\Repo as RepoEntity;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle as BundleEntity;
 use Symfony\Component\HttpKernel\Util\Filesystem;
 use PHPGit_Repository;
 
@@ -33,7 +33,7 @@ class RepoManager
         $this->filesystem->mkdir($this->dir);
     }
 
-    public function getRepo(RepoEntity $repo)
+    public function getRepo(BundleEntity $repo)
     {
         if($this->hasRepo($repo)) {
             $dir = $this->getRepoDir($repo);
@@ -45,14 +45,14 @@ class RepoManager
         return new Repo($repo, $gitRepo);
     }
 
-    public function hasRepo(RepoEntity $repo)
+    public function hasRepo(BundleEntity $repo)
     {
         $dir = $this->getRepoDir($repo);
 
         return is_dir($dir.'/.git');
     }
 
-    public function createGitRepo(RepoEntity $repo)
+    public function createGitRepo(BundleEntity $repo)
     {
         $dir = $this->getRepoDir($repo);
         $this->filesystem->mkdir($dir);
@@ -61,7 +61,7 @@ class RepoManager
         return $gitRepo;
     }
 
-    public function getRepoDir(RepoEntity $repo)
+    public function getRepoDir(BundleEntity $repo)
     {
         return $this->dir.'/'.$repo->getUsername().'/'.$repo->getName();
     }

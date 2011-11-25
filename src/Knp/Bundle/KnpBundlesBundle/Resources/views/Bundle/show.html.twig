@@ -1,1 +1,134 @@
-{% extends 'KnpBundlesBundle:Repo:show.html.twig' %}
+{% extends 'KnpBundlesBundle::layout.html.twig' %}
+
+{% block body_attributes %}id="bundle-show"{% endblock %}
+
+{% block title %}{% trans with {'%name%': bundle.name, '%username%': bundle.username} %}bundles.show.meta.title{% endtrans %}{% endblock %}
+{% block description %}{{ bundle.description }}{% endblock %}
+
+{% block content %}
+    <div class="col-right">
+
+        <div class="box">
+            <h3>{% trans %}bundles.show.infos.title{% endtrans %}</h3>
+            <ul>
+                <li>{% trans %}bundles.show.infos.score{% endtrans %} <span>{{ bundle.score }}</span></li>
+                <li>{% trans %}bundles.show.infos.created{% endtrans %} <span>{{ bundle.createdAt|date('date_format'|trans) }}</span></li>
+                <li>{% trans %}bundles.show.infos.contributors{% endtrans %} <span>{{ bundle.nbContributors }}</span></li>
+                <li>{% trans %}bundles.show.infos.followers{% endtrans %} <span>{{ bundle.nbFollowers }}</span></li>
+                {% if bundle.usesTravisCi %}
+                <li class="info-travis">
+                    <a href="{{ bundle.travisUrl }}">
+                        <img src="https://secure.travis-ci.org/{{ bundle.username }}/{{ bundle.name }}.png"></img>
+                    </a>
+                 </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        {% if bundle.scores|length > 1 %}
+        {% set chartDimensions = [280, 200] %}
+        <div class="box no-padding">
+            <h3>{{ 'bundles.show.chart.title'|trans }}</h3>
+            <div id="chart" class="chart" style="width:{{ chartDimensions.0 }}px;height:{{ chartDimensions.1 }}px;"></div>
+            <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+            <script type="text/javascript">
+              google.load("visualization", "1", {packages:["corechart"]});
+              google.setOnLoadCallback(drawChart);
+              function drawChart() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'Date');
+                data.addColumn('number', 'Score');
+                data.addRows({{ bundle.scores|length }});
+                {% for score in bundle.scores -%}
+                data.setValue({{ loop.index0 }}, 0, '{{ score.date.format('Y-m-d') }}');
+                data.setValue({{ loop.index0 }}, 1, {{ score.value }});
+                {% endfor %}
+
+                var chart = new google.visualization.LineChart(document.getElementById('chart'));
+                chart.draw(data, {
+                    width: {{ chartDimensions.0 }},
+                    height: {{ chartDimensions.1 }},
+                    legend: 'none',
+                    backgroundColor: '#FAFAFA',
+                    colors: ['#4183C4'],
+                    hAxis: {
+                        textPosition: 'none'
+                    }
+                });
+              }
+            </script>
+        </div>
+        {% endif %}
+
+        <div class="box">
+            <h3>{% trans %}bundles.show.contributors.title{% endtrans %}</h3>
+            <ul class="user-list hide-contributors">
+                <li class="user">
+                    {% trans %}bundles.show.users.by{% endtrans %} <a href="{{ path('user_show', {'name': bundle.username}) }}">{{ bundle.username }}</a>
+                </li>
+
+                {%- if bundle.nbContributors != 0 %}
+                    <li class="contributor-others-switch">{% trans %}bundles.show.users.and{% endtrans %} <a href="#">{% trans %}bundles.show.users.contributors{% endtrans %}</a></li>
+                    {%- for contributor in bundle.contributors %}
+                        <li class="contributor"><a href="{{ path('user_show', {'name': contributor}) }}">{{ contributor }}</a>
+                    {%- endfor %}
+                {%- endif %}
+            </ul>
+        </div>
+
+        <div class="box">
+            <h3>{% trans %}bundles.show.latest_commits.title{% endtrans %}</h3>
+            <ul>
+            {%- for commit in bundle.lastCommits %}
+                <li>{{ commit.message_first_line }}<div class="infos">{% trans %}bundles.show.latest_commits.by{% endtrans %} <a href="{{ path('user_show', {'name': commit.author.login }) }}">{{ commit.author.login }}</a> {{ time_diff(commit.committed_date) }}</div></li>
+            {%- endfor %}
+            <ul>
+        </div>
+        
+    </div>
+
+    <div id="main">
+        <div id="bundle-title">
+            <div class="bundlerank">
+                {{ bundle.score }}
+            </div>
+            <h1>
+                {{ bundle.name }}
+                <span class="username">{% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': bundle.username}) }}">{{ bundle.username }}</a></span>
+            </h1>
+            <p class="description">{{ bundle.description }}</p>
+        </div>
+
+        <div class="actions">
+            <a class="button github" href="{{ bundle.gitHubUrl }}">{% trans %}bundles.show.github{% endtrans %}</a>
+            <a class="button github" href="{{ bundle.gitHubUrl }}/issues">{% trans %}bundles.show.issues{% endtrans %}</a>
+        </div>
+    </div>
+
+    {% if bundle.readme %}
+    <div id="data">
+        <div id="readme">
+            <div class="markdown">
+                {{ bundle.readme|markdown }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 's2b';
+        {% if app.environment == 'dev' %}
+        var disqus_developer = 1;
+        {% endif %}
+        var disqus_identifier = '{{ bundle.username }}_{{ bundle.name }}';
+        var disqus_url = '{{ url('bundle_show', {'username':bundle.username, 'name':bundle.name}) }}';
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+{% endblock %}

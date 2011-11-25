@@ -2,7 +2,6 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Github;
 
-use Knp\Bundle\KnpBundlesBundle\Entity\Repo;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Symfony\Component\Console\Output\OutputInterface;
 use Goutte\Client;
@@ -44,38 +43,38 @@ class Search
     }
 
     /**
-     * Get a list of Symfony2 Repos from GitHub & Google
+     * Get a list of Symfony2 bundles from GitHub & Google
      *
      * @param integer $limit The maximum number of results to return
      */
-    public function searchRepos($limit = 300)
+    public function searchBundles($limit = 300)
     {
         $repos = array();
         $nb = 0;
 
-        $repos = $this->searchReposOnTwitter('(#knpbundles OR #symfony2 OR #symfony) github filter:links', $repos, $limit);
+        $repos = $this->searchBundlesOnTwitter('(#knpbundles OR #symfony2 OR #symfony) github filter:links', $repos, $limit);
         $this->output->writeln(sprintf('%d repos found!', count($repos) - $nb));
         $nb = count($repos);
         if ($nb >= $limit) {
             return array_slice($repos, 0, $limit);
         }
 
-        $repos = $this->searchReposOnGitHub('Bundle', $repos, $limit, function($repo) { return $repo instanceof Bundle; });
-        $repos = $this->searchReposOnGitHub('Symfony2', $repos, $limit);
+        $repos = $this->searchBundlesOnGitHub('Bundle', $repos, $limit);
+        $repos = $this->searchBundlesOnGitHub('Symfony2', $repos, $limit);
         $this->output->writeln(sprintf('%d repos found!', count($repos) - $nb));
         $nb = count($repos);
         if ($nb >= $limit) {
             return array_slice($repos, 0, $limit);
         }
 
-        $repos = $this->searchReposOnGoogle($repos, $limit);
+        $repos = $this->searchBundlesOnGoogle($repos, $limit);
         $this->output->writeln(sprintf('%d repos found!', count($repos) - $nb));
         $nb = count($repos);
 
         return array_slice($repos, 0, $limit);
     }
 
-    protected function searchReposOnGitHub($query, array $repos, $limit, $filter = null)
+    protected function searchBundlesOnGitHub($query, array $repos, $limit)
     {
         $this->output->write(sprintf('Search "%s" on Github', $query));
         try {
@@ -87,10 +86,8 @@ class Search
                 }
                 foreach ($found as $repo) {
                     $name = $repo['username'].'/'.$repo['name'];
-                    $entity = Repo::create($name);
-                    if (null === $filter || call_user_func($filter, $entity)) {
-                        $repos[strtolower($name)] = $entity;
-                    }
+                    $entity = new Bundle($name);
+                    $repos[strtolower($name)] = $entity;
                 }
                 $page++;
                 $this->output->write('...'.count($repos));
@@ -103,7 +100,7 @@ class Search
         return $repos;
     }
 
-    protected function searchReposOnGoogle(array $repos, $limit)
+    protected function searchBundlesOnGoogle(array $repos, $limit)
     {
         $this->output->write('Search on Google');
         $maxBatch = 5;
@@ -129,7 +126,7 @@ class Search
                     }
                     $name = $match[1];
                     if(!isset($repos[strtolower($name)])) {
-                        $repo = Repo::create($name);
+                        $repo = new Bundle($name);
                         $repos[strtolower($name)] = $repo;
                         $this->output->write(sprintf('!'));
                     }
@@ -149,7 +146,7 @@ class Search
         return $repos;
     }
 
-    protected function searchReposOnTwitter($query, array $repos, $limit)
+    protected function searchBundlesOnTwitter($query, array $repos, $limit)
     {
         $this->output->write(sprintf('Search "%s" on Twitter', $query));
 
@@ -177,7 +174,7 @@ class Search
                         // The url is perhaps directly a github url
                         if (preg_match('#^https?://github.com/([^/]+/[^/]+)(/.*)?#', $url, $m)) {
                             $name = $m[1];
-                            $repos[strtolower($name)] = Repo::create($name);
+                            $repos[strtolower($name)] = new Bundle($name);
 
                         // Or a redirect/multi-redirect link => we parse the resulting github page
                         } else {
@@ -189,7 +186,7 @@ class Search
 
                             if (preg_match('#<title>([a-z0-9-_]+/[^\'"/ ]+) - GitHub</title>#i', $html, $m)) {
                                 $name = $m[1];
-                                $repos[strtolower($name)] = Repo::create($name);
+                                $repos[strtolower($name)] = new Bundle($name);
                             }
                         }
                     }

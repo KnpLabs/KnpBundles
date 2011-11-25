@@ -1,1 +1,12 @@
-{% extends 'KnpBundlesBundle:Repo:mediumList.html.twig' %}
+<ul class="bundles-list">
+    {%- for bundle in bundles %}
+    <li class="bundle">
+        <div class="generals">
+            <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}" class="name">
+                {{ bundle.name }}
+            </a>
+            <p class="description">{{ bundle.description }}</p>
+        </div>
+    </li>
+    {%- endfor %}
+</ul>

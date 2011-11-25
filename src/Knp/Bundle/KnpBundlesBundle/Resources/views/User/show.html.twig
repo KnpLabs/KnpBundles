@@ -10,7 +10,7 @@
     <div class="content-title"><h1>{{ user.name }}</h1></div>
     <div id="main">
         <div class="actions">
-            <div id="repo-gplusone"><g:plusone {% if user.blog %}href="{{ user.blog }}"{% endif %}></g:plusone></div>
+            <div id="bundle-gplusone"><g:plusone {% if user.blog %}href="{{ user.blog }}"{% endif %}></g:plusone></div>
             <a class="button github" href="{{ user.gitHubUrl }}">{% trans %}users.show.github{% endtrans %}</a>
         </div>
         <div class="card">
@@ -18,7 +18,6 @@
                 <li>{% trans %}users.show.stats.location{% endtrans %} <span>{{ user.location }}</span></li>
                 <li>{% trans %}users.show.stats.lastCommit{% endtrans %} <span>{{ user.lastCommitAt|date('date_format'|trans) }}</span></li>
                 <li>{% trans %}users.show.stats.nbBundles{% endtrans %} <span>{{ user.nbBundles }}</span></li>
-                <li>{% trans %}users.show.stats.nbProjects{% endtrans %} <span>{{ user.nbProjects }}</span></li>
                 {% if user.blog %}
                 <li>{% trans %}users.show.stats.blog{% endtrans %} <span><a href="{{ user.blog }}">{{ user.blog }}</a></span></li>
                 {% endif %}
@@ -27,25 +26,13 @@
         {%- if user.bundles|length > 0 %}
         <div class="bundles-i-manage">
             <h2>{% trans %}users.show.bundles_manage{% endtrans %}</h2>
-            {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'repos': user.bundles} %}
+            {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': user.bundles} %}
         </div>
         {%- endif %}
         {%- if user.contributionBundles|length > 0 %}
         <div class="bundles-i-contribute-to">
             <h2>{% trans %}users.show.bundles_contribute{% endtrans %}</h2>
-            {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'repos': user.contributionBundles} %}
-        </div>
-        {%- endif %}
-        {%- if user.projects|length > 0 %}
-        <div class="projects-i-manage">
-            <h2>{% trans %}users.show.projects_manage{% endtrans %}</h2>
-            {% include 'KnpBundlesBundle:Project:mediumList.html.twig' with {'repos': user.projects} %}
-        </div>
-        {%- endif %}
-        {% if user.contributionProjects|length > 0 %}
-        <div class="projects-i-contribute-to">
-            <h2>{% trans %}users.show.projects_contribute{% endtrans %}</h2>
-            {% include 'KnpBundlesBundle:Project:mediumList.html.twig' with {'repos': user.contributionProjects} %}
+            {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': user.contributionBundles} %}
         </div>
         {%- endif %}
     </div>

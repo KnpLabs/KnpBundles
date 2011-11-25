@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Knp\Bundle\KnpBundlesBundle\Updater\Updater;
 
-class KbUpdateReposCommand extends ContainerAwareCommand
+class KbUpdateBundlesCommand extends ContainerAwareCommand
 {
     /**
      * {@inheritdoc}
@@ -17,7 +17,7 @@ class KbUpdateReposCommand extends ContainerAwareCommand
     {
         $this
             ->setDefinition(array())
-            ->setName('kb:update:repos')
+            ->setName('kb:update:bundles')
         ;
     }
 
@@ -28,14 +28,14 @@ class KbUpdateReposCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $gitRepoDir = $this->getContainer()->getParameter('knp_bundles.repos_dir');
+        $gitRepoDir = $this->getContainer()->getParameter('knp_bundles.bundles_dir');
         $gitBin = $this->getContainer()->getParameter('knp_bundles.git_bin');
 
         $em = $this->getContainer()->get('knp_bundles.entity_manager');
 
         $updater = new Updater($em, $gitRepoDir, $gitBin, $output);
         $updater->setUp();
-        $updater->updateReposData();
+        $updater->updateBundlesData();
         $em->flush();
     }
 }

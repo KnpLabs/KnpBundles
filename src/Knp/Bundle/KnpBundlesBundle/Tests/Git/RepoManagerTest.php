@@ -4,7 +4,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Tests\Git;
 
 use Knp\Bundle\KnpBundlesBundle\Git\RepoManager;
 use Knp\Bundle\KnpBundlesBundle\Git\Repo;
-use Knp\Bundle\KnpBundlesBundle\Entity\Repo as RepoEntity;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 class RepoManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +23,7 @@ class RepoManagerTest extends \PHPUnit_Framework_TestCase
     protected function getRepo($repoFullName = 'knplabs/KnpGaufretteBundle')
     {
         $manager = $this->getManager();
-        $repo = RepoEntity::create($repoFullName);
+        $repo = new Bundle($repoFullName);
         $gitRepo = $manager->getRepo($repo);
 
         return $gitRepo;

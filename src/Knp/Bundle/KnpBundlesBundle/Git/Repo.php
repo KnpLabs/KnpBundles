@@ -2,7 +2,7 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Git;
 
-use Knp\Bundle\KnpBundlesBundle\Entity\Repo as RepoEntity;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle as BundleEntity;
 
 class Repo
 {
@@ -16,11 +16,11 @@ class Repo
     /**
      * Repo entity
      *
-     * @var RepoEntity
+     * @var BundleEntity
      */
     protected $entity = null;
 
-    public function __construct(RepoEntity $repoEntity, \PHPGit_Repository $gitRepo)
+    public function __construct(BundleEntity $repoEntity, \PHPGit_Repository $gitRepo)
     {
         $this->entity = $repoEntity;
         $this->gitRepo = $gitRepo;
@@ -76,9 +76,9 @@ class Repo
     /**
      * Get entity
      *
-     * @return RepoEntity
+     * @return BundleEntity
      */
-    public function getRepoEntity()
+    public function getBundleEntity()
     {
       return $this->entity;
     }
@@ -86,10 +86,10 @@ class Repo
     /**
      * Set entity
      *
-     * @param  RepoEntity
+     * @param  BundleEntity
      * @return null
      */
-    public function setRepoEntity($entity)
+    public function setBundleEntity($entity)
     {
       $this->entity = $entity;
     }

@@ -1,6 +1,6 @@
 {% extends 'KnpBundlesBundle::layout.html.twig' %}
 
-{% block body_attributes %}class="repos-list developers-list"{% endblock %}
+{% block body_attributes %}class="bundles-list developers-list"{% endblock %}
 
 {% block title %}{% trans with {'%count%': users.totalItemCount, '%sort%': sort} %}users.meta.title{% endtrans %}{% endblock %}
 
@@ -21,7 +21,7 @@
     <div id="main">
         <ul class="big-list">
             {%- for user in users %}
-            <li class="repo user {% if loop.first %}first{% endif %}">
+            <li class="bundle user {% if loop.first %}first{% endif %}">
                 <div class="img">
                     {% if user.gravatarHash %}
                     <a href="{{ url('user_show', {'name': user.name}) }}" class="name">
@@ -32,7 +32,7 @@
                     {% endif %}
                 </div>
                 <div class="generals">
-                    <div class="repo-title">
+                    <div class="bundle-title">
                         <a href="{{ path('user_show', {'name': user.name}) }}" class="name">{{ user.name }}</a>
                     </div>
                     <p class="description">{{ user.fullName|default('−') }}</p>

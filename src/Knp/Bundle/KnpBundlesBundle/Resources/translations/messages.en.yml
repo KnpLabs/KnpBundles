@@ -2,7 +2,6 @@ date_format: "Y-m-d"
 
 menu:
     bundles: "Bundles"
-    projects: "Projects"
     users: "Developers"
     evolution: "Evolution"
 
@@ -22,8 +21,8 @@ search:
     list:
         title: "Search"
         meta:
-            title: "Search Bundles and Projects"
-            description: "Search for Open Source Bundles and Projects"
+            title: "Search Bundles"
+            description: "Search for Open Source Bundles"
     results:
         title: "Search '%query%'"
         meta:
@@ -103,12 +102,6 @@ bundles.list:
         newest: "Newest bundles"
     buildStatus: "Build status "
     
-projects:
-    meta:
-        title: "Discover %count% Symfony2 Projects"
-        description: "All Open Source Symfony 2 Projects sorted by %sort%"
-    title: "%count% projects in Symfony2"
-
 users:
     meta:
         title: "Discover %count% Symfony2 Developers"
@@ -126,12 +119,9 @@ users.show:
         location: "Location: "
         lastCommit: "Last commit: "
         nbBundles: "Nb of bundles: "
-        nbProjects: "Nb of projects: "
         blog: "Website: "
     bundles_manage: "Bundles I manage:"
     bundles_contribute: "Bundles I contribute to:"
-    projects_manage: "Projects I manage:"
-    projects_contribute: "Projects I contribute to:"
 
 users.list:
     location: " from "

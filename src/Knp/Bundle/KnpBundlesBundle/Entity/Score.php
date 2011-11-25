@@ -8,16 +8,16 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * A score of a given repo at a given date
+ * A score of a given bundle at a given date
  *
  * @ORM\Entity(repositoryClass="Knp\Bundle\KnpBundlesBundle\Entity\ScoreRepository")
  * @ORM\Table(
  *      name="score",
  *      indexes={
  *          @ORM\Index(name="date", columns={"date"}),
- *          @ORM\Index(name="repo", columns={"repo_id"}),
+ *          @ORM\Index(name="bundle", columns={"bundle_id"}),
  *      },
- *      uniqueConstraints={@ORM\UniqueConstraint(name="date_repo",columns={"date", "repo_id"})}
+ *      uniqueConstraints={@ORM\UniqueConstraint(name="date_bundle",columns={"date", "bundle_id"})}
  * )
  * @ORM\HasLifecycleCallbacks
  */
@@ -39,16 +39,16 @@ class Score
     protected $date = null;
 
     /**
-     * Repo
+     * Bundle
      *
-     * @ORM\ManyToOne(targetEntity="Repo", inversedBy="scores")
-     * @ORM\JoinColumn(name="repo_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity="Bundle", inversedBy="scores")
+     * @ORM\JoinColumn(name="bundle_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
-    protected $repo = null;
+    protected $bundle = null;
 
     /**
-     * Internal value of the Repo, based on several indicators
-     * Defines the Repo position in lists and searches
+     * Internal value of the Bundle, based on several indicators
+     * Defines the Bundle position in lists and searches
      *
      * @ORM\Column(type="integer")
      */
@@ -57,7 +57,7 @@ class Score
 
     public function __construct()
     {
-        $this->repo = null;
+        $this->bundle = null;
         $this->date = new \DateTime();
         $this->value = 0;
     }
@@ -105,19 +105,19 @@ class Score
     }
 
     /**
-     * @return Repo
+     * @return Bundle
      */
-    public function getRepo()
+    public function getBundle()
     {
-        return $this->repo;
+        return $this->bundle;
     }
 
     /**
-     * @param Repo $repo
+     * @param Bundle $bundle
      */
-    public function setRepo(Repo $repo = null)
+    public function setBundle(Bundle $bundle = null)
     {
-        $this->repo = $repo;
+        $this->bundle = $bundle;
     }
 
     public function __toString()

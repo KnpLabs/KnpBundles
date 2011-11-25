@@ -3,7 +3,7 @@
 namespace Knp\Bundle\KnpBundlesBundle\Tests\Travis;
 
 use Knp\Bundle\KnpBundlesBundle\Git\RepoManager;
-use Knp\Bundle\KnpBundlesBundle\Entity\Repo as RepoEntity;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle as BundleEntity;
 use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -50,7 +50,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('lorem/ipsum'))
             ->will($this->returnValue($travisData));
 
-        $repo = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Repo', array('getName', 'getUsername'));
+        $repo = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Bundle', array('getName', 'getUsername'));
         $repo->expects($this->any())
             ->method('getUsername')
             ->will($this->returnValue('lorem'));
@@ -78,7 +78,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
             ->method('getTravisDataForRepo')
             ->will($this->returnValue($travisData));
 
-        $repo = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Repo', array('setTravisCiBuildStatus'));
+        $repo = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Bundle', array('setTravisCiBuildStatus'));
         $repo->expects($this->once())
             ->method('setTravisCiBuildStatus')
             ->with(true);
@@ -99,7 +99,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
             ->method('getTravisDataForRepo')
             ->will($this->returnValue($travisData));
 
-        $repo = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Repo', array('setTravisCiBuildStatus'));
+        $repo = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Bundle', array('setTravisCiBuildStatus'));
         $repo->expects($this->once())
             ->method('setTravisCiBuildStatus')
             ->with(false);
@@ -120,7 +120,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
             ->method('getTravisDataForRepo')
             ->will($this->returnValue($travisData));
 
-        $repo = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Repo', array('setTravisCiBuildStatus'));
+        $repo = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Bundle', array('setTravisCiBuildStatus'));
         $repo->expects($this->once())
             ->method('setTravisCiBuildStatus')
             ->with(null);

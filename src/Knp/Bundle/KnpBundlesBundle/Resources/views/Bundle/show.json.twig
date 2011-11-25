@@ -1,1 +1,1 @@
-{% include 'KnpBundlesBundle:Repo:show.json.twig' with {'repo': repo} %}
+{{ bundle.toBigArray|json_encode|raw }}

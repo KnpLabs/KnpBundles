@@ -90,18 +90,18 @@ class User
     protected $createdAt = null;
 
     /**
-     * Repos the user owns
+     * Bundles the user owns
      *
-     * @ORM\OneToMany(targetEntity="Repo", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Bundle", mappedBy="user")
      */
-    protected $repos = null;
+    protected $bundles = null;
 
     /**
-     * Repos this User contributed to
+     * Bundles this User contributed to
      *
-     * @ORM\ManyToMany(targetEntity="Repo", mappedBy="contributors")
+     * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="contributors")
      */
-    protected $contributionRepos = null;
+    protected $contributionBundles = null;
 
     /**
      * local cache, not persisted
@@ -109,7 +109,7 @@ class User
     protected $lastCommitsCache = null;
 
     /**
-     * Internal score of the User as the sum of his repos' scores
+     * Internal score of the User as the sum of his bundles' scores
      *
      * @ORM\Column(type="integer")
      */
@@ -117,8 +117,8 @@ class User
 
     public function __construct()
     {
-        $this->repos = new ArrayCollection();
-        $this->contributionRepos = new ArrayCollection();
+        $this->bundles = new ArrayCollection();
+        $this->contributionBundles = new ArrayCollection();
         $this->createdAt = new \DateTime('NOW');
     }
 
@@ -248,45 +248,53 @@ class User
     }
 
     /**
-     * Calculate the score of this user based on his repos' scores
+     * Calculate the score of this user based on his bundles' scores
      */
     public function recalculateScore()
     {
         $score = 0;
-        foreach($this->getRepos() as $repo) {
-            $score += $repo->getScore();
+        foreach($this->getBundles() as $bundle) {
+            $score += $bundle->getScore();
         }
 
         $this->setScore($score);
     }
 
     /**
-     * Get repos
+     * Get bundles
      *
      * @return ArrayCollection
      */
-    public function getRepos()
-    {
-        return $this->repos;
-    }
-
-    public function getAllRepos()
-    {
-        return array_merge($this->getRepos()->toArray(), $this->getContributionRepos()->toArray());
-    }
-
     public function getBundles()
     {
-        $bundles = array();
-        foreach ($this->getRepos() as $repo) {
-            if ($repo instanceof Bundle) {
-                $bundles[] = $repo;
-            }
-        }
-
-        return $bundles;
+        return $this->bundles;
     }
 
+    public function getAllBundles()
+    {
+        return array_merge($this->getBundles()->toArray(), $this->getContributionBundles()->toArray());
+    }
+
+    /**
+     * Count the user bundles
+     *
+     * @return integer
+     */
+    public function getNbBundles()
+    {
+        return $this->getBundles()->count();
+    }
+
+    public function hasBundles()
+    {
+        return ($this->getNbBundles() > 0);
+    }
+
+    /**
+     * Get the names of this user bundles
+     *
+     * @return array
+     */
     public function getBundleNames()
     {
         $names = array();
@@ -297,177 +305,74 @@ class User
         return $names;
     }
 
-    public function getProjects()
-    {
-        $projects = array();
-        foreach ($this->getRepos() as $repo) {
-            if ($repo instanceof Project) {
-                $projects[] = $repo;
-            }
-        }
-
-        return $projects;
-    }
-
-    public function getProjectNames()
-    {
-        $names = array();
-        foreach ($this->getProjects() as $project) {
-            $names[] = $project->getName();
-        }
-
-        return $names;
-    }
-
-
     /**
-     * Count the user repos
-     *
-     * @return integer
-     */
-    public function getNbRepos()
-    {
-        return $this->getRepos()->count();
-    }
-
-    public function getNbBundles()
-    {
-        return count($this->getBundles());
-    }
-
-    public function getNbProjects()
-    {
-        return count($this->getProjects());
-    }
-
-    public function hasProjects()
-    {
-        return ($this->getNbProjects() > 0);
-    }
-
-
-    public function hasBundles()
-    {
-        return ($this->getNbBundles() > 0);
-    }
-
-    /**
-     * Get the names of this user repos
-     *
-     * @return array
-     */
-    public function getRepoNames()
-    {
-        $names = array();
-        foreach ($this->getRepos() as $repo) {
-            $names[] = $repo->getName();
-        }
-
-        return $names;
-    }
-
-    /**
-     * Add a repo to this user repos
+     * Add a bundle to this user bundles
      *
      * @return null
      */
-    public function addRepo(Repo $repo)
+    public function addBundle(Bundle $bundle)
     {
-        if ($this->getRepos()->contains($repo)) {
-            throw new \OverflowException(sprintf('User %s already owns the %s repo', $this->getName(), $repo->getName()));
+        if ($this->getBundles()->contains($bundle)) {
+            throw new \OverflowException(sprintf('User %s already owns the %s bundle', $this->getName(), $bundle->getName()));
         }
-        $this->getRepos()->add($repo);
-        $repo->setUser($this);
+        $this->getBundles()->add($bundle);
+        $bundle->setUser($this);
     }
 
     /**
-     * Remove a repo from this user repos
+     * Remove a bundle from this user bundles
      *
      * @return null
      */
-    public function removeRepo(Repo $repo)
+    public function removeBundle(Bundle $bundle)
     {
-        $this->getRepos()->removeElement($repo);
-        $repo->setUser(null);
+        $this->getBundles()->removeElement($bundle);
+        $bundle->setUser(null);
     }
 
     /**
-     * Get contributionRepos
+     * Get contributionBundles
      *
      * @return ArrayCollection
      */
-    public function getContributionRepos()
-    {
-        return $this->contributionRepos;
-    }
-
-    public function getContributionReposSortedByScore()
-    {
-        return $this->sortReposByScore($this->getContributionRepos()->toArray());
-    }
-
-    public function hasContributionRepos()
-    {
-        return !empty($this->contributionRepos);
-    }
-
     public function getContributionBundles()
     {
-        $bundles = array();
-        foreach ($this->getContributionReposSortedByScore() as $repo) {
-            if ($repo instanceof Bundle) {
-                $bundles[] = $repo;
-            }
-        }
-
-        return $bundles;
+        return $this->contributionBundles;
     }
 
-    public function getNbContributionBundles()
+    public function getContributionBundlesSortedByScore()
     {
-        return count($this->getContributionBundles());
+        return $this->sortBundlesByScore($this->getContributionBundles()->toArray());
     }
 
-    public function getContributionProjects()
+    public function hasContributionBundles()
     {
-        $projects = array();
-        foreach ($this->getContributionReposSortedByScore() as $repo) {
-            if ($repo instanceof Project) {
-                $projects[] = $repo;
-            }
-        }
-
-        return $projects;
-    }
-
-    public function getNbContributionProjects()
-    {
-        return count($this->getContributionProjects());
+        return !empty($this->contributionBundles);
     }
 
     /**
-     * Set contributionRepos
+     * Set contributionBundles
      *
      * @param  ArrayCollection
      * @return null
      */
-    public function setContributionRepos(ArrayCollection $contributionRepos)
+    public function setContributionBundles(ArrayCollection $contributionBundles)
     {
-        $this->contributionRepos = $contributionRepos;
+        $this->contributionBundles = $contributionBundles;
     }
 
-    public function getNbContributionRepos()
+    public function getNbContributionBundles()
     {
-        return $this->getContributionRepos()->count();
+        return $this->getContributionBundles()->count();
     }
 
-    protected function sortReposByScore(array $repos)
+    protected function sortBundlesByScore(array $bundles)
     {
-        uasort($repos, function($a, $b) {
+        uasort($bundles, function($a, $b) {
             return $a->getScore() > $b->getScore();
         });
 
-        return $repos;
+        return $bundles;
     }
 
     /**
@@ -496,8 +401,8 @@ class User
     {
         if (null === $this->lastCommitsCache) {
             $commits = array();
-            foreach ($this->getAllRepos() as $repo) {
-                foreach ($repo->getLastCommits() as $commit) {
+            foreach ($this->getAllBundles() as $bundle) {
+                foreach ($bundle->getLastCommits() as $commit) {
                     if (isset($commit['author']['login']) && $commit['author']['login'] === $this->getName()) {
                         $commits[] = $commit;
                     }
@@ -635,7 +540,6 @@ class User
             'location'      => $this->getLocation(),
             'blog'          => $this->getBlog(),
             'bundles'       => $this->getBundleNames(),
-            'projects'      => $this->getProjectNames(),
             'lastCommitAt'  => $this->getLastCommitAt() ? $this->getLastCommitAt()->getTimestamp() : null,
             'score'         => $this->getScore(),
         );

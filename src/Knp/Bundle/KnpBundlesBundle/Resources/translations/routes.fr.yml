@@ -1,10 +1,8 @@
 search: /chercher
 latest: /recents
 api: /api
-project_list: '/projet/{sort}'
 user_list: '/developpeur/{sort}'
 bundle_list: '/{sort}'
 user_bundle_list: '/{name}/bundles'
-user_projects_list: '/{name}/projets'
 user_show: '/{name}/profil'
 repo_show: '/{username}/{name}'

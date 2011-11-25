@@ -3,7 +3,7 @@
     <ul class="bundles_list">
         {%- for i, bundle in bundles %}
         <li class="bundle">
-            <a href="{{ path('repo_show', { 'username': bundle.username, 'name': bundle.name }) }}">
+            <a href="{{ path('bundle_show', { 'username': bundle.username, 'name': bundle.name }) }}">
                 <span class="name">{{ bundle.name }}</span>
                 <span class="number">{{ bundles|length - i }}</span>
                 <span class="description">{{ bundle.description }}</span>

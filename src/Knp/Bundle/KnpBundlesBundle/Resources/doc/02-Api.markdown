@@ -87,75 +87,15 @@ Return informations about one Bundle:
       ~ described at http://develop.github.com/p/commits.html
     readme: # Symfony 2 Micro Kernel\r\n\r\nThis is a Ruby Sinatra inspired micro kernel for Symfony 2.[...]
 
-## Projects
-
-### List all Projects
-
-To get the list of bundles sorted by a given field, use:
-
-    # the best projects first
-    $ curl http://bundles.knplabs.org/project/best?format=json
-    
-    # the newest projects first
-    $ curl http://bundles.knplabs.org/project/newest?format=json
-
-    # the projects updated recently first
-    $ curl http://bundles.knplabs.org/project/updated?format=json
-
-Return a list of Projects:
-
-    - type: Project
-      name: knpbundles
-      username: knplabs
-      description: Comprehensive list of Symfony2 bundles ordered by relevance and integrated with GitHub.
-      homepage: http://bundles.knplabs.org/
-      score: 46
-      nbFollowers: 27
-      nbForks: 3
-      createdAt: 1278497445
-      lastCommitAt: 1278513437
-      tags:
-        - 1.0
-      contributors:
-        - ornicar
-
-### Show one Project
-
-When requesting only one Project, you get more informations such as last commits, readme and documentation.
-
-    :username/:name
-
-    $ curl http://bundles.knplabs.org/knplabs/knpbundles?format=json
-
-Return informations about one Project:
-
-    type: Project
-    name: knpbundles
-    username: knplabs
-    description: Comprehensive list of Symfony2 bundles ordered by relevance and integrated with GitHub.
-    homepage: http://bundles.knplabs.org/
-    score: 46
-    nbFollowers: 27
-    nbForks: 3
-    createdAt: 1278497445
-    lastCommitAt: 1278513437
-    tags:
-      - 1.0
-    contributors:
-      - ornicar
-    lastCommits:
-      ~ described at http://develop.github.com/p/commits.html
-    readme: #bundles.knplabs.org\n\nOpen-source code of the [bundles.knplabs.org](http:\/\/bundles.knplabs.org) website[...]
-
 ## Search 
 
     search?format=:format&q=:query
 
     $ curl http://bundles.knplabs.org/search?format=json&q=mongo
 
-Return a list of bundles and projects:
+Return a list of bundles:
 
-    - type: Project
+    - type: Bundle
       name: knpbundles
       username: knplabs
       description: Comprehensive list of Symfony2 bundles ordered by relevance and integrated with GitHub.
@@ -186,8 +126,6 @@ Return a list of developers:
       blog: http://twitter.com/ornicar
       bundles:
         - GravatarBundle
-      projects:
-        - lichess
 
 ### Show one developer
 
@@ -205,8 +143,6 @@ Return informations about one developer.
       blog: http://twitter.com/ornicar
       bundles:
         - GravatarBundle
-      projects:
-        - lichess
       lastCommitAt:
       lastCommits:
         ~ described at http://develop.github.com/p/commits.html
@@ -239,28 +175,3 @@ Return a list of Bundles:
         - bar
 
 Return a list of Bundles.
-
-### List the Projects of a developer
-
-Get a list of the Projects a given developer owns. 
-
-    :name/projects
-
-    $ curl http://bundles.knplabs.org/knplabs/projects?format=json
-
-Return a list of Projects.
-
-    - type: Project
-      name: knpbundles
-      username: knplabs
-      description: Comprehensive list of Symfony2 bundles ordered by relevance and integrated with GitHub.
-      homepage: http://bundles.knplabs.org/
-      score: 46
-      nbFollowers: 27
-      nbForks: 3
-      createdAt: 1278497445
-      lastCommitAt: 1278513437
-      tags:
-        - 1.0
-      contributors:
-        - ornicar

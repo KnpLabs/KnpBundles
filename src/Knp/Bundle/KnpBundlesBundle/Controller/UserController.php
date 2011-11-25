@@ -59,10 +59,10 @@ class UserController extends Controller
         $this->get('knp_bundles.menu.main')->getChild('users')->setCurrent(true);
 
         if ('html' === $format) {
-            $query = $this->getUserRepository()->queryAllWithProjectsSortedBy($sortField);
+            $query = $this->getUserRepository()->queryAllWithBundlesSortedBy($sortField);
             $users = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
         } else {
-            $users = $this->getUserRepository()->findAllWithProjectsSortedBy($sortField);
+            $users = $this->getUserRepository()->findAllWithBundlesSortedBy($sortField);
         }
 
         return $this->render('KnpBundlesBundle:User:list.'.$format.'.twig', array(
@@ -86,25 +86,7 @@ class UserController extends Controller
         $this->get('request')->setRequestFormat($format);
 
         return $this->render('KnpBundlesBundle:Bundle:list.'.$format.'.twig', array(
-            'repos'     => $user->getBundles(),
-            'callback'  => $this->get('request')->query->get('callback')
-        ));
-    }
-
-    public function projectsAction($name)
-    {
-        if (!$user = $this->getUserRepository()->findOneByName($name)) {
-            throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
-        }
-
-        $format = $this->get('request')->query->get('format', 'html');
-        if (!in_array($format, array('html', 'json', 'js'))) {
-            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
-        }
-        $this->get('request')->setRequestFormat($format);
-
-        return $this->render('KnpBundlesBundle:Project:list.'.$format.'.twig', array(
-            'repos'     => $user->getProjects(),
+            'bundles'   => $user->getBundles(),
             'callback'  => $this->get('request')->query->get('callback')
         ));
     }

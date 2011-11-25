@@ -28,7 +28,7 @@ class RepoNameRegExp implements CriterionInterface
      */
     public function matches(Repo $repo)
     {
-        $name = $repo->getRepoEntity()->getName();
+        $name = $repo->getBundleEntity()->getName();
 
         return (Boolean) preg_match($this->pattern, $name);
     }

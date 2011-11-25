@@ -162,12 +162,12 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 #hot-bundles .bundles_list .number{background:#c27700;}
 /* ----- Repos & Repositories List ----- */
 #sort .sort-by{float:left;padding:5px 20px;}
-.repos-list .image,
+.bundles-list .image,
 .developers-list .image{float:left;width:50px;}
 .bundlerank{text-align:center;text-shadow:0 1px rgba(0,0,0,0.1);text-transform:uppercase;color:#555;font-size:16px;font-weight:bold;font-family:Helvetica;width:50px;float:left;background:url(../images/bundlerank.png) no-repeat;height:50px;line-height:50px;}
 /* Title */
-.repos-list .content-title{height:26px;line-height:18px;}
-.repos-list .content-title h1{color:#383529;font-size:18px;margin:0;padding:0;font-family:Arial;font-weight:bold;display:block;float:left;letter-spacing: -0.03em;}
+.bundles-list .content-title{height:26px;line-height:18px;}
+.bundles-list .content-title h1{color:#383529;font-size:18px;margin:0;padding:0;font-family:Arial;font-weight:bold;display:block;float:left;letter-spacing: -0.03em;}
 /*Dropdown*/
 .dropdown-menu{position:relative;z-index:200;}
 .content-title .dropdown-menu{float:left;margin-left:10px;margin-top:-8px;}
@@ -184,30 +184,30 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 .dropdown-menu-list a:hover {background-color: #F2F5F9;}
 .dropdown-menu a:hover {text-decoration: underline;}
 
-.repos-list .big-list .repo{position:relative;padding:15px 0;font-size:14px;border-bottom:1px solid #CCDCEF;overflow:hidden;width:650px;overflow:hidden;border-left:4px solid transparent;}
-.repos-list .big-list .repo.first{border-top:1px solid #80A1C1;}
-.repos-list .big-list .repo.active{border-left:4px solid #EEB342;}
-.repos-list .big-list .bundlerank{margin:0px 10px 0px 5px;float:left;}
-.repos-list .big-list .generals{padding:0px 0;float:left;width:500px;overflow:hidden;}
-.repos-list .big-list .generals .name{font-size:16px;font-family:Helvetica;margin-bottom:4px;color:#4183C4;}
-.repos-list .big-list .generals .description{padding:0;color:#666;font-size:13px;line-height:16px;margin-bottom:7px;}
-.repos-list .big-list .details{font-size:11px;font-family:Helvetica;color:#999;}
-.repos-list .big-list .details li{float:left;margin-right:20px;line-height:13px;}
-.repos-list .big-list .details a{color:#5F88CE;}
-.repos-list .big-list .img{float:right;}
-.repos-list .big-list .img img{border:2px solid #F0F0F0;}
+.bundles-list .big-list .bundle{position:relative;padding:15px 0;font-size:14px;border-bottom:1px solid #CCDCEF;overflow:hidden;width:650px;overflow:hidden;border-left:4px solid transparent;}
+.bundles-list .big-list .bundle.first{border-top:1px solid #80A1C1;}
+.bundles-list .big-list .bundle.active{border-left:4px solid #EEB342;}
+.bundles-list .big-list .bundlerank{margin:0px 10px 0px 5px;float:left;}
+.bundles-list .big-list .generals{padding:0px 0;float:left;width:500px;overflow:hidden;}
+.bundles-list .big-list .generals .name{font-size:16px;font-family:Helvetica;margin-bottom:4px;color:#4183C4;}
+.bundles-list .big-list .generals .description{padding:0;color:#666;font-size:13px;line-height:16px;margin-bottom:7px;}
+.bundles-list .big-list .details{font-size:11px;font-family:Helvetica;color:#999;}
+.bundles-list .big-list .details li{float:left;margin-right:20px;line-height:13px;}
+.bundles-list .big-list .details a{color:#5F88CE;}
+.bundles-list .big-list .img{float:right;}
+.bundles-list .big-list .img img{border:2px solid #F0F0F0;}
 
-.repos-list .big-list .repo.user .img{float:left;width:70px;margin-left:10px;}
+.bundles-list .big-list .bundle.user .img{float:left;width:70px;margin-left:10px;}
 
-.repos-list .name,
+.bundles-list .name,
 .developers-list .name{font-size:16px;font-weight:bold;color:#d89d14;text-decoration:none;}
-.repos-list .owner,
+.bundles-list .owner,
 .developers-list .location{margin-top:5px;text-decoration:none;font-weight:bold;}
-.repos-list .description{font-size:13px;margin-top:5px;}
-.repos-list .infos,
+.bundles-list .description{font-size:13px;margin-top:5px;}
+.bundles-list .infos,
 .developers-list .infos{font-size:13px;margin:0 10px 10px 10px;}
-.repos-list .infos .info-travis{text-align:center;margin-top:15px;}
-.repos-list .infos span,
+.bundles-list .infos .info-travis{text-align:center;margin-top:15px;}
+.bundles-list .infos span,
 .developers-list .infos span{float:right;font-style:italic;}
 /**
 * SPECIFIC PAGES
@@ -222,37 +222,37 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 #homepage #best-scored-bundles{border-bottom:4px solid #393939;margin-left:0;}
 #homepage #hot-bundles{border-bottom:4px solid #ed9521;margin-right:0;}
 /* ----- Repos List ----- */
-#repos-list{}
+#bundles-list{}
 /* ----- Repo Show ----- */
-#repo-show{}
-#repo-title{overflow:hidden;line-height:24px;padding:0px 0 10px 0;}
-#repo-title .bundlerank{margin-right:10px;}
-#repo-title h1{margin:0;padding:0;}
-#repo-title h1 .username{font-size:13px;color:#666;}
-#repo-title h1 .username a{font-weight:bold;}
-#repo-title .description{color:#666;font-size:13px;margin-top:2px;}
-#repo-gplusone{float:left;margin-left:10px;}
-#repo-show #main{float:left;width:650px;}
-#repo-show #main .actions{margin:10px 0;}
-#repo-show #main .user{float:left;display:block;padding:10px 20px;color:#d89d14;text-decoration:none;font-style:italic;}
+#bundle-show{}
+#bundle-title{overflow:hidden;line-height:24px;padding:0px 0 10px 0;}
+#bundle-title .bundlerank{margin-right:10px;}
+#bundle-title h1{margin:0;padding:0;}
+#bundle-title h1 .username{font-size:13px;color:#666;}
+#bundle-title h1 .username a{font-weight:bold;}
+#bundle-title .description{color:#666;font-size:13px;margin-top:2px;}
+#bundle-gplusone{float:left;margin-left:10px;}
+#bundle-show #main{float:left;width:650px;}
+#bundle-show #main .actions{margin:10px 0;}
+#bundle-show #main .user{float:left;display:block;padding:10px 20px;color:#d89d14;text-decoration:none;font-style:italic;}
 #developer-show .gravatar{top:60px;right:40px;position:absolute;}
-#repo-show #main .details{clear:both;margin:0px 0 10px 0px;overflow:hidden;}
-#repo-show #main .description{padding:0px;font-size:14px;padding-left:60px;}
-#repo-show #main .infos{float:left;margin:0;padding:20px;width:160px;font-size:13px;background:#f6f6f6;}
-#repo-show #main .infos span{float:right;color:#d89d14;}
-#repo-show .col-right{width:280px;float:right;}
-#repo-show .col-right .box{margin:0px 0px 20px 0px;padding:10px;overflow:hidden;font-size:12px;background:#FAFAFA;border:1px solid #DDD;}
-#repo-show .col-right .box.no-padding{padding:0;}
-#repo-show .col-right .box h3{font-weight:bold;font-size:13px;margin-bottom:5px;}
-#repo-show .col-right .box.no-padding h3{margin:10px 10px 5px 10px;}
-#repo-show .col-right .box li{padding:5px 0px;border-top:1px solid #eee;}
-#repo-show .col-right .box a{color:#4183C4;}
-#repo-show .col-right .box .infos{font-style:italic;}
-#repo-show #data{float:left;width:628px;margin:0 0 20px 0px;font-size:12px;padding:10px;background:#fafafa;border:1px solid #DDDDDD;}
-#repo-show #disqus_thread{font-size:12px;background:none repeat scroll 0 0 #FAFAFA;border:1px solid #DDDDDD;padding:0 10px 0 10px;float:left;margin:0 0 20px 0;width:628px;}
-#repo-show .chart-repo{border:1px solid #DDD;width:648px; overflow: hidden;margin-bottom:20px;background:#FAFAFA;}
-#repo-show .chart-repo h2{margin: 10px 0 0 10px;font-size: 14px;font-weight: bold;}
-#repo-show .chart-repo .chart{height:200px;}
+#bundle-show #main .details{clear:both;margin:0px 0 10px 0px;overflow:hidden;}
+#bundle-show #main .description{padding:0px;font-size:14px;padding-left:60px;}
+#bundle-show #main .infos{float:left;margin:0;padding:20px;width:160px;font-size:13px;background:#f6f6f6;}
+#bundle-show #main .infos span{float:right;color:#d89d14;}
+#bundle-show .col-right{width:280px;float:right;}
+#bundle-show .col-right .box{margin:0px 0px 20px 0px;padding:10px;overflow:hidden;font-size:12px;background:#FAFAFA;border:1px solid #DDD;}
+#bundle-show .col-right .box.no-padding{padding:0;}
+#bundle-show .col-right .box h3{font-weight:bold;font-size:13px;margin-bottom:5px;}
+#bundle-show .col-right .box.no-padding h3{margin:10px 10px 5px 10px;}
+#bundle-show .col-right .box li{padding:5px 0px;border-top:1px solid #eee;}
+#bundle-show .col-right .box a{color:#4183C4;}
+#bundle-show .col-right .box .infos{font-style:italic;}
+#bundle-show #data{float:left;width:628px;margin:0 0 20px 0px;font-size:12px;padding:10px;background:#fafafa;border:1px solid #DDDDDD;}
+#bundle-show #disqus_thread{font-size:12px;background:none repeat scroll 0 0 #FAFAFA;border:1px solid #DDDDDD;padding:0 10px 0 10px;float:left;margin:0 0 20px 0;width:628px;}
+#bundle-show .chart-bundle{border:1px solid #DDD;width:648px; overflow: hidden;margin-bottom:20px;background:#FAFAFA;}
+#bundle-show .chart-bundle h2{margin: 10px 0 0 10px;font-size: 14px;font-weight: bold;}
+#bundle-show .chart-bundle .chart{height:200px;}
 /* ----- Developers List ----- */
 #developers-list{}
 #developers-list #main{padding-top:10px;}
@@ -268,7 +268,7 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 #developer-show #main .card .avatar img{margin:11px;}
 #developer-show #main .card .about .links{padding:20px 0 20px 110px;font-size:14px;}
 #developer-show #main .card .about .links a{color:#d89d14;}
-#developer-show #main .repo .details{padding:40px;}
+#developer-show #main .bundle .details{padding:40px;}
 /* ----- Search ----- */
 #search{}
 #search #main p{margin:20px;}

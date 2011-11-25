@@ -4,9 +4,9 @@ namespace Knp\Bundle\KnpBundlesBundle\Detector\Criterion;
 
 abstract class CriterionTest extends \PHPUnit_Framework_TestCase
 {
-    protected function getRepoEntity()
+    protected function getBundleEntity()
     {
-        return $this->getMockForAbstractClass('Knp\Bundle\KnpBundlesBundle\Entity\Repo');
+        return $this->getMockForAbstractClass('Knp\Bundle\KnpBundlesBundle\Entity\Bundle');
     }
 
     protected function getGitRepo($directory)
@@ -24,7 +24,7 @@ abstract class CriterionTest extends \PHPUnit_Framework_TestCase
         return $this->getMockForAbstractClass(
             'Knp\Bundle\KnpBundlesBundle\Git\Repo',
             array(
-                $this->getRepoEntity(),
+                $this->getBundleEntity(),
                 $this->getGitRepo($directory)
             )
         );

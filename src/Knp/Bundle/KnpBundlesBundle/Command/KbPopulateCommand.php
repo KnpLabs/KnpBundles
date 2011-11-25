@@ -20,7 +20,7 @@ class KbPopulateCommand extends ContainerAwareCommand
     {
         $this
             ->setDefinition(array())
-            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'The maximal number of new repositories considered by the update', 1000)
+            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'The maximal number of new bundles considered by the update', 1000)
             ->setName('kb:populate')
         ;
     }
@@ -32,17 +32,17 @@ class KbPopulateCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $gitRepoDir = $this->getContainer()->getParameter('knp_bundles.repos_dir');
+        $gitRepoDir = $this->getContainer()->getParameter('knp_bundles.bundles_dir');
         $gitBin = $this->getContainer()->getParameter('knp_bundles.git_bin');
 
         $em = $this->getContainer()->get('knp_bundles.entity_manager');
 
         $updater = new Updater($em, $gitRepoDir, $gitBin, $output);
         $updater->setUp();
-        $repos = $updater->searchNewRepos((int) $input->getOption('limit'));
-        $updater->createMissingRepos($repos);
+        $bundles = $updater->searchNewBundles((int) $input->getOption('limit'));
+        $updater->createMissingBundles($bundles);
         $em->flush();
-        $updater->updateReposData();
+        $updater->updateBundlesData();
         $em->flush();
         $updater->updateUsers();
         $em->flush();

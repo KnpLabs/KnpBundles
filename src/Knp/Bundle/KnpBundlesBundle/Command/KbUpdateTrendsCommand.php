@@ -31,11 +31,11 @@ class KbUpdateTrendsCommand extends ContainerAwareCommand
     {
         $em = $this->getContainer()->get('knp_bundles.entity_manager');
 
-        $repoRepository = $em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Repo');
+        $bundleRepository = $em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle');
 
         $em->getConnection()->beginTransaction();
         try {
-            $nbRows = $repoRepository->updateTrends();
+            $nbRows = $bundleRepository->updateTrends();
             $output->writeln(sprintf('<info>%s</info> rows updated', $nbRows));
 
             $em->getConnection()->commit();

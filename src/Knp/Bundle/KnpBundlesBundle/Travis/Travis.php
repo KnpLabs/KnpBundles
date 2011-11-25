@@ -32,10 +32,10 @@ class Travis
     /**
      * Updates repo based on status from travis.
      * 
-     * @param Entity\Repo $repo
+     * @param Entity\Bundle $repo
      * @return boolean 
      */
-    public function update(Entity\Repo $repo)
+    public function update(Entity\Bundle $repo)
     {
         $this->output->write(' travis status');
 
@@ -64,10 +64,10 @@ class Travis
     /**
      * Get repository status for Repo
      * 
-     * @param Entity\Repo $repo
+     * @param Entity\Bundle $repo
      * @return array
      */
-    protected function getTravisDataForRepo(Entity\Repo $repo)
+    protected function getTravisDataForRepo(Entity\Bundle $repo)
     {
         return $this->getTravisData($repo->getUsername()."/".$repo->getName());
     }

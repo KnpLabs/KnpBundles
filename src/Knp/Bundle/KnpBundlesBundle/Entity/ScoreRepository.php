@@ -12,21 +12,21 @@ use Doctrine\ORM\NoResultException;
 class ScoreRepository extends EntityRepository
 {
     /**
-     * Set the score value for a given date and repo.
+     * Set the score value for a given date and bundle.
      * If the entry does not yet exist in DB, create a new object
      * (you're responsible for persisting it)
      *
      * @param DateTime $date
-     * @param Repo $repo
+     * @param Bundle $bundle
      * @param int Value of the score
      * @return Score
      */
-    public function setScore(\DateTime $date, Repo $repo, $value)
+    public function setScore(\DateTime $date, Bundle $bundle, $value)
     {
-        $score = $this->findOneByDateAndBundle($date, $repo);
+        $score = $this->findOneByDateAndBundle($date, $bundle);
         if (!$score) {
             $score = new Score();
-            $score->setRepo($repo);
+            $score->setBundle($bundle);
             $score->setDate($date);
         }
         $score->setValue($value);
@@ -35,19 +35,19 @@ class ScoreRepository extends EntityRepository
     }
 
     /**
-     * Finds the Score object for a given date and repo
+     * Finds the Score object for a given date and bundle
      *
      * @param DateTime $date
-     * @param Repo $repo
+     * @param Bundle $bundle
      * @return Score or null
      */
-    public function findOneByDateAndBundle(\DateTime $date, Repo $repo)
+    public function findOneByDateAndBundle(\DateTime $date, Bundle $bundle)
     {
         try {
             return $this->createQueryBuilder('s')
-                ->where('s.repo = :repo_id')
+                ->where('s.bundle = :bundle_id')
                 ->andWhere('s.date = :date')
-                ->setParameter('repo_id', $repo->getId())
+                ->setParameter('bundle_id', $bundle->getId())
                 ->setParameter('date', $date->format('Y-m-d'))
                 ->getQuery()
                 ->getSingleResult();

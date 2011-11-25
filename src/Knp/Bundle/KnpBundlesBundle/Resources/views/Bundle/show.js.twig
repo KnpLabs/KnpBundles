@@ -1,1 +1,1 @@
-{% include 'KnpBundlesBundle:Repo:show.js.twig' with {'repo': repo, 'callback': callback} %}
+{{ '%s(%s)'|format(callback, bundle.toBigArray|json_encode)|raw }}
