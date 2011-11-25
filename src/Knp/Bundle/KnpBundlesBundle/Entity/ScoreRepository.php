@@ -73,4 +73,20 @@ class ScoreRepository extends EntityRepository
 
         return $q->execute();
     }
+
+    /**
+     * Get an array containing dates and number of scores for this date
+     *
+     * @return array
+     */
+    public function getScoreCountEvolution()
+    {
+
+        return $this->createQueryBuilder('s')
+            ->select('s.date, COUNT(s.id) AS number')
+            ->groupBy('s.date')
+            ->orderBy('s.date', 'asc')
+            ->getQuery()
+            ->execute();
+    }
 }

@@ -10,27 +10,53 @@
     <h1>{% trans %}evolution.title{% endtrans %}</h1>
 
     <div id="main">
-        {{ 'evolution.text'|trans|markdown }}
+        <div class="graph">
+            <p class="description">{{ 'evolution.sum_score.text'|trans|markdown }}</p>
+            
+            <div id="sum_chart_div" style="width:960px; height: 400px;"></div>
+        </div>
+    
+        <div class="graph">
+            <p class="description">{{ 'evolution.number_score.text'|trans|markdown }}</p>
+            
+            <div id="count_chart_div" style="width:960px; height: 400px;"></div>
+        </div>
+    </div>
 
-        <div id="chart_div" style="width:960px; height: 400px;"></div>
-        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript">
           google.load("visualization", "1", {packages:["corechart"]});
           google.setOnLoadCallback(drawChart);
           function drawChart() {
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Date');
-            data.addColumn('number', 'Score');
-            data.addRows({{ scores|length }});
-            {% for score in scores -%}
-            data.setValue({{ loop.index0 }}, 0, '{{ score.date }}');
-            data.setValue({{ loop.index0 }}, 1, {{ score.sumValues }});
+            /** 
+             * Drawing the evolution of total score among time
+             */ 
+            var sum_data = new google.visualization.DataTable();
+            sum_data.addColumn('string', 'Date');
+            sum_data.addColumn('number', 'Score');
+            sum_data.addRows({{ score_sums|length }});
+            {% for sum in score_sums -%}
+            sum_data.setValue({{ loop.index0 }}, 0, '{{ sum.date }}');
+            sum_data.setValue({{ loop.index0 }}, 1, {{ sum.sumValues }});
             {% endfor %}
 
-            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-            chart.draw(data, {width: 960, height: 400, legend: 'none', hAxis: {showTextEvery: 1}});
+            var sum_chart = new google.visualization.LineChart(document.getElementById('sum_chart_div'));
+            sum_chart.draw(sum_data, {width: 960, height: 400, legend: 'none', hAxis: {showTextEvery: 1}});
+
+            /** 
+             * Drawing the evolution of the number of score among time
+             */ 
+            var count_data = new google.visualization.DataTable();
+            count_data.addColumn('string', 'Date');
+            count_data.addColumn('number', 'Score');
+            count_data.addRows({{ score_counts|length }});
+            {% for count in score_counts -%}
+            count_data.setValue({{ loop.index0 }}, 0, '{{ count.date }}');
+            count_data.setValue({{ loop.index0 }}, 1, {{ count.number }});
+            {% endfor %}
+
+            var count_chart = new google.visualization.LineChart(document.getElementById('count_chart_div'));
+            count_chart.draw(count_data, {width: 960, height: 400, legend: 'none', hAxis: {showTextEvery: 1}});
           }
         </script>
-
-    </div>
 {% endblock %}
