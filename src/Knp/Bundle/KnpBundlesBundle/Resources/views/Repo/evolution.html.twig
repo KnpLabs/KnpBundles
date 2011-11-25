@@ -10,12 +10,20 @@
     <h1>{% trans %}evolution.title{% endtrans %}</h1>
 
     <div id="main">
-        {{ 'evolution.text'|trans|markdown }}
+        <div class="graph">
+            <p class="description">{{ 'evolution.sum_score.text'|trans|markdown }}</p>
+            
+            <div id="sum_chart_div" style="width:960px; height: 400px;"></div>
+        </div>
+    
+        <div class="graph">
+            <p class="description">{{ 'evolution.number_score.text'|trans|markdown }}</p>
+            
+            <div id="count_chart_div" style="width:960px; height: 400px;"></div>
+        </div>
+    </div>
 
-        <div id="sum_chart_div" style="width:960px; height: 400px;"></div>
-        <div id="count_chart_div" style="width:960px; height: 400px;"></div>
-
-        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript">
           google.load("visualization", "1", {packages:["corechart"]});
           google.setOnLoadCallback(drawChart);
@@ -51,6 +59,4 @@
             count_chart.draw(count_data, {width: 960, height: 400, legend: 'none', hAxis: {showTextEvery: 1}});
           }
         </script>
-
-    </div>
 {% endblock %}
