@@ -20,7 +20,7 @@ evolution:
 
 project_list:
     pattern:        /project/{sort}
-    defaults:       { _controller: KnpBundlesBundle:Repo:list, class: Project, sort: best }
+    defaults:       { _controller: KnpBundlesBundle:Repo:list, class: Project, sort: trend }
     requirements:   { _method: "GET", sort: "(best|updated|newest|trend)"}
 
 user_list:
@@ -30,7 +30,7 @@ user_list:
 
 bundle_list:
     pattern:        /{sort}
-    defaults:       { _controller: KnpBundlesBundle:Repo:list, class: Bundle, sort: best }
+    defaults:       { _controller: KnpBundlesBundle:Repo:list, class: Bundle, sort: trend }
     requirements:   { _method: "GET", sort: "(best|updated|newest|trend)"}
 
 user_bundle_list:
