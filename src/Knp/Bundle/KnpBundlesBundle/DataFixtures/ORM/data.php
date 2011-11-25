@@ -104,6 +104,26 @@ class Data implements FixtureInterface
                 ));
 
                 $manager->persist($repo);
+
+                // Add some scores for projects
+                $today = new \DateTime();
+                // We add a various number of scores for a given project/bundle
+                $daysBefore = crc32($repo->getName().'-days') % 50;
+                $maxScore = crc32($repo->getName()) % 50;
+                $previousScore = $maxScore;
+
+                while($daysBefore-- > 0) {
+                    $date = clone $today;
+                    $date->sub(new \DateInterval('P'.$daysBefore.'D'));
+
+                    $score = new Entity\Score();
+                    $score->setRepo($repo);
+                    $score->setValue($previousScore + $daysBefore);
+                    $score->setDate($date);
+
+                    $manager->persist($score);
+                    $previousScore = $score->getValue();
+                }
             }
         }
 
