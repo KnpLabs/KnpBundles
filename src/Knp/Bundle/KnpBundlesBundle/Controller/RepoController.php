@@ -120,10 +120,13 @@ class RepoController extends Controller
 
     public function evolutionAction()
     {
-        $scores = $this->getRepository('Score')->getScoreSumEvolution();
+        $repository = $this->getRepository('Score'); 
+        $sums = $repository->getScoreSumEvolution();
+        $counts = $repository->getScoreCountEvolution();
 
         return $this->render('KnpBundlesBundle:Repo:evolution.html.twig', array(
-            'scores' => $scores,
+            'score_sums'      => $sums,
+            'score_counts'    => $counts,
         ));
     }
 
