@@ -164,7 +164,7 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 #sort .sort-by{float:left;padding:5px 20px;}
 .repos-list .image,
 .developers-list .image{float:left;width:50px;}
-.bundlerank{text-align:center;text-shadow:0 1px rgba(0,0,0,0.1);text-transform:uppercase;color:#716b14;font-size:18px;font-weight:bold;font-family:Helvetica;width:52px;float:left;background:url(../images/bundlerank.png) no-repeat;height:52px;line-height:52px;}
+.bundlerank{text-align:center;text-shadow:0 1px rgba(0,0,0,0.1);text-transform:uppercase;color:#555;font-size:16px;font-weight:bold;font-family:Helvetica;width:50px;float:left;background:url(../images/bundlerank.png) no-repeat;height:50px;line-height:50px;}
 /* Title */
 .repos-list .content-title{height:26px;line-height:18px;}
 .repos-list .content-title h1{color:#383529;font-size:18px;margin:0;padding:0;font-family:Arial;font-weight:bold;display:block;float:left;letter-spacing: -0.03em;}
@@ -184,7 +184,7 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 .dropdown-menu-list a:hover {background-color: #F2F5F9;}
 .dropdown-menu a:hover {text-decoration: underline;}
 
-.repos-list .big-list .repo{position:relative;padding:10px 0;font-size:14px;border-bottom:1px solid #CCDCEF;overflow:hidden;width:650px;overflow:hidden;border-left:4px solid transparent;}
+.repos-list .big-list .repo{position:relative;padding:15px 0;font-size:14px;border-bottom:1px solid #CCDCEF;overflow:hidden;width:650px;overflow:hidden;border-left:4px solid transparent;}
 .repos-list .big-list .repo.first{border-top:1px solid #80A1C1;}
 .repos-list .big-list .repo.active{border-left:4px solid #EEB342;}
 .repos-list .big-list .bundlerank{margin:0px 10px 0px 5px;float:left;}
@@ -195,7 +195,7 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 .repos-list .big-list .details li{float:left;margin-right:20px;line-height:13px;}
 .repos-list .big-list .details a{color:#5F88CE;}
 .repos-list .big-list .img{float:right;}
-.repos-list .big-list .img img{border:4px solid #E5ECF3;}
+.repos-list .big-list .img img{border:2px solid #F0F0F0;}
 
 .repos-list .big-list .repo.user .img{float:left;width:70px;margin-left:10px;}
 
@@ -242,12 +242,17 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 #repo-show #main .infos span{float:right;color:#d89d14;}
 #repo-show .col-right{width:280px;float:right;}
 #repo-show .col-right .box{margin:0px 0px 20px 0px;padding:10px;overflow:hidden;font-size:12px;background:#FAFAFA;border:1px solid #DDD;}
+#repo-show .col-right .box.no-padding{padding:0;}
 #repo-show .col-right .box h3{font-weight:bold;font-size:13px;margin-bottom:5px;}
+#repo-show .col-right .box.no-padding h3{margin:10px 10px 5px 10px;}
 #repo-show .col-right .box li{padding:5px 0px;border-top:1px solid #eee;}
 #repo-show .col-right .box a{color:#4183C4;}
 #repo-show .col-right .box .infos{font-style:italic;}
 #repo-show #data{float:left;width:628px;margin:0 0 20px 0px;font-size:12px;padding:10px;background:#fafafa;border:1px solid #DDDDDD;}
 #repo-show #disqus_thread{font-size:12px;background:none repeat scroll 0 0 #FAFAFA;border:1px solid #DDDDDD;padding:0 10px 0 10px;float:left;margin:0 0 20px 0;width:628px;}
+#repo-show .chart-repo{border:1px solid #DDD;width:648px; overflow: hidden;margin-bottom:20px;background:#FAFAFA;}
+#repo-show .chart-repo h2{margin: 10px 0 0 10px;font-size: 14px;font-weight: bold;}
+#repo-show .chart-repo .chart{height:200px;}
 /* ----- Developers List ----- */
 #developers-list{}
 #developers-list #main{padding-top:10px;}
