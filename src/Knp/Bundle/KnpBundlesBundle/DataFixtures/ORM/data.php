@@ -108,7 +108,9 @@ class Data implements FixtureInterface
                 // Add some scores for projects
                 $today = new \DateTime();
                 // We add a various number of scores for a given project/bundle
-                $daysBefore = mt_rand(0, 365);
+                $daysBefore = crc32($repo->getName().'-days') % 50;
+                $maxScore = crc32($repo->getName()) % 50;
+                $previousScore = $maxScore;
 
                 while($daysBefore-- > 0) {
                     $date = clone $today;
@@ -116,11 +118,11 @@ class Data implements FixtureInterface
 
                     $score = new Entity\Score();
                     $score->setRepo($repo);
-                    // We generate a random score between 0 and 50
-                    $score->setValue(mt_rand(0, 50));
+                    $score->setValue($previousScore + $daysBefore);
                     $score->setDate($date);
-                    
+
                     $manager->persist($score);
+                    $previousScore = $score->getValue();
                 }
             }
         }
