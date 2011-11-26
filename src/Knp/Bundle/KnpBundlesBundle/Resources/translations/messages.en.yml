@@ -79,9 +79,11 @@ bundles.show:
         contributors: "Nb of contributors:"
         followers: "Nb of followers:"
         buildStatus: "Build status:"
+        composer: "Composer"
+        travis: "Travis CI"
+        github: "Github"
     contributors:
         title: "Contributors"
-        composerName: "Composer name:"
     latest_commits:
         title: "Latest commits"
         by: "By"

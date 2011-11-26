@@ -68,6 +68,7 @@ class Data implements FixtureInterface
                 'readme'        => str_repeat("README of the bundle number ".$i."\n", 20),
                 'tags'          => ($i%2) ? array('1.0', '1.1') : array(),
                 'usesTravisCi'  => ($i%2) ? false : true,
+                'composerName'  => ($i%2) ? null : 'knplabs/knp-menu-bundle',
                 'travisCiBuildStatus'  => ($i%2 == 0) ? $trilean[$i%3] : null,
                 'nbFollowers'   => $i*10,
                 'nbForks'       => $i,

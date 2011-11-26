@@ -115,7 +115,6 @@ class Updater
     {
         $this->output->writeln('Will now update commits, files and tags');
         // Now update repos with more precise GitHub data
-        $now = time();
         foreach (array_reverse($this->bundles) as $bundle) {
             if ($this->em->getUnitOfWork()->getEntityState($bundle) != UnitOfWork::STATE_MANAGED) {
                 continue;

@@ -245,15 +245,18 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 #bundle-show .col-right .box.no-padding{padding:0;}
 #bundle-show .col-right .box h3{font-weight:bold;font-size:13px;margin-bottom:5px;}
 #bundle-show .col-right .box.no-padding h3{margin:10px 10px 5px 10px;}
-#bundle-show .col-right .box li{padding:5px 0px;border-top:1px solid #eee;}
+#bundle-show .col-right .box li{padding:5px 0px;border-top:1px solid #eee;line-height:20px;}
+#bundle-show .col-right .box li img{vertical-align:middle;}
 #bundle-show .col-right .box a{color:#4183C4;}
 #bundle-show .col-right .box .infos{font-style:italic;}
+#bundle-show .col-right .box .info-composer{background: transparent url(http://packagist.org/favicon.ico) no-repeat left center; padding-left: 20px;}
+#bundle-show .col-right .box .info-github{background: transparent url(http://github.com/favicon.png) no-repeat left center; padding-left: 20px;}
+#bundle-show .col-right .box .info-travis{background: transparent url(http://travis-ci.org/favicon.ico) no-repeat left center; padding-left: 20px;}
 #bundle-show #data{float:left;width:628px;margin:0 0 20px 0px;font-size:12px;padding:10px;background:#fafafa;border:1px solid #DDDDDD;}
 #bundle-show #disqus_thread{font-size:12px;background:none repeat scroll 0 0 #FAFAFA;border:1px solid #DDDDDD;padding:0 10px 0 10px;float:left;margin:0 0 20px 0;width:628px;}
 #bundle-show .chart-bundle{border:1px solid #DDD;width:648px; overflow: hidden;margin-bottom:20px;background:#FAFAFA;}
 #bundle-show .chart-bundle h2{margin: 10px 0 0 10px;font-size: 14px;font-weight: bold;}
 #bundle-show .chart-bundle .chart{height:200px;}
-#bundle-show #composer{float:left;width:628px;margin:0 0 20px 0px;font-size:16px;padding:10px;background:#fafafa;border:1px solid #DDDDDD;}
 /* ----- Developers List ----- */
 #developers-list{}
 #developers-list #main{padding-top:10px;}
