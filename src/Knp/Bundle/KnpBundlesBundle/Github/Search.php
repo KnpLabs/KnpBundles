@@ -86,6 +86,9 @@ class Search
                 }
                 foreach ($found as $repo) {
                     $name = $repo['username'].'/'.$repo['name'];
+                    if (!$this->isValidBundleName($name)) {
+                        continue;
+                    }
                     $entity = new Bundle($name);
                     $repos[strtolower($name)] = $entity;
                 }
@@ -126,6 +129,9 @@ class Search
                     }
                     $name = $match[1];
                     if(!isset($repos[strtolower($name)])) {
+                        if (!$this->isValidBundleName($name)) {
+                            continue;
+                        }
                         $repo = new Bundle($name);
                         $repos[strtolower($name)] = $repo;
                         $this->output->write(sprintf('!'));
@@ -174,6 +180,9 @@ class Search
                         // The url is perhaps directly a github url
                         if (preg_match('#^https?://github.com/([^/]+/[^/]+)(/.*)?#', $url, $m)) {
                             $name = $m[1];
+                            if (!$this->isValidBundleName($name)) {
+                                continue;
+                            }
                             $repos[strtolower($name)] = new Bundle($name);
 
                         // Or a redirect/multi-redirect link => we parse the resulting github page
@@ -186,6 +195,9 @@ class Search
 
                             if (preg_match('#<title>([a-z0-9-_]+/[^\'"/ ]+) - GitHub</title>#i', $html, $m)) {
                                 $name = $m[1];
+                                if (!$this->isValidBundleName($name)) {
+                                    continue;
+                                }
                                 $repos[strtolower($name)] = new Bundle($name);
                             }
                         }
@@ -258,5 +270,16 @@ class Search
     public function setGithubClient($github)
     {
         $this->github = $github;
+    }
+
+    /**
+     * Check if a bundle name is really a bundle name
+     *
+     * @param string name of the bundle
+     * @return bool
+     */
+    protected function isValidBundleName($username, $name)
+    {
+        return (bool) preg_match('@Bundle$@', $name);
     }
 }
