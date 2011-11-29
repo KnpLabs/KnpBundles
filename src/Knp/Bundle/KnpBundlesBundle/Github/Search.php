@@ -278,7 +278,7 @@ class Search
      * @param string name of the bundle
      * @return bool
      */
-    protected function isValidBundleName($username, $name)
+    protected function isValidBundleName($name)
     {
         return (bool) preg_match('@Bundle$@', $name);
     }
