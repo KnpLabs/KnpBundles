@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * A user living on GitHub
  *
- * @ORM\Entity(repositoryClass="Knp\Bundle\KnpBundlesBundle\Entity\UserRepository")
+ * @ORM\Entity(repositoryClass="Knp\Bundle\KnpBundlesBundle\Repository\UserRepository")
  * @ORM\Table(
  *      name="user",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="name_unique",columns={"name"})}

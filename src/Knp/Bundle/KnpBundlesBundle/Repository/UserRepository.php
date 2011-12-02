@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\Bundle\KnpBundlesBundle\Entity;
+namespace Knp\Bundle\KnpBundlesBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;

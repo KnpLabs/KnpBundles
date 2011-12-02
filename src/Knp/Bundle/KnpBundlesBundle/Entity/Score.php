@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * A score of a given bundle at a given date
  *
- * @ORM\Entity(repositoryClass="Knp\Bundle\KnpBundlesBundle\Entity\ScoreRepository")
+ * @ORM\Entity(repositoryClass="Knp\Bundle\KnpBundlesBundle\Repository\ScoreRepository")
  * @ORM\Table(
  *      name="score",
  *      indexes={

@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\Collection;
 /**
  * An Open Source Repo living on GitHub
  *
- * @ORM\Entity(repositoryClass="Knp\Bundle\KnpBundlesBundle\Entity\BundleRepository")
+ * @ORM\Entity(repositoryClass="Knp\Bundle\KnpBundlesBundle\Repository\BundleRepository")
  * @ORM\Table(
  *      name="bundle",
  *      indexes={
