@@ -16,6 +16,3 @@ security:
     providers:
         knpbundles_user:
             id: knp_bundles.user.provider
-
-    factories:
-        - "%kernel.root_dir%/../vendor/bundles/Etcpasswd/OAuthBundle/Resources/config/security_factories.xml"

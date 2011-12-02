@@ -104,7 +104,7 @@
     git=http://github.com/zendframework/zf2.git
 
 [EtcpasswdOAuthBundle]
-    git=http://github.com/mazen/EtcpasswdOAuthBundle.git
+    git=http://github.com/mbontemps/EtcpasswdOAuthBundle.git
     target=bundles/Etcpasswd/OAuthBundle
 
 [Buzz]
