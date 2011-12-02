@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * An Open Source Repo living on GitHub
@@ -61,6 +62,15 @@ class Bundle
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     protected $user = null;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="usedBundles")
+     * @ORM\JoinTable(name="bundles_usage",
+     *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="knpbundles_user_id", referencedColumnName="id")}
+     *      )
+     */
+    protected $users = null;
 
     /**
      * Repo description
@@ -839,5 +849,20 @@ class Bundle
         $class = get_class($this);
 
         return substr($class, strrpos($class, '\\')+1);
+    }
+
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    public function getNbUsers()
+    {
+        return count($this->users);
+    }
+
+    public function addUser(User $user)
+    {
+        $this->users[] = $user;
     }
 }

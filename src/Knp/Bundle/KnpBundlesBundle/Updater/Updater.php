@@ -7,6 +7,10 @@ use Knp\Bundle\KnpBundlesBundle\Git;
 use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
 use Doctrine\ORM\UnitOfWork;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\OutputInterface;
+use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
+
 
 class Updater
 {
@@ -21,9 +25,9 @@ class Updater
     private $em;
     private $output;
 
-    public function __construct($em, $gitRepoDir, $gitBin, $output)
+    public function __construct($em, $gitRepoDir, $gitBin, OutputInterface $output = null)
     {
-        $this->output = $output;
+        $this->output = $output ?: new NullOutput();
         $this->em = $em;
         $this->githubClient = new \Github_Client();
         $this->githubSearch = new Github\Search($this->githubClient, new \Goutte\Client(), $this->output);
@@ -82,9 +86,10 @@ class Updater
      * Add or update a repo
      *
      * @param string A full repo name like knplabs/KnpMenuBundle
-     * @return Repo
+     * @param boolean Wether or not to fetch informations
+     * @return Bundle
      */
-    public function addBundle($fullName)
+    public function addBundle($fullName, $updateRepo = true)
     {
         list($username, $bundleName) = explode('/', $fullName);
         
@@ -106,8 +111,10 @@ class Updater
 
         $this->em->flush();
         
-        $this->updateRepo($bundle);
-        
+        if ($updateRepo) {
+            $this->updateRepo($bundle);
+        }
+
         return $bundle;
     }
 
@@ -195,13 +202,15 @@ class Updater
         }
     }
 
-    private function getOrCreateUser($username)
+    public function getOrCreateUser($username)
     {
         if (isset($this->users[strtolower($username)])) {
             $user = $this->users[strtolower($username)];
         } else {
             $this->output->write(sprintf('Add user %s:', $username));
-            $user = $this->githubUserApi->import($username);
+            if (!$user = $this->githubUserApi->import($username)) {
+                throw new UserNotFoundException();
+            }
             $this->users[strtolower($user->getName())] = $user;
             $this->em->persist($user);
         }

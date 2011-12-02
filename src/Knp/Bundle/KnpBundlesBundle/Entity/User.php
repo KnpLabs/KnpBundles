@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * A user living on GitHub
@@ -17,7 +18,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * )
  * @ORM\HasLifecycleCallbacks
  */
-class User
+class User implements UserInterface
 {
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
@@ -115,9 +116,15 @@ class User
      */
     protected $score = null;
 
+    /**
+    * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="users")
+    */
+    protected $usedBundles;
+
     public function __construct()
     {
         $this->bundles = new ArrayCollection();
+        $this->usedBundles = new ArrayCollection();
         $this->contributionBundles = new ArrayCollection();
         $this->createdAt = new \DateTime('NOW');
     }
@@ -488,6 +495,16 @@ class User
     }
 
     /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->getName();
+    }
+
+    /**
      * Set name
      *
      * @param  string
@@ -557,5 +574,46 @@ class User
         foreach ($data as $key => $value) {
             $this->{'set'.$key}($value);
         }
+    }
+
+    /* ---------- Security User ---------- */
+
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    public function getPassword()
+    {
+        return '';
+    }
+
+    public function getSalt()
+    {
+        return '';
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
+    public function equals(UserInterface $user)
+    {
+        return $user instanceof User && $user->getUsername() === $this->getUsername();
+    }
+
+    public function getUsedBundles()
+    {
+        return $this->usedBundles;
+    }
+
+    public function isUsingBundle(Bundle $bundle)
+    {
+        return $this->getUsedBundles()->contains($bundle);
+    }
+
+    public function addUsedBundle(Bundle $bundle)
+    {
+        $this->usedBundles[] = $bundle;
     }
 }

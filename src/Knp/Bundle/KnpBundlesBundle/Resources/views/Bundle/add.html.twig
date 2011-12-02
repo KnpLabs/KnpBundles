@@ -1,0 +1,28 @@
+{% extends 'KnpBundlesBundle::layout.html.twig' %}
+
+{% block title %}{% trans %}addBundle.addBundle{% endtrans %}{% endblock %}
+
+{% block content_title %}
+    <h1>{% trans %}addBundle.addBundle{% endtrans %}</h1>
+{% endblock %}
+
+{% block content %}
+    <div id="add-bundle">
+        <p id="introduction">{% trans %}addBundle.introText{% endtrans %}</p>
+
+        {% if error %}
+        <div class="error">
+          {{ errorMessage | trans }}
+        </div>
+        {% endif %}
+
+        <form action="{{ path('add_bundle') }}" method="post">
+        <label for="bundle">Enter GitHub repo URL: <span class="prefilled">https://github.com/</span></label>
+        <input type="text" id="bundle" name="bundle" value="{% if error %}{{ bundle }}{% endif %}" />
+        <button id="add-bundle-btn" class="button" type="submit">{% trans %}addBundle.addBundle{% endtrans %}</button>
+        </form>
+        <div class="example">
+        {% trans %}addBundle.example{% endtrans %} https://github.com/knplabs/knpbundles
+        </div>
+    </div>
+{% endblock %}

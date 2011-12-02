@@ -38,7 +38,23 @@ user_show:
     defaults:       { _controller: KnpBundlesBundle:User:show }
     requirements:   { _method: "GET"}
 
+bundle_change_usage_status:
+    pattern:        /{username}/{name}/change-usage-status
+    defaults:       { _controller: KnpBundlesBundle:Bundle:changeUsageStatus }
+    requirements:   { _method: "GET", name: ".+" }
+
 bundle_show:
     pattern:        /{username}/{name}
     defaults:       { _controller: KnpBundlesBundle:Bundle:show }
     requirements:   { _method: "GET", format: "(html|json|js)", name: ".+" }
+
+add_bundle:
+    pattern:        /add
+    defaults:       { _controller: KnpBundlesBundle:Bundle:add }
+    requirements:   { _method: "GET|POST" }
+
+login:
+    pattern:        /login
+
+logout:
+    pattern:        /logout

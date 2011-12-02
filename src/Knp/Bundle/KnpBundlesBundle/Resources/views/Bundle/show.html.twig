@@ -33,6 +33,26 @@
             </ul>
         </div>
 
+        <div class="box">
+            <h3>{% trans %}bundles.show.users.title{% endtrans %}</h3>
+            <ul>
+                <li>
+                    {% for user in bundle.users %}
+                        <img src="{{ gravatar_hash(user.gravatarHash, 25, none, 'identicon')}}" />
+                    {% endfor %}
+                </li>
+                <li>
+                    <a class="button i-am-using" href="{{ path('bundle_change_usage_status', { 'username': bundle.username, 'name': bundle.name }) }}">
+                        {% if app.user is not null and not isUsedByUser %}
+                            {% trans %}bundles.show.users.iAmUsing{% endtrans %}
+                        {% else %}
+                            {% trans %}bundles.show.users.iAmNotUsing{% endtrans %}
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
+        </div>
+
         {% if bundle.scores|length > 1 %}
         {% set chartDimensions = [280, 200] %}
         <div class="box no-padding">
@@ -72,11 +92,11 @@
             <h3>{% trans %}bundles.show.contributors.title{% endtrans %}</h3>
             <ul class="user-list hide-contributors">
                 <li class="user">
-                    {% trans %}bundles.show.users.by{% endtrans %} <a href="{{ path('user_show', {'name': bundle.username}) }}">{{ bundle.username }}</a>
+                    {% trans %}bundles.show.contributors.by{% endtrans %} <a href="{{ path('user_show', {'name': bundle.username}) }}">{{ bundle.username }}</a>
                 </li>
 
                 {%- if bundle.nbContributors != 0 %}
-                    <li class="contributor-others-switch">{% trans %}bundles.show.users.and{% endtrans %} <a href="#">{% trans %}bundles.show.users.contributors{% endtrans %}</a></li>
+                    <li class="contributor-others-switch">{% trans %}bundles.show.contributors.and{% endtrans %} <a href="#">{% trans %}bundles.show.contributors.contributors{% endtrans %}</a></li>
                     {%- for contributor in bundle.contributors %}
                         <li class="contributor"><a href="{{ path('user_show', {'name': contributor}) }}">{{ contributor }}</a>
                     {%- endfor %}
@@ -104,7 +124,8 @@
                 {{ bundle.name }}
                 <span class="username">{% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': bundle.username}) }}">{{ bundle.username }}</a></span>
             </h1>
-            <p class="description">{{ bundle.description }}</p>
+            {% set noDescriptionNotice = 'bundle.noDescription'|trans %}
+            <p class="description">{{ bundle.description|default(noDescriptionNotice) }}</p>
         </div>
 
         <div class="actions">

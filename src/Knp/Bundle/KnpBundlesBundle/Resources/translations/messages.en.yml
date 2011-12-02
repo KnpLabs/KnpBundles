@@ -4,6 +4,7 @@ menu:
     bundles: "Bundles"
     users: "Developers"
     evolution: "Evolution"
+    addBundleManually: "Register a bundle"
 
     promo:
         nb: 3
@@ -82,17 +83,22 @@ bundles.show:
         composer: "Composer"
         travis: "Travis CI"
         github: "Github"
+        users: "Nb of users:"
     contributors:
         title: "Contributors"
+        by: "by"
+        and: "&"
+        contributors: "contributors…"
     latest_commits:
         title: "Latest commits"
         by: "By"
     users:
-        by: "by"
-        and: "&"
-        contributors: "contributors…"
+        title: "Registered users"
+        iAmUsing: "I'm using this bundle"
+        iAmNotUsing: "I'm not using this bundle anymore"
     chart:
         title: "Score evolution"
+
 
 bundles.list:
     by: " by "
@@ -156,3 +162,13 @@ travis:
         passing: "Passing"
         failing: "Failing"
         unknown: "Unknown"
+
+addBundle:
+    addBundle: "Add Symfony2 bundle"
+    introText: "You can add a bundle manually by entering its GitHub url. Basic info will be available immediately while some additional info should be fetched in some hours. Please be patient."
+    invalidBundleName: "Please enter a valid GitHub repo name (e.g. knplabs/KnpBundles)"
+    userNotFound: "Specified user was not found on GitHub"
+    example: Example:
+
+bundle:
+    noDescription: "We're fetching informations about this repo. In a few hours, you'll know everything about it."

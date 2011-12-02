@@ -1,0 +1,22 @@
+security:
+    firewalls:
+          oauth:
+              anonymous: true
+              logout: true
+              pattern: ^/
+              oauth:
+                  provider:      knpbundles_user
+                  auth_provider: github
+                  client_id:     %knp_bundles.github.client_id%
+                  client_secret: %knp_bundles.github.client_secret%
+                  scope:         user
+                  login_path:    /login
+                  check_path:    /oauth/github
+                  failure_path:  /
+
+    providers:
+        knpbundles_user:
+            id: knp_bundles.user.provider
+
+    factories:
+        - "%kernel.root_dir%/../vendor/bundles/Etcpasswd/OAuthBundle/Resources/config/security_factories.xml"

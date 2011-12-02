@@ -22,6 +22,14 @@ To configure your database in your development environment, copy
 `/app/config/parameters.yml.dist` to `/app/config/parameters.yml` and 
 edit it according to your database settings.
 
+If you want to use github connect locally, you'll need to
+[create an app on github](https://github.com/account/applications/new)
+with the callback:
+
+    http://yourlocalurl/app_dev.php/oauth/github
+
+And update the parameters.yml with the Client ID and Secret.
+
 ### Install vendors
 
     php bin/vendors install

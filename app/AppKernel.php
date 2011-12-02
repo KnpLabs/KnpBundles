@@ -10,12 +10,14 @@ class AppKernel extends Kernel
         $bundles = array(
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
+            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
 
             // enable third-party bundles
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\DoctrineBundle\DoctrineBundle(),
             new Symfony\Bundle\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
             new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
+            new Etcpasswd\OAuthBundle\EtcpasswdOAuthBundle(),
 
             // register your bundles here
             new Knp\Bundle\MarkdownBundle\KnpMarkdownBundle(),
@@ -26,7 +28,7 @@ class AppKernel extends Kernel
             new JMS\I18nRoutingBundle\JMSI18nRoutingBundle(),
 
             // register your applications here
-            new Knp\Bundle\KnpBundlesBundle\KnpBundlesBundle()
+            new Knp\Bundle\KnpBundlesBundle\KnpBundlesBundle(),
         );
 
         if ($this->isDebug()) {

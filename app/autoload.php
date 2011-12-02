@@ -20,6 +20,8 @@ $loader->registerNamespaces(array(
     'Monolog'                       => __DIR__.'/../vendor/monolog/src',
     'Goutte'                        => __DIR__.'/../vendor/goutte/src',
     'Zend'                          => __DIR__.'/../vendor/zf/library',
+    'Etcpasswd'                     => __DIR__.'/../vendor/bundles',
+    'Buzz'                          => __DIR__.'/../vendor/buzz/lib',
 ));
 
 $loader->registerPrefixes(array(

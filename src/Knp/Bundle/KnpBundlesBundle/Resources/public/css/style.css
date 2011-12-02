@@ -20,17 +20,22 @@ a{color:#4B8ECB;}
 * --------------------
 */
 /* ----- Header ----- */
-#header{background:#2D2D2D;overflow:hidden;}
+#header{background:#2D2D2D;overflow:hidden;color:#CCC;}
+#header a{color:inherit;}
 #menu{height:30px;overflow:hidden;padding:0;float:left;}
-#menu,
-#menu li{margin:0;padding:0;list-style:none;}
-#menu li{height:30px;line-height:30px;display:block;float:left;border-right:0px solid #616162;}
-#menu li.first{margin-left:0;}
-#menu li.last{margin-right:0;border-right:none;}
-#menu a{height:30px;line-height:30px;display:inline;color:#CCC;font:13px/27px Arial,sans-serif;text-decoration:none;padding:0 10px;font-weight:bold;}
-#menu li:hover{background:#555;}
-#menu li.current{color:#ffffff;background:#EEB342;}
-#menu li.current a{color:inherit;}
+#header ul,
+#header li{margin:0;padding:0;list-style:none;}
+#header li{height:30px;line-height:30px;display:block;float:left;border-right:0px solid #616162; }
+#header li.first{margin-left:0;}
+#header li.last{margin-right:0;border-right:none;}
+#header a,
+#header span{height:30px;line-height:30px;display:inline;color:#CCC;font:13px/27px Arial,sans-serif;text-decoration:none; padding:0 10px;font-weight:bold;}
+#header li:hover{ background: #555;}
+#header li.current{color:#ffffff; background: #EEB342;}
+#header li.current a,
+#header li.current span{color:inherit;}
+#auth {float: right;}
+
 /* ----- Header2 ----- */
 #header2{background:#F5F5F5;border-bottom:1px solid #DDD;height:60px;}
 #header2 .center{position:relative;}
@@ -257,6 +262,9 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 #bundle-show .chart-bundle{border:1px solid #DDD;width:648px; overflow: hidden;margin-bottom:20px;background:#FAFAFA;}
 #bundle-show .chart-bundle h2{margin: 10px 0 0 10px;font-size: 14px;font-weight: bold;}
 #bundle-show .chart-bundle .chart{height:200px;}
+
+#bundle-show a.i-am-using { color: #fff !important;display:block;text-align:center;}
+#change-status-form {}
 /* ----- Developers List ----- */
 #developers-list{}
 #developers-list #main{padding-top:10px;}
@@ -273,9 +281,20 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 #developer-show #main .card .about .links{padding:20px 0 20px 110px;font-size:14px;}
 #developer-show #main .card .about .links a{color:#d89d14;}
 #developer-show #main .bundle .details{padding:40px;}
+
+/* ----- Add repo ----- */
+#add-bundle-link { float: right; font-size: 12px; line-height: 40px; }
+#add-bundle-link span { font-style: italic; }
+#add-bundle-btn { float: right; color: #fff; }
+#add-bundle p#introduction { padding-bottom: 10px; font-size: 12px; }
+#add-bundle label { float: left; line-height: 29px; margin-right: 5px; font-size: 14px; }
+#add-bundle input { float: left; border: none; height: 25px; width: 318px; padding: 1px 7px 1px 7px; color: #666; font-size: 14px; margin: 0; outline: none; border: 1px solid #DDDDDD; }
+#add-bundle button { float: left; margin-left: 10px; height: 29px; line-height: 29px; cursor: pointer; }
+#add-bundle .error { color: red; padding-top: 5px; font-size: 12px; }
+#add-bundle span.prefilled { font-size: 14px; line-height: 29px; margin-left: 20px; }
+#add-bundle .example { clear: both; margin-left: 300px; font-size: 10px; margin-bottom: 20px; }
 /* ----- Search ----- */
 #search{}
 #search #main p{margin:20px;}
 /* ----- Search Result ----- */
 #search-result{}
-/* ----- API ----- */

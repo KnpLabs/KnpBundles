@@ -7,7 +7,7 @@ services:
         class: Knp\Menu\MenuItem # the service definition requires setting the class
         factory_service: knp_bundles.menu_builder
         factory_method: createMainMenu
-        arguments: ["@request", "@translator"]
+        arguments: ["@request", "@translator", "@security.context"]
         scope: request # needed as we have the request as a dependency here
         tags:
             - { name: knp_menu.menu, alias: main } # The alias is what is used to retrieve the menu
