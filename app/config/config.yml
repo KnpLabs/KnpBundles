@@ -65,3 +65,10 @@ jms_i18n_routing:
     default_locale: en
     locales: [fr, pl, en]
     strategy: prefix_except_default
+
+inori_twitter_app:
+    file: %kernel.root_dir%/../vendor/twitteroauth/twitteroauth/twitteroauth.php
+    consumer_key: %knp_bundles.twitter.consumer_key%
+    consumer_secret: %knp_bundles.twitter.consumer_secret%
+    oauth_token: %knp_bundles.twitter.oauth_token%
+    oauth_token_secret: %knp_bundles.twitter.oauth_token_secret%

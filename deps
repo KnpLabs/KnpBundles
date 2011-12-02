@@ -110,3 +110,11 @@
 [Buzz]
     git=http://github.com/kriswallsmith/Buzz.git
     target=buzz
+
+[TwitterAppBundle]
+    git=http://github.com/Inori/InoriTwitterAppBundle.git
+    target=bundles/Inori/TwitterAppBundle
+
+[twitteroauth]
+    git=http://github.com/abraham/twitteroauth.git
+    target=twitteroauth

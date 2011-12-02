@@ -22,6 +22,7 @@ $loader->registerNamespaces(array(
     'Zend'                          => __DIR__.'/../vendor/zf/library',
     'Etcpasswd'                     => __DIR__.'/../vendor/bundles',
     'Buzz'                          => __DIR__.'/../vendor/buzz/lib',
+    'Inori'                         => __DIR__.'/../vendor/bundles',
 ));
 
 $loader->registerPrefixes(array(
