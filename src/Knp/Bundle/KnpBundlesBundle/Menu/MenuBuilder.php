@@ -27,9 +27,7 @@ class MenuBuilder
         $menu->addChild('bundles', array('route' => 'bundle_list'))->setLabel($translator->trans('menu.bundles'));
         $menu->addChild('users', array('route' => 'user_list'))->setLabel($translator->trans('menu.users'));
         $menu->addChild('evolution', array('route' => 'evolution'))->setLabel($translator->trans('menu.evolution'));
-        if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $menu->addChild('add-bundle', array('route' => 'add_bundle'))->setLabel($translator->trans('menu.addBundleManually'));
-        }
+        $menu->addChild('add-bundle', array('route' => 'add_bundle'))->setLabel($translator->trans('menu.addBundleManually'));
 
         return $menu;
     }

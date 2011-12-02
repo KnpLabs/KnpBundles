@@ -82,6 +82,16 @@ class BundleController extends Controller
 
     public function listAction($sort)
     {
+        # crappy hack for oauth return_url
+        $session = $this->getRequest()->getSession();
+
+        if (null !== $redirect_url = $session->get('redirect_url', null))
+        {
+            $session->remove('redirect_url');
+            return $this->redirect($redirect_url);
+        }
+        # end hack
+
         if (!array_key_exists($sort, $this->sortFields)) {
             throw new HttpException(406, sprintf('%s is not a valid sorting field', $sort));
         }
@@ -142,7 +152,10 @@ class BundleController extends Controller
     public function addAction(Request $request)
     {
         if (!$this->userIsLogged()) {
-            return $this->redirect($this->generateUrl('bundle_list'));
+            # crappy hack for oauth return url
+            $this->getRequest()->getSession()->set('redirect_url', $this->generateUrl('add_bundle'));
+            # end hack
+            return $this->redirect('/login');
         }
 
         $error = false;
@@ -178,7 +191,8 @@ class BundleController extends Controller
     public function changeUsageStatusAction($username, $name)
     {
         if (!$this->userIsLogged()) {
-            return $this->redirect($this->generateUrl('bundle_list'));
+            $this->getRequest()->getSession()->set('redirect_url', $this->generateUrl('bundle_show', array('username' => $username, 'name' => $name)));
+            return $this->redirect('/login');
         }
 
         $bundle = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);

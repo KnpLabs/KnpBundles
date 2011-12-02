@@ -96,6 +96,7 @@ bundles.show:
         title: "Registered users"
         iAmUsing: "I'm using this bundle"
         iAmNotUsing: "I'm not using this bundle anymore"
+        loginToUse: "Login to say you use this bundle"
     chart:
         title: "Score evolution"
 
