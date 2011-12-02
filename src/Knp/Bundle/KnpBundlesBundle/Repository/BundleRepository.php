@@ -152,4 +152,11 @@ EOF;
         return $nbRows;
     }
 
+    public function getMostTrendingBundle()
+    {
+        $result = $this->findAllSortedBy('trend1', 1);
+
+        return $result ? $result[0] : false;
+    }
+
 }
