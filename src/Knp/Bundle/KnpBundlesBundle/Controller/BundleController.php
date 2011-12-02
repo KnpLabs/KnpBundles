@@ -145,10 +145,12 @@ class BundleController extends Controller
             return $this->redirect($this->generateUrl('bundle_list'));
         }
 
+        $error = false;
+        $errorMessage = $bundle = '';
         if ($request->request->has('bundle')) {
             $bundle = $request->request->get('bundle');
 
-            if (preg_match('/^[A-Za-z0-9-]+\/[A-Za-z0-9-\.]+$/', $bundle)) {
+            if (preg_match('/^[a-z0-9-]+\/[a-z0-9-\.]+$/i', $bundle)) {
                 $updater = $this->get('knp_bundles.updater');
                 $updater->setUp();
                 try {
@@ -166,10 +168,6 @@ class BundleController extends Controller
                 $error = true;
                 $errorMessage = 'addBundle.invalidBundleName';
             }
-        } else {
-            $bundle = '';
-            $error = false;
-            $errorMessage = '';
         }
 
         $data = array('bundle' => $bundle, 'error' => $error, 'errorMessage' => $errorMessage);
@@ -183,12 +181,12 @@ class BundleController extends Controller
             return $this->redirect($this->generateUrl('bundle_list'));
         }
 
-        $params = array('username' => $username, 'name' => $name);
-
         $bundle = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);
         if (!$bundle) {
             throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
         }
+
+        $params = array('username' => $username, 'name' => $name);
 
         if (!$user = $this->get('security.context')->getToken()->getUser()) {
             return $this->redirect($this->generateUrl('bundle_show', $params));
@@ -196,9 +194,13 @@ class BundleController extends Controller
         $em = $this->get('doctrine')->getEntityManager();
 
         if ($user->isUsingBundle($bundle)) {
+            $bundle->updateScore(-1);
+
             $bundle->getUsers()->removeElement($user);
             $user->getUsedBundles()->removeElement($bundle);
         } else {
+            $bundle->updateScore(1);
+
             $bundle->addUser($user);
             $user->addUsedBundle($bundle);
             $em->persist($bundle);

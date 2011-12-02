@@ -64,6 +64,8 @@ class Bundle
     protected $user = null;
 
     /**
+     * Users using the bundle
+     *
      * @ORM\ManyToMany(targetEntity="User", inversedBy="usedBundles")
      * @ORM\JoinTable(name="bundles_usage",
      *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")},
@@ -240,7 +242,6 @@ class Bundle
      * Set homepage
      *
      * @param  string
-     * @return null
      */
     public function setHomepage($homepage)
     {
@@ -261,7 +262,6 @@ class Bundle
      * Set isFork
      *
      * @param  bool
-     * @return null
      */
     public function setIsFork($isFork)
     {
@@ -282,7 +282,6 @@ class Bundle
      * Set whether bundle uses Travis CI
      *
      * @param  bool
-     * @return null
      */
     public function setUsesTravisCi($uses)
     {
@@ -303,7 +302,6 @@ class Bundle
      * Set Travis Ci last build status
      *
      * @param  string
-     * @return null
      */
     public function setTravisCiBuildStatus($status)
     {
@@ -324,7 +322,6 @@ class Bundle
      * Set Composer name
      *
      * @param  string
-     * @return null
      */
     public function setComposerName($name)
     {
@@ -345,7 +342,6 @@ class Bundle
      * Set tags
      *
      * @param  array
-     * @return null
      */
     public function setTags(array $tags)
     {
@@ -381,7 +377,6 @@ class Bundle
      * Set lastCommits
      *
      * @param  array
-     * @return null
      */
     public function setLastCommits(array $lastCommits)
     {
@@ -398,6 +393,7 @@ class Bundle
 
     /**
      * Get readme
+     *
      * @return string
      */
     public function getReadme()
@@ -407,8 +403,8 @@ class Bundle
 
     /**
      * Set readme
+     *
      * @param  string
-     * @return null
      */
     public function setReadme($readme)
     {
@@ -427,8 +423,8 @@ class Bundle
 
     /**
      * Set score
+     *
      * @param  integer
-     * @return null
      */
     public function setScore($score)
     {
@@ -462,26 +458,39 @@ class Bundle
         }
 
         // Small boost for bundles that have a real README file
-        if(strlen($this->getReadme()) > 300) {
+        if (mb_strlen($this->getReadme()) > 300) {
             $score += 5;
         }
 
         // Small boost for bundles that uses travis ci
-        if($this->getUsesTravisCi()) {
+        if ($this->getUsesTravisCi()) {
             $score += 5;
         }
 
         // Small boost for bundles with passing tests according to Travis
-        if($this->getTravisCiBuildStatus()) {
+        if ($this->getTravisCiBuildStatus()) {
             $score += 5;
         }
 
         // Small boost for repos that provide composer package
-        if($this->getComposerName()) {
+        if ($this->getComposerName()) {
             $score += 5;
         }
 
+        // Small boost for repos that have users using it
+        $score += $this->getNbUsers();
+
         $this->setScore($score);
+    }
+
+    /**
+     * Updates bundle score with given amount of points
+     *
+     * @param  integer $points
+     */
+    public function updateScore($points = 1)
+    {
+        $this->setScore($this->score + $points);
     }
 
     /**
@@ -621,7 +630,6 @@ class Bundle
      * Set name
      *
      * @param  string
-     * @return null
      */
     public function setName($name)
     {
@@ -652,7 +660,6 @@ class Bundle
      * Set username
      *
      * @param  string
-     * @return null
      */
     public function setUsername($username)
     {
@@ -689,7 +696,6 @@ class Bundle
      * Set description
      *
      * @param  string
-     * @return null
      */
     public function setDescription($description)
     {
@@ -708,8 +714,6 @@ class Bundle
 
     /**
      * Set the bundle creation date
-     *
-     * @return null
      */
     public function setCreatedAt(\DateTime $createdAt)
     {
@@ -733,7 +737,7 @@ class Bundle
      */
     public function getContributors()
     {
-      return $this->contributors;
+        return $this->contributors;
     }
 
     /**
@@ -760,18 +764,16 @@ class Bundle
      * Set contributors
      *
      * @param  array
-     * @return null
      */
     public function setContributors(array $contributors)
     {
-      $this->contributors = new ArrayCollection($contributors);
+        $this->contributors = new ArrayCollection($contributors);
     }
 
     public function getContributorNames()
     {
         $names = array();
-        foreach ($this->getContributors() as $contributor)
-        {
+        foreach ($this->getContributors() as $contributor) {
             $names[] = $contributor->getName();
         }
 
