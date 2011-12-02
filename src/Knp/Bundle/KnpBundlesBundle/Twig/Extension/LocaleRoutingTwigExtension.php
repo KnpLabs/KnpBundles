@@ -28,32 +28,31 @@ class LocaleRoutingTwigExtension extends \Twig_Extension
 
     public function getLocalizedPath(Request $request, $locale)
     {
-        $route = $request->attributes->get('_route');
-        
-        $parameters = $request->attributes->all();
-        unset($parameters['_route']);
-        unset($parameters['_controller']);
-        unset($parameters['_route_params']);
-
-        $parameters = array_merge($parameters, $request->query->all());
-        $parameters['_locale'] = $locale;
-
-        return $this->generator->generate($route, $parameters, false);
+        return $this->generateLocalizedRoute($request, $locale, false);
     }
 
     public function getLocalizedUrl(Request $request, $locale)
     {
-        $route = $request->attributes->get('_route');
-        
-        $parameters = $request->attributes->all();
-        unset($parameters['_route']);
-        unset($parameters['_controller']);
-        unset($parameters['_route_params']);
+        return $this->generateLocalizedRoute($request, $locale, true);
+    }
 
-        $parameters = array_merge($parameters, $request->query->all());
+    /**
+     * Generate localized route
+     *
+     * @param type $request
+     * @param type $locale
+     * @param type $absolute
+     *
+     * @return string
+     */
+    protected function generateLocalizedRoute(Request $request, $locale, $absolute)
+    {
+        $route = $request->attributes->get('_route');
+
+        $parameters = array_merge($request->attributes->get('_route_params'), $request->query->all());
         $parameters['_locale'] = $locale;
 
-        return $this->generator->generate($route, $parameters, true);
+        return $this->generator->generate($route, $parameters, $absolute);
     }
 
     /**
