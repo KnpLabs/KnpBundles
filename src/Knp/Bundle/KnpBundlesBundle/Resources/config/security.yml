@@ -9,7 +9,6 @@ security:
                   auth_provider: github
                   client_id:     %knp_bundles.github.client_id%
                   client_secret: %knp_bundles.github.client_secret%
-                  scope:         user
                   login_path:    /login
                   check_path:    /oauth/github
                   failure_path:  /
