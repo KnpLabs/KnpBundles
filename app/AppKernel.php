@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
             new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
             new Etcpasswd\OAuthBundle\EtcpasswdOAuthBundle(),
+            new Inori\TwitterAppBundle\InoriTwitterAppBundle(),
 
             // register your bundles here
             new Knp\Bundle\MarkdownBundle\KnpMarkdownBundle(),
