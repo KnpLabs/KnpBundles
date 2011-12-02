@@ -14,9 +14,16 @@ class MainController extends Controller
 {
     public function apiAction()
     {
-        $text = file_get_contents(__DIR__.'/../Resources/doc/02-Api.markdown');
+        $text = file_get_contents(__DIR__.'/../Resources/doc/api.markdown');
 
         return $this->render('KnpBundlesBundle:Main:api.html.twig', array('text' => $text));
+    }
+
+    public function symfony2bundlesAction()
+    {
+        $text = file_get_contents(__DIR__.'/../Resources/doc/symfony2bundles.markdown');
+
+        return $this->render('KnpBundlesBundle:Main:symfony2bundles.html.twig', array('text' => $text));
     }
 
     public function bannerAction()

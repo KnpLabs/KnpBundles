@@ -42,9 +42,6 @@ header:
 
 footer:
     code: "Voir le code sur Github"
-    symfony2bundles:
-        url: "http://knplabs.fr/blog/symfony2bundles-becomes-knpbundle"
-        label: "Pourquoi renommer Symfony2Bundles ?"
     language:
         title: "Langue"
         en: "English"

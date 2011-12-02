@@ -38,9 +38,6 @@ header:
 
 footer:
     code: "Pokaż kod na Githubie"
-    symfony2bundles:
-        url: "http://knplabs.com/blog/symfony2bundles-becomes-knpbundle"
-        label: "Dlaczego zmieniono nazwę z Symfony2Bundles?"
     language:
         title: "Język"
         en: "English"

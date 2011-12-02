@@ -58,3 +58,9 @@ login:
 
 logout:
     pattern:        /logout
+
+symfony2bundles:
+    pattern:        /symfony2bundles
+    defaults:       { _controller: KnpBundlesBundle:Main:symfony2bundles }
+    requirements:   { _method: "GET" }
+

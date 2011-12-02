@@ -43,9 +43,6 @@ header:
 
 footer:
     code: "Show the code on Github"
-    symfony2bundles:
-        url: "http://knplabs.com/blog/symfony2bundles-becomes-knpbundle"
-        label: "Why renaming Symfony2Bundles?"
     language:
         title: "Language"
         en: "English"
@@ -142,6 +139,12 @@ api:
         title: "Developer HTTP API"
         description: "Programmatic HTTP API to access Bundles and developers data"
     title: "Deleveloper API"
+
+symfony2bundles:
+    meta:
+        title: "Symfony2bundles becomes KnpBundles"
+        description: "More features, more love from KnpLabs… Symfony2bundles has been renamed to comply with Symfony trademarks"
+    title: "Symfony2bundles becomes KnpBundles"
 
 notFound:
     title: "404 - Page not found"
