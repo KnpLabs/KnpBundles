@@ -25,16 +25,16 @@ class TrendingBundleTwitterer
 
 	private function prepareMessage()
 	{
-		if (!$trendingBundle = $this->em->getRepository('KnpBundlesBundle:Bundle')->getMostTrendingBundle()) {
+		if (!$trendingBundle = $this->em->getRepository('KnpBundlesBundle:Bundle')->findLatestSortedBy('trend1')) {
 			throw new TrendingBundleNotFound();
 		}
 
 		$bundleName = $trendingBundle->getName();
 		$url = 'bundles.knplabs.org/' . $trendingBundle->getUsername() . '/' . $bundleName;
 
-		$message = str_replace('{name}', $bundleName, $this->tweetTemplate);
-		$message = str_replace('{url}', $url, $message);
+		$placeholders = array('{name}', '{url}');
+		$values = array($bundleName, $url);
 
-		return $message;
+		return str_replace($placeholders, $values, $this->tweetTemplate);
 	}
 }

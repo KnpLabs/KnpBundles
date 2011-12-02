@@ -152,11 +152,11 @@ EOF;
         return $nbRows;
     }
 
-    public function getMostTrendingBundle()
+    public function findLatestSortedBy($field)
     {
-        $result = $this->findAllSortedBy('trend1', 1);
+        $query = $this->queryAllSortedBy($field);
+        $query->setMaxResults(1);
 
-        return $result ? $result[0] : false;
+        return $query->getOneOrNullResult();
     }
-
 }
