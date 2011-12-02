@@ -49,15 +49,17 @@ class BundleControllerTest extends WebTestCase
 
     public function testIAmUsingThisRepo()
     {
+        $this->markTestIncomplete("You should log in here");
+
         $client = self::createClient();
         $crawler = $client->request('GET', '/');
         $this->assertTrue($client->getResponse()->isSuccessful());
 
-        $link = $crawler->filter('a:contains("FooBundle")')->first()->link();
+        $link = $crawler->filter('a:contains("I\'m using")')->first()->link();
         $crawler = $client->click($link);
 
         $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertEquals(1, $crawler->filter('html:contains("Nb of users")')->count());
+        $this->assertEquals(1, $crawler->filter('li.bundle-users img')->count());
         $this->assertEquals(0, $crawler->filter('a:contains("I am using this bundle")')->count());
     }
 }
