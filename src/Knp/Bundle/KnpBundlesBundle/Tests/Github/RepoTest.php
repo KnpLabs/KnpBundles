@@ -4,7 +4,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Tests\Github;
 
 use Knp\Bundle\KnpBundlesBundle\Git\RepoManager;
 use Knp\Bundle\KnpBundlesBundle\Github\Repo;
-use Knp\Bundle\KnpBundlesBundle\Entity\Repo as RepoEntity;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 class RepoTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +28,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
     
     public function testUpdateComposerFailure()
     {
-        $repoEntity = RepoEntity::create('knplabs/KnpMenuBundle');
+        $repoEntity = new Bundle('knplabs/KnpMenuBundle');
         $repo = $this->getRepo();
         $gitRepo = $this->getGitRepoMock();
 
@@ -47,7 +47,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateComposerSuccess()
     {
-        $repoEntity = RepoEntity::create('knplabs/KnpMenuBundle');
+        $repoEntity = new Bundle('knplabs/KnpMenuBundle');
         $repo = $this->getRepo();
         $gitRepo = $this->getGitRepoMock();
 

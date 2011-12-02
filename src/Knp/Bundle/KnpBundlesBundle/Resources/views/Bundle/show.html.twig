@@ -36,7 +36,7 @@
         <div class="box">
             <h3>{% trans %}bundles.show.users.title{% endtrans %}</h3>
             <ul>
-                <li>
+                <li class="bundle-users">
                     {% for user in bundle.users %}
                         <img src="{{ gravatar_hash(user.gravatarHash, 25, none, 'identicon')}}" />
                     {% endfor %}
