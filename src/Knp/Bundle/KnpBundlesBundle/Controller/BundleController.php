@@ -166,7 +166,7 @@ class BundleController extends Controller
                 $updater = $this->get('knp_bundles.updater');
                 $updater->setUp();
                 try {
-                    $bundles = $updater->addRepo($bundle, false);
+                    $bundles = $updater->addBundle($bundle, false);
 
                     $bundleParts = explode('/', $bundle);
                     $params = array('username' => $bundleParts[0], 'name' => $bundleParts[1]);
