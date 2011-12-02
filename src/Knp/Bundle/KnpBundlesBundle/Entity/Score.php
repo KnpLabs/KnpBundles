@@ -23,7 +23,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Score
 {
-
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -54,7 +53,6 @@ class Score
      */
     protected $value = null;
 
-
     public function __construct()
     {
         $this->bundle = null;
@@ -75,8 +73,8 @@ class Score
 
     /**
      * Set value
+     *
      * @param  integer
-     * @return null
      */
     public function setValue($value)
     {
@@ -97,7 +95,6 @@ class Score
      * Set date
      *
      * @param  \DateTime
-     * @return null
      */
     public function setDate(\DateTime $date)
     {
