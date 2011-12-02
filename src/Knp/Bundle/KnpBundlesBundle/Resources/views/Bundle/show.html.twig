@@ -43,10 +43,12 @@
                 </li>
                 <li>
                     <a class="button i-am-using" href="{{ path('bundle_change_usage_status', { 'username': bundle.username, 'name': bundle.name }) }}">
-                        {% if app.user is not null and not isUsedByUser %}
-                            {% trans %}bundles.show.users.iAmUsing{% endtrans %}
-                        {% else %}
-                            {% trans %}bundles.show.users.iAmNotUsing{% endtrans %}
+                        {% if app.user is not null %}
+                            {% if isUsedByUser  %}
+                                {% trans %}bundles.show.users.iAmNotUsing{% endtrans %}
+                            {% else %}
+                                {% trans %}bundles.show.users.iAmUsing{% endtrans %}
+                            {% endif %}
                         {% endif %}
                     </a>
                 </li>
