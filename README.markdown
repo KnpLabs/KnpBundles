@@ -1,6 +1,6 @@
 # KnpBundles
 
-Open-source code of the [bundles.knplabs.org](http://bundles.knplabs.org)
+Open-source code of the [knpbundles.com](http://knpbundles.com)
 website, written in Symfony2.
 
 Any ideas are welcome!

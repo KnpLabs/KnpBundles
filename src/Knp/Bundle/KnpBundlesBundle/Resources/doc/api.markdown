@@ -9,19 +9,19 @@ As for now, the only supported formats are JSON and JavaScript (JSONP)
 Add the "?format=json" parameter at the end of the url path.
 The response content-type will be "application/json".
 
-    $ curl http://bundles.knplabs.org/best?format=json
+    $ curl http://knpbundles.com/best?format=json
 
 ### JavaScript (JSONP)
 
 Use the "js" format parameter and a "callback" parameter to wrap the data.
 The response content-type will be "application/javascript".
 
-    $ curl http://bundles.knplabs.org/best?format=js&callback=doSomething
+    $ curl http://knpbundles.com/best?format=js&callback=doSomething
 
 jQuery provides an easy way to deal with jsonp, removing the need for a callback:
 
     $.ajax({
-        url:        "http://bundles.knplabs.org/best?format=js",
+        url:        "http://knpbundles.com/best?format=js",
         dataType:   "jsonp",
         success:    function(data) { ... }
     });
@@ -33,13 +33,13 @@ jQuery provides an easy way to deal with jsonp, removing the need for a callback
 To get the list of bundles sorted by a given field, use:
 
     # the best bundles first
-    $ curl http://bundles.knplabs.org/best?format=json
+    $ curl http://knpbundles.com/best?format=json
     
     # the newest bundles first
-    $ curl http://bundles.knplabs.org/newest?format=json
+    $ curl http://knpbundles.com/newest?format=json
 
     # the bundles updated recently first
-    $ curl http://bundles.knplabs.org/updated?format=json
+    $ curl http://knpbundles.com/updated?format=json
     
 Return a list of Bundles:
 
@@ -66,7 +66,7 @@ When requesting only one Bundle, you get more informations such as last commits,
 
     :username/:name
 
-    $ curl http://bundles.knplabs.org/avalanche123/MicroKernelBundle?format=json
+    $ curl http://knpbundles.com/avalanche123/MicroKernelBundle?format=json
 
 Return informations about one Bundle:
 
@@ -91,7 +91,7 @@ Return informations about one Bundle:
 
     search?format=:format&q=:query
 
-    $ curl http://bundles.knplabs.org/search?format=json&q=mongo
+    $ curl http://knpbundles.com/search?format=json&q=mongo
 
 Return a list of bundles:
 
@@ -99,7 +99,7 @@ Return a list of bundles:
       name: knpbundles
       username: knplabs
       description: Comprehensive list of Symfony2 bundles ordered by relevance and integrated with GitHub.
-      homepage: http://bundles.knplabs.org/
+      homepage: http://knpbundles.com/
       score: 46
       nbFollowers: 27
       nbForks: 3
@@ -114,7 +114,7 @@ Return a list of bundles:
 
 ### List developers
 
-    $ curl http://bundles.knplabs.org/developer/name?format=json
+    $ curl http://knpbundles.com/developer/name?format=json
 
 Return a list of developers:
 
@@ -131,7 +131,7 @@ Return a list of developers:
 
 When requesting only one user, you get more informations such as last commits.
 
-    $ curl http://bundles.knplabs.org/ornicar?format=json
+    $ curl http://knpbundles.com/ornicar?format=json
 
 Return informations about one developer.
 
@@ -153,7 +153,7 @@ Get a list of the Bundles a given developer owns.
 
     :name/bundles
 
-    $ curl http://bundles.knplabs.org/knplabs/bundles?format=json
+    $ curl http://knpbundles.com/knplabs/bundles?format=json
 
 Return a list of Bundles:
 

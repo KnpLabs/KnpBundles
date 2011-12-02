@@ -3,6 +3,6 @@ We've launched this service back in June 2010 to list all **Symfony2 bundles** -
 
 We've changed its name to comply with the Symfony trademark policy.
 
-**Symfony2bundles is now [KnpBundles](http://bundles.knplabs.org)!**
+**Symfony2bundles is now [KnpBundles](http://knpbundles.com)!**
 
 More [details about Symfony2bundles](http://knplabs.fr/blog/symfony2bundles-becomes-knpbundle) are availables on knplabs.com.
