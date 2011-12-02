@@ -85,8 +85,7 @@ class BundleController extends Controller
         # crappy hack for oauth return_url
         $session = $this->getRequest()->getSession();
 
-        if (null !== $redirect_url = $session->get('redirect_url', null))
-        {
+        if (null !== $redirect_url = $session->get('redirect_url', null)) {
             $session->remove('redirect_url');
             return $this->redirect($redirect_url);
         }
