@@ -60,27 +60,27 @@
     version=v1.0.1
 
 [KnpMarkdownBundle]
-    git=http://github.com/knplabs/KnpMarkdownBundle.git
+    git=http://github.com/KnpLabs/KnpMarkdownBundle.git
     target=bundles/Knp/Bundle/MarkdownBundle
 
 [KnpTimeBundle]
-    git=http://github.com/knplabs/KnpTimeBundle.git
+    git=http://github.com/KnpLabs/KnpTimeBundle.git
     target=bundles/Knp/Bundle/TimeBundle
 
 [KnpMarkdownBundle]
-    git=http://github.com/knplabs/KnpMarkdownBundle.git
+    git=http://github.com/KnpLabs/KnpMarkdownBundle.git
     target=bundles/Knp/Bundle/MarkdownBundle
 
 [KnpMenu]
-    git=http://github.com/knplabs/KnpMenu.git
+    git=http://github.com/KnpLabs/KnpMenu.git
     target=knp-menu
 
 [KnpMenuBundle]
-    git=http://github.com/knplabs/KnpMenuBundle.git
+    git=http://github.com/KnpLabs/KnpMenuBundle.git
     target=bundles/Knp/Bundle/MenuBundle
 
 [KnpPaginatorBundle]
-    git=http://github.com/knplabs/KnpPaginatorBundle.git
+    git=http://github.com/KnpLabs/KnpPaginatorBundle.git
     target=bundles/Knp/Bundle/PaginatorBundle
 
 [goutte]
@@ -98,7 +98,7 @@
     target=bundles/Ornicar/GravatarBundle
 
 [knp-components]
-    git=http://github.com/knplabs/knp-components.git
+    git=http://github.com/KnpLabs/knp-components.git
 
 [zf]
     git=http://github.com/zendframework/zf2.git
