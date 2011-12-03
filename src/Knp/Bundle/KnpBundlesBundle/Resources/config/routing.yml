@@ -18,6 +18,23 @@ evolution:
     defaults:       { _controller: KnpBundlesBundle:Bundle:evolution }
     requirements:   { _method: "GET" }
 
+
+add_bundle:
+    pattern:        /add
+    defaults:       { _controller: KnpBundlesBundle:Bundle:add }
+    requirements:   { _method: "GET|POST" }
+
+login:
+    pattern:        /login
+
+logout:
+    pattern:        /logout
+
+symfony2bundles:
+    pattern:        /symfony2bundles
+    defaults:       { _controller: KnpBundlesBundle:Main:symfony2bundles }
+    requirements:   { _method: "GET" }
+
 user_list:
     pattern:        /developer/{sort}
     defaults:       { _controller: KnpBundlesBundle:User:list, sort: name }
@@ -47,20 +64,3 @@ bundle_show:
     pattern:        /{username}/{name}
     defaults:       { _controller: KnpBundlesBundle:Bundle:show }
     requirements:   { _method: "GET", format: "(html|json|js)", name: ".+" }
-
-add_bundle:
-    pattern:        /add
-    defaults:       { _controller: KnpBundlesBundle:Bundle:add }
-    requirements:   { _method: "GET|POST" }
-
-login:
-    pattern:        /login
-
-logout:
-    pattern:        /logout
-
-symfony2bundles:
-    pattern:        /symfony2bundles
-    defaults:       { _controller: KnpBundlesBundle:Main:symfony2bundles }
-    requirements:   { _method: "GET" }
-
