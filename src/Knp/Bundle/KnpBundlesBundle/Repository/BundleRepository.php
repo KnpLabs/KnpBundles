@@ -3,6 +3,7 @@
 namespace Knp\Bundle\KnpBundlesBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 
 class BundleRepository extends EntityRepository
 {
