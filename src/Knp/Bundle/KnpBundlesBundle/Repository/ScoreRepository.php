@@ -4,6 +4,8 @@ namespace Knp\Bundle\KnpBundlesBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Knp\Bundle\KnpBundlesBundle\Entity\Score;
 
 /**
  * ScoreRepository
