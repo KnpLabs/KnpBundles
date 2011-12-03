@@ -7,22 +7,25 @@
 {% block body_attributes %}id="developer-show"{% endblock %}
 
 {% block content %}
-    <div class="content-title"><h1>{{ user.name }}</h1></div>
+    <h1 class="developer-name">{{ user.name }}</h1>
+    <div class="card">
+        <div class="avatar">
+            <img src="http://www.gravatar.com/avatar/{{ user.gravatarHash }}?s=80&r=g&d=identicon" alt="">
+        </div>
+        <ul class="stats">
+            <li>{% trans %}users.show.stats.location{% endtrans %} <span>{{ user.location }}</span></li>
+            <li>{% trans %}users.show.stats.lastCommit{% endtrans %} <span>{{ user.lastCommitAt|date('date_format'|trans) }}</span></li>
+            <li>{% trans %}users.show.stats.nbBundles{% endtrans %} <span>{{ user.nbBundles }}</span></li>
+            {%- if user.blog %}
+            <li>{% trans %}users.show.stats.blog{% endtrans %} <span><a href="{{ user.blog }}">{{ user.blog }}</a></span></li>
+            {%- endif %}
+        </ul>
+    </div>
+    <div class="actions">
+        <div id="bundle-gplusone"><g:plusone {% if user.blog %}href="{{ user.blog }}"{% endif %}></g:plusone></div>
+        <a class="button github" href="{{ user.gitHubUrl }}">{% trans %}users.show.github{% endtrans %}</a>
+    </div>
     <div id="main">
-        <div class="actions">
-            <div id="bundle-gplusone"><g:plusone {% if user.blog %}href="{{ user.blog }}"{% endif %}></g:plusone></div>
-            <a class="button github" href="{{ user.gitHubUrl }}">{% trans %}users.show.github{% endtrans %}</a>
-        </div>
-        <div class="card">
-            <ul class="stats">
-                <li>{% trans %}users.show.stats.location{% endtrans %} <span>{{ user.location }}</span></li>
-                <li>{% trans %}users.show.stats.lastCommit{% endtrans %} <span>{{ user.lastCommitAt|date('date_format'|trans) }}</span></li>
-                <li>{% trans %}users.show.stats.nbBundles{% endtrans %} <span>{{ user.nbBundles }}</span></li>
-                {% if user.blog %}
-                <li>{% trans %}users.show.stats.blog{% endtrans %} <span><a href="{{ user.blog }}">{{ user.blog }}</a></span></li>
-                {% endif %}
-            </ul>
-        </div>
         {%- if user.bundles|length > 0 %}
         <div class="bundles-i-manage">
             <h2>{% trans %}users.show.bundles_manage{% endtrans %}</h2>
