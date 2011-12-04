@@ -18,17 +18,17 @@
                 <li class="info-github" title="{% trans %}bundles.show.infos.github{% endtrans %}">
                     <a href="{{ bundle.githubUrl }}">{{ bundle.fullName }}</a>
                 </li>
+                {% if bundle.composerName %}
+                <li class="info-composer" title="{% trans %}bundles.show.infos.composer{% endtrans %}">
+                    <a href="{{ bundle.packagistUrl }}">{{ bundle.composerName }}</a>
+                </li>
+                {% endif %}
                 {% if bundle.usesTravisCi %}
                 <li class="info-travis" title="{% trans %}bundles.show.infos.travis{% endtrans %}">
                     <a href="{{ bundle.travisUrl }}">
                         <img src="https://secure.travis-ci.org/{{ bundle.username }}/{{ bundle.name }}.png"></img>
                     </a>
                  </li>
-                {% endif %}
-                {% if bundle.composerName %}
-                <li class="info-composer" title="{% trans %}bundles.show.infos.composer{% endtrans %}">
-                    <a href="{{ bundle.packagistUrl }}">{{ bundle.composerName }}</a>
-                </li>
                 {% endif %}
             </ul>
         </div>
