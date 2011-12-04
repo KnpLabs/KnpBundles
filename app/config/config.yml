@@ -105,3 +105,9 @@ old_sound_rabbit_mq:
         update_bundle:
             connection: default
             exchange_options: {name: 'upload-bundle', type: direct}
+    consumers:
+        update_bundle:
+            connection: default
+            exchange_options: {name: 'upload-bundle', type: direct}
+            queue_options:    {name: 'upload-bundle'}
+            callback:         knp_bundles.consumer.update_bundle

@@ -44,7 +44,7 @@ And update the parameters.yml with the Client ID and Secret.
     php app/console --env=test doctrine:database:create
     php app/console --env=test doctrine:schema:create
 
-#### Load data fixtures
+### Load data fixtures
 
     php app/console doctrine:fixtures:load
     php app/console --env=test doctrine:fixtures:load
@@ -53,7 +53,7 @@ And update the parameters.yml with the Client ID and Secret.
 
     php app/console assets:install --symlink web
 
-#### Run the tests (requires PHPUnit >= 3.5)
+### Run the tests (requires PHPUnit >= 3.5)
 
     phpunit -c app
 
@@ -67,9 +67,25 @@ And update the parameters.yml with the Client ID and Secret.
     php app/console doctrine:migrations:migrate
     php app/console cache:warmup
 
-#### Populate document collections from GitHub
+## Usage
+
+### Launch the consumer
+
+We rely on RabbitMQ to update bundles:
+
+* The main server **produces** messages saying "Hey, we should update this bundle"
+* The **consumers** read these messages and update them
+
+To launch a consumer, do:
+
+    php app/console rabbitmq:consumer update_bundle
+
+Note that you will need a functional rabbitmq server − but that's damn easy to install.
+
+### Populate document collections from GitHub
 
     php app/console kb:populate
 
 This can take long time. GitHub API is limited to 60 calls per minute,
 so the commands needs to wait.
+

@@ -25,6 +25,7 @@ class Updater
     private $users;
     private $em;
     private $output;
+    private $bundleUpdateProducer;
 
     public function __construct(EntityManager $em, $gitRepoDir, $gitBin, Producer $bundleUpdateProducer, OutputInterface $output = null)
     {
@@ -37,6 +38,7 @@ class Updater
         $this->gitRepoManager = new Git\RepoManager($gitRepoDir, $gitBin);
         $this->githubRepoApi = new Github\Repo($this->githubClient, $this->output, $this->gitRepoManager);
         $this->travis = new Travis($this->output);
+        $this->bundleUpdateProducer = $bundleUpdateProducer;
     }
 
     public function setOutput(OutputInterface $output)
@@ -148,6 +150,15 @@ class Updater
     
     public function updateRepo(Bundle $bundle)
     {
+        // Create a Message object
+        $message = array(
+            'hello' => time(),
+        );
+
+        // RabbitMQ, publish my message!
+        $this->bundleUpdateProducer->publish(serialize($message));
+        
+        return;
         $this->output->write($bundle->getFullName());
         $pad = 50 - strlen($bundle->getFullName());
         if ($pad > 0) {
