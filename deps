@@ -122,7 +122,6 @@
 [twitteroauth]
     git=http://github.com/abraham/twitteroauth.git
     target=twitteroauth
-
 [gherkin]
     git=https://github.com/Behat/Gherkin.git
     target=behat/gherkin
@@ -154,3 +153,11 @@
 [KnpZendCacheBundle]
     git=http://github.com/KnpLabs/KnpZendCacheBundle.git
     target=bundles/Knp/Bundle/ZendCacheBundle
+
+[RabbitMqBundle]
+    git=http://github.com/videlalvaro/RabbitMqBundle.git
+    target=bundles/OldSound/RabbitMqBundle
+
+[php-amqplib]
+    git=http://github.com/videlalvaro/php-amqplib.git
+    target=videlalvaro/php-amqplib
