@@ -101,3 +101,7 @@ old_sound_rabbit_mq:
             user:      %old_sound_rabbit_mq.user%
             password:  %old_sound_rabbit_mq.password%
             vhost:     %old_sound_rabbit_mq.vhost%
+    producers:
+        update_bundle:
+            connection: default
+            exchange_options: {name: 'upload-bundle', type: direct}

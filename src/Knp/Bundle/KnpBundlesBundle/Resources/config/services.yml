@@ -7,7 +7,11 @@ parameters:
 services:
     knp_bundles.updater:
         class:                    %knp_bundles.updater.class%
-        arguments:                [@knp_bundles.entity_manager, %knp_bundles.git_bin%, %knp_bundles.bundles_dir%]
+        arguments:
+            - @knp_bundles.entity_manager
+            - %knp_bundles.bundles_dir%
+            - %knp_bundles.git_bin%
+            - @old_sound_rabbit_mq.update_bundle_producer
     knp_bundles.user.provider:
         class:                    %knp_bundles.user.provider%
         arguments:                [@knp_bundles.entity_manager, @knp_bundles.updater]

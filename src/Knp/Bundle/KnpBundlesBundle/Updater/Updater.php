@@ -10,7 +10,8 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
-
+use Doctrine\ORM\EntityManager;
+use OldSound\RabbitMqBundle\RabbitMq\Producer;
 
 class Updater
 {
@@ -25,7 +26,7 @@ class Updater
     private $em;
     private $output;
 
-    public function __construct($em, $gitRepoDir, $gitBin, OutputInterface $output = null)
+    public function __construct(EntityManager $em, $gitRepoDir, $gitBin, Producer $bundleUpdateProducer, OutputInterface $output = null)
     {
         $this->output = $output ?: new NullOutput();
         $this->em = $em;
@@ -36,6 +37,11 @@ class Updater
         $this->gitRepoManager = new Git\RepoManager($gitRepoDir, $gitBin);
         $this->githubRepoApi = new Github\Repo($this->githubClient, $this->output, $this->gitRepoManager);
         $this->travis = new Travis($this->output);
+    }
+
+    public function setOutput(OutputInterface $output)
+    {
+        $this->output = $output;
     }
 
     public function setUp()
