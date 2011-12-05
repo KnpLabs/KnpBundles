@@ -180,10 +180,6 @@ class BundleController extends Controller
                 $error = true;
                 $errorMessage = 'addBundle.invalidBundleName';
             }
-        } else {
-            $bundle = '';
-            $error = false;
-            $errorMessage = '';
         }
 
         $data = array('bundle' => $bundle, 'error' => $error, 'errorMessage' => $errorMessage);
