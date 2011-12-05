@@ -57,6 +57,10 @@ And update the parameters.yml with the Client ID and Secret.
 
     phpunit -c app
 
+#### Run the Behat tests (requires PHPUnit >= 3.5)
+
+    php app/console --env=test behat
+
 #### To generate migrations from your current schema
 
     php app/console doctrine:migrations:diff

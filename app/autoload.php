@@ -23,6 +23,11 @@ $loader->registerNamespaces(array(
     'Etcpasswd'                     => __DIR__.'/../vendor/bundles',
     'Buzz'                          => __DIR__.'/../vendor/buzz/lib',
     'Inori'                         => __DIR__.'/../vendor/bundles',
+    'Behat\Gherkin'                 => __DIR__.'/../vendor/behat/gherkin/src',
+    'Behat\Behat'                   => __DIR__.'/../vendor/behat/behat/src',
+    'Behat\BehatBundle'             => __DIR__.'/../vendor/bundles',
+    'Behat\Mink'                    => __DIR__.'/../vendor/behat/mink/src',
+    'Behat\MinkBundle'              => __DIR__.'/../vendor/bundles',
 ));
 
 $loader->registerPrefixes(array(
