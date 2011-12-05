@@ -10,3 +10,5 @@ parameters:
 
     knp_bundles.github.client_id: your_client_id_here
     knp_bundles.github.client_secret: your_client_secret_here
+
+    base_url: http://your-virtualhost.local/app_test.php

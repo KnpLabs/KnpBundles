@@ -9,3 +9,6 @@ framework:
 web_profiler:
     toolbar: false
     intercept_redirects: false
+    
+mink:
+    base_url:   %base_url%

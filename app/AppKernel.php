@@ -31,6 +31,11 @@ class AppKernel extends Kernel
             new Knp\Bundle\KnpBundlesBundle\KnpBundlesBundle(),
         );
 
+        if ('test' === $this->getEnvironment()) {
+            $bundles[] = new Behat\BehatBundle\BehatBundle();
+            $bundles[] = new Behat\MinkBundle\MinkBundle();
+        }
+
         if ($this->isDebug()) {
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
         }

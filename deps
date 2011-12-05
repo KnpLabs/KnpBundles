@@ -110,3 +110,23 @@
 [Buzz]
     git=http://github.com/kriswallsmith/Buzz.git
     target=buzz
+
+[gherkin]
+    git=https://github.com/Behat/Gherkin.git
+    target=/behat/gherkin
+
+[behat]
+    git=https://github.com/Behat/Behat.git
+    target=/behat/behat
+
+[BehatBundle]
+    git=https://github.com/Behat/BehatBundle.git
+    target=/bundles/Behat/BehatBundle
+
+[mink]
+    git=https://github.com/Behat/Mink.git
+    target=/behat/mink
+
+[MinkBundle]
+    git=https://github.com/Behat/MinkBundle.git
+    target=/bundles/Behat/MinkBundle
