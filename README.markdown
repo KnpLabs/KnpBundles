@@ -5,7 +5,7 @@ website, written in Symfony2.
 
 Any ideas are welcome!
 
-[![Build Status](https://secure.travis-ci.org/KnpLabs/knpbundles.png)](http://travis-ci.org/KnpLabs/knpbundles)
+[![Build Status](https://secure.travis-ci.org/KnpLabs/KnpBundles.png)](http://travis-ci.org/KnpLabs/KnpBundles)
 
 Please note that this service was previously called Symfony2Bundles but we had
 to change the name due to [trademark issues](http://knplabs.com/blog/symfony2bundles-becomes-knpbundle).
