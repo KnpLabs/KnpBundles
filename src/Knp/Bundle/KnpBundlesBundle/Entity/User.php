@@ -117,14 +117,14 @@ class User implements UserInterface
     protected $score = null;
 
     /**
-    * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="users")
+    * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="recommenders")
     */
-    protected $usedBundles;
+    protected $recommendedBundles;
 
     public function __construct()
     {
         $this->bundles = new ArrayCollection();
-        $this->usedBundles = new ArrayCollection();
+        $this->recommendedBundles = new ArrayCollection();
         $this->contributionBundles = new ArrayCollection();
         $this->createdAt = new \DateTime('NOW');
     }
@@ -604,7 +604,7 @@ class User implements UserInterface
 
     public function getUsedBundles()
     {
-        return $this->usedBundles;
+        return $this->recommendedBundles;
     }
 
     public function isUsingBundle(Bundle $bundle)
@@ -612,8 +612,8 @@ class User implements UserInterface
         return $this->getUsedBundles()->contains($bundle);
     }
 
-    public function addUsedBundle(Bundle $bundle)
+    public function addRecommendedBundle(Bundle $bundle)
     {
-        $this->usedBundles[] = $bundle;
+        $this->recommendedBundles[] = $bundle;
     }
 }

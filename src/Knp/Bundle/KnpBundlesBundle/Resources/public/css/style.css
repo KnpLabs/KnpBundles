@@ -42,9 +42,9 @@ a{color:#4B8ECB;}
 #logo{text-decoration:none;width:169px;margin-top:14px;display:block;float:left;}
 #logo img{width:169px;}
 #baseline{position:absolute;top:43px;left:61px;color:#999;font-size:9px;font-family:verdana;}
-#search-box{height:28px;padding:0;border:none;margin:16px 0 0 20px;width:450px;float:left;}
+#search-box{height:28px;padding:0;border:none;margin:16px 0 0 20px;width:430px;float:left;}
 #search-box label{display:none;}
-#search-box input{float:left;border:none;height:25px;width:330px;padding:1px 7px;color:#666;font-size:17px;margin:0;outline:none;border:1px solid #c0c0c0;}
+#search-box input{float:left;border:none;height:25px;width:300px;padding:1px 7px;color:#666;font-size:17px;margin:0;outline:none;border:1px solid #c0c0c0;}
 #search-box .button{overflow:hidden;text-indent:-999px;border:none;outline:none;width:70px;margin:0 0 0 15px;background-image:url(../images/magnifier.png);background-image:url(../images/magnifier.png),-webkit-gradient(linear,left top,left bottom,from(#f1b525),to(#e4ad23));/* Saf4+,Chrome */
 background-image:url(../images/magnifier.png),-webkit-linear-gradient(top,#f1b525,#e4ad23);/* Chrome 10+,Saf5.1+ */
 background-image:url(../images/magnifier.png),-moz-linear-gradient(top,#f1b525,#E8B031);/* FF3.6+ */
@@ -263,7 +263,7 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 #bundle-show .chart-bundle h2{margin: 10px 0 0 10px;font-size: 14px;font-weight: bold;}
 #bundle-show .chart-bundle .chart{height:200px;}
 
-#bundle-show a.i-am-using {color: #fff !important;display:block;text-align:center;}
+#bundle-show a.i-recommend {color: #fff !important;display:block;text-align:center;}
 #change-status-form {}
 /* ----- Developers List ----- */
 #developers-list{}

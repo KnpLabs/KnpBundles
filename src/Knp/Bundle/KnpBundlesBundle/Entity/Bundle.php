@@ -64,15 +64,15 @@ class Bundle
     protected $user = null;
 
     /**
-     * Users using the bundle
+     * Recommenders recommending the bundle
      *
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="usedBundles")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="recommendedBundles")
      * @ORM\JoinTable(name="bundles_usage",
      *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="knpbundles_user_id", referencedColumnName="id")}
      *      )
      */
-    protected $users = null;
+    protected $recommenders = null;
 
     /**
      * Repo description
@@ -146,7 +146,7 @@ class Bundle
     protected $tags = null;
 
     /**
-     * Users who contributed to the Repo
+     * Recommenders who contributed to the Repo
      *
      * @ORM\ManyToMany(targetEntity="User", inversedBy="contributionBundles")
      * @ORM\JoinTable(name="contribution",
@@ -477,8 +477,8 @@ class Bundle
             $score += 5;
         }
 
-        // Small boost for repos that have users using it
-        $score += $this->getNbUsers();
+        // Small boost for repos that have recommenders recommending it
+        $score += $this->getNbRecommenders();
 
         $this->setScore($score);
     }
@@ -853,18 +853,18 @@ class Bundle
         return substr($class, strrpos($class, '\\')+1);
     }
 
-    public function getUsers()
+    public function getRecommenders()
     {
-        return $this->users;
+        return $this->recommenders;
     }
 
-    public function getNbUsers()
+    public function getNbRecommenders()
     {
-        return count($this->users);
+        return count($this->recommenders);
     }
 
-    public function addUser(User $user)
+    public function addRecommender(User $user)
     {
-        $this->users[] = $user;
+        $this->recommenders[] = $user;
     }
 }

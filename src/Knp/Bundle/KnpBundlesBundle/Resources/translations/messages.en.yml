@@ -7,7 +7,7 @@ menu:
     addBundleManually: "Register a bundle"
 
     promo:
-        nb: 3
+        nb: 5
         0:
             text: "Get a [training]| by KnpLabs' ninjas!"
             url: "http://knplabs.com/training/symfony2"
@@ -17,6 +17,12 @@ menu:
         2:
             text: "Get [coding assistance]|from a KnpLabs ninja!"
             url: "http://knplabs.com/service/symfony-support"
+        3:
+            text: "[Join] the KnpLabs team!|In Nantes/France or remotely."
+            url: "http://knplabs.com/jobs"
+        4:
+            text: "Follow [KnpLabs on Twitter]!"
+            url: "http://twitter.com/knplabs"
 
 search:
     list:
@@ -89,11 +95,11 @@ bundles.show:
     latest_commits:
         title: "Latest commits"
         by: "By"
-    users:
-        title: "Registered users"
-        iAmUsing: "I'm using this bundle"
-        iAmNotUsing: "I'm not using this bundle anymore"
-        loginToUse: "Login & say you're using this bundle"
+    recommenders:
+        title: "Recommendations"
+        iRecommend: "I recommend this bundle"
+        iDontRecommend: "I don't recommend this bundle"
+        loginToRecommend: "Login to recommend this bundle"
     chart:
         title: "Score evolution"
 

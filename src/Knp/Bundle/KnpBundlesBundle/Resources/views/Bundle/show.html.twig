@@ -34,23 +34,23 @@
         </div>
 
         <div class="box">
-            <h3>{% trans %}bundles.show.users.title{% endtrans %}</h3>
+            <h3>{% trans %}bundles.show.recommenders.title{% endtrans %}</h3>
             <ul>
-                <li class="bundle-users">
-                    {% for user in bundle.users %}
+                <li class="bundle-recommenders">
+                    {% for user in bundle.recommenders %}
                         <img src="{{ gravatar_hash(user.gravatarHash, 25, none, 'identicon')}}" />
                     {% endfor %}
                 </li>
                 <li>
-                    <a class="button i-am-using" href="{{ path('bundle_change_usage_status', { 'username': bundle.username, 'name': bundle.name }) }}">
+                    <a class="button i-recommend" href="{{ path('bundle_change_usage_status', { 'username': bundle.username, 'name': bundle.name }) }}">
                         {% if app.user is not null %}
                             {% if isUsedByUser  %}
-                                {% trans %}bundles.show.users.iAmNotUsing{% endtrans %}
+                                {% trans %}bundles.show.recommenders.iDontRecommend{% endtrans %}
                             {% else %}
-                                {% trans %}bundles.show.users.iAmUsing{% endtrans %}
+                                {% trans %}bundles.show.recommenders.iRecommend{% endtrans %}
                             {% endif %}
                         {% else %}
-                            {% trans %}bundles.show.users.loginToUse{% endtrans %}
+                            {% trans %}bundles.show.recommenders.loginToRecommend{% endtrans %}
                         {% endif %}
                     </a>
                 </li>

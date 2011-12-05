@@ -180,6 +180,10 @@ class BundleController extends Controller
                 $error = true;
                 $errorMessage = 'addBundle.invalidBundleName';
             }
+        } else {
+            $bundle = '';
+            $error = false;
+            $errorMessage = '';
         }
 
         $data = array('bundle' => $bundle, 'error' => $error, 'errorMessage' => $errorMessage);
@@ -214,8 +218,8 @@ class BundleController extends Controller
         } else {
             $bundle->updateScore(1);
 
-            $bundle->addUser($user);
-            $user->addUsedBundle($bundle);
+            $bundle->addRecommender($user);
+            $user->addRecommendedBundle($bundle);
             $em->persist($bundle);
             $em->persist($user);
         }

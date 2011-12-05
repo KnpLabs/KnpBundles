@@ -106,7 +106,7 @@ class BundleRepository extends EntityRepository
     {
         try {
             return $this->createQueryBuilder('e')
-                ->leftJoin('e.users', 'user')
+                ->leftJoin('e.recommenders', 'user')
                 ->where('e.username = :username')
                 ->andWhere('e.name = :name')
                 ->setParameter('username', $username)
