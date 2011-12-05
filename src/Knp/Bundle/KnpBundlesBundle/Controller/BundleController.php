@@ -16,7 +16,7 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\User;
 use Knp\Menu\MenuItem;
 
-class BundleController extends Controller
+class BundleController extends BaseController
 {
     protected $sortFields = array(
         'trend'         => 'trend1',
@@ -42,11 +42,7 @@ class BundleController extends Controller
 
         $bundles = $this->getRepository('Bundle')->search($query);
 
-        $format = $this->get('request')->query->get('format', 'html');
-        if (!in_array($format, array('html', 'json', 'js'))) {
-            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
-        }
-        $this->get('request')->setRequestFormat($format);
+        $format = $this->recognizeRequestFormat();
 
         return $this->render('KnpBundlesBundle:Bundle:searchResults.'.$format.'.twig', array(
             'query'         => $query,
@@ -63,13 +59,9 @@ class BundleController extends Controller
             throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
         }
 
-        $format = $this->get('request')->query->get('format', 'html');
-        if (!in_array($format, array('html', 'json', 'js'))) {
-            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
-        }
-        $this->get('request')->setRequestFormat($format);
+        $format = $this->recognizeRequestFormat();
 
-        $this->highlightMenu($bundle instanceof Bundle);
+        $this->highlightMenu();
 
         $user = $this->get('security.context')->getToken()->getUser();
 
@@ -95,11 +87,7 @@ class BundleController extends Controller
             throw new HttpException(406, sprintf('%s is not a valid sorting field', $sort));
         }
 
-        $format = $this->get('request')->query->get('format', 'html');
-        if (!in_array($format, array('html', 'json', 'js'))) {
-            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
-        }
-        $this->get('request')->setRequestFormat($format);
+        $format = $this->recognizeRequestFormat();
 
         $sortField = $this->sortFields[$sort];
         
@@ -136,11 +124,7 @@ class BundleController extends Controller
     {
         $bundles = $this->getRepository('Bundle')->findAllSortedBy('createdAt', 50);
 
-        $format = $this->get('request')->query->get('format', 'atom');
-        if (!in_array($format, array('atom'))) {
-            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
-        }
-        $this->get('request')->setRequestFormat($format);
+        $format = $this->recognizeRequestFormat(array('atom'), 'atom');
 
         return $this->render('KnpBundlesBundle:Bundle:listLatest.'.$format.'.twig', array(
             'bundles'       => $bundles,
@@ -228,32 +212,6 @@ class BundleController extends Controller
     protected function userIsLogged()
     {
         return $this->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY');
-    }
-
-    /**
-     * Returns the paginator instance configured for the given query and page
-     * number
-     *
-     * @param  Query   $query The query
-     * @param  integer $page  The current page number
-     *
-     * @return Paginator
-     */
-    protected function getPaginator(Query $query, $page)
-    {
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $query,
-            $page,
-            10
-        );
-
-        return $pagination;
-    }
-
-    protected function getUserRepository()
-    {
-        return $this->getRepository('User');
     }
 
     protected function getRepository($class)
