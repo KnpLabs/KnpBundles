@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  *
  * @package KnpBundles
  */
-class MainController extends Controller
+class MainController extends BaseController
 {
     public function apiAction()
     {

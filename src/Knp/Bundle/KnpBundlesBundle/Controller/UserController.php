@@ -11,7 +11,7 @@ use Doctrine\ORM\Query;
 use Zend\Paginator\Paginator;
 use Knp\Menu\MenuItem;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     protected $sortFields = array(
         'name'          => 'name',
@@ -29,13 +29,9 @@ class UserController extends Controller
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        $format = $this->get('request')->query->get('format', 'html');
-        if (!in_array($format, array('html', 'json', 'js'))) {
-            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
-        }
-        $this->get('request')->setRequestFormat($format);
+        $format = $this->recognizeRequestFormat();
 
-        $this->get('knp_bundles.menu.main')->getChild('users')->setCurrent(true);
+        $this->highlightMenu();
 
         return $this->render('KnpBundlesBundle:User:show.'.$format.'.twig', array(
             'user'      => $user,
@@ -49,14 +45,11 @@ class UserController extends Controller
             throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
         }
 
-        $format = $this->get('request')->query->get('format', 'html');
-        if (!in_array($format, array('html', 'json', 'js'))) {
-            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
-        }
-        $this->get('request')->setRequestFormat($format);
+        $format = $this->recognizeRequestFormat();
 
         $sortField = $this->sortFields[$sort];
-        $this->get('knp_bundles.menu.main')->getChild('users')->setCurrent(true);
+
+        $this->highlightMenu();
 
         if ('html' === $format) {
             $query = $this->getUserRepository()->queryAllWithBundlesSortedBy($sortField);
@@ -79,11 +72,7 @@ class UserController extends Controller
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        $format = $this->get('request')->query->get('format', 'html');
-        if (!in_array($format, array('html', 'json', 'js'))) {
-            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
-        }
-        $this->get('request')->setRequestFormat($format);
+        $format = $this->recognizeRequestFormat();
 
         return $this->render('KnpBundlesBundle:Bundle:list.'.$format.'.twig', array(
             'bundles'   => $user->getBundles(),
@@ -91,34 +80,8 @@ class UserController extends Controller
         ));
     }
 
-    /**
-     * Returns the paginator instance configured for the given query and page
-     * number
-     *
-     * @param  Query   $query The query
-     * @param  integer $page  The current page number
-     *
-     * @return Paginator
-     */
-    protected function getPaginator(Query $query, $page)
+    protected function highlightMenu()
     {
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
-            $query,
-            $page,
-            10
-        );
-
-        return $pagination;
-    }
-
-    protected function getBundleRepository()
-    {
-        return $this->get('knp_bundles.entity_manager')->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle');
-    }
-
-    protected function getUserRepository()
-    {
-        return $this->get('knp_bundles.entity_manager')->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\User');
+        $this->get('knp_bundles.menu.main')->getChild('users')->setCurrent(true);
     }
 }
