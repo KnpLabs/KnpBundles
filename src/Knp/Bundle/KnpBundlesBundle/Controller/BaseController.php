@@ -20,7 +20,8 @@ class BaseController extends Controller
      * @return  string
      * @throws NotFoundHttpException
      */
-    protected function recognizeRequestFormat($supported = array('html', 'json', 'js'), $default = 'html') {
+    protected function recognizeRequestFormat($supported = array('html', 'json', 'js'), $default = 'html')
+    {
         $format = $this->get('request')->query->get('format', $default);
 
         if (!in_array($format, $supported)) {
