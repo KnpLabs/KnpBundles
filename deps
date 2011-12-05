@@ -118,3 +118,27 @@
 [twitteroauth]
     git=http://github.com/abraham/twitteroauth.git
     target=twitteroauth
+
+[gherkin]
+    git=https://github.com/Behat/Gherkin.git
+    target=/behat/gherkin
+
+[behat]
+    git=https://github.com/Behat/Behat.git
+    target=/behat/behat
+
+[BehatBundle]
+    git=https://github.com/Behat/BehatBundle.git
+    target=/bundles/Behat/BehatBundle
+
+[mink]
+    git=https://github.com/Behat/Mink.git
+    target=/behat/mink
+
+[MinkBundle]
+    git=https://github.com/Behat/MinkBundle.git
+    target=/bundles/Behat/MinkBundle
+
+[CommonContexts]
+    git=http://github.com/Behat/CommonContexts.git
+    target=/behat/CommonContexts
