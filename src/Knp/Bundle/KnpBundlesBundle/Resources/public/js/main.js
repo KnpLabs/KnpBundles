@@ -69,6 +69,8 @@
             return false;
         });
     });
+    
+    $('img[class=tooltip]').tipsy({gravity: 'sw'});
 
     function moveElement(className ,direction)
     {
