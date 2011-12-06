@@ -69,6 +69,8 @@
             return false;
         });
     });
+    
+    $('img[rel=tipsy]').tipsy({gravity: 'sw'});
 
     function moveElement(className ,direction)
     {
