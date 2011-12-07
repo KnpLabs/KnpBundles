@@ -2,7 +2,7 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Twitterer\Exception;
 
-class TrendingBundleNotFoundExceptionException extends \Exception
+class TrendingBundleNotFoundException extends \Exception
 {
 
 }
