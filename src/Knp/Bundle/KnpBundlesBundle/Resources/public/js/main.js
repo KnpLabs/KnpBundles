@@ -70,7 +70,7 @@
         });
     });
     
-    $('img[rel=tipsy]').tipsy({gravity: 'sw'});
+    $('img[class=tooltip]').tipsy({gravity: 'sw'});
 
     function moveElement(className ,direction)
     {
