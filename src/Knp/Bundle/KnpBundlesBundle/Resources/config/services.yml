@@ -2,7 +2,7 @@ parameters:
     knp_bundles.updater.class:    Knp\Bundle\KnpBundlesBundle\Updater\Updater
     knp_bundles.user.provider:    Knp\Bundle\KnpBundlesBundle\Security\Core\User\UserProvider
     knp_bundles.trending_bundle_twitterer.class: Knp\Bundle\KnpBundlesBundle\Twitterer\TrendingBundleTwitterer
-    knp_bundles.trending_bundle_tweet.template: "Discover {name}, today's trending #Symfony2 bundle {url} #KnpBundles"
+    knp_bundles.trending_bundle_tweet.template: "Discover {name}, today's trending #Symfony2 bundle {url} on #KnpBundles"
 
 services:
     knp_bundles.updater:

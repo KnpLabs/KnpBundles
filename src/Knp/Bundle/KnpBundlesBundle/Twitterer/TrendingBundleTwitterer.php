@@ -2,7 +2,9 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Twitterer;
 
-use Knp\Bundle\KnpBundlesBundle\Twitterer\Exception\TrendingBundleNotFound;
+use Knp\Bundle\KnpBundlesBundle\Twitterer\Exception\TrendingBundleNotFoundException;
+use Doctrine\ORM\EntityManager;
+use Inori\TwitterAppBundle\Services\TwitterApp;
 
 class TrendingBundleTwitterer
 {
@@ -10,7 +12,7 @@ class TrendingBundleTwitterer
     private $tweetTemplate;
     private $twitterService;
 
-    public function __construct($em, $tweetTemplate, $twitterService)
+    public function __construct(EntityManager $em, $tweetTemplate, TwitterApp $twitterService)
     {
         $this->em = $em;
         $this->tweetTemplate = $tweetTemplate;
@@ -26,11 +28,11 @@ class TrendingBundleTwitterer
     private function prepareMessage()
     {
         if (!$trendingBundle = $this->em->getRepository('KnpBundlesBundle:Bundle')->findLatestSortedBy('trend1')) {
-            throw new TrendingBundleNotFound();
+            throw new TrendingBundleNotFoundException();
         }
 
         $bundleName = $trendingBundle->getName();
-        $url = 'bundles.knplabs.org/' . $trendingBundle->getUsername() . '/' . $bundleName;
+        $url = 'knpbundles.com/'.$trendingBundle->getUsername().'/'.$bundleName;
 
         $placeholders = array('{name}', '{url}');
         $values = array($bundleName, $url);

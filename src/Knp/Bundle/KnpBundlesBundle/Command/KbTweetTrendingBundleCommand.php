@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Knp\Bundle\KnpBundlesBundle\Twitterer\Exception\TrendingBundleNotFound;
+use Knp\Bundle\KnpBundlesBundle\Twitterer\Exception\TrendingBundleNotFoundException;
 
 class KbTweetTrendingBundleCommand extends ContainerAwareCommand
 {
@@ -23,8 +23,8 @@ class KbTweetTrendingBundleCommand extends ContainerAwareCommand
         try {
             $twitterer = $this->getContainer()->get('knp_bundles.trending_bundle_twitterer');
             $twitterer->tweet();
-        } catch (TrendingBundleNotFound $e) {
-            $output->writeln('Trending bundle not found');
+        } catch (TrendingBundleNotFoundException $e) {
+            $output->writeln('<error>Trending bundle not found</error>');
         }
     }
 }
