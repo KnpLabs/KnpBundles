@@ -87,6 +87,7 @@ class BundleController extends Controller
 
         if (null !== $redirect_url = $session->get('redirect_url', null)) {
             $session->remove('redirect_url');
+
             return $this->redirect($redirect_url);
         }
         # end hack
@@ -154,7 +155,7 @@ class BundleController extends Controller
             # crappy hack for oauth return url
             $this->getRequest()->getSession()->set('redirect_url', $this->generateUrl('add_bundle'));
             # end hack
-            return $this->redirect('/login');
+            return $this->redirect($this->generateUrl('_login'));
         }
 
         $error = false;
@@ -191,7 +192,8 @@ class BundleController extends Controller
     {
         if (!$this->userIsLogged()) {
             $this->getRequest()->getSession()->set('redirect_url', $this->generateUrl('bundle_show', array('username' => $username, 'name' => $name)));
-            return $this->redirect('/login');
+
+            return $this->redirect($this->generateUrl('_login'));
         }
 
         $bundle = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);

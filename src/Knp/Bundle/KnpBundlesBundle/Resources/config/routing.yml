@@ -24,10 +24,10 @@ add_bundle:
     defaults:       { _controller: KnpBundlesBundle:Bundle:add }
     requirements:   { _method: "GET|POST" }
 
-login:
+_login:
     pattern:        /login
 
-logout:
+_logout:
     pattern:        /logout
 
 symfony2bundles:

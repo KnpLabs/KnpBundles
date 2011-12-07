@@ -36,9 +36,9 @@
                 {% if app.user is not null %}
                 <li><img src="{{ gravatar_hash(app.user.gravatarHash, 30, none, 'identicon') }}" /></li>
                 <li class="current"><span>{{ app.user }}</span></li>
-                <li><a href="{{ path('logout') }}">Log out</a></li>
+                <li><a href="{{ path('_logout') }}">Log out</a></li>
                 {% else %}
-                <li><a class="login" href="{{ path('login') }}">Login via GitHub</a></li>
+                <li><a class="login" href="{{ path('_login') }}">Login via GitHub</a></li>
                 {% endif %}
             </div>
         </div>
