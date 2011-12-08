@@ -138,3 +138,7 @@
 [MinkBundle]
     git=https://github.com/Behat/MinkBundle.git
     target=/bundles/Behat/MinkBundle
+
+[CommonContexts]
+    git=http://github.com/Behat/CommonContexts.git
+    target=/behat/CommonContexts

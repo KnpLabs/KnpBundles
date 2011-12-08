@@ -15,13 +15,13 @@ Feature: Listing bundles
   Scenario: Listing bundles
     When I go to "/"
     Then I should see "2 bundles"
-    And I should be able to find an element ".bundle" with following texts:
+    And I should be able to find bundle row with following texts:
       | TestBundle       |
       | test desc        |
       | by knplabs       |
       | commit 1 day ago |
       | 10               |
-    And I should be able to find an element ".bundle" with following texts:
+    And I should be able to find bundle row with following texts:
       | UserBundle        |
       | user desc         |
       | by fos            |
@@ -31,20 +31,20 @@ Feature: Listing bundles
   Scenario: Listing trending bundles
     When I go to "/"
     When I follow "Trending"
-    And I should see following texts in order:
+    Then I should see following texts in order:
       | TestBundle |
       | UserBundle |
 
   Scenario: Listing best bundles
     When I go to "/"
     When I follow "Best score"
-    And I should see following texts in order:
+    Then I should see following texts in order:
       | UserBundle |
       | TestBundle |
 
   Scenario: Listing updated recently bundles
     When I go to "/"
     When I follow "Updated recently"
-    And I should see following texts in order:
+    Then I should see following texts in order:
       | TestBundle |
       | UserBundle |

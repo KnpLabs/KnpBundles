@@ -10,7 +10,7 @@ Feature: Showing bundles
     | user_name | name       | description | lastCommitAt | score | trend1 |
     | knplabs   | TestBundle | test desc   |-1 day        | 10    | 15     |
 
-  Scenario: Show bundles
+  Scenario: Show bundle
     When I go to "/"
     And I follow "TestBundle"
     Then I should see "TestBundle"

@@ -10,13 +10,13 @@ use Behat\Behat\Context\ClosuredContextInterface,
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
-use Behat\Behat\Event\ScenarioEvent;
-
 use Behat\Mink\Exception\ElementNotFoundException,
     Behat\Mink\Exception\ExpectationException,
     Behat\Mink\Exception\ResponseTextException,
     Behat\Mink\Exception\ElementHtmlException,
     Behat\Mink\Exception\ElementTextException;
+
+use Behat\Behat\Context\Step;
 
 require_once 'PHPUnit/Autoload.php';
 require_once 'PHPUnit/Framework/Assert/Functions.php';
@@ -31,7 +31,14 @@ use Knp\Bundle\KnpBundlesBundle\Entity;
 class FeatureContext extends MinkContext
 {
     private $users;
-    
+
+    public function __construct($kernel)
+    {
+        $this->useContext('symfony_doctrine', new \Behat\CommonContext\SymfonyDoctrineContext($kernel));
+
+        parent::__construct($kernel);
+    }
+
     /**
      * Returns entity manager 
      * 
@@ -42,47 +49,6 @@ class FeatureContext extends MinkContext
         return $this->getContainer()->get('doctrine.orm.entity_manager');
     }
 
-    /**
-     * @param Behat\Behat\Event\ScenarioEvent $event
-     *
-     * @BeforeScenario
-     *
-     * @return null
-     */
-    public function beforeScenario(ScenarioEvent $event)
-    {
-        $this->generateSchema();
-    }
-
-    /**
-     * @param Behat\Behat\Event\ScenarioEvent $event
-     *
-     * @AfterScenario
-     *
-     * @return null
-     */
-    public function afterScenario(ScenarioEvent $event)
-    {
-        $this->getEntityManager()->clear();
-    }
-
-    /**
-    * @return null
-    */
-    private function generateSchema()
-    {
-        $entityManager = $this->getEntityManager();
-        $metadatas = $entityManager->getMetadataFactory()->getAllMetadata();
-
-        if (!empty($metadatas)) {
-            $tool = new \Doctrine\ORM\Tools\SchemaTool($entityManager);
-            $tool->dropSchema($metadatas);
-            $tool->createSchema($metadatas);
-        } else {
-            throw new Doctrine\DBAL\Schema\SchemaException('No Metadata Classes to process.');
-        }
-    }    
-    
     /**
      * @Given /^the site has following users:$/
      */
@@ -138,6 +104,20 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @param mixed $object
+     * @param string $propertyName
+     * @param mixed $value
+     * @return null
+     */
+    private function setPrivateProperty($object, $propertyName, $value)
+    {
+        $reflection = new \ReflectionObject($object);
+        $property = $reflection->getProperty($propertyName);
+        $property->setAccessible(true);
+        $property->setValue($object, $value);
+    }
+
+    /**
      * Checks, that page contains specified texts in order.
      *
      * @Then /^(?:|I )should see following texts in order:$/
@@ -151,7 +131,7 @@ class FeatureContext extends MinkContext
         $pattern = "/".implode(".*", $texts)."/s";
 
         $actual = $this->getSession()->getPage()->getText();
-        
+
         try {
             assertRegExp($pattern, $actual);
         } catch (AssertException $e) {
@@ -195,16 +175,22 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @param mixed $object
-     * @param string $propertyName
-     * @param mixed $value
-     * @return null
+     * @Given /^I should be able to find bundle row with following texts:$/
      */
-    private function setPrivateProperty($object, $propertyName, $value)
+    public function assertThereIsBundleRowWithFollowingTexts(TableNode $table)
     {
-        $reflection = new \ReflectionObject($object);
-        $property = $reflection->getProperty($propertyName);
-        $property->setAccessible(true);
-        $property->setValue($object, $value);
+        return new Step\Then('I should be able to find an element ".bundle" with following texts:', $table);
     }
+
+    /**
+     * @Given /^I search for "(?P<text>(?:[^"]|\\")*)"$/
+     */
+    public function searchFor($text)
+    {
+        return array(
+            new Step\When('I fill in "search-query" with "'.$text.'"'),
+            new Step\When('I press "search-btn"')
+        );
+    }
+
 }

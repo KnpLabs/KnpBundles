@@ -15,8 +15,7 @@ Feature: Searching bundles
 
   Scenario: Searching all bundles
     When I go to "/"
-    And I fill in "search-query" with "Bundle"
-    And I press "search-btn"
+    And I search for "Bundle"
     Then I should see "3 Bundles"
     And I should see "TestBundle"
     And I should see "Test2Bundle"
@@ -24,8 +23,7 @@ Feature: Searching bundles
 
   Scenario: Searching some bundles
     When I go to "/"
-    And I fill in "search-query" with "Test"
-    And I press "search-btn"
+    And I search for "Test"
     Then I should see "2 Bundles"
     And I should see "TestBundle"
     And I should see "Test2Bundle"
