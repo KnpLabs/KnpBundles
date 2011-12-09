@@ -178,3 +178,11 @@ addBundle:
 
 bundle:
     noDescription: "We're fetching informations about this repo. In a few hours, you'll know everything about it."
+
+error:
+    404:
+        title: "Page not found"
+        content: "We're sorry, but even our awesome Edgar cannot find page you are looking for."
+    500:
+        title: "Error occurred"
+        content: "We're sorry, but Edgar found some issue at this page and reported it to our ninja developers."
