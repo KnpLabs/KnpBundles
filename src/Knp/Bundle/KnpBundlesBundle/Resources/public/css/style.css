@@ -302,3 +302,7 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 #search #main p{margin:20px;}
 /* ----- Search Result ----- */
 #search-result{}
+
+/* ----- Errors ----- */
+.error #content-wrapper div.center {background: url('../images/super-edgar.jpg') no-repeat right center;height:300px}
+.error #content {width: 530px;}

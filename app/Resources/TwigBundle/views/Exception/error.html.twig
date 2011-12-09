@@ -1,0 +1,12 @@
+{% extends 'KnpBundlesBundle::layout.html.twig' %}
+
+{% block body_attributes %}class="error"{% endblock %}
+
+{% block title %}{% trans %}error.500.title{% endtrans %}{% endblock %}
+
+{% block content %}
+    <div id="main">
+        <h1>{% trans %}error.500.title{% endtrans %}</h1>
+        <p>{% trans %}error.500.content{% endtrans %}</p>
+    </div>
+{% endblock %}
