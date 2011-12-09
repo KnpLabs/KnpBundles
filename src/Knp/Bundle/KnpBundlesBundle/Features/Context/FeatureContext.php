@@ -54,8 +54,7 @@ class FeatureContext extends MinkContext
      */
     public function theSiteHasFollowingUsers(TableNode $table)
     {
-        $container = $this->getKernel()->getContainer();
-        $entityManager = $container->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getEntityManager();
 
         $this->users = array();
         foreach ($table->getHash() as $row) {
@@ -79,11 +78,10 @@ class FeatureContext extends MinkContext
      */
     public function theSiteHasFollowingBundles(TableNode $table)
     {
-        $container = $this->getKernel()->getContainer();
-        $entityManager = $container->get('doctrine.orm.entity_manager');
+        $entityManager = $this->getEntityManager();
 
         foreach ($table->getHash() as $row) {
-            $user = $this->users[$row['user_name']];
+            $user = $this->users[$row['username']];
             
             $bundle = new Entity\Bundle();
             $bundle->fromArray(array(
@@ -159,15 +157,14 @@ class FeatureContext extends MinkContext
         }
 
         foreach($nodes as $node) {
-            foreach($texts as $text) {
-                try {
+            try {
+                foreach($texts as $text) {
                     assertContains($text, $node->getText());
-                } catch (AssertException $e) {
-                    continue 2; // search in next node
                 }
+                return;
+            } catch (AssertException $e) {
+                 // search in next node
             }
-
-            return;
         }
 
         $message = sprintf('The texts "%s" was not found in any element matching css "%s"', implode('", "', $texts), $element);
@@ -175,7 +172,7 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Given /^I should be able to find bundle row with following texts:$/
+     * @Given /^I should be able to find a bundle row with following texts:$/
      */
     public function assertThereIsBundleRowWithFollowingTexts(TableNode $table)
     {

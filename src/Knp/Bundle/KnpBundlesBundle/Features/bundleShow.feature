@@ -7,7 +7,7 @@ Feature: Showing bundles
     | name      |
     | knplabs   |
     Given the site has following bundles:
-    | user_name | name       | description | lastCommitAt | score | trend1 |
+    | username  | name       | description | lastCommitAt | score | trend1 |
     | knplabs   | TestBundle | test desc   |-1 day        | 10    | 15     |
 
   Scenario: Show bundle

@@ -8,7 +8,7 @@ Feature: Searching bundles
     | knplabs   |
     | fos       |
     Given the site has following bundles:
-    | user_name | name        | description | lastCommitAt | score | trend1 |
+    | username  | name        | description | lastCommitAt | score | trend1 |
     | knplabs   | TestBundle  | test desc   |-1 day        | 10    | 15     |
     | knplabs   | Test2Bundle | test desc   |-1 day        | 10    | 15     |
     | fos       | UserBundle  | user desc   |-2 days       | 20    | 5      |
