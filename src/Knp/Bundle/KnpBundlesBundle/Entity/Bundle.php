@@ -478,7 +478,7 @@ class Bundle
         }
 
         // Small boost for repos that have recommenders recommending it
-        $score += $this->getNbRecommenders();
+        $score += 5*$this->getNbRecommenders();
 
         $this->setScore($score);
     }

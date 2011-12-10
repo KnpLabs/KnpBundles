@@ -209,12 +209,12 @@ class BundleController extends Controller
         $em = $this->get('doctrine')->getEntityManager();
 
         if ($user->isUsingBundle($bundle)) {
-            $bundle->updateScore(-1);
+            $bundle->updateScore(-5);
 
             $bundle->getRecommenders()->removeElement($user);
             $user->getUsedBundles()->removeElement($bundle);
         } else {
-            $bundle->updateScore(1);
+            $bundle->updateScore(5);
 
             $bundle->addRecommender($user);
             $user->addRecommendedBundle($bundle);
