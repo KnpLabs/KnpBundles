@@ -121,24 +121,24 @@
 
 [gherkin]
     git=https://github.com/Behat/Gherkin.git
-    target=/behat/gherkin
+    target=behat/gherkin
 
 [behat]
     git=https://github.com/Behat/Behat.git
-    target=/behat/behat
+    target=behat/behat
 
 [BehatBundle]
     git=https://github.com/Behat/BehatBundle.git
-    target=/bundles/Behat/BehatBundle
+    target=bundles/Behat/BehatBundle
 
 [mink]
     git=https://github.com/Behat/Mink.git
-    target=/behat/mink
+    target=behat/mink
 
 [MinkBundle]
     git=https://github.com/Behat/MinkBundle.git
-    target=/bundles/Behat/MinkBundle
+    target=bundles/Behat/MinkBundle
 
 [CommonContexts]
     git=http://github.com/Behat/CommonContexts.git
-    target=/behat/CommonContexts
+    target=behat/CommonContexts
