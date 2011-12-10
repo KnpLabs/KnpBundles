@@ -15,5 +15,3 @@ parameters:
     knp_bundles.twitter.consumer_secret: your_twitter_consumer_secret_here
     knp_bundles.twitter.oauth_token: your_twitter_oauth_token_here
     knp_bundles.twitter.oauth_token_secret: your_twitter_oauth_token_secret_here
-
-    base_url: http://your-virtualhost.local/app_test.php
