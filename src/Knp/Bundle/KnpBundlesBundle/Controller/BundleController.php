@@ -44,6 +44,12 @@ class BundleController extends BaseController
 
         $format = $this->recognizeRequestFormat();
 
+        if ('html' == $format && count($bundles) == 1 && strtolower($bundles[0]->getName()) == strtolower($query)) {
+            $params = array('username' => $bundles[0]->getUserName(), 'name' => $bundles[0]->getName());
+
+            return $this->redirect($this->generateUrl('bundle_show', $params));
+        }
+
         return $this->render('KnpBundlesBundle:Bundle:searchResults.'.$format.'.twig', array(
             'query'         => $query,
             'bundles'       => $bundles,
