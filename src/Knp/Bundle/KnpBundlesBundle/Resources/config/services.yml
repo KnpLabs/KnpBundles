@@ -26,4 +26,5 @@ services:
 
     knp_bundles.consumer.update_bundle:
         class: %knp_bundles.consumer.update_bundle.class%
-        arguments: []
+        arguments: 
+            - @doctrine.orm.entity_manager

@@ -152,7 +152,7 @@ class Updater
     {
         // Create a Message object
         $message = array(
-            'hello' => time(),
+            'bundle_id' => $bundle->getId(),
         );
 
         // RabbitMQ, publish my message!

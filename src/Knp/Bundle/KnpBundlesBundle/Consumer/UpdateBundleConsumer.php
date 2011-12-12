@@ -7,9 +7,19 @@ use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Doctrine\ORM\EntityManager;
+
 class UpdateBundleConsumer implements ConsumerInterface
 {
+
     private $container;
+
+    private $manager;
+
+    public function __construct(EntityManager $manager)
+    {
+        $this->manager = $manager;
+    }
 
     public function setContainer(ContainerInterface $container = null)
     {
@@ -25,7 +35,20 @@ class UpdateBundleConsumer implements ConsumerInterface
     {
         // Here we should probably call a bundle_updater service with the data
         // from the message
-        file_put_contents(__DIR__.'/'.\uniqid(), 'yop');
+        
+        $message = unserialize($msg);
+
+        if (!isset($message['bundle_id'])) {
+            
+            throw new \InvalidArgumentException('The bundle id is missing!');
+        }
+
+        $bundles = $this->manager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle');
+
+        // Retrieve Bundle from database
+        $bundle = $bundles->findOneBy(array('id' => $message['bundle_id']));
+
+
     }
 
 }
