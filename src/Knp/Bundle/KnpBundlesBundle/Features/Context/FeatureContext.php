@@ -50,6 +50,16 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * Returns router service
+     *
+     * @return Symfony\Bundle\FrameworkBundle\Routing\Router
+     */
+    protected function getRouter()
+    {
+        return $this->getContainer()->get('router');
+    }
+
+    /**
      * @Given /^the site has following users:$/
      */
     public function theSiteHasFollowingUsers(TableNode $table)
@@ -190,4 +200,13 @@ class FeatureContext extends MinkContext
         );
     }
 
+    /**
+     * @Then /^I should be on "(?P<username>[^"]+)\/(?P<name>[^"]+)" bundle page$/
+     */
+    public function assertBundlePage($username, $name)
+    {
+        $url = $this->getRouter()->generate('bundle_show', array('username' => $username, 'name' => $name));
+
+        return new Step\Then('I should be on "'.$url.'"');
+    }
 }

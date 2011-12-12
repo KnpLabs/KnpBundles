@@ -13,6 +13,7 @@ Feature: Showing bundles
   Scenario: Show bundle
     When I go to "/"
     And I follow "TestBundle"
-    Then I should see "TestBundle"
+    Then I should be on "knplabs/TestBundle" bundle page
+    And I should see "TestBundle"
     And I should see "by knplabs"
     And I should see "Score: 10"
