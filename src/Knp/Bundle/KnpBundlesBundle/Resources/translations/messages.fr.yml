@@ -133,10 +133,6 @@ evolution:
         title: "Evolution de l'écosystème Symfony"
         description: "Découvrez l'évolution de la taille de la communauté Symfony2"
     title: "Evolution de l'écosystème Symfony"
-    sum_score:
-        text: |
-            Ce graphe montre la somme des scores de tous les bundles Symfony.  
-            Il reflète la croissance de la communauté − aussi bien en taille qu'en qualité.
     number_score:
         text: |
             Ce graphe montre le nombre de bundles au fil du temps.

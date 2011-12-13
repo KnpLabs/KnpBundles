@@ -118,11 +118,9 @@ class BundleController extends BaseController
     public function evolutionAction()
     {
         $bundlesitory = $this->getRepository('Score'); 
-        $sums = $bundlesitory->getScoreSumEvolution();
         $counts = $bundlesitory->getScoreCountEvolution();
 
         return $this->render('KnpBundlesBundle:Bundle:evolution.html.twig', array(
-            'score_sums'      => $sums,
             'score_counts'    => $counts,
         ));
     }

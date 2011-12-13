@@ -11,12 +11,6 @@
 
     <div id="main">
         <div class="graph">
-            <p class="description">{{ 'evolution.sum_score.text'|trans|markdown }}</p>
-            
-            <div id="sum_chart_div" style="width:960px; height: 400px;"></div>
-        </div>
-    
-        <div class="graph">
             <p class="description">{{ 'evolution.number_score.text'|trans|markdown }}</p>
             
             <div id="count_chart_div" style="width:960px; height: 400px;"></div>
@@ -28,21 +22,6 @@
           google.load("visualization", "1", {packages:["corechart"]});
           google.setOnLoadCallback(drawChart);
           function drawChart() {
-            /** 
-             * Drawing the evolution of total score among time
-             */ 
-            var sum_data = new google.visualization.DataTable();
-            sum_data.addColumn('string', 'Date');
-            sum_data.addColumn('number', 'Score');
-            sum_data.addRows({{ score_sums|length }});
-            {% for sum in score_sums -%}
-            sum_data.setValue({{ loop.index0 }}, 0, '{{ sum.date }}');
-            sum_data.setValue({{ loop.index0 }}, 1, {{ sum.sumValues }});
-            {% endfor %}
-
-            var sum_chart = new google.visualization.LineChart(document.getElementById('sum_chart_div'));
-            sum_chart.draw(sum_data, {width: 960, height: 400, legend: 'none'});
-
             /** 
              * Drawing the evolution of the number of bundles among time
              */ 
