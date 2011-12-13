@@ -45,8 +45,7 @@ class BundleController extends BaseController
         $format = $this->recognizeRequestFormat();
 
         return $this->render('KnpBundlesBundle:Bundle:searchResults.'.$format.'.twig', array(
-            'query'         => $query,
-            'bundles'       => $bundles,
+            'query'         => urldecode($this->get('request')->query->get('q')),
             'bundles'       => $bundles,
             'callback'      => $this->get('request')->query->get('callback')
         ));
