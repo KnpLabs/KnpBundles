@@ -39,3 +39,11 @@ Feature: Searching bundles
     When I go to "/"
     And I search for "UserBundle"
     Then I should be on "fos/UserBundle" bundle page
+
+  Scenario: Searching some bundles from description
+    When I go to "/"
+    And I search for "desc"
+    Then I should see "3 Bundles"
+    And I should see "TestBundle"
+    And I should see "Test2Bundle"
+    And I should see "UserBundle"
