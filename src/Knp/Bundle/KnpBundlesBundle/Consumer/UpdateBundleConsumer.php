@@ -5,10 +5,10 @@ namespace Knp\Bundle\KnpBundlesBundle\Consumer;
 use Knp\Bundle\KnpBundlesBundle\Github;
 use Knp\Bundle\KnpBundlesBundle\Git;
 use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
@@ -17,14 +17,26 @@ use Doctrine\ORM\EntityManager;
 
 class UpdateBundleConsumer implements ConsumerInterface
 {
+    /**
+     * @var Symfony\Component\HttpKernel\Log\LoggerInterface
+     */ 
     private $logger;
 
-    private $container;
+    /**
+     * @var Doctrine\ORM\EntityManager
+     */
+    private $em;
 
-    private $manager;
-
+    /**
+     * @var array
+     */
     private $users;
 
+    /**
+     * @param Doctrine\ORM\EntityManager $em
+     * @param string $gitRepoDir
+     * @param string $gitBin
+     */
     public function __construct(EntityManager $em, $gitRepoDir, $gitBin)
     {
         $output = new NullOutput();
@@ -45,11 +57,19 @@ class UpdateBundleConsumer implements ConsumerInterface
         }
     }
 
+    /** 
+     * Only here because ConsumerInterface extends ContainerAwareInterface
+     * @todo remove it once this PR is merged : https://github.com/videlalvaro/RabbitMqBundle/pull/13 
+     */
     public function setContainer(ContainerInterface $container = null)
     {
-        $this->container = $container;
     }
 
+    /**
+     * Set a logger instance
+     *
+     * @param Symfony\Component\HttpKernel\Log\LoggerInterface $logger
+     */
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
@@ -62,9 +82,7 @@ class UpdateBundleConsumer implements ConsumerInterface
      */
     public function execute($msg)
     {
-        // Here we should probably call a bundle_updater service with the data
-        // from the message
-        
+        // Retrieve informations from the message
         $message = unserialize($msg);
 
         if (!isset($message['bundle_id'])) {
@@ -75,10 +93,15 @@ class UpdateBundleConsumer implements ConsumerInterface
         $bundles = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle');
 
         // Retrieve Bundle from database
-        $bundle = $bundles->findOneBy(array('id' => $message['bundle_id']));
+        if (!$bundle = $bundles->findOneBy(array('id' => $message['bundle_id'])))
+        {
+
+            throw new \InvalidArgumentException(sprintf('Unable to retrieve bundle with id %d', $message['bundle_id']));
+        }
 
         if ($this->logger) {
             $this->logger->info(sprintf('Retrieved bundle %s', $bundle->getName()));
+            $this->logger->info('Updating bundle');
         }
 
         if (!$this->githubRepoApi->update($bundle)) {
@@ -87,15 +110,33 @@ class UpdateBundleConsumer implements ConsumerInterface
             $this->em->remove($bundle);
             $this->em->flush();
 
-            return false;
-        } else {
-            $score = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')->setScore(new \DateTime(), $bundle, $bundle->getScore());
-            $this->em->persist($score);
-        }
+            if ($this->logger) {
+                $this->logger->warn('Update failed, bundle has been removed');
+            }
 
+            return false;
+        } 
+
+        $this->updateContributors($bundle);
+
+        $score = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')->setScore(new \DateTime(), $bundle, $bundle->getScore());
+        $this->em->persist($score);
         $this->em->flush();
 
+        if ($bundle->getUsesTravisCi()) {
+            $this->travis->update($bundle);
+        }
+    }
+
+    /**
+     * Takes a bundle and update its contributors
+     *
+     * @param Bundle $bundle
+     */
+    private function updateContributors(Bundle $bundle)
+    {
         $contributorNames = $this->githubRepoApi->getContributorNames($bundle);
+
         $contributors = array();
         foreach ($contributorNames as $contributorName) {
             $contributors[] = $this->getOrCreateUser($contributorName);
@@ -103,16 +144,20 @@ class UpdateBundleConsumer implements ConsumerInterface
 
         $bundle->setContributors($contributors);
         $this->em->flush();
-        
-        if ($bundle->getUsesTravisCi()) {
-            $this->travis->update($bundle);
+
+        if ($this->logger) {
+            $this->logger->info(sprintf('%d contributor(s) have been retrieved for bundle %s', sizeof($contributors), $bundle->getName()));
         }
     }
 
     /**
-     * Pretty sure this should move into a dedicated service.
+     * Retrieve or create a user
+     * @todo move into a dedicated service.
+     * 
+     * @param string $username
+     * @return Knp\Bundle\KnpBundlesBundle\Entity\User
      */
-    public function getOrCreateUser($username)
+    private function getOrCreateUser($username)
     {
         if (isset($this->users[strtolower($username)])) {
             $user = $this->users[strtolower($username)];
