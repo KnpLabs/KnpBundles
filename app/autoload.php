@@ -6,10 +6,11 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
     'Symfony'                       => array(__DIR__.'/../vendor/symfony/src', __DIR__.'/../vendor/bundles'),
-    'Knp\Bundle\KnpBundlesBundle'   => __DIR__.'/../src',
     'Knp\Bundle'                    => __DIR__.'/../vendor/bundles',
+    'Knp\Bundle\KnpBundlesBundle'   => __DIR__.'/../src',
     'Knp\Menu'                      => __DIR__.'/../vendor/knp-menu/src',
     'Knp\Component'                 => __DIR__.'/../vendor/knp-components/src',
+    'Sensio\Bundle'                 => __DIR__.'/../vendor/bundles',
     'Ornicar\GravatarBundle'        => __DIR__.'/../vendor/bundles',
     'Doctrine\Bundle'               => __DIR__.'/../vendor/bundles',
     'Doctrine\DBAL\Migrations'      => __DIR__.'/../vendor/doctrine-migrations/lib',
@@ -21,7 +22,6 @@ $loader->registerNamespaces(array(
     'Monolog'                       => __DIR__.'/../vendor/monolog/src',
     'Goutte'                        => __DIR__.'/../vendor/goutte/src',
     'Zend'                          => __DIR__.'/../vendor/zf/library',
-    'Etcpasswd'                     => __DIR__.'/../vendor/bundles',
     'Buzz'                          => __DIR__.'/../vendor/buzz/lib',
     'Inori'                         => __DIR__.'/../vendor/bundles',
     'Behat\Gherkin'                 => __DIR__.'/../vendor/behat/gherkin/src',

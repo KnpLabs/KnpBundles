@@ -107,10 +107,6 @@
 [zf]
     git=http://github.com/zendframework/zf2.git
 
-[EtcpasswdOAuthBundle]
-    git=http://github.com/mbontemps/EtcpasswdOAuthBundle.git
-    target=bundles/Etcpasswd/OAuthBundle
-
 [Buzz]
     git=http://github.com/kriswallsmith/Buzz.git
     target=buzz
@@ -146,3 +142,11 @@
 [CommonContexts]
     git=http://github.com/Behat/CommonContexts.git
     target=behat/CommonContexts
+
+[BuzzBundle]
+    git=https://github.com/sensio/SensioBuzzBundle.git
+    target=/bundles/Sensio/Bundle/BuzzBundle
+
+[KnpOAuthBundle]
+    git=https://github.com/KnpLabs/KnpOAuthBundle.git
+    target=/bundles/Knp/Bundle/OAuthBundle

@@ -1,18 +1,26 @@
 security:
     firewalls:
-          oauth:
-              anonymous: true
-              logout: true
-              pattern: ^/
-              oauth:
-                  provider:      knpbundles_user
-                  auth_provider: github
-                  client_id:     %knp_bundles.github.client_id%
-                  client_secret: %knp_bundles.github.client_secret%
-                  login_path:    /login
-                  check_path:    /oauth/github
-                  failure_path:  /
+        secured_area:
+            anonymous:   true
+            pattern:     ^/
+            oauth:
+                oauth_provider:   github
+                client_id:        %knp_bundles.github.client_id%
+                secret:           %knp_bundles.github.client_secret%
+                scope:            ~
+                check_path:       /oauth/github
+                login_path:       /login
+                failure_path:     /
+            logout:
+                path:   /logout
+                target: /
+
+    access_control:
+        - { path: ^/add, roles: ROLE_USER }
+        - { path: change-usage-status$, roles: ROLE_USER }
 
     providers:
-        knpbundles_user:
-            id: knp_bundles.user.provider
+        secured_area:
+            oauth_entity:
+                class: KnpBundlesBundle:User
+                property: name
