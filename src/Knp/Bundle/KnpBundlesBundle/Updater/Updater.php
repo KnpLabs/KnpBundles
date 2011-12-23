@@ -83,6 +83,7 @@ class Updater
             $user->addBundle($bundle);
             $this->bundles[strtolower($bundle->getFullName())] = $bundle;
             $this->em->persist($bundle);
+            $this->em->flush();
             $this->output->writeln(' ADDED');
             ++$added;
         }
@@ -135,70 +136,11 @@ class Updater
                 continue;
             }
 
-            while (true) {
-                $this->output->writeln("\n\n#################### Updating ".$bundle);
-                try {
-                    $this->updateRepo($bundle);
-                    break;
-                } catch(\Github_HttpClient_Exception $e) {
-                    $this->output->writeln("Got a Github exception $e, sleeping for a few secs before trying again");
-                    sleep(60);
-                }
-            }
-        }
-    }
-    
-    public function updateRepo(Bundle $bundle)
-    {
-        // Create a Message object
-        $message = array(
-            'bundle_id' => $bundle->getId(),
-        );
+            // Create a Message object
+            $message = array('bundle_id' => $bundle->getId());
 
-        // RabbitMQ, publish my message!
-        $this->bundleUpdateProducer->publish(serialize($message));
-        
-        return;
-        $this->output->write($bundle->getFullName());
-        $pad = 50 - strlen($bundle->getFullName());
-        if ($pad > 0) {
-            $this->output->write(str_repeat(' ', $pad));
-        }
-        if (!$this->githubRepoApi->update($bundle)) {
-            $this->output->write(' - Fail, skipping, will be removed if date of last successful check is older than 3 days.');
-
-            if (null !== ($lastCheck = $bundle->getLastCheckAt())) {
-                $now = new \DateTime();
-                if ($now->diff($lastCheck)->days > 3) {
-                    $bundle->getUser()->removeBundle($bundle);
-
-                    $this->em->remove($bundle);
-                    $this->em->flush();
-                }
-            }
-
-            return false;
-        } else {
-            // Success so we set last check date
-            $bundle->setLastCheckAt(new \DateTime());
-
-            $score = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')->setScore(new \DateTime(), $bundle, $bundle->getScore());
-            $this->em->persist($score);
-        }
-        $this->output->writeln(' '.$bundle->getScore());
-        $this->em->flush();
-
-        $contributorNames = $this->githubRepoApi->getContributorNames($bundle);
-        $contributors = array();
-        foreach ($contributorNames as $contributorName) {
-            $contributors[] = $this->getOrCreateUser($contributorName);
-        }
-        $this->output->writeln(sprintf('%s contributors: %s', $bundle->getFullName(), implode(', ', $contributors)));
-        $bundle->setContributors($contributors);
-        $this->em->flush();
-        
-        if ($bundle->getUsesTravisCi()) {
-            $this->travis->update($bundle);
+            // RabbitMQ, publish my message!
+            $this->bundleUpdateProducer->publish(serialize($message));
         }
     }
 
