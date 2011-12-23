@@ -45,7 +45,7 @@ class UpdateBundleConsumer implements ConsumerInterface
 
         $githubClient = new \Github_Client();
         $githubSearch = new Github\Search($githubClient, new \Goutte\Client(), $output);
-        $githubUserApi = new Github\User($githubClient, $output);
+        $this->githubUserApi = new Github\User($githubClient, $output);
 
         $gitRepoManager = new Git\RepoManager($gitRepoDir, $gitBin);
         $this->githubRepoApi = new Github\Repo($githubClient, $output, $gitRepoManager);
@@ -104,18 +104,28 @@ class UpdateBundleConsumer implements ConsumerInterface
             $this->logger->info('Updating bundle');
         }
 
-        if (!$this->githubRepoApi->update($bundle)) {
-            // Update failed, bundle must be removed
-            $bundle->getUser()->removeBundle($bundle);
-            $this->em->remove($bundle);
-            $this->em->flush();
+        try {
+            if (!$this->githubRepoApi->update($bundle)) {
+                // Update failed, bundle must be removed
+                $bundle->getUser()->removeBundle($bundle);
+                $this->em->remove($bundle);
+                $this->em->flush();
 
+                if ($this->logger) {
+                    $this->logger->warn('Update failed, bundle has been removed');
+                }
+
+                return false;
+            } 
+        } catch (\Github_HttpClient_Exception $e) {
             if ($this->logger) {
-                $this->logger->warn('Update failed, bundle has been removed');
+                $this->logger->err('['.get_class($e).'] '.$e->getMessage());
             }
-
-            return false;
-        } 
+        } catch (\InvalidGitRepositoryDirectoryException $e) {
+            if ($this->logger) {
+                $this->logger->err('['.get_class($e).'] '.$e->getMessage());
+            }
+        }
 
         $this->updateContributors($bundle);
 
@@ -142,8 +152,14 @@ class UpdateBundleConsumer implements ConsumerInterface
             $contributors[] = $this->getOrCreateUser($contributorName);
         }
 
-        $bundle->setContributors($contributors);
-        $this->em->flush();
+        try {
+            $bundle->setContributors($contributors);
+            $this->em->flush();
+        } catch(\PDOException $e) {
+            if ($this->logger) {
+                $this->logger->err($e->getMessage());
+            }
+        }
 
         if ($this->logger) {
             $this->logger->info(sprintf('%d contributor(s) have been retrieved for bundle %s', sizeof($contributors), $bundle->getName()));
