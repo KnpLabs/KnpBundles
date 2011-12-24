@@ -6,6 +6,7 @@ use Knp\Bundle\KnpBundlesBundle\Github;
 use Knp\Bundle\KnpBundlesBundle\Git;
 use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Knp\Bundle\KnpBundlesBundle\Entity\UserManager;
 
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 
@@ -28,7 +29,7 @@ class UpdateBundleConsumer implements ConsumerInterface
     private $em;
 
     /**
-     * @var array
+     * @var Knp\Bundle\KnpBundlesBundle\Entity\UserManager
      */
     private $users;
 
@@ -37,7 +38,7 @@ class UpdateBundleConsumer implements ConsumerInterface
      * @param string $gitRepoDir
      * @param string $gitBin
      */
-    public function __construct(EntityManager $em, $gitRepoDir, $gitBin)
+    public function __construct(EntityManager $em, UserManager $users, $gitRepoDir, $gitBin)
     {
         $output = new NullOutput();
 
@@ -51,10 +52,7 @@ class UpdateBundleConsumer implements ConsumerInterface
         $this->githubRepoApi = new Github\Repo($githubClient, $output, $gitRepoManager);
         $this->travis = new Travis($output);
 
-        $this->users = array();
-        foreach ($this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\User')->findAll() as $user) {
-            $this->users[strtolower($user->getName())] = $user;
-        }
+        $this->users = $users;
     }
 
     /** 
@@ -86,8 +84,11 @@ class UpdateBundleConsumer implements ConsumerInterface
         $message = unserialize($msg);
 
         if (!isset($message['bundle_id'])) {
-            
-            throw new \InvalidArgumentException('The bundle id is missing!');
+            if ($this->logger) {
+                $this->logger->err('Bundle id is missing : skip message');
+            }
+
+            return;
         }
 
         $bundles = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle');
@@ -95,46 +96,43 @@ class UpdateBundleConsumer implements ConsumerInterface
         // Retrieve Bundle from database
         if (!$bundle = $bundles->findOneBy(array('id' => $message['bundle_id'])))
         {
+            if ($this->logger)
+            {
+                $this->logger->warn(sprintf('Unable to retrieve bundle #%d', $message['bundle_id']));
+            }
 
-            throw new \InvalidArgumentException(sprintf('Unable to retrieve bundle with id %d', $message['bundle_id']));
+            return;
         }
 
         if ($this->logger) {
             $this->logger->info(sprintf('Retrieved bundle %s', $bundle->getName()));
-            $this->logger->info('Updating bundle');
         }
 
         try {
             if (!$this->githubRepoApi->update($bundle)) {
-                // Update failed, bundle must be removed
-                $bundle->getUser()->removeBundle($bundle);
-                $this->em->remove($bundle);
-                $this->em->flush();
-
                 if ($this->logger) {
-                    $this->logger->warn('Update failed, bundle has been removed');
+                    $this->logger->warn(sprintf('Update failed, bundle "%s" will be removed', $bundle->getName()));
                 }
+                $this->removeBundle($bundle);
 
-                return false;
+                return;
             } 
-        } catch (\Github_HttpClient_Exception $e) {
+
+            $this->updateContributors($bundle);
+            $score = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')->setScore(new \DateTime(), $bundle, $bundle->getScore());
+            $this->em->persist($score);
+            $this->em->flush();
+
+            if ($bundle->getUsesTravisCi()) {
+                $this->travis->update($bundle);
+            }
+
+        } catch (\Exception $e) {
             if ($this->logger) {
                 $this->logger->err('['.get_class($e).'] '.$e->getMessage());
             }
-        } catch (\InvalidGitRepositoryDirectoryException $e) {
-            if ($this->logger) {
-                $this->logger->err('['.get_class($e).'] '.$e->getMessage());
-            }
-        }
 
-        $this->updateContributors($bundle);
-
-        $score = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')->setScore(new \DateTime(), $bundle, $bundle->getScore());
-        $this->em->persist($score);
-        $this->em->flush();
-
-        if ($bundle->getUsesTravisCi()) {
-            $this->travis->update($bundle);
+            return;
         }
     }
 
@@ -149,7 +147,7 @@ class UpdateBundleConsumer implements ConsumerInterface
 
         $contributors = array();
         foreach ($contributorNames as $contributorName) {
-            $contributors[] = $this->getOrCreateUser($contributorName);
+            $contributors[] = $this->users->getOrCreate($contributorName);
         }
 
         try {
@@ -166,28 +164,17 @@ class UpdateBundleConsumer implements ConsumerInterface
         }
     }
 
-    /**
-     * Retrieve or create a user
-     * @todo move into a dedicated service.
-     * 
-     * @param string $username
-     * @return Knp\Bundle\KnpBundlesBundle\Entity\User
-     */
-    private function getOrCreateUser($username)
+    protected function removeBundle(Bundle $bundle)
     {
-        if (isset($this->users[strtolower($username)])) {
-            $user = $this->users[strtolower($username)];
-        } else {
+        $bundle->getUser()->removeBundle($bundle);
+        $this->em->remove($bundle);
+        $this->em->flush();
 
-            if (!$user = $this->githubUserApi->import($username)) {
-                throw new UserNotFoundException();
-            }
+        // @todo also delete folder
 
-            $this->users[strtolower($user->getName())] = $user;
-            $this->em->persist($user);
+        if ($this->logger) {
+            $this->logger->warn('Bundle "%s" was deleted', $bundle->getName());
         }
-
-        return $user;
     }
 
 }

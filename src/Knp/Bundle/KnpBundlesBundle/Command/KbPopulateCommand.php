@@ -38,12 +38,11 @@ class KbPopulateCommand extends ContainerAwareCommand
         $updater->setOutput($output);
         $updater->setUp();
 
+        $bundles = $em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle')->findAll();
+
         $bundles = $updater->searchNewBundles((int) $input->getOption('limit'));
         $updater->createMissingBundles($bundles);
-        $em->flush();
         $updater->updateBundlesData();
-        $em->flush();
         $updater->updateUsers();
-        $em->flush();
     }
 }

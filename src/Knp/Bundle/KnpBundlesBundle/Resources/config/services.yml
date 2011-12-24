@@ -4,15 +4,22 @@ parameters:
     knp_bundles.trending_bundle_twitterer.class: Knp\Bundle\KnpBundlesBundle\Twitterer\TrendingBundleTwitterer
     knp_bundles.trending_bundle_tweet.template: "Discover {name}, today's trending #Symfony2 bundle {url} on #KnpBundles"
     knp_bundles.consumer.update_bundle.class: Knp\Bundle\KnpBundlesBundle\Consumer\UpdateBundleConsumer
-
+    knp_bundles.user.manager.class: Knp\Bundle\KnpBundlesBundle\Entity\UserManager
+        
 services:
     knp_bundles.updater:
         class: %knp_bundles.updater.class%
         arguments:
             - @knp_bundles.entity_manager
+            - @knp_bundles.user.manager
             - %knp_bundles.bundles_dir%
             - %knp_bundles.git_bin%
             - @old_sound_rabbit_mq.update_bundle_producer
+
+    knp_bundles.user.manager:
+        class: %knp_bundles.user.manager.class%
+        arguments:
+            - @knp_bundles.entity_manager
 
     knp_bundles.user.provider:
         class: %knp_bundles.user.provider.class%
@@ -28,6 +35,7 @@ services:
         class: %knp_bundles.consumer.update_bundle.class%
         arguments: 
             - @doctrine.orm.entity_manager
+            - @knp_bundles.user.manager
             - %knp_bundles.bundles_dir%
             - %knp_bundles.git_bin%
 
