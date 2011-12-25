@@ -11,7 +11,7 @@
         <div class="box">
             <h3>{% trans %}bundles.show.infos.title{% endtrans %}</h3>
             <ul>
-                <li>{% trans %}bundles.show.infos.score{% endtrans %} <span>{{ bundle.score }}</span></li>
+                <li>{% trans %}bundles.show.infos.score{% endtrans %} <span><a href="#bundle-score-details">{{ bundle.score }}</a></span></li>
                 <li>{% trans %}bundles.show.infos.created{% endtrans %} <span>{{ bundle.createdAt|date('date_format'|trans) }}</span></li>
                 <li>{% trans %}bundles.show.infos.contributors{% endtrans %} <span>{{ bundle.nbContributors }}</span></li>
                 <li>{% trans %}bundles.show.infos.followers{% endtrans %} <span>{{ bundle.nbFollowers }}</span></li>
@@ -90,6 +90,20 @@
               }
             </script>
         </div>
+
+        <div class="box">
+            <h3 id="bundle-score-details">{% trans %}bundles.show.score.title{% endtrans %} ( <a href="{{ path('scoring') }}">{% trans %}bundles.show.score.about{% endtrans %}</a> )</h3>
+            <ul class="bundle-score-details">
+                <li>{% trans with {'%score%': score.followers } %}bundles.score.followers{% endtrans %}</li>
+                <li>{% trans with {'%score%': score.activity } %}bundles.score.activity{% endtrans %}</li>
+                <li>{% trans with {'%score%': score.readme } %}bundles.score.readme{% endtrans %}</li>
+                <li>{% trans with {'%score%': score.travisci } %}bundles.score.travisci{% endtrans %}</li>
+                <li>{% trans with {'%score%': score.travisbuild } %}bundles.score.travisbuild{% endtrans %}</li>
+                <li>{% trans with {'%score%': score.composer } %}bundles.score.composer{% endtrans %}</li>
+                <li>{% trans with {'%score%': score.recommenders } %}bundles.score.recommenders{% endtrans %}</li>
+
+            </ul>
+        </div>
         {% endif %}
 
         <div class="box">
@@ -116,7 +130,7 @@
             {%- endfor %}
             <ul>
         </div>
-        
+
     </div>
 
     <div id="main">

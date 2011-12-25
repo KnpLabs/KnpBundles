@@ -87,6 +87,9 @@ bundles.show:
         travis: "Travis CI"
         github: "Github"
         users: "Nb of users:"
+    score:
+        title: "Score details"
+        about: "?"
     contributors:
         title: "Contributors"
         by: "by"
@@ -103,6 +106,14 @@ bundles.show:
     chart:
         title: "Score evolution"
 
+bundles.score:
+    followers:      'Github Followers: %score%'
+    activity:       "Last 30 days activity: %score%"
+    readme:         "README file size: %score%"
+    travisci:       "Uses Travis CI: %score%"
+    travisbuild:    "Travis CI build status: %score%"
+    composer:       "Provides a composer package: %score%"
+    recommenders:   "KnpBundles recommandations: %score%"
 
 bundles.list:
     by: " by "
