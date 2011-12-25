@@ -114,7 +114,7 @@ bundles.list:
         featured: "What's hot?"
         newest: "Newest bundles"
     buildStatus: "Build status "
-    
+
 users:
     meta:
         title: "Discover %count% Symfony2 Developers"
@@ -151,6 +151,12 @@ symfony2bundles:
         title: "Symfony2bundles becomes KnpBundles"
         description: "More features, more love from KnpLabs… Symfony2bundles has been renamed to comply with Symfony trademarks"
     title: "Symfony2bundles becomes KnpBundles"
+
+about_scoring:
+    meta:
+        title: "About KnpBundles scoring algorithm"
+        description: "KnpBundles assigns each bundle a score based on best practices, here's how it works"
+    title: "About KnpBundles scoring algorithm"
 
 notFound:
     title: "404 - Page not found"
