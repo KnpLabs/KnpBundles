@@ -145,8 +145,8 @@
 
 [BuzzBundle]
     git=https://github.com/sensio/SensioBuzzBundle.git
-    target=/bundles/Sensio/Bundle/BuzzBundle
+    target=bundles/Sensio/Bundle/BuzzBundle
 
 [KnpOAuthBundle]
     git=https://github.com/KnpLabs/KnpOAuthBundle.git
-    target=/bundles/Knp/Bundle/OAuthBundle
+    target=bundles/Knp/Bundle/OAuthBundle

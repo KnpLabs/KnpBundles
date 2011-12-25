@@ -20,7 +20,7 @@ security:
         - { path: change-usage-status$, roles: ROLE_USER }
 
     providers:
-        secured_area:
+        oauth_entity:
             oauth_entity:
                 class: KnpBundlesBundle:User
                 property: name
