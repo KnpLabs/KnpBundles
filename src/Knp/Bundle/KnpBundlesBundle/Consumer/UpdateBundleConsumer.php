@@ -16,11 +16,17 @@ use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 use Doctrine\ORM\EntityManager;
 
+/**
+ * This class is a consumer which will retrieve a bundle from database
+ * and update everything that needs to be updated.
+ *
+ * @author Romain Pouclet <romain.pouclet@knplabs.com>
+ */
 class UpdateBundleConsumer implements ConsumerInterface
 {
     /**
      * @var Symfony\Component\HttpKernel\Log\LoggerInterface
-     */ 
+     */
     private $logger;
 
     /**
@@ -34,9 +40,10 @@ class UpdateBundleConsumer implements ConsumerInterface
     private $users;
 
     /**
-     * @param Doctrine\ORM\EntityManager $em
-     * @param string $gitRepoDir
-     * @param string $gitBin
+     * @param Doctrine\ORM\EntityManager                     $em
+     * @param Knp\Bundle\KnpBundlesBundle\Entity\UserManager $users
+     * @param string                                         $gitRepoDir
+     * @param string                                         $gitBin
      */
     public function __construct(EntityManager $em, UserManager $users, $gitRepoDir, $gitBin)
     {
@@ -76,7 +83,7 @@ class UpdateBundleConsumer implements ConsumerInterface
     /**
      * Callback called from RabbitMQ to update a bundle
      *
-     * @param string serialized Message
+     * @param string $msg serialized Message
      */
     public function execute($msg)
     {
@@ -94,10 +101,8 @@ class UpdateBundleConsumer implements ConsumerInterface
         $bundles = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle');
 
         // Retrieve Bundle from database
-        if (!$bundle = $bundles->findOneBy(array('id' => $message['bundle_id'])))
-        {
-            if ($this->logger)
-            {
+        if (!$bundle = $bundles->findOneBy(array('id' => $message['bundle_id']))) {
+            if ($this->logger) {
                 $this->logger->warn(sprintf('Unable to retrieve bundle #%d', $message['bundle_id']));
             }
 
@@ -116,7 +121,7 @@ class UpdateBundleConsumer implements ConsumerInterface
                 $this->removeBundle($bundle);
 
                 return;
-            } 
+            }
 
             $this->updateContributors($bundle);
             $score = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')->setScore(new \DateTime(), $bundle, $bundle->getScore());
@@ -164,6 +169,11 @@ class UpdateBundleConsumer implements ConsumerInterface
         }
     }
 
+    /**
+     * Removes a specified bundle
+     *
+     * @param Knp\Bundle\Entity\Bundle $bundle
+     */
     protected function removeBundle(Bundle $bundle)
     {
         $bundle->getUser()->removeBundle($bundle);
