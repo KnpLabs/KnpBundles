@@ -1,5 +1,6 @@
 /app/cache/*
 /app/logs/*
+/app/db/*
 /app/repos
 /app/data
 /app/deploy.sh
