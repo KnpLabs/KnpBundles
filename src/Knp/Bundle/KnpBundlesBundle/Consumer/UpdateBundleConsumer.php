@@ -52,9 +52,6 @@ class UpdateBundleConsumer implements ConsumerInterface
         $this->em = $em;
 
         $githubClient = new \Github_Client();
-        $githubSearch = new Github\Search($githubClient, new \Goutte\Client(), $output);
-        $this->githubUserApi = new Github\User($githubClient, $output);
-
         $gitRepoManager = new Git\RepoManager($gitRepoDir, $gitBin);
         $this->githubRepoApi = new Github\Repo($githubClient, $output, $gitRepoManager);
         $this->travis = new Travis($output);
