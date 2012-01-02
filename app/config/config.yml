@@ -72,3 +72,10 @@ inori_twitter_app:
     consumer_secret: %knp_bundles.twitter.consumer_secret%
     oauth_token: %knp_bundles.twitter.oauth_token%
     oauth_token_secret: %knp_bundles.twitter.oauth_token_secret%
+
+knp_disqus:
+    api_key: %knp_bundles.disqus_key%
+    forums:
+        s2b:
+            shortname: s2b
+            cache:     s2b_disqus
