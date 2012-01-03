@@ -133,8 +133,6 @@ class UpdateBundleConsumer implements ConsumerInterface
             if ($this->logger) {
                 $this->logger->err('['.get_class($e).'] '.$e->getMessage());
             }
-
-            return;
         }
     }
 
