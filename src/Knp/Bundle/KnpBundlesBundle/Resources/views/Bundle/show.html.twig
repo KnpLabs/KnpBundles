@@ -26,12 +26,63 @@
                 {% if bundle.usesTravisCi %}
                 <li class="info-travis" title="{% trans %}bundles.show.infos.travis{% endtrans %}">
                     <a href="{{ bundle.travisUrl }}">
-                        <img src="https://secure.travis-ci.org/{{ bundle.username }}/{{ bundle.name }}.png"></img>
+                        <img src="https://secure.travis-ci.org/{{ bundle.username }}/{{ bundle.name }}.png" alt="">
                     </a>
                  </li>
                 {% endif %}
             </ul>
         </div>
+
+        <form class="modal" action="" method="post" id="modal-settings" style="display: none;width:400px">
+            <div class="modal-header">
+                <a class="close" href="#">×</a>
+                <h3>Bundle Status Setting</h3>
+            </div>
+
+            <div class="modal-body">
+                <ul style="margin: 0 auto; width: 125px;">
+                    <li>
+                        <label>
+                            <input type="radio" name="state" id="state0" value="state0" checked="">
+                            <span>unknown</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="state" id="state1" value="state1">
+                            <span>not yet ready</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="state" id="state2" value="state2">
+                            <span>ready</span>
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="radio" name="state" id="state3" value="state3">
+                            <span>deprecated</span>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="modal-footer">
+                <button class="button">Change state of bundle</button>
+            </div>
+        </form>
+
+        <div class="box">
+            <h3>{% trans %}bundles.show.settings.title{% endtrans %}</h3>
+            <ul>
+                <li>
+                    <span class="button settings i-recommend" data-controls-modal="modal-settings">Change bundle settings</span>
+                </li>
+            </ul>
+        </div>
+        {% if app.user is not null %}
+        {% endif %}
 
         <div class="box">
             <h3>{% trans %}bundles.show.keywords.title{% endtrans %}</h3>
@@ -139,7 +190,6 @@
             {%- endfor %}
             <ul>
         </div>
-
     </div>
 
     <div id="main">

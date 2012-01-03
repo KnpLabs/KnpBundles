@@ -153,6 +153,13 @@ class Bundle
     protected $lastCheckAt;
 
     /**
+     * Status of bundle
+     *
+     * @ORM\Column(type="string")
+     */
+    protected $state = 'unknown';
+
+    /**
      * Recommenders who contributed to the Repo
      *
      * @ORM\ManyToMany(targetEntity="User", inversedBy="contributionBundles")
@@ -810,6 +817,30 @@ class Bundle
     public function getTrend1()
     {
         return $this->trend1;
+    }
+
+    /**
+     * Get the status of bundle
+     *
+     * @return string
+     */
+    public function getState()
+    {
+        return null === $this->state ? 'unknown' : $this->state;
+    }
+
+    /**
+     * Set status of bundle
+     *
+     * @param string
+     */
+    public function setState($state)
+    {
+        if (!in_array($state, array('unknown', 'not yet ready', 'ready', 'deprecated'))) {
+            $state = 'unknown';
+        }
+
+        $this->state = $state;
     }
 
     /**

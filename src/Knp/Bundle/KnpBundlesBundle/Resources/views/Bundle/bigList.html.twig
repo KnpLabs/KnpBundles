@@ -6,7 +6,7 @@
         </div>
         <div class="generals">
             <div class="bundle-title">
-                <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}" class="name">{{ bundle.name }}</a>
+                <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}" class="name">{{ bundle.name }}</a>{% if bundle.state != 'unknown' %} ({{ bundle.state }}){% endif %}
             </div>
             <p class="description">{{ bundle.description|default('−') }}</p>
             

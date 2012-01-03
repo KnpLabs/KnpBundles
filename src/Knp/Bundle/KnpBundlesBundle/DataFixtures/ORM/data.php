@@ -110,6 +110,8 @@ EOD;
             $users[] = $user;
         }
 
+        $states = array('unknown', 'not yet ready', 'ready', 'deprecated');
+
         foreach ($users as $i => $user) {
 
             $contributors = array();
@@ -129,6 +131,7 @@ EOD;
                 'tags'          => ($i%2) ? array('1.0', '1.1') : array(),
                 'usesTravisCi'  => ($i%2) ? false : true,
                 'composerName'  => ($i%2) ? null : 'knplabs/knp-menu-bundle',
+                'state'         => $states[mt_rand(0, 3)],
                 'travisCiBuildStatus'  => ($i%2 == 0) ? $trilean[$i%3] : null,
                 'nbFollowers'   => $i*10,
                 'nbForks'       => $i,
