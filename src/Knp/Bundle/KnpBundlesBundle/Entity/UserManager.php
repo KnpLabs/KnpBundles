@@ -10,13 +10,15 @@ use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 use Knp\Bundle\KnpBundlesBundle\Github;
 
 /**
-* 
-*/
+ * Manages user entities 
+ * 
+ * @author Romain Pouclet <romain.pouclet@knplabs.com> 
+ */
 class UserManager
 {
     /**
      * @var Doctrine\ORM\EntityManager
-     **/
+     */
     private $entityManager;
 
     /**
@@ -24,7 +26,9 @@ class UserManager
      */
     private $users;
 
-
+    /**
+     * @var Doctrine\ORM\EntityRepository
+     */
     private $repository;
     
     /**
@@ -44,7 +48,6 @@ class UserManager
     {
         if (!$user = $this->repository->findOneBy(array('name' => $username))) {
             if (!$user = $this->githubUserApi->import($username)) {
-
                 throw new UserNotFoundException();
             }
 
