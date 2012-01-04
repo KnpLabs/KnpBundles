@@ -33,7 +33,7 @@ class KbAddBundleCommand extends ContainerAwareCommand
         $updater->setOutput($output);
         $updater->setUp();
 
-        $bundles = $updater->addBundle($input->getArgument('bundleName'));
+        $updater->addBundle($input->getArgument('bundleName'));
 
         $em = $this->getContainer()->get('knp_bundles.entity_manager');
         $em->flush();
