@@ -109,6 +109,15 @@ bundles.show:
         empty: "No keywords for this bundle"
     chart:
         title: "Score evolution"
+    settings:
+        title:  "Bundle settings"
+        modal:  "Bundle Status Setting"
+        button: "Change bundle settings"
+        state:
+            unknown:    "unknown"
+            not_ready:  "not yet ready"
+            ready:      "ready"
+            deprecated: "deprecated"
 
 bundles.score:
     followers:      'Github Followers: %score%'
