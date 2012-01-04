@@ -97,7 +97,7 @@ class UpdateBundleConsumer implements ConsumerInterface
         $bundles = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle');
 
         // Retrieve Bundle from database
-        if (!$bundle = $bundles->findOneBy(array('id' => $message['bundle_id']))) {
+        if (!$bundle = $bundles->find($message['bundle_id'])) {
             if ($this->logger) {
                 $this->logger->warn(sprintf('Unable to retrieve bundle #%d', $message['bundle_id']));
             }
