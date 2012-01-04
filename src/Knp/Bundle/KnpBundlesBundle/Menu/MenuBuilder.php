@@ -19,7 +19,7 @@ class MenuBuilder
         $this->factory = $factory;
     }
 
-    public function createMainMenu(Request $request, Translator $translator, SecurityContext $securityContext)
+    public function createMainMenu(Request $request, Translator $translator)
     {
         $menu = $this->factory->createItem('root');
         $menu->setCurrentUri($request->getRequestUri());

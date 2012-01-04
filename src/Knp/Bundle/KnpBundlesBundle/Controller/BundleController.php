@@ -97,7 +97,7 @@ class BundleController extends BaseController
         $format = $this->recognizeRequestFormat();
 
         $sortField = $this->sortFields[$sort];
-        
+
         if ('html' === $format) {
             $query = $this->getRepository('Bundle')->queryAllWithUsersAndContributorsSortedBy($sortField);
             $bundles = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
@@ -117,7 +117,7 @@ class BundleController extends BaseController
 
     public function evolutionAction()
     {
-        $bundlesitory = $this->getRepository('Score'); 
+        $bundlesitory = $this->getRepository('Score');
         $counts = $bundlesitory->getScoreCountEvolution();
 
         return $this->render('KnpBundlesBundle:Bundle:evolution.html.twig', array(
@@ -139,13 +139,6 @@ class BundleController extends BaseController
 
     public function addAction(Request $request)
     {
-        if (!$this->userIsLogged()) {
-            # crappy hack for oauth return url
-            $this->getRequest()->getSession()->set('redirect_url', $this->generateUrl('add_bundle'));
-            # end hack
-            return $this->redirect($this->generateUrl('_login'));
-        }
-
         $error = false;
         $errorMessage = $bundle = '';
         if ($request->request->has('bundle')) {
@@ -178,12 +171,6 @@ class BundleController extends BaseController
 
     public function changeUsageStatusAction($username, $name)
     {
-        if (!$this->userIsLogged()) {
-            $this->getRequest()->getSession()->set('redirect_url', $this->generateUrl('bundle_show', array('username' => $username, 'name' => $name)));
-
-            return $this->redirect($this->generateUrl('_login'));
-        }
-
         $bundle = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);
         if (!$bundle) {
             throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
@@ -224,7 +211,7 @@ class BundleController extends BaseController
     {
         return $this->get('knp_bundles.entity_manager')->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\'.$class);
     }
-    
+
     protected function highlightMenu()
     {
         $this->get('knp_bundles.menu.main')->getChild('bundles')->setCurrent(true);

@@ -14,11 +14,12 @@ class AppKernel extends Kernel
 
             // enable third-party bundles
             new Symfony\Bundle\MonologBundle\MonologBundle(),
-            new Symfony\Bundle\DoctrineBundle\DoctrineBundle(),
-            new Symfony\Bundle\DoctrineMigrationsBundle\DoctrineMigrationsBundle(),
-            new Symfony\Bundle\DoctrineFixturesBundle\DoctrineFixturesBundle(),
-            new Etcpasswd\OAuthBundle\EtcpasswdOAuthBundle(),
+            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new Inori\TwitterAppBundle\InoriTwitterAppBundle(),
+            new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
+            new Knp\Bundle\OAuthBundle\KnpOAuthBundle(),
 
             // register your bundles here
             new Knp\Bundle\MarkdownBundle\KnpMarkdownBundle(),
