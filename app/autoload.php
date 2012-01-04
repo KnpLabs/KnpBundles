@@ -11,6 +11,7 @@ $loader->registerNamespaces(array(
     'Knp\Menu'                      => __DIR__.'/../vendor/knp-menu/src',
     'Knp\Component'                 => __DIR__.'/../vendor/knp-components/src',
     'Ornicar\GravatarBundle'        => __DIR__.'/../vendor/bundles',
+    'Doctrine\Bundle'               => __DIR__.'/../vendor/bundles',
     'Doctrine\DBAL\Migrations'      => __DIR__.'/../vendor/doctrine-migrations/lib',
     'Doctrine\Common'               => __DIR__.'/../vendor/doctrine-common/lib',
     'Doctrine\Common\DataFixtures'  => __DIR__.'/../vendor/doctrine-data-fixtures/lib',

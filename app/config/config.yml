@@ -33,8 +33,7 @@ knp_menu:
     twig: true
 
 # Paginator Configuration
-knp_paginator:
-    templating: ~
+knp_paginator: ~
 
 # KnpBundles Configuration
 knp_bundles: ~
