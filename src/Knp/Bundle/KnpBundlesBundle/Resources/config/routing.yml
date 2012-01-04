@@ -74,3 +74,8 @@ bundle_show:
     pattern:        /{username}/{name}
     defaults:       { _controller: KnpBundlesBundle:Bundle:show }
     requirements:   { _method: "GET", format: "(html|json|js)", name: ".+" }
+
+bundle_settings:
+    pattern:        /bundle/settings/{id}
+    defaults:       { _controller: KnpBundlesBundle:Bundle:settings }
+    requirements:   { _method: "POST" }

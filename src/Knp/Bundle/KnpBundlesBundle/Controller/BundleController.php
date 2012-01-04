@@ -240,6 +240,29 @@ class BundleController extends BaseController
         return $response;
     }
 
+    public function settingsAction($id)
+    {
+        $bundle = $this->getRepository('Bundle')->findOneById($id);
+        if (!$bundle) {
+            throw new NotFoundHttpException('The bundle does not exist.');
+        }
+
+        // Save only if sender is owner of bundle
+        if ($bundle->getUser() === $this->getUser()) {
+            $state = $this->getRequest()->request->get('state', 'unknown');
+
+            $bundle->setState($state);
+
+            $em = $this->get('doctrine')->getEntityManager();
+            $em->persist($bundle);
+            $em->flush();
+
+            $this->getRequest()->getSession()->setFlash('notice', sprintf('Bundle status was successful changed to: %s', $state));
+        }
+
+        return $this->redirect($this->generateUrl('bundle_show', array('username' => $bundle->getUserName(), 'name' => $bundle->getName())));
+    }
+
     protected function userIsLogged()
     {
         return $this->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY');
