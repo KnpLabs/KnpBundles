@@ -22,11 +22,6 @@ class UserManager
     private $entityManager;
 
     /**
-     * @var array
-     */
-    private $users;
-
-    /**
      * @var Doctrine\ORM\EntityRepository
      */
     private $repository;
@@ -38,7 +33,6 @@ class UserManager
 
     public function __construct(ObjectManager $entityManager)
     {
-        $this->users = array();
         $this->entityManager = $entityManager;
         $this->repository = $this->entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\User');
         $this->githubUserApi = new Github\User(new \Github_Client(), new NullOutput());
