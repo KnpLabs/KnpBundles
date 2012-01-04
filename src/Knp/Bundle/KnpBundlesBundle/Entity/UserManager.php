@@ -2,7 +2,7 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Entity;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\Console\Output\NullOutput;
 
@@ -36,7 +36,7 @@ class UserManager
      */
     private $githubUserApi;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(ObjectManager $entityManager)
     {
         $this->users = array();
         $this->entityManager = $entityManager;
