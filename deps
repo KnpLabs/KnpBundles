@@ -30,13 +30,17 @@
 [doctrine-migrations]
     git=http://github.com/doctrine/migrations.git
 
+[DoctrineBundle]
+    git=http://github.com/doctrine/DoctrineBundle.git
+    target=bundles/Doctrine/Bundle/DoctrineBundle
+
 [DoctrineFixturesBundle]
-    git=http://github.com/symfony/DoctrineFixturesBundle.git
-    target=bundles/Symfony/Bundle/DoctrineFixturesBundle
+    git=http://github.com/doctrine/DoctrineFixturesBundle.git
+    target=bundles/Doctrine/Bundle/FixturesBundle
 
 [DoctrineMigrationsBundle]
-    git=http://github.com/symfony/DoctrineMigrationsBundle.git
-    target=bundles/Symfony/Bundle/DoctrineMigrationsBundle
+    git=http://github.com/doctrine/DoctrineMigrationsBundle.git
+    target=bundles/Doctrine/Bundle/MigrationsBundle
 
 [assetic]
     git=http://github.com/kriswallsmith/assetic.git
