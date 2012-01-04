@@ -146,6 +146,13 @@ class Bundle
     protected $tags = null;
 
     /**
+     * Date of the last succesful GitHub check
+     *
+     * @ORM\Column(type="date")
+     */
+    protected $lastCheckAt = null;
+
+    /**
      * Recommenders who contributed to the Repo
      *
      * @ORM\ManyToMany(targetEntity="User", inversedBy="contributionBundles")
@@ -185,7 +192,7 @@ class Bundle
      * @ORM\Column(type="boolean")
      */
     protected $usesTravisCi = false;
-	
+
     /**
      * Travis Ci last build status
      *
@@ -714,6 +721,8 @@ class Bundle
 
     /**
      * Set the bundle creation date
+     *
+     * @param \DateTime $createdAt
      */
     public function setCreatedAt(\DateTime $createdAt)
     {
@@ -728,6 +737,26 @@ class Bundle
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Get the date of last check
+     *
+     * @return \DateTime
+     */
+    public function getLastCheckAt()
+    {
+        return $this->lastCheckAt;
+    }
+
+    /**
+     * Set the date of last check
+     *
+     * @param \DateTime $lastCheckAt
+     */
+    public function setLastCheckAt(\DateTime $lastCheckAt)
+    {
+        $this->lastCheckAt = $lastCheckAt;
     }
 
     /**
