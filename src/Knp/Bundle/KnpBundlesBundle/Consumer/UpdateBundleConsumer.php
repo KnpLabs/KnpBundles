@@ -148,15 +148,7 @@ class UpdateBundleConsumer implements ConsumerInterface
         foreach ($contributorNames as $contributorName) {
             $contributors[] = $this->users->getOrCreate($contributorName);
         }
-
-        try {
-            $bundle->setContributors($contributors);
-            $this->em->flush();
-        } catch(\PDOException $e) {
-            if ($this->logger) {
-                $this->logger->err($e->getMessage());
-            }
-        }
+        $bundle->setContributors($contributors);
 
         if ($this->logger) {
             $this->logger->info(sprintf('%d contributor(s) have been retrieved for bundle %s', sizeof($contributors), $bundle->getName()));
