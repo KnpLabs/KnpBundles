@@ -14,8 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
-use Doctrine\ORM\EntityManager;
-
+use Doctrine\Common\Persistence\ObjectManager;
 /**
  * This class is a consumer which will retrieve a bundle from database
  * and update everything that needs to be updated.
@@ -40,12 +39,12 @@ class UpdateBundleConsumer implements ConsumerInterface
     private $users;
 
     /**
-     * @param Doctrine\ORM\EntityManager                     $em
+     * @param Doctrine\Common\Persistence\ObjectManager      $em
      * @param Knp\Bundle\KnpBundlesBundle\Entity\UserManager $users
      * @param string                                         $gitRepoDir
      * @param string                                         $gitBin
      */
-    public function __construct(EntityManager $em, UserManager $users, $gitRepoDir, $gitBin)
+    public function __construct(ObjectManager $em, UserManager $users, $gitRepoDir, $gitBin)
     {
         $output = new NullOutput();
 
