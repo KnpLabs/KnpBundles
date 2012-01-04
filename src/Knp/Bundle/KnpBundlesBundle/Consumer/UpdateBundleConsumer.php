@@ -2,7 +2,7 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Consumer;
 
-use Knp\Bundle\KnpBundlesBundle\Github;
+use Knp\Bundle\KnpBundlesBundle\Github\Repo;
 use Knp\Bundle\KnpBundlesBundle\Git;
 use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
@@ -44,17 +44,11 @@ class UpdateBundleConsumer implements ConsumerInterface
      * @param string                                         $gitRepoDir
      * @param string                                         $gitBin
      */
-    public function __construct(ObjectManager $em, UserManager $users, $gitRepoDir, $gitBin)
+    public function __construct(ObjectManager $em, UserManager $users, Repo $githubRepoApi, Travis $travis)
     {
-        $output = new NullOutput();
-
         $this->em = $em;
-
-        $githubClient = new \Github_Client();
-        $gitRepoManager = new Git\RepoManager($gitRepoDir, $gitBin);
-        $this->githubRepoApi = new Github\Repo($githubClient, $output, $gitRepoManager);
-        $this->travis = new Travis($output);
-
+        $this->githubRepoApi = $githubRepoApi; 
+        $this->travis = $travis;
         $this->users = $users;
     }
 
