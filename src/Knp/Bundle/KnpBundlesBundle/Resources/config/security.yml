@@ -11,11 +11,13 @@ security:
                 check_path:       /oauth/github
                 login_path:       /login
                 failure_path:     /
+                default_target_path: /
             logout:
                 path:   /logout
                 target: /
 
     access_control:
+        - { path: ^/login, roles: ROLE_USER }
         - { path: ^/add, roles: ROLE_USER }
         - { path: change-usage-status$, roles: ROLE_USER }
 
