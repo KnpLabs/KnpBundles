@@ -11,9 +11,11 @@
         <div class="box">
             <h3>{% trans %}bundles.show.infos.title{% endtrans %}</h3>
             <ul>
+                {%- if bundle.state != 'unknown' -%}
+                <li>{% trans %}bundles.show.infos.state{% endtrans %} <span class="state {{ bundle.state|replace({' ': '-'}) }}">{{ bundle.state }}</span></li>
+                {%- endif -%}
                 <li>{% trans %}bundles.show.infos.score{% endtrans %} <span><a href="#bundle-score-details">{{ bundle.score }}</a></span></li>
-                <li>{% trans %}bundles.show.infos.created{% endtrans %} <span>{{ bundle.createdAt|date('date_format'|trans) }}</span></li>
-                <li>{% trans %}bundles.show.infos.contributors{% endtrans %} <span>{{ bundle.nbContributors }}</span></li>
+                <li>{% trans %}bundles.show.infos.created{% endtrans %} <span>{{ bundle.createdAt|date('date_format'|trans) }}</span></li>                <li>{% trans %}bundles.show.infos.contributors{% endtrans %} <span>{{ bundle.nbContributors }}</span></li>
                 <li>{% trans %}bundles.show.infos.followers{% endtrans %} <span>{{ bundle.nbFollowers }}</span></li>
                 <li class="info-github" title="{% trans %}bundles.show.infos.github{% endtrans %}">
                     <a href="{{ bundle.githubUrl }}">{{ bundle.fullName }}</a>
@@ -32,57 +34,6 @@
                 {% endif %}
             </ul>
         </div>
-
-        {%- if (app.user is not null) and (bundle.user == app.user) -%}
-        <form class="modal" action="{{ path('bundle_settings', {'id': bundle.id}) }}" method="post" id="modal-settings" style="display: none;width:400px">
-            <div class="modal-header">
-                <a class="close" href="#">×</a>
-                <h3>{% trans %}bundles.show.settings.modal{% endtrans %}</h3>
-            </div>
-
-            <div class="modal-body">
-                <ul style="margin: 0 auto; width: 125px;">
-                    <li>
-                        <label>
-                            <input type="radio" name="state" id="state0" value="unknown"{{ bundle.state == 'unknown' ? ' checked=""' : '' }}>
-                            <span>{% trans %}bundles.show.settings.state.unknown{% endtrans %}</span>
-                        </label>
-                    </li>
-                    <li>
-                        <label>
-                            <input type="radio" name="state" id="state1" value="not yet ready"{{ bundle.state == 'not yet ready' ? ' checked=""' : '' }}>
-                            <span>{% trans %}bundles.show.settings.state.not_ready{% endtrans %}</span>
-                        </label>
-                    </li>
-                    <li>
-                        <label>
-                            <input type="radio" name="state" id="state2" value="ready"{{ bundle.state == 'ready' ? ' checked=""' : '' }}>
-                            <span>{% trans %}bundles.show.settings.state.ready{% endtrans %}</span>
-                        </label>
-                    </li>
-                    <li>
-                        <label>
-                            <input type="radio" name="state" id="state3" value="deprecated"{{ bundle.state == 'deprecated' ? ' checked=""' : '' }}>
-                            <span>{% trans %}bundles.show.settings.state.deprecated{% endtrans %}</span>
-                        </label>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="modal-footer">
-                <button class="button">{% trans %}bundles.show.settings.button{% endtrans %}</button>
-            </div>
-        </form>
-
-        <div class="box">
-            <h3>{% trans %}bundles.show.settings.title{% endtrans %}</h3>
-            <ul>
-                <li>
-                    <span class="button settings" data-controls-modal="modal-settings">{% trans %}bundles.show.settings.button{% endtrans %}</span>
-                </li>
-            </ul>
-        </div>
-        {%- endif -%}
 
         <div class="box">
             <h3>{% trans %}bundles.show.keywords.title{% endtrans %}</h3>
@@ -208,6 +159,9 @@
         <div class="actions">
             <a class="button github" href="{{ bundle.gitHubUrl }}">{% trans %}bundles.show.github{% endtrans %}</a>
             <a class="button github" href="{{ bundle.gitHubUrl }}/issues">{% trans %}bundles.show.issues{% endtrans %}</a>
+            {%- if (app.user is not null) and (bundle.user == app.user) -%}
+            &nbsp;<span class="button github" data-controls-modal="modal-settings">{% trans %}bundles.show.setting{% endtrans %}</span>
+            {%- endif -%}
         </div>
     </div>
 
@@ -222,4 +176,46 @@
     {% endif %}
 
     {{ knp_disqus_render('s2b', {'identifier': bundle.username~'_'~bundle.name, 'url': url('bundle_show', {'username':bundle.username, 'name':bundle.name}), 'limit': 100}) }}
+
+    {%- if (app.user is not null) and (bundle.user == app.user) -%}
+    <form class="modal" action="{{ path('bundle_settings', {'id': bundle.id}) }}" method="post" id="modal-settings" style="display: none;width:400px">
+        <div class="modal-header">
+            <a class="close" href="#">×</a>
+            <h3>{% trans %}bundles.show.settings.modal{% endtrans %}</h3>
+        </div>
+
+        <div class="modal-body">
+            <ul style="margin: 0 auto; width: 125px;">
+                <li>
+                    <label>
+                        <input type="radio" name="state" id="state0" value="unknown"{{ bundle.state == 'unknown' ? ' checked="checked"' : '' }}>
+                        <span>{% trans %}bundles.show.settings.state.unknown{% endtrans %}</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="state" id="state1" value="not yet ready"{{ bundle.state == 'not yet ready' ? ' checked="checked"' : '' }}>
+                        <span>{% trans %}bundles.show.settings.state.not_ready{% endtrans %}</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="state" id="state2" value="ready"{{ bundle.state == 'ready' ? ' checked="checked"' : '' }}>
+                        <span>{% trans %}bundles.show.settings.state.ready{% endtrans %}</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="state" id="state3" value="deprecated"{{ bundle.state == 'deprecated' ? ' checked="checked"' : '' }}>
+                        <span>{% trans %}bundles.show.settings.state.deprecated{% endtrans %}</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <div class="modal-footer">
+            <button class="button">{% trans %}bundles.show.setting{% endtrans %}</button>
+        </div>
+    </form>
+    {%- endif -%}
 {% endblock %}

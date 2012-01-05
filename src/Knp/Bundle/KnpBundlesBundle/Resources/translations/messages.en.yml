@@ -77,10 +77,12 @@ bundles.show:
         title: "%name% by %username%"
     github: "Download"
     issues: "Report an Issue"
+    setting: "Change bundle settings"
     infos:
         title: "Infos"
+        state: "Status:"
         score: "Score:"
-        created: "Created"
+        created: "Created:"
         contributors: "Nb of contributors:"
         followers: "Nb of followers:"
         buildStatus: "Build status:"
@@ -112,7 +114,6 @@ bundles.show:
     settings:
         title:  "Bundle settings"
         modal:  "Bundle Status Setting"
-        button: "Change bundle settings"
         state:
             unknown:    "unknown"
             not_ready:  "not yet ready"
