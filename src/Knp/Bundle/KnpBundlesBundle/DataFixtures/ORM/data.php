@@ -25,6 +25,65 @@ class Data implements FixtureInterface
         'Dexter'    => 'Dexter Schwartz'
     );
 
+    private $readme = <<<EOD
+# Readme of __BUNDLE__
+
+```
+something else?
+```
+
+Code samples:
+
+```  yaml
+---
+# FILE /myapp/Mapping/Entity.Role.dcm.yml
+Entity\Role:
+  type: entity
+  table: roles
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+```
+
+- php code
+- xml config
+
+look here
+
+``` php
+<?php
+include('doctrine.php');
+```
+
+and some xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="knp_bundles.finder.aggregate.class">Knp\Bundle\KnpBundlesBundle\Finder\Aggregate</parameter>
+        <parameter key="knp_bundles.finder.google.class">Knp\Bundle\KnpBundlesBundle\Finder\Google</parameter>
+        <parameter key="knp_bundles.finder.github.class">Knp\Bundle\KnpBundlesBundle\Finder\Github</parameter>
+    </parameters>
+</container>
+```
+
+And some standard code **here**
+
+    <?php
+    class XX
+    {
+        //
+    }
+
+EOD;
+
     public function load($manager)
     {
         $users = array();
@@ -65,7 +124,7 @@ class Data implements FixtureInterface
                 'user'          => $user,
                 'description'   => 'Description of my bundle',
                 'homepage'      => ($i%2) ? 'Bundle'.$i.'.com' : null,
-                'readme'        => str_repeat("README of the bundle number ".$i."\n", 20),
+                'readme'        => str_replace('__BUNDLE__', "the bundle number: {$i}", $this->readme),
                 'tags'          => ($i%2) ? array('1.0', '1.1') : array(),
                 'usesTravisCi'  => ($i%2) ? false : true,
                 'composerName'  => ($i%2) ? null : 'knplabs/knp-menu-bundle',

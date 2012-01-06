@@ -36,11 +36,11 @@ And update the parameters.yml with the Client ID and Secret.
 
 #### Create database and tables
 
-    php app/console doctrine:database:drop
+    php app/console doctrine:database:drop --force
     php app/console doctrine:database:create
     php app/console doctrine:schema:create
 
-    php app/console --env=test doctrine:database:drop
+    php app/console --env=test doctrine:database:drop --force
     php app/console --env=test doctrine:database:create
     php app/console --env=test doctrine:schema:create
 
