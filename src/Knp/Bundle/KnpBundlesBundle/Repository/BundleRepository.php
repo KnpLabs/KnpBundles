@@ -4,6 +4,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
+use Doctrine\Common\Cache\ApcCache;
 
 class BundleRepository extends EntityRepository
 {
@@ -74,7 +75,7 @@ class BundleRepository extends EntityRepository
             ->getQuery()
 
             // cache query
-            ->setResultCacheDriver(new \Doctrine\Common\Cache\ApcCache())
+            ->setResultCacheDriver(new ApcCache())
             ->setResultCacheLifetime(3600)
         ;
 
