@@ -138,6 +138,8 @@ class Updater
             if ($this->em->getUnitOfWork()->getEntityState($bundle) != UnitOfWork::STATE_MANAGED) {
                 continue;
             }
+            
+            $this->updateRepo($bundle);
         }
     }
 
