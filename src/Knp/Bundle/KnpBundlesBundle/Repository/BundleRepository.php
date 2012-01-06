@@ -71,7 +71,12 @@ class BundleRepository extends EntityRepository
             ->addOrderBy('bundle.' . $field, 'name' === $field ? 'asc' : 'desc')
             ->addOrderBy('bundle.score', 'desc')
             ->addOrderBy('bundle.lastCommitAt', 'desc')
-            ->getQuery();
+            ->getQuery()
+
+            // cache query
+            ->setResultCacheDriver(new \Doctrine\Common\Cache\ApcCache())
+            ->setResultCacheLifetime(3600)
+        ;
 
         return $q;
     }
