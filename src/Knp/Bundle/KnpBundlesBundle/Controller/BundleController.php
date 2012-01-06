@@ -15,6 +15,7 @@ use Doctrine\ORM\Query;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\User;
 use Knp\Menu\MenuItem;
+use Doctrine\Common\Cache\ApcCache;
 
 class BundleController extends BaseController
 {
@@ -97,9 +98,14 @@ class BundleController extends BaseController
         $format = $this->recognizeRequestFormat();
 
         $sortField = $this->sortFields[$sort];
-        
+
         if ('html' === $format) {
             $query = $this->getRepository('Bundle')->queryAllWithUsersAndContributorsSortedBy($sortField);
+
+            // cache query
+            $query->setResultCacheDriver(new ApcCache());
+            $query->setResultCacheLifetime(3600);
+
             $bundles = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
         } else {
             $bundles = $this->getRepository('Bundle')->findAllWithUsersAndContributorsSortedBy($sortField);
@@ -117,7 +123,7 @@ class BundleController extends BaseController
 
     public function evolutionAction()
     {
-        $bundlesitory = $this->getRepository('Score'); 
+        $bundlesitory = $this->getRepository('Score');
         $counts = $bundlesitory->getScoreCountEvolution();
 
         return $this->render('KnpBundlesBundle:Bundle:evolution.html.twig', array(
@@ -224,7 +230,7 @@ class BundleController extends BaseController
     {
         return $this->get('knp_bundles.entity_manager')->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\'.$class);
     }
-    
+
     protected function highlightMenu()
     {
         $this->get('knp_bundles.menu.main')->getChild('bundles')->setCurrent(true);

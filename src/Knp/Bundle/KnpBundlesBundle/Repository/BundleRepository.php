@@ -4,7 +4,6 @@ namespace Knp\Bundle\KnpBundlesBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
-use Doctrine\Common\Cache\ApcCache;
 
 class BundleRepository extends EntityRepository
 {
@@ -72,12 +71,7 @@ class BundleRepository extends EntityRepository
             ->addOrderBy('bundle.' . $field, 'name' === $field ? 'asc' : 'desc')
             ->addOrderBy('bundle.score', 'desc')
             ->addOrderBy('bundle.lastCommitAt', 'desc')
-            ->getQuery()
-
-            // cache query
-            ->setResultCacheDriver(new ApcCache())
-            ->setResultCacheLifetime(3600)
-        ;
+            ->getQuery();
 
         return $q;
     }
