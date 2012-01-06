@@ -34,7 +34,7 @@ class FeatureContext extends MinkContext
 
     public function __construct($kernel)
     {
-        $this->useContext('symfony_doctrine', new \Behat\CommonContext\SymfonyDoctrineContext($kernel));
+        $this->useContext('symfony_doctrine', new \Behat\CommonContexts\SymfonyDoctrineContext($kernel));
 
         parent::__construct($kernel);
     }

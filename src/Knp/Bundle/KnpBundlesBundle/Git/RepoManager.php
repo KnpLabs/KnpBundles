@@ -3,7 +3,7 @@
 namespace Knp\Bundle\KnpBundlesBundle\Git;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle as BundleEntity;
-use Symfony\Component\HttpKernel\Util\Filesystem;
+use Symfony\Component\Filesystem\Filesystem;
 use PHPGit_Repository;
 
 class RepoManager
