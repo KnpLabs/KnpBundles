@@ -23,6 +23,16 @@ class UserController extends BaseController
         'best'          => 'users.sort.best',
     );
 
+    public function userbarAction()
+    {
+        $response = $this->render('KnpBundlesBundle:User:userbar.html.twig');
+
+        // this is private cache (don't cache with shared proxy)
+        $response->setPrivate();
+
+        return $response;
+    }
+
     public function showAction($name)
     {
         if (!$user = $this->getUserRepository()->findOneByNameWithRepos($name)) {

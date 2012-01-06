@@ -107,12 +107,18 @@ class BundleController extends BaseController
 
         $this->highlightMenu();
 
-        return $this->render('KnpBundlesBundle:Bundle:list.'.$format.'.twig', array(
+        $response = $this->render('KnpBundlesBundle:Bundle:list.'.$format.'.twig', array(
             'bundles'       => $bundles,
             'sort'          => $sort,
             'sortLegends'   => $this->sortLegends,
             'callback'      => $this->get('request')->query->get('callback')
         ));
+
+        // caching
+        $response->setPublic();
+        $response->setMaxAge(600);
+
+        return $response;
     }
 
     public function evolutionAction()

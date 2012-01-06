@@ -32,15 +32,7 @@
     <div id="header">
         <div class="center">
             {{ knp_menu_render(knp_menu_get('main').setAttribute('id', 'menu')) }}
-            <div id="auth">
-                {% if app.user is not null %}
-                <li><img src="{{ gravatar_hash(app.user.gravatarHash, 30, none, 'identicon') }}" /></li>
-                <li class="current"><span>{{ app.user }}</span></li>
-                <li><a href="{{ path('_logout') }}">Log out</a></li>
-                {% else %}
-                <li><a class="login" href="{{ path('_login') }}">Login via GitHub</a></li>
-                {% endif %}
-            </div>
+            {% render 'KnpBundlesBundle:User:userbar' with {}, {'standalone': true} %}
         </div>
     </div><!-- /#header -->
     <div id="header2">
