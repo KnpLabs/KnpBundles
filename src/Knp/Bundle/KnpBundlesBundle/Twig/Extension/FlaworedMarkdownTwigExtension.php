@@ -25,7 +25,7 @@ class FlaworedMarkdownTwigExtension extends \Twig_Extension
         $types = array();
         $markdown = preg_replace_callback("@```[ ]*([^\n]*)(.+?)```@smi", function ($m) use (&$types) {
             $types[] = trim($m[1]);
-            return str_replace("\n", "\n    ", $m[2]);
+            return '    '.str_replace("\n", "\n    ", trim($m[2], "\r\n"));
         }, $githubFlaworedMarkdown);
         // if need to know a block type, theres a list $types
         return $markdown;
