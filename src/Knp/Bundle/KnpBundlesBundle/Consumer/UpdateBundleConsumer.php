@@ -23,6 +23,8 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 class UpdateBundleConsumer implements ConsumerInterface
 {
+    const MAX_GITHUB_TRIALS = 20;
+
     /**
      * @var Symfony\Component\HttpKernel\Log\LoggerInterface
      */
@@ -103,30 +105,41 @@ class UpdateBundleConsumer implements ConsumerInterface
             $this->logger->info(sprintf('Retrieved bundle %s', $bundle->getName()));
         }
 
-        try {
-            if (!$this->githubRepoApi->update($bundle)) {
-                if ($this->logger) {
-                    $this->logger->warn(sprintf('Update failed, bundle "%s" will be removed', $bundle->getName()));
+        for ($i = 0; $i < self::MAX_GITHUB_TRIALS; $i++) {
+            try {
+                if (!$this->githubRepoApi->update($bundle)) {
+                    if ($this->logger) {
+                        $this->logger->warn(sprintf('Update failed, bundle "%s" will be removed', $bundle->getName()));
+                    }
+                    $this->removeBundle($bundle);
+
+                    return;
                 }
-                $this->removeBundle($bundle);
 
-                return;
+                $this->updateContributors($bundle);
+                $score = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')->setScore(new \DateTime(), $bundle, $bundle->getScore());
+                $this->em->persist($score);
+                $this->em->flush();
+
+                if ($bundle->getUsesTravisCi()) {
+                    $this->travis->update($bundle);
+                }
+            } catch (\Github_HttpClient_Exception $e) {
+                if (preg_match('@403@', $e->getMessage())) {
+                    if ($this->logger) {
+                        $this->logger->err(sprintf('Bundle %s got a %s for trial %s', $bundle->getName(), $e->getMessage(), $i+1));
+                    }
+                    sleep(60 * ($i + 1));
+                    continue;
+                }
+            } catch (\Exception $e) {
+                if ($this->logger) {
+                    $this->logger->err('['.get_class($e).'] '.$e->getMessage());
+                }
             }
-
-            $this->updateContributors($bundle);
-            $score = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')->setScore(new \DateTime(), $bundle, $bundle->getScore());
-            $this->em->persist($score);
-            $this->em->flush();
-
-            if ($bundle->getUsesTravisCi()) {
-                $this->travis->update($bundle);
-            }
-
-        } catch (\Exception $e) {
-            if ($this->logger) {
-                $this->logger->err('['.get_class($e).'] '.$e->getMessage());
-            }
+            break;
         }
+
     }
 
     /**
