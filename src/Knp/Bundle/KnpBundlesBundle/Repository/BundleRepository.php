@@ -11,14 +11,26 @@ class BundleRepository extends EntityRepository
     {
         $pattern = '%'.str_replace(' ', '%', $query).'%';
 
-        $qb = $this->createQueryBuilder('e')->orderBy('e.score', 'DESC');
-        $qb->where($qb->expr()->orx(
-            $qb->expr()->like('e.username', ':username'),
-            $qb->expr()->like('e.name', ':name'),
-            $qb->expr()->like('e.description', ':description')
+        $queryBuilder = $this->createQueryBuilder('bundle')
+            ->leftJoin('bundle.composerTags', 'tag')
+            ->leftJoin('bundle.user', 'user');
+
+        $queryBuilder->where($queryBuilder->expr()->orx(
+            $queryBuilder->expr()->like('bundle.username', ':username'),
+            $queryBuilder->expr()->like('bundle.name', ':name'),
+            $queryBuilder->expr()->like('bundle.description', ':description')
         ));
-        $qb->setParameters(array('username' => $pattern, 'name' => $pattern, 'description' => $pattern));
-        return $qb->getQuery()->execute();
+
+        $queryBuilder->orWhere('tag.name = :query')
+            ->orderBy('bundle.score', 'DESC')
+            ->setParameters(array(
+        		'username' => $pattern,
+       			'name' => $pattern,
+                'description' => $pattern,
+         		'query' => $query
+            ));
+
+        return $queryBuilder->getQuery()->execute();
     }
 
     public function findAllSortedBy($field, $nb = null)
@@ -74,6 +86,20 @@ class BundleRepository extends EntityRepository
             ->getQuery();
 
         return $q;
+    }
+
+    public function queryByTagSluggedName($sluggedName)
+    {
+        return $this->createQueryBuilder('bundle')
+            ->select('bundle, user')
+            ->leftJoin('bundle.user', 'user')
+            ->leftJoin('bundle.composerTags', 'tag')
+            ->where('tag.sluggedName = :sluggedName')
+            ->addOrderBy('bundle.score', 'desc')
+            ->addOrderBy('bundle.lastCommitAt', 'desc')
+            ->setParameter('sluggedName', $sluggedName)
+            ->getQuery()
+        ;
     }
 
     public function count()

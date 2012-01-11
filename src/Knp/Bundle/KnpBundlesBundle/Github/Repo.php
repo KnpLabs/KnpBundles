@@ -161,6 +161,18 @@ class Repo
         return $bundle;
     }
 
+    public function fetchComposerTags(Entity\Bundle $bundle)
+    {
+        $composerFilename = 'composer.json';
+        $gitRepo = $this->gitRepoManager->getRepo($bundle);
+
+        if ($gitRepo->hasFile($composerFilename)) {
+            $composer = json_decode($gitRepo->getFileContent($composerFilename));
+
+            return isset($composer->keywords) ? $composer->keywords : array();
+        }
+    }
+
     public function getContributorNames(Entity\Bundle $bundle)
     {
         try {

@@ -221,6 +221,25 @@ class BundleController extends BaseController
         return $this->redirect($this->generateUrl('bundle_show', $params));
     }
 
+    public function searchByTagAction($sluggedName)
+    {
+        $query = $this->getRepository('Bundle')->queryByTagSluggedName($sluggedName);
+        $bundles = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
+
+        $this->highlightMenu();
+
+        $response = $this->render('KnpBundlesBundle:Bundle:tagBundlesList.html.twig', array(
+            'bundles' => $bundles,
+            'tagName' => $sluggedName
+        ));
+
+        // caching
+        $response->setPublic();
+        $response->setMaxAge(600);
+
+        return $response;
+    }
+
     protected function userIsLogged()
     {
         return $this->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY');

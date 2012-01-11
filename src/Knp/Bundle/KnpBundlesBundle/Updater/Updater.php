@@ -171,6 +171,10 @@ class Updater
         $this->output->writeln(' '.$bundle->getScore());
         $this->em->flush();
 
+        if ($bundle->getComposerName()) {
+            $this->generateComposerTags($bundle);
+        }
+
         $contributorNames = $this->githubRepoApi->getContributorNames($bundle);
         $contributors = array();
         foreach ($contributorNames as $contributorName) {
@@ -227,5 +231,16 @@ class Updater
         }
 
         return $user;
+    }
+
+    public function generateComposerTags(Bundle $bundle)
+    {
+        $tags = $this->githubRepoApi->fetchComposerTags($bundle);
+
+        foreach ($tags as $tag) {
+            $tag = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Tag')->findOrCreateOne($tag);
+
+            $bundle->addComposerTag($tag);
+        }
     }
 }

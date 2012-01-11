@@ -212,6 +212,17 @@ class Bundle
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $composerName = null;
+    
+    /**
+     * Tagged bundles
+     *
+     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="bundles", cascade={"persist"})
+     * @ORM\JoinTable(name="bundles_tags",
+     *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
+     *      )
+     */
+    protected $composerTags;
 
     public function __construct($fullName = null)
     {
@@ -223,7 +234,7 @@ class Bundle
         $this->createdAt = new \DateTime('NOW');
         $this->updatedAt = new \DateTime('NOW');
         $this->score = 0;
-        $this->scores = new ArrayCollection();;
+        $this->scores = new ArrayCollection();
         $this->lastCommitAt = new \DateTime('2010-01-01');
         $this->lastCommits = serialize(array());
         $this->tags = serialize(array());
@@ -233,6 +244,7 @@ class Bundle
         $this->travisCiBuildStatus = null;
         $this->trend1 = 0;
         $this->composerName = null;
+        $this->composerTags = new ArrayCollection();
     }
 
     /**
@@ -899,5 +911,34 @@ class Bundle
     public function addRecommender(User $user)
     {
         $this->recommenders[] = $user;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getComposerTags()
+    {
+        return $this->composerTags;
+    }
+
+    /**
+     * @return int Total nb of tags for this bundle
+     */
+    public function countComposerTags()
+    {
+        return count($this->composerTags);
+    }
+
+    public function hasComposerTag(Tag $tag)
+    {
+        return $this->composerTags->contains($tag);
+    }
+
+    public function addComposerTag(Tag $tag)
+    {
+        if (!$this->hasComposerTag($tag)) {
+            $tag->addBundle($this);
+            $this->composerTags[] = $tag;
+        }
     }
 }

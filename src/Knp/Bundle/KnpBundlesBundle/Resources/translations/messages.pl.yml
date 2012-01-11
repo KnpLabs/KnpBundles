@@ -51,6 +51,7 @@ credits:
 bundles:
     meta:
         title: "Odkryj %count% Paczek Symfony2"
+        titleTags: "Znaleziono %count% paczek dla tagu '%tag%'"
         description: "Wszystkie Open Sourcowe paczki do Symfony2 sortowane wg. %sort%"
     title: "Odkryj %count% paczek do Symfony2"
     sort:
@@ -72,6 +73,9 @@ bundles.show:
     latest_commits:
         title: "Ostatnie commity"
         by: "Przez"
+    tags:
+        title: "Tagi"
+        empty: "Brak tagów dla tej paczki"
     users:
         by: "przez"
         and: "&"
