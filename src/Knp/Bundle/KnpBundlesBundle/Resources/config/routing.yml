@@ -53,7 +53,7 @@ bundle_list:
 bundle_tag:
     pattern:        /tag/{sluggedName}
     defaults:       { _controller: KnpBundlesBundle:Bundle:searchByTag }
-    requirements:   { _method: "GET", format: "(html|json|js)", sluggedName: ".+" }
+    requirements:   { _method: "GET", sluggedName: ".+" }
 
 user_bundle_list:
     pattern:        /{name}/bundles
