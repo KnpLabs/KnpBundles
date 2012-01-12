@@ -914,7 +914,7 @@ class Bundle
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getKeywords()
     {

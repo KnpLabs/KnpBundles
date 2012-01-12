@@ -4,7 +4,6 @@ namespace Knp\Bundle\KnpBundlesBundle\Repository;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Keyword;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NoResultException;
 
 class KeywordRepository extends EntityRepository
 {
@@ -18,7 +17,8 @@ class KeywordRepository extends EntityRepository
         $keyword = $this->findOneByValue($value);
 
         if (!$keyword) {
-            $keyword = new $this->_class->name;
+            $class = $this->getClassName();
+            $keyword = new $class;
             $keyword->setValue($value);
         }
 

@@ -12,12 +12,6 @@ Feature: Listing and searching bundles by keywords
     | knplabs     | TestBundle   | test desc   |-1 day        | 10    | 15     |
     | knplabs     | Test2Bundle  | test desc   |-1 day        | 10    | 15     |
     | fos         | UserBundle   | user desc   |-2 days       | 20    | 5      |
-    Given the site has following keywords:
-    | value       |
-    | test        |
-    | user        |
-    | user login  |
-    | unique      |
     Given the bundles have following keywords:
     | bundle      | keyword      |
     | TestBundle  | test         |

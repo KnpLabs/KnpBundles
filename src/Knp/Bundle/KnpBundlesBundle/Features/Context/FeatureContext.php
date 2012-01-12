@@ -215,26 +215,6 @@ class FeatureContext extends MinkContext
     }
     
     /**
-     * @Given /^the site has following keywords:$/
-     */
-    public function theSiteHasFollowingKeywords(TableNode $table)
-    {
-        $entityManager = $this->getEntityManager();
-
-        $this->keywords = array();
-        foreach ($table->getHash() as $row) {
-            $keyword = new Entity\Keyword();
-            $keyword->setValue($row['value']);            
-
-            $entityManager->persist($keyword);
-            
-            $this->keywords[$keyword->getValue()] = $keyword;
-        }
-
-        $entityManager->flush();
-    }
-    
-    /**
      * @Given /^the bundles have following keywords:$/
      */
     public function theBundlesHaveFollowingKeywords(TableNode $table)
@@ -242,9 +222,9 @@ class FeatureContext extends MinkContext
         $entityManager = $this->getEntityManager();
 
         foreach ($table->getHash() as $row) {
-            if (isset($this->bundles[$row['bundle']]) && isset($this->keywords[$row['keyword']])) {
+            if (isset($this->bundles[$row['bundle']])) {
                 $bundle = $this->bundles[$row['bundle']];
-                $keyword = $this->keywords[$row['keyword']];
+                $keyword = $entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Keyword')->findOrCreateOne($row['keyword']);
 
                 $bundle->addKeyword($keyword);
                 $entityManager->persist($bundle);
