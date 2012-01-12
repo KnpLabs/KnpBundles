@@ -2,11 +2,8 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Bundles keyword entity
@@ -37,16 +34,6 @@ class Keyword
      */
     protected $slug;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="keywords")
-     */
-    protected $bundles;
-
-    public function __construct()
-    {
-        $this->bundles = new ArrayCollection;
-    }
-
     public function getId()
     {
         return $this->id;
@@ -71,45 +58,5 @@ class Keyword
     public function setSlug($slug)
     {
         $this->slug = $slug;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getBundles()
-    {
-        return $this->bundles;
-    }
-
-    public function setBundles(ArrayCollection $bundles)
-    {
-        $this->bundles = $bundles;
-    }
-
-    /**
-     * @return int Total nb of bundles tagged with this tag
-     */
-    public function countBundles()
-    {
-        return count($this->bundles);
-    }
-
-    public function hasBundle(Bundle $bundle)
-    {
-        return $this->bundles->contains($bundle);
-    }
-
-    public function addBundle(Bundle $bundle)
-    {
-        if (!$this->hasBundle($bundle)) {
-            $this->bundles[] = $bundle;
-        }
-    }
-
-    public function removeBundle(Bundle $bundle)
-    {
-        if ($this->hasBundle($bundle)) {
-            $this->bundles->removeElement($bundle);
-        }
     }
 }

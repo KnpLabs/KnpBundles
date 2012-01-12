@@ -108,7 +108,7 @@ class FeatureContext extends MinkContext
             $this->setPrivateProperty($bundle, "trend1", $row['trend1']);
             
             $entityManager->persist($bundle);
-            
+
             $this->bundles[$bundle->getName()] = $bundle;
         }
 
@@ -242,12 +242,13 @@ class FeatureContext extends MinkContext
         $entityManager = $this->getEntityManager();
 
         foreach ($table->getHash() as $row) {
-            $bundle = $this->bundles[$row['bundle']];
-            $keyword = $this->keywords[$row['keyword']];
+            if (isset($this->bundles[$row['bundle']]) && isset($this->keywords[$row['keyword']])) {
+                $bundle = $this->bundles[$row['bundle']];
+                $keyword = $this->keywords[$row['keyword']];
 
-            $bundle->addKeyword($keyword);
-
-            $entityManager->persist($bundle);
+                $bundle->addKeyword($keyword);
+                $entityManager->persist($bundle);
+            }
         }
 
         $entityManager->flush();

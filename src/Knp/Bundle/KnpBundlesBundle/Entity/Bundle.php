@@ -937,7 +937,6 @@ class Bundle
     public function addKeyword(Keyword $keyword)
     {
         if (!$this->hasKeyword($keyword)) {
-            $keyword->addBundle($this);
             $this->keywords[] = $keyword;
         }
     }

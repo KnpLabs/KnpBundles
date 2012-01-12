@@ -91,7 +91,7 @@ class BundleRepository extends EntityRepository
     public function queryByKeywordSlug($slug)
     {
         return $this->createQueryBuilder('bundle')
-            ->select('bundle, user')
+            ->addSelect('user')
             ->leftJoin('bundle.user', 'user')
             ->leftJoin('bundle.keywords', 'keyword')
             ->where('keyword.slug = :slug')
