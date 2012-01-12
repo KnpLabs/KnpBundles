@@ -9,12 +9,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
- * Bundles tag entity
+ * Bundles keyword entity
  *
- * @ORM\Entity(repositoryClass="Knp\Bundle\KnpBundlesBundle\Repository\TagRepository")
- * @ORM\Table(name="tags")
+ * @ORM\Entity(repositoryClass="Knp\Bundle\KnpBundlesBundle\Repository\KeywordRepository")
+ * @ORM\Table(name="keyword")
  */
-class Tag
+class Keyword
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -24,23 +24,21 @@ class Tag
     protected $id;
 
     /**
-     * Tag name, for example "ecommerce"
+     * Keyword value, for example "ecommerce"
      *
      * @ORM\Column(type="string", length=127)
      */
-    protected $name;
+    protected $value;
 
     /**
-     * Slugged name
+     * Keyword slug
      *
      * @ORM\Column(type="string", length=127)
      */
-    protected $sluggedName;
+    protected $slug;
 
     /**
-     * Bundles tagged with this tag
-     *
-     * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="composerTags")
+     * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="keywords")
      */
     protected $bundles;
 
@@ -54,25 +52,25 @@ class Tag
         return $this->id;
     }
 
-    public function getName()
+    public function getValue()
     {
-        return $this->name;
+        return $this->value;
     }
 
-    public function setName($name)
+    public function setValue($value)
     {
-        $this->name = $name;
-        $this->setSluggedName(preg_replace('/[^a-z0-9_\s-]/', '', preg_replace("/[\s_]/", "-", strtolower(trim($name)))));
+        $this->value = $value;
+        $this->setSlug(preg_replace('/[^a-z0-9_\s-]/', '', preg_replace("/[\s_]/", "-", strtolower(trim($value)))));
     }
 
-    public function getSluggedName()
+    public function getSlug()
     {
-        return $this->sluggedName;
+        return $this->slug;
     }
 
-    public function setSluggedName($sluggedName)
+    public function setSlug($slug)
     {
-        $this->sluggedName = $sluggedName;
+        $this->slug = $slug;
     }
 
     /**

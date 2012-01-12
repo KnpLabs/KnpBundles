@@ -172,7 +172,7 @@ class Updater
         $this->em->flush();
 
         if ($bundle->getComposerName()) {
-            $this->generateComposerTags($bundle);
+            $this->generateComposerKeywords($bundle);
         }
 
         $contributorNames = $this->githubRepoApi->getContributorNames($bundle);
@@ -233,14 +233,14 @@ class Updater
         return $user;
     }
 
-    public function generateComposerTags(Bundle $bundle)
+    public function generateComposerKeywords(Bundle $bundle)
     {
-        $tags = $this->githubRepoApi->fetchComposerTags($bundle);
+        $keywords = $this->githubRepoApi->fetchComposerKeywords($bundle);
 
-        foreach ($tags as $tag) {
-            $tag = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Tag')->findOrCreateOne($tag);
+        foreach ($keywords as $keyword) {
+            $keyword = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Keyword')->findOrCreateOne($keyword);
 
-            $bundle->addComposerTag($tag);
+            $bundle->addKeyword($keyword);
         }
     }
 }

@@ -221,16 +221,16 @@ class BundleController extends BaseController
         return $this->redirect($this->generateUrl('bundle_show', $params));
     }
 
-    public function searchByTagAction($sluggedName)
+    public function searchByKeywordAction($slug)
     {
-        $query = $this->getRepository('Bundle')->queryByTagSluggedName($sluggedName);
+        $query = $this->getRepository('Bundle')->queryByKeywordSlug($slug);
         $bundles = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
 
         $this->highlightMenu();
 
-        $response = $this->render('KnpBundlesBundle:Bundle:tagBundlesList.html.twig', array(
-            'bundles' => $bundles,
-            'tagName' => $sluggedName
+        $response = $this->render('KnpBundlesBundle:Bundle:searchByKeywordResults.html.twig', array(
+            'bundles'     => $bundles,
+            'keywordSlug' => $slug
         ));
 
         // caching

@@ -2,13 +2,13 @@
 
 {% block body_attributes %}class="bundles-list"{% endblock %}
 
-{% block title %}{% trans with {'%count%': bundles.totalItemCount, '%tag%': tagName} %}bundles.meta.titleTags{% endtrans %}{% endblock %}
+{% block title %}{% trans with {'%count%': bundles.totalItemCount, '%keyword%': keywordSlug} %}bundles.meta.titleKeywords{% endtrans %}{% endblock %}
 
 {% block description %}{% trans with {'%count%': bundles.totalItemCount} %}bundles.meta.description{% endtrans %}{% endblock %}
 
 {% block content %}
     <div class="content-title">
-        <h1>{% trans with {'%count%': bundles.totalItemCount, '%tag%': tagName} %}bundles.meta.titleTags{% endtrans %}</h1>
+        <h1>{% trans with {'%count%': bundles.totalItemCount, '%keyword%': keywordSlug} %}bundles.meta.titleKeywords{% endtrans %}</h1>
     </div>
     <div id="main">
         {% include 'KnpBundlesBundle:Bundle:bigList.html.twig' with {'bundles': bundles} %}

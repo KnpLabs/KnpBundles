@@ -22,7 +22,6 @@ require_once 'PHPUnit/Autoload.php';
 require_once 'PHPUnit/Framework/Assert/Functions.php';
 
 use PHPUnit_Framework_ExpectationFailedException as AssertException;
-
 use Knp\Bundle\KnpBundlesBundle\Entity;
 
 /**
@@ -31,6 +30,8 @@ use Knp\Bundle\KnpBundlesBundle\Entity;
 class FeatureContext extends MinkContext
 {
     private $users;
+    private $bundles;
+    private $keywords;
 
     public function __construct($kernel)
     {
@@ -90,6 +91,7 @@ class FeatureContext extends MinkContext
     {
         $entityManager = $this->getEntityManager();
 
+        $this->bundles = array();
         foreach ($table->getHash() as $row) {
             $user = $this->users[$row['username']];
             
@@ -106,6 +108,8 @@ class FeatureContext extends MinkContext
             $this->setPrivateProperty($bundle, "trend1", $row['trend1']);
             
             $entityManager->persist($bundle);
+            
+            $this->bundles[$bundle->getName()] = $bundle;
         }
 
         $entityManager->flush();
@@ -208,5 +212,44 @@ class FeatureContext extends MinkContext
         $url = $this->getRouter()->generate('bundle_show', array('username' => $username, 'name' => $name));
 
         return new Step\Then('I should be on "'.$url.'"');
+    }
+    
+    /**
+     * @Given /^the site has following keywords:$/
+     */
+    public function theSiteHasFollowingKeywords(TableNode $table)
+    {
+        $entityManager = $this->getEntityManager();
+
+        $this->keywords = array();
+        foreach ($table->getHash() as $row) {
+            $keyword = new Entity\Keyword();
+            $keyword->setValue($row['value']);            
+
+            $entityManager->persist($keyword);
+            
+            $this->keywords[$keyword->getValue()] = $keyword;
+        }
+
+        $entityManager->flush();
+    }
+    
+    /**
+     * @Given /^the bundles have following keywords:$/
+     */
+    public function theBundlesHaveFollowingKeywords(TableNode $table)
+    {
+        $entityManager = $this->getEntityManager();
+
+        foreach ($table->getHash() as $row) {
+            $bundle = $this->bundles[$row['bundle']];
+            $keyword = $this->keywords[$row['keyword']];
+
+            $bundle->addKeyword($keyword);
+
+            $entityManager->persist($bundle);
+        }
+
+        $entityManager->flush();
     }
 }

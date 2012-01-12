@@ -161,7 +161,7 @@ class Repo
         return $bundle;
     }
 
-    public function fetchComposerTags(Entity\Bundle $bundle)
+    public function fetchComposerKeywords(Entity\Bundle $bundle)
     {
         $composerFilename = 'composer.json';
         $gitRepo = $this->gitRepoManager->getRepo($bundle);

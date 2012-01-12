@@ -51,7 +51,7 @@ credits:
 bundles:
     meta:
         title: "Odkryj %count% Paczek Symfony2"
-        titleTags: "Znaleziono %count% paczek dla tagu '%tag%'"
+        titleKeywords: "Znaleziono %count% paczek dla słowa kluczowego '%keyword%'"
         description: "Wszystkie Open Sourcowe paczki do Symfony2 sortowane wg. %sort%"
     title: "Odkryj %count% paczek do Symfony2"
     sort:
@@ -73,9 +73,9 @@ bundles.show:
     latest_commits:
         title: "Ostatnie commity"
         by: "Przez"
-    tags:
-        title: "Tagi"
-        empty: "Brak tagów dla tej paczki"
+    keywords:
+        title: "Słowa kluczowe"
+        empty: "Brak słów kluczowych dla tej paczki"
     users:
         by: "przez"
         and: "&"

@@ -214,15 +214,15 @@ class Bundle
     protected $composerName = null;
     
     /**
-     * Tagged bundles
+     * Bundle keywords
      *
-     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="bundles", cascade={"persist"})
-     * @ORM\JoinTable(name="bundles_tags",
+     * @ORM\ManyToMany(targetEntity="Keyword", inversedBy="bundles", cascade={"persist"})
+     * @ORM\JoinTable(name="bundles_keyword",
      *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="keyword_id", referencedColumnName="id")}
      *      )
      */
-    protected $composerTags;
+    protected $keywords;
 
     public function __construct($fullName = null)
     {
@@ -244,7 +244,7 @@ class Bundle
         $this->travisCiBuildStatus = null;
         $this->trend1 = 0;
         $this->composerName = null;
-        $this->composerTags = new ArrayCollection();
+        $this->keywords = new ArrayCollection();
     }
 
     /**
@@ -916,29 +916,29 @@ class Bundle
     /**
      * @return ArrayCollection
      */
-    public function getComposerTags()
+    public function getKeywords()
     {
-        return $this->composerTags;
+        return $this->keywords;
     }
 
     /**
-     * @return int Total nb of tags for this bundle
+     * @return int Total nb of keywords for this bundle
      */
-    public function countComposerTags()
+    public function countKeywords()
     {
-        return count($this->composerTags);
+        return count($this->keywords);
     }
 
-    public function hasComposerTag(Tag $tag)
+    public function hasKeyword(Keyword $keyword)
     {
-        return $this->composerTags->contains($tag);
+        return $this->keywords->contains($keyword);
     }
 
-    public function addComposerTag(Tag $tag)
+    public function addKeyword(Keyword $keyword)
     {
-        if (!$this->hasComposerTag($tag)) {
-            $tag->addBundle($this);
-            $this->composerTags[] = $tag;
+        if (!$this->hasKeyword($keyword)) {
+            $keyword->addBundle($this);
+            $this->keywords[] = $keyword;
         }
     }
 }

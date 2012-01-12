@@ -34,6 +34,9 @@ class BundleControllerTest extends WebTestCase
         $crawler = $client->submit($crawler->filter('form#search-box button')->form(), array('q' => 'ImQuiteSureThisWillReturnNothing'));
         $this->assertTrue($client->getResponse()->isSuccessful());
         $this->assertEquals(0, $crawler->filter('.repos-list li.bundle')->count());
+        $crawler = $client->submit($crawler->filter('form#search-box button')->form(), array('q' => 'FooBundle'));
+        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertEquals(15, $crawler->filter('.bundles-list li.bundle')->count());
     }
 
     public function testLatest()
@@ -44,12 +47,12 @@ class BundleControllerTest extends WebTestCase
         $this->assertRegexp('/^<\?xml/', $client->getResponse()->getContent());
     }
 
-    public function testSearchByTag()
+    public function testSearchByKeyword()
     {
         $client = self::createClient();
-        $crawler = $client->request('GET', '/tag/foo');
+        $crawler = $client->request('GET', '/keyword/foo');
         $this->assertTrue($client->getResponse()->isSuccessful());
-        $crawler = $client->request('GET', '/tag/CrazyTagNeverSeen');
+        $crawler = $client->request('GET', '/keyword/CrazyKeywordNeverSeen');
         $this->assertTrue($client->getResponse()->isSuccessful());
         $this->assertEquals(0, $crawler->filter('.repos-list li.bundle')->count());
     }
