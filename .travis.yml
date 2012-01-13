@@ -8,6 +8,8 @@ before_script:
     - php bin/vendors install
     - ./bin/prepare-test-env.sh
 
+script: phpunit -c app/
+
 branches:
     except:
         - experimental
