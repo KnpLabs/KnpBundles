@@ -87,6 +87,9 @@ bundles.show:
         travis: "Travis CI"
         github: "Github"
         users: "Nb of users:"
+    score:
+        title: "Score details"
+        about: "?"
     contributors:
         title: "Contributors"
         by: "by"
@@ -103,6 +106,14 @@ bundles.show:
     chart:
         title: "Score evolution"
 
+bundles.score:
+    followers:      'Github Followers: %score%'
+    activity:       "Last 30 days activity: %score%"
+    readme:         "README file size: %score%"
+    travisci:       "Uses Travis CI: %score%"
+    travisbuild:    "Travis CI build status: %score%"
+    composer:       "Provides a composer package: %score%"
+    recommenders:   "KnpBundles recommandations: %score%"
 
 bundles.list:
     by: " by "
@@ -114,7 +125,7 @@ bundles.list:
         featured: "What's hot?"
         newest: "Newest bundles"
     buildStatus: "Build status "
-    
+
 users:
     meta:
         title: "Discover %count% Symfony2 Developers"
@@ -151,6 +162,12 @@ symfony2bundles:
         title: "Symfony2bundles becomes KnpBundles"
         description: "More features, more love from KnpLabs… Symfony2bundles has been renamed to comply with Symfony trademarks"
     title: "Symfony2bundles becomes KnpBundles"
+
+about_scoring:
+    meta:
+        title: "About KnpBundles scoring algorithm"
+        description: "KnpBundles assigns each bundle a score based on best practices, here's how it works"
+    title: "About KnpBundles scoring algorithm"
 
 notFound:
     title: "404 - Page not found"

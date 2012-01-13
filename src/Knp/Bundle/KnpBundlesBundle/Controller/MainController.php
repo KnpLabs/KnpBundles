@@ -26,6 +26,13 @@ class MainController extends BaseController
         return $this->render('KnpBundlesBundle:Main:symfony2bundles.html.twig', array('text' => $text));
     }
 
+    public function aboutScoringAction()
+    {
+        return $this->render('KnpBundlesBundle:Main:aboutScoring.html.twig', array(
+            'text' => file_get_contents(__DIR__.'/../Resources/doc/about_scoring.markdown'),
+        ));
+    }
+
     public function bannerAction()
     {
         $translator = $this->get('translator');
@@ -33,7 +40,7 @@ class MainController extends BaseController
         $id = rand(0, $maxId - 1);
         $url = $translator->trans('menu.promo.'.$id.'.url');
         $text = $translator->trans('menu.promo.'.$id.'.text');
-        
+
         return $this->render('KnpBundlesBundle:Main:banner.html.twig', array(
             'url' => $url,
             'id' => $id,

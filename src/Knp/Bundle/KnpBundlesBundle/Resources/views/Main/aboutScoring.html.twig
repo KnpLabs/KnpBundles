@@ -1,0 +1,16 @@
+{% extends "KnpBundlesBundle::layout.html.twig" %}
+
+{% block title %}{% trans %}about_scoring.meta.title{% endtrans %}{% endblock %}
+
+{% block description %}{% trans %}about_scoring.description{% endtrans %}{% endblock %}
+
+{% block content %}
+<div id="scoring">
+    <h1>{% trans %}about_scoring.title{% endtrans %}</h1>
+    <div id="main">
+        <div class="doc_text markdown">
+            {{ text|markdown }}
+        </div>
+    </div>
+</div>
+{% endblock %}

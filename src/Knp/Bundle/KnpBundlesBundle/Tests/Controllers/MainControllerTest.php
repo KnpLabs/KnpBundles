@@ -16,6 +16,15 @@ class MainControllerTest extends WebTestCase
         $this->assertEquals(1, $crawler->filter('input#search-query')->count());
     }
 
+    public function testAboutScoring()
+    {
+        $client = self::createClient();
+        $crawler = $client->request('GET', '/about/scoring');
+        $this->assertTrue($client->getResponse()->isSuccessful());
+
+        $this->assertEquals(1, $crawler->filter('h1:contains("About KnpBundles scoring algorithm")')->count());
+    }
+
     public function testApi()
     {
         $client = self::createClient();
