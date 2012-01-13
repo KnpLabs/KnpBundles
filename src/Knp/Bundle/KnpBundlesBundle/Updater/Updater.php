@@ -148,12 +148,23 @@ class Updater
             $this->output->write(str_repeat(' ', $pad));
         }
         if (!$this->githubRepoApi->update($bundle)) {
-            $this->output->write(' - Fail, will be removed');
-            $bundle->getUser()->removeBundle($bundle);
-            $this->em->remove($bundle);
-            $this->em->flush();
+            $this->output->write(' - Fail, skipping, will be removed if date of last successful check is older than 3 days.');
+
+            if (null !== ($lastCheck = $bundle->getLastCheckAt())) {
+                $now = new \DateTime();
+                if ($now->diff($lastCheck)->days > 3) {
+                    $bundle->getUser()->removeBundle($bundle);
+
+                    $this->em->remove($bundle);
+                    $this->em->flush();
+                }
+            }
+
             return false;
         } else {
+            // Success so we set last check date
+            $bundle->setLastCheckAt(new \DateTime());
+
             $score = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')->setScore(new \DateTime(), $bundle, $bundle->getScore());
             $this->em->persist($score);
         }
