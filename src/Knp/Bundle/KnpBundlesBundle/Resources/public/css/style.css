@@ -58,7 +58,7 @@ background-image:url(../images/magnifier.png),-moz-linear-gradient(top,#f1b525,#
 background-image:url(../images/magnifier.png),-ms-linear-gradient(top,#f1b525,#d89d14);/* IE10 */
 background-image:url(../images/magnifier.png),-o-linear-gradient(top,#f1b525,#d89d14);/* Opera 11.10+ */
 background-image:url(../images/magnifier.png),linear-gradient(top,#f1b525,#d89d14);/* W3C */}
-#promo{float:right;font-size:13px;height:60px;position:relative;}
+#promo{float:right;font-size:13px;height:60px;position:absolute;right:0px;}
 #promo a.img{position:absolute;bottom:3px;height:56px;}
 #promo .bulle{background:#fff;margin: 3px 0 0 100px;padding:8px 10px;border-radius:4px;-moz-border-radius:4px;-webkit-border-radius:4px;color:#000;border:1px solid silver;}
 #promo .bulle a{font-weight:bold;text-decoration:underline;}
