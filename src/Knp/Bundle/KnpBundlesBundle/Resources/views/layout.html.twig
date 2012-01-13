@@ -4,10 +4,6 @@
     <meta charset="utf-8" />
     <title>{% block title %}{% endblock %} | KnpBundles</title>
     <meta name="description" content="{% block description %}{% endblock %}" />
-    <link rel="canonical" href="{{ locale_url(app.request, 'en') }}" />
-    <link rel="alternate" hreflang="fr" href="{{ locale_url(app.request, 'fr') }}" />
-    <link rel="alternate" hreflang="en" href="{{ locale_url(app.request, 'en') }}" />
-    <link rel="alternate" hreflang="pl" href="{{ locale_url(app.request, 'pl') }}" />
 
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/png" />
     <link href="{{ path('latest', {'format': 'atom'}) }}" rel="alternate" title="ATOM" type="application/atom+xml" />
@@ -83,16 +79,6 @@
 
                             <li><a href="http://twitter.com/knplabs">Knp on Twitter</a></li>
                             <li><a href="http://behat.org">Behat: BDD framework for PHP</a></li>
-                        </ul>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt>{% trans %}footer.language.title{% endtrans %}</dt>
-                    <dd>
-                        <ul>
-                            <li><a hreflang="en" href="{{ locale_url(app.request, 'en') }}">{% trans %}footer.language.en{% endtrans %}</a></li>
-                            <li><a hreflang="fr" href="{{ locale_url(app.request, 'fr') }}">{% trans %}footer.language.fr{% endtrans %}</a></li>
-                            <li><a hreflang="pl" href="{{ locale_url(app.request, 'pl') }}">{% trans %}footer.language.pl{% endtrans %}</a></li>
                         </ul>
                     </dd>
                 </dl>
