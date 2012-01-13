@@ -147,21 +147,6 @@
         </div>
     </div>
     {% endif %}
-    
-    <div id="disqus_thread"></div>
-    <script type="text/javascript">
-        var disqus_shortname = 's2b';
-        {% if app.environment == 'dev' %}
-        var disqus_developer = 1;
-        {% endif %}
-        var disqus_identifier = '{{ bundle.username }}_{{ bundle.name }}';
-        var disqus_url = '{{ url('bundle_show', {'username':bundle.username, 'name':bundle.name}) }}';
 
-        /* * * DON'T EDIT BELOW THIS LINE * * */
-        (function() {
-            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-    </script>
+    {{ knp_disqus_render('s2b', {'identifier': bundle.username~'_'~bundle.name, 'url': url('bundle_show', {'username':bundle.username, 'name':bundle.name}), 'limit': 100}) }}
 {% endblock %}

@@ -72,3 +72,23 @@ inori_twitter_app:
     consumer_secret: %knp_bundles.twitter.consumer_secret%
     oauth_token: %knp_bundles.twitter.oauth_token%
     oauth_token_secret: %knp_bundles.twitter.oauth_token_secret%
+
+knp_zend_cache:
+    templates:
+        s2b_disqus:
+            frontend:
+                name: Core
+                options:
+                    lifetime: 600
+                    automatic_serialization: true
+            backend:
+                name: File
+                options:
+                    cache_dir: %kernel.root_dir%/cache/%kernel.environment%
+
+knp_disqus:
+    api_key: %knp_bundles.disqus_key%
+    forums:
+        s2b:
+            shortname: s2b
+            cache:     s2b_disqus

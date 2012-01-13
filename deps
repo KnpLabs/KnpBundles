@@ -146,4 +146,11 @@
 [CommonContexts]
     git=http://github.com/Behat/CommonContexts.git
     target=behat/CommonContexts
-    version=dca3c31b5267118be89ab87bedf06b42a99f378f
+
+[KnpDisqusBundle]
+    git=http://github.com/KnpLabs/KnpDisqusBundle.git
+    target=bundles/Knp/Bundle/DisqusBundle
+
+[KnpZendCacheBundle]
+    git=http://github.com/KnpLabs/KnpZendCacheBundle.git
+    target=bundles/Knp/Bundle/ZendCacheBundle
