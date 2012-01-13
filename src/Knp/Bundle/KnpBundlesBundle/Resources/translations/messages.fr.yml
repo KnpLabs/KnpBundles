@@ -93,7 +93,7 @@ bundles.list:
         best: "Best score"
         featured: "What's hot?"
         newest: "Newest bundles"
-    
+
 users:
     meta:
         title: "Découvrez tous les %count% développeurs Symfony2"
@@ -124,6 +124,12 @@ api:
         title: "API pour développeurs"
         description: "L'API knpbundles pour accéder à la liste des bundles"
     title: "L'API knpbundles"
+
+about_scoring:
+    meta:
+        title: "À propos de l'agorithme de scorage"
+        description: "KnpBundles assigne à chaque bundle un score basé sur le respect des bonnes pratiques, voilà comment il fonctionne"
+    title: "À propos de l'algorithme de scorage"
 
 notFound:
     title: "404 - Page non trouvée"

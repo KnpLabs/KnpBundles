@@ -62,4 +62,13 @@ class BundleControllerTest extends WebTestCase
         $this->assertEquals(1, $crawler->filter('li.bundle-users img')->count());
         $this->assertEquals(0, $crawler->filter('a:contains("I am using this bundle")')->count());
     }
+
+    public function testScoreDetails()
+    {
+        $client = self::createClient();
+        $crawler = $client->request('GET', '/Dexter/DexterFooBundle');
+        $this->assertTrue($client->getResponse()->isSuccessful());
+
+        $this->assertEquals(1, $crawler->filter('h3#bundle-score-details')->count());
+    }
 }
