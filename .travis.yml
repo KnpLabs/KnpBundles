@@ -8,8 +8,6 @@ before_script:
     - php bin/vendors install
     - ./bin/prepare-test-env.sh
 
-script: phpunit --coverage-text -c app/
-
 branches:
     except:
         - experimental
