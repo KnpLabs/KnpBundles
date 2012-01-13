@@ -54,14 +54,6 @@ class UpdateBundleConsumer implements ConsumerInterface
         $this->users = $users;
     }
 
-    /** 
-     * Only here because ConsumerInterface extends ContainerAwareInterface
-     * @todo remove it once this PR is merged : https://github.com/videlalvaro/RabbitMqBundle/pull/13 
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-    }
-
     /**
      * Set a logger instance
      *
