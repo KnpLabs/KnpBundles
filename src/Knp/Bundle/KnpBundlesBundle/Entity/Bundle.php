@@ -148,7 +148,7 @@ class Bundle
     /**
      * Date of the last succesful GitHub check
      *
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date", nullable=true)
      */
     protected $lastCheckAt;
 
@@ -199,7 +199,7 @@ class Bundle
      * @ORM\Column(type="boolean", nullable=true)
      */
     protected $travisCiBuildStatus = null;
-        
+
     /**
      * Trend over the last day. Max is better.
      * @ORM\Column(type="integer")
@@ -212,7 +212,7 @@ class Bundle
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $composerName = null;
-    
+
     public function __construct($fullName = null)
     {
         if ($fullName) {
@@ -334,7 +334,7 @@ class Bundle
     {
         $this->composerName = $name;
     }
-    
+
     /**
      * Get tags
      *
@@ -602,7 +602,7 @@ class Bundle
     {
         return $this->getComposerName() ? sprintf('http://packagist.org/packages/%s', $this->getComposerName()) : false;
     }
-    
+
     /**
      * Get the Git repo url
      *
