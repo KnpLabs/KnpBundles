@@ -150,7 +150,7 @@ class Bundle
      *
      * @ORM\Column(type="date")
      */
-    protected $lastCheckAt = null;
+    protected $lastCheckAt;
 
     /**
      * Recommenders who contributed to the Repo
