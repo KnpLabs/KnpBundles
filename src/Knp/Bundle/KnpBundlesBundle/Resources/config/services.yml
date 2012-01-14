@@ -74,3 +74,7 @@ services:
         class:                    %knp_bundles.badge_generator.class%
         calls:
             - [ setContainer, [ @service_container ] ]
+
+    knp_bundles.badge_generator:
+        class:                    %knp_bundles.badge_generator.class%
+        arguments:                [@service_container]
