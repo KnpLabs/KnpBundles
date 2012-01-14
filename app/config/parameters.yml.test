@@ -15,4 +15,6 @@ parameters:
     knp_bundles.twitter.consumer_secret: your_twitter_consumer_secret_here
     knp_bundles.twitter.oauth_token: your_twitter_oauth_token_here
     knp_bundles.twitter.oauth_token_secret: your_twitter_oauth_token_secret_here
+
+    knp_bundles.badges_upload_dir: %kernel.root_dir%/../web/uploads/badges
     
