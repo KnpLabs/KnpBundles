@@ -10,6 +10,7 @@ parameters:
     knp_bundles.github.client.class: Github_Client 
     knp_bundles.git_repository_manager.class: Knp\Bundle\KnpBundlesBundle\Git\RepoManager
     knp_bundles.github.repository_api.class: Knp\Bundle\KnpBundlesBundle\Github\Repo
+    knp_bundles.badge_generator.class: Knp\Bundle\KnpBundlesBundle\Badge\BadgeGenerator
 
 services:
     knp_bundles.updater:
@@ -68,3 +69,7 @@ services:
             - @knp_bundles.travis
         calls:
             - [ setLogger, [@logger]]
+
+    knp_bundles.badge_generator:
+        class:                    %knp_bundles.badge_generator.class%
+        arguments:                [@service_container]

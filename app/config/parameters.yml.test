@@ -17,4 +17,5 @@ parameters:
     knp_bundles.twitter.oauth_token_secret: your_twitter_oauth_token_secret_here
 
     knp_bundles.disqus_key: p1Zrns5MOWzLu87mbgFsS2XgwpmuV8PWG1MLUlPfMY3zCZe9uirvwMBWhoPkRuwm
+    knp_bundles.badges_upload_dir: %kernel.root_dir%/../web/uploads/badges
     

@@ -28,7 +28,7 @@ class KbGenerateBadgesCommand extends ContainerAwareCommand
 
         try {
             foreach ($bundleRepository->findAll() as $bundle) {
-                $this->getContainer()->get('knp_bundles.badges_generator')->generate(
+                $this->getContainer()->get('knp_bundles.badge_generator')->generate(
                     $bundle->getUserName().'/'.$bundle->getName(),
                     $bundle->getScore,
                     $bundle->getNbRecommenders()

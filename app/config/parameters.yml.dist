@@ -23,3 +23,5 @@ parameters:
     old_sound_rabbit_mq.user: "guest"
     old_sound_rabbit_mq.password: "guest"
     old_sound_rabbit_mq.vhost: "/"
+
+    knp_bundles.badges_upload_dir: %kernel.root_dir%/../web/uploads/badges

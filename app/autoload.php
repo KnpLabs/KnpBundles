@@ -32,6 +32,8 @@ $loader->registerNamespaces(array(
     'Behat\CommonContext'           => __DIR__.'/../vendor/behat/CommonContexts',
     'OldSound'                      => __DIR__.'/../vendor/bundles',
     'PhpAmqpLib'                    => __DIR__.'/../vendor/videlalvaro/php-amqplib',
+    'Imagine'                       => __DIR__.'/../vendor/imagine/lib',
+    'Avalanche'                     => __DIR__.'/../vendor/bundles',
 ));
 
 $loader->registerPrefixes(array(
