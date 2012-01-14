@@ -154,3 +154,7 @@
 [KnpZendCacheBundle]
     git=http://github.com/KnpLabs/KnpZendCacheBundle.git
     target=bundles/Knp/Bundle/ZendCacheBundle
+
+[Imagine]
+    git=http://github.com/avalanche123/Imagine.git
+    target=imagine
