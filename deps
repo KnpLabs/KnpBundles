@@ -166,7 +166,3 @@
 [Imagine]
     git=http://github.com/avalanche123/Imagine.git
     target=imagine
-
-[AvalancheImagineBundle]
-    git=http://github.com/avalanche123/AvalancheImagineBundle.git
-    target=bundles/Avalanche/Bundle/ImagineBundle
