@@ -69,7 +69,3 @@ bundle_show:
     pattern:        /{username}/{name}
     defaults:       { _controller: KnpBundlesBundle:Bundle:show }
     requirements:   { _method: "GET", format: "(html|json|js)", name: ".+" }
-
-imagine_test:
-    pattern:        /imagine
-    defaults:       { _controller: KnpBundlesBundle:Imagine:index }
