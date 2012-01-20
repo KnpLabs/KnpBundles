@@ -943,7 +943,7 @@ class Bundle
     {
         $this->recommenders[] = $user;
     }
-
+    /**     * @param Knp\Bundle\KnpBundlesBundle\Entity\User     * @return boolean     */    public function isOwnerOrContributor(User $user)    {        if ($this->getUser() == $user) {            return true;        }        return $this->getContributors()->contains($user);    }
     /**
      * @return Collection
      */

@@ -159,7 +159,7 @@
         <div class="actions">
             <a class="button github" href="{{ bundle.gitHubUrl }}">{% trans %}bundles.show.github{% endtrans %}</a>
             <a class="button github" href="{{ bundle.gitHubUrl }}/issues">{% trans %}bundles.show.issues{% endtrans %}</a>
-            {%- if (app.user is not null) and (bundle.user == app.user) -%}
+            {%- if (app.user is not null) and (bundle.isOwnerOrContributor(app.user)) -%}
             &nbsp;<span class="button github" data-controls-modal="modal-settings">{% trans %}bundles.show.setting{% endtrans %}</span>
             {%- endif -%}
         </div>
@@ -177,7 +177,7 @@
 
     {{ knp_disqus_render('s2b', {'identifier': bundle.username~'_'~bundle.name, 'url': url('bundle_show', {'username':bundle.username, 'name':bundle.name}), 'limit': 100}) }}
 
-    {%- if (app.user is not null) and (bundle.user == app.user) -%}
+    {%- if (app.user is not null) and (bundle.isOwnerOrContributor(app.user)) -%}
     <form class="modal" action="{{ path('bundle_settings', {'id': bundle.id}) }}" method="post" id="modal-settings" style="display: none;width:400px">
         <div class="modal-header">
             <a class="close" href="#">×</a>
