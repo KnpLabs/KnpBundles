@@ -28,14 +28,13 @@ class KbUpdateUsersCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $gitRepoDir = $this->getContainer()->getParameter('knp_bundles.bundles_dir');
-        $gitBin = $this->getContainer()->getParameter('knp_bundles.git_bin');
+        $updater = $this->getContainer()->get('knp_bundles.updater');
+        $updater->setOutput($output);
+        $updater->setUp();
+
+        $updater->updateUsers();
 
         $em = $this->getContainer()->get('knp_bundles.entity_manager');
-
-        $updater = new Updater($em, $gitRepoDir, $gitBin, $output);
-        $updater->setUp();
-        $updater->updateUsers();
         $em->flush();
     }
 }

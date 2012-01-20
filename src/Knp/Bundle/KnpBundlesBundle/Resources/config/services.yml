@@ -1,16 +1,71 @@
 parameters:
-    knp_bundles.updater.class:    Knp\Bundle\KnpBundlesBundle\Updater\Updater
-    knp_bundles.user.provider:    Knp\Bundle\KnpBundlesBundle\Security\Core\User\UserProvider
+    knp_bundles.updater.class: Knp\Bundle\KnpBundlesBundle\Updater\Updater
+    knp_bundles.user.provider.class: Knp\Bundle\KnpBundlesBundle\Security\Core\User\UserProvider
     knp_bundles.trending_bundle_twitterer.class: Knp\Bundle\KnpBundlesBundle\Twitterer\TrendingBundleTwitterer
     knp_bundles.trending_bundle_tweet.template: "Discover {name}, today's trending #Symfony2 bundle {url} on #KnpBundles"
+    knp_bundles.consumer.update_bundle.class: Knp\Bundle\KnpBundlesBundle\Consumer\UpdateBundleConsumer
+    knp_bundles.user.manager.class: Knp\Bundle\KnpBundlesBundle\Entity\UserManager
+    knp_bundles.output.class: Symfony\Component\Console\Output\NullOutput
+    knp_bundles.travis.class: Knp\Bundle\KnpBundlesBundle\Travis\Travis
+    knp_bundles.github.client.class: Github_Client 
+    knp_bundles.git_repository_manager.class: Knp\Bundle\KnpBundlesBundle\Git\RepoManager
+    knp_bundles.github.repository_api.class: Knp\Bundle\KnpBundlesBundle\Github\Repo
 
 services:
     knp_bundles.updater:
-        class:                    %knp_bundles.updater.class%
-        arguments:                [@knp_bundles.entity_manager, %knp_bundles.git_bin%, %knp_bundles.bundles_dir%]
+        class: %knp_bundles.updater.class%
+        arguments:
+            - @knp_bundles.entity_manager
+            - @knp_bundles.user.manager
+            - %knp_bundles.bundles_dir%
+            - %knp_bundles.git_bin%
+            - @old_sound_rabbit_mq.update_bundle_producer
+
+    knp_bundles.user.manager:
+        class: %knp_bundles.user.manager.class%
+        arguments:
+            - @knp_bundles.entity_manager
+
     knp_bundles.user.provider:
-        class:                    %knp_bundles.user.provider%
-        arguments:                [@knp_bundles.entity_manager, @knp_bundles.updater]
+        class: %knp_bundles.user.provider.class%
+        arguments:
+            - @knp_bundles.entity_manager
+            - @knp_bundles.updater
+
     knp_bundles.trending_bundle_twitterer:
         class:                    %knp_bundles.trending_bundle_twitterer.class%
         arguments:                [@knp_bundles.entity_manager,	%knp_bundles.trending_bundle_tweet.template%, @twitter_app]
+    
+    knp_bundles.output:
+        class: %knp_bundles.output.class% 
+    
+    knp_bundles.travis:
+        class: %knp_bundles.travis.class%
+        arguments:
+            - @knp_bundles.output
+
+    knp_bundles.github_client:
+        class: %knp_bundles.github.client.class%  
+
+    knp_bundles.git_repository_manager:
+        class: %knp_bundles.git_repository_manager.class%
+        arguments:
+            - %knp_bundles.bundles_dir%
+            - %knp_bundles.git_bin%
+    
+    knp_bundles.github_repository_api:
+        class: %knp_bundles.github.repository_api.class% 
+        arguments:
+          - @knp_bundles.github_client
+          - @knp_bundles.output
+          - @knp_bundles.git_repository_manager
+
+    knp_bundles.consumer.update_bundle:
+        class: %knp_bundles.consumer.update_bundle.class%
+        arguments: 
+            - @doctrine.orm.entity_manager
+            - @knp_bundles.user.manager
+            - @knp_bundles.github_repository_api
+            - @knp_bundles.travis
+        calls:
+            - [ setLogger, [@logger]]
