@@ -32,15 +32,14 @@ class KbAddSearchedBundlesCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $gitRepoDir = $this->getContainer()->getParameter('knp_bundles.bundles_dir');
-        $gitBin = $this->getContainer()->getParameter('knp_bundles.git_bin');
-
-        $em = $this->getContainer()->get('knp_bundles.entity_manager');
-
-        $updater = new Updater($em, $gitRepoDir, $gitBin, $output);
+        $updater = $this->getContainer()->get('knp_bundles.updater');
+        $updater->setOutput($output);
         $updater->setUp();
+
         $bundles = $updater->searchNewBundles((int) $input->getOption('limit'));
         $updater->createMissingBundles($bundles);
+
+        $em = $this->getContainer()->get('knp_bundles.entity_manager');
         $em->flush();
     }
 }

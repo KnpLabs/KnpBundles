@@ -92,3 +92,22 @@ knp_disqus:
         s2b:
             shortname: s2b
             cache:     s2b_disqus
+
+old_sound_rabbit_mq:
+    connections:
+        default:
+            host:      %old_sound_rabbit_mq.host%
+            port:      %old_sound_rabbit_mq.port%
+            user:      %old_sound_rabbit_mq.user%
+            password:  %old_sound_rabbit_mq.password%
+            vhost:     %old_sound_rabbit_mq.vhost%
+    producers:
+        update_bundle:
+            connection: default
+            exchange_options: {name: 'upload-bundle', type: direct, durable: true }
+    consumers:
+        update_bundle:
+            connection: default
+            exchange_options: {name: 'upload-bundle', type: direct, durable: true }
+            queue_options:    {name: 'upload-bundle'}
+            callback:         knp_bundles.consumer.update_bundle

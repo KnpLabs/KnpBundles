@@ -30,6 +30,8 @@ $loader->registerNamespaces(array(
     'Behat\Mink'                    => __DIR__.'/../vendor/behat/mink/src',
     'Behat\MinkBundle'              => __DIR__.'/../vendor/bundles',
     'Behat\CommonContext'           => __DIR__.'/../vendor/behat/CommonContexts',
+    'OldSound'                      => __DIR__.'/../vendor/bundles',
+    'PhpAmqpLib'                    => __DIR__.'/../vendor/videlalvaro/php-amqplib',
 ));
 
 $loader->registerPrefixes(array(

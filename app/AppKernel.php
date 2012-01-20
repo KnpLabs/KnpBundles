@@ -29,6 +29,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
             new JMS\I18nRoutingBundle\JMSI18nRoutingBundle(),
+            new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
 
             // register your applications here
             new Knp\Bundle\KnpBundlesBundle\KnpBundlesBundle(),
