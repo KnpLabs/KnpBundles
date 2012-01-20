@@ -75,7 +75,6 @@ class BadgeGenerator
         // Recommend
         if ($recommenders) {
             $recommendationsText = 'by '.$recommenders.' developers';
-            
         } else {
             $recommendationsText = 'No recommendations';
         }
