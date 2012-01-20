@@ -78,6 +78,8 @@ bundles.show:
     github: "Download"
     issues: "Report an Issue"
     setting: "Change bundle settings"
+    favourite: "Add to favourites"
+    unfavourite: "Remove from favourites"
     infos:
         title: "Infos"
         state: "Status:"
@@ -162,6 +164,7 @@ users.show:
         blog: "Website: "
     bundles_manage: "Bundles I manage:"
     bundles_contribute: "Bundles I contribute to:"
+    bundles_favourites: "My favourite bundles"
 
 users.list:
     location: " from "

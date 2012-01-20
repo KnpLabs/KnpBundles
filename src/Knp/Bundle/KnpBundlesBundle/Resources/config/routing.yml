@@ -73,6 +73,10 @@ bundle_change_usage_status:
 bundle_get_badge:
     pattern:        /{username}/{name}/badge
     defaults:       { _controller: KnpBundlesBundle:Badge:getBadge }
+
+bundle_toggle_favourite:
+    pattern:        /{username}/{name}/toggle-favourite
+    defaults:       { _controller: KnpBundlesBundle:Bundle:toggleFavourite }
     requirements:   { _method: "GET", name: ".+" }
 
 bundle_show:
