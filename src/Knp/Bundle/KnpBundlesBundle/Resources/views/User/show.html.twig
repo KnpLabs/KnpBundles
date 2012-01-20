@@ -32,6 +32,12 @@
             {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': user.bundles} %}
         </div>
         {%- endif %}
+        {%- if user.favourites|length > 0 %}
+        <div class="user-favourites">
+            <h2>{% trans %}users.show.bundles_favourites{% endtrans %}</h2>
+            {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': user.favourites} %}
+        </div>
+        {%- endif %}
         {%- if user.contributionBundles|length > 0 %}
         <div class="bundles-i-contribute-to">
             <h2>{% trans %}users.show.bundles_contribute{% endtrans %}</h2>

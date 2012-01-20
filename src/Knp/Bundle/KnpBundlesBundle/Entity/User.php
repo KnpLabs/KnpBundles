@@ -125,7 +125,7 @@ class User implements UserInterface
     /**
      * Users favourite bundles
      *
-     * @ORM\ManyToMany(targetEntity="User")
+     * @ORM\ManyToMany(targetEntity="Bundle")
      * @ORM\JoinTable(name="user_favourites",
      *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")}

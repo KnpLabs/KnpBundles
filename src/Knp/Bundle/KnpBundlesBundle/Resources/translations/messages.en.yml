@@ -80,6 +80,7 @@ bundles.show:
     setting: "Change bundle settings"
     favourite: "Add to favourites"
     unfavourite: "Remove from favourites"
+    loginToFavourite: "Login to favourite this bundle"
     infos:
         title: "Infos"
         state: "Status:"
