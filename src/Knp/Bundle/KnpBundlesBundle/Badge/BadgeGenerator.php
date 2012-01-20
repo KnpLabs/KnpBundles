@@ -9,20 +9,29 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 class BadgeGenerator
 {
-    protected $container;
+    /**
+     * Get app root dir
+     */
+    protected $rootDir;
 
+    /**
+     * Get generated bages upload dir
+     */
+    protected $uploadDir;
+
+    /**
+     * Get default font
+     */
     protected $font = 'arial.ttf';
 
     /**
      * Generate Badge images
      *
-     * @param string $bundleName
-     * @param integer $score
-     * @param integer $recommend
+     * @param string $bundle
      */
-    public function generate($bundle)
+    public function generate(Bundle $bundle)
     {
-        $bundleName = $bundle->getName();
+        $bundleName = $this->shotify($bundle->getName(), 23);
         $score = $bundle->getScore();
         $recommenders = $bundle->getNbRecommenders();
 
@@ -83,9 +92,14 @@ class BadgeGenerator
         $image->save($this->getBadgeFile($bundle));
     }
 
-    public function setContainer($container)
+    public function setUploadDir($uploadDir)
     {
-        $this->container = $container;
+        $this->uploadDir = $uploadDir;
+    }
+
+    public function setRootDir($rootDir)
+    {
+        $this->rootDir = $rootDir;
     }
 
     /**
@@ -110,7 +124,27 @@ class BadgeGenerator
      */
     protected function getBadgeFile(Bundle $bundle)
     {
-        return $this->getUploadDir().'/'.$bundle->getUsername().'-'.$bundle->getName().'.png';
+        return $this->uploadDir.'/'.$bundle->getUsername().'-'.$bundle->getName().'.png';
+    }
+
+    protected function getResourceDir()
+    {
+        return $this->rootDir.'/../web/bundles/knpbundles';
+    }
+
+    /**
+     * Trim long bundle name
+     *
+     * @param string $name
+     * @param integer $lenght symbol count from the end
+     */
+    protected function shotify($name, $lenght)
+    {
+        if ($lenght < strlen($name)) {
+            $name = '...'.substr($name, -1 * $lenght);
+        }
+
+        return $name;
     }
 
     protected function removeIfExist($file)
@@ -118,15 +152,5 @@ class BadgeGenerator
         if (file_exists($file)) {
             unlink($file);
         }
-    }
-
-    protected function getUploadDir()
-    {
-        return $this->container->getParameter('knp_bundles.badges_upload_dir');
-    }
-
-    protected function getResourceDir()
-    {
-        return $this->container->getParameter('kernel.root_dir').'/../web/bundles/knpbundles';
     }
 }

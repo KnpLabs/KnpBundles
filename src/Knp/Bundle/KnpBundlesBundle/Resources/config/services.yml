@@ -78,4 +78,5 @@ services:
     knp_bundles.badge_generator:
         class:                    %knp_bundles.badge_generator.class%
         calls:
-            - [ setContainer, [ @service_container ] ]
+            - [ setRootDir, [%kernel.root_dir%] ]
+            - [ setUploadDir, [%knp_bundles.badges_upload_dir%] ]
