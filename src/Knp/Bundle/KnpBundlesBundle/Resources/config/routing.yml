@@ -50,6 +50,11 @@ bundle_list:
     defaults:       { _controller: KnpBundlesBundle:Bundle:list, sort: trend }
     requirements:   { _method: "GET", sort: "(best|updated|newest|trend)"}
 
+bundle_keyword:
+    pattern:        /keyword/{slug}
+    defaults:       { _controller: KnpBundlesBundle:Bundle:searchByKeyword }
+    requirements:   { _method: "GET", slug: ".+" }
+
 user_bundle_list:
     pattern:        /{name}/bundles
     defaults:       { _controller: KnpBundlesBundle:User:bundles }

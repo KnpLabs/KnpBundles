@@ -34,6 +34,15 @@
         </div>
 
         <div class="box">
+            <h3>{% trans %}bundles.show.keywords.title{% endtrans %}</h3>
+                {% for keyword in bundle.keywords %}
+                    <a href="{{ path('bundle_keyword', {'slug': keyword.slug}) }}" title="{{ keyword.value }}">{{ keyword.value }}</a>
+                {% else %}
+                    {% trans %}bundles.show.keywords.empty{% endtrans %}
+                {% endfor %}
+        </div>
+
+        <div class="box">
             <h3>{% trans %}bundles.show.recommenders.title{% endtrans %}</h3>
             <ul>
                 <li class="bundle-recommenders">

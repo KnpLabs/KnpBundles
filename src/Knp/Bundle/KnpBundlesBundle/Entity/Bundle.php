@@ -212,6 +212,17 @@ class Bundle
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $composerName = null;
+    
+    /**
+     * Bundle keywords
+     *
+     * @ORM\ManyToMany(targetEntity="Keyword", inversedBy="bundles", cascade={"persist"})
+     * @ORM\JoinTable(name="bundles_keyword",
+     *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="keyword_id", referencedColumnName="id")}
+     *      )
+     */
+    protected $keywords;
 
     public function __construct($fullName = null)
     {
@@ -223,7 +234,7 @@ class Bundle
         $this->createdAt = new \DateTime('NOW');
         $this->updatedAt = new \DateTime('NOW');
         $this->score = 0;
-        $this->scores = new ArrayCollection();;
+        $this->scores = new ArrayCollection();
         $this->lastCommitAt = new \DateTime('2010-01-01');
         $this->lastCommits = serialize(array());
         $this->tags = serialize(array());
@@ -233,6 +244,7 @@ class Bundle
         $this->travisCiBuildStatus = null;
         $this->trend1 = 0;
         $this->composerName = null;
+        $this->keywords = new ArrayCollection();
     }
 
     /**
@@ -899,5 +911,33 @@ class Bundle
     public function addRecommender(User $user)
     {
         $this->recommenders[] = $user;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getKeywords()
+    {
+        return $this->keywords;
+    }
+
+    /**
+     * @return int Total nb of keywords for this bundle
+     */
+    public function countKeywords()
+    {
+        return count($this->keywords);
+    }
+
+    public function hasKeyword(Keyword $keyword)
+    {
+        return $this->keywords->contains($keyword);
+    }
+
+    public function addKeyword(Keyword $keyword)
+    {
+        if (!$this->hasKeyword($keyword)) {
+            $this->keywords[] = $keyword;
+        }
     }
 }

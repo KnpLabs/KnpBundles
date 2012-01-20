@@ -62,6 +62,7 @@ credits:
 bundles:
     meta:
         title: "Discover %count% bundles for Symfony2"
+        titleKeywords: "Found %count% bundles for keyword '%keyword%'"
         description: "All Open Source Symfony 2 Bundles sorted by %sort%"
     title: "%count% bundles for Symfony2"
     sort:
@@ -103,6 +104,9 @@ bundles.show:
         iRecommend: "I recommend this bundle"
         iDontRecommend: "I don't recommend this bundle"
         loginToRecommend: "Login to recommend this bundle"
+    keywords:
+        title: "Keywords"
+        empty: "No keywords for this bundle"
     chart:
         title: "Score evolution"
 

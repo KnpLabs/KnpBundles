@@ -89,7 +89,7 @@ class Updater
 
         $this->output->writeln(sprintf('%d created', $added));
     }
-    
+
     /**
      * Add or update a repo
      *
@@ -100,7 +100,7 @@ class Updater
     public function addBundle($fullName, $updateRepo = true)
     {
         list($username, $bundleName) = explode('/', $fullName);
-        
+
         $user = $this->users->getOrCreate($username);
 
         if (!isset($this->bundles[strtolower($fullName)])) {
@@ -113,7 +113,7 @@ class Updater
         }
 
         $this->em->flush();
-        
+
         if ($updateRepo) {
             $this->updateRepo($bundle);
         }
@@ -138,7 +138,6 @@ class Updater
             if ($this->em->getUnitOfWork()->getEntityState($bundle) != UnitOfWork::STATE_MANAGED) {
                 continue;
             }
-            
             $this->updateRepo($bundle);
         }
     }
@@ -167,7 +166,7 @@ class Updater
                     sleep(60);
                 }
             }
-            
+
         }
     }
 }

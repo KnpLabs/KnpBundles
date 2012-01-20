@@ -11,13 +11,25 @@ class BundleRepository extends EntityRepository
     {
         $pattern = '%'.str_replace(' ', '%', $query).'%';
 
-        $qb = $this->createQueryBuilder('e')->orderBy('e.score', 'DESC');
+        $qb = $this->createQueryBuilder('bundle')
+            ->leftJoin('bundle.keywords', 'keyword');
+
         $qb->where($qb->expr()->orx(
-            $qb->expr()->like('e.username', ':username'),
-            $qb->expr()->like('e.name', ':name'),
-            $qb->expr()->like('e.description', ':description')
+            $qb->expr()->like('bundle.username', ':username'),
+            $qb->expr()->like('bundle.name', ':name'),
+            $qb->expr()->like('bundle.description', ':description'),
+            $qb->expr()->eq('keyword.value', ':query')
         ));
-        $qb->setParameters(array('username' => $pattern, 'name' => $pattern, 'description' => $pattern));
+
+        $qb
+            ->orderBy('bundle.score', 'DESC')
+            ->setParameters(array(
+                'username' => $pattern,
+                'name' => $pattern,
+                'description' => $pattern,
+                'query' => $query
+            ));
+
         return $qb->getQuery()->execute();
     }
 
@@ -34,8 +46,8 @@ class BundleRepository extends EntityRepository
 
     public function queryAllSortedBy($field)
     {
-        $qb = $this->createQueryBuilder('e');
-        $qb->orderBy('e.'.$field, 'name' === $field ? 'asc' : 'desc');
+        $qb = $this->createQueryBuilder('bundle');
+        $qb->orderBy('bundle.'.$field, 'name' === $field ? 'asc' : 'desc');
         $query = $qb->getQuery();
 
         return $query;
@@ -76,9 +88,22 @@ class BundleRepository extends EntityRepository
         return $q;
     }
 
+    public function queryByKeywordSlug($slug)
+    {
+        return $this->createQueryBuilder('bundle')
+            ->addSelect('user')
+            ->leftJoin('bundle.user', 'user')
+            ->leftJoin('bundle.keywords', 'keyword')
+            ->where('keyword.slug = :slug')
+            ->addOrderBy('bundle.score', 'desc')
+            ->addOrderBy('bundle.lastCommitAt', 'desc')
+            ->setParameter('slug', $slug)
+            ->getQuery();
+    }
+
     public function count()
     {
-        return $this->getEntityManager()->createQuery('SELECT COUNT(e.id) FROM '.$this->getEntityName().' e')->getSingleScalarResult();
+        return $this->getEntityManager()->createQuery('SELECT COUNT(bundle.id) FROM '.$this->getEntityName().' bundle')->getSingleScalarResult();
     }
 
     public function getLastCommits($nb)
@@ -99,16 +124,16 @@ class BundleRepository extends EntityRepository
 
     public function findByLastCommitAt($nb)
     {
-        return $this->createQueryBuilder('b')->orderBy('b.lastCommitAt', 'DESC')->getQuery()->setMaxResults($nb)->execute();
+        return $this->createQueryBuilder('bundle')->orderBy('bundle.lastCommitAt', 'DESC')->getQuery()->setMaxResults($nb)->execute();
     }
 
     public function findOneByUsernameAndName($username, $name)
     {
         try {
-            return $this->createQueryBuilder('e')
-                ->leftJoin('e.recommenders', 'user')
-                ->where('e.username = :username')
-                ->andWhere('e.name = :name')
+            return $this->createQueryBuilder('bundle')
+                ->leftJoin('bundle.recommenders', 'user')
+                ->where('bundle.username = :username')
+                ->andWhere('bundle.name = :name')
                 ->setParameter('username', $username)
                 ->setParameter('name', $name)
                 ->getQuery()
@@ -121,7 +146,7 @@ class BundleRepository extends EntityRepository
     public function updateTrends()
     {
         // Reset trends
-        $q = $this->_em->createQuery('UPDATE Knp\Bundle\KnpBundlesBundle\Entity\Bundle b SET b.trend1 = 0');
+        $q = $this->_em->createQuery('UPDATE Knp\Bundle\KnpBundlesBundle\Entity\Bundle bundle SET bundle.trend1 = 0');
         $q->execute();
 
         // Update trends.
