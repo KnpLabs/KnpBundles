@@ -27,7 +27,7 @@ class BadgeGenerator
     /**
      * Generate Badge images
      *
-     * @param string $bundle
+     * @param Bundle $bundle
      */
     public function generate(Bundle $bundle)
     {
@@ -75,7 +75,6 @@ class BadgeGenerator
         // Recommend
         if ($recommenders) {
             $recommendationsText = 'by '.$recommenders.' developers';
-            
         } else {
             $recommendationsText = 'No recommendations';
         }
