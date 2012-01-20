@@ -1,0 +1,6 @@
+services:
+    twig.extension.knp.sitemap:
+        class: Knp\Bundle\SitemapBundle\Twig\Extension\SitemapExtension
+        tags:
+            - { name: twig.extension }
+        arguments: ["%kb_sitemap.base_url%"]

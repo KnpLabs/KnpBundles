@@ -32,10 +32,25 @@ class GenerateCommand extends DoctrineCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $emName = $input->getOption('em');
-        $this->em = $this->getEntityManager($emName);
+        $em = $this->getEntityManager($input->getOption('em'));
+        $c = $this->getContainer();
 
-        //$this->process($output);
+        if (!$c->hasParameter('kb_sitemap.base_url')) {
+            throw new \RuntimeException("Sitemap requires base_url parameter [kb_sitemap.base_url] to be available, through config or parameters");
+        }
+
+        $dql = <<<___SQL
+        SELECT b FROM KnpBundlesBundle:Bundle b
+___SQL;
+        $q = $em->createQuery($dql);
+        $bundles = $q->getArrayResult();
+
+        $sitemapFile = $c->getParameter('kernel.root_dir').'/../web/sitemap.xml';
+        file_put_contents($sitemapFile, $c->get('templating')->render(
+            'KnpSitemapBundle::sitemap.xml.twig',
+            compact('bundles')
+        ));
+
         $output->writeLn('Done');
     }
 }
