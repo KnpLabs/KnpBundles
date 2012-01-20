@@ -212,7 +212,7 @@ class Bundle
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $composerName = null;
-    
+
     /**
      * Bundle keywords
      *
@@ -471,7 +471,7 @@ class Bundle
 
             // Small boost for recently updated bundles
             'activity'     => ($this->getDaysSinceLastCommit() < 30)
-                ? (30 - $this->getDaysSinceLastCommit() / 5)
+                ? ((30 - $this->getDaysSinceLastCommit()) / 5)
                 : 0,
 
             // Small boost for bundles that have a real README file
