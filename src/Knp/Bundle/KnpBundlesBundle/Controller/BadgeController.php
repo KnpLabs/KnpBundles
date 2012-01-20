@@ -4,6 +4,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Controller for returning bundle badges
@@ -11,10 +12,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  */
 class BadgeController extends BaseController
 {
-    function getBadgeAction()
+    function getBadgeAction($username, $name)
     {
+        $bundle = $this->get('doctrine')
+            ->getRepository('KnpBundlesBundle:Bundle')->findOneByUsernameAndName($username, $name);
+        if (!$bundle) {
+            throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
+        }
+
         // Convert image to string
-        $image = imagecreatefrompng('http://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/PNG_transparency_demonstration_2.png/240px-PNG_transparency_demonstration_2.png');
+        $image = imagecreatefrompng(
+            $this->container->getParameter('knp_bundles.badges_upload_dir').'/'.$username.'-'.$name.'.png'
+        );
         ob_start();
         imagepng($image);
         $response = ob_get_clean();
