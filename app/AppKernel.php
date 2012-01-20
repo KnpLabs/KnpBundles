@@ -33,6 +33,7 @@ class AppKernel extends Kernel
 
             // register your applications here
             new Knp\Bundle\KnpBundlesBundle\KnpBundlesBundle(),
+            new Knp\Bundle\SitemapBundle\KnpSitemapBundle(),
         );
 
         if ('test' === $this->getEnvironment()) {
