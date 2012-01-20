@@ -47,6 +47,16 @@ class BundleControllerTest extends WebTestCase
         $this->assertRegexp('/^<\?xml/', $client->getResponse()->getContent());
     }
 
+    public function testSearchByKeyword()
+    {
+        $client = self::createClient();
+        $crawler = $client->request('GET', '/keyword/foo');
+        $this->assertTrue($client->getResponse()->isSuccessful());
+        $crawler = $client->request('GET', '/keyword/CrazyKeywordNeverSeen');
+        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertEquals(0, $crawler->filter('.repos-list li.bundle')->count());
+    }
+
     public function testIAmUsingThisRepo()
     {
         $this->markTestIncomplete("You should log in here");

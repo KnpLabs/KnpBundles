@@ -171,6 +171,10 @@ class Updater
         $this->output->writeln(' '.$bundle->getScore());
         $this->em->flush();
 
+        if ($bundle->getComposerName()) {
+            $this->generateComposerKeywords($bundle);
+        }
+
         $contributorNames = $this->githubRepoApi->getContributorNames($bundle);
         $contributors = array();
         foreach ($contributorNames as $contributorName) {
@@ -227,5 +231,16 @@ class Updater
         }
 
         return $user;
+    }
+
+    public function generateComposerKeywords(Bundle $bundle)
+    {
+        $keywords = $this->githubRepoApi->fetchComposerKeywords($bundle);
+
+        foreach ($keywords as $keyword) {
+            $keyword = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Keyword')->findOrCreateOne($keyword);
+
+            $bundle->addKeyword($keyword);
+        }
     }
 }
