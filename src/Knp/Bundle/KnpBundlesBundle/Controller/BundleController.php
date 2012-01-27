@@ -242,14 +242,14 @@ class BundleController extends BaseController
 
     public function settingsAction($id)
     {
-        $bundle = $this->getRepository('Bundle')->findOneById($id);
+        $bundle = $this->getRepository('Bundle')->find($id);
         if (!$bundle) {
             throw new NotFoundHttpException('The bundle does not exist.');
         }
 
         // Save only if sender is owner of bundle
         if ($user = $this->get('security.context')->getToken()->getUser() && $bundle->isOwnerOrContributor($user)) {
-            $state = $this->getRequest()->request->get('state', 'unknown');
+            $state = $this->getRequest()->request->get('state', Bundle::STATE_UNKNOWN);
 
             $bundle->setState($state);
 

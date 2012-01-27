@@ -110,7 +110,12 @@ EOD;
             $users[] = $user;
         }
 
-        $states = array('unknown', 'not yet ready', 'ready', 'deprecated');
+        $states = array(
+            Entity\Bundle::STATE_UNKNOWN,
+            Entity\Bundle::STATE_NOT_YET_READY,
+            Entity\Bundle::STATE_READY,
+            Entity\Bundle::STATE_DEPRECATED
+        );
 
         foreach ($users as $i => $user) {
 

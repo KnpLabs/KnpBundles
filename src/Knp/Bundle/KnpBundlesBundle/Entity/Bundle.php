@@ -23,6 +23,11 @@ use Doctrine\Common\Collections\Collection;
  */
 class Bundle
 {
+    const STATE_UNKNOWN       = 'unknown';
+    const STATE_NOT_YET_READY = 'not yet ready';
+    const STATE_READY         = 'ready';
+    const STATE_DEPRECATED    = 'deprecated';
+
     // TODO: switch to annotations
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
@@ -157,7 +162,7 @@ class Bundle
      *
      * @ORM\Column(type="string")
      */
-    protected $state = 'unknown';
+    protected $state;
 
     /**
      * Recommenders who contributed to the Repo
@@ -252,6 +257,7 @@ class Bundle
         $this->trend1 = 0;
         $this->composerName = null;
         $this->keywords = new ArrayCollection();
+        $this->state = self::STATE_UNKNOWN;
     }
 
     public function isInitialized()
@@ -826,7 +832,7 @@ class Bundle
      */
     public function getState()
     {
-        return null === $this->state ? 'unknown' : $this->state;
+        return null === $this->state ? self::STATE_UNKNOWN : $this->state;
     }
 
     /**
@@ -836,8 +842,8 @@ class Bundle
      */
     public function setState($state)
     {
-        if (!in_array($state, array('unknown', 'not yet ready', 'ready', 'deprecated'))) {
-            $state = 'unknown';
+        if (!in_array($state, array(self::STATE_UNKNOWN, self::STATE_NOT_YET_READY, self::STATE_READY, self::STATE_DEPRECATED))) {
+            $state = self::STATE_UNKNOWN;
         }
 
         $this->state = $state;
