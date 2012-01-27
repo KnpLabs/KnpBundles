@@ -21,6 +21,7 @@ class KbPopulateCommand extends ContainerAwareCommand
         $this
             ->setDefinition(array())
             ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'The maximal number of new bundles considered by the update', 1000)
+            ->addOption('no-publish', null, InputOption::VALUE_NONE, 'Prevent the command from publishing a message to RabbitMQ producer')
             ->setName('kb:populate')
         ;
     }
@@ -31,10 +32,18 @@ class KbPopulateCommand extends ContainerAwareCommand
      * @throws \InvalidArgumentException When the target directory does not exist
      */
     protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $em = $this->getContainer()->get('knp_bundles.entity_manager');
+    {   
+        $container = $this->getContainer();
 
-        $updater = $this->getContainer()->get('knp_bundles.updater');
+        $em = $container->get('knp_bundles.entity_manager');
+
+        $updater = $container->get('knp_bundles.updater');
+
+        if (!$input->getOption('no-publish')) {
+            // manually set RabbitMQ producer
+            $updater->setBundleUpdateProducer($container->get('old_sound_rabbit_mq.update_bundle_producer'));
+        }
+
         $updater->setOutput($output);
         $updater->setUp();
 
