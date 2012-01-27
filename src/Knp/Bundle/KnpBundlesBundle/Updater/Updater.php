@@ -4,7 +4,6 @@ namespace Knp\Bundle\KnpBundlesBundle\Updater;
 
 use Knp\Bundle\KnpBundlesBundle\Github;
 use Knp\Bundle\KnpBundlesBundle\Git;
-use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
 use Doctrine\ORM\UnitOfWork;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Symfony\Component\Console\Output\NullOutput;
@@ -16,12 +15,8 @@ use OldSound\RabbitMqBundle\RabbitMq\Producer;
 
 class Updater
 {
-    private $githubClient;
     private $githubUserApi;
-    private $githubRepoApi;
     private $githubSearch;
-    private $gitRepoManager;
-    private $travis;
     private $bundles;
     private $users;
     private $em;
@@ -32,24 +27,22 @@ class Updater
     {
         $this->output = $output ?: new NullOutput();
         $this->em = $em;
-        $this->githubClient = new \Github_Client();
-        $this->githubSearch = new Github\Search($this->githubClient, new \Goutte\Client(), $this->output);
-        $this->githubUserApi = new Github\User($this->githubClient, $this->output);
+        
+        $githubClient = new \Github_Client();
+        $this->githubSearch = new Github\Search($githubClient, new \Goutte\Client(), $this->output);
+        $this->githubUserApi = new Github\User($githubClient, $this->output);
 
-        $this->gitRepoManager = new Git\RepoManager($gitRepoDir, $gitBin);
-        $this->githubRepoApi = new Github\Repo($this->githubClient, $this->output, $this->gitRepoManager);
-        $this->travis = new Travis($this->output);
         $this->users = $users;
-    }
-
-    public function setBundleUpdateProducer(Producer $bundleUpdateProducer)
-    {
-        $this->bundleUpdateProducer = $bundleUpdateProducer;
     }
 
     public function setOutput(OutputInterface $output)
     {
         $this->output = $output;
+    }
+
+    public function setBundleUpdateProducer(Producer $bundleUpdateProducer)
+    {
+        $this->bundleUpdateProducer = $bundleUpdateProducer;
     }
 
     public function setUp()
