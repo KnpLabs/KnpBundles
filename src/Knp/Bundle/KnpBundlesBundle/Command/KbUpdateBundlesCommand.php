@@ -17,6 +17,7 @@ class KbUpdateBundlesCommand extends ContainerAwareCommand
     {
         $this
             ->setDefinition(array())
+            ->addOption('no-publish', null, InputOption::VALUE_NONE, 'Prevent the command from publishing a message to RabbitMQ producer')
             ->setName('kb:update:bundles')
         ;
     }
@@ -28,7 +29,15 @@ class KbUpdateBundlesCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $updater = $this->getContainer()->get('knp_bundles.updater');
+        $container = $this->getContainer();
+
+        $updater = $container->get('knp_bundles.updater');
+
+        if (!$input->getOption('no-publish')) {
+            // manually set RabbitMQ producer
+            $updater->setBundleUpdateProducer($container->get('old_sound_rabbit_mq.update_bundle_producer'));
+        }
+
         $updater->setOutput($output);
         $updater->setUp();
 
