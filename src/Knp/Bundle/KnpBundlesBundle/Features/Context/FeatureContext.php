@@ -101,7 +101,7 @@ class FeatureContext extends MinkContext
                 'user'          => $user,
                 'username'      => $user->getName(),
                 'description'   => $row['description'],
-                'state'         => isset($row['state']) ? $row['state'] : 'unknown',
+                'state'         => isset($row['state']) ? $row['state'] : Entity\Bundle::STATE_UNKNOWN,
                 'lastCommitAt'  => new \DateTime($row['lastCommitAt']),
             ));
 

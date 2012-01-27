@@ -5,6 +5,8 @@
 {% block title %}{% trans with {'%name%': bundle.name, '%username%': bundle.username} %}bundles.show.meta.title{% endtrans %}{% endblock %}
 {% block description %}{{ bundle.description }}{% endblock %}
 
+{% set isOwnerOrContributor = app.user is not null and bundle.isOwnerOrContributor(app.user) %}
+
 {% block content %}
     <div class="col-right">
 
@@ -29,7 +31,7 @@
                 {% if bundle.usesTravisCi %}
                 <li class="info-travis" title="{% trans %}bundles.show.infos.travis{% endtrans %}">
                     <a href="{{ bundle.travisUrl }}">
-                        <img src="https://secure.travis-ci.org/{{ bundle.username }}/{{ bundle.name }}.png" alt="">
+                        <img src="https://secure.travis-ci.org/{{ bundle.username }}/{{ bundle.name }}.png" alt="" />
                     </a>
                  </li>
                 {% endif %}
@@ -160,7 +162,7 @@
         <div class="actions">
             <a class="button github" href="{{ bundle.gitHubUrl }}">{% trans %}bundles.show.github{% endtrans %}</a>
             <a class="button github" href="{{ bundle.gitHubUrl }}/issues">{% trans %}bundles.show.issues{% endtrans %}</a>
-            {%- if (app.user is not null) and (bundle.isOwnerOrContributor(app.user)) -%}
+            {%- if isOwnerOrContributor -%}
             &nbsp;<span class="button github" data-controls-modal="modal-settings">{% trans %}bundles.show.setting{% endtrans %}</span>
             {%- endif -%}
         </div>
@@ -178,7 +180,7 @@
 
     {{ knp_disqus_render('s2b', {'identifier': bundle.username~'_'~bundle.name, 'url': url('bundle_show', {'username':bundle.username, 'name':bundle.name}), 'limit': 100}) }}
 
-    {%- if (app.user is not null) and (bundle.isOwnerOrContributor(app.user)) -%}
+    {%- if isOwnerOrContributor -%}
     <form class="modal" action="{{ path('bundle_settings', {'id': bundle.id}) }}" method="post" id="modal-settings" style="display: none;width:400px">
         <div class="modal-header">
             <a class="close" href="#">×</a>
