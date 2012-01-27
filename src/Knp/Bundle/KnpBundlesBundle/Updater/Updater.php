@@ -4,10 +4,8 @@ namespace Knp\Bundle\KnpBundlesBundle\Updater;
 
 use Knp\Bundle\KnpBundlesBundle\Github\Search;
 use Knp\Bundle\KnpBundlesBundle\Github\User;
-use Knp\Bundle\KnpBundlesBundle\Git;
 use Doctrine\ORM\UnitOfWork;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 use Doctrine\ORM\EntityManager;
