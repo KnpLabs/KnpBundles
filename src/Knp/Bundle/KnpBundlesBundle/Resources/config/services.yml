@@ -19,7 +19,6 @@ services:
             - @knp_bundles.user.manager
             - %knp_bundles.bundles_dir%
             - %knp_bundles.git_bin%
-            - @old_sound_rabbit_mq.update_bundle_producer
 
     knp_bundles.user.manager:
         class: %knp_bundles.user.manager.class%
