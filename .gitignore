@@ -9,7 +9,7 @@
 /app/alive.php
 /app/phpunit.xml
 /web/bundles/*
-/web/sitemap.xml
+/web/sitemap.xml*
 /app/DoctrineMigrations/*
 /src/Knp/Bundle/KnpBundlesBundle/DoctrineMigrations/*
 /vendor/*

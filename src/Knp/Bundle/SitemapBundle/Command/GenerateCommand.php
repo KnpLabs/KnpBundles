@@ -39,18 +39,35 @@ class GenerateCommand extends DoctrineCommand
             throw new \RuntimeException("Sitemap requires base_url parameter [kb_sitemap.base_url] to be available, through config or parameters");
         }
 
+        $output->write('<info>Fetching resources..</info>' . PHP_EOL);
         $dql = <<<___SQL
-        SELECT b FROM KnpBundlesBundle:Bundle b
+        SELECT b.{name, username, updatedAt} FROM KnpBundlesBundle:Bundle b
 ___SQL;
         $q = $em->createQuery($dql);
         $bundles = $q->getArrayResult();
 
-        $sitemapFile = $c->getParameter('kernel.root_dir').'/../web/sitemap.xml';
-        file_put_contents($sitemapFile, $c->get('templating')->render(
-            'KnpSitemapBundle::sitemap.xml.twig',
-            compact('bundles')
-        ));
+        $dql = <<<___SQL
+        SELECT u.{name} FROM KnpBundlesBundle:User u
+___SQL;
+        $q = $em->createQuery($dql);
+        $users = $q->getArrayResult();
 
-        $output->writeLn('Done');
+        $sitemapFile = $c->getParameter('kernel.root_dir').'/../web/sitemap.xml';
+        $output->write('<info>Building sitemap...</info>' . PHP_EOL);
+        $sitemap = $c->get('templating')->render(
+            'KnpSitemapBundle::sitemap.xml.twig',
+            compact('bundles', 'users')
+        );
+        $output->write("<info>Saving sitemap in [{$sitemapFile}]..</info>" . PHP_EOL);
+        file_put_contents($sitemapFile, $sitemap);
+        // gzip the sitemap
+        if (function_exists('gzopen')) {
+            $output->write("<info>Gzipping the generated sitemap [{$sitemapFile}.gz]..</info>" . PHP_EOL);
+            $gz = gzopen($sitemapFile.'.gz', 'w9');
+            gzwrite($gz, $sitemap);
+            gzclose($gz);
+        }
+
+        $output->write('<info>Done</info>' . PHP_EOL);
     }
 }
