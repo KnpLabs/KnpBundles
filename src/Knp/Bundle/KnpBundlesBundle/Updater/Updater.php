@@ -2,7 +2,8 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Updater;
 
-use Knp\Bundle\KnpBundlesBundle\Github;
+use Knp\Bundle\KnpBundlesBundle\Github\Search;
+use Knp\Bundle\KnpBundlesBundle\Github\User;
 use Knp\Bundle\KnpBundlesBundle\Git;
 use Doctrine\ORM\UnitOfWork;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
@@ -23,15 +24,11 @@ class Updater
     private $output;
     private $bundleUpdateProducer;
 
-    public function __construct(EntityManager $em,  UserManager $users, $gitRepoDir, $gitBin, OutputInterface $output = null)
+    public function __construct(EntityManager $em,  UserManager $users, Search $githubSearch, User $githubUserApi)
     {
-        $this->output = $output ?: new NullOutput();
         $this->em = $em;
-        
-        $githubClient = new \Github_Client();
-        $this->githubSearch = new Github\Search($githubClient, new \Goutte\Client(), $this->output);
-        $this->githubUserApi = new Github\User($githubClient, $this->output);
-
+        $this->githubSearch = $githubSearch;
+        $this->githubUserApi = $githubUserApi;
         $this->users = $users;
     }
 
