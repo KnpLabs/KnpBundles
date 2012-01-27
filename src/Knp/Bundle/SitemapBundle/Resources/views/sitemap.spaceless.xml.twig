@@ -1,0 +1,21 @@
+{% spaceless %}
+<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
+                             http://www.google.com/schemas/sitemap-image/1.1 http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd"
+         xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{% for bundle in bundles %}
+    <url>
+        {% include "KnpSitemapBundle:Url:bundle.xml.twig" with { 'bundle': bundle } %}
+    </url>
+{% endfor %}
+{% for user in users %}
+    <url>
+        {% include "KnpSitemapBundle:Url:user.xml.twig" with { 'user': user } %}
+    </url>
+    {# NOT USED<url>
+        {% include "KnpSitemapBundle:Url:user_bundles.xml.twig" with { 'user': user } %}
+    </url>#}
+{% endfor %}
+</urlset>
+{% endspaceless %}

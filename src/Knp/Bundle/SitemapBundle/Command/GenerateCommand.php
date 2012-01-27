@@ -25,6 +25,11 @@ class GenerateCommand extends DoctrineCommand
                     'em', null, InputOption::VALUE_OPTIONAL,
                     'Used entity manager.',
                     'default'
+                ),
+                new InputOption(
+                    'spaceless', 'spls', InputOption::VALUE_OPTIONAL,
+                    'Output spaceless sitemap.',
+                    0
                 )
             ))
         ;
@@ -41,23 +46,22 @@ class GenerateCommand extends DoctrineCommand
 
         $output->write('<info>Fetching resources..</info>' . PHP_EOL);
         $dql = <<<___SQL
-        SELECT b.{name, username, updatedAt} FROM KnpBundlesBundle:Bundle b
+        SELECT b.name, b.username, b.updatedAt FROM KnpBundlesBundle:Bundle b
 ___SQL;
         $q = $em->createQuery($dql);
         $bundles = $q->getArrayResult();
 
         $dql = <<<___SQL
-        SELECT u.{name} FROM KnpBundlesBundle:User u
+        SELECT u.name, u.createdAt FROM KnpBundlesBundle:User u
 ___SQL;
         $q = $em->createQuery($dql);
         $users = $q->getArrayResult();
 
         $sitemapFile = $c->getParameter('kernel.root_dir').'/../web/sitemap.xml';
         $output->write('<info>Building sitemap...</info>' . PHP_EOL);
-        $sitemap = $c->get('templating')->render(
-            'KnpSitemapBundle::sitemap.xml.twig',
-            compact('bundles', 'users')
-        );
+        $spaceless = (bool)$input->getOption('spaceless');
+        $tpl = $spaceless ? 'KnpSitemapBundle::sitemap.spaceless.xml.twig' : 'KnpSitemapBundle::sitemap.xml.twig';
+        $sitemap = $c->get('templating')->render($tpl, compact('bundles', 'users'));
         $output->write("<info>Saving sitemap in [{$sitemapFile}]..</info>" . PHP_EOL);
         file_put_contents($sitemapFile, $sitemap);
         // gzip the sitemap

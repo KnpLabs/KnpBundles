@@ -28,7 +28,7 @@ class SitemapExtension extends \Twig_Extension
     public function formatDate(\DateTime $date)
     {
         // YYYY-MM-DDThh:mmTZD
-        return $date->format('Y-m-dTH:i');
+        return $date->format('Y-m-d');
     }
 
     public function getName()
