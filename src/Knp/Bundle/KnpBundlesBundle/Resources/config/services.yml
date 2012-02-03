@@ -38,9 +38,11 @@ services:
         arguments:                [@knp_bundles.entity_manager,	%knp_bundles.trending_bundle_tweet.template%, @twitter_app]
     
     knp_bundles.goutte:
+        public: false
         class: %knp_bundles.goutte.class%
 
     knp_bundles.output:
+        public: false
         class: %knp_bundles.output.class% 
     
     knp_bundles.travis:
@@ -49,6 +51,7 @@ services:
             - @knp_bundles.output
 
     knp_bundles.github_client:
+        public: false
         class: %knp_bundles.github.client.class%  
 
     knp_bundles.git_repository_manager:
