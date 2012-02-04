@@ -111,6 +111,12 @@ class Bundle
     protected $scores = null;
 
     /**
+     *
+     * @var array
+     */
+    protected $scoreDetails;
+
+    /**
      * Repo creation date (on this website)
      *
      * @ORM\Column(type="datetime")
@@ -234,6 +240,7 @@ class Bundle
         $this->createdAt = new \DateTime('NOW');
         $this->updatedAt = new \DateTime('NOW');
         $this->score = 0;
+        $this->scoreDetails = array();
         $this->scores = new ArrayCollection();
         $this->lastCommitAt = new \DateTime('2010-01-01');
         $this->lastCommits = serialize(array());
@@ -460,6 +467,11 @@ class Bundle
         return $this->scores;
     }
 
+    public function addScoreDetail($name, $value)
+    {
+        $this->scoreDetails[$name] = $value;
+    }
+
     /**
      * Returns details about the bundle's score
      */
@@ -501,7 +513,7 @@ class Bundle
      */
     public function recalculateScore()
     {
-        $score = array_sum($this->getScoreDetails());
+        $score = array_sum($this->scoreDetails);
 
         $this->setScore($score);
     }
