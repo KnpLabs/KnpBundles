@@ -11,6 +11,9 @@ parameters:
     knp_bundles.git_repository_manager.class: Knp\Bundle\KnpBundlesBundle\Git\RepoManager
     knp_bundles.github.repository_api.class: Knp\Bundle\KnpBundlesBundle\Github\Repo
     knp_bundles.badge_generator.class: Knp\Bundle\KnpBundlesBundle\Badge\BadgeGenerator
+    knp_bundles.imagine.gd.class: Imagine\Gd\Imagine
+    knp_bundles.imagine.imagick.class: Imagine\Imagick\Imagine
+    knp_bundles.imagine.gmagick.class: Imagine\Gmagick\Imagine
 
 services:
     knp_bundles.updater:
@@ -70,13 +73,21 @@ services:
         calls:
             - [ setLogger, [@logger]]
 
-    knp_bundles.badge_generator:
-        class:                    %knp_bundles.badge_generator.class%
-        calls:
-            - [ setContainer, [ @service_container ] ]
+    knp_bundles.imagine:
+        alias:                    knp_bundles.imagine.gd
+
+    knp_bundles.imagine.gd:
+        class:                    %knp_bundles.imagine.gd.class%
+
+    knp_bundles.imagine.imagick:
+        class:                    %knp_bundles.imagine.imagick.class%
+        
+    knp_bundles.imagine.gmagick:
+        class:                    %knp_bundles.imagine.gmagick.class%        
 
     knp_bundles.badge_generator:
         class:                    %knp_bundles.badge_generator.class%
+        arguments:
+            - @knp_bundles.imagine
         calls:
             - [ setRootDir, [%kernel.root_dir%] ]
-            - [ setUploadDir, [%knp_bundles.badges_upload_dir%] ]
