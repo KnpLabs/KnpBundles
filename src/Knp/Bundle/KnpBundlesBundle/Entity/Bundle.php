@@ -477,32 +477,7 @@ class Bundle
      */
     public function getScoreDetails()
     {
-        $score = array(
-            // 1 follower = 1 point
-            'followers'    => $this->getNbFollowers(),
-
-            // Small boost for recently updated bundles
-            'activity'     => ($this->getDaysSinceLastCommit() < 30)
-                ? ((30 - $this->getDaysSinceLastCommit()) / 5)
-                : 0,
-
-            // Small boost for bundles that have a real README file
-            'readme'       => mb_strlen($this->getReadme()) > 300 ? 5 : 0,
-
-            // Small boost for bundles that uses travis ci
-            'travisci'     => $this->getUsesTravisCi() ? 5 : 0,
-
-            // Small boost for bundles with passing tests according to Travis
-            'travisbuild'  => $this->getTravisCiBuildStatus() ? 5 : 0,
-
-            // Small boost for repos that provide composer package
-            'composer'     => $this->getComposerName() ? 5 : 0,
-
-            // Small boost for repos that have recommenders recommending it
-            'recommenders' => 5 * $this->getNbRecommenders(),
-        );
-
-        return $score;
+        return $this->scoreDetails;
     }
 
     /**
@@ -513,7 +488,7 @@ class Bundle
      */
     public function recalculateScore()
     {
-        $score = array_sum($this->scoreDetails);
+        $score = array_sum($this->getScoreDetails());
 
         $this->setScore($score);
     }

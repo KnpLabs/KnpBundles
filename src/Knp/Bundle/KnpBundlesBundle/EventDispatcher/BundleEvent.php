@@ -3,7 +3,7 @@
 namespace Knp\Bundle\KnpBundlesBundle\EventDispatcher;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
-
+use Symfony\Component\EventDispatcher\Event;
 /**
 * 
 */
