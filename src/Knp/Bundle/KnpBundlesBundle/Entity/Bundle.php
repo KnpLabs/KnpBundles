@@ -477,7 +477,7 @@ class Bundle
      */
     public function getScoreDetails()
     {
-        return $this->scoreDetails;
+        return $this->scoreDetails ?: array();
     }
 
     /**

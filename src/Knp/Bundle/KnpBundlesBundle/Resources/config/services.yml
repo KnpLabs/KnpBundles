@@ -69,9 +69,10 @@ services:
     knp_bundles.github_repository_api:
         class: %knp_bundles.github.repository_api.class% 
         arguments:
-          - @knp_bundles.github_client
-          - @knp_bundles.output
-          - @knp_bundles.git_repository_manager
+            - @knp_bundles.github_client
+            - @knp_bundles.output
+            - @knp_bundles.git_repository_manager
+            - @event_dispatcher
 
     knp_bundles.github.search:
         class: %knp_bundles.github.search.class%
