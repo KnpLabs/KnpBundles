@@ -13,6 +13,12 @@ parameters:
     knp_bundles.github.users.class: Knp\Bundle\KnpBundlesBundle\Github\User
     knp_bundles.git_repository_manager.class: Knp\Bundle\KnpBundlesBundle\Git\RepoManager
     knp_bundles.github.repository_api.class: Knp\Bundle\KnpBundlesBundle\Github\Repo
+    knp_bundles.scoring.activity.class: Knp\Bundle\KnpBundlesBundle\Scoring\ActivityListener
+    knp_bundles.scoring.composer.class: Knp\Bundle\KnpBundlesBundle\Scoring\ComposerListener
+    knp_bundles.scoring.followers.class: Knp\Bundle\KnpBundlesBundle\Scoring\FollowersListener
+    knp_bundles.scoring.knpbundles.class: Knp\Bundle\KnpBundlesBundle\Scoring\KnpBundlesListener
+    knp_bundles.scoring.readme.class: Knp\Bundle\KnpBundlesBundle\Scoring\ReadmeListener
+    knp_bundles.scoring.travis.class: Knp\Bundle\KnpBundlesBundle\Scoring\TravisListener
 
 services:
     knp_bundles.updater:
@@ -89,3 +95,33 @@ services:
             - @knp_bundles.travis
         calls:
             - [ setLogger, [@logger]]
+
+    knp_bundles.scoring.activity: 
+        class: %knp_bundles.scoring.activity.class%
+        tags:
+            - { name: kernel.event_listener, event: bundle.update_score, method: onScoreUpdate }
+
+    knp_bundles.scoring.followers: 
+        class: %knp_bundles.scoring.followers.class%
+        tags:
+            - { name: kernel.event_listener, event: bundle.update_score, method: onScoreUpdate }
+
+    knp_bundles.scoring.composer: 
+        class: %knp_bundles.scoring.composer.class%
+        tags:
+            - { name: kernel.event_listener, event: bundle.update_score, method: onScoreUpdate }
+
+    knp_bundles.scoring.knpbundles: 
+        class: %knp_bundles.scoring.knpbundles.class%
+        tags:
+            - { name: kernel.event_listener, event: bundle.update_score, method: onScoreUpdate }
+
+    knp_bundles.scoring.readme: 
+        class: %knp_bundles.scoring.readme.class%
+        tags:
+            - { name: kernel.event_listener, event: bundle.update_score, method: onScoreUpdate }
+
+    knp_bundles.scoring.travis: 
+        class: %knp_bundles.scoring.travis.class%
+        tags:
+            - { name: kernel.event_listener, event: bundle.update_score, method: onScoreUpdate }
