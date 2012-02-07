@@ -51,8 +51,6 @@ class KnpBundlesExtension extends Extension
             ->root('knp_bundles')
                 ->children()
                     ->scalarNode('git_bin')->defaultValue('/usr/bin/git')->cannotBeEmpty()->end()
-                ->end()
-                ->children()
                     ->arrayNode('generate_badges')
                         ->children()
                             ->scalarNode('driver')->defaultNull()->end()

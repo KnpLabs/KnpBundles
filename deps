@@ -161,7 +161,6 @@
 [php-amqplib]
     git=http://github.com/videlalvaro/php-amqplib.git
     target=videlalvaro/php-amqplib
-    version=dca3c31b5267118be89ab87bedf06b42a99f378f
 
 [Imagine]
     git=http://github.com/avalanche123/Imagine.git
