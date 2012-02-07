@@ -28,8 +28,7 @@ services:
     knp_bundles.user.provider:
         class: %knp_bundles.user.provider.class%
         arguments:
-            - @knp_bundles.entity_manager
-            - @knp_bundles.updater
+            - @knp_bundles.user.manager
 
     knp_bundles.trending_bundle_twitterer:
         class:                    %knp_bundles.trending_bundle_twitterer.class%

@@ -3,6 +3,7 @@
 namespace Knp\Bundle\KnpBundlesBundle\Security\Core\User;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\User;
+use Knp\Bundle\KnpBundlesBundle\Entity\UserManager;
 
 use Symfony\Component\HttpKernel\KernelInterface,
     Symfony\Component\Security\Core\User\UserInterface,
@@ -14,31 +15,16 @@ use Symfony\Component\HttpKernel\KernelInterface,
  */
 class UserProvider implements UserProviderInterface
 {
-    protected $em;
-    protected $container;
+    protected $userManager;
 
-    public function __construct($em, $updater)
+    public function __construct(UserManager $userManager)
     {
-        $this->em = $em;
-        $this->updater = $updater;
+        $this->userManager = $userManager;
     }
 
     public function loadUserByUsername($username)
     {
-        $user = $this->em->getRepository('KnpBundlesBundle:User')->findOneByName($username);
-
-        if (!$user) {
-            $user = new User();
-            $user->setName($username);
-
-            // Get GitHub user
-            $user = $this->updater->getOrCreateUser($username);
-
-            $this->em->persist($user);
-            $this->em->flush();
-        }
-
-        return $user;
+        return $this->userManager->getOrCreate($username);
     }
 
     public function refreshUser(UserInterface $user)
