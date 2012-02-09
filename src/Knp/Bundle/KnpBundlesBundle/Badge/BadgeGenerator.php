@@ -10,9 +10,9 @@ use Imagine\Image\ImagineInterface;
 class BadgeGenerator
 {
     /**
-     * Instace of Imagine lib acсording to image lib 
+     * Instace of Imagine lib acсording to image lib
      */
-    protected $imagine; 
+    protected $imagine;
 
     /**
      * Get app cache dir
@@ -33,14 +33,15 @@ class BadgeGenerator
      * Generate Badge images
      *
      * @param Bundle $bundle
+     * @param string $env environment
      */
-    public function generate(Bundle $bundle)
+    public function generate(Bundle $bundle, $env)
     {
         $bundleName = $this->shorten($bundle->getName(), 23);
         $score = $bundle->getScore();
         $recommenders = $bundle->getNbRecommenders();
 
-        // Open bg badge image        
+        // Open bg badge image
         $image = $this->imagine->open($this->getResourceDir().'/images/badge.png');
 
         // Bundle Title
@@ -78,19 +79,19 @@ class BadgeGenerator
             $recommendationsText = 'No recommendations';
         }
         $image->draw()->text(
-            $recommendationsText, 
-            $this->setFont($this->imagine, $this->font, 8), 
+            $recommendationsText,
+            $this->setFont($this->imagine, $this->font, 8),
             new Point(98, 40)
         );
 
         // Check or create dir for generated badges
-        $this->createBadgesDir();
+        $this->createBadgesDir($env);
 
         // Remove existing badge
-        $this->removeIfExist($this->getBadgeFile($bundle));
+        $this->removeIfExist($this->getBadgeFile($bundle, $env));
 
         // Save badge
-        $image->save($this->getBadgeFile($bundle));
+        $image->save($this->getBadgeFile($bundle, $env));
     }
 
     public function setCacheDir($cacheDir)
@@ -116,9 +117,10 @@ class BadgeGenerator
      * Get badge image full path
      *
      * @param Bundle $bundle
+     * @param string $env
      * @return string
      */
-    protected function getBadgeFile(Bundle $bundle)
+    protected function getBadgeFile(Bundle $bundle, $env)
     {
         return $this->cacheDir.'/badges/'.$bundle->getUsername().'-'.$bundle->getName().'.png';
     }
@@ -146,22 +148,23 @@ class BadgeGenerator
 
     /**
      * Check and create a dir for uploaded badges
-     * 
+     *
+     * @param string $env
      * @return void
      */
-    protected function createBadgesDir()
+    protected function createBadgesDir($env)
     {
         $dir = $this->cacheDir.'/badges';
         if (!is_dir($dir)) {
-            if (!@mkdir($dir, 0755)) {
-                throw new \Exception('Can\'t create the "badges" folder in '.$this->cacheDir);
+            if (!mkdir($dir, 0755)) {
+                throw new \Exception('Can\'t create a "badges" folder under the cache/'.$env);
             }
         }
     }
 
     /**
      * Remove previously generated badge
-     * 
+     *
      * @param string $file
      * @return void
      */

@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Knp\Bundle\KnpBundlesBundle\Badge\Exception\ImageNotSavedException;
 
 /**
- * Generates png-badges with bundle name, score and number of recommendations 
+ * Generates png-badges with bundle name, score and number of recommendations
  */
 class KbGenerateBadgesCommand extends ContainerAwareCommand
 {
@@ -25,11 +25,11 @@ class KbGenerateBadgesCommand extends ContainerAwareCommand
     {
         $bundleRepository = $this->getContainer()->get('doctrine')->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle');
         $badgeGenerator = $this->getContainer()->get('knp_bundles.badge_generator');
-        
+
         $badgesCount = 0;
         foreach ($bundleRepository->findAll() as $bundle) {
             try {
-                $badgeGenerator->generate($bundle);
+                $badgeGenerator->generate($bundle, $this->getContainer()->get('Kernel')->getEnvironment());
                 $badgesCount++;
             } catch (ImageNotSavedException $e) {
                 $output->writeln('<error>Error occured during an image saving for '.$bundle->getUsername().'-'.$bundle->getName().' </error>');
