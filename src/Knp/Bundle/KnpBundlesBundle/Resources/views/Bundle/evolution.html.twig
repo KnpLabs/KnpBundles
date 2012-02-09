@@ -30,7 +30,7 @@
             count_data.addColumn('number', 'Number');
             count_data.addRows({{ score_counts|length }});
             {% for count in score_counts -%}
-            count_data.setValue({{ loop.index0 }}, 0, '{{ count.date }}');
+            count_data.setValue({{ loop.index0 }}, 0, '{{ count.date|date('Y-m-d') }}');
             count_data.setValue({{ loop.index0 }}, 1, {{ count.number }});
             {% endfor %}
 
