@@ -4,6 +4,7 @@ namespace Knp\Bundle\KnpBundlesBundle\DependencyInjection;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -27,6 +28,10 @@ class KnpBundlesExtension extends Extension
         $processor = new Processor();
         $config = $processor->process($this->getConfigTree(), $configs);
         $container->setParameter('knp_bundles.git_bin', $config['git_bin']);
+
+        $driver = strtolower($config['generate_badges']['driver']);
+
+        $container->setAlias('knp_bundles.imagine', new Alias('knp_bundles.imagine.'.$driver));
     }
 
     private function getConfigTree()
@@ -37,6 +42,17 @@ class KnpBundlesExtension extends Extension
             ->root('knp_bundles')
                 ->children()
                     ->scalarNode('git_bin')->defaultValue('/usr/bin/git')->cannotBeEmpty()->end()
+                    ->arrayNode('generate_badges')
+                        ->addDefaultsIfNotSet()
+                        ->children()
+                            ->scalarNode('driver')->defaultValue('gd')
+                            ->validate()
+                                ->ifTrue(function($v) { return !in_array($v, array('gd', 'imagick', 'gmagick')); })
+                                ->thenInvalid('Invalid imagine driver specified: %s')
+                            ->end()
+                        ->end()
+                        ->end()
+                    ->end()
                 ->end()
             ->end()
         ;
