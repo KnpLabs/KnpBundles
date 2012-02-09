@@ -172,7 +172,6 @@ class Updater
                     sleep(60);
                 }
             }
-
         }
     }
 }

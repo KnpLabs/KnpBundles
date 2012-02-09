@@ -161,3 +161,11 @@
 [php-amqplib]
     git=http://github.com/videlalvaro/php-amqplib.git
     target=videlalvaro/php-amqplib
+
+[Imagine]
+    git=http://github.com/avalanche123/Imagine.git
+    target=imagine
+
+[FileServeBundle]
+    git=http://github.com/igorw/IgorwFileServeBundle.git
+    target=bundles/Igorw/FileServeBundle

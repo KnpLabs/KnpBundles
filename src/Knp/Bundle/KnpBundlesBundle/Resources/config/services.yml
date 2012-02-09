@@ -10,6 +10,10 @@ parameters:
     knp_bundles.github.client.class: Github_Client 
     knp_bundles.git_repository_manager.class: Knp\Bundle\KnpBundlesBundle\Git\RepoManager
     knp_bundles.github.repository_api.class: Knp\Bundle\KnpBundlesBundle\Github\Repo
+    knp_bundles.badge_generator.class: Knp\Bundle\KnpBundlesBundle\Badge\BadgeGenerator
+    knp_bundles.imagine.gd.class: Imagine\Gd\Imagine
+    knp_bundles.imagine.imagick.class: Imagine\Imagick\Imagine
+    knp_bundles.imagine.gmagick.class: Imagine\Gmagick\Imagine
 
 services:
     knp_bundles.updater:
@@ -31,12 +35,15 @@ services:
             - @knp_bundles.user.manager
 
     knp_bundles.trending_bundle_twitterer:
-        class:                    %knp_bundles.trending_bundle_twitterer.class%
-        arguments:                [@knp_bundles.entity_manager,	%knp_bundles.trending_bundle_tweet.template%, @twitter_app]
-    
+        class: %knp_bundles.trending_bundle_twitterer.class%
+        arguments:
+            - @knp_bundles.entity_manager
+            - %knp_bundles.trending_bundle_tweet.template%
+            - @twitter_app
+
     knp_bundles.output:
         class: %knp_bundles.output.class% 
-    
+
     knp_bundles.travis:
         class: %knp_bundles.travis.class%
         arguments:
@@ -50,7 +57,7 @@ services:
         arguments:
             - %knp_bundles.bundles_dir%
             - %knp_bundles.git_bin%
-    
+
     knp_bundles.github_repository_api:
         class: %knp_bundles.github.repository_api.class% 
         arguments:
@@ -67,3 +74,25 @@ services:
             - @knp_bundles.travis
         calls:
             - [ setLogger, [@logger]]
+
+    knp_bundles.imagine:
+        alias: knp_bundles.imagine.gd
+
+    knp_bundles.imagine.gd:
+        class: %knp_bundles.imagine.gd.class%
+        public: false
+
+    knp_bundles.imagine.imagick:
+        class: %knp_bundles.imagine.imagick.class%
+        public: false
+
+    knp_bundles.imagine.gmagick:
+        class: %knp_bundles.imagine.gmagick.class%
+        public: false
+
+    knp_bundles.badge_generator:
+        class: %knp_bundles.badge_generator.class%
+        arguments:
+            - @knp_bundles.imagine
+        calls:
+            - [ setCacheDir, [%kernel.cache_dir%] ]
