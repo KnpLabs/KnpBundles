@@ -117,7 +117,7 @@ bundles.score:
     travisci:       "Uses Travis CI: %score%"
     travisbuild:    "Travis CI build status: %score%"
     composer:       "Provides a composer package: %score%"
-    recommenders:   "KnpBundles recommandations: %score%"
+    recommenders:   "KnpBundles recommendations: %score%"
 
 bundles.list:
     by: " by "
