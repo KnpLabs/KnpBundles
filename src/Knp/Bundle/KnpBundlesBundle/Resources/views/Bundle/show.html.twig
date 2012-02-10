@@ -99,7 +99,9 @@
               }
             </script>
         </div>
+        {% endif %}
 
+        {% if bundle.scores|length > 0 %}
         <div class="box">
             <h3 id="bundle-score-details">{% trans %}bundles.show.score.title{% endtrans %} ( <a href="{{ path('scoring') }}">{% trans %}bundles.show.score.about{% endtrans %}</a> )</h3>
             <ul class="bundle-score-details">

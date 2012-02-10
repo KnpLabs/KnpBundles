@@ -53,6 +53,57 @@ class Score
      */
     protected $value = null;
 
+    /**
+     * Score detail based on the number of followers
+     *
+     * @ORM\Column(type="integer")
+     */
+    protected $followers;
+
+    /**
+     * Score detail based on the activity
+     * (number of commits in the past 30 days)
+     *
+     * @ORM\Column(type="integer")
+     */
+    protected $activity;
+
+    /**
+     * Score detail based on how long the README file is (if any)
+     *
+     * @ORM\Column(type="integer")
+     */
+    protected $readme;
+
+    /**
+     * Score detail based on the bundle using TravisCI or not
+     *
+     * @ORM\Column(type="integer")
+     */
+    protected $travisci;
+    
+    /**
+     * Score detail based on the result of the latest travis build
+     * (passing or not passing)
+     *
+     * @ORM\Column(type="integer")
+     */
+    protected $travisbuild;
+    
+    /**
+     * Score detail based on the bundle being installable using composer
+     *
+     * @ORM\Column(type="integer")
+     */
+    protected $composer;
+
+    /**
+     * Score detail based on the number of people who recommended this bundle
+     *
+     * @ORM\Column(type="integer")
+     */
+    protected $recommenders;
+
     public function __construct()
     {
         $this->bundle = null;
@@ -109,6 +160,76 @@ class Score
         return $this->bundle;
     }
 
+    public function setFollowers($followers)
+    {
+        $this->followers = $followers;
+    }
+
+    public function getFollowers()
+    {
+        return $this->followers;
+    }
+
+    public function setActivity($activity)
+    {
+        $this->activity = $activity;
+    }
+
+    public function getActivity()
+    {
+        return $this->activity;
+    }
+
+    public function setReadme($readme)
+    {
+        $this->readme = $readme;
+    }
+
+    public function getReadme()
+    {
+        return $this->readme;
+    }
+
+    public function setTravisci($travisci)
+    {
+        $this->travisci = $travisci;
+    }
+
+    public function getTravisci()
+    {
+        return $this->travisci;
+    }
+
+    public function setTravisbuild($travisbuild)
+    {
+        $this->travisbuild = $travisbuild;
+    }
+
+    public function getTravisbuild()
+    {
+        return $this->travisbuild;
+    }
+
+    public function setComposer($composer)
+    {
+        $this->composer = $composer;
+    }
+
+    public function getComposer()
+    {
+        return $this->composer;
+    }
+
+    public function setRecommenders($recommenders)
+    {
+        $this->recommenders = $recommenders;
+    }
+
+    public function getRecommenders()
+    {
+        return $this->recommenders;
+    }
+    
     /**
      * @param Bundle $bundle
      */

@@ -25,13 +25,21 @@ class ScoreRepository extends EntityRepository
      */
     public function setScore(\DateTime $date, Bundle $bundle, $value)
     {
-        $score = $this->findOneByDateAndBundle($date, $bundle);
-        if (!$score) {
-            $score = new Score();
-            $score->setBundle($bundle);
-            $score->setDate($date);
-        }
+        $score = new Score();
+        $score->setBundle($bundle);
+        $score->setDate($date);
         $score->setValue($value);
+        
+        // Score details
+        $details = $bundle->getScoreDetails();
+        $score->setFollowers(isset($details['followers']) ? $details['followers'] : 0);
+        $score->setActivity(isset($details['activity']) ? $details['activity'] : 0);
+        $score->setReadme(isset($details['readme']) ? $details['readme'] : 0);
+        $score->setTravisci(isset($details['travisci']) ? $details['travisci'] : 0);
+        $score->setTravisbuild(isset($details['travisbuild']) ? $details['travisbuild'] : 0);
+        $score->setComposer(isset($details['composer']) ? $details['composer'] : 0);
+        $score->setRecommenders(isset($details['recommenders']) ? $details['recommenders'] : 0);
+
 
         return $score;
     }

@@ -467,6 +467,11 @@ class Bundle
         return $this->scores;
     }
 
+    public function getLatestScoreDetails()
+    {
+        return $this->getScores()->last();
+    }
+
     public function addScoreDetail($name, $value)
     {
         $this->scoreDetails[$name] = $value;
