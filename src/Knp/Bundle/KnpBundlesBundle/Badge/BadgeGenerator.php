@@ -33,9 +33,8 @@ class BadgeGenerator
      * Generate Badge images
      *
      * @param Bundle $bundle
-     * @param string $env environment
      */
-    public function generate(Bundle $bundle, $env)
+    public function generate(Bundle $bundle)
     {
         $bundleName = $this->shorten($bundle->getName(), 23);
         $score = $bundle->getScore();
@@ -85,13 +84,13 @@ class BadgeGenerator
         );
 
         // Check or create dir for generated badges
-        $this->createBadgesDir($env);
+        $this->createBadgesDir();
 
         // Remove existing badge
-        $this->removeIfExist($this->getBadgeFile($bundle, $env));
+        $this->removeIfExist($this->getBadgeFile($bundle));
 
         // Save badge
-        $image->save($this->getBadgeFile($bundle, $env));
+        $image->save($this->getBadgeFile($bundle));
     }
 
     public function setCacheDir($cacheDir)
@@ -117,10 +116,9 @@ class BadgeGenerator
      * Get badge image full path
      *
      * @param Bundle $bundle
-     * @param string $env
      * @return string
      */
-    protected function getBadgeFile(Bundle $bundle, $env)
+    protected function getBadgeFile(Bundle $bundle)
     {
         return $this->cacheDir.'/badges/'.$bundle->getUsername().'-'.$bundle->getName().'.png';
     }
@@ -149,15 +147,14 @@ class BadgeGenerator
     /**
      * Check and create a dir for uploaded badges
      * 
-     * @param string $env
      * @return void
      */
-    protected function createBadgesDir($env)
+    protected function createBadgesDir()
     {
         $dir = $this->cacheDir.'/badges';
         if (!is_dir($dir)) {
-            if (!mkdir($dir, 0755)) {
-                throw new \Exception('Can\'t create a "badges" folder under the cache/'.$env);
+            if (!@mkdir($dir, 0755)) {
+                throw new \Exception('Can\'t create the "badges" folder in '.$this->cacheDir);
             }
         }
     }
