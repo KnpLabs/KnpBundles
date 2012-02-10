@@ -79,7 +79,7 @@ class BundleController extends BaseController
 
         return $this->render('KnpBundlesBundle:Bundle:show.'.$format.'.twig', array(
             'bundle'        => $bundle,
-            'score'         => $bundle->getScoreDetails(),
+            'score'         => $bundle->getLatestScoreDetails(),
             'isUsedByUser'  => $user instanceof User && $user->isUsingBundle($bundle),
             'callback'      => $this->get('request')->query->get('callback')
         ));
