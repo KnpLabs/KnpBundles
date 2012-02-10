@@ -44,7 +44,7 @@ class GithubHookConsumer implements ConsumerInterface
             $this->logger->info('[GithubHookConsumer] Received a github post push hook');
         }
 
-        if (is_null($message = json_decode($msg->body))) {
+        if (null === $message = json_decode($msg->body)) {
             if ($this->logger) {
                 $this->logger->err('[GithubHookConsumer] Unable to decode payload');
             }
