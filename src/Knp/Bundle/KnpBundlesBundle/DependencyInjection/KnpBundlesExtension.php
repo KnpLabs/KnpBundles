@@ -31,7 +31,7 @@ class KnpBundlesExtension extends Extension
 
         $driver = strtolower($config['generate_badges']['driver']);
 
-        $container->setAlias('knp_bundles.imagine', new Alias('knp_bundles.imagine.'.$driver));
+        $container->setAlias('knp_bundles.imagine', new Alias('knp_bundles.imagine.'.$driver, false));
     }
 
     private function getConfigTree()
@@ -47,7 +47,7 @@ class KnpBundlesExtension extends Extension
                         ->children()
                             ->scalarNode('driver')->defaultValue('gd')
                             ->validate()
-                                ->ifTrue(function($v) { return !in_array($v, array('gd', 'imagick', 'gmagick')); })
+                                ->ifNotInArray(array('gd', 'imagick', 'gmagick'))
                                 ->thenInvalid('Invalid imagine driver specified: %s')
                             ->end()
                         ->end()

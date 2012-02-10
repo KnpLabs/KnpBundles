@@ -94,9 +94,6 @@ services:
         calls:
             - [ setLogger, [@logger]]
 
-    knp_bundles.imagine:
-        alias: knp_bundles.imagine.gd
-
     knp_bundles.imagine.gd:
         class: %knp_bundles.imagine.gd.class%
         public: false
