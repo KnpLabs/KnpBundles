@@ -17,4 +17,9 @@ parameters:
     knp_bundles.twitter.oauth_token_secret: your_twitter_oauth_token_secret_here
 
     knp_bundles.disqus_key: p1Zrns5MOWzLu87mbgFsS2XgwpmuV8PWG1MLUlPfMY3zCZe9uirvwMBWhoPkRuwm
-    
+
+    old_sound_rabbit_mq.host: "localhost"
+    old_sound_rabbit_mq.port: "5672"
+    old_sound_rabbit_mq.user: "guest"
+    old_sound_rabbit_mq.password: "guest"
+    old_sound_rabbit_mq.vhost: "/"
