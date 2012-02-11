@@ -1,8 +1,8 @@
 <?php
 
-namespace Knp\Bundle\KnpBundlesBundle\Scoring;
+namespace Knp\Bundle\KnpBundlesBundle\EventListener\Scoring;
 
-use Knp\Bundle\KnpBundlesBundle\EventDispatcher\BundleEvent;
+use Knp\Bundle\KnpBundlesBundle\Event\BundleEvent;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 /**

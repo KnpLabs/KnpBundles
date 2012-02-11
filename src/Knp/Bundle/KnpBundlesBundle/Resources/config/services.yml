@@ -19,12 +19,12 @@ parameters:
     knp_bundles.imagine.imagick.class: Imagine\Imagick\Imagine
     knp_bundles.imagine.gmagick.class: Imagine\Gmagick\Imagine
     knp_bundles.indexer.solr.class: Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer
-    knp_bundles.scoring.activity.class: Knp\Bundle\KnpBundlesBundle\Scoring\ActivityListener
-    knp_bundles.scoring.composer.class: Knp\Bundle\KnpBundlesBundle\Scoring\ComposerListener
-    knp_bundles.scoring.followers.class: Knp\Bundle\KnpBundlesBundle\Scoring\FollowersListener
-    knp_bundles.scoring.knpbundles.class: Knp\Bundle\KnpBundlesBundle\Scoring\KnpBundlesListener
-    knp_bundles.scoring.readme.class: Knp\Bundle\KnpBundlesBundle\Scoring\ReadmeListener
-    knp_bundles.scoring.travis.class: Knp\Bundle\KnpBundlesBundle\Scoring\TravisListener
+    knp_bundles.scoring.activity.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\ActivityListener
+    knp_bundles.scoring.composer.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\ComposerListener
+    knp_bundles.scoring.followers.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\FollowersListener
+    knp_bundles.scoring.knpbundles.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\KnpBundlesListener
+    knp_bundles.scoring.readme.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\ReadmeListener
+    knp_bundles.scoring.travis.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\TravisListener
 
 services:
     knp_bundles.updater:

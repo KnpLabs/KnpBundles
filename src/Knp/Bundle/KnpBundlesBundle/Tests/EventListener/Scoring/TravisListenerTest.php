@@ -1,9 +1,9 @@
 <?php
 
-namespace Knp\Bundle\KnpBundlesBundle\Tests\Scoring;
+namespace Knp\Bundle\KnpBundlesBundle\Tests\EventListener\Scoring;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
-use Knp\Bundle\KnpBundlesBundle\Scoring\TravisListener;
+use Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\TravisListener;
 
 class TravisListenerTest extends \PHPUnit_Framework_TestCase
 {
