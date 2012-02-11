@@ -9,12 +9,13 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 */
 class ActivityListener extends ScoringListener
 {
-    
+    /**
+     * {@inheritdoc}
+     */
     public function updateScore(Bundle $bundle)
     {
         $bundle->addScoreDetail('activity', $bundle->getDaysSinceLastCommit() < 30
             ? (30 - $bundle->getDaysSinceLastCommit()) / 5
             : 0);
     }
-
 }

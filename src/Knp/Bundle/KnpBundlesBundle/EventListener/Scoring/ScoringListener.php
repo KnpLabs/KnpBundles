@@ -22,6 +22,11 @@ abstract class ScoringListener
         $this->updateScore($event->getBundle());
     }
 
+    /**
+     * Add details to bundle's score
+     *
+     * @param Knp\Bundle\KnpBundlesBundle\Entity\Bundle
+     */
     abstract public function updateScore(Bundle $bundle);
 
 }

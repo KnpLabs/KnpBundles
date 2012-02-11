@@ -9,7 +9,9 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 */
 class KnpBundlesListener extends ScoringListener
 {
-    
+    /**
+     * {@inheritdoc}
+     */
     public function updateScore(Bundle $bundle)
     {
         $bundle->addScoreDetail('recommenders', 5 * $bundle->getNbRecommenders());
