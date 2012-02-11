@@ -89,3 +89,9 @@ Note that you will need a functional rabbitmq server − but that's damn easy to
 This can take long time. GitHub API is limited to 60 calls per minute,
 so the commands needs to wait.
 
+### Generate sitemap
+
+    php app/console kb:sitemap:generate --spaceless=1
+
+Will create **sitemap.xml** and **sitemap.xml.gz** in web directory.
+Sitemap includes bundles and user profiles
