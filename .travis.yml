@@ -8,7 +8,7 @@ before_script:
     - php bin/vendors install
     - ./bin/prepare-test-env.sh
 
-script: phpunit -c app/
+script: phpunit -c app/ && php app/console --env=test behat
 
 branches:
     except:
