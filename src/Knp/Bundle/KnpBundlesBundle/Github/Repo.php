@@ -3,7 +3,7 @@
 namespace Knp\Bundle\KnpBundlesBundle\Github;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Knp\Bundle\KnpBundlesBundle\Entity;
 use Knp\Bundle\KnpBundlesBundle\Git;
@@ -27,11 +27,11 @@ class Repo
     protected $output = null;
 
     /**
-     * @var 
+     * @var Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $dispatcher;
 
-    public function __construct(\Github_Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager, EventDispatcher $dispatcher)
+    public function __construct(\Github_Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager, EventDispatcherInterface $dispatcher)
     {
         $this->github = $github;
         $this->output = $output;
