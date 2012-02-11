@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Knp\Bundle\KnpBundlesBundle\Entity;
 use Knp\Bundle\KnpBundlesBundle\Git;
 use Knp\Bundle\KnpBundlesBundle\Detector;
-use Knp\Bundle\KnpBundlesBundle\EventDispatcher\BundleEvent;
+use Knp\Bundle\KnpBundlesBundle\Event\BundleEvent;
 
 class Repo
 {
