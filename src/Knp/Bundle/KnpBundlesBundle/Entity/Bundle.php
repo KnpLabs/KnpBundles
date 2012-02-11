@@ -111,7 +111,9 @@ class Bundle
     protected $scores = null;
 
     /**
+     * Latest score's details
      *
+     * @ORM\Column(type="array", nullable=true)
      * @var array
      */
     protected $scoreDetails;
@@ -483,6 +485,11 @@ class Bundle
     public function getScoreDetails()
     {
         return $this->scoreDetails ?: array();
+    }
+
+    public function setScoreDetails(array $details)
+    {
+        $this->scoreDetails = serialize($details);
     }
 
     /**
