@@ -7,6 +7,7 @@ $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
     'Symfony'                       => array(__DIR__.'/../vendor/symfony/src', __DIR__.'/../vendor/bundles'),
     'Knp\Bundle\KnpBundlesBundle'   => __DIR__.'/../src',
+    'Knp\Bundle\SitemapBundle'      => __DIR__.'/../src',
     'Knp\Bundle'                    => __DIR__.'/../vendor/bundles',
     'Knp\Menu'                      => __DIR__.'/../vendor/knp-menu/src',
     'Knp\Component'                 => __DIR__.'/../vendor/knp-components/src',
