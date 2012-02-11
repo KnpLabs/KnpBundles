@@ -1,9 +1,9 @@
 <?php
 
-namespace Knp\Bundle\KnpBundlesBundle\Tests\Scoring;
+namespace Knp\Bundle\KnpBundlesBundle\Tests\EventListener\Scoring;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
-use Knp\Bundle\KnpBundlesBundle\Scoring\ReadmeListener;
+use Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\ReadmeListener;
 
 class ReadmeListenerTest extends \PHPUnit_Framework_TestCase
 {

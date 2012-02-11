@@ -1,10 +1,10 @@
 <?php 
 
-namespace Knp\Bundle\KnpBundlesBundle\Tests\Scoring;
+namespace Knp\Bundle\KnpBundlesBundle\Tests\EventListener\Scoring;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\User;
-use Knp\Bundle\KnpBundlesBundle\EventDispatcher\BundleEvent;
+use Knp\Bundle\KnpBundlesBundle\Event\BundleEvent;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -20,7 +20,7 @@ class GlobalScoreTest extends \PHPUnit_Framework_TestCase
 
         $testers = array('Activity', 'Composer', 'Followers', 'KnpBundles', 'Readme', 'Travis');
         foreach ($testers as $testerClass) {
-            $fqcn = sprintf('\\Knp\\Bundle\\KnpBundlesBundle\\Scoring\\%sListener', $testerClass);
+            $fqcn = sprintf('\\Knp\\Bundle\\KnpBundlesBundle\\EventListener\\Scoring\\%sListener', $testerClass);
             $tester = new $fqcn();
             $dispatcher->addListener(BundleEvent::UPDATE_SCORE, array($tester, 'onScoreUpdate'));
         }

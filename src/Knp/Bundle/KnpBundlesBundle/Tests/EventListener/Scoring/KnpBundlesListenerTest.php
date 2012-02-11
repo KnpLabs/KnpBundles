@@ -1,10 +1,10 @@
 <?php 
 
-namespace Knp\Bundle\KnpBundlesBundle\Tests\Scoring;
+namespace Knp\Bundle\KnpBundlesBundle\Tests\EventListener\Scoring;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\User;
-use Knp\Bundle\KnpBundlesBundle\Scoring\KnpBundlesListener;
+use Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\KnpBundlesListener;
 
 /**
 * 
