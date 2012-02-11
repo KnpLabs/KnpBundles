@@ -23,3 +23,5 @@ parameters:
     old_sound_rabbit_mq.user: "guest"
     old_sound_rabbit_mq.password: "guest"
     old_sound_rabbit_mq.vhost: "/"
+
+    kb_sitemap.base_url: http://knpbundles.com
