@@ -5,6 +5,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Tests\Github;
 use Knp\Bundle\KnpBundlesBundle\Git\RepoManager;
 use Knp\Bundle\KnpBundlesBundle\Github\Repo;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class RepoTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +17,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
         
-        return new Repo($github, $output, $repoManager);        
+        return new Repo($github, $output, $repoManager, new EventDispatcher());        
     }
 
     protected function getGitRepoMock()
