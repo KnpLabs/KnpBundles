@@ -161,3 +161,7 @@
 [php-amqplib]
     git=http://github.com/videlalvaro/php-amqplib.git
     target=videlalvaro/php-amqplib
+
+[MonologBundle]
+    git=https://github.com/symfony/MonologBundle.git
+    target=bundles/Symfony/Bundle/MonologBundle
