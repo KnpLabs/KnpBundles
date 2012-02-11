@@ -4,6 +4,7 @@ namespace Knp\Bundle\KnpBundlesBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Knp\Bundle\KnpBundlesBundle\Entity;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class Data implements FixtureInterface
 {
@@ -84,7 +85,7 @@ And some standard code **here**
 
 EOD;
 
-    public function load($manager)
+    public function load(ObjectManager $manager)
     {
         $users = array();
         $trilean = array(true, false, null);
