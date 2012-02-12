@@ -6,8 +6,11 @@ use Knp\Bundle\KnpBundlesBundle\Event\BundleEvent;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 /**
-* 
-*/
+ * This is part of the scoring algorithm, it provides the 2 basics methods
+ * to evaluate a bundle. All scoring listeners must extend this class.
+ *
+ * @author Romain Pouclet <romain.pouclet@knplabs.com>
+ */
 abstract class ScoringListener
 {
     
