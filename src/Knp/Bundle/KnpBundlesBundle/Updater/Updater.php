@@ -7,6 +7,7 @@ use Knp\Bundle\KnpBundlesBundle\Github\User;
 use Doctrine\ORM\UnitOfWork;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\NullOutput;
 use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 use Doctrine\ORM\EntityManager;
 use Knp\Bundle\KnpBundlesBundle\Entity\UserManager;
@@ -28,6 +29,7 @@ class Updater
         $this->githubSearch = $githubSearch;
         $this->githubUserApi = $githubUserApi;
         $this->users = $users;
+        $this->output = new NullOutput();
     }
 
     public function setOutput(OutputInterface $output)
