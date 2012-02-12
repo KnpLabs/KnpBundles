@@ -5,8 +5,11 @@ namespace Knp\Bundle\KnpBundlesBundle\EventListener\Scoring;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 /**
-* 
-*/
+ * This is part of the scoring algorithm, it evaluates a bundle based on the activity
+ * (number of commits in the past x days...)
+ *
+ * @author Romain Pouclet <romain.pouclet@knplabs.com>
+ */
 class ActivityListener extends ScoringListener
 {
     /**
