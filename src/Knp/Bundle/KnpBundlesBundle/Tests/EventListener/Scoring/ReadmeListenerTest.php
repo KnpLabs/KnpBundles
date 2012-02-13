@@ -5,6 +5,11 @@ namespace Knp\Bundle\KnpBundlesBundle\Tests\EventListener\Scoring;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\ReadmeListener;
 
+/**
+ * Test the readme related update scoring part
+ *
+ * @author Romain Pouclet <romain.pouclet@knplabs.com>
+ */
 class ReadmeListenerTest extends \PHPUnit_Framework_TestCase
 {
     
