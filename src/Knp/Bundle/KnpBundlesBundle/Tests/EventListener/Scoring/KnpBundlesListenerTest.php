@@ -7,8 +7,10 @@ use Knp\Bundle\KnpBundlesBundle\Entity\User;
 use Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\KnpBundlesListener;
 
 /**
-* 
-*/
+ * Test the knpbundles related scoring update part
+ *
+ * @author Romain Pouclet <romain.pouclet@knplabs.com>
+ */
 class KnpBundlesListenerTest extends \PHPUnit_Framework_TestCase
 {
     
