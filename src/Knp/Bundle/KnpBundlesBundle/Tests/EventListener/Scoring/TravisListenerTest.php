@@ -5,6 +5,11 @@ namespace Knp\Bundle\KnpBundlesBundle\Tests\EventListener\Scoring;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\TravisListener;
 
+/**
+ * Test the travis related update scoring part
+ *
+ * @author Romain Pouclet <romain.pouclet@knplabs.com>
+ */
 class TravisListenerTest extends \PHPUnit_Framework_TestCase
 {
     public function testUseTravisScoreDetail()
