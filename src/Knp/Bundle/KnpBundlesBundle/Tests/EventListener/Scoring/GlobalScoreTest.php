@@ -9,8 +9,10 @@ use Knp\Bundle\KnpBundlesBundle\Event\BundleEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
-* 
-*/
+ * Test the whole bundle scoring update process 
+ *
+ * @author Romain Pouclet <romain.pouclet@knplabs.com>
+ */
 class GlobalScoreTest extends \PHPUnit_Framework_TestCase
 {
     
