@@ -72,7 +72,7 @@ class UpdateBundleConsumer implements ConsumerInterface
     public function execute($msg)
     {
         // Retrieve informations from the message
-        $message = unserialize($msg->body);
+        $message = json_decode($msg->body, true);
 
         if (!isset($message['bundle_id'])) {
             if ($this->logger) {
