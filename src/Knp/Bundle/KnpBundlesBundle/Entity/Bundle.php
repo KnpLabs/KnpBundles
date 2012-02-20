@@ -247,6 +247,13 @@ class Bundle
         $this->keywords = new ArrayCollection();
     }
 
+    public function isInitialized()
+    {
+        // Using the fact that a repo should have at least one declared fork:
+        // itself
+        return $this->nbForks > 0;
+    }
+
     /**
      * Get homepage
      *

@@ -152,7 +152,7 @@
                 <span class="username">{% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': bundle.username}) }}">{{ bundle.username }}</a></span>
             </h1>
             {% set noDescriptionNotice = 'bundle.noDescription'|trans %}
-            <p class="description">{{ bundle.description|default(noDescriptionNotice) }}</p>
+            <p class="description">{{ bundle.description }}</p>
         </div>
 
         <div class="actions">
@@ -160,6 +160,12 @@
             <a class="button github" href="{{ bundle.gitHubUrl }}/issues">{% trans %}bundles.show.issues{% endtrans %}</a>
         </div>
     </div>
+
+    {% if not bundle.initialized %}
+    <div id="data">
+        {{ noDescriptionNotice|trans }}
+    </div>
+    {% endif %}
 
     {% if bundle.readme %}
     <div id="data">
