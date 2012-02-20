@@ -77,10 +77,12 @@ bundles.show:
         title: "%name% by %username%"
     github: "Download"
     issues: "Report an Issue"
+    setting: "Change bundle settings"
     infos:
         title: "Infos"
+        state: "Status:"
         score: "Score:"
-        created: "Created"
+        created: "Created:"
         contributors: "Nb of contributors:"
         followers: "Nb of followers:"
         buildStatus: "Build status:"
@@ -109,6 +111,14 @@ bundles.show:
         empty: "No keywords for this bundle"
     chart:
         title: "Score evolution"
+    settings:
+        title:  "Bundle settings"
+        modal:  "Bundle Status Setting"
+        state:
+            unknown:    "unknown"
+            not_ready:  "not yet ready"
+            ready:      "ready"
+            deprecated: "deprecated"
 
 bundles.score:
     followers:      'Github Followers: %score%'

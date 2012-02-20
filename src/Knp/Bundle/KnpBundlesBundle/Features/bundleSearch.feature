@@ -47,3 +47,16 @@ Feature: Searching bundles
     And I should see "TestBundle"
     And I should see "Test2Bundle"
     And I should see "UserBundle"
+
+  Scenario: Search nothing
+    When I go to "/"
+    And I search for ""
+    Then I should be on "/search"
+    And I should see "Please use the search input at the top right."
+
+  Scenario: Search and not find
+    When I go to "/"
+    And I search for "lorem"
+    Then I should be on "/search"
+    And I should see "Search 'lorem'"
+    And I should see "0 Bundle"
