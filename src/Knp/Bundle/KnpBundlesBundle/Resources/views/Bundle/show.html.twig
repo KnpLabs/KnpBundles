@@ -162,18 +162,24 @@
     </div>
 
     {% if not bundle.initialized %}
-    <div id="data">
+    <div class="data">
         {{ noDescriptionNotice|trans }}
     </div>
     {% endif %}
 
     {% if bundle.readme %}
-    <div id="data">
+    <div class="data">
         <div id="readme">
             <div class="markdown">
                 {{ bundle.readme|github_md_2_md|markdown }}
             </div>
         </div>
+    </div>
+    {% endif %}
+
+    {% if bundle.license %}
+    <div class="data">
+        {{ bundle.license }}
     </div>
     {% endif %}
 
