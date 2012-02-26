@@ -130,6 +130,12 @@ class Repo
             }
         }
 
+        foreach (array('LICENSE', 'Resources\meta\LICENSE') as $licenseFilename) {
+            if ($gitRepo->hasFile($licenseFilename)) {
+                $bundle->setLicense($gitRepo->getFileContent($licenseFilename));
+            }
+        }
+
         $bundle->setUsesTravisCi($gitRepo->hasFile('.travis.yml'));
 
         $this->updateComposerFile($gitRepo, $bundle);
