@@ -96,6 +96,13 @@ class Bundle
     protected $readme = null;
 
     /**
+     * The bundle license text extracted from source code
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $license = null;
+
+    /**
      * Internal score of the Repo, based on several indicators
      * Defines the Repo position in lists and searches
      *
@@ -435,6 +442,27 @@ class Bundle
     public function setReadme($readme)
     {
         $this->readme = $readme;
+    }
+
+
+    /**
+     * Get license
+     *
+     * @return string
+     */
+    public function getLicense()
+    {
+        return $this->license;
+    }
+
+    /**
+     * Set license
+     *
+     * @param  string
+     */
+    public function setLicense($license)
+    {
+        $this->license = $license;
     }
 
     /**
