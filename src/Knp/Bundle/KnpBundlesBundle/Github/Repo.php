@@ -149,9 +149,12 @@ class Repo
 
             // looking for required version of Symfony
             if (isset($composer['require'])) {
-                $bundle->setSymfonyVersion(isset($composer['require']['symfony/symfony']) 
-                    ? $composer['require']['symfony/symfony']
-                    : null);
+                foreach (array('symfony/framework-bundle', 'symfony/symfony') as $requirement) {
+                    if (isset($composer['require'][$requirement])) {
+                        $bundle->setSymfonyVersion($composer['require'][$requirement]);
+                        break;
+                    }
+                }
             }
         }
 
