@@ -12,6 +12,7 @@
             <h3>{% trans %}bundles.show.infos.title{% endtrans %}</h3>
             <ul>
                 <li>{% trans %}bundles.show.infos.score{% endtrans %} <span><a href="#bundle-score-details">{{ bundle.score }}</a></span></li>
+                <li>Required Symfony version : {{ bundle.symfonyVersion ? bundle.symfonyVersion : "unknown" }}</li>
                 <li>{% trans %}bundles.show.infos.created{% endtrans %} <span>{{ bundle.createdAt|date('date_format'|trans) }}</span></li>
                 <li>{% trans %}bundles.show.infos.contributors{% endtrans %} <span>{{ bundle.nbContributors }}</span></li>
                 <li>{% trans %}bundles.show.infos.followers{% endtrans %} <span>{{ bundle.nbFollowers }}</span></li>
