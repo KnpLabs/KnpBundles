@@ -15,7 +15,8 @@
             <div class="content-title">
                 <h1>{{ bundles|length }} Bundle{{ bundles|length > 1 ? 's' : '' }}</h1>
             </div>
-            {% include 'KnpBundlesBundle:Bundle:bigList.html.twig' with {'bundles': bundles} %}
+            {% include 'KnpBundlesBundle:Bundle:searchBigList.html.twig' with {'bundles': bundles} %}
         </section>
+        {{ bundles.render()|raw }}
     </div>
 {% endblock %}

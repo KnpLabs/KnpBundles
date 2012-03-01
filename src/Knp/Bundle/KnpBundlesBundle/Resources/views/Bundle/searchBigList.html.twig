@@ -1,0 +1,25 @@
+<ul class="big-list">
+    {% for bundle in bundles %}
+    <li class="bundle {% if loop.first %}first{% endif %}">
+        <div class="bundlerank">
+            {{ bundle.totalScore }}
+        </div>
+        <div class="generals">
+            <div class="bundle-title">
+                <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}" class="name">{{ bundle.name }}</a>
+            </div>
+            <p class="description">{{ bundle.description|default('−') }}</p>
+
+            <ul class="details">
+                <li>{% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': bundle.username }) }}" class="owner">{{ bundle.username }}</a></li>
+                <li>{% trans %}bundles.list.lastCommit{% endtrans %} <span>{{ time_diff(bundle.lastCommitAt) }}</span></li>
+            </ul>
+        </div>
+        <div class="img">
+            {% if bundle.userGravatarHash|default(null) %}
+            <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}"><img src="{{ gravatar_hash(bundle.userGravatarHash, 50, none, 'identicon') }}" alt="{{ bundle.name }}" /></a>
+            {% endif %}
+        </div>
+    </li>
+    {% endfor %}
+</ul>

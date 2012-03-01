@@ -1063,9 +1063,9 @@ class Bundle
     /**
      * Set indexedAt
      *
-     * @param datetime $indexedAt
+     * @param \DateTime $indexedAt
      */
-    public function setIndexedAt($indexedAt)
+    public function setIndexedAt(\DateTime $indexedAt)
     {
         $this->indexedAt = $indexedAt;
     }

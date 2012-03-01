@@ -51,10 +51,9 @@ class KbSolrIndexCommand extends ContainerAwareCommand
             $bundles = $doctrine->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\Bundle')->getStaleBundlesForIndexing();
         }
 
-        // clear index before a full-update
         if ($force && !$bundleName) {
             if ($verbose) {
-                $output->writeln('Deleting existing index');
+                $output->writeln('<info>[Edgar]</info>: Deleting existing index.');
             }
 
             $update = $solarium->createUpdate();
@@ -64,10 +63,9 @@ class KbSolrIndexCommand extends ContainerAwareCommand
             $solarium->update($update);
         }
 
-        // update bundle index
         foreach ($bundles as $bundle) {
             if ($verbose) {
-                $output->writeln('Indexing '.$bundle->getFullName());
+                $output->writeln('<info>[Edgar]</info>: Indexing '.$bundle->getFullName().'...');
             }
 
             try {
@@ -79,7 +77,7 @@ class KbSolrIndexCommand extends ContainerAwareCommand
                 $solarium->update($update);
                 $bundle->setIndexedAt(new \DateTime);
             } catch (\Exception $e) {
-                $output->writeln('<error>Exception: '.$e->getMessage().', skipping bundle '.$bundle->getFullName().'.</error>');
+                $output->writeln('<info>[Edgar]</info>: <error>Exception: '.$e->getMessage().', skipping bundle '.$bundle->getFullName().'.</error>');
             }
         }
 
@@ -93,6 +91,16 @@ class KbSolrIndexCommand extends ContainerAwareCommand
         $document->username = $bundle->getUsername();
         $document->fullName = $bundle->getFullName();
         $document->description = $bundle->getDescription();
+        $document->totalScore = $bundle->getScore();
+        $document->userGravatarHash = $bundle->getUser()->getGravatarHash();
+
+        // Hacky hack to format date until this is merged to master branch.
+        // https://github.com/basdenooijer/solarium/pull/62/files.
+        $iso8601 = $bundle->getLastCommitAt()->format(\DateTime::ISO8601);
+        $iso8601 = strstr($iso8601, '+', true);
+        $iso8601 .= 'Z';
+
+        $document->lastCommitAt = $iso8601;
 
         $keywords = array();
         foreach ($bundle->getKeywords() as $keyword) {
