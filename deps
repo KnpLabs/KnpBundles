@@ -177,6 +177,7 @@
 =======
 [solarium]
     git=http://github.com/basdenooijer/solarium.git
+    version=origin/develop
 
 [NelmioSolariumBundle]
     git=http://github.com/nelmio/NelmioSolariumBundle.git
