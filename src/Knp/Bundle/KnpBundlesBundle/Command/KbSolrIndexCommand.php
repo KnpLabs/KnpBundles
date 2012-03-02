@@ -41,6 +41,7 @@ class KbSolrIndexCommand extends ContainerAwareCommand
 
         $doctrine = $this->getContainer()->get('doctrine');
         $solarium = $this->getContainer()->get('solarium.client');
+        $indexer = $this->getContainer()->get('knp_bundles.indexer.solr');
 
         if ($bundleName) {
             list($username, $name) = explode('/', $bundleName);
@@ -53,7 +54,7 @@ class KbSolrIndexCommand extends ContainerAwareCommand
 
         if ($force && !$bundleName) {
             if ($verbose) {
-                $output->writeln('<info>[Edgar]</info>: Deleting existing index.');
+                $output->writeln('Deleting existing index.');
             }
 
             $update = $solarium->createUpdate();
@@ -65,47 +66,15 @@ class KbSolrIndexCommand extends ContainerAwareCommand
 
         foreach ($bundles as $bundle) {
             if ($verbose) {
-                $output->writeln('<info>[Edgar]</info>: Indexing '.$bundle->getFullName().'...');
+                $output->writeln('Indexing '.$bundle->getFullName().'...');
             }
 
             try {
-                $update = $solarium->createUpdate();
-                $document = $update->createDocument();
-                $this->updateDocumentFromBundle($document, $bundle);
-                $update->addDocument($document);
-                $update->addCommit();
-                $solarium->update($update);
-                $bundle->setIndexedAt(new \DateTime);
+                $indexer->indexBundle($bundle);
             } catch (\Exception $e) {
-                $output->writeln('<info>[Edgar]</info>: <error>Exception: '.$e->getMessage().', skipping bundle '.$bundle->getFullName().'.</error>');
+                $output->writeln('<error>Exception: '.$e->getMessage().', skipping bundle '.$bundle->getFullName().'.</error>');
             }
         }
-
         $doctrine->getEntityManager()->flush();
-    }
-
-    private function updateDocumentFromBundle(\Solarium_Document_ReadWrite $document, Bundle $bundle)
-    {
-        $document->id = $bundle->getId();
-        $document->name = $bundle->getName();
-        $document->username = $bundle->getUsername();
-        $document->fullName = $bundle->getFullName();
-        $document->description = $bundle->getDescription();
-        $document->totalScore = $bundle->getScore();
-        $document->userGravatarHash = $bundle->getUser()->getGravatarHash();
-
-        // Hacky hack to format date until this is merged to master branch.
-        // https://github.com/basdenooijer/solarium/pull/62/files.
-        $iso8601 = $bundle->getLastCommitAt()->format(\DateTime::ISO8601);
-        $iso8601 = strstr($iso8601, '+', true);
-        $iso8601 .= 'Z';
-
-        $document->lastCommitAt = $iso8601;
-
-        $keywords = array();
-        foreach ($bundle->getKeywords() as $keyword) {
-            $keywords[] = $keyword->getValue();
-        }
-        $document->keywords = $keywords;
     }
 }

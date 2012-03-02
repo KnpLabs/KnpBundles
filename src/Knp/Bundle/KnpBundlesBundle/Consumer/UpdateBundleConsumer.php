@@ -7,6 +7,7 @@ use Knp\Bundle\KnpBundlesBundle\Git;
 use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\UserManager;
+use Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer;
 
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 
@@ -15,6 +16,7 @@ use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 use Doctrine\Common\Persistence\ObjectManager;
+
 /**
  * This class is a consumer which will retrieve a bundle from database
  * and update everything that needs to be updated.
@@ -41,17 +43,29 @@ class UpdateBundleConsumer implements ConsumerInterface
     private $users;
 
     /**
+     * @var Knp\Bundle\KnpBundlesBundle\Travis\Travis
+     */
+    private $travis;
+
+    /**
+     * @var Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer
+     */
+    private $indexer;
+
+    /**
      * @param Doctrine\Common\Persistence\ObjectManager      $em
      * @param Knp\Bundle\KnpBundlesBundle\Entity\UserManager $users
-     * @param string                                         $gitRepoDir
-     * @param string                                         $gitBin
+     * @param Repo                                           $githubRepoApi
+     * @param Travis                                         $travis
+     * @param SolrIndexer                                    $indexer
      */
-    public function __construct(ObjectManager $em, UserManager $users, Repo $githubRepoApi, Travis $travis)
+    public function __construct(ObjectManager $em, UserManager $users, Repo $githubRepoApi, Travis $travis, SolrIndexer $indexer)
     {
         $this->em = $em;
         $this->githubRepoApi = $githubRepoApi; 
         $this->travis = $travis;
         $this->users = $users;
+        $this->indexer = $indexer;
     }
 
     /**
@@ -107,6 +121,8 @@ class UpdateBundleConsumer implements ConsumerInterface
 
                     return;
                 }
+
+                $this->indexer->indexBundle($bundle);
 
                 $this->updateContributors($bundle);
                 $this->updateKeywords($bundle);
