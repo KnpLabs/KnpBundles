@@ -115,7 +115,7 @@ old_sound_rabbit_mq:
 
 nelmio_solarium:
     adapter:
-        class: %solarium.adapter_class%
+        class: Solarium_Client_Adapter_Http
         host: %solarium.host%
         port: %solarium.port%
         path: %solarium.path%

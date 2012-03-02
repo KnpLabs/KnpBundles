@@ -25,3 +25,7 @@ parameters:
     old_sound_rabbit_mq.vhost: "/"
 
     kb_sitemap.base_url: http://knpbundles.com
+
+    solarium.host: 127.0.0.1
+    solarium.port: 8983
+    solarium.path: /solr
