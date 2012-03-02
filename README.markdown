@@ -92,6 +92,9 @@ so the commands needs to wait.
 ### Search engine
 
 We use [Solr](http://lucene.apache.org/solr/) and it's PHP client [Solarium](http://solarium-project.org) to search bundles.
+Recommended schema can be found
+[**here**](https://github.com/KnpLabs/KnpBundles/blob/master/src/Knp/Bundle/KnpBundlesBundle/Resources/solr/schema.xml).
+
 If you have Solr up and running, simply do:
 
     php app/console kb:solr:index --verbose
