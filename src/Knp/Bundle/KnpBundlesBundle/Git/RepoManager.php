@@ -15,55 +15,50 @@ class RepoManager
      */
     protected $dir = null;
 
+    /**
+     * @var Symfony\Component\Filesystem\Filesystem
+     */
     protected $filesystem = null;
 
     /**
-     * git executable
-     *
      * @var string
      */
     protected $gitExecutable;
 
-    public function __construct($dir, $gitExecutable)
+    public function __construct(Filesystem $filesystem, $dir, $gitExecutable)
     {
+        $this->filesystem = $filesystem;
         $this->dir = $dir;
         $this->gitExecutable = $gitExecutable;
-        $this->filesystem = new Filesystem();
 
         $this->filesystem->mkdir($this->dir);
     }
 
-    public function getRepo(BundleEntity $repo)
+    /**
+     * @param Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     * @return Knp\Bundle\KnpBundlesBundle\Git\Repo
+     */
+    public function getRepo(BundleEntity $bundle)
     {
-        if($this->hasRepo($repo)) {
-            $dir = $this->getRepoDir($repo);
-            $gitRepo = new PHPGit_Repository($dir, false, array('git_executable' => $this->gitExecutable));
+        if($this->hasRepo($bundle)) {
+            $dir = $this->getRepoDir($bundle);
+            $repo = new PHPGit_Repository($dir, false, array('git_executable' => $this->gitExecutable));
         } else {
-            $gitRepo = $this->createGitRepo($repo);
+            $repo = $this->createGitRepo($bundle);
         }
 
-        return new Repo($repo, $gitRepo);
+        return new Repo($bundle, $repo);
     }
 
+    /**
+     * @param Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     * @return boolean
+     */
     public function hasRepo(BundleEntity $repo)
     {
         $dir = $this->getRepoDir($repo);
 
         return is_dir($dir.'/.git');
-    }
-
-    public function createGitRepo(BundleEntity $repo)
-    {
-        $dir = $this->getRepoDir($repo);
-        $this->filesystem->mkdir($dir);
-        $gitRepo = PHPGit_Repository::cloneUrl($repo->getGitUrl(), $dir, false, array('git_executable' => $this->gitExecutable));
-
-        return $gitRepo;
-    }
-
-    public function getRepoDir(BundleEntity $repo)
-    {
-        return $this->dir.'/'.$repo->getUsername().'/'.$repo->getName();
     }
 
     /**
@@ -85,5 +80,36 @@ class RepoManager
     public function setDir($dir)
     {
       $this->dir = $dir;
+    }
+
+    /**
+     * @param Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     * @return PHPGit_Repository
+     */
+    protected function createGitRepo(BundleEntity $bundle)
+    {
+        $targetDir = $this->getRepoDir($bundle);
+        $this->filesystem->mkdir($targetDir);
+
+        return $this->cloneRepo($bundle->getGitUrl(), $targetDir);
+    }
+
+    /**
+     * @param string $repoUrl
+     * @param string $targetDir
+     * @return PHPGit_Repository
+     */
+    protected function cloneRepo($repoUrl, $targetDir)
+    {
+        return PHPGit_Repository::cloneUrl($repoUrl, $targetDir, false, array('git_executable' => $this->gitExecutable));
+    }
+
+    /**
+     * @param Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     * @return string
+     */
+    protected function getRepoDir(BundleEntity $repo)
+    {
+        return $this->dir.DIRECTORY_SEPARATOR.$repo->getUsername().DIRECTORY_SEPARATOR.$repo->getName();
     }
 }

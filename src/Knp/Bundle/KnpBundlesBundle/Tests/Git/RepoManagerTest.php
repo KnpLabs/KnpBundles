@@ -3,37 +3,101 @@
 namespace Knp\Bundle\KnpBundlesBundle\Tests\Git;
 
 use Knp\Bundle\KnpBundlesBundle\Git\RepoManager;
-use Knp\Bundle\KnpBundlesBundle\Git\Repo;
-use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle as BundleEntity;
+use Symfony\Component\Filesystem\Filesystem;
+use PHPGit_Repository;
 
 class RepoManagerTest extends \PHPUnit_Framework_TestCase
 {
-    public function getDir()
+    public function setUp()
     {
-        $manager = $this->getManager();
-        $this->assertTrue(is_dir($manager->getDir()));
+        $this->cleanUpDirectories();
     }
 
-    public function testGetRepo()
+    public function tearDown()
     {
-        $gitRepo = $this->getRepo();
-        $this->assertTrue($gitRepo instanceof Repo);
+        $this->cleanUpDirectories();
     }
 
-    protected function getRepo($repoFullName = 'KnpLabs/KnpGaufretteBundle')
+    /**
+     * @test
+     */
+    public function shouldCreateAndCloneNewRepoWhenNotExists()
     {
-        $manager = $this->getManager();
-        $repo = new Bundle($repoFullName);
-        $gitRepo = $manager->getRepo($repo);
+        $bundle = new BundleEntity();
+        $bundle->setUsername('KnpLabs');
+        $bundle->setName('KnpBundles');
 
-        return $gitRepo;
+        $expectedDir = $this->getExpectedDir();
+
+        $repoManager = $this->getRepoManager();
+        $repoManager->expects($this->once())
+            ->method('cloneRepo')
+            ->with($this->equalTo('git://github.com/KnpLabs/KnpBundles.git'), $this->equalTo($expectedDir))
+            ->will($this->returnValue($this->getPhpGitRepository()));
+
+        $this->assertFalse(is_dir($expectedDir));
+        $this->assertInstanceOf('Knp\Bundle\KnpBundlesBundle\Git\Repo', $repoManager->getRepo($bundle));
+        $this->assertTrue(is_dir($expectedDir));
     }
 
-    protected function getManager()
+    /**
+     * @test
+     */
+    public function shouldNotCreateNewRepoWhenExists()
     {
-        $dir = sys_get_temp_dir().'/kb_git_repos';
-        $manager = new RepoManager($dir, $_SERVER['GIT_BIN']);
+        $bundle = new BundleEntity();
+        $bundle->setUsername('KnpLabs');
+        $bundle->setName('KnpBundles');
 
-        return $manager;
+        $expectedDir = $this->getExpectedDir();
+        $this->createRepoInExpectedLocation();
+
+        $repoManager = $this->getRepoManager();
+        $repoManager->expects($this->never())
+            ->method('cloneRepo');
+
+        $this->assertTrue(is_dir($expectedDir));
+        $this->assertInstanceOf('Knp\Bundle\KnpBundlesBundle\Git\Repo', $repoManager->getRepo($bundle));
+    }
+
+    private function getRepoManager()
+    {
+        return $this->getMock('Knp\Bundle\KnpBundlesBundle\Git\RepoManager',
+            array('cloneRepo'),
+            array(new Filesystem(), $this->getDir(), 'git')
+        );
+    }
+
+    private function createRepoInExpectedLocation()
+    {
+        mkdir($this->getExpectedDir() . DIRECTORY_SEPARATOR . '.git', 0777, true);
+        file_put_contents($this->getExpectedDir() . DIRECTORY_SEPARATOR . '.git' . DIRECTORY_SEPARATOR . 'HEAD', ' ');
+    }
+
+    private function cleanUpDirectories()
+    {
+        @unlink($this->getExpectedDir() . DIRECTORY_SEPARATOR . '.git' . DIRECTORY_SEPARATOR . 'HEAD');
+        @rmdir($this->getExpectedDir() . DIRECTORY_SEPARATOR . '.git');
+        @rmdir($this->getExpectedDir());
+        @rmdir($this->getDir() . DIRECTORY_SEPARATOR . 'KnpLabs');
+        @rmdir($this->getDir());
+    }
+
+    private function getDir()
+    {
+        return sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'kb_git_repos';
+    }
+
+    private function getExpectedDir()
+    {
+        return $this->getDir() . DIRECTORY_SEPARATOR . 'KnpLabs' . DIRECTORY_SEPARATOR . 'KnpBundles';
+    }
+
+    private function getPhpGitRepository()
+    {
+      return $this->getMockBuilder('PHPGit_Repository')
+          ->disableOriginalConstructor()
+          ->getMock();
     }
 }
