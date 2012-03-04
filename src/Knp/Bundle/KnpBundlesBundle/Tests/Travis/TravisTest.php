@@ -7,6 +7,9 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Bundle as BundleEntity;
 use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * @author Leszek Prabucki <leszek.prabucki@knplabs.com>
+ */
 class RepoTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -7,6 +7,9 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Bundle as BundleEntity;
 use Symfony\Component\Filesystem\Filesystem;
 use PHPGit_Repository;
 
+/**
+ * @author Leszek Prabucki <leszek.prabucki@knplabs.com>
+ */
 class RepoManagerTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
@@ -22,7 +25,7 @@ class RepoManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function shouldCreateAndCloneNewRepoWhenNotExists()
+    public function shouldCreateAndCloneNewRepoWhenDoesNotExist()
     {
         $bundle = new BundleEntity();
         $bundle->setUsername('KnpLabs');
