@@ -1,6 +1,6 @@
 Feature: Listing developers
   As a Visitor
-  I want to browse trough developers list
+  I want to browse through developers list
 
   Background:
     Given the site has following users:
