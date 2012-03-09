@@ -185,7 +185,7 @@ EOF;
         return $query->getOneOrNullResult();
     }
 
-    public function findLastestTrend()
+    public function findLatestTrend()
     {
         return $this->createQueryBuilder('bundle')
             ->where('bundle.score > 0')
