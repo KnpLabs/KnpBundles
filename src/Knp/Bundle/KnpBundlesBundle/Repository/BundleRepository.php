@@ -190,8 +190,8 @@ EOF;
         return $this->createQueryBuilder('bundle')
             ->where('bundle.score > 0')
             ->addOrderBy('bundle.trend1', 'asc')
-            ->getQuery()
             ->setMaxResults(1)
+            ->getQuery()
             ->getOneOrNullResult();
     }
 }
