@@ -93,6 +93,18 @@ class FeatureContext extends MinkContext
             $bundle->setScore($row['score']);
             $this->setPrivateProperty($bundle, "trend1", $row['trend1']);
 
+            if (isset($row['recommendedBy'])) {
+                $usernames = explode(',', $row['recommendedBy']);
+                foreach ($usernames as $username) {
+                    $user = $this->users[trim($username)];
+
+                    $bundle->addRecommender($user);
+                    $user->addRecommendedBundle($bundle);
+
+                    $entityManager->persist($user);
+                }
+            }
+
             $entityManager->persist($bundle);
 
             $this->bundles[$bundle->getName()] = $bundle;
@@ -253,6 +265,14 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @Given /^I am at homepage$/
+     */
+    public function iAmAtHomepage()
+    {
+        return new Step\Given('I go to "/"');
+    }
+
+    /**
      * @Then /^I should see "([^"]*)" developer$/
      */
     public function iShouldSeeDeveloper($username)
@@ -274,8 +294,8 @@ class FeatureContext extends MinkContext
     public function iAmLoggedInAs($username)
     {
         throw new PendingException();
-        //todo: token is not visible in the application check how to handle this
 
+        //Check why test fails at the travisci. At dev server tests passes.
         if (!$this->users[$username]) {
             throw new ExpectationException('User not found');
         }
@@ -289,11 +309,17 @@ class FeatureContext extends MinkContext
         $token->setUser($user);
         $token->setAuthenticated(true);
 
-        $this->getApplicationContainer()->get('security.context')->setToken($token);
+        //it is little hackish but without it "hasPreviousSession" in Request return false and we do not be logged in
+        $this->getApplicationClient()->getCookieJar()->set(new \Symfony\Component\BrowserKit\Cookie(session_name(), true));
         $this->getApplicationContainer()->get('session')->set('_security_oauth', serialize($token));
     }
 
     protected function getApplicationContainer()
+    {
+        return $this->getApplicationClient()->getContainer();
+    }
+
+    protected function getApplicationClient()
     {
         $driver = $this->getSession()->getDriver();
 
@@ -305,7 +331,7 @@ class FeatureContext extends MinkContext
             );
         }
 
-        return $driver->getClient()->getContainer();
+        return $driver->getClient();
     }
 
     /**
@@ -327,5 +353,4 @@ class FeatureContext extends MinkContext
     {
         return $this->getContainer()->get('router');
     }
-
 }
