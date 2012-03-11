@@ -32,9 +32,9 @@ class Repo
         $this->getGitRepo()->git('reset --hard origin/HEAD');
     }
 
-    public function getCommits($nb)
+    public function getCommits($nb = 12)
     {
-        $commits = $this->getGitRepo()->getCommits(12);
+        $commits = $this->getGitRepo()->getCommits($nb);
         foreach ($commits as $key => $commit) {
             $commits[$key]['url'] = $this->entity->getGithubUrl().'/commit/'.$commit['id'];
         }

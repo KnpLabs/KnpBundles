@@ -9,5 +9,10 @@ framework:
 web_profiler:
     toolbar: false
     intercept_redirects: false
-    
-mink: ~
+
+mink:
+    show_cmd: firefox %s
+
+doctrine:
+    dbal:
+        dbname:   %database_name%_test

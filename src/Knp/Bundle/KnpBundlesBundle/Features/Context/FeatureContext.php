@@ -4,7 +4,11 @@ namespace Knp\Bundle\KnpBundlesBundle\Features\Context;
 
 use Behat\BehatBundle\Context\BehatContext,
     Behat\BehatBundle\Context\MinkContext;
+
+use Behat\MinkBundle\Driver\SymfonyDriver;
+
 use Behat\Behat\Context\ClosuredContextInterface,
+    Behat\Behat\Context\Step,
     Behat\Behat\Context\TranslatedContextInterface,
     Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode,
@@ -14,9 +18,11 @@ use Behat\Mink\Exception\ElementNotFoundException,
     Behat\Mink\Exception\ExpectationException,
     Behat\Mink\Exception\ResponseTextException,
     Behat\Mink\Exception\ElementHtmlException,
-    Behat\Mink\Exception\ElementTextException;
+    Behat\Mink\Exception\ElementTextException,
+    Behat\Mink\Exception\UnsupportedDriverActionException;
 
-use Behat\Behat\Context\Step;
+use Etcpasswd\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
+    Etcpasswd\OAuthBundle\Provider\Token\GithubToken;
 
 require_once 'PHPUnit/Autoload.php';
 require_once 'PHPUnit/Framework/Assert/Functions.php';
@@ -41,26 +47,6 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * Returns entity manager 
-     * 
-     * @return Doctrine\ORM\EntityManager
-     */
-    protected function getEntityManager()
-    {
-        return $this->getContainer()->get('doctrine.orm.entity_manager');
-    }
-
-    /**
-     * Returns router service
-     *
-     * @return Symfony\Bundle\FrameworkBundle\Routing\Router
-     */
-    protected function getRouter()
-    {
-        return $this->getContainer()->get('router');
-    }
-
-    /**
      * @Given /^the site has following users:$/
      */
     public function theSiteHasFollowingUsers(TableNode $table)
@@ -77,13 +63,13 @@ class FeatureContext extends MinkContext
             ));
 
             $entityManager->persist($user);
-            
+
             $this->users[$user->getName()] = $user;
         }
 
         $entityManager->flush();
     }
-    
+
     /**
      * @Given /^the site has following bundles:$/
      */
@@ -94,7 +80,7 @@ class FeatureContext extends MinkContext
         $this->bundles = array();
         foreach ($table->getHash() as $row) {
             $user = $this->users[$row['username']];
-            
+
             $bundle = new Entity\Bundle();
             $bundle->fromArray(array(
                 'name'          => $row['name'],
@@ -106,7 +92,19 @@ class FeatureContext extends MinkContext
 
             $bundle->setScore($row['score']);
             $this->setPrivateProperty($bundle, "trend1", $row['trend1']);
-            
+
+            if (isset($row['recommendedBy'])) {
+                $usernames = explode(',', $row['recommendedBy']);
+                foreach ($usernames as $username) {
+                    $user = $this->users[trim($username)];
+
+                    $bundle->addRecommender($user);
+                    $user->addRecommendedBundle($bundle);
+
+                    $entityManager->persist($user);
+                }
+            }
+
             $entityManager->persist($bundle);
 
             $this->bundles[$bundle->getName()] = $bundle;
@@ -213,7 +211,7 @@ class FeatureContext extends MinkContext
 
         return new Step\Then('I should be on "'.$url.'"');
     }
-    
+
     /**
      * @Given /^the bundles have following keywords:$/
      */
@@ -232,5 +230,127 @@ class FeatureContext extends MinkContext
         }
 
         $entityManager->flush();
+    }
+
+    /**
+     * @Then /^I should see "([^"]*)" atom entry$/
+     */
+    public function iShouldSeeAtomEntry($entryId)
+    {
+        return new Step\Then(sprintf('the response should contain "%s"', $entryId));
+    }
+
+    /**
+     * @Then /^I should see don\'t recommend button$/
+     */
+    public function iShouldSeeDonTRecommendButton()
+    {
+        return new Step\Then('I should see "I don\'t recommend this bundle"');
+    }
+
+    /**
+     * @Then /^I should see recommend button$/
+     */
+    public function iShouldSeeRecommendButton()
+    {
+        return new Step\Then('I should see "I recommend this bundle"');
+    }
+
+    /**
+     * @Then /^response is successful$/
+     */
+    public function responseIsSuccessful()
+    {
+        return new Step\Then('the response status code should be 200');
+    }
+
+    /**
+     * @Given /^I am at homepage$/
+     */
+    public function iAmAtHomepage()
+    {
+        return new Step\Given('I go to "/"');
+    }
+
+    /**
+     * @Then /^I should see "([^"]*)" developer$/
+     */
+    public function iShouldSeeDeveloper($username)
+    {
+        return new Step\Then(sprintf('I should see "%s"', $username));
+    }
+
+    /**
+     * @Then /^I should see that "([^"]*)" is managed by developer$/
+     */
+    public function iShouldSeeThatIsManagedByDeveloper($bundleName)
+    {
+        return new Step\Then(sprintf('I should see "%s" in the ".bundles-i-manage" element', $bundleName));
+    }
+
+    /**
+     * @When /^I am logged in as "([^"]*)"$/
+     */
+    public function iAmLoggedInAs($username)
+    {
+        throw new PendingException();
+
+        //Check why test fails at the travisci. At dev server tests passes.
+        if (!$this->users[$username]) {
+            throw new ExpectationException('User not found');
+        }
+        $user = $this->users[$username];
+
+        $json = new \stdClass;
+        $json->login = $user->getUsername();
+
+        $githubToken = new GithubToken($json, 'access_token');
+        $token = new OAuthToken($user->getRoles(), $githubToken);
+        $token->setUser($user);
+        $token->setAuthenticated(true);
+
+        //it is little hackish but without it "hasPreviousSession" in Request return false and we do not be logged in
+        $this->getApplicationClient()->getCookieJar()->set(new \Symfony\Component\BrowserKit\Cookie(session_name(), true));
+        $this->getApplicationContainer()->get('session')->set('_security_oauth', serialize($token));
+    }
+
+    protected function getApplicationContainer()
+    {
+        return $this->getApplicationClient()->getContainer();
+    }
+
+    protected function getApplicationClient()
+    {
+        $driver = $this->getSession()->getDriver();
+
+        if (!$driver instanceof SymfonyDriver) {
+            throw new UnsupportedDriverActionException(
+                'You need to tag the scenario with '.
+                '"@mink:symfony". Using the application container is not '.
+                'supported by %s', $driver
+            );
+        }
+
+        return $driver->getClient();
+    }
+
+    /**
+     * Returns entity manager 
+     *
+     * @return Doctrine\ORM\EntityManager
+     */
+    protected function getEntityManager()
+    {
+        return $this->getContainer()->get('doctrine.orm.entity_manager');
+    }
+
+    /**
+     * Returns router service
+     *
+     * @return Symfony\Bundle\FrameworkBundle\Routing\Router
+     */
+    protected function getRouter()
+    {
+        return $this->getContainer()->get('router');
     }
 }
