@@ -248,7 +248,7 @@ class BundleController extends BaseController
         }
 
         // Save only if sender is owner of bundle
-        if ($user = $this->get('security.context')->getToken()->getUser() && $bundle->isOwnerOrContributor($user)) {
+        if ((null !== $user = $this->get('security.context')->getToken()->getUser()) && $bundle->isOwnerOrContributor($user)) {
             $state = $this->getRequest()->request->get('state', Bundle::STATE_UNKNOWN);
 
             $bundle->setState($state);
