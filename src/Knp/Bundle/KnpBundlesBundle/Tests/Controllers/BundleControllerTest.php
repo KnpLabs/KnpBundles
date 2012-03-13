@@ -3,6 +3,10 @@
 namespace Knp\Bundle\KnpBundlesBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Knp\Bundle\KnpBundlesBundle\Command\KbGenerateBadgesCommand;
+use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\NullOutput;
 
 class BundleControllerTest extends WebTestCase
 {
@@ -80,5 +84,19 @@ class BundleControllerTest extends WebTestCase
         $this->assertTrue($client->getResponse()->isSuccessful());
 
         $this->assertEquals(1, $crawler->filter('h3#bundle-score-details')->count());
+    }
+
+    public function testBadge()
+    {
+        $client = self::createClient();
+
+        $application = new Application($client->getKernel());
+        $application->setAutoExit(false);
+        $application->run(new StringInput('kb:generate:badges'), new NullOutput());
+
+        $crawler = $client->request('GET', '/Dexter/DexterFooBundle/badge');
+
+        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertEquals($client->getResponse()->headers->get('Content-Type'), 'image/png');
     }
 }
