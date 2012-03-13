@@ -3,9 +3,12 @@
 namespace Knp\Bundle\KnpBundlesBundle\Github;
 
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 use Knp\Bundle\KnpBundlesBundle\Entity;
 use Knp\Bundle\KnpBundlesBundle\Git;
 use Knp\Bundle\KnpBundlesBundle\Detector;
+use Knp\Bundle\KnpBundlesBundle\Event\BundleEvent;
 
 class Repo
 {
@@ -23,11 +26,17 @@ class Repo
      */
     protected $output = null;
 
-    public function __construct(\Github_Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager)
+    /**
+     * @var Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $dispatcher;
+
+    public function __construct(\Github_Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager, EventDispatcherInterface $dispatcher)
     {
         $this->github = $github;
         $this->output = $output;
         $this->gitRepoManager = $gitRepoManager;
+        $this->dispatcher = $dispatcher;
     }
 
     public function update(Entity\Bundle $bundle)
@@ -50,6 +59,9 @@ class Repo
         if (!$this->updateTags($bundle)) {
             return false;
         }
+
+        $event = new BundleEvent($bundle);
+        $this->dispatcher->dispatch(BundleEvent::UPDATE_SCORE, $event);
         $bundle->recalculateScore();
 
         return $bundle;

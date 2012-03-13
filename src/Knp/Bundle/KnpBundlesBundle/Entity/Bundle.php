@@ -116,6 +116,14 @@ class Bundle
     protected $scores = null;
 
     /**
+     * Latest score's details
+     *
+     * @ORM\Column(type="array", nullable=true)
+     * @var array
+     */
+    protected $scoreDetails;
+
+    /**
      * Repo creation date (on this website)
      *
      * @ORM\Column(type="datetime")
@@ -246,6 +254,7 @@ class Bundle
         $this->createdAt = new \DateTime('NOW');
         $this->updatedAt = new \DateTime('NOW');
         $this->score = 0;
+        $this->scoreDetails = array();
         $this->scores = new ArrayCollection();
         $this->lastCommitAt = new \DateTime('2010-01-01');
         $this->lastCommits = serialize(array());
@@ -480,37 +489,27 @@ class Bundle
         return $this->scores;
     }
 
+    public function getLatestScoreDetails()
+    {
+        return $this->getScores()->last();
+    }
+
+    public function addScoreDetail($name, $value)
+    {
+        $this->scoreDetails[$name] = $value;
+    }
+
     /**
      * Returns details about the bundle's score
      */
     public function getScoreDetails()
     {
-        $score = array(
-            // 1 follower = 1 point
-            'followers'    => $this->getNbFollowers(),
+        return $this->scoreDetails ?: array();
+    }
 
-            // Small boost for recently updated bundles
-            'activity'     => ($this->getDaysSinceLastCommit() < 30)
-                ? ((30 - $this->getDaysSinceLastCommit()) / 5)
-                : 0,
-
-            // Small boost for bundles that have a real README file
-            'readme'       => mb_strlen($this->getReadme()) > 300 ? 5 : 0,
-
-            // Small boost for bundles that uses travis ci
-            'travisci'     => $this->getUsesTravisCi() ? 5 : 0,
-
-            // Small boost for bundles with passing tests according to Travis
-            'travisbuild'  => $this->getTravisCiBuildStatus() ? 5 : 0,
-
-            // Small boost for repos that provide composer package
-            'composer'     => $this->getComposerName() ? 5 : 0,
-
-            // Small boost for repos that have recommenders recommending it
-            'recommenders' => 5 * $this->getNbRecommenders(),
-        );
-
-        return $score;
+    public function setScoreDetails(array $details)
+    {
+        $this->scoreDetails = serialize($details);
     }
 
     /**

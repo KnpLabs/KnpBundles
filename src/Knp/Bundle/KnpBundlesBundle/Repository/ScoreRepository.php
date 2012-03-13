@@ -25,12 +25,9 @@ class ScoreRepository extends EntityRepository
      */
     public function setScore(\DateTime $date, Bundle $bundle, $value)
     {
-        $score = $this->findOneByDateAndBundle($date, $bundle);
-        if (!$score) {
-            $score = new Score();
-            $score->setBundle($bundle);
-            $score->setDate($date);
-        }
+        $score = new Score();
+        $score->setBundle($bundle);
+        $score->setDate($date);
         $score->setValue($value);
 
         return $score;

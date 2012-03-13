@@ -104,17 +104,19 @@
               }
             </script>
         </div>
+        {% endif %}
 
+        {% if bundle.scoreDetails %}
         <div class="box">
             <h3 id="bundle-score-details">{% trans %}bundles.show.score.title{% endtrans %} ( <a href="{{ path('scoring') }}">{% trans %}bundles.show.score.about{% endtrans %}</a> )</h3>
             <ul class="bundle-score-details">
-                <li>{% trans with {'%score%': score.followers } %}bundles.score.followers{% endtrans %}</li>
-                <li>{% trans with {'%score%': score.activity } %}bundles.score.activity{% endtrans %}</li>
-                <li>{% trans with {'%score%': score.readme } %}bundles.score.readme{% endtrans %}</li>
-                <li>{% trans with {'%score%': score.travisci } %}bundles.score.travisci{% endtrans %}</li>
-                <li>{% trans with {'%score%': score.travisbuild } %}bundles.score.travisbuild{% endtrans %}</li>
-                <li>{% trans with {'%score%': score.composer } %}bundles.score.composer{% endtrans %}</li>
-                <li>{% trans with {'%score%': score.recommenders } %}bundles.score.recommenders{% endtrans %}</li>
+                <li>{% trans with {'%score%': score_details.followers } %}bundles.score.followers{% endtrans %}</li>
+                <li>{% trans with {'%score%': score_details.activity } %}bundles.score.activity{% endtrans %}</li>
+                <li>{% trans with {'%score%': score_details.readme } %}bundles.score.readme{% endtrans %}</li>
+                <li>{% trans with {'%score%': score_details.travisci } %}bundles.score.travisci{% endtrans %}</li>
+                <li>{% trans with {'%score%': score_details.travisbuild } %}bundles.score.travisbuild{% endtrans %}</li>
+                <li>{% trans with {'%score%': score_details.composer } %}bundles.score.composer{% endtrans %}</li>
+                <li>{% trans with {'%score%': score_details.recommenders } %}bundles.score.recommenders{% endtrans %}</li>
 
             </ul>
         </div>
