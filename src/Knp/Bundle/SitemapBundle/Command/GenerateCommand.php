@@ -18,7 +18,7 @@ class GenerateCommand extends DoctrineCommand
     {
         parent::configure();
         $this
-            ->setName('kb:sitemap:generate')
+            ->setName('kb:generate:sitemap')
             ->setDescription('Generate knp-bundles sitemap.')
             ->setDefinition(array(
                 new InputOption(
