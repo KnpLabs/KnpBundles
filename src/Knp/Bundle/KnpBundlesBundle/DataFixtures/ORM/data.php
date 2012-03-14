@@ -85,7 +85,7 @@ And some standard code **here**
 
 EOD;
 
-    public function load($manager)
+    public function load(ObjectManager $manager)
     {
         $users = array();
         $trilean = array(true, false, null);
