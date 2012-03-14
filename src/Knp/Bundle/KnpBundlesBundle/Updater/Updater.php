@@ -122,7 +122,7 @@ class Updater
 
         if ($this->bundleUpdateProducer) {
             // RabbitMQ, publish my message!
-            $this->bundleUpdateProducer->publish(serialize($message));
+            $this->bundleUpdateProducer->publish(json_encode($message));
         }
     }
 
