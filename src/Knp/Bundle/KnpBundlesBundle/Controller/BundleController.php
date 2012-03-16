@@ -227,13 +227,8 @@ class BundleController extends BaseController
 
         return $this->redirect($this->generateUrl('bundle_show', $params));
     }
-<<<<<<< HEAD
-
-    public function toggleFavourite($username, $name)
-=======
 
     public function toggleFavouriteAction($username, $name)
->>>>>>> added favs list on user profile.
     {
         if (!$this->userIsLogged()) {
             $this->getRequest()->getSession()->set('redirect_url', $this->generateUrl('bundle_show', array('username' => $username, 'name' => $name)));
@@ -254,21 +249,14 @@ class BundleController extends BaseController
         $em = $this->get('doctrine')->getEntityManager();
 
         if ($user->hasFavourite($bundle)) {
-<<<<<<< HEAD
             $bundle->updateScore(-5);
-
             $user->removeFavourite($bundle);
         } else {
             $bundle->updateScore(5);
-
-=======
-            $user->removeFavourite($bundle);
-        } else {
->>>>>>> added favs list on user profile.
             $user->addFavourite($bundle);
-            $em->persist($user);
         }
 
+        $em->persist($user);
         $em->flush();
 
         return $this->redirect($this->generateUrl('bundle_show', $params));
