@@ -70,7 +70,17 @@ bundle_change_usage_status:
     defaults:       { _controller: KnpBundlesBundle:Bundle:changeUsageStatus }
     requirements:   { _method: "GET", name: ".+" }
 
+bundle_get_badge:
+    pattern:        /{username}/{name}/badge
+    defaults:       { _controller: KnpBundlesBundle:Badge:getBadge }
+    requirements:   { _method: "GET", name: ".+" }
+
 bundle_show:
     pattern:        /{username}/{name}
     defaults:       { _controller: KnpBundlesBundle:Bundle:show }
     requirements:   { _method: "GET", format: "(html|json|js)", name: ".+" }
+
+bundle_settings:
+    pattern:        /bundle/settings/{id}
+    defaults:       { _controller: KnpBundlesBundle:Bundle:settings }
+    requirements:   { _method: "POST" }

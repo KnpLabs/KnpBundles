@@ -101,11 +101,12 @@ class FeatureContext extends MinkContext
                 'user'          => $user,
                 'username'      => $user->getName(),
                 'description'   => $row['description'],
+                'state'         => isset($row['state']) ? $row['state'] : Entity\Bundle::STATE_UNKNOWN,
                 'lastCommitAt'  => new \DateTime($row['lastCommitAt']),
             ));
 
             $bundle->setScore($row['score']);
-            $this->setPrivateProperty($bundle, "trend1", $row['trend1']);
+            $this->setPrivateProperty($bundle, 'trend1', $row['trend1']);
             
             $entityManager->persist($bundle);
 

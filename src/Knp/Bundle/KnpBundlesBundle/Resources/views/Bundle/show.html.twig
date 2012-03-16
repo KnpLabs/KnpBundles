@@ -5,12 +5,17 @@
 {% block title %}{% trans with {'%name%': bundle.name, '%username%': bundle.username} %}bundles.show.meta.title{% endtrans %}{% endblock %}
 {% block description %}{{ bundle.description }}{% endblock %}
 
+{% set isOwnerOrContributor = app.user is not null and bundle.isOwnerOrContributor(app.user) %}
+
 {% block content %}
     <div class="col-right">
 
         <div class="box">
             <h3>{% trans %}bundles.show.infos.title{% endtrans %}</h3>
             <ul>
+                {%- if bundle.state != 'unknown' -%}
+                <li>{% trans %}bundles.show.infos.state{% endtrans %} <span class="state {{ bundle.state|replace({' ': '-'}) }}">{{ bundle.state }}</span></li>
+                {%- endif -%}
                 <li>{% trans %}bundles.show.infos.score{% endtrans %} <span><a href="#bundle-score-details">{{ bundle.score }}</a></span></li>
                 <li>{% trans %}bundles.show.infos.created{% endtrans %} <span>{{ bundle.createdAt|date('date_format'|trans) }}</span></li>
                 <li>{% trans %}bundles.show.infos.contributors{% endtrans %} <span>{{ bundle.nbContributors }}</span></li>
@@ -26,7 +31,7 @@
                 {% if bundle.usesTravisCi %}
                 <li class="info-travis" title="{% trans %}bundles.show.infos.travis{% endtrans %}">
                     <a href="{{ bundle.travisUrl }}">
-                        <img src="https://secure.travis-ci.org/{{ bundle.username }}/{{ bundle.name }}.png"></img>
+                        <img src="https://secure.travis-ci.org/{{ bundle.username }}/{{ bundle.name }}.png" alt="" />
                     </a>
                  </li>
                 {% endif %}
@@ -139,7 +144,6 @@
             {%- endfor %}
             <ul>
         </div>
-
     </div>
 
     <div id="main">
@@ -158,6 +162,9 @@
         <div class="actions">
             <a class="button github" href="{{ bundle.gitHubUrl }}">{% trans %}bundles.show.github{% endtrans %}</a>
             <a class="button github" href="{{ bundle.gitHubUrl }}/issues">{% trans %}bundles.show.issues{% endtrans %}</a>
+            {%- if isOwnerOrContributor -%}
+            &nbsp;<span class="button github" data-controls-modal="modal-settings">{% trans %}bundles.show.setting{% endtrans %}</span>
+            {%- endif -%}
         </div>
     </div>
 
@@ -178,4 +185,46 @@
     {% endif %}
 
     {{ knp_disqus_render('s2b', {'identifier': bundle.username~'_'~bundle.name, 'url': url('bundle_show', {'username':bundle.username, 'name':bundle.name}), 'limit': 100}) }}
+
+    {%- if isOwnerOrContributor -%}
+    <form class="modal" action="{{ path('bundle_settings', {'id': bundle.id}) }}" method="post" id="modal-settings" style="display: none;width:400px">
+        <div class="modal-header">
+            <a class="close" href="#">×</a>
+            <h3>{% trans %}bundles.show.settings.modal{% endtrans %}</h3>
+        </div>
+
+        <div class="modal-body">
+            <ul style="margin: 0 auto; width: 125px;">
+                <li>
+                    <label>
+                        <input type="radio" name="state" id="state0" value="unknown"{{ bundle.state == 'unknown' ? ' checked="checked"' : '' }}>
+                        <span>{% trans %}bundles.show.settings.state.unknown{% endtrans %}</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="state" id="state1" value="not yet ready"{{ bundle.state == 'not yet ready' ? ' checked="checked"' : '' }}>
+                        <span>{% trans %}bundles.show.settings.state.not_ready{% endtrans %}</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="state" id="state2" value="ready"{{ bundle.state == 'ready' ? ' checked="checked"' : '' }}>
+                        <span>{% trans %}bundles.show.settings.state.ready{% endtrans %}</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="state" id="state3" value="deprecated"{{ bundle.state == 'deprecated' ? ' checked="checked"' : '' }}>
+                        <span>{% trans %}bundles.show.settings.state.deprecated{% endtrans %}</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <div class="modal-footer">
+            <button class="button">{% trans %}bundles.show.setting{% endtrans %}</button>
+        </div>
+    </form>
+    {%- endif -%}
 {% endblock %}
