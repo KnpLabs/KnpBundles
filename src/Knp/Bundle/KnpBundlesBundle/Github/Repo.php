@@ -127,12 +127,14 @@ class Repo
         foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
             if ($gitRepo->hasFile($readmeFilename)) {
                $bundle->setReadme($gitRepo->getFileContent($readmeFilename));
+               break;
             }
         }
 
         foreach (array('LICENSE', 'Resources\meta\LICENSE') as $licenseFilename) {
             if ($gitRepo->hasFile($licenseFilename)) {
                 $bundle->setLicense($gitRepo->getFileContent($licenseFilename));
+                break;
             }
         }
 
@@ -156,7 +158,7 @@ class Repo
 
         $bundle->setComposerName($composerName);
     }
-    
+
     public function updateTags(Entity\Bundle $bundle)
     {
         $this->output->write(' tags');
