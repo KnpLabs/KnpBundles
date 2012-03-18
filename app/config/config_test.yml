@@ -12,7 +12,3 @@ web_profiler:
 
 mink:
     show_cmd: firefox %s
-
-doctrine:
-    dbal:
-        dbname:   %database_name%_test
