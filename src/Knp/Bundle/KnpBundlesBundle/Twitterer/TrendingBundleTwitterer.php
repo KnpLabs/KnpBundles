@@ -27,11 +27,12 @@ class TrendingBundleTwitterer
 
     private function prepareMessage()
     {
-        if (!$trendingBundle = $this->em->getRepository('KnpBundlesBundle:Bundle')->findLatestSortedBy('trend1')) {
+        if (!$trendingBundle = $this->em->getRepository('KnpBundlesBundle:Bundle')->findLatestTrend()) {
             throw new TrendingBundleNotFoundException();
         }
 
         $bundleName = $trendingBundle->getName();
+
         $url = 'knpbundles.com/'.$trendingBundle->getUsername().'/'.$bundleName;
 
         $placeholders = array('{name}', '{url}');
