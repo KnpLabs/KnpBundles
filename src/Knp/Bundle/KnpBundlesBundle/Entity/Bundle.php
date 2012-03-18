@@ -243,6 +243,13 @@ class Bundle
      */
     protected $keywords;
 
+    /**
+     * Symfony version required
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $symfonyVersion;
+
     public function __construct($fullName = null)
     {
         if ($fullName) {
@@ -1024,5 +1031,25 @@ class Bundle
         if (!$this->hasKeyword($keyword)) {
             $this->keywords[] = $keyword;
         }
+    }
+
+    /** 
+     * Get required version of Symfony
+     *
+     * @return string
+     */
+    public function getSymfonyVersion()
+    {
+        return $this->symfonyVersion;
+    }
+
+    /** 
+     * Get required version of Symfony
+     *
+     * @param string
+     */
+    public function setSymfonyVersion($version)
+    {
+        $this->symfonyVersion = $version;
     }
 }

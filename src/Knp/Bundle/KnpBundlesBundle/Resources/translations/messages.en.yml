@@ -90,6 +90,8 @@ bundles.show:
         travis: "Travis CI"
         github: "Github"
         users: "Nb of users:"
+        symfonyVersion: "Required Symfony version:"
+        unknown: "unknown"
     score:
         title: "Score details"
         about: "?"
