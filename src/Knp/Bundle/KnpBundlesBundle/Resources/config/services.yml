@@ -64,6 +64,7 @@ services:
     knp_bundles.git_repository_manager:
         class: %knp_bundles.git_repository_manager.class%
         arguments:
+            - @filesystem
             - %knp_bundles.bundles_dir%
             - %knp_bundles.git_bin%
 
