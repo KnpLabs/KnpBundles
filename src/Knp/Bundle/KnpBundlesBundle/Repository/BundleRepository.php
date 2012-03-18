@@ -184,4 +184,14 @@ EOF;
 
         return $query->getOneOrNullResult();
     }
+
+    public function findLatestTrend()
+    {
+        return $this->createQueryBuilder('bundle')
+            ->where('bundle.score > 0')
+            ->addOrderBy('bundle.trend1', 'asc')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
