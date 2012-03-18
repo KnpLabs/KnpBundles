@@ -151,9 +151,19 @@ class Repo
 
         $composerName = null;
         if ($gitRepo->hasFile($composerFilename)) {
-            $composer = json_decode($gitRepo->getFileContent($composerFilename));
+            $composer = json_decode($gitRepo->getFileContent($composerFilename), true);
 
-            $composerName = isset($composer->name) ? $composer->name : null;
+            $composerName = isset($composer['name']) ? $composer['name'] : null;
+
+            // looking for required version of Symfony
+            if (isset($composer['require'])) {
+                foreach (array('symfony/framework-bundle', 'symfony/symfony') as $requirement) {
+                    if (isset($composer['require'][$requirement])) {
+                        $bundle->setSymfonyVersion($composer['require'][$requirement]);
+                        break;
+                    }
+                }
+            }
         }
 
         $bundle->setComposerName($composerName);
