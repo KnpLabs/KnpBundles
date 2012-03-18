@@ -94,6 +94,7 @@ knp_disqus:
             cache:     s2b_disqus
 
 old_sound_rabbit_mq:
+    debug: %old_sound_rabbit_mq.debug%
     connections:
         default:
             host:      %old_sound_rabbit_mq.host%
