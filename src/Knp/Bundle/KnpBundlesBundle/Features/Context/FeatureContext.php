@@ -297,7 +297,7 @@ class FeatureContext extends MinkContext
     {
         throw new PendingException();
 
-        //Check why test fails at the travisci. At dev server tests passes.
+        // @todo check why test fails at the travisci. At dev server tests passes.
         if (!$this->users[$username]) {
             throw new ExpectationException('User not found');
         }
