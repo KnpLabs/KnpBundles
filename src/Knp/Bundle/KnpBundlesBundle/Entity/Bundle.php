@@ -489,7 +489,7 @@ class Bundle
 
     public function setScoreDetails(array $details)
     {
-        $this->scoreDetails = serialize($details);
+        $this->scoreDetails = $details;
     }
 
     /**
