@@ -166,7 +166,6 @@
     git=https://github.com/symfony/MonologBundle.git
     target=bundles/Symfony/Bundle/MonologBundle
 
-<<<<<<< HEAD
 [Imagine]
     git=http://github.com/avalanche123/Imagine.git
     target=imagine
@@ -174,7 +173,7 @@
 [FileServeBundle]
     git=http://github.com/igorw/IgorwFileServeBundle.git
     target=bundles/Igorw/FileServeBundle
-=======
+
 [solarium]
     git=http://github.com/basdenooijer/solarium.git
     version=origin/develop
@@ -182,4 +181,3 @@
 [NelmioSolariumBundle]
     git=http://github.com/nelmio/NelmioSolariumBundle.git
     target=bundles/Nelmio/SolariumBundle
->>>>>>> add NelmioSolariumBundle and Solarium lib, initialize kernel and configuration.
