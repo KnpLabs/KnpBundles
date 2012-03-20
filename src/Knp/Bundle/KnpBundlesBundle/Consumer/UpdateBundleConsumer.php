@@ -43,26 +43,32 @@ class UpdateBundleConsumer implements ConsumerInterface
     private $users;
 
     /**
-     * @var Knp\Bundle\KnpBundlesBundle\Travis\Travis
-     */
-    private $travis;
-
-    /**
      * @var Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer
      */
     private $indexer;
 
     /**
-     * @param Doctrine\Common\Persistence\ObjectManager      $em
-     * @param Knp\Bundle\KnpBundlesBundle\Entity\UserManager $users
-     * @param Repo                                           $githubRepoApi
-     * @param Travis                                         $travis
-     * @param SolrIndexer                                    $indexer
+     * @var Knp\Bundle\KnpBundlesBundle\Github\Repo
+     */
+    private $githubRepoApi;
+
+    /**
+     * @var Knp\Bundle\KnpBundlesBundle\Travis\Travis
+     */
+    private $travis;
+
+    /**
+     * @param Doctrine\Common\Persistence\ObjectManager       $em
+     * @param Knp\Bundle\KnpBundlesBundle\Entity\UserManager  $users
+     * @param Knp\Bundle\KnpBundlesBundle\Github\Repo         $githubRepoApi
+     * @param Knp\Bundle\KnpBundlesBundle\Travis\Travis       $travis
+     * @param Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer $indexer
      */
     public function __construct(ObjectManager $em, UserManager $users, Repo $githubRepoApi, Travis $travis, SolrIndexer $indexer)
     {
         $this->em = $em;
-        $this->githubRepoApi = $githubRepoApi; 
+        $this->users = $users;
+        $this->githubRepoApi = $githubRepoApi;
         $this->travis = $travis;
         $this->users = $users;
         $this->indexer = $indexer;
@@ -170,20 +176,20 @@ class UpdateBundleConsumer implements ConsumerInterface
             $this->logger->info(sprintf('%d contributor(s) have been retrieved for bundle %s', sizeof($contributors), $bundle->getName()));
         }
     }
-    
+
     /**
      * Updates bundle keywords fetched from componser.json
-     * 
+     *
      * @param Bundle $bundle
      */
     private function updateKeywords(Bundle $bundle)
     {
         $keywords = $this->githubRepoApi->fetchComposerKeywords($bundle);
         $repository = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Keyword');
-        
+
         foreach ($keywords as $keyword) {
             $keyword = $repository->findOrCreateOne($keyword);
-        
+
             $bundle->addKeyword($keyword);
         }
     }
