@@ -41,17 +41,27 @@ class UpdateBundleConsumer implements ConsumerInterface
     private $users;
 
     /**
+     * @var Knp\Bundle\KnpBundlesBundle\Github\Repo
+     */
+    private $githubRepoApi;
+
+    /**
+     * @var Knp\Bundle\KnpBundlesBundle\Travis\Travis
+     */
+    private $travis;
+
+    /**
      * @param Doctrine\Common\Persistence\ObjectManager      $em
      * @param Knp\Bundle\KnpBundlesBundle\Entity\UserManager $users
-     * @param string                                         $gitRepoDir
-     * @param string                                         $gitBin
+     * @param Knp\Bundle\KnpBundlesBundle\Github\Repo        $githubRepoApi
+     * @param Knp\Bundle\KnpBundlesBundle\Travis\Travis      $travis
      */
     public function __construct(ObjectManager $em, UserManager $users, Repo $githubRepoApi, Travis $travis)
     {
         $this->em = $em;
+        $this->users = $users;
         $this->githubRepoApi = $githubRepoApi; 
         $this->travis = $travis;
-        $this->users = $users;
     }
 
     /**
