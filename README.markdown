@@ -89,6 +89,20 @@ Note that you will need a functional rabbitmq server − but that's damn easy to
 This can take long time. GitHub API is limited to 60 calls per minute,
 so the commands needs to wait.
 
+### Search engine
+
+We use [Solr](http://lucene.apache.org/solr/) and it's PHP client [Solarium](http://solarium-project.org) to search bundles.
+Recommended schema can be found
+[**here**](https://github.com/KnpLabs/KnpBundles/blob/master/src/Knp/Bundle/KnpBundlesBundle/Resources/solr/schema.xml).  
+Put it inside the `solr/conf` directory, and run Solr with `$ java -jar start.jar`.  
+Bundles will be automatically indexed on next update, or you can force indexing by console command.
+
+If you have Solr up and running, simply do:
+
+    php app/console kb:solr:index --verbose
+
+This will index all bundles.
+
 ### Generate sitemap
 
     php app/console kb:sitemap:generate --spaceless=1

@@ -17,6 +17,7 @@ parameters:
     knp_bundles.imagine.gd.class: Imagine\Gd\Imagine
     knp_bundles.imagine.imagick.class: Imagine\Imagick\Imagine
     knp_bundles.imagine.gmagick.class: Imagine\Gmagick\Imagine
+    knp_bundles.indexer.solr.class: Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer
 
 services:
     knp_bundles.updater:
@@ -88,6 +89,12 @@ services:
             - @knp_bundles.github_client
             - @knp_bundles.output
 
+    knp_bundles.indexer.solr:
+        class: %knp_bundles.indexer.solr.class%
+        arguments:
+            - @doctrine
+            - @solarium.client
+
     knp_bundles.consumer.update_bundle:
         class: %knp_bundles.consumer.update_bundle.class%
         arguments:
@@ -95,6 +102,7 @@ services:
             - @knp_bundles.user.manager
             - @knp_bundles.github_repository_api
             - @knp_bundles.travis
+            - @knp_bundles.indexer.solr
         calls:
             - [ setLogger, [@logger]]
 

@@ -250,6 +250,13 @@ class Bundle
      */
     protected $symfonyVersion;
 
+    /**
+     * Last indexing time.
+     * 
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $indexedAt;
+
     public function __construct($fullName = null)
     {
         if ($fullName) {
@@ -1051,5 +1058,25 @@ class Bundle
     public function setSymfonyVersion($version)
     {
         $this->symfonyVersion = $version;
+    }
+    
+    /**
+     * Set indexedAt
+     *
+     * @param \DateTime $indexedAt
+     */
+    public function setIndexedAt(\DateTime $indexedAt)
+    {
+        $this->indexedAt = $indexedAt;
+    }
+
+    /**
+     * Get indexedAt
+     *
+     * @return datetime $indexedAt
+     */
+    public function getIndexedAt()
+    {
+        return $this->indexedAt;
     }
 }

@@ -112,3 +112,10 @@ old_sound_rabbit_mq:
             exchange_options: {name: 'upload-bundle', type: direct, durable: true }
             queue_options:    {name: 'upload-bundle'}
             callback:         knp_bundles.consumer.update_bundle
+
+nelmio_solarium:
+    adapter:
+        class: Solarium_Client_Adapter_Http
+        host: %solarium.host%
+        port: %solarium.port%
+        path: %solarium.path%

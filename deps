@@ -173,3 +173,11 @@
 [FileServeBundle]
     git=http://github.com/igorw/IgorwFileServeBundle.git
     target=bundles/Igorw/FileServeBundle
+
+[solarium]
+    git=http://github.com/basdenooijer/solarium.git
+    version=origin/develop
+
+[NelmioSolariumBundle]
+    git=http://github.com/nelmio/NelmioSolariumBundle.git
+    target=bundles/Nelmio/SolariumBundle

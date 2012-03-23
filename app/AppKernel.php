@@ -31,6 +31,7 @@ class AppKernel extends Kernel
             new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
             new JMS\I18nRoutingBundle\JMSI18nRoutingBundle(),
             new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
+            new Nelmio\SolariumBundle\NelmioSolariumBundle(),
 
             // register your applications here
             new Knp\Bundle\KnpBundlesBundle\KnpBundlesBundle(),
