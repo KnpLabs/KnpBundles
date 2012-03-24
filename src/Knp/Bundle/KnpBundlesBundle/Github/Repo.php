@@ -3,9 +3,12 @@
 namespace Knp\Bundle\KnpBundlesBundle\Github;
 
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 use Knp\Bundle\KnpBundlesBundle\Entity;
 use Knp\Bundle\KnpBundlesBundle\Git;
 use Knp\Bundle\KnpBundlesBundle\Detector;
+use Knp\Bundle\KnpBundlesBundle\Event\BundleEvent;
 
 class Repo
 {
@@ -23,11 +26,17 @@ class Repo
      */
     protected $output = null;
 
-    public function __construct(\Github_Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager)
+    /**
+     * @var Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $dispatcher;
+
+    public function __construct(\Github_Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager, EventDispatcherInterface $dispatcher)
     {
         $this->github = $github;
         $this->output = $output;
         $this->gitRepoManager = $gitRepoManager;
+        $this->dispatcher = $dispatcher;
     }
 
     public function update(Entity\Bundle $bundle)
@@ -50,6 +59,9 @@ class Repo
         if (!$this->updateTags($bundle)) {
             return false;
         }
+
+        $event = new BundleEvent($bundle);
+        $this->dispatcher->dispatch(BundleEvent::UPDATE_SCORE, $event);
         $bundle->recalculateScore();
 
         return $bundle;
@@ -127,6 +139,14 @@ class Repo
         foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
             if ($gitRepo->hasFile($readmeFilename)) {
                $bundle->setReadme($gitRepo->getFileContent($readmeFilename));
+               break;
+            }
+        }
+
+        foreach (array('LICENSE', 'Resources\meta\LICENSE') as $licenseFilename) {
+            if ($gitRepo->hasFile($licenseFilename)) {
+                $bundle->setLicense($gitRepo->getFileContent($licenseFilename));
+                break;
             }
         }
 
@@ -143,14 +163,24 @@ class Repo
 
         $composerName = null;
         if ($gitRepo->hasFile($composerFilename)) {
-            $composer = json_decode($gitRepo->getFileContent($composerFilename));
+            $composer = json_decode($gitRepo->getFileContent($composerFilename), true);
 
-            $composerName = isset($composer->name) ? $composer->name : null;
+            $composerName = isset($composer['name']) ? $composer['name'] : null;
+
+            // looking for required version of Symfony
+            if (isset($composer['require'])) {
+                foreach (array('symfony/framework-bundle', 'symfony/symfony') as $requirement) {
+                    if (isset($composer['require'][$requirement])) {
+                        $bundle->setSymfonyVersion($composer['require'][$requirement]);
+                        break;
+                    }
+                }
+            }
         }
 
         $bundle->setComposerName($composerName);
     }
-    
+
     public function updateTags(Entity\Bundle $bundle)
     {
         $this->output->write(' tags');

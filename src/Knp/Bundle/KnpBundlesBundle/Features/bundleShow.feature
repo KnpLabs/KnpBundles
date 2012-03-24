@@ -17,4 +17,3 @@ Feature: Showing bundles
     And I should see "TestBundle"
     And I should see "by knplabs"
     And I should see "Score: 10"
-    And I should not see "Bundle settings"

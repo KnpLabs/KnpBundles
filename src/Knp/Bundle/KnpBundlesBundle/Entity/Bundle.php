@@ -101,6 +101,13 @@ class Bundle
     protected $readme = null;
 
     /**
+     * The bundle license text extracted from source code
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $license = null;
+
+    /**
      * Internal score of the Repo, based on several indicators
      * Defines the Repo position in lists and searches
      *
@@ -114,6 +121,14 @@ class Bundle
      * @ORM\OneToMany(targetEntity="Score", mappedBy="bundle")
      */
     protected $scores = null;
+
+    /**
+     * Latest score's details
+     *
+     * @ORM\Column(type="array", nullable=true)
+     * @var array
+     */
+    protected $scoreDetails;
 
     /**
      * Repo creation date (on this website)
@@ -236,6 +251,20 @@ class Bundle
      */
     protected $keywords;
 
+    /**
+     * Symfony version required
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $symfonyVersion;
+
+    /**
+     * Last indexing time.
+     * 
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $indexedAt;
+
     public function __construct($fullName = null)
     {
         if ($fullName) {
@@ -246,6 +275,7 @@ class Bundle
         $this->createdAt = new \DateTime('NOW');
         $this->updatedAt = new \DateTime('NOW');
         $this->score = 0;
+        $this->scoreDetails = array();
         $this->scores = new ArrayCollection();
         $this->lastCommitAt = new \DateTime('2010-01-01');
         $this->lastCommits = serialize(array());
@@ -450,6 +480,27 @@ class Bundle
         $this->readme = $readme;
     }
 
+
+    /**
+     * Get license
+     *
+     * @return string
+     */
+    public function getLicense()
+    {
+        return $this->license;
+    }
+
+    /**
+     * Set license
+     *
+     * @param  string
+     */
+    public function setLicense($license)
+    {
+        $this->license = $license;
+    }
+
     /**
      * Get score
      *
@@ -480,37 +531,27 @@ class Bundle
         return $this->scores;
     }
 
+    public function getLatestScoreDetails()
+    {
+        return $this->getScores()->last();
+    }
+
+    public function addScoreDetail($name, $value)
+    {
+        $this->scoreDetails[$name] = $value;
+    }
+
     /**
      * Returns details about the bundle's score
      */
     public function getScoreDetails()
     {
-        $score = array(
-            // 1 follower = 1 point
-            'followers'    => $this->getNbFollowers(),
+        return $this->scoreDetails ?: array();
+    }
 
-            // Small boost for recently updated bundles
-            'activity'     => ($this->getDaysSinceLastCommit() < 30)
-                ? ((30 - $this->getDaysSinceLastCommit()) / 5)
-                : 0,
-
-            // Small boost for bundles that have a real README file
-            'readme'       => mb_strlen($this->getReadme()) > 300 ? 5 : 0,
-
-            // Small boost for bundles that uses travis ci
-            'travisci'     => $this->getUsesTravisCi() ? 5 : 0,
-
-            // Small boost for bundles with passing tests according to Travis
-            'travisbuild'  => $this->getTravisCiBuildStatus() ? 5 : 0,
-
-            // Small boost for repos that provide composer package
-            'composer'     => $this->getComposerName() ? 5 : 0,
-
-            // Small boost for repos that have recommenders recommending it
-            'recommenders' => 5 * $this->getNbRecommenders(),
-        );
-
-        return $score;
+    public function setScoreDetails(array $details)
+    {
+        $this->scoreDetails = serialize($details);
     }
 
     /**
@@ -996,5 +1037,45 @@ class Bundle
         if (!$this->hasKeyword($keyword)) {
             $this->keywords[] = $keyword;
         }
+    }
+
+    /** 
+     * Get required version of Symfony
+     *
+     * @return string
+     */
+    public function getSymfonyVersion()
+    {
+        return $this->symfonyVersion;
+    }
+
+    /** 
+     * Get required version of Symfony
+     *
+     * @param string
+     */
+    public function setSymfonyVersion($version)
+    {
+        $this->symfonyVersion = $version;
+    }
+    
+    /**
+     * Set indexedAt
+     *
+     * @param \DateTime $indexedAt
+     */
+    public function setIndexedAt(\DateTime $indexedAt)
+    {
+        $this->indexedAt = $indexedAt;
+    }
+
+    /**
+     * Get indexedAt
+     *
+     * @return datetime $indexedAt
+     */
+    public function getIndexedAt()
+    {
+        return $this->indexedAt;
     }
 }

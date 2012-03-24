@@ -7,32 +7,6 @@ use Doctrine\ORM\NoResultException;
 
 class BundleRepository extends EntityRepository
 {
-    public function search($query)
-    {
-        $pattern = '%'.str_replace(' ', '%', $query).'%';
-
-        $qb = $this->createQueryBuilder('bundle')
-            ->leftJoin('bundle.keywords', 'keyword');
-
-        $qb->where($qb->expr()->orx(
-            $qb->expr()->like('bundle.username', ':username'),
-            $qb->expr()->like('bundle.name', ':name'),
-            $qb->expr()->like('bundle.description', ':description'),
-            $qb->expr()->eq('keyword.value', ':query')
-        ));
-
-        $qb
-            ->orderBy('bundle.score', 'DESC')
-            ->setParameters(array(
-                'username' => $pattern,
-                'name' => $pattern,
-                'description' => $pattern,
-                'query' => $query
-            ));
-
-        return $qb->getQuery()->execute();
-    }
-
     public function findAllSortedBy($field, $nb = null)
     {
         $query = $this->queryAllSortedBy($field);
@@ -143,6 +117,16 @@ class BundleRepository extends EntityRepository
         }
     }
 
+    public function getStaleBundlesForIndexing()
+    {
+        return $this->createQueryBuilder('bundle')
+            ->leftJoin('bundle.user', 'user')
+            ->where('bundle.indexedAt IS NULL OR bundle.indexedAt < bundle.updatedAt')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     public function updateTrends()
     {
         // Reset trends
@@ -185,13 +169,13 @@ EOF;
         return $query->getOneOrNullResult();
     }
 
-    public function findLastestTrend()
+    public function findLatestTrend()
     {
         return $this->createQueryBuilder('bundle')
             ->where('bundle.score > 0')
             ->addOrderBy('bundle.trend1', 'asc')
-            ->getQuery()
             ->setMaxResults(1)
+            ->getQuery()
             ->getOneOrNullResult();
     }
 }

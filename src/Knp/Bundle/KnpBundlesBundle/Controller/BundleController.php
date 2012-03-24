@@ -40,15 +40,22 @@ class BundleController extends BaseController
             return $this->render('KnpBundlesBundle:Bundle:search.html.twig');
         }
 
-        $bundles = $this->getRepository('Bundle')->search($query);
+        $solarium = $this->get('solarium.client');
+        $select = $solarium->createSelect();
+        $escapedQuery = $select->getHelper()->escapePhrase($query);
+
+        $dismax = $select->getDisMax();
+        $dismax->setQueryFields(array('name', 'description', 'keywords', 'text', 'username', 'fullName'));
+        $select->setQuery($escapedQuery);
+
+        $paginator = $this->get('knp_paginator');
+        $bundles = $paginator->paginate(
+            array($solarium, $select),
+            $this->get('request')->query->get('page', 1),
+            10
+        );
 
         $format = $this->recognizeRequestFormat();
-
-        if ('html' == $format && count($bundles) == 1 && strtolower($bundles[0]->getName()) == strtolower($query)) {
-            $params = array('username' => $bundles[0]->getUserName(), 'name' => $bundles[0]->getName());
-
-            return $this->redirect($this->generateUrl('bundle_show', $params));
-        }
 
         return $this->render('KnpBundlesBundle:Bundle:searchResults.'.$format.'.twig', array(
             'query'         => urldecode($this->get('request')->query->get('q')),
@@ -72,7 +79,7 @@ class BundleController extends BaseController
 
         return $this->render('KnpBundlesBundle:Bundle:show.'.$format.'.twig', array(
             'bundle'        => $bundle,
-            'score'         => $bundle->getScoreDetails(),
+            'score_details' => $bundle->getScoreDetails(),
             'isUsedByUser'  => $user instanceof User && $user->isUsingBundle($bundle),
             'callback'      => $this->get('request')->query->get('callback')
         ));

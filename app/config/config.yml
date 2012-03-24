@@ -94,6 +94,7 @@ knp_disqus:
             cache:     s2b_disqus
 
 old_sound_rabbit_mq:
+    debug: %old_sound_rabbit_mq.debug%
     connections:
         default:
             host:      %old_sound_rabbit_mq.host%
@@ -111,3 +112,15 @@ old_sound_rabbit_mq:
             exchange_options: {name: 'upload-bundle', type: direct, durable: true }
             queue_options:    {name: 'upload-bundle'}
             callback:         knp_bundles.consumer.update_bundle
+    anon_consumers:
+        github_hook:
+            connection: default
+            exchange_options: {name: 'github-hooks', type: topic }
+            callback:         knp_bundles.consumer.github_hook
+
+nelmio_solarium:
+    adapter:
+        class: Solarium_Client_Adapter_Http
+        host: %solarium.host%
+        port: %solarium.port%
+        path: %solarium.path%

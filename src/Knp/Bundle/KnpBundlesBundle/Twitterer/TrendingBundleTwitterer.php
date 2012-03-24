@@ -27,7 +27,7 @@ class TrendingBundleTwitterer
 
     private function prepareMessage()
     {
-        if (!$trendingBundle = $this->em->getRepository('KnpBundlesBundle:Bundle')->findLastestTrend()) { //findLatestSortedBy('trend1')) {
+        if (!$trendingBundle = $this->em->getRepository('KnpBundlesBundle:Bundle')->findLatestTrend()) {
             throw new TrendingBundleNotFoundException();
         }
 

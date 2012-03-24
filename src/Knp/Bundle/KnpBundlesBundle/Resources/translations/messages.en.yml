@@ -90,6 +90,8 @@ bundles.show:
         travis: "Travis CI"
         github: "Github"
         users: "Nb of users:"
+        symfonyVersion: "Required Symfony version:"
+        unknown: "unknown"
     score:
         title: "Score details"
         about: "?"
@@ -169,7 +171,7 @@ api:
     meta:
         title: "Developer HTTP API"
         description: "Programmatic HTTP API to access Bundles and developers data"
-    title: "Deleveloper API"
+    title: "Developer API"
 
 symfony2bundles:
     meta:

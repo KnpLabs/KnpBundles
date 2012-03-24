@@ -7,6 +7,7 @@ use Knp\Bundle\KnpBundlesBundle\Git;
 use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\UserManager;
+use Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer;
 
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 
@@ -15,6 +16,7 @@ use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 use Doctrine\Common\Persistence\ObjectManager;
+
 /**
  * This class is a consumer which will retrieve a bundle from database
  * and update everything that needs to be updated.
@@ -41,17 +43,35 @@ class UpdateBundleConsumer implements ConsumerInterface
     private $users;
 
     /**
-     * @param Doctrine\Common\Persistence\ObjectManager      $em
-     * @param Knp\Bundle\KnpBundlesBundle\Entity\UserManager $users
-     * @param string                                         $gitRepoDir
-     * @param string                                         $gitBin
+     * @var Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer
      */
-    public function __construct(ObjectManager $em, UserManager $users, Repo $githubRepoApi, Travis $travis)
+    private $indexer;
+
+    /**
+     * @var Knp\Bundle\KnpBundlesBundle\Github\Repo
+     */
+    private $githubRepoApi;
+
+    /**
+     * @var Knp\Bundle\KnpBundlesBundle\Travis\Travis
+     */
+    private $travis;
+
+    /**
+     * @param Doctrine\Common\Persistence\ObjectManager       $em
+     * @param Knp\Bundle\KnpBundlesBundle\Entity\UserManager  $users
+     * @param Knp\Bundle\KnpBundlesBundle\Github\Repo         $githubRepoApi
+     * @param Knp\Bundle\KnpBundlesBundle\Travis\Travis       $travis
+     * @param Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer $indexer
+     */
+    public function __construct(ObjectManager $em, UserManager $users, Repo $githubRepoApi, Travis $travis, SolrIndexer $indexer)
     {
         $this->em = $em;
-        $this->githubRepoApi = $githubRepoApi; 
+        $this->users = $users;
+        $this->githubRepoApi = $githubRepoApi;
         $this->travis = $travis;
         $this->users = $users;
+        $this->indexer = $indexer;
     }
 
     /**
@@ -72,7 +92,7 @@ class UpdateBundleConsumer implements ConsumerInterface
     public function execute($msg)
     {
         // Retrieve informations from the message
-        $message = unserialize($msg->body);
+        $message = json_decode($msg->body, true);
 
         if (!isset($message['bundle_id'])) {
             if ($this->logger) {
@@ -108,7 +128,10 @@ class UpdateBundleConsumer implements ConsumerInterface
                     return;
                 }
 
+                $this->indexer->indexBundle($bundle);
+
                 $this->updateContributors($bundle);
+                $this->updateKeywords($bundle);
                 $score = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')->setScore(new \DateTime(), $bundle, $bundle->getScore());
                 $this->em->persist($score);
                 $this->em->flush();
@@ -151,6 +174,23 @@ class UpdateBundleConsumer implements ConsumerInterface
 
         if ($this->logger) {
             $this->logger->info(sprintf('%d contributor(s) have been retrieved for bundle %s', sizeof($contributors), $bundle->getName()));
+        }
+    }
+
+    /**
+     * Updates bundle keywords fetched from componser.json
+     *
+     * @param Bundle $bundle
+     */
+    private function updateKeywords(Bundle $bundle)
+    {
+        $keywords = $this->githubRepoApi->fetchComposerKeywords($bundle);
+        $repository = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Keyword');
+
+        foreach ($keywords as $keyword) {
+            $keyword = $repository->findOrCreateOne($keyword);
+
+            $bundle->addKeyword($keyword);
         }
     }
 

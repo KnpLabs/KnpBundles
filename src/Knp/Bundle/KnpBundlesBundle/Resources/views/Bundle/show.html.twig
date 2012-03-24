@@ -17,6 +17,7 @@
                 <li>{% trans %}bundles.show.infos.state{% endtrans %} <span class="state {{ bundle.state|replace({' ': '-'}) }}">{{ bundle.state }}</span></li>
                 {%- endif -%}
                 <li>{% trans %}bundles.show.infos.score{% endtrans %} <span><a href="#bundle-score-details">{{ bundle.score }}</a></span></li>
+                <li>{% trans %}bundles.show.infos.symfonyVersion{% endtrans %} {{ bundle.symfonyVersion ? bundle.symfonyVersion : "bundles.show.infos.unknown" | trans }}</li>
                 <li>{% trans %}bundles.show.infos.created{% endtrans %} <span>{{ bundle.createdAt|date('date_format'|trans) }}</span></li>
                 <li>{% trans %}bundles.show.infos.contributors{% endtrans %} <span>{{ bundle.nbContributors }}</span></li>
                 <li>{% trans %}bundles.show.infos.followers{% endtrans %} <span>{{ bundle.nbFollowers }}</span></li>
@@ -104,17 +105,19 @@
               }
             </script>
         </div>
+        {% endif %}
 
+        {% if bundle.scoreDetails %}
         <div class="box">
             <h3 id="bundle-score-details">{% trans %}bundles.show.score.title{% endtrans %} ( <a href="{{ path('scoring') }}">{% trans %}bundles.show.score.about{% endtrans %}</a> )</h3>
             <ul class="bundle-score-details">
-                <li>{% trans with {'%score%': score.followers } %}bundles.score.followers{% endtrans %}</li>
-                <li>{% trans with {'%score%': score.activity } %}bundles.score.activity{% endtrans %}</li>
-                <li>{% trans with {'%score%': score.readme } %}bundles.score.readme{% endtrans %}</li>
-                <li>{% trans with {'%score%': score.travisci } %}bundles.score.travisci{% endtrans %}</li>
-                <li>{% trans with {'%score%': score.travisbuild } %}bundles.score.travisbuild{% endtrans %}</li>
-                <li>{% trans with {'%score%': score.composer } %}bundles.score.composer{% endtrans %}</li>
-                <li>{% trans with {'%score%': score.recommenders } %}bundles.score.recommenders{% endtrans %}</li>
+                <li>{% trans with {'%score%': score_details.followers } %}bundles.score.followers{% endtrans %}</li>
+                <li>{% trans with {'%score%': score_details.activity } %}bundles.score.activity{% endtrans %}</li>
+                <li>{% trans with {'%score%': score_details.readme } %}bundles.score.readme{% endtrans %}</li>
+                <li>{% trans with {'%score%': score_details.travisci } %}bundles.score.travisci{% endtrans %}</li>
+                <li>{% trans with {'%score%': score_details.travisbuild } %}bundles.score.travisbuild{% endtrans %}</li>
+                <li>{% trans with {'%score%': score_details.composer } %}bundles.score.composer{% endtrans %}</li>
+                <li>{% trans with {'%score%': score_details.recommenders } %}bundles.score.recommenders{% endtrans %}</li>
 
             </ul>
         </div>
@@ -169,18 +172,24 @@
     </div>
 
     {% if not bundle.initialized %}
-    <div id="data">
+    <div class="data">
         {{ noDescriptionNotice|trans }}
     </div>
     {% endif %}
 
     {% if bundle.readme %}
-    <div id="data">
+    <div class="data">
         <div id="readme">
             <div class="markdown">
                 {{ bundle.readme|github_md_2_md|markdown }}
             </div>
         </div>
+    </div>
+    {% endif %}
+
+    {% if bundle.license %}
+    <div class="data">
+        {{ bundle.license }}
     </div>
     {% endif %}
 
