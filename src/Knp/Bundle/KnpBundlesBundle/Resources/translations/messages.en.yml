@@ -141,6 +141,12 @@ bundles.list:
         featured: "What's hot?"
         newest: "Newest bundles"
     buildStatus: "Build status "
+    activity: "Activity"
+
+bundles.activity:
+    high: "High"
+    medium: "Medium"
+    low: "Low"
 
 users:
     meta:
