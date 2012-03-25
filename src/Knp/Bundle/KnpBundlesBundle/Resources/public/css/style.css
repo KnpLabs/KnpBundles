@@ -154,6 +154,7 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 .bundles_list .rank{position:absolute;top:40px;left:10px;width:25px;}
 .bundles_list .hot{position:absolute;top:12px;left:13px;}
 .bundles_list .description{font-size:12px;}
+abbr, acronym {border-bottom:.1em dotted;cursor:help;font-weight:bold;}
 #newest-bundles h2,
 #best-scored-bundles h2,
 #hot-bundles h2{margin:0;padding:0;font-size:16px;font-weight:bold;padding:15px 10px 0 40px;height:30px;background:#000;color:#fff;border-radius:12px 12px 0 0;-moz-border-radius:12px 12px 0 0;-webkit-border-radius:12px 12px 0 0;}
@@ -193,7 +194,7 @@ background:linear-gradient(top,#f1b525,#d89d14);/* W3C */}
 .bundles-list .big-list .bundle.first{border-top:1px solid #80A1C1;}
 .bundles-list .big-list .bundle.active{border-left:4px solid #EEB342;}
 .bundles-list .big-list .bundlerank{margin:0 10px 0 5px;float:left;}
-.bundles-list .big-list .generals{padding:0;float:left;width:500px;overflow:hidden;}
+.bundles-list .big-list .generals{padding:0 0 1px;float:left;width:500px;overflow:hidden;}
 .bundles-list .big-list .generals .name{font-size:16px;font-family:Helvetica;margin-bottom:4px;color:#4183C4;}
 .bundles-list .big-list .generals .description{padding:0;color:#666;font-size:13px;line-height:16px;margin-bottom:7px;}
 .bundles-list .big-list .details{font-size:11px;font-family:Helvetica;color:#999;}
