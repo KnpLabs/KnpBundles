@@ -2,13 +2,14 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Activity;
 
-class BundleActivity {
+class BundleActivity 
+{
    
     const ACTIVITY_HIGH   = 7;
     const ACTIVITY_MEDIUM = 30;
     const ACTIVITY_LOW    = 90;
 
-    protected static $titles = array(
+    static protected $titles = array(
         self::ACTIVITY_HIGH   => 'bundles.activity.high',
         self::ACTIVITY_MEDIUM => 'bundles.activity.medium',
         self::ACTIVITY_LOW    => 'bundles.activity.low'
@@ -20,9 +21,9 @@ class BundleActivity {
      * @param integer $days
      * @return string
      */
-    public static function getActivityByDays($days)
+    static public function getActivityByDays($days)
     {
-        switch ($days) {
+        switch (true) {
             case ($days <= self::ACTIVITY_HIGH):
                 $activity = self::ACTIVITY_HIGH;
                 break;
