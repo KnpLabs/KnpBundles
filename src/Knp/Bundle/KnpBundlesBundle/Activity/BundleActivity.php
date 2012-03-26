@@ -33,9 +33,6 @@ class BundleActivity
                 break;
                 
             case ($days <= self::ACTIVITY_LOW):
-                $activity = self::ACTIVITY_LOW;
-                break;        
-            
             default:
                 $activity = self::ACTIVITY_LOW;
                 break;
