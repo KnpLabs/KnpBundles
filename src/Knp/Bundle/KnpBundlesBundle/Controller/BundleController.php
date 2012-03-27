@@ -199,7 +199,7 @@ class BundleController extends BaseController
         if ($user->isUsingBundle($bundle)) {
             $bundle->updateScore(-5);
 
-            $bundle->getRecommenders()->removeElement($user);
+            $bundle->removeRecommender($user);
             $user->getUsedBundles()->removeElement($bundle);
         } else {
             $bundle->updateScore(5);
