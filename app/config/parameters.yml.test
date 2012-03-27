@@ -10,7 +10,7 @@ parameters:
 
     knp_bundles.github.client_id: b46912af13ee7cb7ecd3
     knp_bundles.github.client_secret: 116f5427707fcc2a3f7c630dd356be61500b2e18
-    
+
     knp_bundles.twitter.consumer_key: your_twitter_consumer_key_here
     knp_bundles.twitter.consumer_secret: your_twitter_consumer_secret_here
     knp_bundles.twitter.oauth_token: your_twitter_oauth_token_here
