@@ -265,6 +265,11 @@ class Bundle
      */
     protected $indexedAt;
 
+    /*
+     * @ORM\Column(type="integer")
+     */
+    protected $nbRecommenders;
+
     public function __construct($fullName = null)
     {
         if ($fullName) {
