@@ -289,6 +289,8 @@ class Bundle
         $this->contributors = new ArrayCollection();
         $this->scores = new ArrayCollection();
         $this->keywords = new ArrayCollection();
+        $this->state = self::STATE_UNKNOWN;
+        $this->nbRecommenders = 0;
     }
 
     public function isInitialized()
@@ -999,6 +1001,13 @@ class Bundle
     public function addRecommender(User $user)
     {
         $this->recommenders[] = $user;
+        $this->nbRecommenders++;
+    }
+
+    public function removeRecommender(User $user)
+    {
+        $this->getRecommenders()->removeElement($user);
+        $this->nbRecommenders--;
     }
 
     /**
