@@ -63,10 +63,6 @@
     target=bundles/Symfony/Bundle/AsseticBundle
     version=v1.0.1
 
-[KnpMarkdownBundle]
-    git=http://github.com/KnpLabs/KnpMarkdownBundle.git
-    target=bundles/Knp/Bundle/MarkdownBundle
-
 [KnpTimeBundle]
     git=http://github.com/KnpLabs/KnpTimeBundle.git
     target=bundles/Knp/Bundle/TimeBundle
