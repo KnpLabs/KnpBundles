@@ -48,6 +48,7 @@ header:
     baseline: "Bundles for Symfony2"
 
 footer:
+    report_issue: "Report an issue"
     code: "Show the code on Github"
     language:
         title: "Language"
