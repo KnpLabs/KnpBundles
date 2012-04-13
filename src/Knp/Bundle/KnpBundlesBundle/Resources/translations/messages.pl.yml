@@ -64,6 +64,9 @@ bundles.show:
     meta:
         title: "%name% stworzone przez %username%"
     github: "Zobacz i pobierz z github"
+    favourite: "Dodaj do ulubionych"
+    unfavourite: "Usuń z ulubionych"
+    loginToFavourite: "Zaloguj się by dodać do ulubionych"
     infos:
         title: "Informacje"
         score: "Wynik:"

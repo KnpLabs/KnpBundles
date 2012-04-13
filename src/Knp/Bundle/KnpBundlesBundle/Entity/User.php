@@ -5,6 +5,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -121,11 +122,23 @@ class User implements UserInterface
     */
     protected $recommendedBundles;
 
+    /**
+     * Users favourite bundles
+     *
+     * @ORM\ManyToMany(targetEntity="Bundle")
+     * @ORM\JoinTable(name="user_favourites",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")}
+     *      )
+     */
+    protected $favourites;
+
     public function __construct()
     {
         $this->bundles = new ArrayCollection();
         $this->recommendedBundles = new ArrayCollection();
         $this->contributionBundles = new ArrayCollection();
+        $this->favourites = new ArrayCollection();
         $this->createdAt = new \DateTime('NOW');
     }
 
@@ -615,5 +628,69 @@ class User implements UserInterface
     public function addRecommendedBundle(Bundle $bundle)
     {
         $this->recommendedBundles[] = $bundle;
+    }
+
+    /**
+     * Returns collection of favorite bundles
+     *
+     * @return Collection
+     */
+    public function getFavourites()
+    {
+        return $this->favourites;
+    }
+
+    /**
+     * Sets collection of favourite bundles
+     *
+     * @param Collection $collection Favourite bundles
+     */
+    public function setFavourites(Collection $favourites)
+    {
+        $this->favourites = $favourites;
+    }
+
+    /**
+     * Adds bundle to user favourites
+     *
+     * @param Bundle $bundle
+     */
+    public function addFavourite(Bundle $bundle)
+    {
+        if (!$this->hasFavourite($bundle)) {
+            $this->favourites[] = $bundle;
+        }
+    }
+
+    /**
+     * Removes bundle from favourites
+     *
+     * @param Bundle $bundle
+     */
+    public function removeFavourite(Bundle $bundle)
+    {
+        if ($this->hasFavourite($bundle)) {
+            $this->favourites->removeElement($bundle);
+        }
+    }
+
+    /**
+     * Checks whether the user favourited bundle
+     *
+     * @return Boolean
+     */
+    public function hasFavourite(Bundle $bundle)
+    {
+        return $this->favourites->contains($bundle);
+    }
+
+    /**
+     * Counts favourite bundles
+     *
+     * @return integer
+     */
+    public function countFavourites()
+    {
+        return count($this->favourites);
     }
 }

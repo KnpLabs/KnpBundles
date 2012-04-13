@@ -168,6 +168,17 @@
             {%- if isOwnerOrContributor -%}
             &nbsp;<span class="button github" data-controls-modal="modal-settings">{% trans %}bundles.show.setting{% endtrans %}</span>
             {%- endif -%}
+            {% if app.user is not null %}
+                    <a class="button github" href="{{ path('bundle_toggle_favourite', {'username': bundle.username, 'name': bundle.name}) }}">
+                {% if not app.user.hasFavourite(bundle)  %}
+                    {% trans %}bundles.show.favourite{% endtrans %}
+                {% else %}
+                    {% trans %}bundles.show.unfavourite{% endtrans %}
+                {% endif %}
+                    </a>
+            {% else %}
+                <a class="button github disabled">{% trans %}bundles.show.loginToFavourite{% endtrans %}</a>
+            {% endif %}
         </div>
     </div>
 

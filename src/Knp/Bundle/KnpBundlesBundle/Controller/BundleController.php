@@ -228,6 +228,40 @@ class BundleController extends BaseController
         return $this->redirect($this->generateUrl('bundle_show', $params));
     }
 
+    public function toggleFavouriteAction($username, $name)
+    {
+        if (!$this->userIsLogged()) {
+            $this->getRequest()->getSession()->set('redirect_url', $this->generateUrl('bundle_show', array('username' => $username, 'name' => $name)));
+
+            return $this->redirect($this->generateUrl('_login'));
+        }
+
+        $bundle = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);
+        if (!$bundle) {
+            throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
+        }
+
+        $params = array('username' => $username, 'name' => $name);
+
+        if (!$user = $this->get('security.context')->getToken()->getUser()) {
+            return $this->redirect($this->generateUrl('bundle_show', $params));
+        }
+        $em = $this->get('doctrine')->getEntityManager();
+
+        if ($user->hasFavourite($bundle)) {
+            $bundle->updateScore(-5);
+            $user->removeFavourite($bundle);
+        } else {
+            $bundle->updateScore(5);
+            $user->addFavourite($bundle);
+        }
+
+        $em->persist($user);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('bundle_show', $params));
+    }
+
     public function searchByKeywordAction($slug)
     {
         $query = $this->getRepository('Bundle')->queryByKeywordSlug($slug);
