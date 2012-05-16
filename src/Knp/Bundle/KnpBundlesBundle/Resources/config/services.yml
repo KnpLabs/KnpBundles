@@ -87,7 +87,6 @@ services:
     knp_bundles.github.search:
         class: %knp_bundles.github.search.class%
         arguments:
-            - @knp_bundles.github_client
             - @knp_bundles.goutte
             - @knp_bundles.output
 
