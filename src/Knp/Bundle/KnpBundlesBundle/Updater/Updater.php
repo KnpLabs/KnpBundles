@@ -157,7 +157,7 @@ class Updater
                         $this->output->writeln('OK, score is '.$user->getScore());
                     }
                     break;
-                } catch(\Github_HttpClient_Exception $e) {
+                } catch(\Github\HttpClient\Exception $e) {
                     $this->output->writeln("Got a Github exception, sleeping for a few secs before trying again");
                     sleep(60);
                 }

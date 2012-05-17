@@ -10,9 +10,9 @@ use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 use Knp\Bundle\KnpBundlesBundle\Github;
 
 /**
- * Manages user entities 
- * 
- * @author Romain Pouclet <romain.pouclet@knplabs.com> 
+ * Manages user entities
+ *
+ * @author Romain Pouclet <romain.pouclet@knplabs.com>
  */
 class UserManager
 {
@@ -25,7 +25,7 @@ class UserManager
      * @var Doctrine\ORM\EntityRepository
      */
     private $repository;
-    
+
     /**
      * @var Knp\Bundle\KnpBundlesBundle\Github\User
      */
@@ -35,7 +35,7 @@ class UserManager
     {
         $this->entityManager = $entityManager;
         $this->repository = $this->entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\User');
-        $this->githubUserApi = new Github\User(new \Github_Client(), new NullOutput());
+        $this->githubUserApi = new Github\User(new \Github\Client(), new NullOutput());
     }
 
     public function getOrCreate($username)

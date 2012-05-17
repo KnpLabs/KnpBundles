@@ -31,7 +31,7 @@ class Repo
      */
     protected $dispatcher;
 
-    public function __construct(\Github_Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager, EventDispatcherInterface $dispatcher)
+    public function __construct(\Github\Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager, EventDispatcherInterface $dispatcher)
     {
         $this->github = $github;
         $this->output = $output;
@@ -79,7 +79,7 @@ class Repo
         $this->output->write(' infos');
         try {
             $data = $this->github->getRepoApi()->show($bundle->getUsername(), $bundle->getName());
-        } catch (\Github_HttpClient_Exception $e) {
+        } catch (\Github\HttpClient\Exception $e) {
             if (404 == $e->getCode()) {
                 return false;
             }
@@ -108,7 +108,7 @@ class Repo
         $this->output->write(' commits');
         try {
             $commits = $this->github->getCommitApi()->getBranchCommits($bundle->getUsername(), $bundle->getName(), 'HEAD');
-        } catch (\Github_HttpClient_Exception $e) {
+        } catch (\Github\HttpClient\Exception $e) {
             if (404 == $e->getCode()) {
                 return false;
             }
@@ -207,7 +207,7 @@ class Repo
     {
         try {
             $contributors = $this->github->getRepoApi()->getRepoContributors($bundle->getUsername(), $bundle->getName());
-        } catch (\Github_HttpClient_Exception $e) {
+        } catch (\Github\HttpClient\Exception $e) {
             if (404 == $e->getCode()) {
                 return array();
             }
@@ -247,7 +247,7 @@ class Repo
     /**
      * Get github
      *
-     * @return \Github_Client
+     * @return \Github\Client
      */
     public function getGithubClient()
     {
@@ -257,8 +257,7 @@ class Repo
     /**
      * Set github
      *
-     * @param  \Github_Client
-     * @return null
+     * @param \Github\Client
      */
     public function setGithubClient($github)
     {

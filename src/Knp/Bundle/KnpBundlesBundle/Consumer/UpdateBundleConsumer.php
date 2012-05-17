@@ -139,7 +139,7 @@ class UpdateBundleConsumer implements ConsumerInterface
                 if ($bundle->getUsesTravisCi()) {
                     $this->travis->update($bundle);
                 }
-            } catch (\Github_HttpClient_Exception $e) {
+            } catch (\Github\HttpClient\Exception $e) {
                 if (preg_match('@403@', $e->getMessage())) {
                     if ($this->logger) {
                         $this->logger->err(sprintf('Bundle %s got a %s for trial %s', $bundle->getName(), $e->getMessage(), $i+1));

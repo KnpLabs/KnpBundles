@@ -21,7 +21,7 @@ class User
      */
     protected $output = null;
 
-    public function __construct(\Github_Client $github, OutputInterface $output)
+    public function __construct(\Github\Client $github, OutputInterface $output)
     {
         $this->github = $github;
         $this->output = $output;
@@ -42,7 +42,7 @@ class User
     {
         try {
             $data = $this->github->getUserApi()->show($user->getName());
-        } catch(\Github_HttpClient_Exception $e) {
+        } catch(\Github\HttpClient\Exception $e) {
             if(404 == $e->getCode()) {
                 // User has been removed
                 return false;
@@ -101,7 +101,7 @@ class User
     /**
      * Get github
      *
-     * @return \Github_Client
+     * @return \Github\Client
      */
     public function getGithubClient()
     {
@@ -111,8 +111,7 @@ class User
     /**
      * Set github
      *
-     * @param  \Github_Client
-     * @return null
+     * @param  \Github\Client
      */
     public function setGithubClient($github)
     {
