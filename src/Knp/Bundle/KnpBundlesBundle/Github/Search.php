@@ -82,7 +82,7 @@ class Search
             for ($page = 1; $page <= $maxPage; $page++) {
                 $url = sprintf('https://github.com/search?q=%s&repo=&langOverride=&start_value=%d&type=Repositories&language=PHP',
                     urlencode($query),
-                    (1 === $pageNumber) ? '' : $pageNumber
+                    $pageNumber
                 );
                 $crawler = $this->browser->request('GET', $url);
 
