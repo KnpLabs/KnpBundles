@@ -260,7 +260,7 @@ class Bundle
 
     /**
      * Last indexing time.
-     * 
+     *
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $indexedAt;
@@ -435,8 +435,10 @@ class Bundle
     public function getLastCommits($nb = 10)
     {
         $lastCommits = array_slice(unserialize($this->lastCommits), 0, $nb);
-        foreach ($lastCommits as $i => $commit) {
-            $lastCommits[$i]['message_first_line'] = strtok($commit['message'], "\n\r");
+        foreach ($lastCommits as $i => $commitInfo) {
+            $lastCommits[$i]['message_first_line'] = strtok($commitInfo['commit']['message'], "\n\r");
+            $lastCommits[$i]['author'] = $commitInfo['commit']['committer']['name'];
+            $lastCommits[$i]['date'] = $commitInfo['commit']['committer']['date'];
         }
 
         return $lastCommits;
@@ -456,7 +458,7 @@ class Bundle
         $this->lastCommits = serialize($lastCommits);
 
         $lastCommitAt = new \DateTime();
-        $lastCommitAt->setTimestamp(strtotime($lastCommits[0]['committed_date']));
+        $lastCommitAt->setTimestamp(strtotime($lastCommits[0]['commit']['committer']['date']));
         $this->setLastCommitAt($lastCommitAt);
     }
 
@@ -998,7 +1000,7 @@ class Bundle
         $this->recommenders[] = $user;
     }
 
-    /** 
+    /**
      * @param Knp\Bundle\KnpBundlesBundle\Entity\User
      * @return boolean
      */
@@ -1039,7 +1041,7 @@ class Bundle
         }
     }
 
-    /** 
+    /**
      * Get required version of Symfony
      *
      * @return string
@@ -1049,7 +1051,7 @@ class Bundle
         return $this->symfonyVersion;
     }
 
-    /** 
+    /**
      * Get required version of Symfony
      *
      * @param string
@@ -1058,7 +1060,7 @@ class Bundle
     {
         $this->symfonyVersion = $version;
     }
-    
+
     /**
      * Set indexedAt
      *
