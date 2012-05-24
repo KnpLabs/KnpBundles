@@ -3,6 +3,10 @@
 namespace Knp\Bundle\KnpBundlesBundle\Github;
 
 use Symfony\Component\Console\Output\OutputInterface;
+
+use Github\Client;
+use Github\HttpClient\Exception as GithubException;
+
 use Knp\Bundle\KnpBundlesBundle\Entity;
 
 class User
@@ -10,18 +14,22 @@ class User
     /**
      * php-github-api instance used to request GitHub API
      *
-     * @var \Github_Client
+     * @var \Github\Client|null
      */
     protected $github = null;
 
     /**
      * Output buffer
      *
-     * @var OutputInterface
+     * @var OutputInterface|null
      */
     protected $output = null;
 
-    public function __construct(\Github\Client $github, OutputInterface $output)
+    /**
+     * @param \Github\Client $github
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    public function __construct(Client $github, OutputInterface $output)
     {
         $this->github = $github;
         $this->output = $output;
@@ -42,8 +50,8 @@ class User
     {
         try {
             $data = $this->github->getUserApi()->show($user->getName());
-        } catch(\Github\HttpClient\Exception $e) {
-            if(404 == $e->getCode()) {
+        } catch(GithubException $e) {
+            if (404 === $e->getCode()) {
                 // User has been removed
                 return false;
             }

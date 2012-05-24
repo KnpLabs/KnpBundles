@@ -5,6 +5,9 @@ namespace Knp\Bundle\KnpBundlesBundle\Github;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+use Github\Client;
+use Github\HttpClient\Exception as GithubException;
+
 use Knp\Bundle\KnpBundlesBundle\Entity;
 use Knp\Bundle\KnpBundlesBundle\Git;
 use Knp\Bundle\KnpBundlesBundle\Detector;
@@ -15,23 +18,34 @@ class Repo
     /**
      * php-github-api instance used to request GitHub API
      *
-     * @var \Github_Client
+     * @var \Github\Client|null
      */
     protected $github = null;
 
     /**
+     * @var \Knp\Bundle\KnpBundlesBundle\Git\RepoManager|null
+     */
+    protected $gitRepoManager = null;
+
+    /**
      * Output buffer
      *
-     * @var OutputInterface
+     * @var null|\Symfony\Component\Console\Output\OutputInterface
      */
     protected $output = null;
 
     /**
-     * @var Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     protected $dispatcher;
 
-    public function __construct(\Github\Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager, EventDispatcherInterface $dispatcher)
+    /**
+     * @param \Github\Client $github
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Knp\Bundle\KnpBundlesBundle\Git\RepoManager $gitRepoManager
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+     */
+    public function __construct(Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager, EventDispatcherInterface $dispatcher)
     {
         $this->github = $github;
         $this->output = $output;
@@ -79,19 +93,16 @@ class Repo
         $this->output->write(' infos');
         try {
             $data = $this->github->getRepoApi()->show($bundle->getUsername(), $bundle->getName());
-        } catch (\Github\HttpClient\Exception $e) {
-            if (404 == $e->getCode()) {
+        } catch (GithubException $e) {
+            if (404 === $e->getCode()) {
                 return false;
             }
             throw $e;
         }
 
-        if($data['fork']) {
-            if ($data['watchers'] >= 10) {
-                // Let's try to keep a forked repo with lots of watchers
-            } else {
-                return false;
-            }
+        // Let's try to only keep a forked repo with lots of watchers
+        if ($data['fork'] && $data['watchers'] < 10) {
+            return false;
         }
 
         $bundle->setDescription(empty($data['description']) ? null : $data['description']);
@@ -108,8 +119,8 @@ class Repo
         $this->output->write(' commits');
         try {
             $commits = $this->github->getCommitApi()->getBranchCommits($bundle->getUsername(), $bundle->getName(), 'HEAD');
-        } catch (\Github\HttpClient\Exception $e) {
-            if (404 == $e->getCode()) {
+        } catch (GithubException $e) {
+            if (404 === $e->getCode()) {
                 return false;
             }
             throw $e;
@@ -136,7 +147,7 @@ class Repo
         $this->output->write(' files');
         $gitRepo = $this->gitRepoManager->getRepo($bundle);
 
-        foreach(array('README.markdown', 'README.md', 'README') as $readmeFilename) {
+        foreach (array('README.markdown', 'README.md', 'README') as $readmeFilename) {
             if ($gitRepo->hasFile($readmeFilename)) {
                $bundle->setReadme($gitRepo->getFileContent($readmeFilename));
                break;
@@ -201,14 +212,16 @@ class Repo
 
             return isset($composer->keywords) ? $composer->keywords : array();
         }
+
+        return array();
     }
 
     public function getContributorNames(Entity\Bundle $bundle)
     {
         try {
             $contributors = $this->github->getRepoApi()->getRepoContributors($bundle->getUsername(), $bundle->getName());
-        } catch (\Github\HttpClient\Exception $e) {
-            if (404 == $e->getCode()) {
+        } catch (GithubException $e) {
+            if (404 === $e->getCode()) {
                 return array();
             }
             throw $e;
@@ -236,8 +249,7 @@ class Repo
     /**
      * Set output
      *
-     * @param  OutputInterface
-     * @return null
+     * @param $output OutputInterface
      */
     public function setOutput($output)
     {
