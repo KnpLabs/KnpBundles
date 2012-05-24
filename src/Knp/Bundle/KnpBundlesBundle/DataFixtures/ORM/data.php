@@ -143,26 +143,36 @@ EOD;
                 'lastCommitAt'  => new \DateTime('-'.($i*4).' day'),
                 'lastCommits'   => array(
                     array(
-                        'author'            => array(
-                            'name'  => $contributor->getFullName(),
-                            'login' => $contributor->getName(),
-                            'email' => $contributor->getEmail()
+                        'commit' => array(
+                            'author'    => array(
+                                'date'  => '2010-05-16T09:58:32-09:00',
+                                'name'  => $contributor->getFullName(),
+                                'email' => $contributor->getEmail()
+                            ),
+                            'committer' => array(
+                                'date'  => '2010-05-16T09:58:32-09:00',
+                                'name'  => $contributor->getFullName(),
+                                'login' => $contributor->getName()
+                            ),
+                            'url'       => 'http://github.com',
+                            'message'   => 'Fix something on this Bundle',
                         ),
-                        'url'               => 'http://github.com',
-                        'committed_date'    => '2010-05-16T09:58:32-09:00',
-                        'authored_date'     => '2010-05-16T09:58:32-09:00',
-                        'message'           => 'Fix something on this '.'Bundle',
                     ),
                     array(
-                        'author'            => array(
-                            'name'  => $user->getFullName(),
-                            'login' => $user->getName(),
-                            'email' => $user->getEmail()
+                        'commit' => array(
+                            'author'    => array(
+                                'date'  => '2010-05-16T09:58:32-07:00',
+                                'name'  => $user->getFullName(),
+                                'email' => $user->getEmail()
+                            ),
+                            'committer' => array(
+                                'date'  => '2010-05-16T09:58:32-07:00',
+                                'name'  => $user->getFullName(),
+                                'email' => $user->getEmail()
+                            ),
+                            'url'       => 'http://github.com',
+                            'message'   => 'Commit something on this bundle',
                         ),
-                        'url'               => 'http://github.com',
-                        'committed_date'    => '2010-05-16T09:58:32-07:00',
-                        'authored_date'     => '2010-05-16T09:58:32-07:00',
-                        'message'           => 'Commit something on this bundle',
                     ),
                 ),
                 'isFork'        => false,
