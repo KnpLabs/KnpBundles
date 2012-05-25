@@ -6,8 +6,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\Console\Output\NullOutput;
 
+use Github\Client;
+
 use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
-use Knp\Bundle\KnpBundlesBundle\Github;
+use Knp\Bundle\KnpBundlesBundle\Github\User;
 
 /**
  * Manages user entities
@@ -35,7 +37,7 @@ class UserManager
     {
         $this->entityManager = $entityManager;
         $this->repository = $this->entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\User');
-        $this->githubUserApi = new Github\User(new \Github\Client(), new NullOutput());
+        $this->githubUserApi = new User(new Client(), new NullOutput());
     }
 
     public function getOrCreate($username)

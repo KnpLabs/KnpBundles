@@ -2,7 +2,10 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Github;
 
-class Request extends \Github\HttpClient\HttpClient
+use Github\HttpClient\HttpClient;
+use Github\HttpClient\Exception as GithubException;
+
+class Request extends HttpClient
 {
     /**
      * How many times retry to communicate with GitHub before giving up
@@ -28,7 +31,7 @@ class Request extends \Github\HttpClient\HttpClient
         for ($tries = 1; $tries <= $this->maxTries; $tries++) {
             try {
                 return parent::doRequest($apiPath, $parameters, $httpMethod, $options);
-            } catch(\Github\HttpClient\Exception $e) {
+            } catch(GithubException $e) {
                 if (404 === $e->getCode()) {
                     throw $e;
                 }

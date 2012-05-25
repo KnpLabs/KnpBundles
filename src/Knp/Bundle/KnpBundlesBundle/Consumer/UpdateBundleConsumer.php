@@ -11,6 +11,8 @@ use Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer;
 
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 
+use Github\HttpClient\Exception as GithubException;
+
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
@@ -139,8 +141,8 @@ class UpdateBundleConsumer implements ConsumerInterface
                 if ($bundle->getUsesTravisCi()) {
                     $this->travis->update($bundle);
                 }
-            } catch (\Github\HttpClient\Exception $e) {
-                if (preg_match('@403@', $e->getMessage())) {
+            } catch (GithubException $e) {
+                if (403 === $e->getCode()) {
                     if ($this->logger) {
                         $this->logger->err(sprintf('Bundle %s got a %s for trial %s', $bundle->getName(), $e->getMessage(), $i+1));
                     }
