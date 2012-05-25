@@ -143,7 +143,16 @@
             <h3>{% trans %}bundles.show.latest_commits.title{% endtrans %}</h3>
             <ul>
             {%- for commit in bundle.lastCommits %}
-                <li>{{ commit.message_first_line }}<div class="infos">{% trans %}bundles.show.latest_commits.by{% endtrans %} <a href="#">{{ commit.author }}</a> {{ time_diff(commit.date) }}</div></li>
+                <li>{{ commit.message_first_line }}
+                    <div class="infos">{% trans %}bundles.show.latest_commits.by{% endtrans %}
+                        {% if commit.committer.login is defined %}
+                            <a href="{{ path('user_show', {'name': commit.committer.login }) }}">{{ commit.committer.login }}</a>
+                        {% else %}
+                            <p>{{ commit.author }}</p>
+                        {% endif %}
+                        {{ time_diff(commit.date) }}
+                    </div>
+                </li>
             {%- endfor %}
             <ul>
         </div>

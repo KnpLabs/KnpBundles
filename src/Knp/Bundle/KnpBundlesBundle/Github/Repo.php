@@ -119,6 +119,10 @@ class Repo
         $this->output->write(' commits');
         try {
             $commits = $this->github->getCommitApi()->getBranchCommits($bundle->getUsername(), $bundle->getName(), 'HEAD');
+            foreach ($commits as $key => $commit) {
+                $commitDetailedInfo = $this->github->getCommitApi()->getCommit($bundle->getUsername(), $bundle->getName(), $commit['sha']);
+                $commits[$key]['committer'] = $commitDetailedInfo['committer'];
+            }
         } catch (GithubException $e) {
             if (404 === $e->getCode()) {
                 return false;
