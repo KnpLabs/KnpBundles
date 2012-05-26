@@ -105,11 +105,11 @@ old_sound_rabbit_mq:
     producers:
         update_bundle:
             connection: default
-            exchange_options: {name: 'upload-bundle', type: direct, durable: true }
+            exchange_options: {name: 'upload-bundle', type: direct, durable: true, auto_delete: false }
     consumers:
         update_bundle:
             connection: default
-            exchange_options: {name: 'upload-bundle', type: direct, durable: true }
+            exchange_options: {name: 'upload-bundle', type: direct, durable: true, auto_delete: false }
             queue_options:    {name: 'upload-bundle'}
             callback:         knp_bundles.consumer.update_bundle
     anon_consumers:
