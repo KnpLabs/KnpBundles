@@ -2,27 +2,58 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Updater;
 
-use Knp\Bundle\KnpBundlesBundle\Github\Search;
-use Knp\Bundle\KnpBundlesBundle\Github\User;
 use Doctrine\ORM\UnitOfWork;
-use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\NullOutput;
-use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
-use Doctrine\ORM\EntityManager;
-use Knp\Bundle\KnpBundlesBundle\Entity\UserManager;
+
+use Github\HttpClient\Exception as GithubException;
+
 use OldSound\RabbitMqBundle\RabbitMq\Producer;
+
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Knp\Bundle\KnpBundlesBundle\Entity\UserManager;
+use Knp\Bundle\KnpBundlesBundle\Github\Search;
+use Knp\Bundle\KnpBundlesBundle\Github\User;
+use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 
 class Updater
 {
+    /**
+     * @var \Knp\Bundle\KnpBundlesBundle\Github\User
+     */
     private $githubUserApi;
+    /**
+     * @var \Knp\Bundle\KnpBundlesBundle\Github\Search
+     */
     private $githubSearch;
+    /**
+     * @var array
+     */
     private $bundles;
+    /**
+     * @var \Knp\Bundle\KnpBundlesBundle\Entity\UserManager
+     */
     private $users;
+    /**
+     * @var \Doctrine\ORM\EntityManager
+     */
     private $em;
+    /**
+     * @var \Symfony\Component\Console\Output\NullOutput
+     */
     private $output;
+    /**
+     * @var \OldSound\RabbitMqBundle\RabbitMq\Producer
+     */
     private $bundleUpdateProducer;
 
+    /**
+    * @param \Doctrine\ORM\EntityManager $em
+    * @param \Knp\Bundle\KnpBundlesBundle\Entity\UserManager $users
+    * @param \Knp\Bundle\KnpBundlesBundle\Github\Search $githubSearch
+    * @param \Knp\Bundle\KnpBundlesBundle\Github\User $githubUserApi
+    */
     public function __construct(EntityManager $em,  UserManager $users, Search $githubSearch, User $githubUserApi)
     {
         $this->em = $em;
@@ -87,8 +118,8 @@ class Updater
     /**
      * Add or update a repo
      *
-     * @param string A full repo name like knplabs/KnpMenuBundle
-     * @param boolean Wether or not to fetch informations
+     * @param $fullName string A full repo name like knplabs/KnpMenuBundle
+     * @param $updateRepo boolean Wether or not to fetch informations
      * @return Bundle
      */
     public function addBundle($fullName, $updateRepo = true)
@@ -157,7 +188,7 @@ class Updater
                         $this->output->writeln('OK, score is '.$user->getScore());
                     }
                     break;
-                } catch(\Github_HttpClient_Exception $e) {
+                } catch(GithubException $e) {
                     $this->output->writeln("Got a Github exception, sleeping for a few secs before trying again");
                     sleep(60);
                 }

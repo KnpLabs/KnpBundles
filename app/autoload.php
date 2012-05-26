@@ -36,12 +36,12 @@ $loader->registerNamespaces(array(
     'Imagine'                       => __DIR__.'/../vendor/imagine/lib',
     'Igorw'                         => __DIR__.'/../vendor/bundles',
     'Nelmio'                        => __DIR__.'/../vendor/bundles',
+    'Github'                       => __DIR__.'/../vendor/php-github-api/lib',
 ));
 
 $loader->registerPrefixes(array(
     'Twig_Extensions_'              => __DIR__.'/../vendor/twig-extensions/lib',
     'Twig_'                         => __DIR__.'/../vendor/twig/lib',
-    'Github_'                       => __DIR__.'/../vendor/php-github-api/lib',
     'PHPGit_'                       => __DIR__.'/../vendor/php-git-repo/lib',
     'Solarium_'                     => __DIR__.'/../vendor/solarium/library',
 ));

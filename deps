@@ -95,7 +95,8 @@
     version=origin/cloneUrl
 
 [php-github-api]
-    git=http://github.com/ornicar/php-github-api.git
+    git=http://github.com/KnpLabs/php-github-api.git
+    version=origin/api_v3
 
 [OrnicarGravatarBundle]
     git=http://github.com/ornicar/GravatarBundle.git

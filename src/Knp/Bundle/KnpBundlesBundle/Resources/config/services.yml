@@ -9,7 +9,7 @@ parameters:
     knp_bundles.output.class: Symfony\Component\Console\Output\NullOutput
     knp_bundles.travis.class: Knp\Bundle\KnpBundlesBundle\Travis\Travis
     knp_bundles.goutte.class: Goutte\Client
-    knp_bundles.github.client.class: Github_Client
+    knp_bundles.github.client.class: Github\Client
     knp_bundles.github.search.class: Knp\Bundle\KnpBundlesBundle\Github\Search
     knp_bundles.github.users.class: Knp\Bundle\KnpBundlesBundle\Github\User
     knp_bundles.git_repository_manager.class: Knp\Bundle\KnpBundlesBundle\Git\RepoManager
@@ -87,7 +87,6 @@ services:
     knp_bundles.github.search:
         class: %knp_bundles.github.search.class%
         arguments:
-            - @knp_bundles.github_client
             - @knp_bundles.goutte
             - @knp_bundles.output
 

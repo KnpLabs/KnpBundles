@@ -11,22 +11,22 @@ class RepoTest extends \PHPUnit_Framework_TestCase
 {
     protected function getRepo()
     {
-        $github = new \Github_Client;
+        $github = new \Github\Client;
         $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
         $repoManager = $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Git\RepoManager')
                 ->disableOriginalConstructor()
                 ->getMock();
-        
-        return new Repo($github, $output, $repoManager, new EventDispatcher());        
+
+        return new Repo($github, $output, $repoManager, new EventDispatcher());
     }
 
     protected function getGitRepoMock()
     {
         return $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Git\Repo')
                 ->disableOriginalConstructor()
-                ->getMock();        
+                ->getMock();
     }
-    
+
     public function testUpdateComposerFailure()
     {
         $repoEntity = new Bundle('knplabs/KnpMenuBundle');
@@ -40,7 +40,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
 
         $method = new \ReflectionMethod($repo, 'updateComposerFile');
         $method->setAccessible(true);
-        
+
         $method->invokeArgs($repo, array($gitRepo, $repoEntity));
 
         $this->assertNull($repoEntity->getComposerName());
@@ -64,7 +64,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
 
         $method = new \ReflectionMethod($repo, 'updateComposerFile');
         $method->setAccessible(true);
-        
+
         $method->invokeArgs($repo, array($gitRepo, $repoEntity));
 
         $this->assertEquals($repoEntity->getComposerName(), 'knplabs/knp-menu-bundle');

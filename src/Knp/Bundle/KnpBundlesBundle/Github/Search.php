@@ -15,13 +15,6 @@ use Goutte\Client;
 class Search
 {
     /**
-     * php-github-api instance used to request GitHub API
-     *
-     * @var \Github_Client
-     */
-    protected $github = null;
-
-    /**
      * Web browser
      *
      * @var Client
@@ -35,17 +28,22 @@ class Search
      */
     protected $output = null;
 
-    public function __construct(\Github_Client $github, Client $browser, OutputInterface $output)
+    /**
+     * @param \Goutte\Client $browser
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    public function __construct(Client $browser, OutputInterface $output)
     {
-        $this->github = $github;
         $this->browser = $browser;
-        $this->output = $output;
+        $this->output  = $output;
     }
 
     /**
      * Get a list of Symfony2 bundles from GitHub & Google
      *
      * @param integer $limit The maximum number of results to return
+     *
+     * @return array
      */
     public function searchBundles($limit = 300)
     {
@@ -59,8 +57,8 @@ class Search
             return array_slice($repos, 0, $limit);
         }
 
-        $repos = $this->searchBundlesOnGitHub('Bundle', $repos, $limit);
-        $repos = $this->searchBundlesOnGitHub('Symfony2', $repos, $limit);
+        $repos = $this->searchBundlesOnGitHub('"Bundle"', $repos, $limit);
+        $repos = $this->searchBundlesOnGitHub('"Symfony2"', $repos, $limit);
         $this->output->writeln(sprintf('%d repos found!', count($repos) - $nb));
         $nb = count($repos);
         if ($nb >= $limit) {
@@ -69,7 +67,6 @@ class Search
 
         $repos = $this->searchBundlesOnGoogle($repos, $limit);
         $this->output->writeln(sprintf('%d repos found!', count($repos) - $nb));
-        $nb = count($repos);
 
         return array_slice($repos, 0, $limit);
     }
@@ -77,26 +74,50 @@ class Search
     protected function searchBundlesOnGitHub($query, array $repos, $limit)
     {
         $this->output->write(sprintf('Search "%s" on Github', $query));
-        try {
-            $page = 1;
-            do {
-                $found = $this->github->getRepoApi()->search($query, 'php', $page);
-                if (empty($found)) {
-                    break;
+
+        $maxBatch = 5;
+        $maxPage  = 5;
+        $pageNumber = 1;
+        for ($batch = 1; $batch <= $maxBatch; $batch++) {
+            for ($page = 1; $page <= $maxPage; $page++) {
+                $url = sprintf('https://github.com/search?q=%s&repo=&langOverride=&start_value=%d&type=Repositories&language=PHP',
+                    urlencode($query),
+                    $pageNumber
+                );
+                $crawler = $this->browser->request('GET', $url);
+
+                $maxPage = $crawler->filter('.results_and_sidebar .results .pagination a')->last()->text();
+
+                $links = $crawler->filter('.results_and_sidebar .results .result h2 a');
+                if (0 === $links->count()) {
+                    $this->output->write(sprintf(' - No link - [%s]', $this->browser->getResponse()->getStatus()));
+                    break 2;
                 }
-                foreach ($found as $repo) {
-                    $name = $repo['username'].'/'.$repo['name'];
-                    if (!$this->isValidBundleName($name)) {
+                $this->output->write('.');
+
+                foreach ($links->extract('href') as $url) {
+                    if (!preg_match('#^/([\w-]+/[\w-]+).*$#', $url, $match)) {
                         continue;
                     }
-                    $entity = new Bundle($name);
-                    $repos[strtolower($name)] = $entity;
+                    $name = $match[1];
+                    if (!isset($repos[strtolower($name)])) {
+                        if (!$this->isValidBundleName($name)) {
+                            continue;
+                        }
+                        $repo = new Bundle($name);
+                        $repos[strtolower($name)] = $repo;
+                        $this->output->write(sprintf('!'));
+                    }
                 }
-                $page++;
-                $this->output->write('...'.count($repos));
-            } while (count($repos) < $limit);
-        } catch (\Exception $e) {
-            $this->output->write(' - '.$e->getMessage());
+                ++$pageNumber;
+                if (count($repos) >= $limit) {
+                    // No need to keep searching and waiting.
+                    break 2;
+                }
+                usleep(500 * 1000);
+            }
+            $this->output->write(sprintf('%d/%d', 30 * ($pageNumber - 1), $maxBatch * $maxPage * 30));
+            sleep(2);
         }
         $this->output->writeln('... DONE');
 
@@ -117,18 +138,18 @@ class Search
                 );
                 $crawler = $this->browser->request('GET', $url);
                 $links = $crawler->filter('#center_col ol li h3 a');
-                if (0 != $links->count()) {
-                    $this->output->write('.');
-                } else {
+                if (0 === $links->count()) {
                     $this->output->write(sprintf(' - No link - [%s]', $this->browser->getResponse()->getStatus()));
                     break 2;
                 }
+                $this->output->write('.');
+
                 foreach ($links->extract('href') as $url) {
                     if (!preg_match('#^http://github.com/([\w-]+/[\w-]+).*$#', $url, $match)) {
                         continue;
                     }
                     $name = $match[1];
-                    if(!isset($repos[strtolower($name)])) {
+                    if (!isset($repos[strtolower($name)])) {
                         if (!$this->isValidBundleName($name)) {
                             continue;
                         }
@@ -137,7 +158,7 @@ class Search
                         $this->output->write(sprintf('!'));
                     }
                 }
-                $pageNumber++;
+                ++$pageNumber;
                 if (count($repos) >= $limit) {
                     // No need to keep searching and waiting.
                     break 2;
@@ -147,7 +168,7 @@ class Search
             $this->output->write(sprintf('%d/%d', 10 * ($pageNumber - 1), $maxBatch * $maxPage * 10));
             sleep(2);
         }
-        $this->output->writeln(' DONE');
+        $this->output->writeln('... DONE');
 
         return $repos;
     }
@@ -222,8 +243,8 @@ class Search
 
     /**
      * Set browser
+     *
      * @param  Client
-     * @return null
      */
     public function setBrowser($browser)
     {
@@ -244,7 +265,6 @@ class Search
      * Set output
      *
      * @param  OutputInterface
-     * @return null
      */
     public function setOutput(OutputInterface $output)
     {
@@ -252,30 +272,10 @@ class Search
     }
 
     /**
-     * Get github
-     *
-     * @return \Github_Client
-     */
-    public function getGithubClient()
-    {
-        return $this->github;
-    }
-
-    /**
-     * Set github
-     *
-     * @param  \Github_Client
-     * @return null
-     */
-    public function setGithubClient($github)
-    {
-        $this->github = $github;
-    }
-
-    /**
      * Check if a bundle name is really a bundle name
      *
-     * @param string name of the bundle
+     * @param string $name name of the bundle
+     *
      * @return bool
      */
     protected function isValidBundleName($name)

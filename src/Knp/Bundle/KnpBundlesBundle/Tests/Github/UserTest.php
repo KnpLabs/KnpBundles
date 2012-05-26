@@ -20,9 +20,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'blog' => 'http://knplabs.com',
         );
 
-        $github = $this->getMock('Github_Client', array('getUserApi'));
+        $github = $this->getMock('Github\Client', array('getUserApi'));
 
-        $githubUserApi = $this->getMock('Github_Api_User', array('show'), array($github));
+        $githubUserApi = $this->getMock('Github\Api\User', array('show'), array($github));
         $githubUserApi->expects($this->any())
             ->method('show')
             ->with($this->equalTo('lorem'))
@@ -54,9 +54,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'blog' => 'knplabs.com',
         );
 
-        $github = $this->getMock('Github_Client', array('getUserApi'));
+        $github = $this->getMock('Github\Client', array('getUserApi'));
 
-        $githubUserApi = $this->getMock('Github_Api_User', array('show'), array($github));
+        $githubUserApi = $this->getMock('Github\Api\User', array('show'), array($github));
         $githubUserApi->expects($this->any())
             ->method('show')
             ->with($this->equalTo('lorem'))
