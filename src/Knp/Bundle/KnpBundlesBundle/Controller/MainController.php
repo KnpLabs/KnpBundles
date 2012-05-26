@@ -37,13 +37,13 @@ class MainController extends BaseController
     {
         $translator = $this->get('translator');
         $maxId = $translator->trans('menu.promo.nb');
-        $id = rand(0, $maxId - 1);
-        $url = $translator->trans('menu.promo.'.$id.'.url');
-        $text = $translator->trans('menu.promo.'.$id.'.text');
+
+        $banner = $this->container->getParameter('banner');
+        $text = $banner['text'];
+        $url = $banner['url'];
 
         return $this->render('KnpBundlesBundle:Main:banner.html.twig', array(
             'url' => $url,
-            'id' => $id,
             'text' => $text,
         ));
     }

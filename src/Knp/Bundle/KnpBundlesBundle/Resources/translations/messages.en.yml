@@ -6,24 +6,6 @@ menu:
     evolution: "Evolution"
     addBundleManually: "Register a bundle"
 
-    promo:
-        nb: 5
-        0:
-            text: "Get a [training]| by KnpLabs' ninjas!"
-            url: "http://knplabs.com/training/symfony2"
-        1:
-            text: "Work with [ninja developers]| at KnpLabs!"
-            url: "http://knplabs.com/"
-        2:
-            text: "Get [coding assistance]|from a KnpLabs ninja!"
-            url: "http://knplabs.com/service/symfony-support"
-        3:
-            text: "[Join] the KnpLabs team!|In Nantes/France or remotely."
-            url: "http://knplabs.com/jobs"
-        4:
-            text: "Follow [KnpLabs on Twitter]!"
-            url: "http://twitter.com/knplabs"
-
 search:
     list:
         title: "Search"

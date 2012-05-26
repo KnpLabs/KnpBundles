@@ -30,3 +30,7 @@ parameters:
     solarium.host: 127.0.0.1
     solarium.port: 8983
     solarium.path: /solr
+
+    banner:
+        text: "Hello|[World]"
+        url: "http://knpbundles.com"
