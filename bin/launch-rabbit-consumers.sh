@@ -7,6 +7,6 @@ TASK="/usr/bin/php /site/app/console rabbitmq:consumer update_bundle --env=prod 
 
 for (( i=${NB_LAUNCHED}; i<${NB_TASKS}; i++ ))
 do
-    echo "Launching a new consumer"
+    echo "$(date +%c) - Launching a new consumer"
     nohup $TASK &
 done
