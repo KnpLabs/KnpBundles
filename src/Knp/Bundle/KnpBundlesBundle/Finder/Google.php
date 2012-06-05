@@ -81,9 +81,8 @@ class Google implements FinderInterface
             if (0 === count($results)) {
                 break;
             }
-
             foreach ($results as $result) {
-                if (in_array($result, $repositories)) {
+                if (!in_array($result, $repositories)) {
                     $repositories[] = $result;
                 }
             }

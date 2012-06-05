@@ -7,47 +7,67 @@ use Symfony\Component\DomCrawler\Crawler;
 class GoogleTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @dataProvider getBuildUrlData
+     * @test
      */
-    public function testBuildUrl($query, $arguments, $expected)
+    public function shouldBuildValidUrl()
     {
-        $finder = new Google($query);
+        $callCounter = 0;
 
-        $method = new \ReflectionMethod($finder, 'buildUrl');
-        $method->setAccessible(true);
+        $crawler = $this->getMock('Symfony\Component\DomCrawler\Crawler');
+        $crawler->expects($this->any())
+            ->method('filter')
+            ->will($this->returnSelf());
+        $crawler->expects($this->any())
+            ->method('extract')
+            ->will($this->returnCallback(function () use (&$callCounter) {
+                if ($callCounter) {
+                    return array('test' => 'https://github.com/KnpLabs/KnpBundles');
+                }
+                $callCounter++;
 
-        $this->assertEquals($expected, $method->invokeArgs($finder, $arguments));
-    }
+                return array('test2' => 'https://github.com/l3l0/KnpBundles');
+            }));
 
-    public function getBuildUrlData()
-    {
-        return array(
-            array(
-                'Symfony2',
-                array(1),
-                'http://www.google.com/search?q=Symfony2'
-            ),
-            array(
-                'Symfony2',
-                array(2),
-               'http://www.google.com/search?q=Symfony2&start=10'
-           )
-        );
+        $client = $this->getMock('Goutte\Client', array('request'));
+        $client->expects($this->at(0))
+            ->method('request')
+            ->with('GET', 'http://www.google.com/search?q=Symfony2')
+            ->will($this->returnValue($crawler));
+        $client->expects($this->at(1))
+            ->method('request')
+            ->with('GET', 'http://www.google.com/search?q=Symfony2&start=10')
+            ->will($this->returnValue($crawler));
+
+        $finder = new Google('Symfony2', 2, $client);
+        $repos = $finder->find();
+
+        $this->assertEquals(array('l3l0/KnpBundles', 'KnpLabs/KnpBundles'), $repos);
     }
 
     /**
      * @dataProvider getExtractPageUrlsData
+     * @test
      */
-    public function testExtractPageUrls($node, $expected)
+    public function shouldExtractPageUrlsFromGoogleHtml($node, $expected)
     {
-        $crawler = new Crawler($node);
+        $callCounter = 0;
 
-        $finder = new Google('Symfony2');
+        $client = $this->getMock('Goutte\Client', array('request'));
+        $client->expects($this->any())
+            ->method('request')
+            ->will($this->returnCallback(function () use ($node, &$callCounter) {
+                $callCounter++;
+                if (1 == $callCounter) {
+                    return new Crawler($node);
+                }
 
-        $method = new \ReflectionMethod($finder, 'extractPageUrls');
-        $method->setAccessible(true);
+                return new Crawler();
+            }));
 
-        $this->assertEquals($expected, $method->invoke($finder, $crawler));
+        $finder = new Google('Symfony2', 3, $client);
+        $values = $finder->find();
+
+        $this->assertEquals($expected, $values);
     }
 
     public function getExtractPageUrlsData()
@@ -60,58 +80,20 @@ class GoogleTest extends \PHPUnit_Framework_TestCase
             array(
                 file_get_contents(__DIR__.'/Fixtures/google-results.html'),
                 array(
-                    'https://github.com/foo/bar',
-                    'http://nothing.tld',
-                    'https://github.com/foo/bar2'
+                    'foo/bar',
+                    'foo/bar2'
                 )
             )
         );
     }
 
     /**
-     * @dataProvider getExtractUrlRepositoryData
+     * @test
+     * @expectedException \LogicException
      */
-    public function testExtractUrlRepository($url, $expected)
+    public function shouldNotUseEmptyQuery()
     {
-        $finder = new Google('Symfony2');
-
-        $method = new \ReflectionMethod($finder, 'extractUrlRepository');
-        $method->setAccessible(true);
-
-        $this->assertEquals($expected, $method->invoke($finder, $url));
-    }
-
-    public function getExtractUrlRepositoryData()
-    {
-        return array(
-            array(
-                'https://github.com/foo/bar',
-                'foo/bar'
-            ),
-            array(
-                'https://github.com/dashed-username/dashed-repository',
-                'dashed-username/dashed-repository'
-            ),
-            array(
-                'https://github.com/underscored_username/underscored_repository',
-                'underscored_username/underscored_repository'
-            ),
-            array(
-                'https://github.com/foo',
-                null
-            ),
-            array(
-                'http://github.com/foo/bar',
-                'foo/bar'
-            ),
-            array(
-                'https://www.github.com/foo/bar',
-                'foo/bar'
-            ),
-            array(
-                'http://www.github.com/foo/bar',
-                'foo/bar'
-            )
-        );
+        $finder = new Google('', 3);
+        $finder->find();
     }
 }
