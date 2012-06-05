@@ -1,3 +1,4 @@
+@solr
 Feature: Listing and searching bundles by keywords
   As a Visitor
   I want to list or search bundles by keywords
@@ -19,6 +20,7 @@ Feature: Listing and searching bundles by keywords
     | Test2Bundle | unique       |
     | UserBundle  | user         |
     | UserBundle  | user login   |
+    And bundles are indexed
     
   Scenario: List bundles by keyword
     When I go to "/keyword/test"

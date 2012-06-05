@@ -10,6 +10,18 @@ use Knp\Bundle\KnpBundlesBundle\Command\KbGenerateBadgesCommand;
 
 class KbGenerateBadgesCommandTest extends \PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        if (!function_exists('gd_info')) {
+            $this->markTestSkipped();
+        }
+        $info = gd_info();
+
+        if (!$info['FreeType Support']) {
+            $this->markTestSkipped();
+        }
+    }
+
     public function testBadgeGenerator()
     {
         $kernel = new \AppKernel('test', true);
