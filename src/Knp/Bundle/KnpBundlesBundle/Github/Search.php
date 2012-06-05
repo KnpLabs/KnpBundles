@@ -45,10 +45,12 @@ class Search
      *
      * @return array
      */
-    public function searchBundles($limit = 300)
+    public function searchBundles()
     {
         $repos = array();
         $nb = 0;
+
+        $limit = 2000;
 
         $repos = $this->searchBundlesOnTwitter('(#knpbundles OR #symfony2 OR #symfony) github filter:links', $repos, $limit);
         $this->output->writeln(sprintf('%d repos found!', count($repos) - $nb));
