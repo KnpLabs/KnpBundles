@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\Bundle\KnpBundlesBundle\Finder;
+namespace Knp\Bundle\KnpBundlesBundle\Tests\Security\Core\User;
 
 use Knp\Bundle\KnpBundlesBundle\Security\Core\User\UserProvider;
 

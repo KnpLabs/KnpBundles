@@ -67,10 +67,6 @@
     git=http://github.com/KnpLabs/KnpTimeBundle.git
     target=bundles/Knp/Bundle/TimeBundle
 
-[KnpMarkdownBundle]
-    git=http://github.com/KnpLabs/KnpMarkdownBundle.git
-    target=bundles/Knp/Bundle/MarkdownBundle
-
 [KnpMenu]
     git=http://github.com/KnpLabs/KnpMenu.git
     target=knp-menu
@@ -119,13 +115,16 @@
 [twitteroauth]
     git=http://github.com/abraham/twitteroauth.git
     target=twitteroauth
+
 [gherkin]
     git=https://github.com/Behat/Gherkin.git
-    target=behat/gherkin
+    target=/behat/gherkin
+    version=v2.1.0
 
 [behat]
     git=https://github.com/Behat/Behat.git
-    target=behat/behat
+    target=/behat/behat
+    version=v2.3.5
 
 [BehatBundle]
     git=https://github.com/Behat/BehatBundle.git
@@ -134,6 +133,7 @@
 [mink]
     git=https://github.com/Behat/Mink.git
     target=behat/mink
+    version=v1.3.0
 
 [MinkBundle]
     git=https://github.com/Behat/MinkBundle.git
@@ -178,3 +178,7 @@
 [NelmioSolariumBundle]
     git=http://github.com/nelmio/NelmioSolariumBundle.git
     target=bundles/Nelmio/SolariumBundle
+
+[KnpMarkdownBundle]
+    git=http://github.com/KnpLabs/KnpMarkdownBundle.git
+    target=bundles/Knp/Bundle/MarkdownBundle
