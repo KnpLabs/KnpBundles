@@ -93,8 +93,12 @@ so the commands needs to wait.
 
 We use [Solr](http://lucene.apache.org/solr/) and it's PHP client [Solarium](http://solarium-project.org) to search bundles.
 Recommended schema can be found
-[**here**](https://github.com/KnpLabs/KnpBundles/blob/master/src/Knp/Bundle/KnpBundlesBundle/Resources/solr/schema.xml).  
-Put it inside the `solr/conf` directory, and run Solr with `$ java -jar start.jar`.  
+[**here**](https://github.com/KnpLabs/KnpBundles/blob/master/src/Knp/Bundle/KnpBundlesBundle/Resources/solr/conf/schema.xml).  
+You can run SOLR using:
+
+    php app/console kb:solr:start
+
+See bin/prepare-test-solr.sh script
 Bundles will be automatically indexed on next update, or you can force indexing by console command.
 
 If you have Solr up and running, simply do:

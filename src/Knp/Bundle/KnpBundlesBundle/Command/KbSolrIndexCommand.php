@@ -40,7 +40,6 @@ class KbSolrIndexCommand extends ContainerAwareCommand
         $bundleName = $input->getArgument('bundleName');
 
         $doctrine = $this->getContainer()->get('doctrine');
-        $solarium = $this->getContainer()->get('solarium.client');
         $indexer = $this->getContainer()->get('knp_bundles.indexer.solr');
 
         if ($bundleName) {
@@ -56,12 +55,8 @@ class KbSolrIndexCommand extends ContainerAwareCommand
             if ($verbose) {
                 $output->writeln('Deleting existing index.');
             }
-
-            $update = $solarium->createUpdate();
-            $update->addDeleteQuery('*:*');
-            $update->addCommit();
-
-            $solarium->update($update);
+            
+            $indexer->deleteBundlesIndexes();
         }
 
         foreach ($bundles as $bundle) {

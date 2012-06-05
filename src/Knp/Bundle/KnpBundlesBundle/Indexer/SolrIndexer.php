@@ -74,4 +74,16 @@ class SolrIndexer
         }
         $document->keywords = $keywords;
     }
+
+    /**
+     * Delete all bundles from index
+     */
+    public function deleteBundlesIndexes()
+    {
+        $delete = $this->solarium->createUpdate();
+        $delete->addDeleteQuery('*:*');
+        $delete->addCommit();
+
+        $this->solarium->update($delete);
+    }
 }
