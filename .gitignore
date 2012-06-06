@@ -1,4 +1,7 @@
 .DS_Store
+.idea
+/symfony
+
 /app/bootstrap.php.cache
 /app/cache/*
 /app/logs/*
