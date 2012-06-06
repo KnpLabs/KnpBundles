@@ -23,7 +23,7 @@ class KbSolrServerStartCommand extends ContainerAwareCommand
             ->setName('kb:solr:start')
             ->setDescription('Start SOLR for given enviroment')
             ->addOption('solr-path', 'p', InputOption::VALUE_OPTIONAL, 'path to solr (where start.jar is localized)', '/opt/solr/example')
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'If set show command but not execute it')
+            ->addOption('show-commands-only', null, InputOption::VALUE_NONE, 'If set show command but not execute it')
         ;
     }
 
@@ -32,7 +32,7 @@ class KbSolrServerStartCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('dry-run')) {
+        if ($input->getOption('show-commands-only')) {
             $output->writeln(sprintf('<info>%s</info>', $this->createRunSolrCommand($input)));
 
             return 0;
