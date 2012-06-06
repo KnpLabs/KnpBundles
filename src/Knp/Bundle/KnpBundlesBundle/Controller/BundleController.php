@@ -146,7 +146,7 @@ class BundleController extends BaseController
 
     public function listLatestAction()
     {
-        $bundles = $this->getRepository('Bundle')->findAllSortedBy('createdAt', 50);
+        $bundles = $this->getRepository('Bundle')->findAllSortedBy('createdAt', 'desc', 50);
 
         $format = $this->recognizeRequestFormat(array('atom'), 'atom');
 

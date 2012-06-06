@@ -7,21 +7,21 @@ use Doctrine\ORM\NoResultException;
 
 class BundleRepository extends EntityRepository
 {
-    public function findAllSortedBy($field, $nb = null)
+    public function findAllSortedBy($field, $order = 'desc', $nb = null)
     {
-        $query = $this->queryAllSortedBy($field);
+        $query = $this->queryAllSortedBy($field, $order);
 
-        if(null !== $nb) {
+        if (null !== $nb) {
             $query->setMaxResults($nb);
         }
 
         return $query->execute();
     }
 
-    public function queryAllSortedBy($field)
+    public function queryAllSortedBy($field, $order)
     {
-        $qb = $this->createQueryBuilder('bundle');
-        $qb->orderBy('bundle.'.$field, 'name' === $field ? 'asc' : 'desc');
+        $qb = $this->createQueryBuilder('b');
+        $qb->orderBy('b.' . $field, $order);
         $query = $qb->getQuery();
 
         return $query;
@@ -77,14 +77,14 @@ class BundleRepository extends EntityRepository
 
     public function count()
     {
-        return $this->getEntityManager()->createQuery('SELECT COUNT(bundle.id) FROM '.$this->getEntityName().' bundle')->getSingleScalarResult();
+        return $this->getEntityManager()->createQuery('SELECT COUNT(bundle.id) FROM ' . $this->getEntityName() . ' bundle')->getSingleScalarResult();
     }
 
     public function getLastCommits($nb)
     {
         $bundles = $this->findByLastCommitAt($nb);
         $commits = array();
-        foreach($bundles as $bundle) {
+        foreach ($bundles as $bundle) {
             $commits = array_merge($commits, $bundle->getLastCommits());
         }
         usort($commits, function($a, $b)
@@ -112,7 +112,7 @@ class BundleRepository extends EntityRepository
                 ->setParameter('name', $name)
                 ->getQuery()
                 ->getSingleResult();
-        } catch(NoResultException $e) {
+        } catch (NoResultException $e) {
             return null;
         }
     }
@@ -123,8 +123,7 @@ class BundleRepository extends EntityRepository
             ->leftJoin('bundle.user', 'user')
             ->where('bundle.indexedAt IS NULL OR bundle.indexedAt < bundle.updatedAt')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     public function updateTrends()
