@@ -20,7 +20,6 @@ class KbAddSearchedBundlesCommand extends ContainerAwareCommand
     {
         $this
             ->setDefinition(array())
-            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'The maximal number of new bundles considered by the update', 2000)
             ->setName('kb:add:searched-bundles')
         ;
     }
@@ -36,7 +35,7 @@ class KbAddSearchedBundlesCommand extends ContainerAwareCommand
         $updater->setOutput($output);
         $updater->setUp();
 
-        $bundles = $updater->searchNewBundles((int) $input->getOption('limit'));
+        $bundles = $updater->searchNewBundles();
         $updater->createMissingBundles($bundles);
 
         $em = $this->getContainer()->get('knp_bundles.entity_manager');

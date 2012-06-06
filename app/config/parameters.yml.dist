@@ -34,3 +34,5 @@ parameters:
     banner:
         text: "Hello|[Edgar]"
         url: "http://knpbundles.com"
+
+    knp_bundles.finder.limit: 2000
