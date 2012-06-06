@@ -133,7 +133,7 @@
 [mink]
     git=https://github.com/Behat/Mink.git
     target=behat/mink
-    version=v1.3.0
+    version=v1.3.*
 
 [MinkBundle]
     git=https://github.com/Behat/MinkBundle.git
