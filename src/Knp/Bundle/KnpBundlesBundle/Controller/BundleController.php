@@ -57,7 +57,7 @@ class BundleController extends BaseController
 
         $format = $this->recognizeRequestFormat();
 
-        if ('html' == $format && count($bundles) == 1 && strtolower($bundles[0]['name']) == strtolower($query)) {
+        if ('html' === $format && count($bundles) === 1 && strtolower($bundles[0]['name']) == strtolower($query)) {
             $params = array('username' => $bundles[0]['username'], 'name' => $bundles[0]['name']);
 
             return $this->redirect($this->generateUrl('bundle_show', $params));
