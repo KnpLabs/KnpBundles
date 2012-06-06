@@ -76,15 +76,16 @@ class Updater
     public function setUp()
     {
         $this->bundles = array();
-        foreach ($this->em->createQuery('SELECT b FROM KnpBundlesBundle:Bundle b ORDER BY b.updatedAt DESC')->execute() as $bundle) {
+        foreach ($this->em->getRepository('KnpBundlesBundle:Bundle')->findAllSortedBy('updatedAt') as $bundle) {
             $this->bundles[strtolower($bundle->getFullName())] = $bundle;
         }
         $this->output->writeln(sprintf('Loaded %d bundles from the DB', count($this->bundles)));
     }
 
-    public function searchNewBundles($nb)
+    public function searchNewBundles()
     {
-        $foundBundles = $this->githubSearch->searchBundles($nb, $this->output);
+        $this->githubSearch->setOutput($this->output);
+        $foundBundles = $this->githubSearch->searchBundles();
         $this->output->writeln(sprintf('Found %d bundle candidates', count($foundBundles)));
 
         return $foundBundles;
