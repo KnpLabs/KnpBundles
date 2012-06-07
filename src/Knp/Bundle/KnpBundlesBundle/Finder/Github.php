@@ -15,7 +15,6 @@ class Github extends CommonFinder
     const ENDPOINT         = 'https://github.com/search';
     const PARAMETER_QUERY  = 'q';
     const PARAMETER_START  = 'start_value';
-    const RESULTS_PER_PAGE = 30;
 
     /**
      * {@inheritdoc}
@@ -31,7 +30,7 @@ class Github extends CommonFinder
         );
 
         if ($page > 1) {
-            $params[self::PARAMETER_START] = self::RESULTS_PER_PAGE * ($page - 1);
+            $params[self::PARAMETER_START] = $page;
         }
 
         return self::ENDPOINT . '?' . http_build_query($params);
