@@ -49,10 +49,10 @@ class Updater
     private $bundleUpdateProducer;
 
     /**
-     * @param \Doctrine\ORM\EntityManager                     $em
-     * @param \Knp\Bundle\KnpBundlesBundle\Entity\UserManager $users
-     * @param \Knp\Bundle\KnpBundlesBundle\Github\Search      $finder
-     * @param \Knp\Bundle\KnpBundlesBundle\Github\User        $githubUserApi
+     * @param \Doctrine\ORM\EntityManager                              $em
+     * @param \Knp\Bundle\KnpBundlesBundle\Entity\UserManager          $users
+     * @param \Knp\Bundle\KnpBundlesBundle\Finder\FinderInterface      $finder
+     * @param \Knp\Bundle\KnpBundlesBundle\Github\User                 $githubUserApi
      */
     public function __construct(EntityManager $em, UserManager $users, FinderInterface $finder, User $githubUserApi)
     {
