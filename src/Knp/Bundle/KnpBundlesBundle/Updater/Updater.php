@@ -13,7 +13,7 @@ use OldSound\RabbitMqBundle\RabbitMq\Producer;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\UserManager;
-use Knp\Bundle\KnpBundlesBundle\Github\Search;
+use Knp\Bundle\KnpBundlesBundle\Finder\FinderInterface;
 use Knp\Bundle\KnpBundlesBundle\Github\User;
 use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 
@@ -24,9 +24,9 @@ class Updater
      */
     private $githubUserApi;
     /**
-     * @var \Knp\Bundle\KnpBundlesBundle\Github\Search
+     * @var \Knp\Bundle\KnpBundlesBundle\Finder\FinderInterface|
      */
-    private $githubSearch;
+    private $finder;
     /**
      * @var array
      */
@@ -49,15 +49,15 @@ class Updater
     private $bundleUpdateProducer;
 
     /**
-    * @param \Doctrine\ORM\EntityManager $em
-    * @param \Knp\Bundle\KnpBundlesBundle\Entity\UserManager $users
-    * @param \Knp\Bundle\KnpBundlesBundle\Github\Search $githubSearch
-    * @param \Knp\Bundle\KnpBundlesBundle\Github\User $githubUserApi
-    */
-    public function __construct(EntityManager $em,  UserManager $users, Search $githubSearch, User $githubUserApi)
+     * @param \Doctrine\ORM\EntityManager                              $em
+     * @param \Knp\Bundle\KnpBundlesBundle\Entity\UserManager          $users
+     * @param \Knp\Bundle\KnpBundlesBundle\Finder\FinderInterface      $finder
+     * @param \Knp\Bundle\KnpBundlesBundle\Github\User                 $githubUserApi
+     */
+    public function __construct(EntityManager $em, UserManager $users, FinderInterface $finder, User $githubUserApi)
     {
         $this->em = $em;
-        $this->githubSearch = $githubSearch;
+        $this->finder = $finder;
         $this->githubUserApi = $githubUserApi;
         $this->users = $users;
         $this->output = new NullOutput();
@@ -84,11 +84,18 @@ class Updater
 
     public function searchNewBundles()
     {
-        $this->githubSearch->setOutput($this->output);
-        $foundBundles = $this->githubSearch->searchBundles();
-        $this->output->writeln(sprintf('Found %d bundle candidates', count($foundBundles)));
+        $this->output->writeln(sprintf('Trying to find bundle candidates'));
 
-        return $foundBundles;
+        $repos = $this->finder->find();
+        $bundles = array();
+        foreach ($repos as $repo) {
+            if ($this->isValidBundleName($repo)) {
+                $bundles[strtolower($repo)] = new Bundle($repo);
+            }
+        }
+        $this->output->writeln(sprintf('Found %d bundle candidates', count($bundles)));
+
+        return $bundles;
     }
 
     public function createMissingBundles($foundBundles)
@@ -119,7 +126,7 @@ class Updater
     /**
      * Add or update a repo
      *
-     * @param $fullName string A full repo name like knplabs/KnpMenuBundle
+     * @param $fullName   string A full repo name like knplabs/KnpMenuBundle
      * @param $updateRepo boolean Wether or not to fetch informations
      * @return Bundle
      */
@@ -180,20 +187,32 @@ class Updater
 
             while (true) {
                 try {
-                    $this->output->write($user->getName().str_repeat(' ', 40-strlen($user->getName())));
+                    $this->output->write($user->getName() . str_repeat(' ', 40 - strlen($user->getName())));
                     if (!$this->githubUserApi->update($user)) {
                         $this->output->writeln('Remove user');
                         $this->em->remove($user);
                     } else {
                         $user->recalculateScore();
-                        $this->output->writeln('OK, score is '.$user->getScore());
+                        $this->output->writeln('OK, score is ' . $user->getScore());
                     }
                     break;
-                } catch(GithubException $e) {
+                } catch (GithubException $e) {
                     $this->output->writeln("Got a Github exception, sleeping for a few secs before trying again");
                     sleep(60);
                 }
             }
         }
+    }
+
+    /**
+     * Check if a bundle name is really a bundle name
+     *
+     * @param string $name name of the bundle
+     *
+     * @return bool
+     */
+    protected function isValidBundleName($name)
+    {
+        return (bool)preg_match('@Bundle$@', $name);
     }
 }
