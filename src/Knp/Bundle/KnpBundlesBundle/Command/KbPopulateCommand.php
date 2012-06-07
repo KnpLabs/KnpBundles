@@ -34,8 +34,6 @@ class KbPopulateCommand extends ContainerAwareCommand
     {   
         $container = $this->getContainer();
 
-        $em = $container->get('knp_bundles.entity_manager');
-
         $updater = $container->get('knp_bundles.updater');
 
         if (!$input->getOption('no-publish')) {
@@ -45,8 +43,6 @@ class KbPopulateCommand extends ContainerAwareCommand
 
         $updater->setOutput($output);
         $updater->setUp();
-
-        $bundles = $em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle')->findAll();
 
         $bundles = $updater->searchNewBundles();
         $updater->createMissingBundles($bundles);
