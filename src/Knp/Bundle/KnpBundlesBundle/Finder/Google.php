@@ -51,5 +51,4 @@ class Google extends CommonFinder
 
         return null;
     }
-
 }
