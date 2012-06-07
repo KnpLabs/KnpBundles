@@ -82,9 +82,10 @@ class Updater
         $this->output->writeln(sprintf('Loaded %d bundles from the DB', count($this->bundles)));
     }
 
-    public function searchNewBundles($nb)
+    public function searchNewBundles()
     {
-        $foundBundles = $this->githubSearch->searchBundles($nb, $this->output);
+        $this->githubSearch->setOutput($this->output);
+        $foundBundles = $this->githubSearch->searchBundles();
         $this->output->writeln(sprintf('Found %d bundle candidates', count($foundBundles)));
 
         return $foundBundles;
