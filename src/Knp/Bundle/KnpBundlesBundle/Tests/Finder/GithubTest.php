@@ -36,7 +36,7 @@ class GithubTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($crawler));
         $client->expects($this->at(1))
             ->method('request')
-            ->with('GET', 'https://github.com/search?q=Symfony2&type=Repositories&language=PHP&start_value=30')
+            ->with('GET', 'https://github.com/search?q=Symfony2&type=Repositories&language=PHP&start_value=2')
             ->will($this->returnValue($crawler));
 
         $finder = new Github('Symfony2', 2, $client);
