@@ -12,7 +12,10 @@
             
             <ul class="details">
                 <li>{% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': bundle.username }) }}" class="owner">{{ bundle.username }}</a></li>
-                <li>{% trans %}bundles.list.lastCommit{% endtrans %} <span>{{ time_diff(bundle.lastCommitAt) }}</span></li>
+                <li>
+                    {% trans %}bundles.list.activity{% endtrans %} 
+                    <abbr title="{% trans %}bundles.list.lastCommit{% endtrans %}{{ time_diff(bundle.lastCommitAt) }}">{{ bundle.lastCommitAt|bundle_activity|trans }}</abbr>
+                </li>
             </ul>
         </div>
         <div class="img">
