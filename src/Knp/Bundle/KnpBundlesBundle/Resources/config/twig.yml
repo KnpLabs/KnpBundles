@@ -9,3 +9,7 @@ services:
         class: Knp\Bundle\KnpBundlesBundle\Twig\Extension\FlaworedMarkdownTwigExtension
         tags:
             - { name: twig.extension }
+    twig.extension.knp.bundle_activity:
+        class: Knp\Bundle\KnpBundlesBundle\Twig\Extension\BundleActivityTwigExtension
+        tags:
+            - { name: twig.extension }        
