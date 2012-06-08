@@ -42,6 +42,7 @@ class FeatureContext extends MinkContext
     public function __construct($kernel)
     {
         $this->useContext('symfony_doctrine', new \Behat\CommonContexts\SymfonyDoctrineContext($kernel));
+        $this->useContext('solr', new \Knp\Bundle\KnpBundlesBundle\Features\Context\SolrContext($kernel));
 
         parent::__construct($kernel);
     }

@@ -1,4 +1,7 @@
 .DS_Store
+.idea
+/symfony
+
 /app/bootstrap.php.cache
 /app/cache/*
 /app/logs/*
@@ -12,6 +15,7 @@
 /web/sitemap.xml*
 /app/DoctrineMigrations/*
 /src/Knp/Bundle/KnpBundlesBundle/DoctrineMigrations/*
+/src/Knp/Bundle/KnpBundlesBundle/Resources/solr/data/*
 /vendor/*
 /app/config/parameters.yml
 /app/config/parameters.*.yml
