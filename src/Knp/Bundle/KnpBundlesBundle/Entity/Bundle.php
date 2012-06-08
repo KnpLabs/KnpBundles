@@ -875,7 +875,7 @@ class Bundle
      */
     public function getState()
     {
-        return null === $this->state ? self::STATE_UNKNOWN : $this->state;
+        return empty($this->state) ? self::STATE_UNKNOWN : $this->state;
     }
 
     /**
