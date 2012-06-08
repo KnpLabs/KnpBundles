@@ -13,32 +13,19 @@
     <services>
         <service id="knp_bundles.finder" class="%knp_bundles.finder.aggregate.class%" />
 
-        <!-- Search "site:github.com Symfony2 Bundle" on Google -->
-        <service class="%knp_bundles.finder.google.class%" public="false">
-        	<tag name="knp_bundles.finder" />
-            <argument>site:github.com Symfony2 Bundle</argument>
-            <argument>300</argument>
-        </service>
-
-        <!-- Search "site:github.com Symfony2 Project" on Google -->
-        <service class="%knp_bundles.finder.google.class%" public="false">
-        	<tag name="knp_bundles.finder" />
-            <argument>site:github.com Symfony2 Project</argument>
-            <argument>300</argument>
-        </service>
+        <!-- Example usage of Google finder: Search query "site:github.com Symfony2 Bundle" on Google -->
+        <!--<service class="%knp_bundles.finder.google.class%" public="false">-->
+        	<!--<tag name="knp_bundles.finder" />-->
+            <!--<argument>site:github.com Symfony2 Bundle</argument>-->
+            <!--<argument>%knp_bundles.finder.limit%</argument>-->
+        <!--</service>-->
 
         <!-- Search "Symfony2 Bundle" on Github -->
         <service class="%knp_bundles.finder.github.class%" public="false">
             <tag name="knp_bundles.finder" />
-            <argument>Symfony2 Bundle</argument>
-            <argument>300</argument>
+            <argument>Bundle</argument>
+            <argument>%knp_bundles.finder.limit%</argument>
         </service>
 
-        <!-- Search "Symfony2 Project" on Github -->
-        <service class="%knp_bundles.finder.github.class%" public="false">
-            <tag name="knp_bundles.finder" />
-            <argument>Symfony2 Project</argument>
-            <argument>300</argument>
-        </service>
     </services>
 </container>

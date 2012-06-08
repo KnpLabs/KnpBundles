@@ -32,7 +32,7 @@ services:
         arguments:
             - @knp_bundles.entity_manager
             - @knp_bundles.user.manager
-            - @knp_bundles.github.search
+            - @knp_bundles.finder
             - @knp_bundles.github.users
 
     knp_bundles.user.manager:

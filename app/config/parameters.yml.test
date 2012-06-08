@@ -28,7 +28,7 @@ parameters:
     kb_sitemap.base_url: http://knpbundles.com
 
     solarium.host: 127.0.0.1
-    solarium.port: 8983
+    solarium.port: 8984
     solarium.path: /solr
 
     banner:
