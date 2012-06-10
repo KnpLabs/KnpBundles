@@ -9,6 +9,10 @@ use Imagine\Image\ImagineInterface;
 
 class BadgeGenerator
 {
+    // Badge types
+    const LONG = 'long';
+    const SHORT = 'short';
+
     /**
      * Instace of Imagine lib acсording to image lib
      */
@@ -24,6 +28,34 @@ class BadgeGenerator
      */
     protected $font = 'arial.ttf';
 
+    /**
+     * Get badge type
+     */
+    protected $type = array(
+        self::LONG => 'badge-mock.png',
+        self::SHORT => 'badge-line-mock.png'
+    );
+
+    /**
+     * Determine score points position
+     */
+    protected $position = array(
+        self::LONG => array(
+            // n => x:y
+            // n+1 - score count number
+            '29:16',
+            '23:16',
+            '15:16',
+            '10:16'
+        ),
+        self::SHORT => array(
+            '28:5',
+            '22:5',
+            '14:5',
+            '6:5'   
+        )
+    );
+
     public function __construct(ImagineInterface $imagine)
     {
         $this->imagine = $imagine;
@@ -36,40 +68,21 @@ class BadgeGenerator
      */
     public function generate(Bundle $bundle)
     {
-        $bundleName = $this->shorten($bundle->getName(), 23);
-        $score = $bundle->getScore();
+        $bundleName = $this->shorten($bundle->getName(), 15);
+        $score = $bundle->getScore() ?: 'N/A';
         $recommenders = $bundle->getNbRecommenders();
 
         // Open bg badge image
-        $image = $this->imagine->open($this->getResourceDir().'/images/badge.png');
+        $image = $this->imagine->open($this->getResourceDir().'/images/'.$this->getImageMockByType(self::LONG));
+        $imageShort = $this->imagine->open($this->getResourceDir().'/images/'.$this->getImageMockByType(self::SHORT));
 
         // Bundle Title
-        $image->draw()->text($bundleName, $this->setFont($this->imagine, $this->font, 15), new Point(67, 12));
+        $image->draw()->text($bundleName, $this->setFont($this->imagine, $this->font, 14), new Point(77, 10));
 
-        // Score
-        if ($score) {
-            // Center score position
-            $y = 23;
-            switch (strlen($score)) {
-                case 1:
-                    $x = 23;
-                    break;
+        // Score points
+        $image->draw()->text($score, $this->setFont($this->imagine, $this->font, 18), $this->getPositionByType($score, self::LONG));
+        $imageShort->draw()->text($score, $this->setFont($this->imagine, $this->font, 18), $this->getPositionByType($score, self::SHORT));
 
-                case 2:
-                    $x = 17;
-                    break;
-
-                case 3:
-                    $x = 11;
-                    break;
-
-                default:
-                    $x = 11;
-                    break;
-            }
-
-            $image->draw()->text($score, $this->setFont($this->imagine, $this->font, 18), new Point($x, $y));
-        }
 
         // Recommend
         if ($recommenders) {
@@ -80,7 +93,7 @@ class BadgeGenerator
         $image->draw()->text(
             $recommendationsText,
             $this->setFont($this->imagine, $this->font, 8),
-            new Point(98, 40)
+            new Point(98, 34)
         );
 
         // Check or create dir for generated badges
@@ -88,9 +101,11 @@ class BadgeGenerator
 
         // Remove existing badge
         $this->removeIfExist($this->getBadgeFile($bundle));
+        $this->removeIfExist($this->getBadgeFile($bundle, self::SHORT));
 
         // Save badge
         $image->save($this->getBadgeFile($bundle));
+        $imageShort->save($this->getBadgeFile($bundle, self::SHORT));
     }
 
     public function setCacheDir($cacheDir)
@@ -107,7 +122,7 @@ class BadgeGenerator
      * @param string $color
      * @return string
      */
-    protected function setFont($imagine, $font, $size, $color = '000')
+    protected function setFont($imagine, $font, $size, $color = '8c96a0')
     {
         return $imagine->font($this->getResourceDir().'/fonts/'.$font, $size, new Color($color));
     }
@@ -118,9 +133,9 @@ class BadgeGenerator
      * @param Bundle $bundle
      * @return string
      */
-    protected function getBadgeFile(Bundle $bundle)
+    protected function getBadgeFile(Bundle $bundle, $type = self::LONG)
     {
-        return $this->cacheDir.'/badges/'.$bundle->getUsername().'-'.$bundle->getName().'.png';
+        return $this->cacheDir.'/badges/'.$type.'/'.$bundle->getUsername().'-'.$bundle->getName().'.png';
     }
 
     protected function getResourceDir()
@@ -152,10 +167,20 @@ class BadgeGenerator
     protected function createBadgesDir()
     {
         $dir = $this->cacheDir.'/badges';
+
         if (!is_dir($dir)) {
             if (!@mkdir($dir, 0755)) {
                 throw new \Exception('Can\'t create the "badges" folder in '.$this->cacheDir);
             }
+        }
+
+        // Create badge types folder
+        foreach ($this->type as $type => $image) {
+            if (!is_dir($dir.'/'.$type)) {
+                if (!@mkdir($dir.'/'.$type, 0755)) {
+                    throw new \Exception(sprintf('Can\'t create "%s" folder in %s', $type, $dir));
+                }
+            }    
         }
     }
 
@@ -170,5 +195,33 @@ class BadgeGenerator
         if (file_exists($file)) {
             unlink($file);
         }
+    }
+
+    /**
+     * Get background image
+     *
+     * @param string $type
+     * @return string
+     */
+    protected function getImageMockByType($type)
+    {
+        return $this->type[$type];
+    }
+
+    /**
+     * Get score points position x:y
+     *
+     * @param string $type
+     * @param integer|string $score
+     * @return \Imagine\Image\Point
+     */
+    protected function getPositionByType($score, $type)
+    {
+        // Count scores numbers
+        $n = (strlen($score) - 1) ?: 0;
+
+        $coordinates = explode(':', ($this->position[$type][$n]));
+
+        return new Point($coordinates[0], $coordinates[1]);
     }
 }
