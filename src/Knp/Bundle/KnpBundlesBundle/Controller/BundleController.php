@@ -57,6 +57,12 @@ class BundleController extends BaseController
 
         $format = $this->recognizeRequestFormat();
 
+        if ('html' === $format && count($bundles) === 1 && strtolower($bundles[0]['name']) == strtolower($query)) {
+            $params = array('username' => $bundles[0]['username'], 'name' => $bundles[0]['name']);
+
+            return $this->redirect($this->generateUrl('bundle_show', $params));
+        }
+
         return $this->render('KnpBundlesBundle:Bundle:searchResults.'.$format.'.twig', array(
             'query'         => urldecode($this->get('request')->query->get('q')),
             'bundles'       => $bundles,
@@ -140,7 +146,7 @@ class BundleController extends BaseController
 
     public function listLatestAction()
     {
-        $bundles = $this->getRepository('Bundle')->findAllSortedBy('createdAt', 50);
+        $bundles = $this->getRepository('Bundle')->findAllSortedBy('createdAt', 'desc', 50);
 
         $format = $this->recognizeRequestFormat(array('atom'), 'atom');
 

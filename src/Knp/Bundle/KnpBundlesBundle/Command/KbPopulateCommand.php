@@ -20,7 +20,6 @@ class KbPopulateCommand extends ContainerAwareCommand
     {
         $this
             ->setDefinition(array())
-            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'The maximal number of new bundles considered by the update', 1000)
             ->addOption('no-publish', null, InputOption::VALUE_NONE, 'Prevent the command from publishing a message to RabbitMQ producer')
             ->setName('kb:populate')
         ;
@@ -35,8 +34,6 @@ class KbPopulateCommand extends ContainerAwareCommand
     {   
         $container = $this->getContainer();
 
-        $em = $container->get('knp_bundles.entity_manager');
-
         $updater = $container->get('knp_bundles.updater');
 
         if (!$input->getOption('no-publish')) {
@@ -47,9 +44,7 @@ class KbPopulateCommand extends ContainerAwareCommand
         $updater->setOutput($output);
         $updater->setUp();
 
-        $bundles = $em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle')->findAll();
-
-        $bundles = $updater->searchNewBundles((int) $input->getOption('limit'));
+        $bundles = $updater->searchNewBundles();
         $updater->createMissingBundles($bundles);
         $updater->updateBundlesData();
         $updater->updateUsers();
