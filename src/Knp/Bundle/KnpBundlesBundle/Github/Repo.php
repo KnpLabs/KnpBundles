@@ -8,7 +8,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Github\Client;
 use Github\HttpClient\Exception as GithubException;
 
-use Knp\Bundle\KnpBundlesBundle\Entity;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Git;
 use Knp\Bundle\KnpBundlesBundle\Detector;
 use Knp\Bundle\KnpBundlesBundle\Event\BundleEvent;
@@ -53,7 +53,7 @@ class Repo
         $this->dispatcher = $dispatcher;
     }
 
-    public function update(Entity\Bundle $bundle)
+    public function update(Bundle $bundle)
     {
         try {
             $this->gitRepoManager->getRepo($bundle)->update();
@@ -84,11 +84,11 @@ class Repo
     /**
      * Return true if the Repo exists on GitHub, false otherwise
      *
-     * @param Entity\Bundle $bundle
+     * @param Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
      * @param array $data
      * @return boolean whether the Repo exists on GitHub
      */
-    public function updateInfos(Entity\Bundle $bundle)
+    public function updateInfos(Bundle $bundle)
     {
         $this->output->write(' infos');
         try {
@@ -114,7 +114,7 @@ class Repo
         return $bundle;
     }
 
-    public function updateCommits(Entity\Bundle $bundle)
+    public function updateCommits(Bundle $bundle)
     {
         $this->output->write(' commits');
         try {
@@ -137,7 +137,7 @@ class Repo
         return $bundle;
     }
 
-    public function updateCommitsFromGitRepo(Entity\Bundle $bundle)
+    public function updateCommitsFromGitRepo(Bundle $bundle)
     {
         $this->output->write(' commits');
         $commits = $this->gitRepoManager->getRepo($bundle)->getCommits(30);
@@ -146,7 +146,7 @@ class Repo
         return $bundle;
     }
 
-    public function updateFiles(Entity\Bundle $bundle)
+    public function updateFiles(Bundle $bundle)
     {
         $this->output->write(' files');
         $gitRepo = $this->gitRepoManager->getRepo($bundle);
@@ -172,7 +172,7 @@ class Repo
         return $bundle;
     }
 
-    private function updateComposerFile($gitRepo, Entity\Bundle $bundle)
+    private function updateComposerFile($gitRepo, Bundle $bundle)
     {
         $composerFilename = 'composer.json';
 
@@ -196,7 +196,7 @@ class Repo
         $bundle->setComposerName($composerName);
     }
 
-    public function updateTags(Entity\Bundle $bundle)
+    public function updateTags(Bundle $bundle)
     {
         $this->output->write(' tags');
         $gitRepo = $this->gitRepoManager->getRepo($bundle);
@@ -206,7 +206,7 @@ class Repo
         return $bundle;
     }
 
-    public function fetchComposerKeywords(Entity\Bundle $bundle)
+    public function fetchComposerKeywords(Bundle $bundle)
     {
         $composerFilename = 'composer.json';
         $gitRepo = $this->gitRepoManager->getRepo($bundle);
@@ -220,7 +220,7 @@ class Repo
         return array();
     }
 
-    public function getContributorNames(Entity\Bundle $bundle)
+    public function getContributorNames(Bundle $bundle)
     {
         try {
             $contributors = $this->github->getRepoApi()->getRepoContributors($bundle->getUsername(), $bundle->getName());
@@ -238,6 +238,22 @@ class Repo
         }
 
         return $names;
+    }
+
+    /**
+     * Checks if '*Bundle.php' class use base class for Symfony bundle
+     *
+     * @param \Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     *
+     * @return bool
+     */
+    public function isValidSymfonyBundle(Bundle $bundle)
+    {
+        if (null === $bundleClassContent = $this->getBundleClassContentAsString($bundle)) {
+            return false;
+        }
+
+        return false !== strpos($bundleClassContent, 'Symfony\Component\HttpKernel\Bundle\Bundle');
     }
 
     /**
@@ -278,5 +294,26 @@ class Repo
     public function setGithubClient($github)
     {
         $this->github = $github;
+    }
+
+    /**
+     * Returns content for *Bundle.php class via Github API v3
+     *
+     * @param \Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     *
+     * @return null|string
+     */
+    private function getBundleClassContentAsString(Bundle $bundle)
+    {
+        $rootContents = $this->github->getRepoApi()->getRepoContents($bundle->getUsername(), $bundle->getName(), '');
+        foreach ($rootContents as $rootEntry) {
+            if (strpos($rootEntry['name'], 'Bundle.php') !== false) {
+                $response = json_decode(file_get_contents($rootEntry['_links']['git']));
+
+                return base64_decode($response->content);
+            }
+        }
+
+        return null;
     }
 }
