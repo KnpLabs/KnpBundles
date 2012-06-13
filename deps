@@ -88,7 +88,7 @@
 
 [php-github-api]
     git=http://github.com/KnpLabs/php-github-api.git
-    version=origin/api_v3
+    version=origin/master
 
 [OrnicarGravatarBundle]
     git=http://github.com/ornicar/GravatarBundle.git

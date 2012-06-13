@@ -15,6 +15,7 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\UserManager;
 use Knp\Bundle\KnpBundlesBundle\Finder\FinderInterface;
 use Knp\Bundle\KnpBundlesBundle\Github\User;
+use Knp\Bundle\KnpBundlesBundle\Github\Repo;
 use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 
 class Updater
@@ -23,6 +24,10 @@ class Updater
      * @var \Knp\Bundle\KnpBundlesBundle\Github\User
      */
     private $githubUserApi;
+    /**
+     * @var \Knp\Bundle\KnpBundlesBundle\Github\Repo
+     */
+    private $githubRepoApi;
     /**
      * @var \Knp\Bundle\KnpBundlesBundle\Finder\FinderInterface|
      */
@@ -54,11 +59,12 @@ class Updater
      * @param \Knp\Bundle\KnpBundlesBundle\Finder\FinderInterface      $finder
      * @param \Knp\Bundle\KnpBundlesBundle\Github\User                 $githubUserApi
      */
-    public function __construct(EntityManager $em, UserManager $users, FinderInterface $finder, User $githubUserApi)
+    public function __construct(EntityManager $em, UserManager $users, FinderInterface $finder, User $githubUserApi, Repo $githubRepoApi)
     {
         $this->em = $em;
         $this->finder = $finder;
         $this->githubUserApi = $githubUserApi;
+        $this->githubRepoApi = $githubRepoApi;
         $this->users = $users;
         $this->output = new NullOutput();
     }
@@ -89,9 +95,7 @@ class Updater
         $repos = $this->finder->find();
         $bundles = array();
         foreach ($repos as $repo) {
-            if ($this->isValidBundleName($repo)) {
-                $bundles[strtolower($repo)] = new Bundle($repo);
-            }
+            $bundles[strtolower($repo)] = new Bundle($repo);
         }
         $this->output->writeln(sprintf('Found %d bundle candidates', count($bundles)));
 
@@ -104,6 +108,10 @@ class Updater
 
         foreach ($foundBundles as $bundle) {
             if (isset($this->bundles[strtolower($bundle->getFullName())])) {
+                continue;
+            }
+            if (!$this->githubRepoApi->isValidSymfonyBundle($bundle)) {
+                $this->output->writeln(sprintf("%s: invalid Symfony bundle", $bundle->getFullName()));
                 continue;
             }
             $this->output->write(sprintf('Discover bundle %s: ', $bundle->getFullName()));
@@ -202,17 +210,5 @@ class Updater
                 }
             }
         }
-    }
-
-    /**
-     * Check if a bundle name is really a bundle name
-     *
-     * @param string $name name of the bundle
-     *
-     * @return bool
-     */
-    protected function isValidBundleName($name)
-    {
-        return (bool)preg_match('@Bundle$@', $name);
     }
 }
