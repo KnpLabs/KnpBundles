@@ -57,7 +57,7 @@ class Github extends CommonFinder
      */
     protected function extractUrlRepository($url)
     {
-        if (preg_match('/\/(?<username>[\w_-]+)\/(?<repository>[\w_-]+)/', $url, $matches)) {
+        if (preg_match('/\/(?<username>[\w\.-]+)\/(?<repository>[\w\.-]+)/', $url, $matches)) {
             return $matches['username'] . '/' . $matches['repository'];
         }
 

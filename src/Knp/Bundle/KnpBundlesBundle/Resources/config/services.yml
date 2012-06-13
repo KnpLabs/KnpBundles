@@ -34,6 +34,7 @@ services:
             - @knp_bundles.user.manager
             - @knp_bundles.finder
             - @knp_bundles.github.users
+            - @knp_bundles.github_repository_api
 
     knp_bundles.user.manager:
         class: %knp_bundles.user.manager.class%
