@@ -69,4 +69,65 @@ class RepoTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($repoEntity->getComposerName(), 'knplabs/knp-menu-bundle');
     }
+
+    /**
+     * @test
+     */
+    public function isValidSymfonyBundleShouldReturnTRUEIfRepoHasCorrectBundleClass()
+    {
+        $bundle = new Bundle('knplabs/KnpMenuBundle');
+        $repo = $this->getRepoWithMockedGithubClient('KnpMenuBundle.php', __DIR__ . '/fixtures/info.valid-bundle-class.json');
+        $this->assertTrue($repo->isValidSymfonyBundle($bundle));
+    }
+
+    /**
+     * @test
+     */
+    public function isValidSymfonyBundleShouldReturnFALSEIfRepoDoesNotHaveBundleClass()
+    {
+        $bundle = new Bundle('knplabs/KnpMenuBundle');
+        $repo = $this->getRepoWithMockedGithubClient('Smth.php', __DIR__ . '/fixtures/info.valid-bundle-class.json');
+        $this->assertFalse($repo->isValidSymfonyBundle($bundle));
+    }
+
+    /**
+     * @test
+     */
+    public function isValidSymfonyBundleShouldReturnFALSEIfRepoHasIncorrectBundleClass()
+    {
+        $bundle = new Bundle('knplabs/KnpMenuBundle');
+        $repo = $this->getRepoWithMockedGithubClient('KnpMenuBundle.php', __DIR__ . '/fixtures/info.invalid-bundle-class.json');
+        $this->assertFalse($repo->isValidSymfonyBundle($bundle));
+    }
+
+    protected function getRepoWithMockedGithubClient($bundleClassName, $bundleClassContentsLink)
+    {
+        $githubApiRepoMock = $this->getMockBuilder('Github\Api\Repo')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $githubApiRepoMock->expects($this->any())
+            ->method('getRepoContents')
+            ->with('knplabs', 'KnpMenuBundle', '')
+            ->will($this->returnValue(
+            array(
+                array(
+                    'name'   => $bundleClassName,
+                    '_links' => array(
+                        'git' => $bundleClassContentsLink
+                    )
+                )
+            )));
+
+        $githubMock = $this->getMock('Github\Client');
+        $githubMock->expects($this->any())
+            ->method('getRepoApi')
+            ->will($this->returnValue($githubApiRepoMock));
+        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+
+        $repoManager = $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Git\RepoManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        return new Repo($githubMock, $output, $repoManager, new EventDispatcher());
+    }
 }

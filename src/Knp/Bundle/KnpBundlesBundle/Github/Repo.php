@@ -241,6 +241,22 @@ class Repo
     }
 
     /**
+     * Checks if '*Bundle.php' class use base class for Symfony bundle
+     *
+     * @param \Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     *
+     * @return bool
+     */
+    public function isValidSymfonyBundle(Entity\Bundle $bundle)
+    {
+        if (null === $bundleClassContent = $this->getBundleClassContentAsString($bundle)) {
+            return false;
+        }
+
+        return false !== strpos($bundleClassContent, 'Symfony\Component\HttpKernel\Bundle\Bundle');
+    }
+
+    /**
      * Get output
      *
      * @return OutputInterface
@@ -278,5 +294,26 @@ class Repo
     public function setGithubClient($github)
     {
         $this->github = $github;
+    }
+
+    /**
+     * Returns content for *Bundle.php class via Github API v3
+     *
+     * @param \Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     *
+     * @return null|string
+     */
+    private function getBundleClassContentAsString(Entity\Bundle $bundle)
+    {
+        $rootContents = $this->github->getRepoApi()->getRepoContents($bundle->getUsername(), $bundle->getName(), '');
+        foreach ($rootContents as $rootEntry) {
+            if (strpos($rootEntry['name'], 'Bundle.php') !== false) {
+                $response = json_decode(file_get_contents($rootEntry['_links']['git']));
+
+                return base64_decode($response->content);
+            }
+        }
+
+        return null;
     }
 }
