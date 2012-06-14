@@ -753,7 +753,7 @@ class Bundle
     }
 
     /**
-     * @return User
+     * @return \Knp\Bundle\KnpBundlesBundle\Entity\User
      */
     public function getUser()
     {

@@ -111,7 +111,7 @@ class Updater
                 continue;
             }
             if (!$this->githubRepoApi->isValidSymfonyBundle($bundle)) {
-                $this->output->writeln(sprintf("%s: invalid Symfony bundle", $bundle->getFullName()));
+                $this->notifyInvalidBundle($bundle);
                 continue;
             }
             $this->output->write(sprintf('Discover bundle %s: ', $bundle->getFullName()));
@@ -210,5 +210,32 @@ class Updater
                 }
             }
         }
+    }
+
+    public function removeNonSymfonyBundles()
+    {
+        if (count($this->bundles) === 0) {
+            $this->setUp();
+        }
+
+        $invalidCntr = 0;
+        foreach ($this->bundles as $key => $bundle) {
+            /** @var $bundle \Knp\Bundle\KnpBundlesBundle\Entity\Bundle */
+            if (false === $this->githubRepoApi->isValidSymfonyBundle($bundle)) {
+                $this->notifyInvalidBundle($bundle);
+                $bundle->getUser()->removeBundle($bundle);
+                $this->em->remove($bundle);
+                $invalidCntr++;
+            }
+        }
+
+        $this->output->writeln(sprintf('%s invalid bundles have been founded and removed', $invalidCntr));
+
+        $this->em->flush();
+    }
+
+    protected function notifyInvalidBundle(Bundle $bundle)
+    {
+        $this->output->writeln(sprintf("%s: invalid Symfony bundle", $bundle->getFullName()));
     }
 }
