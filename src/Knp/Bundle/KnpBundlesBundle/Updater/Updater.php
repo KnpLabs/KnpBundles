@@ -218,23 +218,23 @@ class Updater
             $this->setUp();
         }
 
-        $invalidCntr = 0;
+        $counter = 0;
         foreach ($this->bundles as $key => $bundle) {
             /** @var $bundle \Knp\Bundle\KnpBundlesBundle\Entity\Bundle */
             if (false === $this->githubRepoApi->isValidSymfonyBundle($bundle)) {
                 $this->notifyInvalidBundle($bundle);
                 $bundle->getUser()->removeBundle($bundle);
                 $this->em->remove($bundle);
-                $invalidCntr++;
+                $counter++;
             }
         }
 
-        $this->output->writeln(sprintf('%s invalid bundles have been founded and removed', $invalidCntr));
+        $this->output->writeln(sprintf('%s invalid bundles have been found and removed', $counter));
 
         $this->em->flush();
     }
 
-    protected function notifyInvalidBundle(Bundle $bundle)
+    private function notifyInvalidBundle(Bundle $bundle)
     {
         $this->output->writeln(sprintf("%s: invalid Symfony bundle", $bundle->getFullName()));
     }

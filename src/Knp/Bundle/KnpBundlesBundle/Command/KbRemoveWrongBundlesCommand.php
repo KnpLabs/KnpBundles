@@ -15,7 +15,7 @@ class KbRemoveWrongBundlesCommand extends ContainerAwareCommand
     {
         $this
             ->setName('kb:remove:wrong-bundles')
-            ->setDescription('Removes alL wrong bundles (non Symfony2 bundles)')
+            ->setDescription('Removes all wrong bundles (non Symfony2 bundles)')
         ;
     }
 
