@@ -19,7 +19,7 @@ to change the name due to [trademark issues](http://knplabs.com/blog/symfony2bun
 ### Configure
 
 To configure your database in your development environment, copy
-`/app/config/parameters.yml.dist` to `/app/config/parameters.yml` and 
+`/app/config/parameters.yml.dist` to `/app/config/parameters.yml` and
 edit it according to your database settings.
 
 If you want to use github connect locally, you'll need to
@@ -32,7 +32,8 @@ And update the parameters.yml with the Client ID and Secret.
 
 ### Install vendors
 
-    php bin/vendors install
+    curl -s http://getcomposer.org/installer | php
+    php composer.phar install
 
 #### Create database and tables
 
@@ -48,10 +49,6 @@ And update the parameters.yml with the Client ID and Secret.
 
     php app/console doctrine:fixtures:load
     php app/console --env=test doctrine:fixtures:load
-
-### Publish the assets
-
-    php app/console assets:install --symlink web
 
 ### Run the tests (requires PHPUnit >= 3.5)
 

@@ -5,7 +5,8 @@ php:
 
 before_script:
     - cp app/config/parameters.yml.test app/config/parameters.yml
-    - php bin/vendors install
+    - curl -s http://getcomposer.org/installer | php
+    - php composer.phar --dev install
     - ./bin/prepare-test-env.sh
     - ./bin/prepare-test-solr.sh
 
