@@ -184,7 +184,8 @@ evolution:
     title: "Evolution of the Symfony ecosystem"
     number_score:
         text: |
-            This shows the evolution of the daily number of bundles.
+            The activity level shows the number of bundle updates (maintenance and upgrade) and new bundles
+            entering the ecosystem.
 travis:
     buildStatus:
         passing: "Passing"
