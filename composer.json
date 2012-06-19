@@ -1,0 +1,189 @@
+{
+    "name": "knplabs/knpbundles",
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/symfony": "2.1.*",
+        "doctrine/orm": "2.2.*",
+        "doctrine/doctrine-bundle": "*",
+        "twig/extensions": "*",
+        "symfony/assetic-bundle": "*",
+        "symfony/monolog-bundle": "*",
+        "sensio/distribution-bundle": "*",
+        "jms/i18n-routing-bundle": "*",
+
+        "behat/behat": "2.3.*",
+        "behat/behat-bundle": "*",
+        "behat/mink-bundle": "*",
+        "behat/common-contexts": "1.1.*",
+
+        "doctrine/doctrine-fixtures-bundle": "*",
+        "doctrine/doctrine-migrations-bundle": "*",
+        "stof/doctrine-extensions-bundle": "*",
+        "knplabs/knp-markdown-bundle": "*",
+        "knplabs/knp-menu-bundle": "*",
+        "knplabs/knp-disqus-bundle": "*",
+        "knplabs/knp-time-bundle": "*",
+        "knplabs/knp-paginator-bundle": "2.1",
+        "knplabs/knp-zend-cache-bundle": "*",
+        "knplabs/github-api": "*",
+        "avalanche123/imagine-bundle": "*",
+        "kriswallsmith/buzz": "*",
+        "nelmio/solarium-bundle": "*",
+        "igorw/file-serve-bundle": "*",
+
+        "videlalvaro/php-amqplib": "*",
+        "oldsound/rabbitmq-bundle": "*",
+
+        "fabpot/goutte": "*",
+
+        "ornicar/gravatar-bundle": "*",
+        "ornicar/php-git-repo": "*",
+
+        "twitter/app-bundle": "*",
+        "twitter/oauth": "*",
+
+        "mbontemps/oauth-bundle": "*"
+    },
+
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "behat.org"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "mbontemps/oauth-bundle",
+                "version": "master-dev",
+                "dist": {
+                    "url": "https://github.com/mbontemps/EtcpasswdOAuthBundle/zipball/master",
+                    "type": "zip"
+                },
+                "source": {
+                    "url": "git://github.com/mbontemps/EtcpasswdOAuthBundle.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "psr-0": { "Etcpasswd\\OAuthBundle": "" }
+                },
+                "target-dir": "Etcpasswd/OAuthBundle"
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "twitter/oauth",
+                "version": "master-dev",
+                "dist": {
+                    "url": "https://github.com/abraham/twitteroauth/zipball/master",
+                    "type": "zip"
+                },
+                "source": {
+                    "url": "git://github.com/abraham/twitteroauth.git",
+                    "type": "git",
+                    "reference": "master"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "twitter/app-bundle",
+                "version": "master-dev",
+                "dist": {
+                    "url": "https://github.com/Inori/InoriTwitterAppBundle/zipball/master",
+                    "type": "zip"
+                },
+                "source": {
+                    "url": "git://github.com/Inori/InoriTwitterAppBundle.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "psr-0": {
+                        "Inori\\TwitterAppBundle": ""
+                    }
+                },
+                "target-dir": "Inori/TwitterAppBundle"
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "ornicar/php-git-repo",
+                "version": "master-dev",
+                "dist": {
+                    "url": "http://github.com/ornicar/php-git-repo/zipball/master",
+                    "type": "zip"
+                },
+                "source": {
+                    "url": "git://github.com/ornicar/php-git-repo.git",
+                    "type": "git",
+                    "reference": "master"
+                },
+                "autoload": {
+                    "psr-0" : {
+                        "PHPGit_" : "lib/"
+                    }
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "zendframework/zend-cache",
+                "version": "2.0.0-beta1",
+                "dist": {
+                    "url":  "http://packages.zendframework.com/get/Zend_Cache-2.0.0beta1.tgz",
+                    "type": "pear"
+                },
+                "autoload": {
+                    "psr-0": {
+                        "Zend\\Cache": "php/"
+                    }
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "zendframework/zend-filter",
+                "version": "2.0.0-beta1",
+                "dist": {
+                    "url":  "http://packages.zendframework.com/get/Zend_Filter-2.0.0beta1.tgz",
+                    "type": "pear"
+                },
+                "autoload": {
+                    "psr-0": {
+                        "Zend\\Filter": "php/"
+                    }
+                }
+            }
+        }
+    ],
+
+    "scripts": {
+        "post-install-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets"
+        ],
+        "post-update-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-web-dir": "web",
+        "symfony-assets-install": "symlink"
+    }
+}
