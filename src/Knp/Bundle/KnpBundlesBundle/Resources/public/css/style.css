@@ -307,3 +307,9 @@ abbr, acronym {border-bottom:.1em dotted;cursor:help;font-weight:bold;}
 /* ----- Errors ----- */
 .error #content-wrapper div.center {background: url('../images/super-edgar.jpg') no-repeat right center;height:300px}
 .error #content {width: 530px;}
+
+pre.code {
+    line-height: 8px;
+    font-size: 0.9em;
+    border: none;
+}

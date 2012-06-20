@@ -90,6 +90,13 @@ class Bundle
     protected $homepage;
 
     /**
+     * The bundle canonical configuration yaml extracted from bundle's repo
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $canonicalConfig = null;
+
+    /**
      * The bundle readme text extracted from source code
      *
      * @ORM\Column(type="text", nullable=true)
@@ -1069,5 +1076,25 @@ class Bundle
     public function getIndexedAt()
     {
         return $this->indexedAt;
+    }
+
+    /**
+     * Get canonicalConfig
+     *
+     * @return string
+     */
+    public function getCanonicalConfig()
+    {
+        return $this->canonicalConfig;
+    }
+
+    /**
+     * Set canonicalConfig
+     *
+     * @param $canonicalConfig
+     */
+    public function setCanonicalConfig($canonicalConfig)
+    {
+        $this->canonicalConfig = $canonicalConfig;
     }
 }

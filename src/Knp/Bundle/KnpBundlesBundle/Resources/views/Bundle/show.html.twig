@@ -186,6 +186,18 @@
     </div>
     {% endif %}
 
+    {% if bundle.canonicalConfig %}
+    <div class="data">
+        <div id="canonical-config">
+            <div class="markdown">
+                <pre class="code">
+                {{- bundle.canonicalConfig|nl2br -}}
+                </pre>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
     {% if bundle.readme %}
     <div class="data">
         <div id="readme">
