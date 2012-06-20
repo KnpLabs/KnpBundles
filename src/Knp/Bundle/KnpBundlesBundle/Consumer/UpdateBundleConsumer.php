@@ -10,6 +10,7 @@ use Knp\Bundle\KnpBundlesBundle\Entity\UserManager;
 use Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer;
 
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
+use PhpAmqpLib\Message\AMQPMessage;
 
 use Github\HttpClient\Exception as GithubException;
 
@@ -91,7 +92,7 @@ class UpdateBundleConsumer implements ConsumerInterface
      *
      * @param string $msg serialized Message
      */
-    public function execute($msg)
+    public function execute(AMQPMessage $msg)
     {
         // Retrieve informations from the message
         $message = json_decode($msg->body, true);
