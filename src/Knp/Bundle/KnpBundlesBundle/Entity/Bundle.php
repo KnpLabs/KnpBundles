@@ -255,11 +255,11 @@ class Bundle
     protected $keywords;
 
     /**
-     * Symfony version required
+     * Symfony versions required
      *
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="array", nullable=true)
      */
-    protected $symfonyVersion;
+    protected $symfonyVersions;
 
     /**
      * Last indexing time.
@@ -1060,23 +1060,23 @@ class Bundle
     }
 
     /**
-     * Get required version of Symfony
+     * Get required versions of Symfony
      *
-     * @return string
+     * @return array
      */
-    public function getSymfonyVersion()
+    public function getSymfonyVersions()
     {
-        return $this->symfonyVersion;
+        return $this->symfonyVersions;
     }
 
     /**
-     * Get required version of Symfony
+     * Get required versions of Symfony
      *
-     * @param string
+     * @param array
      */
-    public function setSymfonyVersion($version)
+    public function setSymfonyVersions($versions)
     {
-        $this->symfonyVersion = $version;
+        $this->symfonyVersions = $versions;
     }
 
     /**
