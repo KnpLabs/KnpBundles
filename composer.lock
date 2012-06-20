@@ -288,7 +288,44 @@
             "version": "2.0.0-beta1"
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+        {
+            "package": "behat/behat",
+            "version": "v2.4.2"
+        },
+        {
+            "package": "behat/common-contexts",
+            "version": "dev-master",
+            "source-reference": "fdd34724890828bd8442a443fd59f8af81daed17",
+            "commit-date": "1339965382"
+        },
+        {
+            "package": "behat/gherkin",
+            "version": "v2.2.2"
+        },
+        {
+            "package": "behat/mink",
+            "version": "v1.4.0"
+        },
+        {
+            "package": "behat/mink-browserkit-driver",
+            "version": "dev-master",
+            "source-reference": "b07a3908fed61cd31953ddaa6faeb66767cf9d6e",
+            "commit-date": "1339680228"
+        },
+        {
+            "package": "behat/mink-extension",
+            "version": "dev-master",
+            "source-reference": "1907fda9f11dd01e5ccd997ba2cb8a46042cda8c",
+            "commit-date": "1340882923"
+        },
+        {
+            "package": "behat/symfony2-extension",
+            "version": "dev-master",
+            "source-reference": "d8e620376969c388f027be55cf6e96a445415e92",
+            "commit-date": "1340986181"
+        }
+    ],
     "aliases": [
 
     ],
