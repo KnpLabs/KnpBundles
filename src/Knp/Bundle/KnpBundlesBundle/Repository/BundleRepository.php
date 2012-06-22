@@ -18,7 +18,7 @@ class BundleRepository extends EntityRepository
         return $query->execute();
     }
 
-    public function queryAllSortedBy($field, $order)
+    public function queryAllSortedBy($field, $order = 'desc')
     {
         $qb = $this->createQueryBuilder('b');
         $qb->orderBy('b.' . $field, $order);
