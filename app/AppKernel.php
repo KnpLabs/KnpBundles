@@ -17,7 +17,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
-            new Etcpasswd\OAuthBundle\EtcpasswdOAuthBundle(),
+            new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Inori\TwitterAppBundle\InoriTwitterAppBundle(),
             new Igorw\FileServeBundle\IgorwFileServeBundle(),
 
@@ -28,7 +28,6 @@ class AppKernel extends Kernel
             new Knp\Bundle\ZendCacheBundle\KnpZendCacheBundle(),
             new Knp\Bundle\DisqusBundle\KnpDisqusBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
-            new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
             new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
             new Nelmio\SolariumBundle\NelmioSolariumBundle(),
 

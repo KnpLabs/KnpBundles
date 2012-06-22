@@ -9,18 +9,20 @@
                 <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}" class="name">{{ bundle.name }}</a>{% if bundle.state != 'unknown' %} <span class="state">({{ bundle.state }})</span>{% endif %}
             </div>
             <p class="description">{{ bundle.description|default('−') }}</p>
-            
+
             <ul class="details">
                 <li>{% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': bundle.username }) }}" class="owner">{{ bundle.username }}</a></li>
                 <li>
-                    {% trans %}bundles.list.activity{% endtrans %} 
+                    {% trans %}bundles.list.activity{% endtrans %}
                     <abbr title="{% trans %}bundles.list.lastCommit{% endtrans %}{{ time_diff(bundle.lastCommitAt) }}">{{ bundle.lastCommitAt|bundle_activity|trans }}</abbr>
                 </li>
             </ul>
         </div>
         <div class="img">
             {% if bundle.user.gravatarHash %}
-            <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}"><img src="{{ gravatar_hash(bundle.user.gravatarHash, 50, none, 'identicon') }}" alt="{{ bundle.name }}" /></a>
+            <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}">
+                <img src="{{ bundle.user.gravatarHash }}" alt="{{ bundle.name }} developer" width="50" height="50" />
+            </a>
             {% endif %}
         </div>
     </li>

@@ -8,6 +8,8 @@ use Symfony\Component\Console\Output\NullOutput;
 
 use Github\Client;
 
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+
 use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 use Knp\Bundle\KnpBundlesBundle\Github\User as GithubUser;
 
@@ -19,7 +21,7 @@ use Knp\Bundle\KnpBundlesBundle\Github\User as GithubUser;
 class UserManager
 {
     /**
-     * @var Doctrine\ORM\EntityManager
+     * @var Doctrine\Common\Persistence\ObjectManager
      */
     private $entityManager;
 
@@ -29,21 +31,46 @@ class UserManager
     private $repository;
 
     /**
-     * @var Knp\Bundle\KnpBundlesBundle\Github\User
+     * @var GithubUser
      */
     private $githubUserApi;
 
+    /**
+     * @param ObjectManager $entityManager
+     */
     public function __construct(ObjectManager $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->repository = $this->entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\User');
+        $this->repository    = $entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\User');
         $this->githubUserApi = new GithubUser(new Client(), new NullOutput());
     }
 
-    public function getOrCreate($username)
+    /**
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function findUserBy(array $data)
     {
-        if (!$user = $this->repository->findOneBy(array('name' => $username))) {
-            if (!$user = $this->githubUserApi->import($username)) {
+        return $this->repository->findOneBy($data);
+    }
+
+    /**
+     * @param string|UserResponseInterface $data
+     *
+     * @return User
+     *
+     * @throws UserNotFoundException
+     */
+    public function getOrCreate($data)
+    {
+        $username = $data;
+        if ($data instanceof UserResponseInterface) {
+            $username = $data->getUsername();
+        }
+
+        if (!$user = $this->findUserBy(array('name' => $username))) {
+            if (!$user = $this->githubUserApi->import($data)) {
                 throw new UserNotFoundException();
             }
 

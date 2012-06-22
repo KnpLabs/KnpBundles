@@ -39,7 +39,7 @@ class Bundle
      * Like in GitHub, this name is not unique
      *
      * @Assert\NotBlank()
-     * @Assert\MinLength(2)
+     * @Assert\Length(min = 2)
      *
      * @ORM\Column(type="string", length=127)
      */
@@ -50,7 +50,7 @@ class Bundle
      * This value is redundant with the name of the referenced User, for performance reasons
      *
      * @Assert\NotBlank()
-     * @Assert\MinLength(2)
+     * @Assert\Length(min = 2)
      *
      * @ORM\Column(type="string", length=127)
      */

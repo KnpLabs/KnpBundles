@@ -25,7 +25,7 @@
                 <div class="img">
                     {% if user.gravatarHash %}
                     <a href="{{ url('user_show', {'name': user.name}) }}" class="name">
-                        <img src="{{ gravatar_hash(user.gravatarHash, 50, none, 'identicon') }}" alt="{{ user.name }}, Symfony developer" />
+                        <img src="{{ user.gravatarHash }}" alt="{{ user.name }}, Symfony developer" width="50" height="50" />
                     </a>
                     {% else %}
                     &nbsp;

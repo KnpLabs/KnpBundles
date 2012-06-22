@@ -10,7 +10,7 @@
     <h1 class="developer-name">{{ user.name }}</h1>
     <div class="card">
         <div class="avatar">
-            <img src="http://www.gravatar.com/avatar/{{ user.gravatarHash }}?s=80&r=g&d=identicon" alt="">
+            <img src="{{ user.gravatarHash }}" alt="{{ user.name }}" width="80" height="80" alt="">
         </div>
         <ul class="stats">
             <li>{% trans %}users.show.stats.location{% endtrans %} <span>{{ user.location }}</span></li>
