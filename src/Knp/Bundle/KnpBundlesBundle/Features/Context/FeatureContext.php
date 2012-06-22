@@ -296,9 +296,6 @@ class FeatureContext extends MinkContext
      */
     public function iAmLoggedInAs($username)
     {
-        throw new PendingException();
-
-        // @todo check why test fails at the travisci. At dev server tests passes.
         if (!$this->users[$username]) {
             throw new ExpectationException('User not found');
         }
