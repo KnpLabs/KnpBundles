@@ -20,21 +20,21 @@ Feature: Listing bundles
       | TestBundle       |
       | test desc        |
       | by knplabs       |
-      | commit 1 day ago |
+      | High             |
       | 20               |
       | ready            |
     And I should be able to find a bundle row with following texts:
       | UserBundle        |
       | user desc         |
       | by fos            |
-      | commit 2 days ago |
+      | High              |
       | 50                |
       | deprecated        |
     And I should be able to find a bundle row with following texts:
       | TestBundle2       |
       | test2 desc        |
       | by knplabs        |
-      | commit 3 days ago |
+      | High              |
       | 10                |
 
   Scenario: Listing trending bundles
