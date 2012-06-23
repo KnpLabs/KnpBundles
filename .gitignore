@@ -17,3 +17,7 @@
 /app/config/parameters.yml
 /app/config/parameters.*.yml
 composer.phar
+bin/*
+!bin/launch-rabit-consumers.sh
+!bin/prepare-*.sh
+
