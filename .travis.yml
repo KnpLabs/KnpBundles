@@ -1,6 +1,7 @@
 language: php
 
 php:
+  - 5.4
   - 5.3
 
 before_script:
@@ -9,6 +10,7 @@ before_script:
     - php composer.phar --dev install
     - ./bin/prepare-test-env.sh
     - ./bin/prepare-test-solr.sh
+    - ./bin/prepare-test-gd.sh
 
 script: phpunit -c app/ && php app/console --env=test behat --format progress
 
