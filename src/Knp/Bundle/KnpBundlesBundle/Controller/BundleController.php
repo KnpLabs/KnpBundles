@@ -111,12 +111,8 @@ class BundleController extends BaseController
 
         $sortField = $this->sortFields[$sort];
 
-        if ('html' === $format) {
-            $query = $this->getRepository('Bundle')->queryAllWithUsersAndContributorsSortedBy($sortField);
-            $bundles = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
-        } else {
-            $bundles = $this->getRepository('Bundle')->findAllWithUsersAndContributorsSortedBy($sortField);
-        }
+        $query = $this->getRepository('Bundle')->queryAllWithUsersAndContributorsSortedBy($sortField);
+        $bundles = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
 
         $this->highlightMenu();
 

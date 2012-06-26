@@ -6,11 +6,15 @@ php:
 
 before_script:
     - cp app/config/parameters.yml.test app/config/parameters.yml
-    - curl -s http://getcomposer.org/installer | php
-    - php composer.phar --dev install
+    - curl -s http://getcomposer.org/installer | php -- --quiet
+    - php composer.phar install --dev
+    - ./bin/prepare-test-web.sh
     - ./bin/prepare-test-env.sh
     - ./bin/prepare-test-solr.sh
     - ./bin/prepare-test-gd.sh
+    - mkdir -p app/cache app/logs
+    - php app/console --env=test cache:clear
+    - sudo chmod -R 777 app/cache app/logs
 
 script:
     - phpunit -c app/
