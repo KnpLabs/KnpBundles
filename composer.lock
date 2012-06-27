@@ -1,5 +1,5 @@
 {
-    "hash": "6436ead2fe90a0f48e8a14dc18bafda9",
+    "hash": "f8afd49fea4210b279e876b675093de4",
     "packages": [
         {
             "package": "avalanche123/imagine-bundle",
@@ -9,31 +9,49 @@
         },
         {
             "package": "behat/behat",
-            "version": "v2.3.5"
-        },
-        {
-            "package": "behat/behat-bundle",
-            "version": "dev-master",
-            "source-reference": "12e75b35f44e4ba911abb34db3d2b3c585d41123",
-            "commit-date": "1336682785"
+            "version": "v2.4.2"
         },
         {
             "package": "behat/common-contexts",
-            "version": "v1.1.1"
+            "version": "dev-master",
+            "source-reference": "fdd34724890828bd8442a443fd59f8af81daed17",
+            "commit-date": "1339965382"
         },
         {
             "package": "behat/gherkin",
-            "version": "v2.1.1"
+            "version": "v2.2.1"
         },
         {
             "package": "behat/mink",
-            "version": "v1.3.4"
+            "version": "v1.4.0"
         },
         {
-            "package": "behat/mink-bundle",
+            "package": "behat/mink-browserkit-driver",
             "version": "dev-master",
-            "source-reference": "144c8cbc08e386e70029edae7a73611079e2dca1",
-            "commit-date": "1337850147"
+            "source-reference": "b07a3908fed61cd31953ddaa6faeb66767cf9d6e",
+            "commit-date": "1339680228"
+        },
+        {
+            "package": "behat/mink-extension",
+            "version": "dev-master",
+            "source-reference": "f77bd494338c4765e56d5448750985f0bb7ffe97",
+            "commit-date": "1340368028"
+        },
+        {
+            "package": "behat/mink-sahi-driver",
+            "version": "dev-master",
+            "source-reference": "79ecebabcd031c0c9ae78335cda9a893fe40ff38",
+            "commit-date": "1338334143"
+        },
+        {
+            "package": "behat/sahi-client",
+            "version": "v1.0.1"
+        },
+        {
+            "package": "behat/symfony2-extension",
+            "version": "dev-master",
+            "source-reference": "1ae47b8839e9e9501c715ad516f97412ee98a042",
+            "commit-date": "1340373540"
         },
         {
             "package": "doctrine/common",
@@ -42,8 +60,8 @@
         {
             "package": "doctrine/data-fixtures",
             "version": "dev-master",
-            "source-reference": "d233d05437c1a10034867f22069b4bb0f7dc96b6",
-            "commit-date": "1338071483"
+            "source-reference": "1f0b8be5db0b53681f80c99324c94e21e1efe39a",
+            "commit-date": "1340392920"
         },
         {
             "package": "doctrine/dbal",
@@ -89,8 +107,14 @@
         },
         {
             "package": "fabpot/goutte",
-            "version": "master-dev",
-            "source-reference": "master",
+            "version": "dev-master",
+            "alias-pretty-version": "1.0.x-dev",
+            "alias-version": "1.0.9999999.9999999-dev"
+        },
+        {
+            "package": "fabpot/goutte",
+            "version": "dev-master",
+            "source-reference": "c2ea8d9a6682d14482e57ede2371001b8a5238d2",
             "commit-date": "1340264258"
         },
         {
@@ -102,8 +126,12 @@
         {
             "package": "gedmo/doctrine-extensions",
             "version": "dev-master",
-            "source-reference": "f14d807797b2d6feb8e9a02e61ca03d125e9349b",
-            "commit-date": "1340355081"
+            "source-reference": "9ed48efd2868652f9020c681519d176688a0e87f",
+            "commit-date": "1340362268"
+        },
+        {
+            "package": "guzzle/guzzle",
+            "version": "v2.6.6"
         },
         {
             "package": "igorw/file-serve-bundle",
@@ -126,8 +154,8 @@
         {
             "package": "jms/translation-bundle",
             "version": "dev-master",
-            "source-reference": "3b96a2560ab26ba30c7ffcc88342c4ef20a597b6",
-            "commit-date": "1339728208"
+            "source-reference": "cbe95c467ed5e5c26944a4eb23d7fcc90e799b35",
+            "commit-date": "1340675531"
         },
         {
             "package": "knplabs/github-api",
@@ -270,8 +298,8 @@
         {
             "package": "symfony/monolog-bundle",
             "version": "dev-master",
-            "source-reference": "0b5046d3d1ef93cd59ceabfa37de2665f5118c7f",
-            "commit-date": "1339708477"
+            "source-reference": "660a1aeaf93e8ffdc34c27b3a82dc47195ad1d8d",
+            "commit-date": "1340609637"
         },
         {
             "package": "symfony/symfony",
@@ -282,8 +310,8 @@
         {
             "package": "symfony/symfony",
             "version": "dev-master",
-            "source-reference": "v2.1.0-BETA1",
-            "commit-date": "1340300540"
+            "source-reference": "d0e154725c85a3ec5bc6760a59cc2769b8a17ae5",
+            "commit-date": "1340724924"
         },
         {
             "package": "twig/extensions",
@@ -300,8 +328,8 @@
         {
             "package": "twig/twig",
             "version": "dev-master",
-            "source-reference": "4679ad51c5390648b7ea4c8f0ecd2c0c344145ba",
-            "commit-date": "1339959143"
+            "source-reference": "cd049dac38dda63bd0fb264bbd939a547c7c4b1a",
+            "commit-date": "1340727866"
         },
         {
             "package": "twitter/app-bundle",
@@ -328,30 +356,6 @@
         {
             "package": "zendframework/zend-filter",
             "version": "2.0.0-beta1"
-        },
-        {
-            "package": "zendframework/zend-http",
-            "version": "2.0.0beta3"
-        },
-        {
-            "package": "zendframework/zend-loader",
-            "version": "2.0.0beta3"
-        },
-        {
-            "package": "zendframework/zend-registry",
-            "version": "2.0.0beta3"
-        },
-        {
-            "package": "zendframework/zend-stdlib",
-            "version": "2.0.0beta3"
-        },
-        {
-            "package": "zendframework/zend-uri",
-            "version": "2.0.0beta3"
-        },
-        {
-            "package": "zendframework/zend-validator",
-            "version": "2.0.0beta3"
         }
     ],
     "packages-dev": null,
