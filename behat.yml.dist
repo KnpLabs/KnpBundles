@@ -1,0 +1,12 @@
+default:
+  formatter:
+    name: progress
+  extensions:
+    Behat\Symfony2Extension\Extension:
+      mink_driver: true
+      kernel:
+        env: test
+        debug: true
+    Behat\MinkExtension\Extension:
+      base_url: 'http://knpbundles.local/app_test.php/'
+      default_session: symfony2

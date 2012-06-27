@@ -12,7 +12,9 @@ before_script:
     - ./bin/prepare-test-solr.sh
     - ./bin/prepare-test-gd.sh
 
-script: phpunit -c app/ && php app/console --env=test behat --format progress
+script:
+    - phpunit -c app/
+    - ./bin/behat-ci.sh
 
 branches:
     except:
