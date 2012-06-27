@@ -20,4 +20,6 @@ composer.phar
 bin/*
 !bin/launch-rabit-consumers.sh
 !bin/prepare-*.sh
-
+!bin/behat-*.sh
+build
+behat.yml

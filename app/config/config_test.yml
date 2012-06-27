@@ -9,6 +9,3 @@ framework:
 web_profiler:
     toolbar: false
     intercept_redirects: false
-
-mink:
-    show_cmd: firefox %s

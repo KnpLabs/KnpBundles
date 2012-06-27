@@ -2,15 +2,14 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Features\Context;
 
-use Behat\BehatBundle\Context\BehatContext,
-    Behat\BehatBundle\Context\MinkContext;
-
-use Behat\MinkBundle\Driver\SymfonyDriver;
-
 use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\Step,
     Behat\Behat\Context\TranslatedContextInterface,
     Behat\Behat\Exception\PendingException;
+use Behat\CommonContexts\SymfonyDoctrineContext;
+use Behat\MinkExtension\Context\MinkContext;
+use Behat\Symfony2Extension\Context\KernelAwareInterface;
+use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
@@ -20,6 +19,8 @@ use Behat\Mink\Exception\ElementNotFoundException,
     Behat\Mink\Exception\ElementHtmlException,
     Behat\Mink\Exception\ElementTextException,
     Behat\Mink\Exception\UnsupportedDriverActionException;
+
+use Symfony\Component\HttpKernel\KernelInterface;
 
 use Etcpasswd\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
     Etcpasswd\OAuthBundle\Provider\Token\GithubToken;
@@ -33,18 +34,22 @@ use Knp\Bundle\KnpBundlesBundle\Entity;
 /**
  * Feature context.
  */
-class FeatureContext extends MinkContext
+class FeatureContext extends RawMinkContext implements KernelAwareInterface
 {
     private $users;
     private $bundles;
     private $keywords;
 
+    /**
+     * @var \Symfony\Component\HttpKernel\KernelInterface $kernel
+     */
+    private $kernel;
+
     public function __construct($kernel)
     {
-        $this->useContext('symfony_doctrine', new \Behat\CommonContexts\SymfonyDoctrineContext($kernel));
-        $this->useContext('solr', new \Knp\Bundle\KnpBundlesBundle\Features\Context\SolrContext($kernel));
-
-        parent::__construct($kernel);
+        $this->useContext('symfony_doctrine', new SymfonyDoctrineContext());
+        $this->useContext('solr', new SolrContext());
+        $this->useContext('mink', new MinkContext());
     }
 
     /**
@@ -352,5 +357,25 @@ class FeatureContext extends MinkContext
     protected function getRouter()
     {
         return $this->getContainer()->get('router');
+    }
+
+    /**
+     * gets container from kernel
+     * 
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected function getContainer()
+    {
+        return $this->kernel->getContainer();
+    }
+    
+    /**
+     * Sets Kernel instance.
+     *
+     * @param KernelInterface $kernel HttpKernel instance
+     */
+    public function setKernel(KernelInterface $kernel)
+    {
+        $this->kernel = $kernel;
     }
 }
