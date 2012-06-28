@@ -18,6 +18,7 @@
                 <tokenizer class="solr.StandardTokenizerFactory" />
                 <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt" enablePositionIncrements="true" />
                 <filter class="solr.LowerCaseFilterFactory"/>
+                <filter class="solr.NGramFilterFactory" minGramSize="2" maxGramSize="25" />
             </analyzer>
             <analyzer type="query">
                 <tokenizer class="solr.StandardTokenizerFactory"/>
