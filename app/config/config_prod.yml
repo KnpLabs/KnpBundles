@@ -5,7 +5,7 @@ monolog:
     handlers:
         main:
             type: fingers_crossed
-            action_level: error
+            action_level: critical
             handler: grouped
         grouped:
             type: group
