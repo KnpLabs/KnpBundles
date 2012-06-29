@@ -14,6 +14,8 @@ use Symfony\Component\Process\Process;
  */
 class KbSolrServerStartCommand extends ContainerAwareCommand
 {
+    protected $utils;
+
     /**
      * {@inheritdoc}
      */
@@ -32,14 +34,16 @@ class KbSolrServerStartCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->utils = $this->getContainer()->get('knp_bundles.utils.solr');
+
         if ($input->getOption('show-commands-only')) {
             $output->writeln(sprintf('<info>%s</info>', $this->createRunSolrCommand($input)));
 
             return 0;
         }
 
-        if ($this->solrIsRunning()) {
-            $output->writeln(sprintf('<info>%s %d</info>', 'Solr is running. Pid: ', $this->getSolrPid()));
+        if ($this->utils->isSolrRunning()) {
+            $output->writeln(sprintf('<info>%s %d</info>', 'Solr is running. Pid: ', $this->utils->getSolrPid()));
 
             return 0;
         }
@@ -49,70 +53,20 @@ class KbSolrServerStartCommand extends ContainerAwareCommand
         $process = new Process($this->createRunSolrCommand($input));
         $process->run();
 
-        $output->writeln(sprintf('<info>Pid: %d</info>', $this->getSolrPid()));
-    }
-
-    /**
-     * @return boolean
-     */
-    private function solrIsRunning()
-    {
-        return (boolean) $this->getSolrPid();
-    }
-
-    /**
-     * Get SOLR pid
-     */
-    private function getSolrPid()
-    {
-        $properties = array();
-        foreach ($this->getPropertiesArray() as $key => $property) {
-             $properties[] = $key.'='.$property;
-        }
-
-        $process = new Process(sprintf('ps aux | grep \\\\%s | grep -v grep | awk \'{ print $2 }\'', implode('| grep \\\\', $properties)));
-        $process->run();
-        $pid = $process->getOutput();
-
-        return (integer) $pid;
+        $output->writeln(sprintf('<info>Pid: %d</info>', $this->utils->getSolrPid()));
     }
 
     /**
      * Create and return SOLR start command
      *
      * @param InputInterface $input
+     *
      * @return string
      */
     private function createRunSolrCommand(InputInterface $input)
     {
         $solrPath = $input->getOption('solr-path');
 
-        return sprintf('(cd %s; java -jar %s start.jar ) 1> /dev/null 2> /dev/null &', $solrPath, $this->buildProperties());
-    }
-
-    /**
-     * Build SOLR start.jar properties
-     *
-     * @return string
-     */
-    private function buildProperties()
-    {
-        $properties = array();
-        foreach ($this->getPropertiesArray() as $key => $property) {
-             $properties[] = $key.'='.$property;
-        }
-
-        return implode(' ', $properties);
-    }
-
-    /**
-     * @return array
-     */
-    private function getPropertiesArray()
-    {
-        return array(
-            '-Djetty.port'     => $this->getContainer()->get('solarium.client')->getAdapter()->getPort(),
-            '-Dsolr.solr.home' => $this->getContainer()->get('kernel')->getBundle('KnpBundlesBundle')->getPath().'/Resources/solr'
-        );
+        return sprintf('(cd %s; java -jar %s start.jar ) 1> /dev/null 2> /dev/null &', $solrPath, $this->utils->buildProperties());
     }
 }

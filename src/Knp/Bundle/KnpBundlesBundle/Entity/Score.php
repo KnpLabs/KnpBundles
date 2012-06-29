@@ -3,9 +3,6 @@
 namespace Knp\Bundle\KnpBundlesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * A score of a given bundle at a given date
@@ -35,7 +32,7 @@ class Score
      *
      * @ORM\Column(type="date")
      */
-    protected $date = null;
+    protected $date;
 
     /**
      * Bundle
@@ -43,7 +40,7 @@ class Score
      * @ORM\ManyToOne(targetEntity="Bundle", inversedBy="scores")
      * @ORM\JoinColumn(name="bundle_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
-    protected $bundle = null;
+    protected $bundle;
 
     /**
      * Internal value of the Bundle, based on several indicators
@@ -51,15 +48,12 @@ class Score
      *
      * @ORM\Column(type="integer")
      */
-    protected $value = null;
+    protected $value = 0;
 
     public function __construct()
     {
-        $this->bundle = null;
         $this->date = new \DateTime();
-        $this->value = 0;
     }
-
 
     /**
      * Get value
@@ -74,7 +68,7 @@ class Score
     /**
      * Set value
      *
-     * @param  integer
+     * @param integer $value
      */
     public function setValue($value)
     {
@@ -94,7 +88,7 @@ class Score
     /**
      * Set date
      *
-     * @param  \DateTime
+     * @param \DateTime $date
      */
     public function setDate(\DateTime $date)
     {
@@ -102,7 +96,7 @@ class Score
     }
 
     /**
-     * @return Bundle
+     * @return null|Bundle
      */
     public function getBundle()
     {
@@ -110,7 +104,7 @@ class Score
     }
 
     /**
-     * @param Bundle $bundle
+     * @param null|Bundle $bundle
      */
     public function setBundle(Bundle $bundle = null)
     {
