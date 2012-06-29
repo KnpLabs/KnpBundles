@@ -56,7 +56,7 @@ And update the parameters.yml with the Client ID and Secret.
 
 #### Run the Behat tests (requires PHPUnit >= 3.5)
 
-    php app/console --env=test behat
+    ./bin/behat @KnpBundlesBundle
 
 #### To generate migrations from your current schema
 
