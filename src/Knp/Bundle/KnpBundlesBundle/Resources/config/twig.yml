@@ -1,10 +1,10 @@
 services:
-    twig.extension.knp.locale_routing:
-        class: Knp\Bundle\KnpBundlesBundle\Twig\Extension\LocaleRoutingTwigExtension
-        tags:
-            - { name: twig.extension }
-        arguments:
-            - @router
+#    twig.extension.knp.locale_routing:
+#        class: Knp\Bundle\KnpBundlesBundle\Twig\Extension\LocaleRoutingTwigExtension
+#        tags:
+#            - { name: twig.extension }
+#        arguments:
+#            - @router
     twig.extension.knp.flawored_markdown:
         class: Knp\Bundle\KnpBundlesBundle\Twig\Extension\FlaworedMarkdownTwigExtension
         tags:
