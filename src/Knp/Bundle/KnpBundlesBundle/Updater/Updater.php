@@ -85,19 +85,19 @@ class Updater
         foreach ($this->em->getRepository('KnpBundlesBundle:Bundle')->findAllSortedBy('updatedAt') as $bundle) {
             $this->bundles[strtolower($bundle->getFullName())] = $bundle;
         }
-        $this->output->writeln(sprintf('Loaded %d bundles from the DB', count($this->bundles)));
+        $this->output->writeln(sprintf('[%s] Loaded %d bundles from the DB', $this->currentTime(), count($this->bundles)));
     }
 
     public function searchNewBundles()
     {
-        $this->output->writeln(sprintf('Trying to find bundle candidates'));
+        $this->output->writeln(sprintf('[%s] Trying to find bundle candidates'), $this->currentTime());
 
         $repos = $this->finder->find();
         $bundles = array();
         foreach ($repos as $repo) {
             $bundles[strtolower($repo)] = new Bundle($repo);
         }
-        $this->output->writeln(sprintf('Found %d bundle candidates', count($bundles)));
+        $this->output->writeln(sprintf('[%s] Found %d bundle candidates', $this->currentTime(), count($bundles)));
 
         return $bundles;
     }
@@ -114,7 +114,7 @@ class Updater
                 $this->notifyInvalidBundle($bundle);
                 continue;
             }
-            $this->output->write(sprintf('Discover bundle %s: ', $bundle->getFullName()));
+            $this->output->write(sprintf('[%s] Discover bundle %s: ', $this->currentTime(), $bundle->getFullName()));
             $user = $this->users->getOrCreate($bundle->getUsername());
 
             $user->addBundle($bundle);
@@ -128,7 +128,7 @@ class Updater
             ++$added;
         }
 
-        $this->output->writeln(sprintf('%d created', $added));
+        $this->output->writeln(sprintf('[%s] %d created', $this->currentTime(), $added));
     }
 
     /**
@@ -175,7 +175,7 @@ class Updater
 
     public function updateBundlesData()
     {
-        $this->output->writeln('Will now update commits, files and tags');
+        $this->output->writeln(sprintf('[%s] Will now update commits, files and tags', $this->currentTime()));
         // Now update repos with more precise GitHub data
         foreach (array_reverse($this->bundles) as $bundle) {
             if ($this->em->getUnitOfWork()->getEntityState($bundle) != UnitOfWork::STATE_MANAGED) {
@@ -187,7 +187,7 @@ class Updater
 
     public function updateUsers()
     {
-        $this->output->writeln(sprintf('Will now update %d users', count($this->users)));
+        $this->output->writeln(sprintf('[%s] Will now update %d users', $this->currentTime(), count($this->users)));
         foreach ($this->users as $user) {
             if ($this->em->getUnitOfWork()->getEntityState($user) != UnitOfWork::STATE_MANAGED) {
                 continue;
@@ -197,11 +197,11 @@ class Updater
                 try {
                     $this->output->write($user->getName() . str_repeat(' ', 40 - strlen($user->getName())));
                     if (!$this->githubUserApi->update($user)) {
-                        $this->output->writeln('Remove user');
+                        $this->output->writeln(sprintf('[%s] Remove user', $this->currentTime()));
                         $this->em->remove($user);
                     } else {
                         $user->recalculateScore();
-                        $this->output->writeln('OK, score is ' . $user->getScore());
+                        $this->output->writeln(sprintf('[%s] OK, score is %s', $this->currentTime(), $user->getScore()));
                     }
                     break;
                 } catch (GithubException $e) {
@@ -236,6 +236,11 @@ class Updater
 
     private function notifyInvalidBundle(Bundle $bundle)
     {
-        $this->output->writeln(sprintf("%s: invalid Symfony bundle", $bundle->getFullName()));
+        $this->output->writeln(sprintf("[%s] %s: invalid Symfony bundle", $this->currentTime(), $bundle->getFullName()));
+    }
+
+    private function currentTime()
+    {
+        return date('d-m-y H:i:s');
     }
 }

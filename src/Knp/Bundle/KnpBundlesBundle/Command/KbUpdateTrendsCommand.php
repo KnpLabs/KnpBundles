@@ -36,14 +36,19 @@ class KbUpdateTrendsCommand extends ContainerAwareCommand
         $em->getConnection()->beginTransaction();
         try {
             $nbRows = $bundleRepository->updateTrends();
-            $output->writeln(sprintf('<info>%s</info> rows updated', $nbRows));
+            $output->writeln(sprintf('[%s] <info>%s</info> rows updated', $this->currentTime(), $nbRows));
 
             $em->getConnection()->commit();
         } catch (\Exception $e) {
-            $output->writeln(sprintf('<error>Rollbacking</error> because of %s', $e));
+            $output->writeln(sprintf('[%s] <error>Rollbacking</error> because of %s', $this->currentTime(), $e));
             $em->getConnection()->rollback();
             $em->close();
         }
 
+    }
+
+    private function currentTime()
+    {
+        return date('d-m-y H:i:s');
     }
 }
