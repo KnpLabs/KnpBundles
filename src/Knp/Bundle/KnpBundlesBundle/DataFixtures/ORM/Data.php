@@ -194,7 +194,8 @@ EOT;
                 ),
                 'isFork'        => false,
                 'contributors'  => array($contributor),
-                'canonicalConfig' => $canonicalConfigDump
+                'canonicalConfig' => $canonicalConfigDump,
+                'nbRecommenders' => rand(0, 90),
         ));
 
             $manager->persist($bundle);
