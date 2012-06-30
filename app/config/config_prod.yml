@@ -5,10 +5,22 @@ monolog:
     handlers:
         main:
             type: fingers_crossed
-            action_level: error
-            handler: nested
+            action_level: critical
+            handler: grouped
+        grouped:
+            type: group
+            members:  [nested, buffered]
         nested:
             type: stream
             path: %kernel.logs_dir%/%kernel.environment%.log
             level: debug
+        buffered:
+            type: buffer
+            handler: swift
+        swift:
+            type:       swift_mailer
+            from_email: %monolog.swift.from_email%
+            to_email:   %monolog.swift.to_email%
+            subject:    "[ERROR] knpbundles.com"
+            level:      debug
 
