@@ -75,4 +75,17 @@ Feature: Searching bundles
     And I search for "Twitter"
     Then I should see "1 Bundle"
     And I should see "FOSTwitterBundle"
-    
+
+  Scenario: Searching by partial name but partial name is too short 
+    When I go to "/"
+    And I search for "f"
+    Then I should be on "/search"
+    And I should see "Search 'f'"
+    And I should see "0 Bundle"
+
+  Scenario: Searching by partial name but partial name is too long
+    When I go to "/"
+    And I search for "FOSTwitterBootstrapLongAndSuperLongNameForABundleIsJustTooMuchBundle"
+    Then I should be on "/search"
+    And I should see "Search 'FOSTwitterBootstrapLongAndSuperLongNameForABundleIsJustTooMuchBundle'"
+    And I should see "0 Bundle"
