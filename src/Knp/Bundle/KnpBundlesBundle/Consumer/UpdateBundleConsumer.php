@@ -211,7 +211,7 @@ class UpdateBundleConsumer implements ConsumerInterface
         // @todo also delete folder
 
         if ($this->logger) {
-            $this->logger->warn('Bundle "%s" was deleted', $bundle->getName());
+            $this->logger->warn(sprintf('Bundle "%s" was deleted', $bundle->getName()));
         }
     }
 
