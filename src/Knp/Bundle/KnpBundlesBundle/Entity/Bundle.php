@@ -265,6 +265,11 @@ class Bundle
      */
     protected $indexedAt;
 
+    /*
+     * @ORM\Column(type="integer")
+     */
+    protected $nbRecommenders;
+
     public function __construct($fullName = null)
     {
         if ($fullName) {
@@ -288,6 +293,7 @@ class Bundle
         $this->composerName = null;
         $this->keywords = new ArrayCollection();
         $this->state = self::STATE_UNKNOWN;
+        $this->nbRecommenders = 0;
     }
 
     public function isInitialized()
@@ -998,6 +1004,13 @@ class Bundle
     public function addRecommender(User $user)
     {
         $this->recommenders[] = $user;
+        $this->nbRecommenders++;
+    }
+
+    public function removeRecommender(User $user)
+    {
+        $this->getRecommenders()->removeElement($user);
+        $this->nbRecommenders--;
     }
 
     /**

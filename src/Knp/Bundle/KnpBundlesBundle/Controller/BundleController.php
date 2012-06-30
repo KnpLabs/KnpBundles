@@ -23,6 +23,7 @@ class BundleController extends BaseController
         'best'          => 'score',
         'updated'       => 'lastCommitAt',
         'newest'        => 'createdAt',
+        'recommended'   => 'nbRecommenders',
     );
 
     protected $sortLegends = array(
@@ -30,6 +31,7 @@ class BundleController extends BaseController
         'best'          => 'bundles.sort.best',
         'updated'       => 'bundles.sort.updated',
         'newest'        => 'bundles.sort.newest',
+        'recommended'   => 'bundles.sort.recommended',
     );
 
     public function searchAction()
@@ -218,7 +220,7 @@ class BundleController extends BaseController
         if ($user->isUsingBundle($bundle)) {
             $bundle->updateScore(-5);
 
-            $bundle->getRecommenders()->removeElement($user);
+            $bundle->removeRecommender($user);
             $user->getUsedBundles()->removeElement($bundle);
         } else {
             $bundle->updateScore(5);
