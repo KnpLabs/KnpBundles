@@ -268,7 +268,7 @@ class Bundle
      */
     protected $indexedAt;
 
-    /*
+    /**
      * @ORM\Column(type="integer")
      */
     protected $nbRecommenders;
@@ -1110,5 +1110,10 @@ class Bundle
     public function setCanonicalConfig($canonicalConfig)
     {
         $this->canonicalConfig = $canonicalConfig;
+    }
+
+    public function setNbRecommenders($nbRecommenders)
+    {
+        $this->nbRecommenders = $nbRecommenders;
     }
 }
