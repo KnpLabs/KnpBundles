@@ -49,6 +49,6 @@ class KbUpdateTrendsCommand extends ContainerAwareCommand
 
     private function currentTime()
     {
-        return date('D, d M Y H:i:s');
+        return date('d-m-y H:i:s');
     }
 }
