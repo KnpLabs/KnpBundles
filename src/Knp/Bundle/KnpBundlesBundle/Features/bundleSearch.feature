@@ -8,11 +8,16 @@ Feature: Searching bundles
     | name      |
     | knplabs   |
     | fos       |
+    | tos       |
     And the site has following bundles:
-    | username  | name        | description | lastCommitAt | score | trend1 |
-    | knplabs   | TestBundle  | test desc   |-1 day        | 10    | 15     |
-    | knplabs   | Test2Bundle | test desc   |-1 day        | 10    | 15     |
-    | fos       | UserBundle  | user desc   |-2 days       | 20    | 5      |
+    | username  | name                      | description | lastCommitAt | score | trend1 |
+    | knplabs   | TestBundle                | test desc   |-1 day        | 10    | 15     |
+    | knplabs   | Test2Bundle               | test desc   |-1 day        | 10    | 15     |
+    | tos       | FOSUserBundle             | user desc   |-2 days       | 20    | 5      |
+    | fos       | FOSTwitterBundle          | user desc   |-2 days       | 20    | 5      |
+    | fos       | FOSJsRoutingBundle        | user desc   |-2 days       | 20    | 5      |
+    | fos       | FOSFacebookBundle         | user desc   |-2 days       | 20    | 5      |
+    | fos       | FOSAdvancedEncoderBundle  | user desc   |-2 days       | 20    | 5      |
     And bundles are indexed
 
   Scenario: Searching some bundles
@@ -26,18 +31,18 @@ Feature: Searching bundles
   Scenario: Search one bundle
     When I go to "/"
     And I search for "User"
-    Then I should see "1 Bundle"
+    Then I should see "5 Bundle"
     And I should see "UserBundle"
 
   Scenario: Search one bundle with exact name
     When I go to "/"
-    And I search for "UserBundle"
-    Then I should be on "fos/UserBundle" bundle page
+    And I search for "FOSUserBundle"
+    Then I should be on "tos/FOSUserBundle" bundle page
 
   Scenario: Searching some bundles from description
     When I go to "/"
     And I search for "desc"
-    Then I should see "3 Bundles"
+    Then I should see "7 Bundles"
     And I should see "TestBundle"
     And I should see "Test2Bundle"
     And I should see "UserBundle"
@@ -53,4 +58,34 @@ Feature: Searching bundles
     And I search for "lorem"
     Then I should be on "/search"
     And I should see "Search 'lorem'"
+    And I should see "0 Bundle"
+
+  Scenario: Searching by partial name is rather search by author
+    When I go to "/"
+    And I search for "FOS"
+    Then I should see "5 Bundles"
+    And I should see "FOSTwitterBundle"
+    And I should see "FOSJsRoutingBundle"
+    And I should see "FOSFacebookBundle"
+    And I should see "FOSAdvancedEncoderBundle"
+    And I should see "FOSUserBundle"
+
+  Scenario: Searching by partial name
+    When I go to "/"
+    And I search for "Twitter"
+    Then I should see "1 Bundle"
+    And I should see "FOSTwitterBundle"
+
+  Scenario: Searching by partial name but partial name is too short 
+    When I go to "/"
+    And I search for "f"
+    Then I should be on "/search"
+    And I should see "Search 'f'"
+    And I should see "0 Bundle"
+
+  Scenario: Searching by partial name but partial name is too long
+    When I go to "/"
+    And I search for "FOSTwitterBootstrapLongAndSuperLongNameForABundleIsJustTooMuchBundle"
+    Then I should be on "/search"
+    And I should see "Search 'FOSTwitterBootstrapLongAndSuperLongNameForABundleIsJustTooMuchBundle'"
     And I should see "0 Bundle"
