@@ -50,7 +50,7 @@ class BundleRepository extends EntityRepository
      */
     public function queryAllWithUsersAndContributorsSortedBy($field)
     {
-        $order = 'nbRecommenders' === $field ? $field : 'bundle.'.$field;
+        $order = 'nbRecommenders' === $field ? $field : 'b.'.$field;
         $dir = 'name' === $field ? 'asc' : 'desc';
 
         $q = $this->getEntityManager()->createQuery(<<<EOF
