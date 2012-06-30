@@ -19,8 +19,8 @@ monolog:
             handler: swift
         swift:
             type:       swift_mailer
-            from_email: luis.cordova@knplabs.com
-            to_email:   luis.cordova@knplabs.com
+            from_email: %monolog.swift.from_email%
+            to_email:   %monolog.swift.to_email%
             subject:    "[ERROR] knpbundles.com"
             level:      debug
 
