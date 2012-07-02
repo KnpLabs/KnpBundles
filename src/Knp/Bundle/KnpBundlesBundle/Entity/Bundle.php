@@ -3,8 +3,7 @@
 namespace Knp\Bundle\KnpBundlesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
@@ -28,15 +27,6 @@ class Bundle
     const STATE_READY         = 'ready';
     const STATE_DEPRECATED    = 'deprecated';
 
-    // TODO: switch to annotations
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-        $metadata->addPropertyConstraint('name', new Constraints\NotBlank());
-        $metadata->addPropertyConstraint('name', new Constraints\MinLength(2));
-        $metadata->addPropertyConstraint('username', new Constraints\NotBlank());
-        $metadata->addPropertyConstraint('username', new Constraints\MinLength(2));
-    }
-
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -48,17 +38,23 @@ class Bundle
      * Repo name, e.g. "MarkdownBundle"
      * Like in GitHub, this name is not unique
      *
+     * @Assert\NotBlank()
+     * @Assert\MinLength(2)
+     *
      * @ORM\Column(type="string", length=127)
      */
-    protected $name = null;
+    protected $name;
 
     /**
      * The name of the user who owns this bundle
      * This value is redundant with the name of the referenced User, for performance reasons
      *
+     * @Assert\NotBlank()
+     * @Assert\MinLength(2)
+     *
      * @ORM\Column(type="string", length=127)
      */
-    protected $username = null;
+    protected $username;
 
     /**
      * User who owns the bundle
@@ -66,7 +62,7 @@ class Bundle
      * @ORM\ManyToOne(targetEntity="User", inversedBy="bundles")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
-    protected $user = null;
+    protected $user;
 
     /**
      * Recommenders recommending the bundle
@@ -75,37 +71,37 @@ class Bundle
      * @ORM\JoinTable(name="bundles_usage",
      *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="knpbundles_user_id", referencedColumnName="id")}
-     *      )
+     * )
      */
-    protected $recommenders = null;
+    protected $recommenders;
 
     /**
      * Repo description
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $description = null;
+    protected $description;
 
     /**
      * The website url, if any
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $homepage = null;
+    protected $homepage;
 
     /**
      * The bundle readme text extracted from source code
      *
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $readme = null;
+    protected $readme;
 
     /**
      * The bundle license text extracted from source code
      *
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $license = null;
+    protected $license;
 
     /**
      * Internal score of the Repo, based on several indicators
@@ -113,14 +109,14 @@ class Bundle
      *
      * @ORM\Column(type="integer")
      */
-    protected $score = null;
+    protected $score = 0;
 
     /**
      * Internal scores
      *
      * @ORM\OneToMany(targetEntity="Score", mappedBy="bundle")
      */
-    protected $scores = null;
+    protected $scores;
 
     /**
      * Latest score's details
@@ -128,42 +124,42 @@ class Bundle
      * @ORM\Column(type="array", nullable=true)
      * @var array
      */
-    protected $scoreDetails;
+    protected $scoreDetails = array();
 
     /**
      * Repo creation date (on this website)
      *
      * @ORM\Column(type="datetime")
      */
-    protected $createdAt = null;
+    protected $createdAt;
 
     /**
      * Repo update date (on this website)
      *
      * @ORM\Column(type="datetime")
      */
-    protected $updatedAt = null;
+    protected $updatedAt;
 
     /**
      * Date of the last Git commit
      *
      * @ORM\Column(type="date")
      */
-    protected $lastCommitAt = null;
+    protected $lastCommitAt;
 
     /**
      * The last commits on this bundle repo
      *
      * @ORM\Column(type="text")
      */
-    protected $lastCommits = null;
+    protected $lastCommits;
 
     /**
      * Released tags are Git tags
      *
      * @ORM\Column(type="text")
      */
-    protected $tags = null;
+    protected $tags;
 
     /**
      * Date of the last succesful GitHub check
@@ -177,7 +173,7 @@ class Bundle
      *
      * @ORM\Column(type="string")
      */
-    protected $state;
+    protected $state = self::STATE_UNKNOWN;
 
     /**
      * Recommenders who contributed to the Repo
@@ -186,25 +182,25 @@ class Bundle
      * @ORM\JoinTable(name="contribution",
      *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")}
-     *)
+     * )
      *
-     * @var ArrayCollection
+     * @var Collection
      */
-    protected $contributors = null;
+    protected $contributors;
 
     /**
      * Number of GitHub followers
      *
      * @ORM\Column(type="integer")
      */
-    protected $nbFollowers = null;
+    protected $nbFollowers = 0;
 
     /**
      * Number of GitHub forks
      *
      * @ORM\Column(type="integer")
      */
-    protected $nbForks = null;
+    protected $nbForks = 0;
 
     /**
      * True if the Repo is a fork
@@ -225,20 +221,20 @@ class Bundle
      *
      * @ORM\Column(type="boolean", nullable=true)
      */
-    protected $travisCiBuildStatus = null;
+    protected $travisCiBuildStatus;
 
     /**
      * Trend over the last day. Max is better.
      * @ORM\Column(type="integer")
      */
-    protected $trend1 = null;
+    protected $trend1 = 0;
 
     /**
      * Composer name
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $composerName = null;
+    protected $composerName;
 
     /**
      * Bundle keywords
@@ -247,7 +243,7 @@ class Bundle
      * @ORM\JoinTable(name="bundles_keyword",
      *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="keyword_id", referencedColumnName="id")}
-     *      )
+     * )
      */
     protected $keywords;
 
@@ -271,23 +267,16 @@ class Bundle
             list($this->username, $this->name) = explode('/', $fullName);
         }
 
-        $this->contributors = new ArrayCollection();
         $this->createdAt = new \DateTime('NOW');
         $this->updatedAt = new \DateTime('NOW');
-        $this->score = 0;
-        $this->scoreDetails = array();
-        $this->scores = new ArrayCollection();
         $this->lastCommitAt = new \DateTime('2010-01-01');
+
         $this->lastCommits = serialize(array());
         $this->tags = serialize(array());
-        $this->nbFollowers = 0;
-        $this->nbForks = 0;
-        $this->usesTravisCi = false;
-        $this->travisCiBuildStatus = null;
-        $this->trend1 = 0;
-        $this->composerName = null;
+
+        $this->contributors = new ArrayCollection();
+        $this->scores = new ArrayCollection();
         $this->keywords = new ArrayCollection();
-        $this->state = self::STATE_UNKNOWN;
     }
 
     public function isInitialized()
@@ -310,7 +299,7 @@ class Bundle
     /**
      * Set homepage
      *
-     * @param  string
+     * @param string $homepage
      */
     public function setHomepage($homepage)
     {
@@ -320,7 +309,7 @@ class Bundle
     /**
      * Get isFork
      *
-     * @return bool
+     * @return boolean
      */
     public function getIsFork()
     {
@@ -330,7 +319,7 @@ class Bundle
     /**
      * Set isFork
      *
-     * @param  bool
+     * @param boolean $isFork
      */
     public function setIsFork($isFork)
     {
@@ -340,7 +329,7 @@ class Bundle
     /**
      * Get whether bundle uses Travis CI
      *
-     * @return bool
+     * @return boolean
      */
     public function getUsesTravisCi()
     {
@@ -350,7 +339,7 @@ class Bundle
     /**
      * Set whether bundle uses Travis CI
      *
-     * @param  bool
+     * @param boolean $uses
      */
     public function setUsesTravisCi($uses)
     {
@@ -370,7 +359,7 @@ class Bundle
     /**
      * Set Travis Ci last build status
      *
-     * @param  string
+     * @param string $status
      */
     public function setTravisCiBuildStatus($status)
     {
@@ -410,7 +399,7 @@ class Bundle
     /**
      * Set tags
      *
-     * @param  array
+     * @param array $tags
      */
     public function setTags(array $tags)
     {
@@ -430,6 +419,8 @@ class Bundle
     /**
      * Get lastCommits
      *
+     * @param integer $nb
+     *
      * @return array
      */
     public function getLastCommits($nb = 10)
@@ -447,7 +438,7 @@ class Bundle
     /**
      * Set lastCommits
      *
-     * @param  array
+     * @param array $lastCommits
      */
     public function setLastCommits(array $lastCommits)
     {
@@ -475,7 +466,7 @@ class Bundle
     /**
      * Set readme
      *
-     * @param  string
+     * @param string $readme
      */
     public function setReadme($readme)
     {
@@ -496,7 +487,7 @@ class Bundle
     /**
      * Set license
      *
-     * @param  string
+     * @param string $license
      */
     public function setLicense($license)
     {
@@ -516,7 +507,7 @@ class Bundle
     /**
      * Set score
      *
-     * @param  integer
+     * @param integer $score
      */
     public function setScore($score)
     {
@@ -535,7 +526,7 @@ class Bundle
 
     public function getLatestScoreDetails()
     {
-        return $this->getScores()->last();
+        return $this->scores->last();
     }
 
     public function addScoreDetail($name, $value)
@@ -607,7 +598,7 @@ class Bundle
      */
     public function getDaysSinceLastCommit()
     {
-        return date_create()->diff($this->getLastCommitAt())->days;
+        return date_create()->diff($this->lastCommitAt)->days;
     }
 
     /**
@@ -623,8 +614,7 @@ class Bundle
     /**
      * Set forks
      *
-     * @param  integer
-     * @return null
+     * @param integer $nbForks
      */
     public function setNbForks($nbForks)
     {
@@ -644,8 +634,7 @@ class Bundle
     /**
      * Set followers
      *
-     * @param  integer
-     * @return null
+     * @param integer $nbFollowers
      */
     public function setNbFollowers($nbFollowers)
     {
@@ -659,7 +648,7 @@ class Bundle
      */
     public function getGitHubUrl()
     {
-        return sprintf('http://github.com/%s/%s', $this->getUsername(), $this->getName());
+        return sprintf('http://github.com/%s/%s', $this->username, $this->name);
     }
 
     /**
@@ -669,7 +658,7 @@ class Bundle
      */
     public function getTravisUrl()
     {
-        return $this->getUsesTravisCi() ? sprintf('http://travis-ci.org/%s/%s', $this->getUsername(), $this->getName()) : false;
+        return $this->usesTravisCi ? sprintf('http://travis-ci.org/%s/%s', $this->username, $this->name) : false;
     }
 
     /**
@@ -679,7 +668,7 @@ class Bundle
      */
     public function getPackagistUrl()
     {
-        return $this->getComposerName() ? sprintf('http://packagist.org/packages/%s', $this->getComposerName()) : false;
+        return $this->composerName ? sprintf('http://packagist.org/packages/%s', $this->composerName) : false;
     }
 
     /**
@@ -689,7 +678,7 @@ class Bundle
      */
     public function getGitUrl()
     {
-        return sprintf('git://github.com/%s/%s.git', $this->getUsername(), $this->getName());
+        return sprintf('git://github.com/%s/%s.git', $this->username, $this->name);
     }
 
     /**
@@ -699,7 +688,7 @@ class Bundle
      */
     public function getFullName()
     {
-        return $this->getUsername().'/'.$this->name;
+        return $this->username.'/'.$this->name;
     }
 
     /**
@@ -745,7 +734,7 @@ class Bundle
     /**
      * Set username
      *
-     * @param  string
+     * @param string
      */
     public function setUsername($username)
     {
@@ -753,7 +742,7 @@ class Bundle
     }
 
     /**
-     * @return \Knp\Bundle\KnpBundlesBundle\Entity\User
+     * @return User
      */
     public function getUser()
     {
@@ -761,7 +750,7 @@ class Bundle
     }
 
     /**
-     * @param User $user
+     * @param null|User $user
      */
     public function setUser(User $user = null)
     {
@@ -781,7 +770,7 @@ class Bundle
     /**
      * Set description
      *
-     * @param  string
+     * @param string $description
      */
     public function setDescription($description)
     {
@@ -841,7 +830,7 @@ class Bundle
     /**
      * Get contributors
      *
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getContributors()
     {
@@ -895,7 +884,7 @@ class Bundle
     /**
      * Set contributors
      *
-     * @param  array
+     * @param array $contributors
      */
     public function setContributors(array $contributors)
     {
@@ -905,7 +894,7 @@ class Bundle
     public function getContributorNames()
     {
         $names = array();
-        foreach ($this->getContributors() as $contributor) {
+        foreach ($this->contributors as $contributor) {
             $names[] = $contributor->getName();
         }
 
@@ -975,7 +964,7 @@ class Bundle
 
     public function __toString()
     {
-        return $this->getUsername().'/'.$this->getName();
+        return $this->username.'/'.$this->name;
     }
 
     public function getClass()
@@ -1001,16 +990,17 @@ class Bundle
     }
 
     /**
-     * @param Knp\Bundle\KnpBundlesBundle\Entity\User
+     * @param User $user
+     *
      * @return boolean
      */
     public function isOwnerOrContributor(User $user)
     {
-        if ($this->getUser() == $user) {
+        if ($this->user == $user) {
             return true;
         }
 
-        return $this->getContributors()->contains($user);
+        return $this->contributors->contains($user);
     }
 
     /**
@@ -1074,7 +1064,7 @@ class Bundle
     /**
      * Get indexedAt
      *
-     * @return datetime $indexedAt
+     * @return \DateTime
      */
     public function getIndexedAt()
     {

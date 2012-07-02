@@ -35,6 +35,12 @@ class KbSolrIndexCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (!$this->getContainer()->get('knp_bundles.utils.solr')->isSolrRunning()) {
+            $output->writeln('<error>Solr is NOT running. Please start server first!</error>');
+
+            return 1;
+        }
+
         $verbose = $input->getOption('verbose');
         $force = $input->getOption('force');
         $bundleName = $input->getArgument('bundleName');
@@ -55,7 +61,7 @@ class KbSolrIndexCommand extends ContainerAwareCommand
             if ($verbose) {
                 $output->writeln('Deleting existing index.');
             }
-            
+
             $indexer->deleteBundlesIndexes();
         }
 
@@ -70,6 +76,7 @@ class KbSolrIndexCommand extends ContainerAwareCommand
                 $output->writeln('<error>Exception: '.$e->getMessage().', skipping bundle '.$bundle->getFullName().'.</error>');
             }
         }
+
         $doctrine->getEntityManager()->flush();
     }
 }

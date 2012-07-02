@@ -29,7 +29,6 @@ class AppKernel extends Kernel
             new Knp\Bundle\DisqusBundle\KnpDisqusBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
-            new JMS\I18nRoutingBundle\JMSI18nRoutingBundle(),
             new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
             new Nelmio\SolariumBundle\NelmioSolariumBundle(),
 

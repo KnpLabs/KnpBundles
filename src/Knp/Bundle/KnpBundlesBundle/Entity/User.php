@@ -3,9 +3,8 @@
 namespace Knp\Bundle\KnpBundlesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -20,12 +19,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-        $metadata->addPropertyConstraint('name', new Constraints\NotBlank());
-        $metadata->addPropertyConstraint('name', new Constraints\MinLength(2));
-    }
-
     /**
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -37,84 +30,87 @@ class User implements UserInterface
      * User name, e.g. "ornicar"
      * Like in GitHub, this name is unique
      *
+     * @Assert\NotBlank()
+     * @Assert\MinLength(2)
+     *
      * @ORM\Column(type="string", length=127)
      */
-    protected $name = null;
+    protected $name;
 
     /**
      * User email
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $email = null;
+    protected $email;
 
     /**
      * User email
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $gravatarHash = null;
+    protected $gravatarHash;
 
     /**
      * Full name of the user, like "Thibault Duplessis"
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $fullName = null;
+    protected $fullName;
 
     /**
      * The user company name
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $company = null;
+    protected $company;
 
     /**
      * The user location
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $location = null;
+    protected $location;
 
     /**
      * The user blog url
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $blog = null;
+    protected $blog;
 
     /**
      * User creation date (on this website)
      *
      * @ORM\Column(type="datetime")
      */
-    protected $createdAt = null;
+    protected $createdAt;
 
     /**
      * Bundles the user owns
      *
      * @ORM\OneToMany(targetEntity="Bundle", mappedBy="user")
      */
-    protected $bundles = null;
+    protected $bundles;
 
     /**
      * Bundles this User contributed to
      *
      * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="contributors")
      */
-    protected $contributionBundles = null;
+    protected $contributionBundles;
 
     /**
      * local cache, not persisted
      */
-    protected $lastCommitsCache = null;
+    protected $lastCommitsCache;
 
     /**
      * Internal score of the User as the sum of his bundles' scores
      *
      * @ORM\Column(type="integer")
      */
-    protected $score = null;
+    protected $score;
 
     /**
     * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="recommenders")
@@ -162,8 +158,7 @@ class User implements UserInterface
     /**
      * Set blog
      *
-     * @param  string
-     * @return null
+     * @param string $blog
      */
     public function setBlog($blog)
     {
@@ -183,8 +178,7 @@ class User implements UserInterface
     /**
      * Set location
      *
-     * @param  string
-     * @return null
+     * @param string $location
      */
     public function setLocation($location)
     {
@@ -204,8 +198,7 @@ class User implements UserInterface
     /**
      * Set company
      *
-     * @param  string
-     * @return null
+     * @param string $company
      */
     public function setCompany($company)
     {
@@ -225,8 +218,7 @@ class User implements UserInterface
     /**
      * Set fullName
      *
-     * @param  string
-     * @return null
+     * @param string $fullName
      */
     public function setFullName($fullName)
     {
@@ -246,8 +238,7 @@ class User implements UserInterface
     /**
      * Set score
      *
-     * @param  integer
-     * @return null
+     * @param integer $score
      */
     public function setScore($score)
     {
@@ -260,7 +251,7 @@ class User implements UserInterface
     public function recalculateScore()
     {
         $score = 0;
-        foreach($this->getBundles() as $bundle) {
+        foreach ($this->bundles as $bundle) {
             $score += $bundle->getScore();
         }
 
@@ -279,7 +270,7 @@ class User implements UserInterface
 
     public function getAllBundles()
     {
-        return array_merge($this->getBundles()->toArray(), $this->getContributionBundles()->toArray());
+        return array_merge($this->bundles->toArray(), $this->contributionBundles->toArray());
     }
 
     /**
@@ -289,7 +280,7 @@ class User implements UserInterface
      */
     public function getNbBundles()
     {
-        return $this->getBundles()->count();
+        return $this->bundles->count();
     }
 
     public function hasBundles()
@@ -305,7 +296,7 @@ class User implements UserInterface
     public function getBundleNames()
     {
         $names = array();
-        foreach ($this->getBundles() as $bundle) {
+        foreach ($this->bundles as $bundle) {
             $names[] = $bundle->getName();
         }
 
@@ -315,25 +306,25 @@ class User implements UserInterface
     /**
      * Add a bundle to this user bundles
      *
-     * @return null
+     * @param Bundle $bundle
      */
     public function addBundle(Bundle $bundle)
     {
-        if ($this->getBundles()->contains($bundle)) {
-            throw new \OverflowException(sprintf('User %s already owns the %s bundle', $this->getName(), $bundle->getName()));
+        if ($this->bundles->contains($bundle)) {
+            throw new \OverflowException(sprintf('User %s already owns the %s bundle', $this->name, $bundle->getName()));
         }
-        $this->getBundles()->add($bundle);
+        $this->bundles->add($bundle);
         $bundle->setUser($this);
     }
 
     /**
      * Remove a bundle from this user bundles
      *
-     * @return null
+     * @param Bundle $bundle
      */
     public function removeBundle(Bundle $bundle)
     {
-        $this->getBundles()->removeElement($bundle);
+        $this->bundles->removeElement($bundle);
         $bundle->setUser(null);
     }
 
@@ -349,7 +340,7 @@ class User implements UserInterface
 
     public function getContributionBundlesSortedByScore()
     {
-        return $this->sortBundlesByScore($this->getContributionBundles()->toArray());
+        return $this->sortBundlesByScore($this->contributionBundles->toArray());
     }
 
     public function hasContributionBundles()
@@ -360,8 +351,7 @@ class User implements UserInterface
     /**
      * Set contributionBundles
      *
-     * @param  ArrayCollection
-     * @return null
+     * @param ArrayCollection $contributionBundles
      */
     public function setContributionBundles(ArrayCollection $contributionBundles)
     {
@@ -370,7 +360,7 @@ class User implements UserInterface
 
     public function getNbContributionBundles()
     {
-        return $this->getContributionBundles()->count();
+        return $this->contributionBundles->count();
     }
 
     protected function sortBundlesByScore(array $bundles)
@@ -402,6 +392,8 @@ class User implements UserInterface
     /**
      * Get the more recent commits by this user
      *
+     * @param integer $nb
+     *
      * @return array
      */
     public function getLastCommits($nb = 10)
@@ -410,15 +402,14 @@ class User implements UserInterface
             $commits = array();
             foreach ($this->getAllBundles() as $bundle) {
                 foreach ($bundle->getLastCommits() as $commit) {
-                    if (isset($commit['author']['login']) && $commit['author']['login'] === $this->getName()) {
+                    if (isset($commit['author']['login']) && $commit['author']['login'] === $this->name) {
                         $commits[] = $commit;
                     }
                 }
             }
-            usort($commits, function($a, $b)
-                    {
-                        return strtotime($a['committed_date']) < strtotime($b['committed_date']);
-                    });
+            usort($commits, function($a, $b) {
+                return strtotime($a['committed_date']) < strtotime($b['committed_date']);
+            });
             $this->lastCommitsCache = $commits;
         }
         $commits = array_slice($this->lastCommitsCache, 0, $nb);
@@ -443,9 +434,10 @@ class User implements UserInterface
      */
     public function getObfuscatedEmail()
     {
-        $text = $this->getEmail();
+        $text = $this->email;
         $result = '';
-        for ($i = 0; $i < strlen($text); $i++) {
+        $length = strlen($text);
+        for ($i = 0; $i < $length; $i++) {
             if (mt_rand(0, 1)) {
                 $result .= substr($text, $i, 1);
             } else {
@@ -458,9 +450,9 @@ class User implements UserInterface
         }
         if (mt_rand(0, 1)) {
             return str_replace('@', '&#64;', $result);
-        } else {
-            return str_replace('@', '&#x40;', $result);
         }
+
+        return str_replace('@', '&#x40;', $result);
     }
 
     /**
@@ -481,7 +473,7 @@ class User implements UserInterface
      */
     public function getGithubUrl()
     {
-        return sprintf('http://github.com/%s', $this->getName());
+        return sprintf('http://github.com/%s', $this->name);
     }
 
     /**
@@ -507,8 +499,7 @@ class User implements UserInterface
     /**
      * Set name
      *
-     * @param  string
-     * @return null
+     * @param string $name
      */
     public function setName($name)
     {
@@ -528,7 +519,7 @@ class User implements UserInterface
     /**
      * Set the user creation date
      *
-     * @return null
+     * @param \DateTime $createdAt
      */
     public function setCreatedAt(\DateTime $createdAt)
     {
@@ -576,6 +567,21 @@ class User implements UserInterface
         }
     }
 
+    public function getUsedBundles()
+    {
+        return $this->recommendedBundles;
+    }
+
+    public function isUsingBundle(Bundle $bundle)
+    {
+        return $this->recommendedBundles->contains($bundle);
+    }
+
+    public function addRecommendedBundle(Bundle $bundle)
+    {
+        $this->recommendedBundles[] = $bundle;
+    }
+
     /* ---------- Security User ---------- */
 
     public function getRoles()
@@ -600,20 +606,5 @@ class User implements UserInterface
     public function equals(UserInterface $user)
     {
         return $user instanceof User && $user->getUsername() === $this->getUsername();
-    }
-
-    public function getUsedBundles()
-    {
-        return $this->recommendedBundles;
-    }
-
-    public function isUsingBundle(Bundle $bundle)
-    {
-        return $this->getUsedBundles()->contains($bundle);
-    }
-
-    public function addRecommendedBundle(Bundle $bundle)
-    {
-        $this->recommendedBundles[] = $bundle;
     }
 }
