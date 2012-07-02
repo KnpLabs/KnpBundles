@@ -1,8 +1,0 @@
-search: /chercher
-latest: /recents
-api: /api
-user_list: '/developpeur/{sort}'
-bundle_list: '/{sort}'
-user_bundle_list: '/{name}/bundles'
-user_show: '/{name}/profil'
-repo_show: '/{username}/{name}'
