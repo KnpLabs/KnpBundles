@@ -25,6 +25,7 @@ parameters:
     knp_bundles.scoring.knpbundles.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\KnpBundlesListener
     knp_bundles.scoring.readme.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\ReadmeListener
     knp_bundles.scoring.travis.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\TravisListener
+    knp_bundles.utils.solr.class: Knp\Bundle\KnpBundlesBundle\Utils\SolrUtils
 
 services:
     knp_bundles.updater:
@@ -171,3 +172,8 @@ services:
         class: %knp_bundles.scoring.travis.class%
         tags:
             - { name: kernel.event_listener, event: bundle.update_score, method: onScoreUpdate }
+
+    knp_bundles.utils.solr:
+        class: %knp_bundles.utils.solr.class%
+        arguments:
+            - @service_container

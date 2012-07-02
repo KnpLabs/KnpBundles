@@ -12,7 +12,6 @@
         "symfony/assetic-bundle": "*",
         "symfony/monolog-bundle": "*",
         "sensio/distribution-bundle": "*",
-        "jms/i18n-routing-bundle": "*",
         "doctrine/doctrine-fixtures-bundle": "*",
         "doctrine/doctrine-migrations-bundle": "*",
         "stof/doctrine-extensions-bundle": "*",
