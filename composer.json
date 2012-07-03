@@ -23,7 +23,7 @@
         "knplabs/knp-zend-cache-bundle": "*",
         "knplabs/github-api": "*",
         "avalanche123/imagine-bundle": "*",
-        "kriswallsmith/buzz": "0.6",
+        "kriswallsmith/buzz": "0.7",
         "nelmio/solarium-bundle": "*",
         "igorw/file-serve-bundle": "*",
 
