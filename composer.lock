@@ -1,5 +1,5 @@
 {
-    "hash": "64e1ef7665b5a406e290a452cb8fd49e",
+    "hash": "9a9b6434cad4c4ec50c64d814ec0c1c6",
     "packages": [
         {
             "package": "avalanche123/imagine-bundle",
@@ -32,8 +32,8 @@
         {
             "package": "doctrine/doctrine-bundle",
             "version": "dev-master",
-            "source-reference": "9b4dd7398cbc4d2dfe04eefc3c0451f1e13e141c",
-            "commit-date": "1340813490"
+            "source-reference": "1d5061d3e426feb990f2378fbcbee58f6ecadd12",
+            "commit-date": "1341222099"
         },
         {
             "package": "doctrine/doctrine-fixtures-bundle",
@@ -62,14 +62,26 @@
         {
             "package": "fabpot/goutte",
             "version": "dev-master",
+            "alias-pretty-version": "1.0.x-dev",
+            "alias-version": "1.0.9999999.9999999-dev"
+        },
+        {
+            "package": "fabpot/goutte",
+            "version": "dev-master",
             "source-reference": "c2ea8d9a6682d14482e57ede2371001b8a5238d2",
             "commit-date": "1340264258"
         },
         {
             "package": "gedmo/doctrine-extensions",
             "version": "dev-master",
-            "source-reference": "f3b75e0fa19b8559b76128fc3f50ecf3bb4306f0",
-            "commit-date": "1340773520"
+            "alias-pretty-version": "2.3.x-dev",
+            "alias-version": "2.3.9999999.9999999-dev"
+        },
+        {
+            "package": "gedmo/doctrine-extensions",
+            "version": "dev-master",
+            "source-reference": "add6fe25a2b25872db897c8443ba94305dde5890",
+            "commit-date": "1341256068"
         },
         {
             "package": "guzzle/guzzle",
@@ -90,8 +102,8 @@
         {
             "package": "knplabs/github-api",
             "version": "dev-master",
-            "source-reference": "725bf7c990a3b2bb5e248b700ccf090f51d499f4",
-            "commit-date": "1339496597"
+            "source-reference": "578f7d85be2ddd097c7770deb4b08ea2a1ae326f",
+            "commit-date": "1341314740"
         },
         {
             "package": "knplabs/knp-components",
@@ -99,9 +111,9 @@
         },
         {
             "package": "knplabs/knp-disqus-bundle",
-            "version": "dev-master",
-            "source-reference": "f018fdaf27ef2d5b888bd118082fcb711cfa35a4",
-            "commit-date": "1340012926"
+            "version": "dev-ssl-fix",
+            "source-reference": "68d01a399b7039f49c48116a9319198b0fd69d54",
+            "commit-date": "1329105202"
         },
         {
             "package": "knplabs/knp-markdown-bundle",
@@ -149,7 +161,7 @@
         },
         {
             "package": "kriswallsmith/buzz",
-            "version": "v0.6"
+            "version": "v0.7"
         },
         {
             "package": "mbontemps/oauth-bundle",
@@ -188,8 +200,8 @@
         {
             "package": "sensio/distribution-bundle",
             "version": "dev-master",
-            "source-reference": "f3515e702f9cae8e727d982557dca8de82dd12c5",
-            "commit-date": "1340790396"
+            "source-reference": "d0a346b0b67025acdb23ff51edbaf05c571062b6",
+            "commit-date": "1341325077"
         },
         {
             "package": "solarium/solarium",
@@ -202,6 +214,12 @@
             "version": "dev-master",
             "source-reference": "f141a698d65271a18d86469c1f7b29d7e24170dd",
             "commit-date": "1334871333"
+        },
+        {
+            "package": "symfony/assetic-bundle",
+            "version": "dev-master",
+            "alias-pretty-version": "2.1.x-dev",
+            "alias-version": "2.1.9999999.9999999-dev"
         },
         {
             "package": "symfony/assetic-bundle",
@@ -230,8 +248,8 @@
         {
             "package": "symfony/symfony",
             "version": "dev-master",
-            "source-reference": "b6e4fd0393bcd1d7837cb2711cc7de8a081421fe",
-            "commit-date": "1341178091"
+            "source-reference": "23f41a21ca57c9acb2d4f5ef3392f06014d2420e",
+            "commit-date": "1341330436"
         },
         {
             "package": "twig/extensions",
@@ -255,7 +273,7 @@
             "package": "twitter/app-bundle",
             "version": "master-dev",
             "source-reference": "master",
-            "commit-date": "1340302028"
+            "commit-date": "1341173158"
         },
         {
             "package": "twitter/oauth",
