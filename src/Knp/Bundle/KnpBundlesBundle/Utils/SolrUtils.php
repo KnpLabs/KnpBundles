@@ -2,22 +2,17 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Utils;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Process\Process;
 
 class SolrUtils
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private $kernel;
+    private $solarium;
 
-    /**
-     * @param ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
+    public function __construct($solarium, $kernel)
     {
-        $this->container = $container;
+        $this->solarium = $solarium;
+        $this->kernel   = $kernel;
     }
 
     /**
@@ -65,8 +60,8 @@ class SolrUtils
     private function getPropertiesArray()
     {
         return array(
-            '-Djetty.port'     => $this->container->get('solarium.client')->getAdapter()->getPort(),
-            '-Dsolr.solr.home' => $this->container->get('kernel')->getBundle('KnpBundlesBundle')->getPath().'/Resources/solr'
+            '-Djetty.port'     => $this->solarium->getAdapter()->getPort(),
+            '-Dsolr.solr.home' => $this->kernel->getBundle('KnpBundlesBundle')->getPath().'/Resources/solr'
         );
     }
 }

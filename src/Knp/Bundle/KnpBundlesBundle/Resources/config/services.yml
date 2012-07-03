@@ -176,4 +176,5 @@ services:
     knp_bundles.utils.solr:
         class: %knp_bundles.utils.solr.class%
         arguments:
-            - @service_container
+            - @solarium.client
+            - @kernel
