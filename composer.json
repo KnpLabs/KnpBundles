@@ -134,7 +134,7 @@
                 "version": "2.0.0-beta1",
                 "dist": {
                     "url":  "http://packages.zendframework.com/get/Zend_Cache-2.0.0beta1.tgz",
-                    "type": "pear"
+                    "type": "tar"
                 },
                 "autoload": {
                     "psr-0": {
@@ -150,7 +150,7 @@
                 "version": "2.0.0-beta1",
                 "dist": {
                     "url":  "http://packages.zendframework.com/get/Zend_Filter-2.0.0beta1.tgz",
-                    "type": "pear"
+                    "type": "tar"
                 },
                 "autoload": {
                     "psr-0": {
