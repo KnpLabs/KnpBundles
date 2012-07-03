@@ -3,7 +3,6 @@ imports:
     - { resource: @KnpBundlesBundle/Resources/config/security.yml }
 
 framework:
-    charset:          UTF-8
     csrf_protection:  true
     secret:           %secret%
     router:           { resource: "%kernel.root_dir%/config/routing.yml" }
@@ -13,7 +12,6 @@ framework:
     esi: { enabled: true }
     session:
         lifetime:       3600
-        auto_start:     true
     translator:    { fallback: en }
 
 
