@@ -36,6 +36,7 @@
                     </a>
                  </li>
                 {% endif %}
+                <li class="info-configuration"><a id="canonical-config-id" href="#">Canonical configuration</a></li>
             </ul>
         </div>
 
@@ -186,18 +187,6 @@
     </div>
     {% endif %}
 
-    {% if bundle.canonicalConfig %}
-    <div class="data">
-        <div id="canonical-config">
-            <div class="markdown">
-                <pre class="code">
-                {{- bundle.canonicalConfig|nl2br -}}
-                </pre>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-
     {% if bundle.readme %}
     <div class="data">
         <div id="readme">
@@ -257,4 +246,20 @@
         </div>
     </form>
     {%- endif -%}
+        
+    <div class="canonical-configuration-class modal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3>Canonical Configuration:</h3>
+        </div>
+        {% if bundle.canonicalConfig %}
+            <div id="canonical-config">
+                <div class="markdown">
+                <pre class="code">
+                {{- bundle.canonicalConfig|nl2br -}}
+                </pre>
+                </div>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}
