@@ -50,6 +50,7 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
         $this->useContext('symfony_doctrine', new SymfonyDoctrineContext());
         $this->useContext('solr', new SolrContext());
         $this->useContext('mink', new MinkContext());
+        $this->useContext('api', new ApiContext());
     }
 
     /**
