@@ -3,8 +3,6 @@
 namespace Knp\Bundle\KnpBundlesBundle\Features\Context;
 
 use Behat\Behat\Context\Step;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Behat\Exception\PendingException;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Gherkin\Node\TableNode;
 
