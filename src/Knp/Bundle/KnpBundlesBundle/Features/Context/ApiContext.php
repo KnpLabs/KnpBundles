@@ -184,7 +184,7 @@ class ApiContext extends RawMinkContext
     public function theResponseShouldContainJsonItemsAsFollow(TableNode $table)
     {
         $response = $this->getBrowser()->getLastResponse()->getContent();
-        var_export($response);
+
         $jsonResponse = json_decode($response, true);
 
         foreach ($table->getHash() as $row) {
