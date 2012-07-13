@@ -8,7 +8,6 @@ before_script:
     - cp app/config/parameters.yml.test app/config/parameters.yml
     - curl -s http://getcomposer.org/installer | php -- --quiet
     - php composer.phar install --dev
-    - ./bin/prepare-test-web.sh
     - ./bin/prepare-test-env.sh
     - ./bin/prepare-test-solr.sh
     - ./bin/prepare-test-gd.sh
