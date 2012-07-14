@@ -144,7 +144,7 @@
                 },
                 "autoload": {
                     "psr-0": {
-                        "Zend\\Cache": "php/"
+                        "Zend\\Cache": "Zend_Cache-2.0.0beta1/php/"
                     }
                 }
             }
@@ -160,7 +160,7 @@
                 },
                 "autoload": {
                     "psr-0": {
-                        "Zend\\Filter": "php/"
+                        "Zend\\Filter": "Zend_Filter-2.0.0beta1/php/"
                     }
                 }
             }

@@ -27,6 +27,8 @@ cd $project_dir
 logs_path=${logs_path##$(pwd)/}
 reports_path=${reports_path##$(pwd)/}
 
+last_exit_code=0
+
 for feature_path in `find src/ -path '*/Features'`; do
     var=`echo $feature_path`;
     var2=${var%Bundle*};
@@ -36,7 +38,11 @@ for feature_path in `find src/ -path '*/Features'`; do
     echo "Running suite for $bundle";
 
     ./bin/behat --format=progress,junit,html --out=,$logs_path,$reports_dir "@$bundle";
-    echo "<a href=\"$bundle.html\">$bundle</a><br />" >> $reports_path"/index.html"
+    let last_exit_code=$last_exit_code+$?
 done
 
 cd -
+
+if (( $last_exit_code >= 1 )); then
+    exit 1
+fi
