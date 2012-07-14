@@ -11,7 +11,6 @@ before_script:
     - ./bin/prepare-test-env.sh
     - ./bin/prepare-test-solr.sh
     - ./bin/prepare-test-gd.sh
-    - cp behat.yml-dist behat.yml
     - mkdir -p app/cache app/logs
     - php app/console --env=test cache:clear
     - sudo chmod -R 777 app/cache app/logs

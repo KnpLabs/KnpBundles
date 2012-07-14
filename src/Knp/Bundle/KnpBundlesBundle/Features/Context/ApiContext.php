@@ -34,7 +34,7 @@ class ApiContext extends RawMinkContext
 
         $jsonResponse = json_decode($response, true);
 
-        assertCount((int) count($table->getHash()), $jsonResponse);
+        assertCount(count($table->getHash()), $jsonResponse);
 
         $expectedItems = array();
         foreach ($table->getHash() as $row) {
