@@ -43,6 +43,6 @@ done
 
 cd -
 
-if (( $last_exit_code > 1 )); then
-    return 1
+if (( $last_exit_code >= 1 )); then
+    exit 1
 fi
