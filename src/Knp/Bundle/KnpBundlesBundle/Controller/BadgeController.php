@@ -4,24 +4,17 @@ namespace Knp\Bundle\KnpBundlesBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Controller for returning bundle badges
- *
  */
 class BadgeController extends BaseController
 {
-    public function getBadgeAction($username, $name)
+    public function getBadgeAction($username, $name, $type = 'long')
     {
-        $bundle = $this->get('doctrine')
-            ->getRepository('KnpBundlesBundle:Bundle')->findOneByUsernameAndName($username, $name);
-        if (!$bundle) {
-            throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
-        }
-
-        $file = $this->container->getParameter('kernel.cache_dir').'/badges/long/'.$username.'-'.$name.'.png';
+        $file = sprintf('%s/badges/%s/%s-%s.png', $this->container->getParameter('kernel.cache_dir'), $type, $username, $name);
         if (!file_exists($file)) {
             throw new NotFoundHttpException(sprintf('The badge is missing for "%s/%s"', $username, $name));
         }
@@ -32,7 +25,7 @@ class BadgeController extends BaseController
         );
 
         return $this->get('igorw_file_serve.response_factory')->create(
-            $relativePath.'/badges/'.$username.'-'.$name.'.png',
+            sprintf('%s/badges/%s/%s-%s.png', $relativePath, $type, $username, $name),
             'image/png'
         );
     }

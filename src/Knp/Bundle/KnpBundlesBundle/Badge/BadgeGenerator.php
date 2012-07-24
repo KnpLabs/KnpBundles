@@ -4,40 +4,50 @@ namespace Knp\Bundle\KnpBundlesBundle\Badge;
 
 use Imagine\Image\Point;
 use Imagine\Image\Color;
-use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Imagine\Image\ImagineInterface;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 class BadgeGenerator
 {
     // Badge types
-    const LONG = 'long';
+    const LONG  = 'long';
     const SHORT = 'short';
 
     /**
      * Instace of Imagine lib acсording to image lib
+     *
+     * @var ImagineInterface
      */
     protected $imagine;
 
     /**
      * Get app cache dir
+     *
+     * @var string
      */
     protected $cacheDir;
 
     /**
      * Get default font
+     *
+     * @var string
      */
     protected $font = 'arial.ttf';
 
     /**
      * Get badge type
+     *
+     * @var array
      */
     protected $type = array(
-        self::LONG => 'badge-mock.png',
+        self::LONG  => 'badge-mock.png',
         self::SHORT => 'badge-line-mock.png'
     );
 
     /**
      * Determine score points position
+     *
+     * @var array
      */
     protected $position = array(
         self::LONG => array(
@@ -52,10 +62,15 @@ class BadgeGenerator
             '28:5',
             '22:5',
             '14:5',
-            '6:5'   
+            '6:5'
         )
     );
 
+    /**
+     * Constructor
+     *
+     * @param ImagineInterface $imagine
+     */
     public function __construct(ImagineInterface $imagine)
     {
         $this->imagine = $imagine;
@@ -108,6 +123,9 @@ class BadgeGenerator
         $imageShort->save($this->getBadgeFile($bundle, self::SHORT));
     }
 
+    /**
+     * @param string $cacheDir
+     */
     public function setCacheDir($cacheDir)
     {
         $this->cacheDir = $cacheDir;
@@ -116,13 +134,14 @@ class BadgeGenerator
     /**
      * Return full font path
      *
-     * @param Imagine $imagine
+     * @param ImagineInterface $imagine
      * @param string $font
      * @param integer $size
      * @param string $color
+     *
      * @return string
      */
-    protected function setFont($imagine, $font, $size, $color = '8c96a0')
+    protected function setFont(ImagineInterface $imagine, $font, $size, $color = '8c96a0')
     {
         return $imagine->font($this->getResourceDir().'/fonts/'.$font, $size, new Color($color));
     }
@@ -131,6 +150,8 @@ class BadgeGenerator
      * Get badge image full path
      *
      * @param Bundle $bundle
+     * @param string $type
+     *
      * @return string
      */
     protected function getBadgeFile(Bundle $bundle, $type = self::LONG)
@@ -138,6 +159,9 @@ class BadgeGenerator
         return $this->cacheDir.'/badges/'.$type.'/'.$bundle->getUsername().'-'.$bundle->getName().'.png';
     }
 
+    /**
+     * @return string
+     */
     protected function getResourceDir()
     {
         return __DIR__.'/../Resources/badge';
@@ -148,6 +172,7 @@ class BadgeGenerator
      *
      * @param string $name
      * @param integer $lenght symbol count from the end
+     *
      * @return string
      */
     protected function shorten($name, $lenght)
@@ -162,7 +187,7 @@ class BadgeGenerator
     /**
      * Check and create a dir for uploaded badges
      *
-     * @return void
+     * @throws \RuntimeException
      */
     protected function createBadgesDir()
     {
@@ -170,17 +195,15 @@ class BadgeGenerator
 
         if (!is_dir($dir)) {
             if (!@mkdir($dir, 0755)) {
-                throw new \Exception('Can\'t create the "badges" folder in '.$this->cacheDir);
+                throw new \RuntimeException("Can't create the 'badges' folder in ".$this->cacheDir);
             }
         }
 
         // Create badge types folder
         foreach ($this->type as $type => $image) {
-            if (!is_dir($dir.'/'.$type)) {
-                if (!@mkdir($dir.'/'.$type, 0755)) {
-                    throw new \Exception(sprintf('Can\'t create "%s" folder in %s', $type, $dir));
-                }
-            }    
+            if (!is_dir($dir.'/'.$type) && !@mkdir($dir.'/'.$type, 0755)) {
+                throw new \RuntimeException(sprintf("Can't create the '%s' folder in %s", $type, $dir));
+            }
         }
     }
 
@@ -188,7 +211,6 @@ class BadgeGenerator
      * Remove previously generated badge
      *
      * @param string $file
-     * @return void
      */
     protected function removeIfExist($file)
     {
@@ -201,6 +223,7 @@ class BadgeGenerator
      * Get background image
      *
      * @param string $type
+     *
      * @return string
      */
     protected function getImageMockByType($type)
@@ -213,7 +236,8 @@ class BadgeGenerator
      *
      * @param string $type
      * @param integer|string $score
-     * @return \Imagine\Image\Point
+     *
+     * @return Point
      */
     protected function getPositionByType($score, $type)
     {

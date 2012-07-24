@@ -77,9 +77,14 @@ bundle_change_usage_status:
     defaults:       { _controller: KnpBundlesBundle:Bundle:changeUsageStatus }
     requirements:   { _method: "GET", name: ".+" }
 
+bundle_get_badge_short:
+    pattern:        /{username}/{name}/badge-short
+    defaults:       { _controller: KnpBundlesBundle:Badge:getBadge, type: short }
+    requirements:   { _method: "GET", name: ".+" }
+
 bundle_get_badge:
     pattern:        /{username}/{name}/badge
-    defaults:       { _controller: KnpBundlesBundle:Badge:getBadge }
+    defaults:       { _controller: KnpBundlesBundle:Badge:getBadge, type: long }
     requirements:   { _method: "GET", name: ".+" }
 
 bundle_show:
