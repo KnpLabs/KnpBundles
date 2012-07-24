@@ -21,7 +21,7 @@ class BadgeController extends BaseController
             throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
         }
 
-        $file = $this->container->getParameter('kernel.cache_dir').'/badges/'.$username.'-'.$name.'.png';
+        $file = $this->container->getParameter('kernel.cache_dir').'/badges/long/'.$username.'-'.$name.'.png';
         if (!file_exists($file)) {
             throw new NotFoundHttpException(sprintf('The badge is missing for "%s/%s"', $username, $name));
         }
