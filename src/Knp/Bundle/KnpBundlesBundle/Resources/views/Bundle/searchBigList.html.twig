@@ -17,7 +17,9 @@
         </div>
         <div class="img">
             {% if bundle.userGravatarHash|default(null) %}
-            <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}"><img src="{{ gravatar_hash(bundle.userGravatarHash, 50, none, 'identicon') }}" alt="{{ bundle.name }}" /></a>
+            <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}">
+                <img src="{{ bundle.userGravatarHash }}" alt="{{ bundle.name }} developer" width="50" height="50" />
+            </a>
             {% endif %}
         </div>
     </li>

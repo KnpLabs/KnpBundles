@@ -11,6 +11,9 @@ parameters:
     knp_bundles.github.client_id: b46912af13ee7cb7ecd3
     knp_bundles.github.client_secret: 116f5427707fcc2a3f7c630dd356be61500b2e18
 
+    knp_bundles.sensio.client_id: 867d229fab429f69b99ac40fc52d0184b6ab83b5fc28b5daadc7f9282cfee1a5
+    knp_bundles.sensio.client_secret: b79a082b4b88b0e4d8b0832a6ea8db76e68bce338a19279d7d712c2792f8f789
+
     knp_bundles.twitter.consumer_key: your_twitter_consumer_key_here
     knp_bundles.twitter.consumer_secret: your_twitter_consumer_secret_here
     knp_bundles.twitter.oauth_token: your_twitter_oauth_token_here

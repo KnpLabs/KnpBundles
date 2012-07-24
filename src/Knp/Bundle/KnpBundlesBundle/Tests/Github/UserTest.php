@@ -14,7 +14,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $data = array(
             'email' => 'hello@knplabs.com',
             'gravatar_id' => 'hash',
-            'name' => 'Edgar Knp',
+            'name' => 'lorem',
+            'fullname' => 'Edgar Knp',
             'company' => 'KnpLabs',
             'location' => 'Nantes',
             'blog' => 'http://knplabs.com',
@@ -34,12 +35,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $userEntity = new UserEntity;
         $userEntity->setName('lorem');
+        $userEntity->setFullName('lorem');
 
         $githubUser = new GithubUser($github, $output);
-        $ret = $githubUser->update($userEntity);
+        $githubUser->update($userEntity);
 
         $this->assertEquals($data['email'], $userEntity->getEmail());
-        $this->assertEquals($data['name'], $userEntity->getFullName());
+        $this->assertEquals($data['name'], $userEntity->getName());
+        $this->assertEquals($data['fullname'], $userEntity->getFullName());
         $this->assertEquals($data['gravatar_id'], $userEntity->getGravatarHash());
         $this->assertEquals($data['company'], $userEntity->getCompany());
         $this->assertEquals($data['location'], $userEntity->getLocation());

@@ -31,7 +31,7 @@ class User implements UserInterface
      * Like in GitHub, this name is unique
      *
      * @Assert\NotBlank()
-     * @Assert\MinLength(2)
+     * @Assert\Length(min = 2)
      *
      * @ORM\Column(type="string", length=127)
      */
@@ -45,7 +45,7 @@ class User implements UserInterface
     protected $email;
 
     /**
-     * User email
+     * User avatar
      *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -101,21 +101,21 @@ class User implements UserInterface
     protected $contributionBundles;
 
     /**
-     * local cache, not persisted
-     */
-    protected $lastCommitsCache;
-
-    /**
      * Internal score of the User as the sum of his bundles' scores
      *
      * @ORM\Column(type="integer")
      */
-    protected $score;
+    protected $score = 0;
 
     /**
     * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="recommenders")
     */
     protected $recommendedBundles;
+
+    /**
+     * local cache, not persisted
+     */
+    private $lastCommitsCache;
 
     public function __construct()
     {
@@ -126,12 +126,24 @@ class User implements UserInterface
     }
 
     /**
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Get the gravatar hash
      *
      * @return string
      */
     public function getGravatarHash()
     {
+        if (32 === strlen($this->gravatarHash)) {
+            return sprintf('http://www.gravatar.com/avatar/%s?s=80&r=g&d=identicon', $this->gravatarHash);
+        }
+
         return $this->gravatarHash;
     }
 
@@ -458,8 +470,7 @@ class User implements UserInterface
     /**
      * Set email
      *
-     * @param  string
-     * @return null
+     * @param string $email
      */
     public function setEmail($email)
     {
@@ -603,7 +614,7 @@ class User implements UserInterface
     {
     }
 
-    public function equals(UserInterface $user)
+    public function isEqualTo(UserInterface $user)
     {
         return $user instanceof User && $user->getUsername() === $this->getUsername();
     }

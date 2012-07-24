@@ -53,7 +53,7 @@
             <ul>
                 <li class="bundle-recommenders">
                     {% for user in bundle.recommenders %}
-                        <img src="{{ gravatar_hash(user.gravatarHash, 25, none, 'identicon')}}" class="tooltip" title="{{ user.name }}" />
+                        <img src="{{ user.gravatarHash }}" class="tooltip" title="{{ user.name }}" width="25" height="25" />
                     {% endfor %}
                 </li>
                 <li>

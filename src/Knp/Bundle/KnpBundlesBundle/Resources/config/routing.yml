@@ -31,9 +31,16 @@ add_bundle:
 
 _login:
     pattern:        /login
+    defaults:       { _controller: HWIOAuthBundle:Connect:connect }
 
 _logout:
     pattern:        /logout
+
+_login_github:
+    pattern:        /login/check-github
+
+_login_sensio:
+    pattern:        /login/check-sensio
 
 symfony2bundles:
     pattern:        /symfony2bundles

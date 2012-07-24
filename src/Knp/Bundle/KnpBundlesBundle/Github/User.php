@@ -4,30 +4,34 @@ namespace Knp\Bundle\KnpBundlesBundle\Github;
 
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Github\Client;
-use Github\HttpClient\Exception as GithubException;
+use Github\Client,
+    Github\HttpClient\Exception as GithubException;
 
-use Knp\Bundle\KnpBundlesBundle\Entity;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface,
+    HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedUserResponseInterface;
+
+use Knp\Bundle\KnpBundlesBundle\Entity\User as EntityUser,
+    Knp\Bundle\KnpBundlesBundle\Security\OAuth\Response\SensioConnectUserResponse;
 
 class User
 {
     /**
      * php-github-api instance used to request GitHub API
      *
-     * @var \Github\Client|null
+     * @var Client
      */
-    protected $github = null;
+    protected $github;
 
     /**
      * Output buffer
      *
-     * @var OutputInterface|null
+     * @var OutputInterface
      */
-    protected $output = null;
+    protected $output;
 
     /**
-     * @param \Github\Client $github
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param Client $github
+     * @param OutputInterface $output
      */
     public function __construct(Client $github, OutputInterface $output)
     {
@@ -35,32 +39,87 @@ class User
         $this->output = $output;
     }
 
-    public function import($name)
+    /**
+     * @param UserResponseInterface $response
+     *
+     * @return boolean|EntityUser
+     */
+    public function import(UserResponseInterface $response)
     {
-        $user = new Entity\User();
-        $user->setName($name);
-        $user->setScore(0);
+        $user = new EntityUser();
+        $user->setName($response->getUsername());
+        if ($response instanceof SensioConnectUserResponse) {
+            $user->setName($response->getLinkedAccount('github') ?: $response->getUsername());
+        }
+
+        $user->setFullName($response->getDisplayName());
+        if ($response instanceof AdvancedUserResponseInterface) {
+            $user->setEmail($response->getEmail());
+            $user->setGravatarHash($response->getProfilePicture());
+        }
+
         if (!$this->update($user)) {
             return false;
         }
+
         return $user;
     }
 
-    public function update(Entity\User $user)
+    /**
+     * @param EntityUser $user
+     *
+     * @return boolean
+     */
+    public function update(EntityUser $user)
     {
-        try {
-            $data = $this->github->getUserApi()->show($user->getName());
-        } catch(GithubException $e) {
-            if (404 === $e->getCode()) {
-                // User has been removed
-                return false;
-            }
-            return true;
+        $keywords = array(
+            $user->getName()
+        );
+        if (null !== $user->getFullName()) {
+            $keywords[] = $user->getFullName();
+        }
+        if (null !== $user->getEmail()) {
+            $keywords[] = $user->getEmail();
         }
 
+        $api  = $this->github->getUserApi();
+        $data = null;
+        try {
+            $data = $api->show($user->getName());
+        } catch(GithubException $e) {
+        }
+
+        if (empty($data)) {
+            foreach ($keywords as $field) {
+                try {
+                    $data = $api->search($field);
+                    if (isset($data['users']) && 0 < count($data['users'])) {
+                        $data = $data['users'][0];
+                        // Let's call API one more time to get clean user data
+                        $data = $api->show($data['login']);
+                    }
+                } catch(GithubException $e) {
+                    if (404 === $e->getCode()) {
+                        continue;
+                    }
+                    break;
+                }
+
+                // Did we found user in this iteration ?
+                if (!empty($data)) {
+                    break;
+                }
+            }
+        }
+
+        // User has been removed / not found ?
+        if (empty($data)) {
+            return false;
+        }
+
+        $user->setFullName(isset($data['fullname']) ? $data['fullname'] : null);
         $user->setEmail(isset($data['email']) ? $data['email'] : null);
-        $user->setGravatarHash(isset($data['gravatar_id']) ? $data['gravatar_id'] : null);
-        $user->setFullName(isset($data['name']) ? $data['name'] : null);
+        $user->setGravatarHash(isset($data['avatar_url']) ? $data['avatar_url'] : (isset($data['gravatar_id']) ? $data['gravatar_id'] : null));
         $user->setCompany(isset($data['company']) ? $data['company'] : null);
         $user->setLocation(isset($data['location']) ? $data['location'] : null);
         $user->setBlog(isset($data['blog']) ? $this->fixUrl($data['blog']) : null);
@@ -78,8 +137,8 @@ class User
     protected function fixUrl($url)
     {
         $scheme = parse_url($url, PHP_URL_SCHEME);
-        if ($scheme === null) {
-            return "http://".$url;
+        if (null === $scheme) {
+            return 'http://'.$url;
         }
 
         return $url;
@@ -98,8 +157,7 @@ class User
     /**
      * Set output
      *
-     * @param  OutputInterface
-     * @return null
+     * @param OutputInterface $output
      */
     public function setOutput($output)
     {
@@ -109,7 +167,7 @@ class User
     /**
      * Get github
      *
-     * @return \Github\Client
+     * @return Client
      */
     public function getGithubClient()
     {
@@ -119,7 +177,7 @@ class User
     /**
      * Set github
      *
-     * @param  \Github\Client
+     * @param Client $github
      */
     public function setGithubClient($github)
     {

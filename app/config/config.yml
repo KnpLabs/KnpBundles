@@ -8,12 +8,10 @@ framework:
     router:           { resource: "%kernel.root_dir%/config/routing.yml" }
     validation:       { enabled: true, enable_annotations: true }
     templating:       { engines: ['twig'] }
-    default_locale: en
-    esi: { enabled: true }
+    default_locale:   en
     session:
-        lifetime:       3600
+        cookie_lifetime: 3600
     translator:    { fallback: en }
-
 
 # Twig Configuration
 twig:
@@ -36,9 +34,6 @@ knp_paginator: ~
 
 # KnpBundles Configuration
 knp_bundles: ~
-
-# Gravatar Configuration
-ornicar_gravatar: ~
 
 # Doctrine Configuration
 doctrine:
@@ -117,3 +112,19 @@ nelmio_solarium:
         host: %solarium.host%
         port: %solarium.port%
         path: %solarium.path%
+
+hwi_oauth:
+    resource_owners:
+        github:
+            type:                github
+            client_id:           %knp_bundles.github.client_id%
+            client_secret:       %knp_bundles.github.client_secret%
+
+        sensio:
+            type:                sensio_connect
+            client_id:           %knp_bundles.sensio.client_id%
+            client_secret:       %knp_bundles.sensio.client_secret%
+            scope:               "SCOPE_EMAIL SCOPE_PUBLIC"
+            user_response_class: Knp\Bundle\KnpBundlesBundle\Security\OAuth\Response\SensioConnectUserResponse
+
+    firewall_name: secured_area

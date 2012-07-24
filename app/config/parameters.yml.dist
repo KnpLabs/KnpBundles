@@ -11,6 +11,9 @@ parameters:
     knp_bundles.github.client_id: your_client_id_here
     knp_bundles.github.client_secret: your_client_secret_here
 
+    knp_bundles.sensio.client_id: your_client_id_here
+    knp_bundles.sensio.client_secret: your_client_secret_here
+
     knp_bundles.twitter.consumer_key: your_twitter_consumer_key_here
     knp_bundles.twitter.consumer_secret: your_twitter_consumer_secret_here
     knp_bundles.twitter.oauth_token: your_twitter_oauth_token_here
