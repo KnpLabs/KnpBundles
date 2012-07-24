@@ -1,6 +1,9 @@
 imports:
   - { resource: config.yml }
 
+framework:
+    esi: { enabled: true }
+
 monolog:
     handlers:
         main:

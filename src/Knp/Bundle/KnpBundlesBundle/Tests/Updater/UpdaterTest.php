@@ -133,10 +133,4 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($shouldBeNull);
     }
-
-    public function tearDown()
-    {
-        $purger = new ORMPurger($this->em);
-        $purger->purge();
-    }
 }

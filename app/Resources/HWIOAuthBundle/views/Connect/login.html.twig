@@ -1,0 +1,11 @@
+{% extends 'KnpBundlesBundle::layout.html.twig' %}
+
+{% block body_attributes %}id="developer-show"{% endblock %}
+
+{% block content %}
+<h1 class="developer-name">Login via</h1>
+<div class="actions">
+    <a class="button github" href="{{ hwi_oauth_login_url('github') }}">GitHub</a>
+    <a class="button github" href="{{ hwi_oauth_login_url('sensio') }}">Sensio Connect</a>
+</div>
+{% endblock %}
