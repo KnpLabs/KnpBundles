@@ -116,6 +116,23 @@ EOD;
             Entity\Bundle::STATE_READY,
             Entity\Bundle::STATE_DEPRECATED
         );
+        
+        $canonicalConfigDump = <<<EOT
+vendor_bundle_name:   
+    app_id:               ~ # Required
+    secret:               ~ # Required
+    file:                 ~ 
+    cookie:               false 
+    domain:               ~ 
+    alias:                ~ 
+    logging:              %kernel.debug% 
+    culture:              en_US 
+    class:                
+        api:                  Vendor\\FixtureBundle\\APIKey 
+        type:                 Vendor\\FixtureBundle\\Type 
+    permissions:          [] 
+
+EOT;
 
         foreach ($users as $i => $user) {
 
@@ -176,8 +193,9 @@ EOD;
                     ),
                 ),
                 'isFork'        => false,
-                'contributors'  => array($contributor)
-            ));
+                'contributors'  => array($contributor),
+                'canonicalConfig' => $canonicalConfigDump
+        ));
 
             $manager->persist($bundle);
 

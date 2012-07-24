@@ -124,3 +124,9 @@
         return false;
     }
 })(jQuery)
+
+$(document).ready(function() {
+    $('#canonical-config-id').click(function() {
+        $('.canonical-configuration-class').modal('show');
+    });
+});
