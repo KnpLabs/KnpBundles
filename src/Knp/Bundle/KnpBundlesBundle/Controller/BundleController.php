@@ -149,14 +149,20 @@ class BundleController extends BaseController
             $bundle = $request->request->get('bundle');
 
             if (preg_match('/^[a-z0-9-]+\/[a-z0-9-\.]+$/i', $bundle)) {
+                list($username, $name) = explode('/', $bundle);
+
+                $url    = $this->generateUrl('bundle_show', array('username' => $username, 'name' => $name);
+                $exists = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);
+                if ($exists) {
+                    return $this->redirect($url);
+                }
+
                 $updater = $this->get('knp_bundles.updater');
                 $updater->setUp();
                 try {
                     $updater->addBundle($bundle, false);
 
-                    $bundleParts = explode('/', $bundle);
-
-                    return $this->redirect($this->generateUrl('bundle_show', array('username' => $bundleParts[0], 'name' => $bundleParts[1])));
+                    return $this->redirect($url);
                 } catch (UserNotFoundException $e) {
                     $error = true;
                     $errorMessage = 'addBundle.userNotFound';
