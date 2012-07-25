@@ -148,7 +148,7 @@ JOIN
     FROM score
     WHERE
       date = CURRENT_DATE
-      AND value >= 15
+      AND value >= 1
     ) endRange
   ON startRange.bundle_id = endRange.bundle_id
 SET trend1 = (endScore - startScore)
