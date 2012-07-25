@@ -255,9 +255,9 @@ abbr, acronym {border-bottom:.1em dotted;cursor:help;font-weight:bold;}
 #bundle-show .col-right .box li img{vertical-align:middle;}
 #bundle-show .col-right .box a{color:#4183C4;}
 #bundle-show .col-right .box .infos{font-style:italic;}
-#bundle-show .col-right .box .info-composer{background: transparent url(http://packagist.org/favicon.ico) no-repeat left center; padding-left: 20px;}
-#bundle-show .col-right .box .info-github{background: transparent url(http://github.com/favicon.png) no-repeat left center; padding-left: 20px;}
-#bundle-show .col-right .box .info-travis{background: transparent url(http://travis-ci.org/favicon.ico) no-repeat left center; padding-left: 20px;}
+#bundle-show .col-right .box .info-composer{background: transparent url(../images/packagist.png) no-repeat left center; padding-left: 20px;}
+#bundle-show .col-right .box .info-github{background: transparent url(../images/github.png) no-repeat left center; padding-left: 20px;}
+#bundle-show .col-right .box .info-travis{background: transparent url(../images/travis-ci.png) no-repeat left center; padding-left: 20px;}
 #bundle-show .col-right .box .info-configuration{background: transparent url(../images/configuration02.ico) no-repeat left center; padding-left: 20px;}
 #bundle-show .data{float:left;width:628px;margin:0 0 20px;font-size:12px;padding:10px;background:#fafafa;border:1px solid #DDD;}
 #bundle-show #disqus_thread{font-size:12px;background:#FAFAFA;border:1px solid #DDD;padding:0 10px;float:left;margin:0 0 20px;width:628px;}
