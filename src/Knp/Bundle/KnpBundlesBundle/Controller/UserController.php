@@ -14,13 +14,13 @@ use Knp\Menu\MenuItem;
 class UserController extends BaseController
 {
     protected $sortFields = array(
-        'name'          => 'name',
-        'best'          => 'score',
+        'name' => 'name',
+        'best' => 'score',
     );
 
     protected $sortLegends = array(
-        'name'          => 'users.sort.name',
-        'best'          => 'users.sort.best',
+        'name' => 'users.sort.name',
+        'best' => 'users.sort.best',
     );
 
     public function userbarAction()
@@ -33,61 +33,56 @@ class UserController extends BaseController
         return $response;
     }
 
-    public function showAction($name)
+    public function showAction(Request $request, $name)
     {
         if (!$user = $this->getUserRepository()->findOneByNameWithRepos($name)) {
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        $format = $this->recognizeRequestFormat();
+        $format = $this->recognizeRequestFormat($request);
 
-        $this->highlightMenu();
+        $this->highlightMenu('users');
 
         return $this->render('KnpBundlesBundle:User:show.'.$format.'.twig', array(
-            'user'      => $user,
-            'callback'  => $this->get('request')->query->get('callback')
+            'user'     => $user,
+            'callback' => $request->query->get('callback')
         ));
     }
 
-    public function listAction($sort = 'name')
+    public function listAction(Request $request, $sort = 'name')
     {
         if (!array_key_exists($sort, $this->sortFields)) {
             throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
         }
 
-        $format = $this->recognizeRequestFormat();
+        $format = $this->recognizeRequestFormat($request);
 
         $sortField = $this->sortFields[$sort];
 
-        $this->highlightMenu();
+        $this->highlightMenu('users');
 
         $query = $this->getUserRepository()->queryAllWithBundlesSortedBy($sortField);
-        $users = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
+        $users = $this->getPaginator($query, $request->query->get('page', 1));
 
         return $this->render('KnpBundlesBundle:User:list.'.$format.'.twig', array(
-            'users'         => $users,
-            'sort'          => $sort,
-            'sortLegends'   => $this->sortLegends,
-            'callback'      => $this->get('request')->query->get('callback')
+            'users'       => $users,
+            'sort'        => $sort,
+            'sortLegends' => $this->sortLegends,
+            'callback'    => $request->query->get('callback')
         ));
     }
 
-    public function bundlesAction($name)
+    public function bundlesAction(Request $request, $name)
     {
         if (!$user = $this->getUserRepository()->findOneByName($name)) {
             throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
         }
 
-        $format = $this->recognizeRequestFormat();
+        $format = $this->recognizeRequestFormat($request);
 
         return $this->render('KnpBundlesBundle:Bundle:list.'.$format.'.twig', array(
-            'bundles'   => $user->getBundles(),
-            'callback'  => $this->get('request')->query->get('callback')
+            'bundles'  => $user->getBundles(),
+            'callback' => $request->query->get('callback')
         ));
-    }
-
-    protected function highlightMenu()
-    {
-        $this->get('knp_bundles.menu.main')->getChild('users')->setCurrent(true);
     }
 }

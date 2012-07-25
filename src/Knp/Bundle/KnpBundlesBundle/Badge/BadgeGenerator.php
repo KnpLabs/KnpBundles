@@ -5,6 +5,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Badge;
 use Imagine\Image\Point;
 use Imagine\Image\Color;
 use Imagine\Image\ImagineInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 class BadgeGenerator
@@ -14,18 +15,18 @@ class BadgeGenerator
     const SHORT = 'short';
 
     /**
-     * Instace of Imagine lib acсording to image lib
-     *
-     * @var ImagineInterface
-     */
-    protected $imagine;
-
-    /**
      * Get app cache dir
      *
      * @var string
      */
     protected $cacheDir;
+
+    /**
+     * Get app root dir
+     *
+     * @var string
+     */
+    protected $rootDir;
 
     /**
      * Get default font
@@ -67,13 +68,55 @@ class BadgeGenerator
     );
 
     /**
+     * Instace of Imagine lib acсording to image lib
+     *
+     * @var ImagineInterface
+     */
+    private $imagine;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+    private $responseFactory;
+
+    /**
      * Constructor
      *
      * @param ImagineInterface $imagine
+     * @param object           $responseFactory
+     * @param Filesystem|null  $filesystem
      */
-    public function __construct(ImagineInterface $imagine)
+    public function __construct(ImagineInterface $imagine, $responseFactory, $filesystem = null)
     {
-        $this->imagine = $imagine;
+        $this->imagine         = $imagine;
+        $this->responseFactory = $responseFactory;
+        $this->filesystem      = $filesystem ?: new Filesystem();
+    }
+
+    /**
+     * @param Bundle  $bundle
+     * @param string  $type
+     * @param boolean $regenerate
+     *
+     * @return mixed
+     */
+    public function show(Bundle $bundle, $type = 'long', $regenerate = false)
+    {
+        $relativePath = $this->findShortestPath(
+            $this->rootDir,
+            $this->cacheDir
+        );
+
+        $filename = sprintf('%s/badges/%s/%s-%s.png', $relativePath, $type, $bundle->getUsername(), $bundle->getName());
+        if (!$this->filesystem->exists($filename) || false !== $regenerate) {
+            $this->generate($bundle);
+        }
+
+        return $this->responseFactory->create(
+            $filename,
+            'image/png'
+        );
     }
 
     /**
@@ -83,23 +126,22 @@ class BadgeGenerator
      */
     public function generate(Bundle $bundle)
     {
-        $bundleName = $this->shorten($bundle->getName(), 15);
-        $score = $bundle->getScore() ?: 'N/A';
-        $recommenders = $bundle->getNbRecommenders();
-
         // Open bg badge image
-        $image = $this->imagine->open($this->getResourceDir().'/images/'.$this->getImageMockByType(self::LONG));
-        $imageShort = $this->imagine->open($this->getResourceDir().'/images/'.$this->getImageMockByType(self::SHORT));
+        $image      = $this->imagine->open($this->getResourceDir().'/images/'.$this->type[self::LONG]);
+        $imageShort = $this->imagine->open($this->getResourceDir().'/images/'.$this->type[self::SHORT]);
 
         // Bundle Title
+        $bundleName = $this->shorten($bundle->getName(), 15);
         $image->draw()->text($bundleName, $this->setFont($this->imagine, $this->font, 14), new Point(77, 10));
 
         // Score points
+        $score = $bundle->getScore() ?: 'N/A';
         $image->draw()->text($score, $this->setFont($this->imagine, $this->font, 18), $this->getPositionByType($score, self::LONG));
         $imageShort->draw()->text($score, $this->setFont($this->imagine, $this->font, 18), $this->getPositionByType($score, self::SHORT));
 
 
         // Recommend
+        $recommenders = $bundle->getNbRecommenders();
         if ($recommenders) {
             $recommendationsText = 'by '.$recommenders.' developers';
         } else {
@@ -129,6 +171,14 @@ class BadgeGenerator
     public function setCacheDir($cacheDir)
     {
         $this->cacheDir = $cacheDir;
+    }
+
+    /**
+     * @param string $rootDir
+     */
+    public function setRootDir($rootDir)
+    {
+        $this->rootDir = $rootDir;
     }
 
     /**
@@ -193,17 +243,11 @@ class BadgeGenerator
     {
         $dir = $this->cacheDir.'/badges';
 
-        if (!is_dir($dir)) {
-            if (!@mkdir($dir, 0755)) {
-                throw new \RuntimeException("Can't create the 'badges' folder in ".$this->cacheDir);
-            }
-        }
+        $this->filesystem->mkdir($dir, 0755);
 
         // Create badge types folder
         foreach ($this->type as $type => $image) {
-            if (!is_dir($dir.'/'.$type) && !@mkdir($dir.'/'.$type, 0755)) {
-                throw new \RuntimeException(sprintf("Can't create the '%s' folder in %s", $type, $dir));
-            }
+            $this->filesystem->mkdir($dir.'/'.$type, 0755);
         }
     }
 
@@ -214,21 +258,9 @@ class BadgeGenerator
      */
     protected function removeIfExist($file)
     {
-        if (file_exists($file)) {
+        if ($this->filesystem->exists($file)) {
             unlink($file);
         }
-    }
-
-    /**
-     * Get background image
-     *
-     * @param string $type
-     *
-     * @return string
-     */
-    protected function getImageMockByType($type)
-    {
-        return $this->type[$type];
     }
 
     /**
@@ -247,5 +279,34 @@ class BadgeGenerator
         $coordinates = explode(':', ($this->position[$type][$n]));
 
         return new Point($coordinates[0], $coordinates[1]);
+    }
+
+    private function findShortestPath($from, $to)
+    {
+        if (!$this->filesystem->isAbsolutePath($from) || !$this->filesystem->isAbsolutePath($to)) {
+            throw new \InvalidArgumentException('from and to must be absolute paths');
+        }
+
+        if (dirname($from) === dirname($to)) {
+            return './'.basename($to);
+        }
+
+        $from = lcfirst(rtrim(strtr($from, '\\', '/'), '/'));
+        $to   = lcfirst(rtrim(strtr($to, '\\', '/'), '/'));
+
+        $commonPath = $to;
+        while (0 !== strpos($from, $commonPath) && '/' !== $commonPath && '.' !== $commonPath && !preg_match('{^[a-z]:/?$}i', $commonPath)) {
+            $commonPath = strtr(dirname($commonPath), '\\', '/');
+        }
+
+        if (0 !== strpos($from, $commonPath) || '/' === $commonPath || '.' === $commonPath) {
+            return $to;
+        }
+
+        $commonPath      = rtrim($commonPath, '/') . '/';
+        $sourcePathDepth = substr_count(substr($from, strlen($commonPath)), '/');
+        $commonPathCode  = str_repeat('../', $sourcePathDepth);
+
+        return ($commonPathCode . substr($to, strlen($commonPath))) ?: './';
     }
 }

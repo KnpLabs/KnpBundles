@@ -131,8 +131,11 @@ services:
         class: %knp_bundles.badge_generator.class%
         arguments:
             - @knp_bundles.imagine
+            - @igorw_file_serve.response_factory
+            - @filesystem
         calls:
             - [ setCacheDir, [%kernel.cache_dir%] ]
+            - [ setRootDir, [%kernel.root_dir%] ]
 
     knp_bundles.consumer.github_hook:
         public: false
@@ -181,7 +184,7 @@ services:
 
     # Buzz
     buzz.message_factory:
-        class: Buzz\Message\Factory
+        class: Buzz\Message\Factory\Factory
         public: false
 
     buzz.client:

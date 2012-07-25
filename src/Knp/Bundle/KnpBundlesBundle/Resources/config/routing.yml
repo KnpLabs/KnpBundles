@@ -1,34 +1,3 @@
-scoring:
-    pattern:        /about/scoring
-    defaults:       { _controller: KnpBundlesBundle:Main:aboutScoring }
-    requirements:   { _method: "GET" }
-
-search:
-    pattern:        /search
-    defaults:       { _controller: KnpBundlesBundle:Bundle:search }
-    requirements:   { _method: "GET"}
-
-latest:
-    pattern:        /latest
-    defaults:       { _controller: KnpBundlesBundle:Bundle:listLatest }
-    requirements:   { _method: "GET" }
-
-api:
-    pattern:        /api
-    defaults:       { _controller: KnpBundlesBundle:Main:api }
-    requirements:   { _method: "GET" }
-
-evolution:
-    pattern:        /evolution
-    defaults:       { _controller: KnpBundlesBundle:Bundle:evolution }
-    requirements:   { _method: "GET" }
-
-
-add_bundle:
-    pattern:        /add
-    defaults:       { _controller: KnpBundlesBundle:Bundle:add }
-    requirements:   { _method: "GET|POST" }
-
 _login:
     pattern:        /login
     defaults:       { _controller: HWIOAuthBundle:Connect:connect }
@@ -42,25 +11,10 @@ _login_github:
 _login_sensio:
     pattern:        /login/check-sensio
 
-symfony2bundles:
-    pattern:        /symfony2bundles
-    defaults:       { _controller: KnpBundlesBundle:Main:symfony2bundles }
-    requirements:   { _method: "GET" }
-
 user_list:
     pattern:        /developer/{sort}
     defaults:       { _controller: KnpBundlesBundle:User:list, sort: name }
     requirements:   { _method: "GET", sort: "(name|best)"}
-
-bundle_list:
-    pattern:        /{sort}
-    defaults:       { _controller: KnpBundlesBundle:Bundle:list, sort: trend }
-    requirements:   { _method: "GET", sort: "(best|updated|newest|trend)"}
-
-bundle_keyword:
-    pattern:        /keyword/{slug}
-    defaults:       { _controller: KnpBundlesBundle:Bundle:searchByKeyword }
-    requirements:   { _method: "GET", slug: ".+" }
 
 user_bundle_list:
     pattern:        /{name}/bundles
@@ -72,27 +26,8 @@ user_show:
     defaults:       { _controller: KnpBundlesBundle:User:show }
     requirements:   { _method: "GET"}
 
-bundle_change_usage_status:
-    pattern:        /{username}/{name}/change-usage-status
-    defaults:       { _controller: KnpBundlesBundle:Bundle:changeUsageStatus }
-    requirements:   { _method: "GET", name: ".+" }
+_bundles:
+    resource: "routing/bundles.yml"
 
-bundle_get_badge_short:
-    pattern:        /{username}/{name}/badge-short
-    defaults:       { _controller: KnpBundlesBundle:Badge:getBadge, type: short }
-    requirements:   { _method: "GET", name: ".+" }
-
-bundle_get_badge:
-    pattern:        /{username}/{name}/badge
-    defaults:       { _controller: KnpBundlesBundle:Badge:getBadge, type: long }
-    requirements:   { _method: "GET", name: ".+" }
-
-bundle_show:
-    pattern:        /{username}/{name}
-    defaults:       { _controller: KnpBundlesBundle:Bundle:show }
-    requirements:   { _method: "GET", format: "(html|json|js)", name: ".+" }
-
-bundle_settings:
-    pattern:        /bundle/settings/{id}
-    defaults:       { _controller: KnpBundlesBundle:Bundle:settings }
-    requirements:   { _method: "POST" }
+_static:
+    resource: "routing/static.yml"

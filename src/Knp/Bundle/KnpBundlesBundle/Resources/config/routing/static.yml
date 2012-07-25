@@ -1,0 +1,19 @@
+scoring:
+    pattern:        /about/scoring
+    defaults:       { _controller: KnpBundlesBundle:Main:aboutScoring }
+    requirements:   { _method: "GET" }
+
+api:
+    pattern:        /api
+    defaults:       { _controller: KnpBundlesBundle:Main:api }
+    requirements:   { _method: "GET" }
+
+evolution:
+    pattern:        /evolution
+    defaults:       { _controller: KnpBundlesBundle:Bundle:evolution }
+    requirements:   { _method: "GET" }
+
+symfony2bundles:
+    pattern:        /symfony2bundles
+    defaults:       { _controller: KnpBundlesBundle:Main:symfony2bundles }
+    requirements:   { _method: "GET" }

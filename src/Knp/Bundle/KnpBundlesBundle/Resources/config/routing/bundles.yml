@@ -1,0 +1,49 @@
+search:
+    pattern:        /search
+    defaults:       { _controller: KnpBundlesBundle:Bundle:search }
+    requirements:   { _method: "GET|POST"}
+
+latest:
+    pattern:        /latest
+    defaults:       { _controller: KnpBundlesBundle:Bundle:listLatest }
+    requirements:   { _method: "GET" }
+
+add_bundle:
+    pattern:        /add
+    defaults:       { _controller: KnpBundlesBundle:Bundle:add }
+    requirements:   { _method: "GET|POST" }
+
+bundle_list:
+    pattern:        /{sort}
+    defaults:       { _controller: KnpBundlesBundle:Bundle:list, sort: trend }
+    requirements:   { _method: "GET", sort: "(best|updated|newest|trend)"}
+
+bundle_keyword:
+    pattern:        /keyword/{slug}
+    defaults:       { _controller: KnpBundlesBundle:Bundle:searchByKeyword }
+    requirements:   { _method: "GET", slug: ".+" }
+
+bundle_change_usage_status:
+    pattern:        /{username}/{name}/change-usage-status
+    defaults:       { _controller: KnpBundlesBundle:Bundle:changeUsageStatus }
+    requirements:   { _method: "GET", name: ".+" }
+
+bundle_get_badge_short:
+    pattern:        /{username}/{name}/badge-short
+    defaults:       { _controller: KnpBundlesBundle:Badge:show, type: short }
+    requirements:   { _method: "GET", name: ".+" }
+
+bundle_get_badge:
+    pattern:        /{username}/{name}/badge
+    defaults:       { _controller: KnpBundlesBundle:Badge:show }
+    requirements:   { _method: "GET", name: ".+" }
+
+bundle_show:
+    pattern:        /{username}/{name}
+    defaults:       { _controller: KnpBundlesBundle:Bundle:show }
+    requirements:   { _method: "GET", format: "(html|json|js)", name: ".+" }
+
+bundle_settings:
+    pattern:        /bundle/settings/{id}
+    defaults:       { _controller: KnpBundlesBundle:Bundle:settings }
+    requirements:   { _method: "POST" }

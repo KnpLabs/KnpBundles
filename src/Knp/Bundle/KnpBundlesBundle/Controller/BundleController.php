@@ -32,9 +32,9 @@ class BundleController extends BaseController
         'newest'        => 'bundles.sort.newest',
     );
 
-    public function searchAction()
+    public function searchAction(Request $request)
     {
-        $query = preg_replace('(\W)', '', trim($this->get('request')->query->get('q')));
+        $query = preg_replace('(\W)', '', trim($request->query->get('q')));
 
         if (empty($query)) {
             return $this->render('KnpBundlesBundle:Bundle:search.html.twig');
@@ -51,11 +51,11 @@ class BundleController extends BaseController
         $paginator = $this->get('knp_paginator');
         $bundles = $paginator->paginate(
             array($solarium, $select),
-            $this->get('request')->query->get('page', 1),
+            $request->query->get('page', 1),
             10
         );
 
-        $format = $this->recognizeRequestFormat();
+        $format = $this->recognizeRequestFormat($request);
 
         if ('html' === $format && count($bundles) === 1 && strtolower($bundles[0]['name']) == strtolower($query)) {
             $params = array('username' => $bundles[0]['username'], 'name' => $bundles[0]['name']);
@@ -64,22 +64,22 @@ class BundleController extends BaseController
         }
 
         return $this->render('KnpBundlesBundle:Bundle:searchResults.'.$format.'.twig', array(
-            'query'         => urldecode($this->get('request')->query->get('q')),
-            'bundles'       => $bundles,
-            'callback'      => $this->get('request')->query->get('callback')
+            'query'    => urldecode($request->query->get('q')),
+            'bundles'  => $bundles,
+            'callback' => $request->query->get('callback')
         ));
     }
 
-    public function showAction($username, $name)
+    public function showAction(Request $request, $username, $name)
     {
         $bundle = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);
         if (!$bundle) {
             throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
         }
 
-        $format = $this->recognizeRequestFormat();
+        $format = $this->recognizeRequestFormat($request);
 
-        $this->highlightMenu();
+        $this->highlightMenu('bundles');
 
         $user = $this->get('security.context')->getToken()->getUser();
 
@@ -87,30 +87,30 @@ class BundleController extends BaseController
             'bundle'        => $bundle,
             'score_details' => $bundle->getScoreDetails(),
             'isUsedByUser'  => $user instanceof User && $user->isUsingBundle($bundle),
-            'callback'      => $this->get('request')->query->get('callback')
+            'callback'      => $request->query->get('callback')
         ));
     }
 
-    public function listAction($sort)
+    public function listAction(Request $request, $sort)
     {
         if (!array_key_exists($sort, $this->sortFields)) {
             throw new HttpException(406, sprintf('%s is not a valid sorting field', $sort));
         }
 
-        $format = $this->recognizeRequestFormat();
+        $format = $this->recognizeRequestFormat($request);
 
         $sortField = $this->sortFields[$sort];
 
-        $query = $this->getRepository('Bundle')->queryAllWithUsersAndContributorsSortedBy($sortField);
-        $bundles = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
+        $query   = $this->getRepository('Bundle')->queryAllWithUsersAndContributorsSortedBy($sortField);
+        $bundles = $this->getPaginator($query, $request->query->get('page', 1));
 
-        $this->highlightMenu();
+        $this->highlightMenu('bundles');
 
         $response = $this->render('KnpBundlesBundle:Bundle:list.'.$format.'.twig', array(
-            'bundles'       => $bundles,
-            'sort'          => $sort,
-            'sortLegends'   => $this->sortLegends,
-            'callback'      => $this->get('request')->query->get('callback')
+            'bundles'     => $bundles,
+            'sort'        => $sort,
+            'sortLegends' => $this->sortLegends,
+            'callback'    => $request->query->get('callback')
         ));
 
         // caching
@@ -122,23 +122,22 @@ class BundleController extends BaseController
 
     public function evolutionAction()
     {
-        $bundlesitory = $this->getRepository('Score');
-        $counts = $bundlesitory->getScoreCountEvolution();
+        $counts = $this->getRepository('Score')->getScoreCountEvolution();
 
         return $this->render('KnpBundlesBundle:Bundle:evolution.html.twig', array(
-            'score_counts'    => $counts,
+            'score_counts' => $counts,
         ));
     }
 
-    public function listLatestAction()
+    public function listLatestAction(Request $request)
     {
         $bundles = $this->getRepository('Bundle')->findAllSortedBy('createdAt', 'desc', 50);
 
-        $format = $this->recognizeRequestFormat(array('atom'), 'atom');
+        $format  = $this->recognizeRequestFormat($request, array('atom'), 'atom');
 
         return $this->render('KnpBundlesBundle:Bundle:listLatest.'.$format.'.twig', array(
-            'bundles'       => $bundles,
-            'callback'      => $this->get('request')->query->get('callback')
+            'bundles'  => $bundles,
+            'callback' => $request->query->get('callback')
         ));
     }
 
@@ -153,12 +152,11 @@ class BundleController extends BaseController
                 $updater = $this->get('knp_bundles.updater');
                 $updater->setUp();
                 try {
-                    $bundles = $updater->addBundle($bundle, false);
+                    $updater->addBundle($bundle, false);
 
                     $bundleParts = explode('/', $bundle);
-                    $params = array('username' => $bundleParts[0], 'name' => $bundleParts[1]);
 
-                    return $this->redirect($this->generateUrl('bundle_show', $params));
+                    return $this->redirect($this->generateUrl('bundle_show', array('username' => $bundleParts[0], 'name' => $bundleParts[1])));
                 } catch (UserNotFoundException $e) {
                     $error = true;
                     $errorMessage = 'addBundle.userNotFound';
@@ -169,9 +167,11 @@ class BundleController extends BaseController
             }
         }
 
-        $data = array('bundle' => $bundle, 'error' => $error, 'errorMessage' => $errorMessage);
-
-        return $this->render('KnpBundlesBundle:Bundle:add.html.twig', $data);
+        return $this->render('KnpBundlesBundle:Bundle:add.html.twig', array(
+            'bundle'       => $bundle,
+            'error'        => $error,
+            'errorMessage' => $errorMessage
+        ));
     }
 
     public function changeUsageStatusAction($username, $name)
@@ -207,12 +207,12 @@ class BundleController extends BaseController
         return $this->redirect($this->generateUrl('bundle_show', $params));
     }
 
-    public function searchByKeywordAction($slug)
+    public function searchByKeywordAction(Request $request, $slug)
     {
-        $query = $this->getRepository('Bundle')->queryByKeywordSlug($slug);
-        $bundles = $this->getPaginator($query, $this->get('request')->query->get('page', 1));
+        $query   = $this->getRepository('Bundle')->queryByKeywordSlug($slug);
+        $bundles = $this->getPaginator($query, $request->query->get('page', 1));
 
-        $this->highlightMenu();
+        $this->highlightMenu('bundles');
 
         $response = $this->render('KnpBundlesBundle:Bundle:searchByKeywordResults.html.twig', array(
             'bundles'     => $bundles,
@@ -226,7 +226,7 @@ class BundleController extends BaseController
         return $response;
     }
 
-    public function settingsAction($id)
+    public function settingsAction(Request $request, $id)
     {
         $bundle = $this->getRepository('Bundle')->find($id);
         if (!$bundle) {
@@ -235,7 +235,7 @@ class BundleController extends BaseController
 
         // Save only if sender is owner of bundle
         if ((null !== $user = $this->get('security.context')->getToken()->getUser()) && $bundle->isOwnerOrContributor($user)) {
-            $state = $this->getRequest()->request->get('state', Bundle::STATE_UNKNOWN);
+            $state = $request->request->get('state', Bundle::STATE_UNKNOWN);
 
             $bundle->setState($state);
 
@@ -243,19 +243,9 @@ class BundleController extends BaseController
             $em->persist($bundle);
             $em->flush();
 
-            $this->getRequest()->getSession()->setFlash('notice', sprintf('Bundle status was successful changed to: %s', $state));
+            $request->getSession()->setFlash('notice', sprintf('Bundle status was successful changed to: %s', $state));
         }
 
         return $this->redirect($this->generateUrl('bundle_show', array('username' => $bundle->getUserName(), 'name' => $bundle->getName())));
-    }
-
-    protected function getRepository($class)
-    {
-        return $this->get('knp_bundles.entity_manager')->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\'.$class);
-    }
-
-    protected function highlightMenu()
-    {
-        $this->get('knp_bundles.menu.main')->getChild('bundles')->setCurrent(true);
     }
 }

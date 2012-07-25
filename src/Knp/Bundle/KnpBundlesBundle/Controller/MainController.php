@@ -35,16 +35,11 @@ class MainController extends BaseController
 
     public function bannerAction()
     {
-        $translator = $this->get('translator');
-        $maxId = $translator->trans('menu.promo.nb');
-
         $banner = $this->container->getParameter('banner');
-        $text = $banner['text'];
-        $url = $banner['url'];
 
         return $this->render('KnpBundlesBundle:Main:banner.html.twig', array(
-            'url' => $url,
-            'text' => $text,
+            'url'  => $banner['url'],
+            'text' => $banner['text'],
         ));
     }
 }
