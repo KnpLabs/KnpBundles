@@ -40,19 +40,24 @@ class User
     }
 
     /**
-     * @param UserResponseInterface $response
+     * @param string|UserResponseInterface $response
      *
      * @return boolean|EntityUser
      */
-    public function import(UserResponseInterface $response)
+    public function import($response)
     {
         $user = new EntityUser();
-        $user->setName($response->getUsername());
+        if (is_string($response)) {
+            $user->setName($response);
+        } else {
+            $user->setName($response->getUsername());
+            $user->setFullName($response->getDisplayName());
+        }
+
         if ($response instanceof SensioConnectUserResponse) {
             $user->setName($response->getLinkedAccount('github') ?: $response->getUsername());
         }
 
-        $user->setFullName($response->getDisplayName());
         if ($response instanceof AdvancedUserResponseInterface) {
             $user->setEmail($response->getEmail());
             $user->setGravatarHash($response->getProfilePicture());
