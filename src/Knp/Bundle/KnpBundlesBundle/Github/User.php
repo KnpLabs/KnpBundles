@@ -47,11 +47,11 @@ class User
     public function import($response)
     {
         $user = new EntityUser();
-        if (is_object($response)) {
+        if (is_string($response)) {
+            $user->setName($response);
+        } else {
             $user->setName($response->getUsername());
             $user->setFullName($response->getDisplayName());
-        } else {
-            $user->setName($response);
         }
 
         if ($response instanceof SensioConnectUserResponse) {
