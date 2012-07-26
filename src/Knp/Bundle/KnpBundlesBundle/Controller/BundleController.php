@@ -151,7 +151,7 @@ class BundleController extends BaseController
             if (preg_match('/^[a-z0-9-]+\/[a-z0-9-\.]+$/i', $bundle)) {
                 list($username, $name) = explode('/', $bundle);
 
-                $url    = $this->generateUrl('bundle_show', array('username' => $username, 'name' => $name);
+                $url    = $this->generateUrl('bundle_show', array('username' => $username, 'name' => $name));
                 $exists = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);
                 if ($exists) {
                     return $this->redirect($url);
