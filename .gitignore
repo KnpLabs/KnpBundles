@@ -11,6 +11,7 @@
 /web/bundles/*
 /web/sitemap.xml*
 /app/DoctrineMigrations/*
+!/app/DoctrineMigrations/Version20120629202640.php
 /src/Knp/Bundle/KnpBundlesBundle/DoctrineMigrations/*
 /src/Knp/Bundle/KnpBundlesBundle/Resources/solr/data/*
 /vendor/*
@@ -18,6 +19,7 @@
 /app/config/parameters.*.yml
 composer.phar
 bin/*
+!bin/update-all-bundles.sh
 !bin/launch-rabit-consumers.sh
 !bin/prepare-*.sh
 !bin/behat-*.sh

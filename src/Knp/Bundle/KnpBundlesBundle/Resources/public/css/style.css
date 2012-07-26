@@ -319,3 +319,15 @@ pre.code {
 .canonical-configuration-class {
     display: none;
 }
+
+table.versions-table {
+    margin: 5px 10px 0;
+}
+
+tr.table-bottom-line {
+    border-bottom: 1px solid #DDD;
+}
+
+th.table-middle-space {
+    width: 20px;
+}

@@ -177,6 +177,8 @@ class Repo
 
         $this->updateCanonicalConfigFile($gitRepo, $bundle);
 
+        $this->updateSymfonyVersions($bundle);
+
         return $bundle;
     }
 
@@ -189,19 +191,41 @@ class Repo
             $composer = json_decode($gitRepo->getFileContent($composerFilename), true);
 
             $composerName = isset($composer['name']) ? $composer['name'] : null;
+        }
 
-            // looking for required version of Symfony
-            if (isset($composer['require'])) {
-                foreach (array('symfony/framework-bundle', 'symfony/symfony') as $requirement) {
-                    if (isset($composer['require'][$requirement])) {
-                        $bundle->setSymfonyVersion($composer['require'][$requirement]);
-                        break;
-                    }
+        $bundle->setComposerName($composerName);
+    }
+
+    public function updateSymfonyVersions(Bundle $bundle)
+    {
+        // retrieve name from composer.json
+        $packagistName = $bundle->getComposerName();
+
+        // no composer file
+        if (null === $packagistName) {
+
+            $bundle->setSymfonyVersions(null);
+            return false;
+        }
+
+        $symfonyVersions = array();
+
+        // query packagist json
+        $packagistArray = json_decode(file_get_contents('http://packagist.org/packages/'.$packagistName.'.json'), true);
+
+        // build array branch => version
+        $versionsArray = $packagistArray['package']['versions'];
+        foreach ($versionsArray as $version => $value) {
+
+            foreach (array('symfony/framework-bundle', 'symfony/symfony') as $requirement) {
+
+                if (isset($value['require'][$requirement])) {
+                    $symfonyVersions[$version] = $value['require'][$requirement]; // array('master' => >=2.0,<2.2-dev')
                 }
             }
         }
 
-        $bundle->setComposerName($composerName);
+        $bundle->setSymfonyVersions($symfonyVersions);
     }
 
     public function updateTags(Bundle $bundle)
