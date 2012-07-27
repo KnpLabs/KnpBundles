@@ -1,9 +1,9 @@
 <?php
 
-namespace Vendor\FixtureBundle\DependencyInjection;
+namespace Knp\Bundle\KnpBundlesBundle\Tests\Fixtures\GoodBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder,
-Symfony\Component\Config\Definition\ConfigurationInterface;
+    Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
@@ -15,7 +15,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('vendor_bundle_name');
+        $rootNode = $treeBuilder->root('vendor_good_bundle');
 
         $rootNode
             ->fixXmlConfig('permission', 'permissions')

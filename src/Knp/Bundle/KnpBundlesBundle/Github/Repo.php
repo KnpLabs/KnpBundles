@@ -8,6 +8,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\NodeInterface;
 use Symfony\Component\Config\Definition\ArrayNode;
 use Symfony\Component\Config\Definition\PrototypedArrayNode;
+use Symfony\Component\Process\PhpProcess;
 
 use Github\Client;
 use Github\HttpClient\Exception as GithubException;
@@ -22,34 +23,37 @@ class Repo
     /**
      * php-github-api instance used to request GitHub API
      *
-     * @var \Github\Client|null
+     * @var Client|null
      */
     protected $github = null;
 
     /**
-     * @var \Knp\Bundle\KnpBundlesBundle\Git\RepoManager|null
+     * @var Git\RepoManager|null
      */
     protected $gitRepoManager = null;
 
     /**
      * Output buffer
      *
-     * @var null|\Symfony\Component\Console\Output\OutputInterface
+     * @var null|OutputInterface
      */
     protected $output = null;
 
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var EventDispatcherInterface
      */
     protected $dispatcher;
 
-    protected $canonicalConfiguration;
-    
     /**
-     * @param \Github\Client $github
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Knp\Bundle\KnpBundlesBundle\Git\RepoManager $gitRepoManager
-     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+     * @var string
+     */
+    public static $canonicalConfiguration;
+
+    /**
+     * @param Client $github
+     * @param OutputInterface $output
+     * @param Git\RepoManager $gitRepoManager
+     * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager, EventDispatcherInterface $dispatcher)
     {
@@ -90,8 +94,8 @@ class Repo
     /**
      * Return true if the Repo exists on GitHub, false otherwise
      *
-     * @param Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
-     * @param array $data
+     * @param Bundle $bundle
+     *
      * @return boolean whether the Repo exists on GitHub
      */
     public function updateInfos(Bundle $bundle)
@@ -117,7 +121,7 @@ class Repo
         $bundle->setCreatedAt(new \DateTime($data['created_at']));
         $bundle->setHomepage(empty($data['homepage']) ? null : $data['homepage']);
 
-        return $bundle;
+        return true;
     }
 
     public function updateCommits(Bundle $bundle)
@@ -140,7 +144,7 @@ class Repo
         }
         $bundle->setLastCommits(array_slice($commits, 0, 30));
 
-        return $bundle;
+        return true;
     }
 
     public function updateCommitsFromGitRepo(Bundle $bundle)
@@ -149,7 +153,7 @@ class Repo
         $commits = $this->gitRepoManager->getRepo($bundle)->getCommits(30);
         $bundle->setLastCommits($commits);
 
-        return $bundle;
+        return true;
     }
 
     public function updateFiles(Bundle $bundle)
@@ -177,16 +181,13 @@ class Repo
 
         $this->updateCanonicalConfigFile($gitRepo, $bundle);
 
-        return $bundle;
+        return true;
     }
 
     private function updateComposerFile($gitRepo, Bundle $bundle)
     {
-        $composerFilename = 'composer.json';
-
-        $composerName = null;
-        if ($gitRepo->hasFile($composerFilename)) {
-            $composer = json_decode($gitRepo->getFileContent($composerFilename), true);
+        if ($gitRepo->hasFile('composer.json')) {
+            $composer = json_decode($gitRepo->getFileContent('composer.json'), true);
 
             $composerName = isset($composer['name']) ? $composer['name'] : null;
 
@@ -199,9 +200,9 @@ class Repo
                     }
                 }
             }
-        }
 
-        $bundle->setComposerName($composerName);
+            $bundle->setComposerName($composerName);
+        }
     }
 
     public function updateTags(Bundle $bundle)
@@ -251,7 +252,7 @@ class Repo
     /**
      * Checks if '*Bundle.php' class use base class for Symfony bundle
      *
-     * @param \Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     * @param Bundle $bundle
      *
      * @return bool
      */
@@ -261,7 +262,7 @@ class Repo
             return false;
         }
 
-        return false !== strpos($bundleClassContent, 'Symfony\Component\HttpKernel\Bundle\Bundle');
+        return false !== strpos($bundleClassContent, 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle');
     }
 
     /**
@@ -287,7 +288,7 @@ class Repo
     /**
      * Get github
      *
-     * @return \Github\Client
+     * @return Client
      */
     public function getGithubClient()
     {
@@ -297,17 +298,101 @@ class Repo
     /**
      * Set github
      *
-     * @param \Github\Client
+     * @param Client
      */
     public function setGithubClient($github)
     {
         $this->github = $github;
     }
 
+    public function updateCanonicalConfigFile($gitRepo, Bundle $bundle)
+    {
+        self::$canonicalConfiguration = '';
+
+        /**
+         * Currently there is only support for bundles whose configuration is stored exactly under Configuration.php
+         */
+        $relativePath = 'DependencyInjection'.DIRECTORY_SEPARATOR.'Configuration.php';
+        if ($gitRepo->hasFile($relativePath)) {
+            $absolutePath = $gitRepo->getDir().DIRECTORY_SEPARATOR.$relativePath;
+
+            $tokens    = token_get_all(file_get_contents($absolutePath));
+            $start     = false;
+            $namespace = '';
+            foreach ($tokens as $token) {
+                if ($token == ';') {
+                    break;
+                }
+
+                $tokenName = is_array($token) ? $token[0] : null;
+                if (T_NAMESPACE === $tokenName) {
+                    $start = true;
+
+                    continue;
+                }
+
+                // Still not found namespace, skip this part of code
+                if ($start === false) {
+                    continue;
+                }
+
+                $tokenData = is_array($token) ? $token[1] : $token;
+                if ($tokenData == ' ') {
+                    continue;
+                }
+
+                $namespace .= $tokenData;
+            }
+            unset($tokens);
+
+            $autoloaderPath = __DIR__.'/../../../../../vendor/autoload.php';
+
+            $script = <<<EOF
+<?php
+
+include_once "$autoloaderPath";
+include_once "$absolutePath";
+
+use Knp\Bundle\KnpBundlesBundle\Github\Repo;
+
+\$configuration = new \ReflectionClass("$namespace\\Configuration");
+// only dumps if it implements interface ConfigurationInterface
+if (in_array('Symfony\\Component\\Config\\Definition\\ConfigurationInterface', \$configuration->getInterfaceNames())) {
+    \$configuration = \$configuration->newInstance();
+    \$configuration = Repo::outputNode(\$configuration->getConfigTreeBuilder()->buildTree());
+
+    echo Repo::\$canonicalConfiguration;
+} else {
+    echo '';
+}
+
+?>
+EOF;
+
+            // Workaround for bundles with external deps called in DI configuration, i.e. FOSRestBundle
+            $process = new PhpProcess($script);
+            $process->run();
+
+            if ($process->isSuccessful()) {
+                $bundle->setCanonicalConfig(Repo::$canonicalConfiguration = $process->getOutput());
+            }
+        }
+    }
+
+    public function getCanonicalConfiguration()
+    {
+        return self::$canonicalConfiguration;
+    }
+
+    public function setCanonicalConfiguration($canonicalConfiguration)
+    {
+        self::$canonicalConfiguration = $canonicalConfiguration;
+    }
+
     /**
      * Returns content for *Bundle.php class via Github API v3
      *
-     * @param \Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     * @param Bundle $bundle
      *
      * @return null|string
      */
@@ -325,67 +410,20 @@ class Repo
         return null;
     }
 
-    public function updateCanonicalConfigFile($gitRepo, $bundle)
-    {
-        /**
-         * Currently there is only support for bundles whose configuration is stored exactly under Configuration.php
-         */
-        $configurationRelativePath = 'DependencyInjection'.DIRECTORY_SEPARATOR.'Configuration.php';
-        $configurationAbsolutePath = $gitRepo->getDir().DIRECTORY_SEPARATOR.$configurationRelativePath;
-        $yamlContents = '';
-        if ($gitRepo->hasFile($configurationRelativePath)) {
-
-            include_once $configurationAbsolutePath;
-
-            $tokens = token_get_all(file_get_contents($configurationAbsolutePath));
-            $start = false;
-            $namespace = '';
-            foreach ($tokens as $token) {
-                $tokenName = is_array($token) ? $token[0] : null;
-                $tokenData = is_array($token) ? $token[1] : $token;
-                if ($tokenName == T_NAMESPACE) {
-                    $start = true;
-                }
-                if ($token == ';') {
-                    $start = false;
-                }
-                if ($start == true && $tokenName != T_NAMESPACE && $tokenData != ' ') {
-                    $namespace .= $tokenData;
-                }
-            }
-
-            $configuration = $namespace.'\\Configuration';
-            $configuration = new $configuration();
-
-            // only dumps if it implements interface ConfigurationInterface
-            if ($configuration instanceof ConfigurationInterface) {
-
-                $rootNode = $configuration->getConfigTreeBuilder()->buildTree();
-                $this->canonicalConfiguration = '';
-                $this->outputNode($rootNode);
-                $yamlContents = $this->canonicalConfiguration;
-            }
-        }
-
-        $bundle->setCanonicalConfig($yamlContents);
-    }
-
     /**
      * Outputs a single config reference line
      *
-     * @param string $text
-     * @param int    $indent
+     * @param string  $text
+     * @param integer $indent
      */
-    private function outputLine($text, $indent = 0)
+    public static function outputLine($text, $indent = 0)
     {
         $indent = strlen($text) + $indent;
 
-        $format = '%'.$indent.'s';
-
-        $this->canonicalConfiguration = $this->canonicalConfiguration . sprintf($format, $text) . "\n";
+        self::$canonicalConfiguration .= rtrim(sprintf('%'.$indent.'s', $text)) . "\n";
     }
 
-    private function outputArray(array $array, $depth)
+    public static function outputArray(array $array, $depth)
     {
         $isIndexed = array_values($array) === $array;
 
@@ -397,22 +435,22 @@ class Repo
             }
 
             if ($isIndexed) {
-                $this->outputLine('- '.$val, $depth * 4);
+                self::outputLine('- '.$val, $depth * 4);
             } else {
-                $this->outputLine(sprintf('%-20s %s', $key.':', $val), $depth * 4);
+                self::outputLine(sprintf('%-20s %s', $key.':', $val), $depth * 4);
             }
 
             if (is_array($value)) {
-                $this->outputArray($value, $depth + 1);
+                self::outputArray($value, $depth + 1);
             }
         }
     }
 
     /**
      * @param NodeInterface $node
-     * @param int           $depth
+     * @param integer       $depth
      */
-    private function outputNode(NodeInterface $node, $depth = 0)
+    public static function outputNode(NodeInterface $node, $depth = 0)
     {
         $comments = array();
         $default = '';
@@ -483,47 +521,37 @@ class Repo
         $text = sprintf('%-20s %s %s', $node->getName().':', $default, $comments);
 
         if ($info = $node->getInfo()) {
-            $this->outputLine('');
-            $this->outputLine('# '.$info, $depth * 4);
+            self::outputLine('');
+            self::outputLine('# '.$info, $depth * 4);
         }
 
-        $this->outputLine($text, $depth * 4);
+        self::outputLine($text, $depth * 4);
 
         // output defaults
         if ($defaultArray) {
-            $this->outputLine('');
+            self::outputLine('');
 
             $message = count($defaultArray) > 1 ? 'Defaults' : 'Default';
 
-            $this->outputLine('# '.$message.':', $depth * 4 + 4);
+            self::outputLine('# '.$message.':', $depth * 4 + 4);
 
-            $this->outputArray($defaultArray, $depth + 1);
+            self::outputArray($defaultArray, $depth + 1);
         }
 
         if (is_array($example)) {
-            $this->outputLine('');
+            self::outputLine('');
 
             $message = count($example) > 1 ? 'Examples' : 'Example';
 
-            $this->outputLine('# '.$message.':', $depth * 4 + 4);
+            self::outputLine('# '.$message.':', $depth * 4 + 4);
 
-            $this->outputArray($example, $depth + 1);
+            self::outputArray($example, $depth + 1);
         }
 
         if ($children) {
             foreach ($children as $childNode) {
-                $this->outputNode($childNode, $depth + 1);
+                self::outputNode($childNode, $depth + 1);
             }
         }
-    }
-
-    public function getCanonicalConfiguration()
-    {
-        return $this->canonicalConfiguration;
-    }
-
-    public function setCanonicalConfiguration($canonicalConfiguration)
-    {
-        $this->canonicalConfiguration = $canonicalConfiguration;
     }
 }
