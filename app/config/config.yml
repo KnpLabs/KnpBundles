@@ -55,7 +55,7 @@ doctrine:
                   KnpBundlesBundle: ~
 
 inori_twitter_app:
-    file: %kernel.root_dir%/../vendor/twitteroauth/twitteroauth/twitteroauth.php
+    file: %kernel.root_dir%/../vendor/twitter/oauth/twitteroauth/twitteroauth.php
     consumer_key: %knp_bundles.twitter.consumer_key%
     consumer_secret: %knp_bundles.twitter.consumer_secret%
     oauth_token: %knp_bundles.twitter.oauth_token%
