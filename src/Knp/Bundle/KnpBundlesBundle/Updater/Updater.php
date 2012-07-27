@@ -90,7 +90,7 @@ class Updater
 
     public function searchNewBundles()
     {
-        $this->output->writeln(sprintf('[%s] Trying to find bundle candidates'), $this->currentTime());
+        $this->output->writeln(sprintf('[%s] Trying to find bundle candidates', $this->currentTime()));
 
         $repos = $this->finder->find();
         $bundles = array();
