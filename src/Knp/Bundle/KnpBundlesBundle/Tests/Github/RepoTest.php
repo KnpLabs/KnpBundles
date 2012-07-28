@@ -9,24 +9,6 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class RepoTest extends \PHPUnit_Framework_TestCase
 {
-    protected function getRepo()
-    {
-        $github = new \Github\Client;
-        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
-        $repoManager = $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Git\RepoManager')
-                ->disableOriginalConstructor()
-                ->getMock();
-
-        return new Repo($github, $output, $repoManager, new EventDispatcher());
-    }
-
-    protected function getGitRepoMock()
-    {
-        return $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Git\Repo')
-                ->disableOriginalConstructor()
-                ->getMock();
-    }
-
     public function testUpdateComposerFailure()
     {
         $repoEntity = new Bundle('knplabs/KnpMenuBundle');
@@ -100,6 +82,69 @@ class RepoTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($repo->isValidSymfonyBundle($bundle));
     }
 
+    /**
+     * @test
+     */
+    public function shouldUpdateCanonicalConfig()
+    {
+        $bundle = new Bundle('knplabs/KnpMenuBundle');
+
+        $githubRepo = $this->getRepoWithMockedGithubClient('KnpMenuBundle.php', __DIR__ . '/fixtures/info.valid-bundle-class.json');
+
+        $githubRepo->updateCanonicalConfigFile($this->getFullyMockedRepo($githubRepo, 'GoodBundle'), $bundle);
+
+        $expectedYaml = <<<EOT
+vendor_good_bundle:
+    app_id:               ~ # Required
+    secret:               ~ # Required
+    file:                 ~
+    cookie:               false
+    domain:               ~
+    alias:                ~
+    logging:              %kernel.debug%
+    culture:              en_US
+    class:
+        api:                  Vendor\\FixtureBundle\\APIKey
+        type:                 Vendor\\FixtureBundle\\Type
+    permissions:          []
+
+EOT;
+
+        $this->assertEquals($expectedYaml, $githubRepo->getCanonicalConfiguration());
+    }
+
+    /**
+     * @test
+     */
+    public function shouldNotUpdateCanonicalConfig()
+    {
+        $bundle = new Bundle('knplabs/KnpMenuBundle');
+
+        $githubRepo = $this->getRepoWithMockedGithubClient('KnpMenuBundle.php', __DIR__ . '/fixtures/info.valid-bundle-class.json');
+
+        $githubRepo->updateCanonicalConfigFile($this->getFullyMockedRepo($githubRepo, 'InvalidBundle'), $bundle);
+
+        $this->assertEquals('', $githubRepo->getCanonicalConfiguration());
+    }
+
+    protected function getRepo()
+    {
+        $github = new \Github\Client;
+        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $repoManager = $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Git\RepoManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        return new Repo($github, $output, $repoManager, new EventDispatcher());
+    }
+
+    protected function getGitRepoMock()
+    {
+        return $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Git\Repo')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     protected function getRepoWithMockedGithubClient($bundleClassName, $bundleClassContentsLink)
     {
         $githubApiRepoMock = $this->getMockBuilder('Github\Api\Repo')
@@ -108,8 +153,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
         $githubApiRepoMock->expects($this->any())
             ->method('getRepoContents')
             ->with('knplabs', 'KnpMenuBundle', '')
-            ->will($this->returnValue(
-            array(
+            ->will($this->returnValue(array(
                 array(
                     'name'   => $bundleClassName,
                     '_links' => array(
@@ -131,15 +175,8 @@ class RepoTest extends \PHPUnit_Framework_TestCase
         return new Repo($githubMock, $output, $repoManager, new EventDispatcher());
     }
 
-    /**
-     * @test
-     */
-    public function shouldUpdateCanonicalConfig()
+    protected function getFullyMockedRepo($githubRepo, $folder)
     {
-        $bundle = new Bundle('knplabs/KnpMenuBundle');
-
-        $githubRepo = $this->getRepoWithMockedGithubClient('KnpMenuBundle.php', __DIR__ . '/fixtures/info.valid-bundle-class.json');
-
         $gitRepo = $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Git\Repo')
             ->disableOriginalConstructor()
             ->getMock();
@@ -148,29 +185,8 @@ class RepoTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $gitRepo->expects($this->once())
             ->method('getDir')
-            ->will($this->returnValue(__DIR__.'/fixtures'));
+            ->will($this->returnValue(__DIR__.'/../Fixtures/'.$folder));
 
-        $githubRepo->isValidSymfonyBundle($bundle);
-
-        $githubRepo->updateCanonicalConfigFile($gitRepo, $bundle);
-
-        $expectedYaml = <<<EOT
-vendor_bundle_name:   
-    app_id:               ~ # Required
-    secret:               ~ # Required
-    file:                 ~ 
-    cookie:               false 
-    domain:               ~ 
-    alias:                ~ 
-    logging:              %kernel.debug% 
-    culture:              en_US 
-    class:                
-        api:                  Vendor\\FixtureBundle\\APIKey 
-        type:                 Vendor\\FixtureBundle\\Type 
-    permissions:          [] 
-
-EOT;
-
-        $this->assertEquals($expectedYaml, $githubRepo->getCanonicalConfiguration());
+        return $gitRepo;
     }
 }
