@@ -31,11 +31,9 @@ class KbUpdateTrendsCommand extends ContainerAwareCommand
     {
         $em = $this->getContainer()->get('knp_bundles.entity_manager');
 
-        $bundleRepository = $em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle');
-
         $em->getConnection()->beginTransaction();
         try {
-            $nbRows = $bundleRepository->updateTrends();
+            $nbRows = $this->updateTrends();
             $output->writeln(sprintf('[%s] <info>%s</info> rows updated', $this->currentTime(), $nbRows));
 
             $em->getConnection()->commit();
@@ -45,6 +43,46 @@ class KbUpdateTrendsCommand extends ContainerAwareCommand
             $em->close();
         }
 
+    }
+
+    private function updateTrends()
+    {
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+
+        // Reset trends
+        $q = $em->createQuery('UPDATE Knp\Bundle\KnpBundlesBundle\Entity\Bundle bundle SET bundle.trend1 = 0');
+        $q->execute();
+
+        $sql = <<<EOF
+UPDATE bundle
+
+JOIN (
+    SELECT date, bundle_id,
+    (
+        SELECT current.value - value AS diff
+        FROM score
+        WHERE bundle_id = current.bundle_id
+        AND date < current.date
+        ORDER BY date DESC
+        LIMIT 1
+    ) AS diff
+    FROM score AS current
+    WHERE date = CURRENT_DATE
+) score
+  ON score.bundle_id = bundle.id
+  AND score.diff > %s
+
+SET trend1 = score.diff
+WHERE description != '';
+EOF;
+
+        $minDiff = $this->getContainer()->getParameter('knp_bundles.trending_bundle.min_score_diff');
+        $query = sprintf($sql, $minDiff);
+
+        $conn = $em->getConnection();
+        $nbRows = $conn->executeUpdate($query);
+
+        return $nbRows;
     }
 
     private function currentTime()

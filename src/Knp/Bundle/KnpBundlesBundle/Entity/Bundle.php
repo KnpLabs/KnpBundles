@@ -273,6 +273,13 @@ class Bundle
      */
     protected $nbRecommenders;
 
+    /**
+     * Date when bundle was tweeted from knplabs account.
+     *
+     * @ORM\Column(type="date", nullable=true)
+     */
+    protected $lastTweetedAt;
+
     public function __construct($fullName = null)
     {
         if ($fullName) {
@@ -1112,8 +1119,30 @@ class Bundle
         $this->canonicalConfig = $canonicalConfig;
     }
 
+
     public function setNbRecommenders($nbRecommenders)
     {
         $this->nbRecommenders = $nbRecommenders;
+    }
+
+    /**
+     * Set lastTweetedAt
+     *
+     * @param date $lastTweetedAt
+     * @return Bundle
+     */
+    public function setLastTweetedAt($lastTweetedAt)
+    {
+        $this->lastTweetedAt = $lastTweetedAt;
+    }
+
+    /**
+     * Get lastTweetedAt
+     *
+     * @return date
+     */
+    public function getLastTweetedAt()
+    {
+        return $this->lastTweetedAt;
     }
 }

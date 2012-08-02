@@ -126,38 +126,16 @@ class BundleRepository extends EntityRepository
             ->getResult();
     }
 
-    public function updateTrends()
+    public function findLatestTrend($idlePeriod)
     {
-        // Reset trends
-        $q = $this->_em->createQuery('UPDATE Knp\Bundle\KnpBundlesBundle\Entity\Bundle bundle SET bundle.trend1 = 0');
-        $q->execute();
-
-        // Update trends.
-        // TODO: Improve me
-        $sql = <<<EOF
-UPDATE bundle
-JOIN
-  (SELECT bundle_id, value AS startScore
-    FROM score
-    WHERE
-      date = CURRENT_DATE - 1
-      ) startRange
-  ON startRange.bundle_id = bundle.id
-  JOIN
-  (SELECT bundle_id, value AS endScore
-    FROM score
-    WHERE
-      date = CURRENT_DATE
-      AND value >= 1
-    ) endRange
-  ON startRange.bundle_id = endRange.bundle_id
-SET trend1 = (endScore - startScore)
-WHERE description != '';
-EOF;
-        $conn = $this->_em->getConnection();
-        $nbRows = $conn->executeUpdate($sql);
-
-        return $nbRows;
+        return $this->createQueryBuilder('bundle')
+            ->where('bundle.score > 0')
+            ->andWhere('bundle.lastTweetedAt < :date or bundle.lastTweetedAt is null')
+            ->addOrderBy('bundle.trend1', 'desc')
+            ->setMaxResults(1)
+            ->setParameter('date', new \DateTime(sprintf('-%s day', $idlePeriod)))
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     public function findLatestSortedBy($field)
@@ -166,15 +144,5 @@ EOF;
         $query->setMaxResults(1);
 
         return $query->getOneOrNullResult();
-    }
-
-    public function findLatestTrend()
-    {
-        return $this->createQueryBuilder('bundle')
-            ->where('bundle.score > 0')
-            ->addOrderBy('bundle.trend1', 'asc')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
     }
 }
