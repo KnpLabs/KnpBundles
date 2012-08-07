@@ -16,6 +16,20 @@ class Version20120630111620 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != "mysql");
         
         $this->addSql("ALTER TABLE bundle ADD nbRecommenders INT NOT NULL");
+
+        $recommendersSql = <<<EOF
+UPDATE bundle
+JOIN (
+    SELECT id, name, (
+        SELECT COUNT(*) FROM bundles_usage WHERE bundle_id = bundle.id
+    ) AS usages
+    FROM bundle AS bundle
+) AS number
+ON number.id = bundle.id
+SET bundle.nbRecommenders = number.usages
+EOF;
+
+        $this->addSql($recommendersSql);
     }
 
     public function down(Schema $schema)
