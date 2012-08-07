@@ -50,18 +50,14 @@ class BundleRepository extends EntityRepository
      */
     public function queryAllWithUsersAndContributorsSortedBy($field)
     {
-        $order = 'nbRecommenders' === $field ? $field : 'b.'.$field;
-        $dir = 'name' === $field ? 'asc' : 'desc';
-
-        $q = $this->getEntityManager()->createQuery(<<<EOF
-SELECT b, contributors, user, SIZE(b.recommenders) as HIDDEN nbRecommenders
-FROM KnpBundlesBundle:Bundle b 
-LEFT JOIN b.contributors contributors
-JOIN b.user user
-GROUP BY b
-ORDER BY $order $dir
-EOF
-);
+        $q = $this->createQueryBuilder('bundle')
+            ->select('bundle, user, contributors')
+            ->leftJoin('bundle.user', 'user')
+            ->leftJoin('bundle.contributors', 'contributors')
+            ->addOrderBy('bundle.' . $field, 'name' === $field ? 'asc' : 'desc')
+            ->addOrderBy('bundle.score', 'desc')
+            ->addOrderBy('bundle.lastCommitAt', 'desc')
+            ->getQuery();
 
         return $q;
     }
