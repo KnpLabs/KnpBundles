@@ -268,6 +268,11 @@ class Bundle
      */
     protected $indexedAt;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $nbRecommenders;
+
     public function __construct($fullName = null)
     {
         if ($fullName) {
@@ -284,6 +289,8 @@ class Bundle
         $this->contributors = new ArrayCollection();
         $this->scores = new ArrayCollection();
         $this->keywords = new ArrayCollection();
+        $this->state = self::STATE_UNKNOWN;
+        $this->nbRecommenders = 0;
     }
 
     public function isInitialized()
@@ -994,6 +1001,13 @@ class Bundle
     public function addRecommender(User $user)
     {
         $this->recommenders[] = $user;
+        $this->nbRecommenders++;
+    }
+
+    public function removeRecommender(User $user)
+    {
+        $this->getRecommenders()->removeElement($user);
+        $this->nbRecommenders--;
     }
 
     /**
@@ -1096,5 +1110,10 @@ class Bundle
     public function setCanonicalConfig($canonicalConfig)
     {
         $this->canonicalConfig = $canonicalConfig;
+    }
+
+    public function setNbRecommenders($nbRecommenders)
+    {
+        $this->nbRecommenders = $nbRecommenders;
     }
 }
