@@ -400,7 +400,7 @@ EOF;
     {
         $rootContents = $this->github->getRepoApi()->getRepoContents($bundle->getUsername(), $bundle->getName(), '');
         foreach ($rootContents as $rootEntry) {
-            if (strpos($rootEntry['name'], 'Bundle.php') !== false) {
+            if (isset($rootEntry['name']) && strpos($rootEntry['name'], 'Bundle.php') !== false) {
                 $response = json_decode(file_get_contents($rootEntry['_links']['git']));
 
                 return base64_decode($response->content);
