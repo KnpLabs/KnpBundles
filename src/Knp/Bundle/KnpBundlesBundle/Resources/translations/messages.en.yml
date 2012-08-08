@@ -54,6 +54,7 @@ bundles:
         updated: "Updated recently"
         newest: "New"
         trend: "Trending"
+        recommended: "Most recommended"
 
 bundles.show:
     meta:
