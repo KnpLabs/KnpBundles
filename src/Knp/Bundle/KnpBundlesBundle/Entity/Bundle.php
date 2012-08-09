@@ -1129,7 +1129,6 @@ class Bundle
      * Set lastTweetedAt
      *
      * @param date $lastTweetedAt
-     * @return Bundle
      */
     public function setLastTweetedAt($lastTweetedAt)
     {
@@ -1139,7 +1138,7 @@ class Bundle
     /**
      * Get lastTweetedAt
      *
-     * @return date
+     * @return null|\DateTime
      */
     public function getLastTweetedAt()
     {

@@ -73,14 +73,12 @@ JOIN (
   AND score.diff > %s
 
 SET trend1 = score.diff
-WHERE description != '';
 EOF;
 
         $minDiff = $this->getContainer()->getParameter('knp_bundles.trending_bundle.min_score_diff');
         $query = sprintf($sql, $minDiff);
 
-        $conn = $em->getConnection();
-        $nbRows = $conn->executeUpdate($query);
+        $nbRows = $em->getConnection()->executeUpdate($query);
 
         return $nbRows;
     }

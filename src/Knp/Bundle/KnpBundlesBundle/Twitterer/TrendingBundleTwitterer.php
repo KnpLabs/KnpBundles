@@ -24,7 +24,6 @@ class TrendingBundleTwitterer
     public function tweet()
     {
         $message = $this->prepareMessage();
-        echo $message . PHP_EOL; die;
         $this->twitterService->tweet($message);
     }
 
