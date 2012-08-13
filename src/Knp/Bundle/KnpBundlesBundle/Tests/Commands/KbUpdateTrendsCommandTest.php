@@ -22,6 +22,12 @@ class KbUpdateTrendsCommandTest extends WebTestCase
         $kernel = static::createKernel();
         $kernel->boot();
 
+        if ($kernel->getContainer()->getParameter('database_driver') == 'pdo_sqlite') {
+            $this->markTestSkipped(
+                "The SQLite does not support joins."
+            );
+        }
+
         $em = $kernel->getContainer()->get('knp_bundles.entity_manager');
         $scoreRepository = $em->getRepository('KnpBundlesBundle:Score');
 
