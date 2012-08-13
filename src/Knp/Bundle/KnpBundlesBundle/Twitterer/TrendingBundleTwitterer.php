@@ -11,39 +11,47 @@ class TrendingBundleTwitterer
     private $em;
     private $tweetTemplate;
     private $twitterService;
-    private $idlePeriod;
 
     public function __construct(EntityManager $em, $tweetTemplate, TwitterApp $twitterService, $idlePeriod)
     {
         $this->em = $em;
         $this->tweetTemplate = $tweetTemplate;
         $this->twitterService = $twitterService;
-        $this->idlePeriod = $idlePeriod;
+
+        if (!$this->trendingBundle = $this->em->getRepository('KnpBundlesBundle:Bundle')->findLatestTrend($idlePeriod)) {
+            throw new TrendingBundleNotFoundException();
+        }
     }
 
     public function tweet()
     {
         $message = $this->prepareMessage();
         $this->twitterService->tweet($message);
+
+        if ($this->twitterService->getApi()->http_code == 200) {
+            $this->checkBundleAsTweeted();
+
+            return $this->trendingBundle;
+        }
+
+        return false;
     }
 
     private function prepareMessage()
     {
-        if (!$trendingBundle = $this->em->getRepository('KnpBundlesBundle:Bundle')->findLatestTrend($this->idlePeriod)) {
-            throw new TrendingBundleNotFoundException();
-        }
-
-        $bundleName = $trendingBundle->getName();
-
-        $trendingBundle->setLastTweetedAt(new \DateTime());
-        $this->em->persist($trendingBundle);
-        $this->em->flush();
-
-        $url = 'knpbundles.com/'.$trendingBundle->getUsername().'/'.$bundleName;
+        $bundleName = $this->trendingBundle->getName();
+        $url = 'knpbundles.com/'.$this->trendingBundle->getUsername().'/'.$bundleName;
 
         $placeholders = array('{name}', '{url}');
         $values = array($bundleName, $url);
 
         return str_replace($placeholders, $values, $this->tweetTemplate);
+    }
+
+    private function checkBundleAsTweeted()
+    {
+        $this->trendingBundle->setLastTweetedAt(new \DateTime());
+        $this->em->persist($this->trendingBundle);
+        $this->em->flush();
     }
 }

@@ -22,9 +22,13 @@ class KbTweetTrendingBundleCommand extends ContainerAwareCommand
     {
         try {
             $twitterer = $this->getContainer()->get('knp_bundles.trending_bundle_twitterer');
-            $twitterer->tweet();
+            $trendingBundle = $twitterer->tweet();
         } catch (TrendingBundleNotFoundException $e) {
             $output->writeln('<error>Trending bundle not found</error>');
+        }
+
+        if ($trendingBundle) {
+            $output->writeln(sprintf('Today trending bundle - %s has been tweeted', $trendingBundle->getName()));
         }
     }
 }
