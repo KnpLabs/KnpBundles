@@ -1,0 +1,37 @@
+bundles:
+    FOSAdminBundle:
+        scores:
+            1: { date: 7 day ago, value: 100 }
+            2: { date: today, value: 500 }
+        # 400 trend
+
+    SonataBigCrappyBundle:
+        scores:
+            1: { date: 1 day ago, value: 1 }
+            2: { date: today, value: 2 }
+        # 1 trend, min diff is 3
+
+    SensioBuzzBundle:
+        scores:
+            1: { date: 15 day ago, value: 3 }
+            2: { date: today, value: 0 }
+        # -3 trend, min diff is 3
+
+    AdmingeneratorAdminBundleGeneratorReallyLongNamedBundle:
+        scores:
+            1: { date: 21 day ago, value: 10 }
+            2: { date: today, value: 50 }
+        # 40 trend
+
+    AntonValeraCounterStrikeBundle:
+        scores:
+            1: { date: 3 day ago, value: 3 }
+            2: { date: today, value: 33 }
+        # 30 trend
+
+    YetAnotherTwitterBootstrapBundle:
+        scores:
+            1: { date: 3 day ago, value: 10 }
+            2: { date: 2 day ago, value: 20 }
+            3: { date: 1 day ago, value: 30 }
+        # not trending now

@@ -8,6 +8,9 @@ parameters:
     database_password: ~
     database_path:     %kernel.root_dir%/db/db-%kernel.environment%.sql
 
+    knp_bundles.trending_bundle_twitterer.idle_period: 30 #days
+    knp_bundles.trending_bundle.min_score_diff: 3
+
     knp_bundles.github.client_id: your_client_id_here
     knp_bundles.github.client_secret: your_client_secret_here
 
