@@ -9,9 +9,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Console\Output\NullOutput as Output;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Templating\EngineInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\Adapter\SolariumAdapter;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\User;
 use Knp\Menu\MenuItem;
@@ -50,12 +53,12 @@ class BundleController extends BaseController
         $dismax->setQueryFields(array('name', 'description', 'keywords', 'text', 'username', 'fullName'));
         $select->setQuery($escapedQuery);
 
-        $paginator = $this->get('knp_paginator');
-        $bundles = $paginator->paginate(
-            array($solarium, $select),
-            $request->query->get('page', 1),
-            10
-        );
+        $paginator = new Pagerfanta(new SolariumAdapter($solarium, $select));
+        $paginator
+            ->setMaxPerPage(10)
+            ->setCurrentPage($request->query->get('page', 1))
+        ;
+        $bundles = $paginator->getCurrentPageResults();
 
         $format = $this->recognizeRequestFormat($request);
 
@@ -87,6 +90,12 @@ class BundleController extends BaseController
         $user = $this->get('security.context')->getToken()->getUser();
 
         return $this->render('KnpBundlesBundle:Bundle:show.'.$format.'.twig', array(
+            'series'  => array(
+            array(
+                'name' => 'Score',
+                'data' => $bundle->getScores(),
+            )
+            ),
             'bundle'        => $bundle,
             'score_details' => $bundle->getScoreDetails(),
             'isUsedByUser'  => $user instanceof User && $user->isUsingBundle($bundle),
@@ -106,11 +115,19 @@ class BundleController extends BaseController
 
         $query   = $this->getRepository('Bundle')->queryAllWithUsersAndContributorsSortedBy($sortField);
         $bundles = $this->getPaginator($query, $request->query->get('page', 1));
+        $users   = $this->getRepository('User')->findAllSortedBy('createdAt', 20);
 
         $this->highlightMenu('bundles');
 
         $response = $this->render('KnpBundlesBundle:Bundle:list.'.$format.'.twig', array(
+            'series'  => array(
+                array(
+                    'name' => 'New bundles',
+                    'data' => $this->getRepository('Bundle')->getBundlesCountEvolution(5),
+                )
+            ),
             'bundles'     => $bundles,
+            'users'       => $users,
             'sort'        => $sort,
             'sortLegends' => $this->sortLegends,
             'callback'    => $request->query->get('callback')
@@ -125,10 +142,19 @@ class BundleController extends BaseController
 
     public function evolutionAction()
     {
-        $counts = $this->getRepository('Score')->getScoreCountEvolution();
-
         return $this->render('KnpBundlesBundle:Bundle:evolution.html.twig', array(
-            'score_counts' => $counts,
+            'series'  => array(
+                array(
+                    'name' => 'Developers',
+                    'data' => $this->getRepository('User')->getUsersCountEvolution(),
+                ),
+                array(
+                    'name' => 'Bundles updated',
+                    'data' => $this->getRepository('Score')->getScoreCountEvolution(),
+                )
+            ),
+            'bundles' => $this->getRepository('Bundle')->count(),
+            'users'   => $this->getRepository('User')->count()
         ));
     }
 
@@ -146,41 +172,63 @@ class BundleController extends BaseController
 
     public function addAction(Request $request)
     {
-        $error = false;
-        $errorMessage = $bundle = '';
-        if ($request->request->has('bundle')) {
-            $bundle = $request->request->get('bundle');
+        $error  = false;
+        $bundle = $request->request->get('bundle');
+        if (null === $bundle) {
+            $error   = true;
+            $message = 'Please enter a valid GitHub repo name (e.g. KnpLabs/KnpBundles).';
+        }
 
-            if (preg_match('/^[a-z0-9-]+\/[a-z0-9-\.]+$/i', $bundle)) {
-                list($username, $name) = explode('/', str_replace('.git', '', $bundle));
+        if (!$error) {
+            $bundle = str_replace(array('http://github.com', 'https://github.com', '.git'), '', $bundle);
+            if (preg_match('/^[a-z0-9-]+\/[a-z0-9-\.]+$/i', trim($bundle, '/'))) {
+                list($username, $name) = explode('/', $bundle);
 
-                $url    = $this->generateUrl('bundle_show', array('username' => $username, 'name' => $name));
-                $exists = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);
-                if ($exists) {
-                    return $this->redirect($url);
+                $url = $this->generateUrl('bundle_show', array('username' => $username, 'name' => $name));
+                if ($this->getRepository('Bundle')->findOneByUsernameAndName($username, $name)) {
+                    if (!$request->isXmlHttpRequest()) {
+                        return $this->redirect($url);
+                    } else {
+                        $error   = true;
+                        $message = 'Specified bundle already <a href="'.$url.'">exists</a> at KnpBundles.com!';
+                    }
                 }
 
-                $updater = $this->get('knp_bundles.updater');
-                $updater->setUp();
-                try {
-                    $updater->addBundle($bundle, false);
+                if (!$error) {
+                    $updater = $this->get('knp_bundles.updater');
+                    $updater->setUp();
+                    try {
+                        $updater->addBundle($bundle, false);
 
-                    return $this->redirect($url);
-                } catch (UserNotFoundException $e) {
-                    $error = true;
-                    $errorMessage = 'addBundle.userNotFound';
+                        if (!$request->isXmlHttpRequest()) {
+                            return $this->redirect($url);
+                        }
+                        $message = '<strong>Hey, friend!</strong> Thanks for adding <a href="'.$url.'">your bundle</a> to our database!';
+                    } catch (UserNotFoundException $e) {
+                        $error = true;
+                        $message = 'Specified user was not found on GitHub.';
+                    }
                 }
             } else {
                 $error = true;
-                $errorMessage = 'addBundle.invalidBundleName';
+                $message = 'Please enter a valid GitHub repo name (e.g. KnpLabs/KnpBundles).';
             }
         }
 
-        return $this->render('KnpBundlesBundle:Bundle:add.html.twig', array(
-            'bundle'       => $bundle,
-            'error'        => $error,
-            'errorMessage' => $errorMessage
-        ));
+        if (!$request->isXmlHttpRequest()) {
+            $bundles = $this->getRepository('Bundle')->findAllSortedBy('createdAt', 'desc', 5);
+
+            return $this->render('KnpBundlesBundle:Bundle:add.html.twig', array(
+                'bundle'       => $bundle,
+                'bundles'      => $bundles,
+                'error'        => $error,
+                'errorMessage' => $message
+            ));
+        }
+
+        return new JsonResponse(array(
+            'message' => $message
+        ), $error ? 400 : 201);
     }
 
     public function changeUsageStatusAction($username, $name)
@@ -202,16 +250,13 @@ class BundleController extends BaseController
             $bundle->updateScore(-5);
 
             $bundle->removeRecommender($user);
-            $user->getUsedBundles()->removeElement($bundle);
         } else {
             $bundle->updateScore(5);
 
             $bundle->addRecommender($user);
-            $user->addRecommendedBundle($bundle);
-            $em->persist($bundle);
-            $em->persist($user);
         }
 
+        $em->persist($bundle);
         $em->flush();
 
         return $this->redirect($this->generateUrl('bundle_show', $params));

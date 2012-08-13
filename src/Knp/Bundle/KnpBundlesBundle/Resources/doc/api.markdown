@@ -1,5 +1,3 @@
-Everything here is available through an HTTP API.
-
 ## Formats
 
 As for now, the only supported formats are JSON and JavaScript (JSONP)
@@ -34,13 +32,13 @@ To get the list of bundles sorted by a given field, use:
 
     # the best bundles first
     $ curl http://knpbundles.com/best?format=json
-    
+
     # the newest bundles first
     $ curl http://knpbundles.com/newest?format=json
 
     # the bundles updated recently first
     $ curl http://knpbundles.com/updated?format=json
-    
+
 Return a list of Bundles:
 
     - type: Bundle
@@ -87,7 +85,7 @@ Return informations about one Bundle:
       ~ described at http://develop.github.com/p/commits.html
     readme: # Symfony 2 Micro Kernel\r\n\r\nThis is a Ruby Sinatra inspired micro kernel for Symfony 2.[...]
 
-## Search 
+## Search
 
     search?format=:format&q=:query
 
@@ -149,7 +147,7 @@ Return informations about one developer.
 
 ### List the Bundles of a developer
 
-Get a list of the Bundles a given developer owns. 
+Get a list of the Bundles a given developer owns.
 
     :name/bundles
 

@@ -1,28 +1,70 @@
-{% extends 'KnpBundlesBundle::layout.html.twig' %}
+{% extends 'KnpBundlesBundle::layout/960px.html.twig' %}
 
 {% block title %}{% trans %}addBundle.addBundle{% endtrans %}{% endblock %}
 
-{% block content_title %}
+{% block intro %}
+<div id="intro">
     <h1>{% trans %}addBundle.addBundle{% endtrans %}</h1>
+    <h2>Can't find your bundle? Simply add it here!</h2>
+</div>
 {% endblock %}
 
-{% block content %}
-    <div id="add-bundle">
-        <p id="introduction">{% trans %}addBundle.introText{% endtrans %}</p>
+{% block left %}
+<div class="content-box">
+    <hgroup>
+        <h2></h2>
+        <h4>{% trans %}addBundle.introText{% endtrans %}</h4>
+    </hgroup>
 
-        {% if error %}
-        <div class="error">
-          {{ errorMessage | trans }}
-        </div>
-        {% endif %}
+    <section class="add-bundle">
+        <ul>
+            <li class="success">
+                <span class="success"></span>
+                <form action="{{ path('add_bundle') }}" method="post">
+                    <label for="bundle">Enter GitHub repo URL:</label>
+                    <input type="text" id="bundle" name="bundle" value="{{ bundle|default('https://github.com/') }}" />
+                    <button id="add-bundle-btn" class="btn" type="submit">{% trans %}addBundle.addBundle{% endtrans %}</button>
+                </form>
+            </li>
+            <li class="unknown hide">
+                <span class="unknown"><img src="{{ asset('bundles/knpbundles/images/ajax_loader.gif') }}" alt=""></span>
+                Repository exist, validating data...
+            </li>
+            <li class="error hide">
+                <span class="error"></span>
+                <p class="alert alert-error">Repository exist, validating data...</p>
+            </li>
+            {#% if error -%#}
+            <li class="alert alert-error hide">
+                Houston, we have a problem! Selected repo probably don’t exist. Try enter another repo.
+                {#{ errorMessage | trans }#}
+            </li>
+            {#%- endif %#}
+            <li class="alert alert-success hide">
+                <strong>Hey, friend!</strong> Thanks for adding your bundle to our database!
+            </li>
+        </ul>
+    </section>
+</div>
+{% endblock %}
 
-        <form action="{{ path('add_bundle') }}" method="post">
-        <label for="bundle">Enter GitHub repo URL: <span class="prefilled">https://github.com/</span></label>
-        <input type="text" id="bundle" name="bundle" value="{% if error %}{{ bundle }}{% endif %}" />
-        <button id="add-bundle-btn" class="button" type="submit">{% trans %}addBundle.addBundle{% endtrans %}</button>
-        </form>
-        <div class="example">
-        {% trans %}addBundle.example{% endtrans %} https://github.com/knplabs/knpbundles
-        </div>
-    </div>
+{% block right %}
+<div class="sidebar-box sidebar-recent">
+    <hgroup>
+        <h2>Newest Bundles</h2>
+    </hgroup>
+
+    <section>
+        <ul>
+            {% for bundle in bundles %}
+            <li>
+                <img src="{{ bundle.user.gravatarHash|default('http://www.gravatar.com/avatar/?s=30&d=identicon&f=y') }}" alt="">
+
+                <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}">{{ bundle.name }}</a>
+                <span>{{ bundle.createdAt|date('d-m-Y') }} by <strong>{{ bundle.userName }}</strong></span>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>
 {% endblock %}

@@ -1,0 +1,11 @@
+{% set step = step|default(1) %}
+{% block steps %}
+<div id="steps">
+    <ul>
+        <li{{ step == 1 ? ' class="current"' : '' }}><span>1. Look for bundles</span></li>
+        <li{{ step == 2 ? ' class="current"' : '' }}><span>2. Read description</span></li>
+        <li{{ step == 3 ? ' class="current"' : '' }}><span>3. Download bundle</span></li>
+        <li{{ step == 4 ? ' class="current"' : '' }}><span>4. Happy usage ;-)</span></li>
+    </ul>
+</div>
+{% endblock %}

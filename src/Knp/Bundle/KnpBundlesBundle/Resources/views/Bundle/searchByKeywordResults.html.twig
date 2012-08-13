@@ -1,17 +1,25 @@
-{% extends 'KnpBundlesBundle::layout.html.twig' %}
-
-{% block body_attributes %}class="bundles-list"{% endblock %}
+{% extends 'KnpBundlesBundle::layout/900px.html.twig' %}
 
 {% block title %}{% trans with {'%count%': bundles.totalItemCount, '%keyword%': keywordSlug} %}bundles.meta.titleKeywords{% endtrans %}{% endblock %}
 
 {% block description %}{% trans with {'%count%': bundles.totalItemCount} %}bundles.meta.description{% endtrans %}{% endblock %}
 
-{% block content %}
-    <div class="content-title">
-        <h1>{% trans with {'%count%': bundles.totalItemCount, '%keyword%': keywordSlug} %}bundles.meta.titleKeywords{% endtrans %}</h1>
-    </div>
-    <div id="main">
+{% block intro %}
+<div id="intro">
+    <h1>{{ block('title') }}</h1>
+</div>
+{% endblock %}
+
+{% block left %}
+<div class="content-box">
+    <hgroup>
+        <h2>{% trans with {'%count%': bundles.totalItemCount, '%keyword%': keywordSlug} %}bundles.meta.titleKeywords{% endtrans %}</h2>
+    </hgroup>
+
+    <section class="bundles-list">
         {% include 'KnpBundlesBundle:Bundle:bigList.html.twig' with {'bundles': bundles} %}
-        {{ bundles.render()|raw }}
-    </div>
+
+        {{ pagerfanta(bundles, 'knp_bundles_view') }}
+    </section>
+</div>
 {% endblock %}

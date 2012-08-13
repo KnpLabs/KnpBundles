@@ -3,7 +3,6 @@
 namespace Knp\Bundle\KnpBundlesBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NoResultException;
 
 class BundleRepository extends EntityRepository
 {
@@ -22,9 +21,8 @@ class BundleRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('b');
         $qb->orderBy('b.' . $field, $order);
-        $query = $qb->getQuery();
 
-        return $query;
+        return $qb->getQuery();
     }
 
     /**
@@ -87,8 +85,7 @@ class BundleRepository extends EntityRepository
         foreach ($bundles as $bundle) {
             $commits = array_merge($commits, $bundle->getLastCommits());
         }
-        usort($commits, function($a, $b)
-        {
+        usort($commits, function($a, $b) {
             return strtotime($a['committed_date']) < strtotime($b['committed_date']);
         });
         $commits = array_slice($commits, 0, $nb);
@@ -103,18 +100,14 @@ class BundleRepository extends EntityRepository
 
     public function findOneByUsernameAndName($username, $name)
     {
-        try {
-            return $this->createQueryBuilder('bundle')
-                ->leftJoin('bundle.recommenders', 'user')
-                ->where('bundle.username = :username')
-                ->andWhere('bundle.name = :name')
-                ->setParameter('username', $username)
-                ->setParameter('name', $name)
-                ->getQuery()
-                ->getSingleResult();
-        } catch (NoResultException $e) {
-            return null;
-        }
+        return $this->createQueryBuilder('bundle')
+            ->leftJoin('bundle.recommenders', 'user')
+            ->where('bundle.username = :username')
+            ->andWhere('bundle.name = :name')
+            ->setParameter('username', $username)
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     public function getStaleBundlesForIndexing()
@@ -144,5 +137,20 @@ class BundleRepository extends EntityRepository
         $query->setMaxResults(1);
 
         return $query->getOneOrNullResult();
+    }
+
+    public function getBundlesCountEvolution($nb = null)
+    {
+        $query = $this->createQueryBuilder('b')
+            ->select('b.createdAt AS date, COUNT(b.id) AS value')
+            ->groupBy('b.createdAt')
+            ->orderBy('b.createdAt', 'asc')
+            ->getQuery();
+
+        if (null !== $nb) {
+            $query->setMaxResults($nb);
+        }
+
+        return $query->execute();
     }
 }

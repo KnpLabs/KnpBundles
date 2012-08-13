@@ -19,7 +19,6 @@ class KnpBundlesExtension extends Extension
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('finder.xml');
-        $loader->load('paginator.xml');
         $loader->load('model.xml');
 
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

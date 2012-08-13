@@ -29,9 +29,6 @@ knp_time: ~     # Enable the time helper
 knp_menu:
     twig: true
 
-# Paginator Configuration
-knp_paginator: ~
-
 # KnpBundles Configuration
 knp_bundles: ~
 

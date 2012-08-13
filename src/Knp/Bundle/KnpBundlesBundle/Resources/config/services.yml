@@ -182,3 +182,11 @@ services:
         arguments:
             - @solarium.client
             - @kernel
+
+    knp_bundles.pagerfanta_view:
+        class: Pagerfanta\View\OptionableView
+        arguments:
+            - @pagerfanta.view.twitter_bootstrap
+            - { prev_message: '«', next_message: '»', 'css_container_class': 'pagination pagination-centered' }
+        public: false
+        tags: [{ name: pagerfanta.view, alias: knp_bundles_view }]

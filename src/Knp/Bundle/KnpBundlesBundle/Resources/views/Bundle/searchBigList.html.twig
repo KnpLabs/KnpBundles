@@ -1,27 +1,33 @@
-<ul class="big-list">
-    {% for bundle in bundles %}
-    <li class="bundle {% if loop.first %}first{% endif %}">
-        <div class="bundlerank">
-            {{ bundle.totalScore }}
-        </div>
-        <div class="generals">
-            <div class="bundle-title">
-                <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}" class="name">{{ bundle.name }}</a>
-            </div>
-            <p class="description">{{ bundle.description|default('−') }}</p>
+{% for bundle in bundles %}
+<article class="bundle{% if bundle.lastTweetedAt %} award{% endif %}">
+    <div class="bundle-score">
+        <h3>{{ bundle.score }}</h3>
+    </div>
 
-            <ul class="details">
-                <li>{% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': bundle.username }) }}" class="owner">{{ bundle.username }}</a></li>
-                <li>{% trans %}bundles.list.lastCommit{% endtrans %} <span>{{ time_diff(bundle.lastCommitAt) }}</span></li>
-            </ul>
-        </div>
-        <div class="img">
-            {% if bundle.userGravatarHash|default(null) %}
-            <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}">
-                <img src="{{ bundle.userGravatarHash }}" alt="{{ bundle.name }} developer" width="50" height="50" />
-            </a>
-            {% endif %}
-        </div>
-    </li>
-    {% endfor %}
-</ul>
+    <div class="bundle-info">
+        <h2>
+            <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}" class="name">{{ bundle.name }}</a>
+            {% if bundle.state != 'unknown' %}<abbr title="{{ bundle.state|bundle_state_tooltip }}">({{ bundle.state }})</abbr>{% endif %}
+        </h2>
+
+        <p>{{ bundle.description(140)|default('No description found.') }}</p>
+
+        <ul>
+            <li class="bundle-author">
+                {% trans %}bundles.list.by{% endtrans %}
+                <a href="{{ path('user_show', {'name': bundle.username }) }}">{{ bundle.username }}</a>
+            </li>
+            <li class="bundle-activity">
+                {% trans %}bundles.list.activity{% endtrans %}
+                <abbr title="{% trans %}bundles.list.lastCommit{% endtrans %}{{ time_diff(bundle.lastCommitAt) }}" class="{{ bundle.lastCommitAt|bundle_activity|trans|lower }}">{{ bundle.lastCommitAt|bundle_activity|trans }}</abbr>
+            </li>
+        </ul>
+    </div>
+
+    <figure>
+        <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}">
+            <img src="{{ bundle.userGravatarHash|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=50') }}" alt="{{ bundle.name }} developer" width="50" height="50" />
+        </a>
+    </figure>
+</article>
+{% endfor %}

@@ -1,0 +1,143 @@
+{% set simple = simple|default(false) %}
+{% set tooltipText = tooltipText|default('new<br>bundles') %}
+
+<div id="chart"></div>
+
+<script type="text/javascript" src="{{ asset('bundles/knpbundles/js/highcharts.js') }}"></script>
+<script type="text/javascript">
+    $(function () {
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'chart',
+                {% if not simple %}
+                marginTop: 35,
+                {% endif %}
+                type: 'area'
+            },
+            {% if simple %}
+            credits: {
+                enabled: false
+            },
+            {% endif %}
+            title: {
+                text: null
+            },
+            colors: [
+                {% if series|length == 1 %}
+                '#f08561'
+                {% else %}
+                '#9dc1cf',
+                '#f08561'
+                {% endif %}
+            ],
+            legend: {
+                {% if simple %}
+                enabled: false,
+                {% endif %}
+                align: 'right',
+                floating: true,
+                verticalAlign: 'top',
+                borderWidth: 0,
+                symbolPadding: 8,
+                symbolWidth: 40,
+                itemStyle: {
+                    color: '#949494',
+                    fontSize: '13px'
+                },
+                x: -30,
+                y: -10
+            },
+            tooltip: {
+                backgroundColor: {
+                    linearGradient: [0, 0, 0, 60],
+                    stops: [
+                        [0, '#FFFFFF'],
+                        [1, '#f3f3f3']
+                    ]
+                },
+                borderWidth: 1,
+                borderColor: '#d0d0d0',
+                style: {
+                    padding: '5px 10px'
+                },
+                useHTML: true,
+                {% if not simple %}
+                headerFormat: '',
+                pointFormat: '<center style="font-size: 12px">{point.y}<br><strong style="font-size: 11px;color: {series.color}">{series.name}</strong></center>'
+                {% else %}
+                xDateFormat: '%Y-%m-%d',
+                headerFormat: '<small>{point.key}</small>',
+                pointFormat: '<center style="font-size: 11px"><strong>{point.y} {{ tooltipText|raw }}</strong></center>'
+                {% endif %}
+            },
+            xAxis: {
+                type: 'datetime',
+                tickLength: 0,
+                tickPixelInterval: 35,
+                labels: {
+                    {% if simple %}
+                    enabled: false,
+                    {% endif %}
+                    x: -35,
+                    y: 50,
+                    rotation: -30,
+                    style: {
+                        color: '#6d6d6d'
+                    },
+                    step: 1,
+                    align: 'left',
+                    formatter: function() {
+                        return Highcharts.dateFormat('%Y-%m-%e', this.value);
+                    }
+                }{% if simple %},
+                gridLineColor: '#cccccc',
+                gridLineWidth: 1
+                {% endif %}
+            },
+            yAxis: {
+                title: {
+                    text: null
+                },
+                labels: {
+                    {% if simple %}
+                    enabled: false,
+                    {% endif %}
+                    style: {
+                        color: '#6d6d6d',
+                        fontSize: '12px'
+                    }
+                },
+                gridLineDashStyle: 'dash',
+                gridLineColor: '#cccccc'
+            },
+            plotOptions: {
+                series: {
+                    lineWidth: 2,
+                    fillOpacity: 0.3,
+                    shadow: false,
+                    marker: {
+                        symbol: 'circle',
+                        fillColor: '#FFFFFF',
+                        lineWidth: 2,
+                        lineColor: null,
+                        radius: 4,
+                        states: {
+                            hover: {
+                                enabled: false
+                            }
+                        }
+                    }
+                }
+            },
+            series: [{% for serie in series -%}{
+                name: '{{ serie.name }}',
+                data: [
+                    {% for data in serie.data -%}
+                    [Date.UTC({{ data.date|date('Y') }}, {{ data.date|date('m')-1 }}, {{ data.date|date('d') }}), {{ data.value }}]{% if not loop.last %},{% endif %}
+
+                    {% endfor -%}
+                ]
+            }{% if not loop.last %},{% endif %}{% endfor -%}]
+        });
+    });
+</script>
