@@ -16,7 +16,7 @@ add_bundle:
 bundle_list:
     pattern:        /{sort}
     defaults:       { _controller: KnpBundlesBundle:Bundle:list, sort: trend }
-    requirements:   { _method: "GET", sort: "(best|updated|newest|trend)"}
+    requirements:   { _method: "GET", sort: "(best|updated|newest|trend|recommended)"}
 
 bundle_keyword:
     pattern:        /keyword/{slug}
