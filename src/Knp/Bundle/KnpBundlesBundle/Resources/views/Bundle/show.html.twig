@@ -14,7 +14,13 @@
             <h3>{% trans %}bundles.show.infos.title{% endtrans %}</h3>
             <ul>
                 {%- if bundle.state != 'unknown' -%}
-                <li>{% trans %}bundles.show.infos.state{% endtrans %} <span class="state {{ bundle.state|replace({' ': '-'}) }}">{{ bundle.state }}</span></li>
+                <li>
+                    {% trans %}bundles.show.infos.state{% endtrans %}
+                    <span class="state {{ bundle.state|replace({' ': '-'}) }}"
+                          data-state-title="{{ bundle.state|bundle_state_tooltip }}">
+                        {{ bundle.state }}
+                    </span>
+                </li>
                 {%- endif -%}
                 <li>{% trans %}bundles.show.infos.score{% endtrans %} <span><a href="#bundle-score-details">{{ bundle.score }}</a></span></li>
                 <li>{% trans %}bundles.show.infos.symfonyVersion{% endtrans %} {{ bundle.symfonyVersion ? bundle.symfonyVersion : "bundles.show.infos.unknown" | trans }}</li>
