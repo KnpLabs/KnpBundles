@@ -25,4 +25,4 @@ Feature: Showing bundles
 
   Scenario: Cannot register bundle when not logged in
     When I go to "/add"
-    Then I should be on "/login/oauth/authorize"
+    Then I should be on "/login"

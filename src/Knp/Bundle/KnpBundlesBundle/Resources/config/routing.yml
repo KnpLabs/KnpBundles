@@ -36,8 +36,8 @@ user_show:
     defaults:       { _controller: KnpBundlesBundle:User:show }
     requirements:   { _method: "GET"}
 
-_bundles:
-    resource: "routing/bundles.yml"
-
 _static:
     resource: "routing/static.yml"
+
+_bundles:
+    resource: "routing/bundles.yml"
