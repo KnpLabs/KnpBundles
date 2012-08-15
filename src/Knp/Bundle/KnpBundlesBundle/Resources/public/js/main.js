@@ -69,8 +69,9 @@
             return false;
         });
     });
-    
+
     $('img[class=tooltip]').tipsy({gravity: 'sw'});
+    $('span.state').tipsy({gravity: 's', title: 'data-state-title'});
 
     function moveElement(className ,direction)
     {
