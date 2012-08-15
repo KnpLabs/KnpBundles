@@ -319,3 +319,7 @@ pre.code {
 .canonical-configuration-class {
     display: none;
 }
+
+span.state {
+    border-bottom: 1px dotted #aaa;
+}
