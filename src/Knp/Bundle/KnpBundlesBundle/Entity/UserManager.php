@@ -12,6 +12,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 
 use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 use Knp\Bundle\KnpBundlesBundle\Github\User as GithubUser;
+use Knp\Bundle\KnpBundlesBundle\Security\OAuth\Response\SensioConnectUserResponse;
 
 /**
  * Manages user entities
@@ -66,7 +67,11 @@ class UserManager
     {
         $username = $data;
         if ($data instanceof UserResponseInterface) {
-            $username = $data->getUsername();
+            if ($data instanceof SensioConnectUserResponse) {
+                $username = $data->getLinkedAccount('github') ?: $data->getUsername();
+            } else {
+                $username = $data->getUsername();
+            }
         }
 
         if (!$user = $this->findUserBy(array('name' => $username))) {
