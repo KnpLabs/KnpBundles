@@ -65,8 +65,9 @@ class UserManager
      */
     public function getOrCreate($data)
     {
-        $username = $data;
-        if ($data instanceof UserResponseInterface) {
+        if (is_string($data)) {
+            $username = $data;
+        } elseif ($data instanceof UserResponseInterface) {
             if ($data instanceof SensioConnectUserResponse) {
                 $username = $data->getLinkedAccount('github') ?: $data->getUsername();
             } else {
