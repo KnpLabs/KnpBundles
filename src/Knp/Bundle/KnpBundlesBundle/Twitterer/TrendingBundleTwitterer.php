@@ -2,6 +2,7 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Twitterer;
 
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Twitterer\Exception\TrendingBundleNotFoundException;
 use Doctrine\ORM\EntityManager;
 use Inori\TwitterAppBundle\Services\TwitterApp;
@@ -9,8 +10,15 @@ use Inori\TwitterAppBundle\Services\TwitterApp;
 class TrendingBundleTwitterer
 {
     private $em;
+    /**
+     * @var string
+     */
     private $tweetTemplate;
     private $twitterService;
+    /**
+     * @var Bundle
+     */
+    private $trendingBundle;
 
     public function __construct(EntityManager $em, $tweetTemplate, TwitterApp $twitterService, $idlePeriod)
     {
@@ -23,12 +31,14 @@ class TrendingBundleTwitterer
         }
     }
 
+    /**
+     * @return boolean|Bundle
+     */
     public function tweet()
     {
-        $message = $this->prepareMessage();
-        $this->twitterService->tweet($message);
+        $this->twitterService->tweet($this->prepareMessage());
 
-        if ($this->twitterService->getApi()->http_code == 200) {
+        if (200 == $this->twitterService->getApi()->http_code) {
             $this->checkBundleAsTweeted();
 
             return $this->trendingBundle;

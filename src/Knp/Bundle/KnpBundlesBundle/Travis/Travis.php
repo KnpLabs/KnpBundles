@@ -3,17 +3,19 @@
 namespace Knp\Bundle\KnpBundlesBundle\Travis;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Knp\Bundle\KnpBundlesBundle\Entity;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+
+use Buzz\Browser;
 
 /*
  * This class is very simple and stupid - it uses curl for getting data
  * from travis.
- * 
+ *
  * It should use some Travis client API - when someone will write it.
  */
 
 /**
- * Updates repo based on status from travis. 
+ * Updates repo based on status from travis.
  */
 class Travis
 {
@@ -22,28 +24,39 @@ class Travis
      *
      * @var OutputInterface
      */
-    protected $output = null;
+    private $output;
 
-    public function __construct(OutputInterface $output)
+    /**
+     * @var Browser
+     */
+    private $browser;
+
+    /**
+     * @param OutputInterface $output
+     * @param Browser         $browser
+     */
+    public function __construct(OutputInterface $output, Browser $browser)
     {
-        $this->output = $output;
+        $this->output  = $output;
+        $this->browser = $browser;
     }
 
     /**
      * Updates repo based on status from travis.
-     * 
-     * @param Entity\Bundle $repo
-     * @return boolean 
+     *
+     * @param  Bundle $repo
+     *
+     * @return boolean
      */
-    public function update(Entity\Bundle $repo)
+    public function update(Bundle $repo)
     {
-        $this->output->write(' travis status');
+        $this->output->write(' Travis status:');
 
-        $status = $this->getTravisDataForRepo($repo);
+        $status = $this->getTravisData($repo->getUsername().'/'.$repo->getName());
 
         if (!$status) {
             $repo->setTravisCiBuildStatus(null);
-            $this->output->write(' failed');
+            $this->output->write(' error');
 
             return false;
         }
@@ -51,51 +64,42 @@ class Travis
         switch ($status['last_build_status']) {
             case 0:
                 $repo->setTravisCiBuildStatus(true);
+                $this->output->write(' success');
                 break;
             case 1:
                 $repo->setTravisCiBuildStatus(false);
+                $this->output->write(' failed');
                 break;
             default:
                 $repo->setTravisCiBuildStatus(null);
-                break;        
-          }
+                $this->output->write(' error');
+                break;
+        }
+
+        return true;
     }
 
     /**
-     * Get repository status for Repo
-     * 
-     * @param Entity\Bundle $repo
-     * @return array
-     */
-    protected function getTravisDataForRepo(Entity\Bundle $repo)
-    {
-        return $this->getTravisData($repo->getUsername()."/".$repo->getName());
-    }
-  
-    /**
-     * Return data from Travis 
-     * 
+     * Return data from Travis
+     *
      * @param string $url
+     *
      * @return array
      */
-    protected function getTravisData($url)
+    private function getTravisData($url)
     {
-        $curl = curl_init();
+        $client = $this->browser->getClient();
+        $client->setVerifyPeer(false);
+        $client->setTimeout(30);
 
-        $curlOptions = array(
-            CURLOPT_URL => "http://travis-ci.org/".$url.".json",
-            CURLOPT_PORT => 80,
-            CURLOPT_USERAGENT => "KnpBundles",
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_TIMEOUT => 60
-        );
-        curl_setopt_array($curl, $curlOptions);
+        if ($client instanceof \Buzz\Client\Curl) {
+            $client->setOption(CURLOPT_USERAGENT, 'KnpBundles.com Bot');
+        }
 
-        $response = curl_exec($curl);
-        curl_close($curl);
+        $this->browser->setClient($client);
 
-        return json_decode($response, true);
+        $response = $this->browser->get($url);
+
+        return json_decode($response->getContent(), true);
     }
 }

@@ -67,6 +67,7 @@ services:
         class: %knp_bundles.travis.class%
         arguments:
             - @knp_bundles.output
+            - @buzz
 
     knp_bundles.github_client:
         public: false

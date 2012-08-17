@@ -8,12 +8,16 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+use Knp\Bundle\KnpBundlesBundle\Utils\SolrUtils;
 
 /**
  * @author Leszek Prabucki <leszek.prabucki@gmail.com>
  */
 class KbSolrServerStartCommand extends ContainerAwareCommand
 {
+    /**
+     * @var SolrUtils
+     */
     protected $utils;
 
     /**
@@ -54,6 +58,8 @@ class KbSolrServerStartCommand extends ContainerAwareCommand
         $process->run();
 
         $output->writeln(sprintf('<info>Pid: %d</info>', $this->utils->getSolrPid()));
+
+        return 0;
     }
 
     /**

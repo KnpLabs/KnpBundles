@@ -31,6 +31,7 @@ class KbUpdateBundlesCommand extends ContainerAwareCommand
     {
         $container = $this->getContainer();
 
+        /* @var $updater Updater */
         $updater = $container->get('knp_bundles.updater');
 
         if (!$input->getOption('no-publish')) {
@@ -43,7 +44,7 @@ class KbUpdateBundlesCommand extends ContainerAwareCommand
 
         $updater->updateBundlesData();
 
-        $em = $this->getContainer()->get('knp_bundles.entity_manager');
+        $em = $container->get('knp_bundles.entity_manager');
         $em->flush();
     }
 }

@@ -24,13 +24,15 @@ class KbGenerateBadgesCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $bundleRepository = $this->getContainer()->get('doctrine')->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle');
+        /* @var $badgeGenerator \Knp\Bundle\KnpBundlesBundle\Badge\BadgeGenerator */
         $badgeGenerator = $this->getContainer()->get('knp_bundles.badge_generator');
 
         $badgesCount = 0;
+        /* @var $bundle \Knp\Bundle\KnpBundlesBundle\Entity\Bundle */
         foreach ($bundleRepository->findAll() as $bundle) {
             try {
                 $badgeGenerator->generate($bundle);
-                $badgesCount++;
+                ++$badgesCount;
             } catch (ImageNotSavedException $e) {
                 $output->writeln('<error>Error occured during an image saving for '.$bundle->getUsername().'-'.$bundle->getName().' </error>');
             }

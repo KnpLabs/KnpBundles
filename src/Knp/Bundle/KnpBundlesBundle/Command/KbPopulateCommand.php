@@ -31,9 +31,10 @@ class KbPopulateCommand extends ContainerAwareCommand
      * @throws \InvalidArgumentException When the target directory does not exist
      */
     protected function execute(InputInterface $input, OutputInterface $output)
-    {   
+    {
         $container = $this->getContainer();
 
+        /* @var $updater Updater */
         $updater = $container->get('knp_bundles.updater');
 
         if (!$input->getOption('no-publish')) {
