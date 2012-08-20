@@ -5,11 +5,12 @@ namespace Knp\Bundle\KnpBundlesBundle\Finder;
 /**
  * Aggregate finder. It handles some finders and uses each of them to find the
  * repositories
- *
- * @package KnpBundles
  */
 class Aggregate implements FinderInterface
 {
+    /**
+     * @var \SplObjectStorage
+     */
     private $finders;
 
     /**

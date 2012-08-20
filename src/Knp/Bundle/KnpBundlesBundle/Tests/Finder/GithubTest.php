@@ -8,67 +8,29 @@ use Knp\Bundle\KnpBundlesBundle\Finder\Github;
 class GithubTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @test
-     */
-    public function shouldBuildValidUrl()
-    {
-        $callCounter = 0;
-
-        $crawler = $this->getMock('Symfony\Component\DomCrawler\Crawler');
-        $crawler->expects($this->any())
-            ->method('filter')
-            ->will($this->returnSelf());
-        $crawler->expects($this->any())
-            ->method('extract')
-            ->will($this->returnCallback(function () use (&$callCounter) {
-                if ($callCounter) {
-                    return array('test' => '/KnpLabs/KnpBundles');
-                }
-                $callCounter++;
-
-                return array('test2' => '/l3l0/KnpBundles');
-            }));
-
-        $client = $this->getMock('Goutte\Client', array('request'));
-        $client->expects($this->at(0))
-            ->method('request')
-            ->with('GET', 'https://github.com/search?q=Symfony2&type=Repositories&language=PHP')
-            ->will($this->returnValue($crawler));
-        $client->expects($this->at(1))
-            ->method('request')
-            ->with('GET', 'https://github.com/search?q=Symfony2&type=Repositories&language=PHP&start_value=2')
-            ->will($this->returnValue($crawler));
-
-        $finder = new Github('Symfony2', 2, $client);
-        $repos = $finder->find();
-
-        $this->assertEquals(array('l3l0/KnpBundles', 'KnpLabs/KnpBundles'), $repos);
-    }
-
-    /**
      * @dataProvider getExtractPageUrlsData
      * @test
      */
     public function shouldExtractPageUrlsFromGithubHtml($node, $expected)
     {
-        $callCounter = 0;
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom->add($node);
 
-        $client = $this->getMock('Goutte\Client', array('request'));
-        $client->expects($this->any())
-            ->method('request')
-            ->will($this->returnCallback(function () use ($node, &$callCounter) {
-                $callCounter++;
-                if (1 == $callCounter) {
-                    return new Crawler($node);
-                }
+        $response = $this->getMock('Buzz\Message\Response');
+        $response->expects($this->any())
+            ->method('toDomDocument')
+            ->will($this->returnValue($dom));
 
-                return new Crawler();
-            }));
+        $browser = $this->getMock('Buzz\Browser');
+        $browser->expects($this->any())
+            ->method('get')
+            ->with('https://github.com/search?q=Symfony2&type=Repositories&language=PHP&start_value=3')
+            ->will($this->returnValue($response));
 
-        $finder = new Github('Symfony2', 3, $client);
-        $values = $finder->find();
+        $finder = new Github('Symfony2', 3);
+        $finder->setBrowser($browser);
 
-        $this->assertEquals($expected, $values);
+        $this->assertEquals($expected, $finder->find());
     }
 
     public function getExtractPageUrlsData()
@@ -94,7 +56,15 @@ class GithubTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldNotUseEmptyQuery()
     {
-        $finder = new Github('', 3);
-        $finder->find();
+        new Github('', 3);
+    }
+
+    /**
+     * @test
+     * @expectedException \LogicException
+     */
+    public function shouldNotUseLimitNearZero()
+    {
+        new Github('test', 0);
     }
 }

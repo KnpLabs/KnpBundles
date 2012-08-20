@@ -100,11 +100,12 @@ class RepoTest extends \PHPUnit_Framework_TestCase
 
     private function getTravis()
     {
-        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $output  = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $browser = $this->getMock('Buzz\Browser');
 
         return $this->getMock('Knp\Bundle\KnpBundlesBundle\Travis\Travis',
             array('getTravisData'),
-            array($output)
+            array($output, $browser)
         );
     }
 }

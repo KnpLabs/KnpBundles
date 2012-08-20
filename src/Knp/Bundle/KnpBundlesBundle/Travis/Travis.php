@@ -98,7 +98,7 @@ class Travis
 
         $this->browser->setClient($client);
 
-        $response = $this->browser->get($url);
+        $response = $this->browser->get('http://travis-ci.org/'.$url.'.json');
 
         return json_decode($response->getContent(), true);
     }
