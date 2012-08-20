@@ -3,7 +3,6 @@
 namespace Knp\Bundle\KnpBundlesBundle\Github;
 
 use Github\HttpClient\HttpClient;
-use Github\HttpClient\Exception as GithubException;
 
 class Request extends HttpClient
 {
@@ -23,23 +22,11 @@ class Request extends HttpClient
      * @param  array    $options       Request options
      *
      * @return string   HTTP response
-     *
-     * @throws \Github\HttpClient\Exception
      */
     protected function doRequest($apiPath, array $parameters = array(), $httpMethod = 'GET', array $options = array())
     {
         for ($tries = 1; $tries <= $this->maxTries; $tries++) {
-            try {
-                return parent::doRequest($apiPath, $parameters, $httpMethod, $options);
-            } catch(GithubException $e) {
-                if (404 === $e->getCode()) {
-                    throw $e;
-                }
-            }
-        }
-
-        if (isset($e)) {
-            throw $e;
+            return parent::doRequest($apiPath, $parameters, $httpMethod, $options);
         }
     }
 }

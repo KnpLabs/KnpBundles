@@ -24,6 +24,11 @@ parameters:
     knp_bundles.scoring.readme.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\ReadmeListener
     knp_bundles.scoring.travis.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\TravisListener
     knp_bundles.utils.solr.class: Knp\Bundle\KnpBundlesBundle\Utils\SolrUtils
+    knp_bundles.twitter.parameters:
+        consumer_key: %knp_bundles.twitter.consumer_key%
+        consumer_secret: %knp_bundles.twitter.consumer_secret%
+        oauth_token: %knp_bundles.twitter.oauth_token%
+        oauth_token_secret: %knp_bundles.twitter.oauth_token_secret%
 
 services:
     knp_bundles.updater:
@@ -47,9 +52,11 @@ services:
 
     knp_bundles.trending_bundle_twitterer:
         class: %knp_bundles.trending_bundle_twitterer.class%
+        arguments:
+            - @knp_bundles.entity_manager
+            - @buzz.client
         calls:
-            - [ setEntityManager, [@knp_bundles.entity_manager] ]
-            - [ setTwitterParams, [%knp_bundles.trending_bundle_twitterer.template%, %knp_bundles.trending_bundle_twitterer.idle_period%, %knp_bundles.twitter.oauth_token%, %knp_bundles.twitter.oauth_token_secret%] ]
+            - [ setTwitterParams, [%knp_bundles.trending_bundle_twitterer.template%, %knp_bundles.trending_bundle_twitterer.idle_period%, %knp_bundles.twitter.parameters%] ]
 
     knp_bundles.output:
         public: false

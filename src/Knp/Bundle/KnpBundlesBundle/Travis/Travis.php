@@ -52,8 +52,6 @@ class Travis
             $client->setOption(CURLOPT_USERAGENT, 'KnpBundles.com Bot');
         }
 
-        $browser->setClient($client);
-
         $this->browser = $browser;
     }
 

@@ -116,7 +116,7 @@ EOD;
             Entity\Bundle::STATE_READY,
             Entity\Bundle::STATE_DEPRECATED
         );
-        
+
         $canonicalConfigDump = <<<EOT
 vendor_bundle_name:   
     app_id:               ~ # Required
@@ -135,7 +135,6 @@ vendor_bundle_name:
 EOT;
 
         foreach ($users as $i => $user) {
-
             $contributors = array();
             $contributors[] = isset($users[$i + 1]) ? $users[$i + 1] : $users[0];
             $contributors[] = isset($users[$i - 1]) ? $users[$i - 1] : $users[count($users) - 1];
@@ -199,9 +198,9 @@ EOT;
                 ),
                 'isFork'        => false,
                 'contributors'  => array($contributor),
-                'canonicalConfig' => $canonicalConfigDump,
+                'canonicalConfig' => ($i%2 == 0) ? $canonicalConfigDump : null,
                 'nbRecommenders' => rand(0, 90),
-        ));
+            ));
 
             $manager->persist($bundle);
 

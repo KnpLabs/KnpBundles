@@ -4,15 +4,17 @@ namespace Knp\Bundle\KnpBundlesBundle\Consumer;
 
 use Knp\Bundle\KnpBundlesBundle\Github\Repo;
 use Knp\Bundle\KnpBundlesBundle\Git;
-use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Knp\Bundle\KnpBundlesBundle\Entity\Score;
+use Knp\Bundle\KnpBundlesBundle\Entity\User;
 use Knp\Bundle\KnpBundlesBundle\Entity\UserManager;
 use Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer;
+use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
 
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 
-use Github\HttpClient\Exception as GithubException;
+use Github\Exception\ApiLimitExceedException;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Console\Output\NullOutput;
@@ -108,6 +110,7 @@ class UpdateBundleConsumer implements ConsumerInterface
         $bundles = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Bundle');
 
         // Retrieve Bundle from database
+        /* @var $bundle Bundle */
         if (!$bundle = $bundles->find($message['bundle_id'])) {
             if ($this->logger) {
                 $this->logger->warn(sprintf('Unable to retrieve bundle #%d', $message['bundle_id']));
@@ -120,6 +123,7 @@ class UpdateBundleConsumer implements ConsumerInterface
             $this->logger->info(sprintf('Retrieved bundle %s', $bundle->getName()));
         }
 
+        $scoreRepo = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score');
         for ($i = 0; $i < self::MAX_GITHUB_TRIALS; $i++) {
             try {
                 if (!$this->githubRepoApi->update($bundle)) {
@@ -135,29 +139,32 @@ class UpdateBundleConsumer implements ConsumerInterface
 
                 $this->updateContributors($bundle);
                 $this->updateKeywords($bundle);
-                $score = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')->setScore(new \DateTime(), $bundle, $bundle->getScore());
+
+                $score = $scoreRepo->findOneBy(array('date' => new \DateTime(), 'bundle' => $bundle->getId()));
+                if (!$score) {
+                    $score = new Score();
+                    $score->setBundle($bundle);
+                }
+                $score->setValue($bundle->getScore());
                 $this->em->persist($score);
                 $this->em->flush();
 
                 if ($bundle->getUsesTravisCi()) {
                     $this->travis->update($bundle);
                 }
-            } catch (GithubException $e) {
-                if (403 === $e->getCode()) {
-                    if ($this->logger) {
-                        $this->logger->err(sprintf('Bundle %s got a %s for trial %s', $bundle->getName(), $e->getMessage(), $i+1));
-                    }
-                    sleep(60 * ($i + 1));
-                    continue;
+            } catch (ApiLimitExceedException $e) {
+                if ($this->logger) {
+                    $this->logger->err(sprintf('Bundle %s got a %s for trial %s', $bundle->getName(), $e->getMessage(), $i+1));
                 }
+                sleep(60 * ($i + 1));
+                continue;
             } catch (\Exception $e) {
                 if ($this->logger) {
-                    $this->logger->err('['.get_class($e).'] '.$e->getMessage());
+                    $this->logger->err('['.get_class($e).' / '.$e->getFile().':'.$e->getLine().'] '.$e->getMessage());
                 }
             }
             break;
         }
-
     }
 
     /**
@@ -200,11 +207,14 @@ class UpdateBundleConsumer implements ConsumerInterface
     /**
      * Removes a specified bundle
      *
-     * @param Knp\Bundle\Entity\Bundle $bundle
+     * @param Bundle $bundle
      */
     protected function removeBundle(Bundle $bundle)
     {
-        $bundle->getUser()->removeBundle($bundle);
+        $user = $bundle->getUser();
+        if ($user instanceof User) {
+            $user->removeBundle($bundle);
+        }
         $this->em->remove($bundle);
         $this->em->flush();
 
@@ -214,5 +224,4 @@ class UpdateBundleConsumer implements ConsumerInterface
             $this->logger->warn(sprintf('Bundle "%s" was deleted', $bundle->getName()));
         }
     }
-
 }

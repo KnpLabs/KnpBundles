@@ -24,12 +24,16 @@ class KbUpdateTrendsCommand extends ContainerAwareCommand
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \InvalidArgumentException When the target directory does not exist
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('knp_bundles.entity_manager');
+
+        if ($em->getConnection()->getDatabasePlatform()->getName() == 'sqlite') {
+            $output->writeln(sprintf('[%s] This command can\'t be executed on <error>SQLite</error>!', $this->currentTime()));
+
+            return 1;
+        }
 
         $em->getConnection()->beginTransaction();
         try {
@@ -41,8 +45,11 @@ class KbUpdateTrendsCommand extends ContainerAwareCommand
             $output->writeln(sprintf('[%s] <error>Rollbacking</error> because of %s', $this->currentTime(), $e));
             $em->getConnection()->rollback();
             $em->close();
+
+            return 1;
         }
 
+        return 0;
     }
 
     private function updateTrends()

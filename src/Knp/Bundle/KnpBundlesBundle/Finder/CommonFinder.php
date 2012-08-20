@@ -49,16 +49,9 @@ abstract class CommonFinder implements FinderInterface
      * Defines the query
      *
      * @param string $query
-     *
-     * @throws \LogicException
      */
     public function setQuery($query)
     {
-        $query = strval($query);
-        if ($query) {
-            throw new \LogicException('You must specify a query to find repositories.');
-        }
-
         $this->query = $query;
     }
 
@@ -66,16 +59,9 @@ abstract class CommonFinder implements FinderInterface
      * Defines the limit of results to fetch
      *
      * @param integer $limit
-     *
-     * @throws \LogicException
      */
     public function setLimit($limit)
     {
-        $limit = intval($limit);
-        if (0 <= $limit) {
-            throw new \LogicException('Limit must be bigger than zero.');
-        }
-
         $this->limit = $limit;
     }
 
