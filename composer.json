@@ -27,8 +27,6 @@
         "nelmio/solarium-bundle": "dev-master",
         "igorw/file-serve-bundle": "dev-master",
 
-        "inori/twitter-app-bundle": "dev-master",
-
         "videlalvaro/php-amqplib": "dev-master",
         "oldsound/rabbitmq-bundle": "dev-master",
 
@@ -47,22 +45,6 @@
         "behat/common-contexts":        "dev-master"
     },
     "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "abraham/twitteroauth",
-                "version": "dev-master",
-                "dist": {
-                    "url": "https://github.com/abraham/twitteroauth/zipball/master",
-                    "type": "zip"
-                },
-                "source": {
-                    "url": "git://github.com/abraham/twitteroauth.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
-        },
         {
             "type": "package",
             "package": {

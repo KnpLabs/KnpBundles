@@ -47,11 +47,9 @@ services:
 
     knp_bundles.trending_bundle_twitterer:
         class: %knp_bundles.trending_bundle_twitterer.class%
-        arguments:
-            - @knp_bundles.entity_manager
-            - %knp_bundles.trending_bundle_twitterer.template%
-            - @twitter_app
-            - %knp_bundles.trending_bundle_twitterer.idle_period%
+        calls:
+            - [ setEntityManager, [@knp_bundles.entity_manager] ]
+            - [ setTwitterParams, [%knp_bundles.trending_bundle_twitterer.template%, %knp_bundles.trending_bundle_twitterer.idle_period%, %knp_bundles.twitter.oauth_token%, %knp_bundles.twitter.oauth_token_secret%] ]
 
     knp_bundles.output:
         public: false
@@ -61,7 +59,8 @@ services:
         class: %knp_bundles.travis.class%
         arguments:
             - @knp_bundles.output
-            - @buzz
+        calls:
+            - [ setBrowser, [@buzz]]
 
     knp_bundles.github_client:
         public: false

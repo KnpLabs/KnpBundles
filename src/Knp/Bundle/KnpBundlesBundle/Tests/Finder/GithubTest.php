@@ -2,10 +2,9 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Tests\Finder;
 
-use Symfony\Component\DomCrawler\Crawler;
 use Knp\Bundle\KnpBundlesBundle\Finder\Github;
 
-class GithubTest extends \PHPUnit_Framework_TestCase
+class GithubTest extends FinderTestCase
 {
     /**
      * @dataProvider getExtractPageUrlsData
@@ -13,19 +12,7 @@ class GithubTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldExtractPageUrlsFromGithubHtml($node, $expected)
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->add($node);
-
-        $response = $this->getMock('Buzz\Message\Response');
-        $response->expects($this->any())
-            ->method('toDomDocument')
-            ->will($this->returnValue($dom));
-
-        $browser = $this->getMock('Buzz\Browser');
-        $browser->expects($this->any())
-            ->method('get')
-            ->with('https://github.com/search?q=Symfony2&type=Repositories&language=PHP&start_value=3')
-            ->will($this->returnValue($response));
+        $browser = $this->getBrowserMock($node, 'https://github.com/search?q=Symfony2&type=Repositories&language=PHP&start_value=3');
 
         $finder = new Github('Symfony2', 3);
         $finder->setBrowser($browser);

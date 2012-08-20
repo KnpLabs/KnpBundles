@@ -33,11 +33,27 @@ class Travis
 
     /**
      * @param OutputInterface $output
-     * @param Browser         $browser
      */
-    public function __construct(OutputInterface $output, Browser $browser)
+    public function __construct(OutputInterface $output)
     {
-        $this->output  = $output;
+        $this->output = $output;
+    }
+
+    /**
+     * @param Browser $browser
+     */
+    public function setBrowser(Browser $browser)
+    {
+        $client = $browser->getClient();
+        $client->setVerifyPeer(false);
+        $client->setTimeout(30);
+
+        if ($client instanceof \Buzz\Client\Curl) {
+            $client->setOption(CURLOPT_USERAGENT, 'KnpBundles.com Bot');
+        }
+
+        $browser->setClient($client);
+
         $this->browser = $browser;
     }
 
@@ -52,54 +68,28 @@ class Travis
     {
         $this->output->write(' Travis status:');
 
-        $status = $this->getTravisData($repo->getUsername().'/'.$repo->getName());
+        $response = $this->browser->get('http://travis-ci.org/'.$repo->getUsername().'/'.$repo->getName().'.json');
 
-        if (!$status) {
-            $repo->setTravisCiBuildStatus(null);
-            $this->output->write(' error');
-
-            return false;
-        }
-
-        switch ($status['last_build_status']) {
-            case 0:
+        $status = json_decode($response->getContent(), true);
+        if (JSON_ERROR_NONE === json_last_error()) {
+            if (0 === $status['last_build_status']) {
                 $repo->setTravisCiBuildStatus(true);
                 $this->output->write(' success');
-                break;
-            case 1:
+
+                return true;
+            }
+
+            if (1 === $status['last_build_status']) {
                 $repo->setTravisCiBuildStatus(false);
                 $this->output->write(' failed');
-                break;
-            default:
-                $repo->setTravisCiBuildStatus(null);
-                $this->output->write(' error');
-                break;
+
+                return true;
+            }
         }
 
-        return true;
-    }
+        $repo->setTravisCiBuildStatus(null);
+        $this->output->write(' error');
 
-    /**
-     * Return data from Travis
-     *
-     * @param string $url
-     *
-     * @return array
-     */
-    private function getTravisData($url)
-    {
-        $client = $this->browser->getClient();
-        $client->setVerifyPeer(false);
-        $client->setTimeout(30);
-
-        if ($client instanceof \Buzz\Client\Curl) {
-            $client->setOption(CURLOPT_USERAGENT, 'KnpBundles.com Bot');
-        }
-
-        $this->browser->setClient($client);
-
-        $response = $this->browser->get('http://travis-ci.org/'.$url.'.json');
-
-        return json_decode($response->getContent(), true);
+        return false;
     }
 }
