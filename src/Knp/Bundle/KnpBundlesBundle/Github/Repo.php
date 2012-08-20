@@ -71,10 +71,10 @@ class Repo
             return false;
         }
 
-        if (!$this->updateFiles($bundle)) {
+        if (!$this->updateInfos($bundle)) {
             return false;
         }
-        if (!$this->updateInfos($bundle)) {
+        if (!$this->updateFiles($bundle)) {
             return false;
         }
         if (!$this->updateCommits($bundle)) {
@@ -102,7 +102,7 @@ class Repo
     {
         $this->output->write(' infos');
         try {
-            $data = $this->github->api('repo')->show($bundle->getUsername(), $bundle->getName());
+            $data = $this->github->getRepoApi()->show($bundle->getUsername(), $bundle->getName());
         } catch (GithubException $e) {
             if (404 === $e->getCode()) {
                 return false;
@@ -128,7 +128,11 @@ class Repo
     {
         $this->output->write(' commits');
         try {
-            $commits = $this->github->api('repo')->commits()->all($bundle->getUsername(), $bundle->getName(), array('sha' => 'HEAD', 'per_page' => 30));
+            $commits = $this->github->getCommitApi()->getBranchCommits($bundle->getUsername(), $bundle->getName(), 'HEAD');
+            foreach ($commits as $key => $commit) {
+                $commitDetailedInfo = $this->github->getCommitApi()->getCommit($bundle->getUsername(), $bundle->getName(), $commit['sha']);
+                $commits[$key]['committer'] = $commitDetailedInfo['committer'];
+            }
         } catch (GithubException $e) {
             if (404 === $e->getCode()) {
                 return false;
@@ -138,6 +142,15 @@ class Repo
         if (empty($commits)) {
             return false;
         }
+        $bundle->setLastCommits(array_slice($commits, 0, 30));
+
+        return true;
+    }
+
+    public function updateCommitsFromGitRepo(Bundle $bundle)
+    {
+        $this->output->write(' commits');
+        $commits = $this->gitRepoManager->getRepo($bundle)->getCommits(30);
         $bundle->setLastCommits($commits);
 
         return true;
@@ -146,85 +159,52 @@ class Repo
     public function updateFiles(Bundle $bundle)
     {
         $this->output->write(' files');
+        $gitRepo = $this->gitRepoManager->getRepo($bundle);
 
-        $api = $this->github->api('repo')->contents();
-
-        $files = $api->show($bundle->getUsername(), $bundle->getName());
-        foreach ($files as $data) {
-            if (false !== strpos($data['name'], 'Bundle.php')) {
-                $file = $api->show($bundle->getUsername(), $bundle->getName(), $data['name']);
-                if ($file && 'base64' == $file['encoding']) {
-                    $this->validateSymfonyBundle($bundle, $file['content']);
-                }
-
-                continue;
-            }
-
-            switch ($data['name']) {
-                case 'LICENSE':
-                    $file = $api->show($bundle->getUsername(), $bundle->getName(), 'LICENSE');
-                    if ($file && 'base64' == $file['encoding']) {
-                        $bundle->setLicense(base64_decode($file['content']));
-                        break;
-                    }
-                    break;
-
-                case '.travis.yml':
-                    $bundle->setUsesTravisCi(true);
-                    break;
-
-                case 'composer.json':
-                    $file = $api->show($bundle->getUsername(), $bundle->getName(), 'composer.json');
-                    if ($file && 'base64' == $file['encoding']) {
-                        $this->updateComposerFile(base64_decode($file['content']), $bundle);
-                        break;
-                    }
+        foreach (array('README.markdown', 'README.md', 'README') as $readmeFilename) {
+            if ($gitRepo->hasFile($readmeFilename)) {
+               $bundle->setReadme($gitRepo->getFileContent($readmeFilename));
+               break;
             }
         }
 
-        $readme = $api->readme($bundle->getUsername(), $bundle->getName());
-        if ($readme && 'base64' == $readme['encoding']) {
-            $bundle->setReadme(base64_decode($readme['content']));
-        }
-
-        if (null === $bundle->getLicense()) {
-            $file = $api->show($bundle->getUsername(), $bundle->getName(), 'Resources/meta/LICENSE');
-            if ($file && 'base64' == $file['encoding']) {
-                $bundle->setLicense(base64_decode($file['content']));
+        foreach (array('LICENSE', 'Resources'.DIRECTORY_SEPARATOR.'meta'.DIRECTORY_SEPARATOR.'LICENSE') as $licenseFilename) {
+            if ($gitRepo->hasFile($licenseFilename)) {
+                $bundle->setLicense($gitRepo->getFileContent($licenseFilename));
+                break;
             }
         }
 
-        $this->updateCanonicalConfigFile($bundle);
+        $bundle->setUsesTravisCi($gitRepo->hasFile('.travis.yml'));
+
+        $this->updateComposerFile($gitRepo, $bundle);
+
+        $this->updateCanonicalConfigFile($gitRepo, $bundle);
 
         $this->updateSymfonyVersions($bundle);
 
         return true;
     }
 
-    /**
-     * @param string $composer
-     * @param Bundle $bundle
-     */
-    private function updateComposerFile($composer, Bundle $bundle)
+    private function updateComposerFile($gitRepo, Bundle $bundle)
     {
-        $composer = json_decode($composer, true);
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            return;
-        }
+        if ($gitRepo->hasFile('composer.json')) {
+            $composer = json_decode($gitRepo->getFileContent('composer.json'), true);
 
-        $composerName = isset($composer['name']) ? $composer['name'] : null;
+            $composerName = isset($composer['name']) ? $composer['name'] : null;
 
-        // looking for required version of Symfony
-        if (isset($composer['require'])) {
-            foreach (array('symfony/framework-bundle', 'symfony/symfony') as $requirement) {
-                if (isset($composer['require'][$requirement])) {
-                    $bundle->setSymfonyVersion($composer['require'][$requirement]);
-                    break;
+            // looking for required version of Symfony
+            if (isset($composer['require'])) {
+                foreach (array('symfony/framework-bundle', 'symfony/symfony') as $requirement) {
+                    if (isset($composer['require'][$requirement])) {
+                        $bundle->setSymfonyVersion($composer['require'][$requirement]);
+                        break;
+                    }
                 }
             }
-        }
 
-        $bundle->setComposerName($composerName);
+            $bundle->setComposerName($composerName);
+        }
     }
 
     public function updateSymfonyVersions(Bundle $bundle)
@@ -261,15 +241,8 @@ class Repo
     public function updateTags(Bundle $bundle)
     {
         $this->output->write(' tags');
-
-        $tags = array();
-        $data = $this->github->api('repo')->tags($bundle->getUsername(), $bundle->getName());
-        if ($data) {
-            foreach ($data as $tag) {
-                $tags[] = $tag['name'];
-            }
-        }
-
+        $gitRepo = $this->gitRepoManager->getRepo($bundle);
+        $tags = $gitRepo->getGitRepo()->getTags();
         $bundle->setTags($tags);
 
         return $bundle;
@@ -277,12 +250,13 @@ class Repo
 
     public function fetchComposerKeywords(Bundle $bundle)
     {
-        $file = $this->github->api('repo')->contents()->show($bundle->getUsername(), $bundle->getName(), 'composer.json');
-        if ($file && 'base64' == $file['encoding']) {
-            $composer = json_decode(base64_decode($file['content']), true);
-            if (JSON_ERROR_NONE === json_last_error()) {
-                return isset($composer['keywords']) ? $composer['keywords'] : array();
-            }
+        $composerFilename = 'composer.json';
+        $gitRepo = $this->gitRepoManager->getRepo($bundle);
+
+        if ($gitRepo->hasFile($composerFilename)) {
+            $composer = json_decode($gitRepo->getFileContent($composerFilename));
+
+            return isset($composer->keywords) ? $composer->keywords : array();
         }
 
         return array();
@@ -291,7 +265,7 @@ class Repo
     public function getContributorNames(Bundle $bundle)
     {
         try {
-            $contributors = $this->github->api('repo')->contributors($bundle->getUsername(), $bundle->getName());
+            $contributors = $this->github->getRepoApi()->getRepoContributors($bundle->getUsername(), $bundle->getName());
         } catch (GithubException $e) {
             if (404 === $e->getCode()) {
                 return array();
@@ -306,6 +280,22 @@ class Repo
         }
 
         return $names;
+    }
+
+    /**
+     * Checks if '*Bundle.php' class use base class for Symfony bundle
+     *
+     * @param Bundle $bundle
+     *
+     * @return bool
+     */
+    public function isValidSymfonyBundle(Bundle $bundle)
+    {
+        if (null === $bundleClassContent = $this->getBundleClassContentAsString($bundle)) {
+            return false;
+        }
+
+        return false !== strpos($bundleClassContent, 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle');
     }
 
     /**
@@ -348,11 +338,9 @@ class Repo
         $this->github = $github;
     }
 
-    public function updateCanonicalConfigFile(Bundle $bundle)
+    public function updateCanonicalConfigFile($gitRepo, Bundle $bundle)
     {
         self::$canonicalConfiguration = '';
-
-        $gitRepo = $this->gitRepoManager->getRepo($bundle);
 
         /**
          * Currently there is only support for bundles whose configuration is stored exactly under Configuration.php
@@ -435,21 +423,24 @@ EOF;
     }
 
     /**
-     * Checks if '*Bundle.php' class use base class for Symfony bundle
+     * Returns content for *Bundle.php class via Github API v3
      *
      * @param Bundle $bundle
-     * @param string $content
      *
-     * @return boolean
+     * @return null|string
      */
-    private function validateSymfonyBundle(Bundle $bundle, $content)
+    private function getBundleClassContentAsString(Bundle $bundle)
     {
-        $content = json_decode(base64_decode($content), true);
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            $bundle->setIsValid(false !== strpos($content, 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle'));
+        $rootContents = $this->github->getRepoApi()->getRepoContents($bundle->getUsername(), $bundle->getName(), '');
+        foreach ($rootContents as $rootEntry) {
+            if (isset($rootEntry['name']) && strpos($rootEntry['name'], 'Bundle.php') !== false) {
+                $response = json_decode(file_get_contents($rootEntry['_links']['git']));
+
+                return base64_decode($response->content);
+            }
         }
 
-        return $bundle->isValid();
+        return null;
     }
 
     /**

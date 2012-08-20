@@ -1,4 +1,7 @@
 * 2012-08-20
+  * Removed old Detectors code, as it's not used anymore
+  * Changed dependency of website from version `0.1` to `master`
+    for `KnpLabs/github-api`
   * `Travis` now depends on `Buzz`
   * `Goutte` was removed, and finders were refactored to use `Buzz`
   * `TrendingBundleTwitterer` now depends on `HWIOAuthBundle` resource owner,
