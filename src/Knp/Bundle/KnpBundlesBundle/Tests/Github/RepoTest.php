@@ -205,7 +205,7 @@ EOT;
             ->disableOriginalConstructor()
             ->getMock();
         $githubApiRepoMock->expects($this->any())
-            ->method('getRepoContents')
+            ->method('contents')
             ->with('knplabs', 'KnpMenuBundle', '')
             ->will($this->returnValue(array(
                 array(
@@ -218,7 +218,8 @@ EOT;
 
         $githubMock = $this->getMock('Github\Client');
         $githubMock->expects($this->any())
-            ->method('getRepoApi')
+            ->method('api')
+            ->with('repo')
             ->will($this->returnValue($githubApiRepoMock));
         $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
 

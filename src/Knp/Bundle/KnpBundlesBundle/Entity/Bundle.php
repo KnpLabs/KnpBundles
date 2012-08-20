@@ -280,6 +280,13 @@ class Bundle
      */
     protected $lastTweetedAt;
 
+    /**
+     * Not saved variable, it's used to simplify validation when updating bundles
+     *
+     * @var boolean
+     */
+    protected $valid = false;
+
     public function __construct($fullName = null)
     {
         if ($fullName) {
@@ -298,6 +305,22 @@ class Bundle
         $this->keywords = new ArrayCollection();
         $this->state = self::STATE_UNKNOWN;
         $this->nbRecommenders = 0;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isValid()
+    {
+        return $this->valid;
+    }
+
+    /**
+     * @param boolean $state
+     */
+    public function setIsValid($state)
+    {
+        $this->valid = (bool) $state;
     }
 
     public function isInitialized()

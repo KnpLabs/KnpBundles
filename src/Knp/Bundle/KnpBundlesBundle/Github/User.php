@@ -87,7 +87,7 @@ class User
             $keywords[] = $user->getEmail();
         }
 
-        $api  = $this->github->getUserApi();
+        $api  = $this->github->api('user');
         $data = null;
         try {
             $data = $api->show($user->getName());

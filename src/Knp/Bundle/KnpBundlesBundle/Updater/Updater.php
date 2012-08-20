@@ -106,18 +106,22 @@ class Updater
     {
         $added = 0;
 
+        /* @var $bundle Bundle */
         foreach ($foundBundles as $bundle) {
             // We have it in DB already, skip it
             if (isset($this->bundles[strtolower($bundle->getFullName())])) {
                 continue;
             }
-            // It's doesn't catch in our requirements (don't exists, or is a fork with less then 10 watchers)
-            if (!$this->githubRepoApi->updateInfos($bundle)) {
+
+            $this->githubRepoApi->updateFiles($bundle);
+
+            // It's not an valid Symfony2 Bundle
+            if ($bundle->isValid()) {
                 $this->notifyInvalidBundle($bundle);
                 continue;
             }
-            // It's not an valid Symfony2 Bundle
-            if (!$this->githubRepoApi->isValidSymfonyBundle($bundle)) {
+            // It's doesn't catch in our requirements (don't exists, or is a fork with less then 10 watchers)
+            if (!$this->githubRepoApi->updateInfos($bundle)) {
                 $this->notifyInvalidBundle($bundle);
                 continue;
             }
