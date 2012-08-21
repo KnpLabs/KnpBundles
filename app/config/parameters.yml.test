@@ -43,3 +43,6 @@ parameters:
         url: "http://knpbundles.com"
 
     knp_bundles.finder.limit: 2000
+
+    monolog.swift.from_email: error@knpbundles.com
+    monolog.swift.to_email: error@knpbundles.com

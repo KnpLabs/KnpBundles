@@ -323,3 +323,15 @@ pre.code {
 span.state {
     border-bottom: 1px dotted #aaa;
 }
+
+table.versions-table {
+    margin: 5px 10px 0;
+}
+
+tr.table-bottom-line {
+    border-bottom: 1px solid #DDD;
+}
+
+th.table-middle-space {
+    width: 20px;
+}

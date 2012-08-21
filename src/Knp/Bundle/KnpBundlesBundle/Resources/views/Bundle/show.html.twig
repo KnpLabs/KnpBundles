@@ -22,7 +22,20 @@
                 </li>
                 {%- endif -%}
                 <li>{% trans %}bundles.show.infos.score{% endtrans %} <span><a href="#bundle-score-details">{{ bundle.score }}</a></span></li>
-                <li>{% trans %}bundles.show.infos.symfonyVersion{% endtrans %} {{ bundle.symfonyVersion ? bundle.symfonyVersion : "bundles.show.infos.unknown" | trans }}</li>
+                <li>{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}
+                    <table class="versions-table">
+                        <tbody>
+                            <tr class="table-bottom-line">
+                                <th>Bundle</th><th class="table-middle-space"></th><th>Symfony</th>
+                            </tr>
+                        {% for key, version in bundle.symfonyVersions %}
+                            <tr>
+                                <td>{{ key }}</td><td></td><td>{{ version ? version : "bundles.show.infos.unknown" | trans }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </li>
                 <li>{% trans %}bundles.show.infos.created{% endtrans %} <span>{{ bundle.createdAt|date('date_format'|trans) }}</span></li>
                 <li>{% trans %}bundles.show.infos.contributors{% endtrans %} <span>{{ bundle.nbContributors }}</span></li>
                 <li>{% trans %}bundles.show.infos.followers{% endtrans %} <span>{{ bundle.nbFollowers }}</span></li>
