@@ -10,6 +10,7 @@ parameters:
 
     knp_bundles.trending_bundle_twitterer.idle_period: 30 #days
     knp_bundles.trending_bundle.min_score_diff: 3
+    knp_bundles.trending_bundle.min_score_threshold: 25
 
     knp_bundles.github.client_id: b46912af13ee7cb7ecd3
     knp_bundles.github.client_secret: 116f5427707fcc2a3f7c630dd356be61500b2e18
