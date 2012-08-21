@@ -1,4 +1,5 @@
 {% extends 'KnpBundlesBundle:Bundle:search.html.twig' %}
+{% set totalCount = bundles.getPaginationData().totalCount %}
 
 {% block body_attributes %}class="bundles-list" id="search-result"{% endblock %}
 
@@ -6,16 +7,22 @@
 
 {% block title %}{% trans with {'%query%': query} %}search.results.meta.title{% endtrans %}{% endblock %}
 
-{% block description %}{% trans with {'%count%': bundles|length, '%query%': query} %}search.results.meta.description{% endtrans %}{% endblock %}
+{% block description %}{% trans with {'%count%': totalCount, '%query%': query} %}search.results.meta.description{% endtrans %}{% endblock %}
 
 {% block content %}
     <h1>{% trans with {'%query%': query} %}search.results.title{% endtrans %}</h1>
     <div id="main">
         <section id="search-result-bundles">
-            <div class="content-title">
-                <h1>{{ bundles|length }} Bundle{{ bundles|length > 1 ? 's' : '' }}</h1>
-            </div>
-            {% include 'KnpBundlesBundle:Bundle:searchBigList.html.twig' with {'bundles': bundles} %}
+            {% if totalCount == 0 %}
+                <div class="content-title">
+                    <h1>No bundles found. Feel free to create your own :)</h1>
+                </div>
+            {% else %}
+                <div class="content-title">
+                    <h1>{{ totalCount }} Bundle{{ totalCount > 1 ? 's' : '' }}</h1>
+                </div>
+                {% include 'KnpBundlesBundle:Bundle:searchBigList.html.twig' with {'bundles': bundles} %}
+            {% endif %}
         </section>
         {{ bundles.render()|raw }}
     </div>
