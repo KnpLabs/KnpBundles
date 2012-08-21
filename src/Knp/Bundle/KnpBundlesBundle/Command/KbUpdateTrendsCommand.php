@@ -53,7 +53,7 @@ class KbUpdateTrendsCommand extends ContainerAwareCommand
         $q = $em->createQuery('UPDATE Knp\Bundle\KnpBundlesBundle\Entity\Bundle bundle SET bundle.trend1 = 0');
         $q->execute();
 
-        $sql = <<<EOF
+        $query = <<<EOF
 UPDATE bundle
 
 JOIN (
@@ -70,15 +70,15 @@ JOIN (
     WHERE date = CURRENT_DATE
 ) score
   ON score.bundle_id = bundle.id
-  AND score.diff > %s
+  AND score.diff > :minDiff
 
 SET trend1 = score.diff
+WHERE score >= :minThreshold
 EOF;
 
         $minDiff = $this->getContainer()->getParameter('knp_bundles.trending_bundle.min_score_diff');
-        $query = sprintf($sql, $minDiff);
-
-        $nbRows = $em->getConnection()->executeUpdate($query);
+        $minThreshold = $this->getContainer()->getParameter('knp_bundles.trending_bundle.min_score_threshold');
+        $nbRows = $em->getConnection()->executeUpdate($query, array('minDiff' => $minDiff, 'minThreshold' => $minThreshold));
 
         return $nbRows;
     }

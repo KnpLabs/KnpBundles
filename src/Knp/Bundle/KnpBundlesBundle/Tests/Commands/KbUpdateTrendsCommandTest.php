@@ -44,7 +44,7 @@ class KbUpdateTrendsCommandTest extends WebTestCase
         foreach ($data['bundles'] as $bundleName => $bundleData) {
             $bundle = new Bundle('vendor/' . $bundleName);
             $bundle->setDescription('some description');
-            $bundle->setScore(0);
+            $bundle->setScore(100);
             $bundle->setUser($user);
 
             foreach ($bundleData['scores'] as $scoreData) {
