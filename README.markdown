@@ -83,8 +83,14 @@ Note that you will need a functional rabbitmq server − but that's damn easy to
 
     php app/console kb:populate
 
-This can take long time. GitHub API is limited to 60 calls per minute,
+This can take a long time. GitHub API is limited to 60 calls per minute,
 so the commands needs to wait.
+
+### Update all bundles in database
+
+    php app/console kb:update:bundles
+
+This can take a long time but should be run to trigger update on all bundles when this is needed.
 
 ### Search engine
 

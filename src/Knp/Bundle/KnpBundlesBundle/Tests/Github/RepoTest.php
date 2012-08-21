@@ -6,6 +6,7 @@ use Knp\Bundle\KnpBundlesBundle\Git\RepoManager;
 use Knp\Bundle\KnpBundlesBundle\Github\Repo;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Github\HttpClient\HttpClient;
 
 class RepoTest extends \PHPUnit_Framework_TestCase
 {
@@ -127,9 +128,62 @@ EOT;
         $this->assertEquals('', $githubRepo->getCanonicalConfiguration());
     }
 
-    protected function getRepo()
+    /**
+     * @test
+     */
+    public function shouldUpdateSymfonyVersions()
     {
-        $github = new \Github\Client;
+        $json = array('package' => array('versions' => array(
+            0 => array('require' => array('symfony/framework-bundle' => 'dev-master', 'symfony/symfony' => 'dev-master')),
+            1 => array('require' => array('symfony/framework-bundle' => '>=2.0,<2.2-dev', 'symfony/symfony' => '>=2.0,<2.2-dev'))
+        )));
+
+        $bundle = new Bundle('knplabs/KnpMenuBundle');
+        $bundle->setComposerName('knplabs/knp-menu-bundle');
+
+        $httpClient = $this->getMockBuilder('Github\HttpClient\HttpClient')
+            ->setMethods(array('get'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $httpClient->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue($json));
+
+        $githubRepo = $this->getRepo($httpClient);
+
+        $githubRepo->updateSymfonyVersions($bundle);
+
+        $this->assertCount(2, $bundle->getSymfonyVersions());
+    }
+
+    /**
+     * @test
+     */
+    public function shoudNotUpdateSymfonyVersionsWithWrongData()
+    {
+        $json = 'I am wrong json';
+
+        $bundle = new Bundle('knplabs/KnpMenuBundle');
+        $bundle->setComposerName('knplabs/knp-menu-bundle');
+
+        $httpClient = $this->getMockBuilder('Github\HttpClient\HttpClient')
+            ->setMethods(array('get'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $httpClient->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue($json));
+
+        $githubRepo = $this->getRepo($httpClient);
+
+        $githubRepo->updateSymfonyVersions($bundle);
+    }
+
+    protected function getRepo($httpClient = null)
+    {
+        $github = new \Github\Client($httpClient ? $httpClient : null);
         $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
         $repoManager = $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Git\RepoManager')
             ->disableOriginalConstructor()
