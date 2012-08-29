@@ -23,10 +23,18 @@ To configure your database in your development environment, copy
 edit it according to your database settings.
 
 If you want to use github connect locally, you'll need to
-[create an app on github](https://github.com/account/applications/new)
+[create an app on github](https://github.com/settings/applications/new)
 with the callback:
 
-    http://yourlocalurl/app_dev.php/oauth/github
+    http://yourlocalurl/login/check-github
+
+And update the parameters.yml with the Client ID and Secret.
+
+If you also want to use sensio labs connect locally, you'll need to
+[create a client on sensio labs connect](https://connect.sensiolabs.com/account/app/new)
+with the callback:
+
+    http://yourlocalurl/login/check-sensio
 
 And update the parameters.yml with the Client ID and Secret.
 
@@ -77,7 +85,7 @@ To launch a consumer, do:
 
     php app/console rabbitmq:consumer update_bundle
 
-Note that you will need a functional rabbitmq server − but that's damn easy to install.
+Note that you will need a functional rabbitmq server − Follow the instructions in [this page](http://www.rabbitmq.com/download.html) to install it.
 
 ### Populate document collections from GitHub
 
@@ -94,9 +102,13 @@ This can take a long time but should be run to trigger update on all bundles whe
 
 ### Search engine
 
-We use [Solr](http://lucene.apache.org/solr/) and it's PHP client [Solarium](http://solarium-project.org) to search bundles.
-Recommended schema can be found
-[**here**](https://github.com/KnpLabs/KnpBundles/blob/master/src/Knp/Bundle/KnpBundlesBundle/Resources/solr/conf/schema.xml).  
+We use [Solr](http://lucene.apache.org/solr/) and its PHP client [Solarium](http://solarium-project.org) to search bundles.
+
+To install SOLR follow the steps listed in [this document](http://wiki.apache.org/solr/SolrInstall).
+Use the default Jetty server included with SOLR. The default directory used for the installation is 'opt/solr/example'.
+Copy the recommended configuration and schema found [**here**](https://github.com/KnpLabs/KnpBundles/blob/master/src/Knp/Bundle/KnpBundlesBundle/Resources/solr/conf/schema.xml)
+to your solr/conf directory.
+
 You can run SOLR using:
 
     php app/console kb:solr:start
