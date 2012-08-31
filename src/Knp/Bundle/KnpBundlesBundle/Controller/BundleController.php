@@ -117,7 +117,7 @@ class BundleController extends BaseController
 
         // caching
         $response->setPublic();
-        $response->setMaxAge(600);
+        $response->setSharedMaxAge(600);
 
         return $response;
     }
@@ -229,7 +229,7 @@ class BundleController extends BaseController
 
         // caching
         $response->setPublic();
-        $response->setMaxAge(600);
+        $response->setSharedMaxAge(600);
 
         return $response;
     }
