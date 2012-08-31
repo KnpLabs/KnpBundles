@@ -1,8 +1,10 @@
 <div id="auth">
 {% if app.user is not null %}
     <ul id="userbar">
+        <a href="{{ path('user_show', { 'name': app.user.name }) }}">
         <li><img src="{{ app.user.gravatarHash }}" height="30" width="30" /></li>
         <li class="username"><span>{{ app.user }}</span></li>
+        </a>
         <li class="logout"><a href="{{ path('_logout') }}"><i title="Log out" class="icon-off"></i></a></li>
     </ul>
 {% else %}
