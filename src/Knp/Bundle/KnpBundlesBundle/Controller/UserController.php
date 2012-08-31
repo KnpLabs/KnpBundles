@@ -30,7 +30,7 @@ class UserController extends BaseController
         // this is private cache (don't cache with shared proxy)
         $response->setPrivate();
         // always revalidate cache
-        $response->setSharedMaxAge(0);
+        $response->setMaxAge(0);
         $response->headers->addCacheControlDirective('must-revalidate', true);        
         
         return $response;
