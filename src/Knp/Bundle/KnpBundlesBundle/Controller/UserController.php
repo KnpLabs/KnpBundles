@@ -29,7 +29,7 @@ class UserController extends BaseController
 
         // this is private cache (don't cache with shared proxy)
         $response->setPrivate();
-        
+
         return $response;
     }
 
