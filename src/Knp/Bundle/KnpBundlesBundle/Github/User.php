@@ -5,7 +5,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Github;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Github\Client,
-    Github\HttpClient\Exception as GithubException;
+    Github\HttpClient\ApiLimitExceedException;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface,
     HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedUserResponseInterface;
@@ -87,12 +87,8 @@ class User
             $keywords[] = $user->getEmail();
         }
 
-        $api  = $this->github->getUserApi();
-        $data = null;
-        try {
-            $data = $api->show($user->getName());
-        } catch(GithubException $e) {
-        }
+        $api  = $this->github->api('user');
+        $data = $api->show($user->getName());
 
         if (empty($data)) {
             foreach ($keywords as $field) {
@@ -103,22 +99,19 @@ class User
                         // Let's call API one more time to get clean user data
                         $data = $api->show($data['login']);
                     }
-                } catch(GithubException $e) {
-                    if (404 === $e->getCode()) {
-                        continue;
-                    }
+                } catch(ApiLimitExceedException $e) {
                     break;
                 }
 
                 // Did we found user in this iteration ?
-                if (!empty($data)) {
+                if (!empty($data) && !isset($data['message'])) {
                     break;
                 }
             }
         }
 
         // User has been removed / not found ?
-        if (empty($data)) {
+        if (empty($data) || isset($data['message'])) {
             return false;
         }
 

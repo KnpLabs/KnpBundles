@@ -6,7 +6,6 @@ use Knp\Bundle\KnpBundlesBundle\Finder\Aggregate;
 
 class AggregateTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @test
      */

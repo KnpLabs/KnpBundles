@@ -4,8 +4,6 @@ namespace Knp\Bundle\KnpBundlesBundle\Finder;
 
 /**
  * Interface that must be implemented by the repository finders
- *
- * @package KnpBundles
  */
 interface FinderInterface
 {
@@ -14,5 +12,5 @@ interface FinderInterface
      *
      * @return array
      */
-    function find();
+    public function find();
 }

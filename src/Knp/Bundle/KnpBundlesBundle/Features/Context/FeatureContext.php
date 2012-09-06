@@ -38,7 +38,6 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
 {
     private $users;
     private $bundles;
-    private $keywords;
 
     /**
      * @var \Symfony\Component\HttpKernel\KernelInterface $kernel
@@ -120,20 +119,6 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
         }
 
         $entityManager->flush();
-    }
-
-    /**
-     * @param mixed $object
-     * @param string $propertyName
-     * @param mixed $value
-     * @return null
-     */
-    private function setPrivateProperty($object, $propertyName, $value)
-    {
-        $reflection = new \ReflectionObject($object);
-        $property = $reflection->getProperty($propertyName);
-        $property->setAccessible(true);
-        $property->setValue($object, $value);
     }
 
     /**
@@ -320,6 +305,16 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
         $this->getApplicationContainer()->get('session')->set('_security_oauth', serialize($token));
     }
 
+    /**
+     * Sets Kernel instance.
+     *
+     * @param KernelInterface $kernel HttpKernel instance
+     */
+    public function setKernel(KernelInterface $kernel)
+    {
+        $this->kernel = $kernel;
+    }
+
     protected function getApplicationContainer()
     {
         return $this->getApplicationClient()->getContainer();
@@ -362,21 +357,25 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
 
     /**
      * gets container from kernel
-     * 
+     *
      * @return \Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected function getContainer()
     {
         return $this->kernel->getContainer();
     }
-    
+
     /**
-     * Sets Kernel instance.
-     *
-     * @param KernelInterface $kernel HttpKernel instance
+     * @param mixed $object
+     * @param string $propertyName
+     * @param mixed $value
+     * @return null
      */
-    public function setKernel(KernelInterface $kernel)
+    private function setPrivateProperty($object, $propertyName, $value)
     {
-        $this->kernel = $kernel;
+        $reflection = new \ReflectionObject($object);
+        $property = $reflection->getProperty($propertyName);
+        $property->setAccessible(true);
+        $property->setValue($object, $value);
     }
 }

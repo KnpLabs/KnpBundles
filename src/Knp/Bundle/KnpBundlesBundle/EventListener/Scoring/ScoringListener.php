@@ -13,12 +13,11 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
  */
 abstract class ScoringListener
 {
-    
     /**
-     * Handles a Bundle::UPDATE_SCORE event so the listener 
+     * Handles a Bundle::UPDATE_SCORE event so the listener
      * can update the score (add its own scoring detail : travis, readme...)
      *
-     * @param Knp\Bundle\KnpBundlesBundle\EventDispatcher\BundleEvent
+     * @param BundleEvent $event
      */
     public function onScoreUpdate(BundleEvent $event)
     {
@@ -28,8 +27,7 @@ abstract class ScoringListener
     /**
      * Add details to bundle's score
      *
-     * @param Knp\Bundle\KnpBundlesBundle\Entity\Bundle
+     * @param Bundle $bundle
      */
     abstract public function updateScore(Bundle $bundle);
-
 }

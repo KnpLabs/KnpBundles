@@ -65,6 +65,7 @@ class KbSolrIndexCommand extends ContainerAwareCommand
             $indexer->deleteBundlesIndexes();
         }
 
+        /* @var $bundle Bundle */
         foreach ($bundles as $bundle) {
             if ($verbose) {
                 $output->writeln('Indexing '.$bundle->getFullName().'...');
@@ -78,5 +79,7 @@ class KbSolrIndexCommand extends ContainerAwareCommand
         }
 
         $doctrine->getEntityManager()->flush();
+
+        return 0;
     }
 }

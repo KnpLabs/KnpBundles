@@ -74,6 +74,7 @@ class BundleController extends BaseController
 
     public function showAction(Request $request, $username, $name)
     {
+        /* @var $bundle Bundle */
         $bundle = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);
         if (!$bundle) {
             throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
@@ -151,7 +152,7 @@ class BundleController extends BaseController
             $bundle = $request->request->get('bundle');
 
             if (preg_match('/^[a-z0-9-]+\/[a-z0-9-\.]+$/i', $bundle)) {
-                list($username, $name) = explode('/', $bundle);
+                list($username, $name) = explode('/', str_replace('.git', '', $bundle));
 
                 $url    = $this->generateUrl('bundle_show', array('username' => $username, 'name' => $name));
                 $exists = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);
@@ -184,6 +185,7 @@ class BundleController extends BaseController
 
     public function changeUsageStatusAction($username, $name)
     {
+        /* @var $bundle Bundle */
         $bundle = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);
         if (!$bundle) {
             throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
@@ -236,6 +238,7 @@ class BundleController extends BaseController
 
     public function settingsAction(Request $request, $id)
     {
+        /* @var $bundle Bundle */
         $bundle = $this->getRepository('Bundle')->find($id);
         if (!$bundle) {
             throw new NotFoundHttpException('The bundle does not exist.');

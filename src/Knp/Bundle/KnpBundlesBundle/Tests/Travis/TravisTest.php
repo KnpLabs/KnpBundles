@@ -17,11 +17,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUpdateBundleForSuccessfulBuildStatus()
     {
-        $travis = $this->getTravis();
-        $travis->expects($this->once())
-            ->method('getTravisData')
-            ->with($this->equalTo('KnpLabs/KnpBundles'))
-            ->will($this->returnValue(array('last_build_status' => 0)));
+        $travis = $this->getTravis(array('last_build_status' => 0), 'KnpLabs/KnpBundles');
 
         $bundle = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Bundle', array('setTravisCiBuildStatus'));
         $bundle->expects($this->once())
@@ -39,11 +35,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUpdateBundleForFailureBuildStatus()
     {
-        $travis = $this->getTravis();
-        $travis->expects($this->once())
-            ->method('getTravisData')
-            ->with($this->equalTo('KnpLabs/KnpBundles'))
-            ->will($this->returnValue(array('last_build_status' => 1)));
+        $travis = $this->getTravis(array('last_build_status' => 1), 'KnpLabs/KnpBundles');
 
         $bundle = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Bundle', array('setTravisCiBuildStatus'));
         $bundle->expects($this->once())
@@ -61,10 +53,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUpdateBundleForUndefinedBuildStatus()
     {
-        $travis = $this->getTravis();
-        $travis->expects($this->once())
-            ->method('getTravisData')
-            ->will($this->returnValue(array('last_build_status' => 777)));
+        $travis = $this->getTravis(array('last_build_status' => 777));
 
         $bundle = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Bundle', array('setTravisCiBuildStatus'));
         $bundle->expects($this->once())
@@ -82,10 +71,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUpdateBundleWhenCannotFetchStatus()
     {
-        $travis = $this->getTravis();
-        $travis->expects($this->once())
-            ->method('getTravisData')
-            ->will($this->returnValue(array()));
+        $travis = $this->getTravis(array(), false);
 
         $bundle = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Bundle', array('setTravisCiBuildStatus'));
         $bundle->expects($this->once())
@@ -98,13 +84,50 @@ class RepoTest extends \PHPUnit_Framework_TestCase
         $travis->update($bundle);
     }
 
-    private function getTravis()
+    private function getTravis($return = array(), $with = null)
     {
         $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
 
-        return $this->getMock('Knp\Bundle\KnpBundlesBundle\Travis\Travis',
-            array('getTravisData'),
-            array($output)
-        );
+        $travis = new Travis($output);
+        $travis->setBrowser($this->getBrowserMock($return, $with));
+
+        return $travis;
+    }
+
+    private function getBrowserMock($return = array(), $with = null)
+    {
+        $client = $this->getMockForAbstractClass('Buzz\Client\Curl');
+        $client->expects($this->any())
+            ->method('setVerifyPeer')
+            ->with($this->equalTo(false));
+        $client->expects($this->any())
+            ->method('setTimeout')
+            ->with($this->equalTo(30));
+
+        $response = $this->getMock('Buzz\Message\Response');
+        $response->expects($this->any())
+            ->method('getContent')
+            ->will($this->returnValue(false !== $with ? json_encode($return) : null));
+
+        $browser = $this->getMock('Buzz\Browser');
+        $browser->expects($this->any())
+            ->method('getClient')
+            ->will($this->returnValue($client));
+        $browser->expects($this->any())
+            ->method('setClient')
+            ->with($client);
+
+        if (empty($with)) {
+            $browser->expects($this->any())
+                ->method('get')
+                ->will($this->returnValue($response));
+        } else {
+            $browser->expects($this->any())
+                ->method('get')
+                ->with($this->equalTo('http://travis-ci.org/'.$with.'.json'))
+                ->will($this->returnValue($response));
+        }
+
+        return $browser;
     }
 }

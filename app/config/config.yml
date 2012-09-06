@@ -52,14 +52,7 @@ doctrine:
         entity_managers:
             default:
                 mappings:
-                  KnpBundlesBundle: ~
-
-inori_twitter_app:
-    file: %kernel.root_dir%/../vendor/twitter/oauth/twitteroauth/twitteroauth.php
-    consumer_key: %knp_bundles.twitter.consumer_key%
-    consumer_secret: %knp_bundles.twitter.consumer_secret%
-    oauth_token: %knp_bundles.twitter.oauth_token%
-    oauth_token_secret: %knp_bundles.twitter.oauth_token_secret%
+                    KnpBundlesBundle: ~
 
 knp_zend_cache:
     templates:
@@ -126,5 +119,10 @@ hwi_oauth:
             client_secret:       %knp_bundles.sensio.client_secret%
             scope:               "SCOPE_EMAIL SCOPE_PUBLIC"
             user_response_class: Knp\Bundle\KnpBundlesBundle\Security\OAuth\Response\SensioConnectUserResponse
+
+        twitter:
+            type:                twitter
+            client_id:           %knp_bundles.twitter.consumer_key%
+            client_secret:       %knp_bundles.twitter.consumer_secret%
 
     firewall_name: secured_area
