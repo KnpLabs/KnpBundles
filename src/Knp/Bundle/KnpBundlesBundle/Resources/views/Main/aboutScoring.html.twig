@@ -1,16 +1,22 @@
-{% extends "KnpBundlesBundle::layout.html.twig" %}
+{% extends "KnpBundlesBundle::layout/900px.html.twig" %}
 
 {% block title %}{% trans %}about_scoring.meta.title{% endtrans %}{% endblock %}
 
 {% block description %}{% trans %}about_scoring.description{% endtrans %}{% endblock %}
 
-{% block content %}
-<div id="scoring">
-    <h1>{% trans %}about_scoring.title{% endtrans %}</h1>
-    <div id="main">
-        <div class="doc_text markdown">
-            {{ text|markdown }}
-        </div>
-    </div>
+{% block intro %}
+<div id="intro">
+    <h1>KnpBundles scoring</h1>
+    <h2>Detailed explanation of used scoring algorithm</h2>
+</div>
+{% endblock %}
+
+{% block right_holder %}{% endblock %}
+
+{% block left_holder %}
+<div class="content-box">
+    <section class="markdown">
+        {{ text|markdown }}
+    </section>
 </div>
 {% endblock %}

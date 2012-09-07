@@ -7,6 +7,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\Adapter\DoctrineCollectionAdapter;
+
 /**
  * An Open Source Repo living on GitHub
  *
@@ -804,11 +807,17 @@ class Bundle
     /**
      * Get description
      *
+     * @param null|integer $cutAfter
+     *
      * @return string
      */
-    public function getDescription()
+    public function getDescription($cutAfter = null)
     {
-        return $this->description;
+        if (null === $cutAfter) {
+            return $this->description;
+        }
+
+        return $this->description ? substr($this->description, 0, $cutAfter) : null;
     }
 
     /**
@@ -874,11 +883,24 @@ class Bundle
     /**
      * Get contributors
      *
-     * @return Collection
+     * @param null|integer $page
+     * @param integer      $limit
+     *
+     * @return \Traversable
      */
-    public function getContributors()
+    public function getContributors($page = null, $limit = 1)
     {
-        return $this->contributors;
+        if (null === $page) {
+            return $this->contributors;
+        }
+
+        $paginator = new Pagerfanta(new DoctrineCollectionAdapter($this->contributors));
+        $paginator
+            ->setMaxPerPage($limit)
+            ->setCurrentPage($page)
+        ;
+
+        return $paginator->getCurrentPageResults();
     }
 
     /**
@@ -1018,9 +1040,25 @@ class Bundle
         return substr($class, strrpos($class, '\\')+1);
     }
 
-    public function getRecommenders()
+    /**
+     * @param null|integer $page
+     * @param integer      $limit
+     *
+     * @return \Traversable
+     */
+    public function getRecommenders($page = null, $limit = 20)
     {
-        return $this->recommenders;
+        if (null === $page) {
+            return $this->recommenders;
+        }
+
+        $paginator = new Pagerfanta(new DoctrineCollectionAdapter($this->recommenders));
+        $paginator
+            ->setMaxPerPage($limit)
+            ->setCurrentPage($page)
+        ;
+
+        return $paginator->getCurrentPageResults();
     }
 
     public function getNbRecommenders()
@@ -1030,13 +1068,17 @@ class Bundle
 
     public function addRecommender(User $user)
     {
+        $user->addRecommendedBundle($this);
+
         $this->recommenders[] = $user;
         $this->nbRecommenders++;
     }
 
     public function removeRecommender(User $user)
     {
-        $this->getRecommenders()->removeElement($user);
+        $user->getUsedBundles()->removeElement($this);
+
+        $this->recommenders->removeElement($user);
         $this->nbRecommenders--;
     }
 

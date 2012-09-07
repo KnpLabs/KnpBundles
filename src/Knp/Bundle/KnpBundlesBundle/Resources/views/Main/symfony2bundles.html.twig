@@ -1,16 +1,22 @@
-{% extends "KnpBundlesBundle::layout.html.twig" %}
+{% extends 'KnpBundlesBundle::layout/900px.html.twig' %}
 
 {% block title %}{% trans %}symfony2bundles.meta.title{% endtrans %}{% endblock %}
 
 {% block description %}{% trans %}symfony2bundles.description{% endtrans %}{% endblock %}
 
-{% block content %}
-<div id="api">
-    <h1>{% trans %}symfony2bundles.title{% endtrans %}</h1>
-    <div id="main">
-        <div class="doc_text markdown">
-            {{ text|markdown }}
-        </div>
-    </div>
+{% block intro %}
+<div id="intro">
+    <h1>Welcome KnpBundles!</h1>
+    <h2>Explanation why Symfony2Bundles became KnpBundles</h2>
+</div>
+{% endblock %}
+
+{% block right_holder %}{% endblock %}
+
+{% block left_holder %}
+<div class="content-box">
+    <section class="markdown">
+        {{ text|markdown }}
+    </section>
 </div>
 {% endblock %}

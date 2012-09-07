@@ -51,12 +51,12 @@ Feature:
       | cordoval3  |
       | cordoval4  |
       | cordoval5  |
+      | cordoval6  |
+      | cordoval7  |
 
   Scenario: Show second page of developers list
     When I send a GET request to "/developer?page=2&format=json"
     Then I should get JSON with following items:
       | name       |
-      | cordoval6  |
-      | cordoval7  |
       | cordoval8  |
       | cordoval9  |

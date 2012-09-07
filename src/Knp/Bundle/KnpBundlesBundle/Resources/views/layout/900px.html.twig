@@ -1,0 +1,17 @@
+{% extends 'KnpBundlesBundle::layout.html.twig' %}
+
+{% block content_holder %}
+<div id="content-holder">
+    {% block right_holder %}
+    <div id="sidebar">
+        {% block right %}{% endblock %}
+    </div>
+    {% endblock %}
+
+    {% block left_holder %}
+    <div id="content">
+        {% block left %}{% endblock %}
+    </div>
+    {% endblock %}
+</div>
+{% endblock %}

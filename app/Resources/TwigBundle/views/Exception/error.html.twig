@@ -1,12 +1,22 @@
-{% extends 'KnpBundlesBundle::layout.html.twig' %}
+{% extends 'KnpBundlesBundle::layout/960px.html.twig' %}
 
-{% block body_attributes %}class="error"{% endblock %}
+{% block title %}ERROR - {% trans %}error.500.title{% endtrans %}{% endblock %}
 
-{% block title %}{% trans %}error.500.title{% endtrans %}{% endblock %}
+{% block content_header %}{% endblock %}
 
-{% block content %}
-    <div id="main">
-        <h1>{% trans %}error.500.title{% endtrans %}</h1>
-        <p>{% trans %}error.500.content{% endtrans %}</p>
-    </div>
+{% block content_holder %}
+<div id="error">
+    <h1>ERROR 500</h1>
+
+    <section id="error-crap">
+        <span>O<br>H<br><span>!</span></span>
+        <span>C<br>R<br>A<br>P</span>
+    </section>
+
+    <section id="error-desc">
+        <p>An error occurred</p>
+        <p>Edgar found some issue at this page<br>and reported it to our ninja developers.</p>
+        <p id="error-sorry">(we're terribly sorry about this)</p>
+    </section>
+</div>
 {% endblock %}

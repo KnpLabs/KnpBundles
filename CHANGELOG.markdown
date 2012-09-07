@@ -1,3 +1,7 @@
+* 2012-09-07
+  * Introduced new design!
+  * Replaced `knp-components` with `pagerfanta`
+
 * 2012-08-30
   * Removed `ScoreRepository#setScore()`
 

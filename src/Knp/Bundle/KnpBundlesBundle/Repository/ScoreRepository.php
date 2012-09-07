@@ -35,7 +35,7 @@ class ScoreRepository extends EntityRepository
     public function getScoreCountEvolution()
     {
         return $this->createQueryBuilder('s')
-            ->select('s.date, COUNT(s.id) AS number')
+            ->select('s.date, COUNT(s.id) AS value')
             ->groupBy('s.date')
             ->orderBy('s.date', 'asc')
             ->getQuery()

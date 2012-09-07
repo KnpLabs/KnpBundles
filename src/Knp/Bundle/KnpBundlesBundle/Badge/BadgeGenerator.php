@@ -103,7 +103,7 @@ class BadgeGenerator
      */
     public function show(Bundle $bundle, $type = 'long', $regenerate = false)
     {
-        $relativePath = $this->findShortestPath(
+        $relativePath = $this->filesystem->makePathRelative(
             $this->rootDir,
             $this->cacheDir
         );
@@ -157,8 +157,8 @@ class BadgeGenerator
         $this->createBadgesDir();
 
         // Remove existing badge
-        $this->removeIfExist($this->getBadgeFile($bundle));
-        $this->removeIfExist($this->getBadgeFile($bundle, self::SHORT));
+        $this->filesystem->remove($this->getBadgeFile($bundle));
+        $this->filesystem->remove($this->getBadgeFile($bundle, self::SHORT));
 
         // Save badge
         $image->save($this->getBadgeFile($bundle));
@@ -252,18 +252,6 @@ class BadgeGenerator
     }
 
     /**
-     * Remove previously generated badge
-     *
-     * @param string $file
-     */
-    protected function removeIfExist($file)
-    {
-        if ($this->filesystem->exists($file)) {
-            unlink($file);
-        }
-    }
-
-    /**
      * Get score points position x:y
      *
      * @param string $type
@@ -279,34 +267,5 @@ class BadgeGenerator
         $coordinates = explode(':', ($this->position[$type][$n]));
 
         return new Point($coordinates[0], $coordinates[1]);
-    }
-
-    private function findShortestPath($from, $to)
-    {
-        if (!$this->filesystem->isAbsolutePath($from) || !$this->filesystem->isAbsolutePath($to)) {
-            throw new \InvalidArgumentException('from and to must be absolute paths');
-        }
-
-        if (dirname($from) === dirname($to)) {
-            return './'.basename($to);
-        }
-
-        $from = lcfirst(rtrim(strtr($from, '\\', '/'), '/'));
-        $to   = lcfirst(rtrim(strtr($to, '\\', '/'), '/'));
-
-        $commonPath = $to;
-        while (0 !== strpos($from, $commonPath) && '/' !== $commonPath && '.' !== $commonPath && !preg_match('{^[a-z]:/?$}i', $commonPath)) {
-            $commonPath = strtr(dirname($commonPath), '\\', '/');
-        }
-
-        if (0 !== strpos($from, $commonPath) || '/' === $commonPath || '.' === $commonPath) {
-            return $to;
-        }
-
-        $commonPath      = rtrim($commonPath, '/') . '/';
-        $sourcePathDepth = substr_count(substr($from, strlen($commonPath)), '/');
-        $commonPathCode  = str_repeat('../', $sourcePathDepth);
-
-        return ($commonPathCode . substr($to, strlen($commonPath))) ?: './';
     }
 }

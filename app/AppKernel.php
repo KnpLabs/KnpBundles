@@ -26,9 +26,9 @@ class AppKernel extends Kernel
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Knp\Bundle\ZendCacheBundle\KnpZendCacheBundle(),
             new Knp\Bundle\DisqusBundle\KnpDisqusBundle(),
-            new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
             new Nelmio\SolariumBundle\NelmioSolariumBundle(),
+            new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
 
             // register your applications here
             new Knp\Bundle\KnpBundlesBundle\KnpBundlesBundle(),

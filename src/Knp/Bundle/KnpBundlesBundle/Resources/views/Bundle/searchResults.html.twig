@@ -1,29 +1,36 @@
 {% extends 'KnpBundlesBundle:Bundle:search.html.twig' %}
 {% set totalCount = bundles.getPaginationData().totalCount %}
 
-{% block body_attributes %}class="bundles-list" id="search-result"{% endblock %}
-
 {% block search_query %}{{ query }}{% endblock %}
 
 {% block title %}{% trans with {'%query%': query} %}search.results.meta.title{% endtrans %}{% endblock %}
 
 {% block description %}{% trans with {'%count%': totalCount, '%query%': query} %}search.results.meta.description{% endtrans %}{% endblock %}
 
-{% block content %}
-    <h1>{% trans with {'%query%': query} %}search.results.title{% endtrans %}</h1>
-    <div id="main">
-        <section id="search-result-bundles">
-            {% if totalCount == 0 %}
-                <div class="content-title">
-                    <h1>No bundles found. Feel free to create your own :)</h1>
-                </div>
-            {% else %}
-                <div class="content-title">
-                    <h1>{{ totalCount }} Bundle{{ totalCount > 1 ? 's' : '' }}</h1>
-                </div>
-                {% include 'KnpBundlesBundle:Bundle:searchBigList.html.twig' with {'bundles': bundles} %}
-            {% endif %}
-        </section>
-        {{ bundles.render()|raw }}
-    </div>
+{% block intro %}
+<div id="intro">
+    <h1>{{ block('title') }}</h1>
+</div>
+{% endblock %}
+
+{% block left %}
+<div class="content-box">
+    <hgroup>
+        <h2>{% trans with {'%query%': query} %}search.results.title{% endtrans %}</h2>
+        {% if totalCount == 0 %}
+        <h4>No bundles found. Feel free to create your own :)</h4>
+        {% endif %}
+    </hgroup>
+
+    <section id="search-result-bundles">
+        {% if totalCount > 0 %}
+        <div class="content-title">
+            <h1>{{ totalCount }} Bundle{{ totalCount > 1 ? 's' : '' }}</h1>
+        </div>
+        {% include 'KnpBundlesBundle:Bundle:searchBigList.html.twig' with {'bundles': bundles} %}
+
+        {{ pagerfanta(bundles, 'knp_bundles_view') }}
+        {% endif %}
+    </section>
+</div>
 {% endblock %}

@@ -279,7 +279,7 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
      */
     public function iShouldSeeThatIsManagedByDeveloper($bundleName)
     {
-        return new Step\Then(sprintf('I should see "%s" in the ".bundles-i-manage" element', $bundleName));
+        return new Step\Then(sprintf('I should see "%s" in the "#owned" element', $bundleName));
     }
 
     /**

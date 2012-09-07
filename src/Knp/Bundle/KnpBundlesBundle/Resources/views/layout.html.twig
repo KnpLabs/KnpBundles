@@ -1,111 +1,129 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
+
     <title>{% block title %}{% endblock %} | KnpBundles</title>
-    <meta name="description" content="{% block description %}{% endblock %}" />
+    <meta name="description" content="{% block description %}{% endblock %}">
 
-    <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/png" />
-    <link href="{{ path('latest', {'format': 'atom'}) }}" rel="alternate" title="ATOM" type="application/atom+xml" />
-    <link href="{{ asset('bundles/knpbundles/css/reset.css') }}" rel="stylesheet" type="text/css" media="screen" />
-    <link href="{{ asset('bundles/knpbundles/css/style.css') }}" rel="stylesheet" type="text/css" media="screen" />
-    <link href="{{ asset('bundles/knpbundles/css/tipsy.css') }}" rel="stylesheet" type="text/css" media="screen" />
-    <link href="{{ asset('bundles/knpbundles/css/modal.css') }}" rel="stylesheet" type="text/css" media="screen" />
-    <script type="text/javascript">
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/png">
 
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-7062980-9']);
-      _gaq.push(['_trackPageview']);
+    <link rel="alternate" href="{{ path('latest', {'format': 'atom'}) }}" title="ATOM" type="application/atom+xml">
 
-      (function() {
+    <link rel="stylesheet" href="{{ asset('bundles/knpbundles/css/bootstrap.min.css') }}" type="text/css" media="screen">
+    <link rel="stylesheet" href="{{ asset('bundles/knpbundles/css/styles.css') }}" type="text/css" media="screen">
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/6.0/styles/github.min.css" type="text/css" media="screen">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+</head>
+<body{% block body_attributes %}{% endblock %}>
+
+<header id="page-header">
+    <section>
+        <h1 id="logo"><a href="{{ path('bundle_list') }}"><img src="{{ asset('bundles/knpbundles/images/logo.gif') }}" alt="KnpBundles"></a></h1>
+
+        <nav>
+            {{ knp_menu_render(knp_menu_get('main').setAttribute('id', 'menu')) }}
+        </nav>
+
+        {% render 'KnpBundlesBundle:User:userbar' %}
+
+        <form method="get" action="{{ path('search') }}" id="search-box">
+            <label for="search-query">{% trans %}search.label{% endtrans %}</label>
+            <input type="text" id="search-query" name="q" value="{% block search_query %}{% endblock %}" placeholder="Search...">
+        </form>
+    </section>
+</header>
+
+<div id="content-wrapper" class="clearfix">
+    <div id="content-center"{% block content_attributes %}{% endblock %}>
+        {% block content_header %}
+        <div id="content-header">
+            {% block promo -%}
+                {% render "KnpBundlesBundle:Main:banner" %}
+            {%- endblock %}
+
+            {% block intro -%}
+                <div></div>
+            {%- endblock %}
+        </div>
+        {% endblock %}
+
+        {% block content_holder %}
+        <div id="content-holder">
+            {% block sidebar %}
+            <div id="sidebar">
+                {% block right %}{% endblock %}
+            </div>
+            {% endblock %}
+
+            {% block content %}
+            <div id="content">
+                {% block left %}{% endblock %}
+            </div>
+            {% endblock %}
+        </div>
+        {% endblock %}
+    </div>
+</div>
+
+<footer id="page-footer">
+    <section>
+        <section id="copyrights">
+            <h2><a href="http://knplabs.com/" hreflang="en"><img src="{{ asset('bundles/knpbundles/images/knp_logo.png') }}" alt="KnpBundles"></a></h2>
+            <p>Copyright &copy; 2012 <a href="http://knplabs.com/" hreflang="en"><strong>KnpBundles.com</strong></a><br>All rights reserved</p>
+
+            <ul>
+                <li><a href="http://knplabs.com/" hreflang="en">KnpLabs World</a></li>
+                <li><a href="http://knplabs.fr/" hreflang="fr">KnpLabs France</a></li>
+            </ul>
+        </section>
+
+        <nav>
+            <dl>
+                <dt><a href="{{ path('bundle_list') }}">KnpBundles</a></dt>
+                <dd>
+                    <ul>
+                        <li><a href="https://github.com/knplabs/knpbundles">{% trans %}footer.code{% endtrans %}</a></li>
+                        <li><a href="{{ path('api') }}">API</a></li>
+                        <li><a href="{{ path('scoring') }}">{% trans %}Scoring explanation{% endtrans %}</a></li>
+                        <li><a href="{{ path('symfony2bundles') }}">Symfony2bundles</a></li>
+                        <li><a href="https://github.com/KnpLabs/KnpBundles/issues/new">{% trans %}footer.report_issue{% endtrans %}</a></li>
+                    </ul>
+                </dd>
+            </dl>
+            <dl>
+                <dt><a href="http://knplabs.com/" hreflang="en">KnpLabs</a></dt>
+                <dd>
+                    <ul>
+                        <li><a href="http://knplabs.com/training/symfony2" hreflang="en">Symfony training</a> (World)</li>
+                        <li><a href="http://knplabs.fr/formation/symfony2" hreflang="fr">Formation Symfony</a> (France)</li>
+                        <li><a href="http://knpuniversity.com/">Symfony tutorial</a> screencast</li>
+
+                        <li><a href="http://twitter.com/knplabs">KnpLabs on Twitter</a></li>
+                        <li><a href="http://behat.org/">Behat: BDD framework for PHP</a></li>
+                    </ul>
+                </dd>
+            </dl>
+        </nav>
+    </section>
+</footer>
+
+<script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-7062980-9']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-
-    </script>
-</head>
-<body {% block body_attributes %}{% endblock %}>
-    <div id="header">
-        <div class="center">
-            {{ knp_menu_render(knp_menu_get('main').setAttribute('id', 'menu')) }}
-            {% render 'KnpBundlesBundle:User:userbar' with {}, {'standalone': true} %}
-        </div>
-    </div><!-- /#header -->
-    <div id="header2">
-        <div class="center">
-            <a href="{{ path('bundle_list') }}" title="KnpBundles" id="logo">
-                <img src="{{ asset('bundles/knpbundles/images/knpbundles.png') }}" alt="Knp Bundles: {{ 'header.baseline'|trans }}" />
-            </a>
-            <div id="baseline">The Unofficial Selection</div>
-
-            <form method="get" action="{{ path('search') }}" id="search-box">
-                <label for="search-query">{% trans %}search.label{% endtrans %}</label>
-                <input type="text" id="search-query" name="q" value="{% block search_query %}{% endblock %}" />
-                <button id="search-btn" class="button">{% trans %}search.label{% endtrans %}</button>
-            </form>
-
-            {% render 'KnpBundlesBundle:Main:banner' %}
-        </div>
-    </div>
-    <div id="content-wrapper">
-        <div class="center">
-            <div id="content" class="clearfix">
-                {% block content %}{% endblock %}
-            </div><!-- /#content -->
-        </div>
-    </div>
-    <div id="footer-wrapper">
-        <div id="footer">
-            <div id="footer-inner">
-                <dl>
-                    <dt><a href="{{ path('bundle_list') }}">KnpBundles</a></dt>
-                    <dd>
-                        <ul>
-                            <li><a href="https://github.com/knplabs/knpbundles">{% trans %}footer.code{% endtrans %}</a></li>
-                            <li><a href="{{ path('api') }}">API</a></li>
-                            <li><a href="{{ path('scoring') }}">{% trans %}Scoring explanation{% endtrans %}</a></li>
-                            <li><a href="{{ path('symfony2bundles') }}">Symfony2bundles</a></li>
-                            <li><a href="https://github.com/KnpLabs/KnpBundles/issues/new">{% trans %}footer.report_issue{% endtrans %}
-
-                        </ul>
-                    </dd>
-                </dl>
-                <dl>
-                    <dt><a href="http://knplabs.com">KnpLabs</a></dt>
-                    <dd>
-                        <ul>
-                            <li><a href="http://knplabs.com/training/symfony2">Symfony training</a> (World)</li>
-                            <li><a href="http://knplabs.fr/formation/symfony2" hreflang="fr" lang="fr">Formation Symfony</a> (France)</li>
-                            <li><a href="http://knpuniversity.com/">Symfony tutorial</a> screencast</li>
-
-                            <li><a href="http://twitter.com/knplabs">KnpLabs on Twitter</a></li>
-                            <li><a href="http://behat.org">Behat: BDD framework for PHP</a></li>
-                        </ul>
-                    </dd>
-                </dl>
-                <dl class="right">
-                    <dt>{% trans %}credits.title{% endtrans %}</dt>
-                    <dd>
-                        <li><a href="http://knplabs.com">{% trans %}credits.lead_dev{% endtrans %}</a></li>
-                        <ul style="font-size: 11px; ">
-                        <li><a style="text-decoration: none;" hreflang="en" href="http://knplabs.com">KnpLabs World</a></li>
-                        <li><a style="text-decoration: none;" hreflang="fr" href="http://knplabs.fr">KnpLabs France</a></li>
-                        </ul>
-                    </dd>
-                </dl>
-
-            </div>
-        </div>
-    </div><!-- /#footer-wrapper -->
-    <link rel="stylesheet" href="http://yandex.st/highlightjs/6.0/styles/github.min.css">
-    <script src="http://yandex.st/highlightjs/6.0/highlight.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-    <script src="{{ asset('bundles/knpbundles/js/jquery.hotkeys.js') }}"></script>
-    <script src="{{ asset('bundles/knpbundles/js/jquery.ba-viewportoffset.min.js') }}"></script>
-    <script src="{{ asset('bundles/knpbundles/js/jquery.tipsy.js') }}"></script>
-    <script src="{{ asset('bundles/knpbundles/js/bootstrap-modal.js') }}"></script>
-    <script src="{{ asset('bundles/knpbundles/js/main.js') }}"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    </body>
+    })();
+</script>
+<script src="http://yandex.st/highlightjs/6.0/highlight.min.js"></script>
+<script src="{{ asset('bundles/knpbundles/js/jquery.hotkeys.js') }}"></script>
+<script src="{{ asset('bundles/knpbundles/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('bundles/knpbundles/js/main.js') }}"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
 </html>

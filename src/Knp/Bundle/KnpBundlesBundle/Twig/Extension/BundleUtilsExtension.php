@@ -17,7 +17,10 @@ class BundleUtilsExtension extends \Twig_Extension
     {
         return array(
             'bundle_activity'      => new \Twig_Filter_Method($this, 'bundleActivity'),
-            'bundle_state_tooltip' => new \Twig_Filter_Method($this, 'bundleStateTooltip')
+            'bundle_github_url'    => new \Twig_Filter_Method($this, 'bundleGithubUrl'),
+            'bundle_packagist_url' => new \Twig_Filter_Method($this, 'bundlePackagistUrl'),
+            'bundle_state_tooltip' => new \Twig_Filter_Method($this, 'bundleStateTooltip'),
+            'bundle_travis_url'    => new \Twig_Filter_Method($this, 'bundleTravisUrl'),
         );
     }
 
@@ -32,19 +35,19 @@ class BundleUtilsExtension extends \Twig_Extension
     {
         switch ($state) {
             default:
-                return 'status of this bundle is not yet confirmed';
+                return 'Status of this bundle is not yet confirmed';
                 break;
 
             case Bundle::STATE_READY:
-                return 'this bundle is ready for production usage';
+                return 'This bundle is ready for production usage';
                 break;
 
             case Bundle::STATE_NOT_YET_READY:
-                return 'this bundle is currently in development stage, you can use it on your own risk';
+                return 'This bundle is currently in development stage, you can use it on your own risk';
                 break;
 
             case Bundle::STATE_DEPRECATED:
-                return 'this bundle is not maintained anymore, you can use it on your own risk';
+                return 'This bundle is not maintained anymore, you can use it on your own risk';
                 break;
         }
     }
@@ -68,6 +71,27 @@ class BundleUtilsExtension extends \Twig_Extension
         }
 
         return 'bundles.activity.low';
+    }
+
+    public function bundleGithubUrl(Bundle $bundle, $urlType = 'http')
+    {
+        if ('git' === $urlType) {
+            $url = 'git://github.com/%s/%s.git';
+        } else {
+            $url = 'http://github.com/%s/%s';
+        }
+
+        return sprintf($url, $bundle->getUsername(), $this->getName());
+    }
+
+    public function bundlePackagistUrl(Bundle $bundle)
+    {
+        return $bundle->getComposerName() ? sprintf('http://packagist.org/packages/%s', $bundle->getComposerName()) : null;
+    }
+
+    public function bundleTravisUrl(Bundle $bundle)
+    {
+        return $bundle->getUsesTravisCi() ? sprintf('http://travis-ci.org/%s/%s', $bundle->getUsername(), $this->getName()) : null;
     }
 
     /**

@@ -37,9 +37,10 @@ class MainController extends BaseController
     {
         $banner = $this->container->getParameter('banner');
 
-        return $this->render('KnpBundlesBundle:Main:banner.html.twig', array(
-            'url'  => $banner['url'],
-            'text' => $banner['text'],
+        $banner = str_replace(array('[', ']', '|'), array('', '', ' '), $banner['text']);
+
+        return $this->render('KnpBundlesBundle::layout/promo.html.twig', array(
+            'text' => $banner
         ));
     }
 }

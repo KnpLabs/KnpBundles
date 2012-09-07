@@ -1,11 +1,24 @@
-{% extends 'KnpBundlesBundle::layout.html.twig' %}
+{% extends 'KnpBundlesBundle::layout/900px.html.twig' %}
 
-{% block body_attributes %}id="developer-show"{% endblock %}
+{% block title %}Sign-in{% endblock %}
 
-{% block content %}
-<h1 class="developer-name">Login via</h1>
-<div class="actions">
-    <a class="button github" href="{{ hwi_oauth_login_url('github') }}">GitHub</a>
-    <a class="button github" href="{{ hwi_oauth_login_url('sensio') }}">Sensio Connect</a>
+{% block intro %}
+<div id="intro">
+    <h1>Sign in to KnpBundles.com</h1>
+    <h2>Action you want to perform, require from you to sign-in</h2>
+</div>
+{% endblock %}
+
+{% block left %}
+<div class="content-box">
+    <hgroup>
+        <h2>No "Sign up" form?</h2>
+        <h4>Yep, there is no sign-up form, but why you ask? We don't like them it same as you! All sign-up job is done automatically in background when you choose which way you want to sign in into <strong>KnpBundles.com</strong></h4>
+    </hgroup>
+
+    <section>
+        <a class="btn btn-large" href="{{ hwi_oauth_login_url('github') }}">GitHub</a>
+        <a class="btn btn-large" href="{{ hwi_oauth_login_url('sensio') }}">Sensio Connect</a>
+    </section>
 </div>
 {% endblock %}
