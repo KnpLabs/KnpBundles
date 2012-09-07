@@ -50,12 +50,12 @@ class User
         if (is_string($response)) {
             $user->setName($response);
         } else {
-            $user->setName($response->getUsername());
-            $user->setFullName($response->getDisplayName());
+            $user->setName($response->getNickname());
+            $user->setFullName($response->getRealName());
         }
 
         if ($response instanceof SensioConnectUserResponse) {
-            $user->setName($response->getLinkedAccount('github') ?: $response->getUsername());
+            $user->setName($response->getLinkedAccount('github') ?: $response->getNickname());
         }
 
         if ($response instanceof AdvancedUserResponseInterface) {

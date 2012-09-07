@@ -11,7 +11,7 @@ class SensioConnectUserResponse extends BaseResponse
     /**
      * {@inheritdoc}
      */
-    public function getUsername()
+    public function getNickname()
     {
         $this->getOnlineAccounts();
 
