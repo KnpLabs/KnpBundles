@@ -1,26 +1,70 @@
-{% extends 'KnpBundlesBundle::layout.html.twig' %}
+{% extends 'KnpBundlesBundle::layout/900px.html.twig' %}
 
-{% block body_attributes %}class="bundles-list"{% endblock %}
+{% block title %}{% trans with {'%count%': bundles.nbResults, '%sort%': sort} %}bundles.meta.title{% endtrans %}{% endblock %}
 
-{% block title %}{% trans with {'%count%': bundles.totalItemCount, '%sort%': sort} %}bundles.meta.title{% endtrans %}{% endblock %}
+{% block description %}{% trans with {'%count%': bundles.nbResults, '%sort%': sort} %}bundles.meta.description{% endtrans %}{% endblock %}
 
-{% block description %}{% trans with {'%count%': bundles.totalItemCount, '%sort%': sort} %}bundles.meta.description{% endtrans %}{% endblock %}
+{% block intro %}
+<div id="intro">
+    <h1>Over {{ bundles.nbResults }} bundles</h1>
+    <h2>Find bundle that fits your needs!</h2>
+</div>
+{% endblock %}
 
-{% block content %}
-    <div class="content-title">
-        <h1>{% trans with {'%count%': bundles.totalItemCount, '%sort%': sort, '[': '<span>', ']': '</span>'} %}bundles.title{% endtrans %}</h1>
-        <div class="dropdown-menu group">
-            <a class="label">{{ sortLegends[sort]|trans }}</a>
-            <ul class="dropdown-menu-list">
+{% block left %}
+<div class="content-box">
+    <hgroup>
+        <div class="btn-group btn-sort">
+            <button class="btn dropdown-title" data-toggle="dropdown"><i class="icon-{{ sort }}"></i>{{ sortLegends[sort]|trans }}</button>
+            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
                 {%- for field, text in sortLegends %}
-                <li><a href='{% block route_list %}{{ path('bundle_list', {'sort': field}) }}{% endblock %}'>{{ text|trans }}</a></li>
+                <li><i class="icon-{{ field }}"></i><a href="{{ path('bundle_list', {'sort': field}) }}">{{ text|trans }}</a></li>
                 {%- endfor %}
             </ul>
         </div>
-    </div>
-    <div id="main">
+
+        <h2>{% trans with {'%count%': bundles.nbResults, '%sort%': sort, '[': '<span>', ']': '</span>'} %}bundles.title{% endtrans %}</h2>
+    </hgroup>
+
+    <section class="bundles-list">
         {% include 'KnpBundlesBundle:Bundle:bigList.html.twig' with {'bundles': bundles} %}
-        {{ bundles.render()|raw }}
-    </div>
+
+        {{ pagerfanta(bundles, 'knp_bundles_view') }}
+    </section>
+</div>
 {% endblock %}
 
+{% block right %}
+<div class="sidebar-box sidebar-chart">
+    <hgroup>
+        <h2>Statistics</h2>
+    </hgroup>
+
+    <section>
+        {% include 'KnpBundlesBundle::layout/chart.html.twig' with {'simple': true} %}
+
+        <h4><a href="{{ path('evolution') }}">Discover evolution of Symfony2 ecosystem</a></h4>
+    </section>
+</div>
+
+<div class="sidebar-box sidebar-users-list clearfix">
+    <hgroup>
+        <h2>Newest Users</h2>
+    </hgroup>
+
+    <section>
+        <ul>
+            {% for user in users %}
+            <li>
+                <a href="{{ path('user_show', {'name': user.username}) }}">
+                    <img src="{{ user.gravatarHash|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=40') }}" alt="{{ user.name }}" title="{{ user.name }}" width="40" height="40">
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>
+{% endblock %}

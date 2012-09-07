@@ -1,285 +1,299 @@
-{% extends 'KnpBundlesBundle::layout.html.twig' %}
-
-{% block body_attributes %}id="bundle-show"{% endblock %}
+{% extends 'KnpBundlesBundle::layout/900px.html.twig' %}
 
 {% block title %}{% trans with {'%name%': bundle.name, '%username%': bundle.username} %}bundles.show.meta.title{% endtrans %}{% endblock %}
 {% block description %}{{ bundle.description }}{% endblock %}
 
 {% set isOwnerOrContributor = app.user is not null and bundle.isOwnerOrContributor(app.user) %}
 
-{% block content %}
-    <div class="col-right">
+{% block intro %}
+<div id="intro" class="bundle-details">
+    {%- if isOwnerOrContributor -%}
+    <span class="btn pull-right" data-toggle="modal" data-target="#modal-settings"><i class="icon-wrench"></i>{% trans %}bundles.show.setting{% endtrans %}</span>
+    {%- endif -%}
 
-        <div class="box">
-            <h3>{% trans %}bundles.show.infos.title{% endtrans %}</h3>
+    <div class="score{% if bundle.lastTweetedAt %} award{% endif %}">
+        {{ bundle.score }}
+    </div>
+
+    <h1>{{ bundle.name }}</h1>
+    <h2>{% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': bundle.username}) }}">{{ bundle.username }}</a></h2>
+
+    <p class="description">{{ bundle.description|slice(0, 150) }}</p>
+</div>
+{% endblock %}
+
+{% block promo -%}
+<div id="header-right">
+    {{ parent() }}
+
+    <div id="bundle-actions">
+        <a class="btn btn-large" href="{{ bundle.gitHubUrl }}" style="width:228px">{% trans %}bundles.show.github{% endtrans %}</a>
+    </div>
+</div>
+{%- endblock %}
+
+{% block right %}
+    <div class="sidebar-box sidebar-bundle-info">
+        <hgroup>
+            <h2>{% trans %}bundles.show.infos.title{% endtrans %}</h2>
+        </hgroup>
+
+        <section>
             <ul>
                 {%- if bundle.state != 'unknown' -%}
                 <li>
-                    {% trans %}bundles.show.infos.state{% endtrans %}
-                    <span class="state {{ bundle.state|replace({' ': '-'}) }}" data-state-title="{{ bundle.state|bundle_state_tooltip }}">
-                        {{ bundle.state }}
-                    </span>
+                    <i class="icon-{{ bundle.state == 'ready' ? 'ok' : 'cancel' }}"></i><strong>{% trans %}bundles.show.infos.state{% endtrans %}</strong>
+                    <abbr title="{{ bundle.state|bundle_state_tooltip }}">{{ bundle.state }}</abbr>
                 </li>
                 {%- endif -%}
-                <li>{% trans %}bundles.show.infos.score{% endtrans %} <span><a href="#bundle-score-details">{{ bundle.score }}</a></span></li>
-                <li>{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}
+                <li><i class="icon-chart"></i><strong>{% trans %}bundles.show.infos.score{% endtrans %}</strong> <a href="#score-details" data-toggle="tab">{{ bundle.score }}</a></li>
+                {%- if bundle.symfonyVersions|length > 0 -%}
+                <li><i class="icon-symfony"></i><strong>{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}</strong>
                     <table class="versions-table">
                         <tbody>
-                            <tr class="table-bottom-line">
-                                <th>Bundle</th><th class="table-middle-space"></th><th>Symfony</th>
-                            </tr>
+                        <tr class="table-bottom-line">
+                            <th>Bundle</th><th class="table-middle-space"></th><th>Symfony</th>
+                        </tr>
                         {% for key, version in bundle.symfonyVersions %}
-                            <tr>
-                                <td>{{ key }}</td><td></td><td>{{ version ? version : "bundles.show.infos.unknown" | trans }}</td>
-                            </tr>
+                        <tr>
+                            <td>{{ key }}</td><td>{{ version ? version : "bundles.show.infos.unknown"|trans }}</td>
+                        </tr>
                         {% endfor %}
                         </tbody>
                     </table>
                 </li>
-                <li>{% trans %}bundles.show.infos.created{% endtrans %} <span>{{ bundle.createdAt|date('date_format'|trans) }}</span></li>
-                <li>{% trans %}bundles.show.infos.contributors{% endtrans %} <span>{{ bundle.nbContributors }}</span></li>
-                <li>{% trans %}bundles.show.infos.followers{% endtrans %} <span>{{ bundle.nbFollowers }}</span></li>
-                <li class="info-github" title="{% trans %}bundles.show.infos.github{% endtrans %}">
-                    <a href="{{ bundle.githubUrl }}">{{ bundle.fullName }}</a>
+                {%- endif -%}
+                <li><i class="icon-calendar"></i><strong>{% trans %}bundles.show.infos.created{% endtrans %}</strong> {{ bundle.createdAt|date('date_format'|trans) }}</li>
+                <li><i class="icon-users"></i><strong>{% trans %}bundles.show.infos.contributors{% endtrans %}</strong> {{ bundle.nbContributors }}</li>
+                <li><i class="icon-eye"></i><strong>Nb of watchers:</strong> {{ bundle.nbFollowers }}</li>
+                <li><i class="icon-thumbs-up"></i><strong>Nb of recommendations:</strong> {{ bundle.nbRecommenders }}</li>
+                <li title="{% trans %}bundles.show.infos.github{% endtrans %}">
+                    <i class="icon-github"></i><a href="{{ bundle.githubUrl }}">{{ bundle.fullName }}</a>
                 </li>
-                {% if bundle.composerName %}
-                <li class="info-composer" title="{% trans %}bundles.show.infos.composer{% endtrans %}">
-                    <a href="{{ bundle.packagistUrl }}">{{ bundle.composerName }}</a>
+                {%- if bundle.composerName -%}
+                <li title="{% trans %}bundles.show.infos.composer{% endtrans %}">
+                    <i class="icon-box"></i><a href="{{ bundle.packagistUrl }}">{{ bundle.composerName }}</a>
                 </li>
-                {% endif %}
-                {% if bundle.usesTravisCi %}
-                <li class="info-travis" title="{% trans %}bundles.show.infos.travis{% endtrans %}">
+                {%- endif -%}
+                {%- if bundle.usesTravisCi %}
+                <li title="{% trans %}bundles.show.infos.travis{% endtrans %}">
+                    <i class="icon-cogs"></i>
                     <a href="{{ bundle.travisUrl }}">
-                        <img src="https://secure.travis-ci.org/{{ bundle.username }}/{{ bundle.name }}.png" alt="" />
+                        <img src="https://secure.travis-ci.org/{{ bundle.username }}/{{ bundle.name }}.png" alt="Travis Build Status" />
                     </a>
-                 </li>
-                {% endif %}
-                {% if not bundle.canonicalConfig is empty %}
-                <li class="info-configuration"><a id="canonical-config-id" href="#">Canonical configuration</a></li>
-                {% endif %}
+                </li>
+                {%- endif -%}
             </ul>
-        </div>
+        </section>
+    </div>
 
-        <div class="box">
-            <h3>{% trans %}bundles.show.keywords.title{% endtrans %}</h3>
-                {% for keyword in bundle.keywords %}
-                    <a href="{{ path('bundle_keyword', {'slug': keyword.slug}) }}" title="{{ keyword.value }}">{{ keyword.value }}</a>
-                {% else %}
-                    {% trans %}bundles.show.keywords.empty{% endtrans %}
-                {% endfor %}
-        </div>
+    <div class="sidebar-box sidebar-keywords">
+        <hgroup>
+            <h2>{% trans %}bundles.show.keywords.title{% endtrans %}</h2>
+        </hgroup>
 
-        <div class="box">
-            <h3>{% trans %}bundles.show.recommenders.title{% endtrans %}</h3>
+        <section>
+        {% for keyword in bundle.keywords %}
+            <a href="{{ path('bundle_keyword', {'slug': keyword.slug}) }}" title="{{ keyword.value }}">{{ keyword.value }}</a>{{ loop.last ? '' : ',' }}
+        {% else %}
+            {% trans %}bundles.show.keywords.empty{% endtrans %}
+        {% endfor %}
+        </section>
+    </div>
+
+    <div class="sidebar-box sidebar-users-list clearfix">
+        <hgroup>
+            <h2>{% trans %}bundles.show.recommenders.title{% endtrans %}</h2>
+        </hgroup>
+
+        <section>
             <ul>
-                <li class="bundle-recommenders">
-                    {% for user in bundle.recommenders %}
-                        <img src="{{ user.gravatarHash }}" class="tooltip" title="{{ user.name }}" width="25" height="25" />
+                <li>
+                    {% for user in bundle.recommenders(1, 19) %}
+                    <a href="{{ path('user_show', {'name': user.name}) }}">
+                        <img src="{{ user.gravatarHash|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=40') }}" alt="{{ user.name }}" title="{{ user.name }}" width="40" height="40">
+                    </a>
                     {% endfor %}
                 </li>
+                {% if bundle.nbRecommenders > 19 %}
+                <li><span class="box-more-users"><abbr class="icon-info" title="And {{ bundle.nbRecommenders - 19 }} other recommendations!"></span></li>
+                {%- endif %}
                 <li>
-                    <a class="button i-recommend" href="{{ path('bundle_change_usage_status', { 'username': bundle.username, 'name': bundle.name }) }}">
-                        {% if app.user is not null %}
-                            {% if isUsedByUser  %}
+                    <a class="btn btn-recommend" href="{{ path('bundle_change_usage_status', { 'username': bundle.username, 'name': bundle.name }) }}">
+                        {%- if app.user is not null -%}
+                            {%- if isUsedByUser -%}
                                 {% trans %}bundles.show.recommenders.iDontRecommend{% endtrans %}
-                            {% else %}
+                            {%- else -%}
                                 {% trans %}bundles.show.recommenders.iRecommend{% endtrans %}
-                            {% endif %}
-                        {% else %}
+                            {%- endif -%}
+                        {%- else -%}
                             {% trans %}bundles.show.recommenders.loginToRecommend{% endtrans %}
-                        {% endif %}
+                        {%- endif -%}
                     </a>
                 </li>
             </ul>
+        </section>
+    </div>
+
+    {% if bundle.scores|length > 1 %}
+    <div class="sidebar-box tabbable tabs-below">
+        <hgroup>
+            <h2>{{ 'bundles.show.chart.title'|trans }}</h2>
+        </hgroup>
+
+        <div class="tab-content">
+            <div class="tab-pane active chart" id="graph">
+                {% include 'KnpBundlesBundle::layout/chart.html.twig' with {'simple': true, 'tooltipText': 'points'} %}
+            </div>
+
+            <div class="tab-pane" id="score-details">
+                {% if bundle.scoreDetails %}
+                <ul class="bundle-score-details">
+                    <li>{% trans with {'%score%': score_details.followers } %}bundles.score.followers{% endtrans %}</li>
+                    <li>{% trans with {'%score%': score_details.activity } %}bundles.score.activity{% endtrans %}</li>
+                    <li>{% trans with {'%score%': score_details.readme } %}bundles.score.readme{% endtrans %}</li>
+                    <li>{% trans with {'%score%': score_details.travisci } %}bundles.score.travisci{% endtrans %}</li>
+                    <li>{% trans with {'%score%': score_details.travisbuild } %}bundles.score.travisbuild{% endtrans %}</li>
+                    <li>{% trans with {'%score%': score_details.composer } %}bundles.score.composer{% endtrans %}</li>
+                    <li>{% trans with {'%score%': score_details.recommenders } %}bundles.score.recommenders{% endtrans %}</li>
+                </ul>
+                {% endif %}
+            </div>
         </div>
 
-        {% if bundle.scores|length > 1 %}
-        {% set chartDimensions = [280, 200] %}
-        <div class="box no-padding">
-            <h3>{{ 'bundles.show.chart.title'|trans }}</h3>
-            <div id="chart" class="chart" style="width:{{ chartDimensions.0 }}px;height:{{ chartDimensions.1 }}px;"></div>
-            <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-            <script type="text/javascript">
-              google.load("visualization", "1", {packages:["corechart"]});
-              google.setOnLoadCallback(drawChart);
-              function drawChart() {
-                var data = new google.visualization.DataTable();
-                data.addColumn('string', 'Date');
-                data.addColumn('number', 'Score');
-                data.addRows({{ bundle.scores|length }});
-                {% for score in bundle.scores -%}
-                data.setValue({{ loop.index0 }}, 0, '{{ score.date.format('Y-m-d') }}');
-                data.setValue({{ loop.index0 }}, 1, {{ score.value }});
-                {% endfor %}
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#graph" data-toggle="tab">Graph</a></li>
+            <li><a href="#score-details" data-toggle="tab">Details</a></li>
+        </ul>
+    </div>
+    {% endif %}
 
-                var chart = new google.visualization.LineChart(document.getElementById('chart'));
-                chart.draw(data, {
-                    width: {{ chartDimensions.0 }},
-                    height: {{ chartDimensions.1 }},
-                    legend: 'none',
-                    backgroundColor: '#FAFAFA',
-                    colors: ['#4183C4'],
-                    hAxis: {
-                        textPosition: 'none'
-                    }
-                });
-              }
-            </script>
-        </div>
-        {% endif %}
+    <div class="sidebar-box sidebar-users-list clearfix">
+        <hgroup>
+            <h2>{% trans %}bundles.show.contributors.title{% endtrans %}</h2>
+        </hgroup>
 
-        {% if bundle.scoreDetails %}
-        <div class="box">
-            <h3 id="bundle-score-details">{% trans %}bundles.show.score.title{% endtrans %} ( <a href="{{ path('scoring') }}">{% trans %}bundles.show.score.about{% endtrans %}</a> )</h3>
-            <ul class="bundle-score-details">
-                <li>{% trans with {'%score%': score_details.followers } %}bundles.score.followers{% endtrans %}</li>
-                <li>{% trans with {'%score%': score_details.activity } %}bundles.score.activity{% endtrans %}</li>
-                <li>{% trans with {'%score%': score_details.readme } %}bundles.score.readme{% endtrans %}</li>
-                <li>{% trans with {'%score%': score_details.travisci } %}bundles.score.travisci{% endtrans %}</li>
-                <li>{% trans with {'%score%': score_details.travisbuild } %}bundles.score.travisbuild{% endtrans %}</li>
-                <li>{% trans with {'%score%': score_details.composer } %}bundles.score.composer{% endtrans %}</li>
-                <li>{% trans with {'%score%': score_details.recommenders } %}bundles.score.recommenders{% endtrans %}</li>
-
-            </ul>
-        </div>
-        {% endif %}
-
-        <div class="box">
-            <h3>{% trans %}bundles.show.contributors.title{% endtrans %}</h3>
-            <ul class="user-list hide-contributors">
-                <li class="user">
-                    {% trans %}bundles.show.contributors.by{% endtrans %} <a href="{{ path('user_show', {'name': bundle.username}) }}">{{ bundle.username }}</a>
+        <section>
+            <ul>
+                <li class="contributor">
+                    <a href="{{ path('user_show', {'name': bundle.username}) }}">
+                        <img src="{{ bundle.user.gravatarHash|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=40') }}" alt="{{ bundle.username }}" title="{{ bundle.username }}" width="40" height="40">
+                    </a>
                 </li>
 
                 {%- if bundle.nbContributors != 0 %}
-                    <li class="contributor-others-switch">{% trans %}bundles.show.contributors.and{% endtrans %} <a href="#">{% trans %}bundles.show.contributors.contributors{% endtrans %}</a></li>
-                    {%- for contributor in bundle.contributors %}
-                        <li class="contributor"><a href="{{ path('user_show', {'name': contributor}) }}">{{ contributor }}</a>
-                    {%- endfor %}
+                {%- for contributor in bundle.contributors(1, 18) %}
+                <li class="contributor">
+                    <a href="{{ path('user_show', {'name': contributor}) }}">
+                        <img src="{{ contributor.gravatarHash|default('http://www.gravatar.com/avatar/?d=identicon&f=y') }}" alt="{{ contributor.name }}" title="{{ contributor.name }}" width="40" height="40">
+                    </a>
+                </li>
+                {%- endfor %}
+                {% if bundle.nbContributors > 18 %}
+                <li><span class="box-more-users"><abbr class="icon-info" title="And {{ bundle.nbContributors - 18 }} other contributors!"></span></li>
+                {%- endif %}
                 {%- endif %}
             </ul>
+        </section>
+    </div>
+{% endblock %}
+
+{% block left %}
+<div class="content-box tabbable">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#readme" data-toggle="tab"><i class="icon-info"></i>README</a></li>
+        {%- if bundle.license -%}
+        <li><a href="#license" data-toggle="tab"><i class="icon-bag"></i>LICENSE</a></li>
+        {%- endif %}
+        {%- if not bundle.canonicalConfig is empty -%}
+        <li><a href="#configuration" data-toggle="tab"><i class="icon-wrench"></i>Configuration</a></li>
+        {%- endif %}
+        <li><a href="#activity" data-toggle="tab"><i class="icon-clock"></i>Recent activity</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="readme" class="tab-pane active markdown">
+            {% if bundle.readme %}
+                {{ bundle.readme|github_md_2_md|markdown }}
+            {% else %}
+                No readme file found in bundle.
+            {% endif %}
         </div>
 
-        <div class="box">
-            <h3>{% trans %}bundles.show.latest_commits.title{% endtrans %}</h3>
+        {% if bundle.license %}
+        <div id="license" class="tab-pane markdown">
+            {{ bundle.license|nl2br }}
+        </div>
+        {% endif %}
+
+        {%- if not bundle.canonicalConfig is empty -%}
+        <div id="configuration" class="tab-pane markdown">
+            <pre class="code">
+            {{- bundle.canonicalConfig|nl2br -}}
+            </pre>
+        </div>
+        {%- endif -%}
+
+        <div id="activity" class="tab-pane">
             <ul>
-            {%- for commit in bundle.lastCommits %}
-                <li>{{ commit.message_first_line }}
+                {%- for commit in bundle.lastCommits %}
+                <li>
+                    <i class="icon-github"></i>
+                    {{ commit.message_first_line }}
                     <div class="infos">{% trans %}bundles.show.latest_commits.by{% endtrans %}
                         {% if commit.committer.login is defined %}
-                            <a href="{{ path('user_show', {'name': commit.committer.login }) }}">{{ commit.committer.login }}</a>
-                        {% else %}
-                            <p>{{ commit.author }}</p>
-                        {% endif %}
-                        {{ time_diff(commit.date) }}
+                        <a href="{{ path('user_show', {'name': commit.committer.login }) }}">{{ commit.committer.login }}</a>
+                        {%- else -%}
+                        <strong>{{ commit.author }}</strong>
+                        {%- endif %},
+                        <strong>{{ time_diff(commit.date) }}</strong>
                     </div>
                 </li>
-            {%- endfor %}
-            <ul>
-        </div>
-    </div>
-
-    <div id="main">
-        <div id="bundle-title">
-            <div class="bundlerank">
-                {{ bundle.score }}
-            </div>
-            <h1>
-                {{ bundle.name }}
-                <span class="username">{% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': bundle.username}) }}">{{ bundle.username }}</a></span>
-            </h1>
-            {% set noDescriptionNotice = 'bundle.noDescription'|trans %}
-            <p class="description">{{ bundle.description }}</p>
-        </div>
-
-        <div class="actions">
-            <a class="button github" href="{{ bundle.gitHubUrl }}">{% trans %}bundles.show.github{% endtrans %}</a>
-            <a class="button github" href="{{ bundle.gitHubUrl }}/issues">{% trans %}bundles.show.issues{% endtrans %}</a>
-            {%- if isOwnerOrContributor -%}
-            &nbsp;<span class="button github" data-controls-modal="modal-settings">{% trans %}bundles.show.setting{% endtrans %}</span>
-            {%- endif -%}
-        </div>
-    </div>
-
-    {% if not bundle.initialized %}
-    <div class="data">
-        {{ noDescriptionNotice|trans }}
-    </div>
-    {% endif %}
-
-    {% if bundle.readme %}
-    <div class="data">
-        <div id="readme">
-            <div class="markdown">
-                {{ bundle.readme|github_md_2_md|markdown }}
-            </div>
-        </div>
-    </div>
-    {% endif %}
-
-    {% if bundle.license %}
-    <div class="data">
-        {{ bundle.license }}
-    </div>
-    {% endif %}
-
-    {{ knp_disqus_render('s2b', {'identifier': bundle.username~'_'~bundle.name, 'url': url('bundle_show', {'username':bundle.username, 'name':bundle.name}), 'limit': 100}) }}
-
-    {%- if isOwnerOrContributor -%}
-    <form class="modal" action="{{ path('bundle_settings', {'id': bundle.id}) }}" method="post" id="modal-settings" style="display: none;width:400px">
-        <div class="modal-header">
-            <a class="close" href="#">×</a>
-            <h3>{% trans %}bundles.show.settings.modal{% endtrans %}</h3>
-        </div>
-
-        <div class="modal-body">
-            <ul style="margin: 0 auto; width: 125px;">
-                <li>
-                    <label>
-                        <input type="radio" name="state" id="state0" value="unknown"{{ bundle.state == 'unknown' ? ' checked="checked"' : '' }}>
-                        <span>{% trans %}bundles.show.settings.state.unknown{% endtrans %}</span>
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <input type="radio" name="state" id="state1" value="not yet ready"{{ bundle.state == 'not yet ready' ? ' checked="checked"' : '' }}>
-                        <span>{% trans %}bundles.show.settings.state.not_ready{% endtrans %}</span>
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <input type="radio" name="state" id="state2" value="ready"{{ bundle.state == 'ready' ? ' checked="checked"' : '' }}>
-                        <span>{% trans %}bundles.show.settings.state.ready{% endtrans %}</span>
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <input type="radio" name="state" id="state3" value="deprecated"{{ bundle.state == 'deprecated' ? ' checked="checked"' : '' }}>
-                        <span>{% trans %}bundles.show.settings.state.deprecated{% endtrans %}</span>
-                    </label>
-                </li>
+                {%- endfor %}
             </ul>
         </div>
-
-        <div class="modal-footer">
-            <button class="button">{% trans %}bundles.show.setting{% endtrans %}</button>
-        </div>
-    </form>
-    {%- endif -%}
-
-    {%- if not bundle.canonicalConfig is empty -%}
-    <div class="canonical-configuration-class modal">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">×</button>
-            <h3>Canonical Configuration:</h3>
-        </div>
-            <div id="canonical-config">
-                <div class="markdown">
-                <pre class="code">
-                {{- bundle.canonicalConfig|nl2br -}}
-                </pre>
-                </div>
-            </div>
     </div>
-    {%- endif -%}
+</div>
+
+{%- if isOwnerOrContributor -%}
+<form class="modal hide" action="{{ path('bundle_settings', {'id': bundle.id}) }}" method="post" id="modal-settings">
+    <div class="modal-header">
+        <a class="close" href="#">×</a>
+        <h3>{% trans %}bundles.show.settings.modal{% endtrans %}</h3>
+    </div>
+
+    <div class="modal-body">
+        <ul style="margin: 0 auto; width: 125px;">
+            <li>
+                <label>
+                    <input type="radio" name="state" id="state0" value="unknown"{{ bundle.state == 'unknown' ? ' checked="checked"' : '' }}>
+                    <span>{% trans %}bundles.show.settings.state.unknown{% endtrans %}</span>
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="radio" name="state" id="state1" value="not yet ready"{{ bundle.state == 'not yet ready' ? ' checked="checked"' : '' }}>
+                    <span>{% trans %}bundles.show.settings.state.not_ready{% endtrans %}</span>
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="radio" name="state" id="state2" value="ready"{{ bundle.state == 'ready' ? ' checked="checked"' : '' }}>
+                    <span>{% trans %}bundles.show.settings.state.ready{% endtrans %}</span>
+                </label>
+            </li>
+            <li>
+                <label>
+                    <input type="radio" name="state" id="state3" value="deprecated"{{ bundle.state == 'deprecated' ? ' checked="checked"' : '' }}>
+                    <span>{% trans %}bundles.show.settings.state.deprecated{% endtrans %}</span>
+                </label>
+            </li>
+        </ul>
+    </div>
+
+    <div class="modal-footer">
+        <button class="button">{% trans %}bundles.show.setting{% endtrans %}</button>
+    </div>
+</form>
+{%- endif -%}
 {% endblock %}

@@ -52,7 +52,7 @@ bundles:
         trending: "Trending"
         best: "Best score"
         updated: "Updated recently"
-        newest: "New"
+        newest: "Newest"
         trend: "Trending"
         recommended: "Most recommended"
 
@@ -125,7 +125,7 @@ bundles.list:
         featured: "What's hot?"
         newest: "Newest bundles"
     buildStatus: "Build status "
-    activity: "Activity"
+    activity: "activity"
 
 bundles.activity:
     high: "High"
@@ -148,10 +148,10 @@ users.show:
     stats:
         location: "Location: "
         lastCommit: "Last commit: "
-        nbBundles: "Nb of bundles: "
+        nbBundles: "Number of bundles: "
         blog: "Website: "
-    bundles_manage: "Bundles I manage:"
-    bundles_contribute: "Bundles I contribute to:"
+    bundles_manage: "Bundles I owe"
+    bundles_contribute: "Bundles I contribute to"
 
 users.list:
     location: " from "

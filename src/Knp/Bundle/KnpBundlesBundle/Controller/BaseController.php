@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\Query;
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
 
 class BaseController extends Controller
 {
@@ -40,18 +42,19 @@ class BaseController extends Controller
      *
      * @param  Query   $query The query
      * @param  integer $page  The current page number
+     * @param  integer $limit Results per page
      *
-     * @return Paginator
+     * @return Pagerfanta
      */
-    protected function getPaginator(Query $query, $page)
+    protected function getPaginator(Query $query, $page, $limit = 10)
     {
-        $pagination = $this->get('knp_paginator')->paginate(
-            $query,
-            $page,
-            10
-        );
+        $paginator = new Pagerfanta(new DoctrineORMAdapter($query));
+        $paginator
+            ->setMaxPerPage($limit)
+            ->setCurrentPage($page)
+        ;
 
-        return $pagination;
+        return $paginator;
     }
 
     protected function getBundleRepository()

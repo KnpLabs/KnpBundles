@@ -1,16 +1,22 @@
-{% extends "KnpBundlesBundle::layout.html.twig" %}
+{% extends 'KnpBundlesBundle::layout/960px.html.twig' %}
 
 {% block title %}{% trans %}api.meta.title{% endtrans %}{% endblock %}
 
 {% block description %}{% trans %}api.description{% endtrans %}{% endblock %}
 
-{% block content %}
-<div id="api">
+{% block intro %}
+<div id="intro">
     <h1>{% trans %}api.title{% endtrans %}</h1>
-    <div id="main">
-        <div class="doc_text markdown">
-            {{ text|markdown }}
-        </div>
-    </div>
+    <h2>Everything here is available through an HTTP API.</h2>
+</div>
+{% endblock %}
+
+{% block right_holder %}{% endblock %}
+
+{% block left_holder %}
+<div class="content-box">
+    <section class="api markdown">
+        {{ text|markdown }}
+    </section>
 </div>
 {% endblock %}

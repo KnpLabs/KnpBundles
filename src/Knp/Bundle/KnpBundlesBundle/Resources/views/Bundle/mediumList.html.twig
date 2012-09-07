@@ -1,12 +1,15 @@
-<ul class="bundles-list">
-    {%- for bundle in bundles %}
-    <li class="bundle">
-        <div class="generals">
-            <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}" class="name">
-                {{ bundle.name }}
-            </a>
-            <p class="description">{{ bundle.description }}</p>
-        </div>
-    </li>
-    {%- endfor %}
-</ul>
+{% for bundle in bundles %}
+<article class="bundle{% if bundle.lastTweetedAt %} award{% endif %}">
+    <div class="bundle-score">
+        <h3>{{ bundle.score }}</h3>
+    </div>
+
+    <div class="bundle-info">
+        <h2>
+            <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}" class="name">{{ bundle.name }}</a>
+        </h2>
+
+        <p>{{ bundle.description(100)|default('No description found.') }}</p>
+    </div>
+</article>
+{% endfor %}

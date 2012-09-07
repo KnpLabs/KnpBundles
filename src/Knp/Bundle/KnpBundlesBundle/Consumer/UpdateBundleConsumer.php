@@ -33,12 +33,12 @@ class UpdateBundleConsumer implements ConsumerInterface
     const MAX_GITHUB_TRIALS = 20;
 
     /**
-     * @var Symfony\Component\HttpKernel\Log\LoggerInterface
+     * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @var Doctrine\ORM\EntityManager
+     * @var ObjectManager
      */
     private $em;
 
@@ -63,11 +63,11 @@ class UpdateBundleConsumer implements ConsumerInterface
     private $travis;
 
     /**
-     * @param Doctrine\Common\Persistence\ObjectManager       $em
-     * @param Knp\Bundle\KnpBundlesBundle\Entity\UserManager  $users
-     * @param Knp\Bundle\KnpBundlesBundle\Github\Repo         $githubRepoApi
-     * @param Knp\Bundle\KnpBundlesBundle\Travis\Travis       $travis
-     * @param Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer $indexer
+     * @param ObjectManager  $em
+     * @param UserManager    $users
+     * @param Repo           $githubRepoApi
+     * @param Travis         $travis
+     * @param SolrIndexer    $indexer
      */
     public function __construct(ObjectManager $em, UserManager $users, Repo $githubRepoApi, Travis $travis, SolrIndexer $indexer)
     {
@@ -82,7 +82,7 @@ class UpdateBundleConsumer implements ConsumerInterface
     /**
      * Set a logger instance
      *
-     * @param Symfony\Component\HttpKernel\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      */
     public function setLogger(LoggerInterface $logger)
     {
@@ -92,7 +92,7 @@ class UpdateBundleConsumer implements ConsumerInterface
     /**
      * Callback called from RabbitMQ to update a bundle
      *
-     * @param string $msg serialized Message
+     * @param AMQPMessage $msg serialized Message
      */
     public function execute(AMQPMessage $msg)
     {

@@ -1,11 +1,19 @@
 <div id="auth">
 {% if app.user is not null %}
-    <li><img src="{{ app.user.gravatarHash }}" height="30" width="30" /></li>
-    <li class="current"><span>{{ app.user }}</span></li>
-    <li><a href="{{ path('_logout') }}">Log out</a></li>
+    <ul id="userbar">
+        <li><img src="{{ app.user.gravatarHash }}" height="30" width="30" /></li>
+        <li class="username"><span>{{ app.user }}</span></li>
+        <li class="logout"><a href="{{ path('_logout') }}"><i title="Log out" class="icon-off"></i></a></li>
+    </ul>
 {% else %}
-    <li><span class="login">Login via:</span></li>
-    <li><a class="login" href="{{ hwi_oauth_login_url('github') }}">GitHub</a></li>
-    <li><a class="login" href="{{ hwi_oauth_login_url('sensio') }}">Sensio Connect</a></li>
+    <ul id="auth-menu">
+        <li class="login"><img src="{{ asset('bundles/knpbundles/images/icon_person.gif') }}" alt="Log out">Login via</li>
+        <li>
+            <ul>
+                <li><a href="{{ hwi_oauth_login_url('github') }}">GitHub</a></li>
+                <li><a href="{{ hwi_oauth_login_url('sensio') }}">SensioConnect</a></li>
+            </ul>
+        </li>
+    </ul>
 {% endif %}
 </div>
