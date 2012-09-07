@@ -1,11 +1,11 @@
 {
-    "hash": "b2b8201a16361942689bb9d0e806a9e9",
+    "hash": "2c9626a7058ec47afd4d514cd3d27259",
     "packages": [
         {
             "package": "avalanche123/imagine-bundle",
             "version": "dev-master",
-            "source-reference": "4faa253231cb42a231311eaa314e88479517be1a",
-            "commit-date": "1340300780"
+            "source-reference": "a1248483cdd532780928f0ac23f06596d198a3f0",
+            "commit-date": "1344289113"
         },
         {
             "package": "doctrine/common",
@@ -20,8 +20,8 @@
         {
             "package": "doctrine/dbal",
             "version": "2.2.x-dev",
-            "source-reference": "b961a3fce6bf220f1dca47d7d747b9074bea4730",
-            "commit-date": "1341779435"
+            "source-reference": "da4b7b4d965db0c1c1d23333e87ee5ae8994e249",
+            "commit-date": "1344978731"
         },
         {
             "package": "doctrine/doctrine-bundle",
@@ -32,14 +32,14 @@
         {
             "package": "doctrine/doctrine-bundle",
             "version": "dev-master",
-            "source-reference": "c9ea46d1f0c48bb88bb87b44214fe44e03c0c692",
-            "commit-date": "1341405737"
+            "source-reference": "4d9bb0f3af470556983eb41a7d19ede23401ef0b",
+            "commit-date": "1344549563"
         },
         {
             "package": "doctrine/doctrine-fixtures-bundle",
             "version": "dev-master",
-            "source-reference": "a5103a71bcd9b2f851ca6c16519a077784a3184a",
-            "commit-date": "1341472847"
+            "source-reference": "186d605aa6b592bd577e07e0e9a2c420b02b2492",
+            "commit-date": "1345465418"
         },
         {
             "package": "doctrine/doctrine-migrations-bundle",
@@ -50,48 +50,26 @@
         {
             "package": "doctrine/migrations",
             "version": "dev-master",
-            "source-reference": "fe98141b1e460baf5ab52f9139e1ae238101b28b",
-            "commit-date": "1336330359"
+            "source-reference": "b86b4cc0a39714f0aa53b908d495beacfa0e4011",
+            "commit-date": "1343202693"
         },
         {
             "package": "doctrine/orm",
             "version": "2.2.x-dev",
-            "source-reference": "5d2a3bcb3b467f41ee58575764f3ba84937f76e4",
-            "commit-date": "1341676080"
-        },
-        {
-            "package": "fabpot/goutte",
-            "version": "dev-master",
-            "alias-pretty-version": "1.0.x-dev",
-            "alias-version": "1.0.9999999.9999999-dev"
-        },
-        {
-            "package": "fabpot/goutte",
-            "version": "dev-master",
-            "source-reference": "c2ea8d9a6682d14482e57ede2371001b8a5238d2",
-            "commit-date": "1340264258"
+            "source-reference": "7d343302a8f886be9cfb2a9c8345a95740dcfde9",
+            "commit-date": "1343560954"
         },
         {
             "package": "gedmo/doctrine-extensions",
             "version": "dev-master",
-            "alias-pretty-version": "2.3.x-dev",
-            "alias-version": "2.3.9999999.9999999-dev"
-        },
-        {
-            "package": "gedmo/doctrine-extensions",
-            "version": "dev-master",
-            "source-reference": "9898253452a37733d278af6fc595b059327c4218",
-            "commit-date": "1342872222"
-        },
-        {
-            "package": "guzzle/guzzle",
-            "version": "v2.6.6"
+            "source-reference": "b0421677c69a6cdb649faedd659fdca39fcad028",
+            "commit-date": "1346056964"
         },
         {
             "package": "hwi/oauth-bundle",
             "version": "dev-master",
-            "source-reference": "ad2f468abdfe09e8f9c1398ad4637f51df7d7791",
-            "commit-date": "1342353157"
+            "source-reference": "6538e2e3aa839c4f692bb14a419db7bfd33fdfdd",
+            "commit-date": "1346099853"
         },
         {
             "package": "igorw/file-serve-bundle",
@@ -102,12 +80,14 @@
         {
             "package": "imagine/Imagine",
             "version": "dev-master",
-            "source-reference": "v0.2.8",
-            "commit-date": "1322638721"
+            "source-reference": "v0.3.0",
+            "commit-date": "1343522118"
         },
         {
             "package": "knplabs/github-api",
-            "version": "0.1"
+            "version": "dev-master",
+            "source-reference": "be1086c6097b6005b09622649adc1b517cacf607",
+            "commit-date": "1346159876"
         },
         {
             "package": "knplabs/knp-components",
@@ -142,8 +122,8 @@
         {
             "package": "knplabs/knp-time-bundle",
             "version": "dev-master",
-            "source-reference": "f05a3f4da5369c2fb87610dca27fd3cb2f27a80a",
-            "commit-date": "1339679078"
+            "source-reference": "f71d440383acc4254d112182ef382a02da772a09",
+            "commit-date": "1343681304"
         },
         {
             "package": "knplabs/knp-zend-cache-bundle",
@@ -160,8 +140,8 @@
         {
             "package": "kriswallsmith/assetic",
             "version": "dev-master",
-            "source-reference": "c518a48ddc26af898191410cc35f7f30aaed448e",
-            "commit-date": "1343084248"
+            "source-reference": "v1.1.0-alpha1",
+            "commit-date": "1346157224"
         },
         {
             "package": "kriswallsmith/buzz",
@@ -169,13 +149,13 @@
         },
         {
             "package": "monolog/monolog",
-            "version": "1.1.0"
+            "version": "1.2.0"
         },
         {
             "package": "nelmio/solarium-bundle",
             "version": "dev-master",
-            "source-reference": "d0d80a702eae4699bb6010ec3a6bc29eec0b8e55",
-            "commit-date": "1338319498"
+            "source-reference": "61b8a7f2b99edd13d90e377335f571607721a7f2",
+            "commit-date": "1345050695"
         },
         {
             "package": "oldsound/rabbitmq-bundle",
@@ -192,20 +172,20 @@
         {
             "package": "sensio/distribution-bundle",
             "version": "dev-master",
-            "source-reference": "5886adae1613c0a72fbb95259a83ae798e86c0d3",
-            "commit-date": "1342347850"
+            "source-reference": "v2.1.0-RC2",
+            "commit-date": "1345982505"
         },
         {
             "package": "solarium/solarium",
             "version": "dev-master",
-            "source-reference": "2.4.0",
-            "commit-date": "1334575912"
+            "source-reference": "5c7afe1c4e104feb3761618dd54cf813beb4de5a",
+            "commit-date": "1343376249"
         },
         {
             "package": "stof/doctrine-extensions-bundle",
             "version": "dev-master",
-            "source-reference": "f31a0861de08b6594f09430a4cbaf0618e5e11ad",
-            "commit-date": "1343029923"
+            "source-reference": "63c2aa344bd45ca8cf16d778bb8d382bf18b09e3",
+            "commit-date": "1345420848"
         },
         {
             "package": "symfony/assetic-bundle",
@@ -216,8 +196,8 @@
         {
             "package": "symfony/assetic-bundle",
             "version": "dev-master",
-            "source-reference": "e5e9a56a872d9e1f305d14cd8296bf77888388af",
-            "commit-date": "1342820047"
+            "source-reference": "3196ef27926e9f6668b5ce4481c8f578550c2d71",
+            "commit-date": "1346160609"
         },
         {
             "package": "symfony/monolog-bundle",
@@ -228,8 +208,8 @@
         {
             "package": "symfony/monolog-bundle",
             "version": "dev-master",
-            "source-reference": "v2.1.0-BETA4",
-            "commit-date": "1341078487"
+            "source-reference": "v2.1.0-RC2",
+            "commit-date": "1345557954"
         },
         {
             "package": "symfony/symfony",
@@ -240,14 +220,20 @@
         {
             "package": "symfony/symfony",
             "version": "dev-master",
-            "source-reference": "2aaa4ed84e56ad8e3420e696f6a42231d30bc1d2",
-            "commit-date": "1343064472"
+            "source-reference": "9f4525a614dd3e79b28ac7cb3549e07e30fba6fd",
+            "commit-date": "1346162419"
         },
         {
             "package": "twig/extensions",
             "version": "dev-master",
-            "source-reference": "feb6d3f10c411e2631997c0a905aa581c80305c1",
-            "commit-date": "1337599699"
+            "alias-pretty-version": "1.0.x-dev",
+            "alias-version": "1.0.9999999.9999999-dev"
+        },
+        {
+            "package": "twig/extensions",
+            "version": "dev-master",
+            "source-reference": "v1.0.0-alpha",
+            "commit-date": "1346166263"
         },
         {
             "package": "twig/twig",
@@ -258,26 +244,14 @@
         {
             "package": "twig/twig",
             "version": "dev-master",
-            "source-reference": "657de7bdeb680815e0df95f63da9f81e1533d2ea",
-            "commit-date": "1342953178"
-        },
-        {
-            "package": "twitter/app-bundle",
-            "version": "master-dev",
-            "source-reference": "master",
-            "commit-date": "1342545554"
-        },
-        {
-            "package": "twitter/oauth",
-            "version": "master-dev",
-            "source-reference": "master",
-            "commit-date": "1337376750"
+            "source-reference": "92d8b25fee71e1d2f19f5d0c31838d6144a4bbcd",
+            "commit-date": "1346166350"
         },
         {
             "package": "videlalvaro/php-amqplib",
             "version": "dev-master",
-            "source-reference": "5772542542bd061d023fe4266dda74db7ee43144",
-            "commit-date": "1342427648"
+            "source-reference": "258573c6d264ccb06a3a4191bb529320579d21c6",
+            "commit-date": "1345726400"
         },
         {
             "package": "zendframework/zend-cache",
@@ -291,7 +265,7 @@
     "packages-dev": [
         {
             "package": "behat/behat",
-            "version": "v2.4.2"
+            "version": "v2.4.3"
         },
         {
             "package": "behat/common-contexts",
@@ -301,7 +275,7 @@
         },
         {
             "package": "behat/gherkin",
-            "version": "v2.2.2"
+            "version": "v2.2.4"
         },
         {
             "package": "behat/mink",
@@ -310,20 +284,20 @@
         {
             "package": "behat/mink-browserkit-driver",
             "version": "dev-master",
-            "source-reference": "b07a3908fed61cd31953ddaa6faeb66767cf9d6e",
-            "commit-date": "1339680228"
+            "source-reference": "97fa7d67ab5afb13d74515c15ef5c0cab12c0bc0",
+            "commit-date": "1341477260"
         },
         {
             "package": "behat/mink-extension",
             "version": "dev-master",
-            "source-reference": "1907fda9f11dd01e5ccd997ba2cb8a46042cda8c",
-            "commit-date": "1340882923"
+            "source-reference": "cf32eff0ce286770db5c08700cd92eeb2c777050",
+            "commit-date": "1346147725"
         },
         {
             "package": "behat/symfony2-extension",
             "version": "dev-master",
-            "source-reference": "d8e620376969c388f027be55cf6e96a445415e92",
-            "commit-date": "1340986181"
+            "source-reference": "3955aea7932b69aa35893c594ae76da9ce7e1e42",
+            "commit-date": "1343142072"
         }
     ],
     "aliases": [
@@ -331,35 +305,26 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "symfony/symfony": 20,
         "doctrine/doctrine-bundle": 20,
         "twig/extensions": 20,
-        "kriswallsmith/assetic": 20,
-        "symfony/assetic-bundle": 20,
-        "symfony/monolog-bundle": 20,
         "sensio/distribution-bundle": 20,
-        "doctrine/data-fixtures": 20,
         "doctrine/doctrine-fixtures-bundle": 20,
-        "doctrine/migrations": 20,
         "doctrine/doctrine-migrations-bundle": 20,
         "stof/doctrine-extensions-bundle": 20,
         "knplabs/knp-markdown-bundle": 20,
         "knplabs/knp-disqus-bundle": 20,
         "knplabs/knp-time-bundle": 20,
         "knplabs/knp-zend-cache-bundle": 20,
-        "zendframework/zend-cache": 10,
-        "zendframework/zend-filter": 10,
-        "imagine/imagine": 20,
+        "knplabs/github-api": 20,
         "avalanche123/imagine-bundle": 20,
         "nelmio/solarium-bundle": 20,
         "igorw/file-serve-bundle": 20,
         "videlalvaro/php-amqplib": 20,
         "oldsound/rabbitmq-bundle": 20,
-        "fabpot/goutte": 20,
         "ornicar/php-git-repo": 20,
-        "twitter/app-bundle": 20,
-        "twitter/oauth": 20,
         "hwi/oauth-bundle": 20,
+        "zendframework/zend-cache": 10,
+        "zendframework/zend-filter": 10,
         "behat/symfony2-extension": 20,
         "behat/mink-extension": 20,
         "behat/mink-browserkit-driver": 20,

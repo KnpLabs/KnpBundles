@@ -8,9 +8,7 @@ parameters:
     knp_bundles.user.manager.class: Knp\Bundle\KnpBundlesBundle\Entity\UserManager
     knp_bundles.output.class: Symfony\Component\Console\Output\NullOutput
     knp_bundles.travis.class: Knp\Bundle\KnpBundlesBundle\Travis\Travis
-    knp_bundles.goutte.class: Goutte\Client
     knp_bundles.github.client.class: Github\Client
-    knp_bundles.github.search.class: Knp\Bundle\KnpBundlesBundle\Github\Search
     knp_bundles.github.users.class: Knp\Bundle\KnpBundlesBundle\Github\User
     knp_bundles.git_repository_manager.class: Knp\Bundle\KnpBundlesBundle\Git\RepoManager
     knp_bundles.github.repository_api.class: Knp\Bundle\KnpBundlesBundle\Github\Repo
@@ -26,6 +24,11 @@ parameters:
     knp_bundles.scoring.readme.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\ReadmeListener
     knp_bundles.scoring.travis.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\TravisListener
     knp_bundles.utils.solr.class: Knp\Bundle\KnpBundlesBundle\Utils\SolrUtils
+    knp_bundles.twitter.parameters:
+        consumer_key: %knp_bundles.twitter.consumer_key%
+        consumer_secret: %knp_bundles.twitter.consumer_secret%
+        oauth_token: %knp_bundles.twitter.oauth_token%
+        oauth_token_secret: %knp_bundles.twitter.oauth_token_secret%
 
 services:
     knp_bundles.updater:
@@ -51,13 +54,9 @@ services:
         class: %knp_bundles.trending_bundle_twitterer.class%
         arguments:
             - @knp_bundles.entity_manager
-            - %knp_bundles.trending_bundle_twitterer.template%
-            - @twitter_app
-            - %knp_bundles.trending_bundle_twitterer.idle_period%
-
-    knp_bundles.goutte:
-        public: false
-        class: %knp_bundles.goutte.class%
+            - @buzz.client
+        calls:
+            - [ setTwitterParams, [%knp_bundles.trending_bundle_twitterer.template%, %knp_bundles.trending_bundle_twitterer.idle_period%, %knp_bundles.twitter.parameters%] ]
 
     knp_bundles.output:
         public: false
@@ -67,6 +66,8 @@ services:
         class: %knp_bundles.travis.class%
         arguments:
             - @knp_bundles.output
+        calls:
+            - [ setBrowser, [@buzz]]
 
     knp_bundles.github_client:
         public: false
@@ -86,12 +87,6 @@ services:
             - @knp_bundles.output
             - @knp_bundles.git_repository_manager
             - @event_dispatcher
-
-    knp_bundles.github.search:
-        class: %knp_bundles.github.search.class%
-        arguments:
-            - @knp_bundles.goutte
-            - @knp_bundles.output
 
     knp_bundles.github.users:
         class: %knp_bundles.github.users.class%
@@ -182,16 +177,3 @@ services:
         arguments:
             - @solarium.client
             - @kernel
-
-    # Buzz
-    buzz.message_factory:
-        class: Buzz\Message\Factory\Factory
-        public: false
-
-    buzz.client:
-        class: Buzz\Client\Curl
-        public: false
-
-    buzz:
-        class: Buzz\Browser
-        arguments: ["@buzz.client", "@buzz.message_factory"]

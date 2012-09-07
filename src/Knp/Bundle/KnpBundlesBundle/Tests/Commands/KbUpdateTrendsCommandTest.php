@@ -9,8 +9,9 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-use Knp\Bundle\KnpBundlesBundle\Entity\User;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Knp\Bundle\KnpBundlesBundle\Entity\User;
+use Knp\Bundle\KnpBundlesBundle\Entity\Score;
 use Knp\Bundle\KnpBundlesBundle\Command\KbUpdateTrendsCommand;
 
 use Doctrine\ORM\Tools\SchemaTool;
@@ -29,7 +30,6 @@ class KbUpdateTrendsCommandTest extends WebTestCase
         }
 
         $em = $kernel->getContainer()->get('knp_bundles.entity_manager');
-        $scoreRepository = $em->getRepository('KnpBundlesBundle:Score');
 
         $fileLocator = new FileLocator(__DIR__ . '/fixtures/');
         $path = $fileLocator->locate('trending-bundles.yml');
@@ -48,7 +48,11 @@ class KbUpdateTrendsCommandTest extends WebTestCase
             $bundle->setUser($user);
 
             foreach ($bundleData['scores'] as $scoreData) {
-                $score = $scoreRepository->setScore(new \DateTime($scoreData['date']), $bundle, $scoreData['value']);
+                $score = new Score();
+                $score->setDate(new \DateTime($scoreData['date']));
+                $score->setBundle($bundle);
+                $score->setValue($scoreData['value']);
+
                 $em->persist($score);
             }
 

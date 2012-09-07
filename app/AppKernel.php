@@ -18,7 +18,6 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
-            new Inori\TwitterAppBundle\InoriTwitterAppBundle(),
             new Igorw\FileServeBundle\IgorwFileServeBundle(),
 
             // register your bundles here

@@ -5,17 +5,14 @@
     },
     "require": {
         "php": ">=5.3.2",
-        "symfony/symfony": "2.1.*-dev",
+        "symfony/symfony": "2.1.*",
+        "symfony/assetic-bundle": "2.1.*",
+        "symfony/monolog-bundle": "2.1.*",
         "doctrine/orm": "2.2.*",
         "doctrine/doctrine-bundle": "dev-master",
         "twig/extensions": "dev-master",
-        "kriswallsmith/assetic": "1.1.x-dev",
-        "symfony/assetic-bundle": "2.1.x-dev",
-        "symfony/monolog-bundle": "2.1.x-dev",
         "sensio/distribution-bundle": "dev-master",
-        "doctrine/data-fixtures": "dev-master",
         "doctrine/doctrine-fixtures-bundle": "dev-master",
-        "doctrine/migrations": "dev-master",
         "doctrine/doctrine-migrations-bundle": "dev-master",
         "stof/doctrine-extensions-bundle": "dev-master",
         "knplabs/knp-markdown-bundle": "dev-master",
@@ -24,10 +21,7 @@
         "knplabs/knp-time-bundle": "dev-master",
         "knplabs/knp-paginator-bundle": "2.1",
         "knplabs/knp-zend-cache-bundle": "dev-master",
-        "knplabs/github-api": "0.1",
-        "zendframework/zend-cache": "2.0.0-beta1",
-        "zendframework/zend-filter": "2.0.0-beta1",
-        "imagine/imagine": "dev-master",
+        "knplabs/github-api": "dev-master",
         "avalanche123/imagine-bundle": "dev-master",
         "kriswallsmith/buzz": "0.7",
         "nelmio/solarium-bundle": "dev-master",
@@ -36,13 +30,12 @@
         "videlalvaro/php-amqplib": "dev-master",
         "oldsound/rabbitmq-bundle": "dev-master",
 
-        "fabpot/goutte": "1.0.x-dev",
-
         "ornicar/php-git-repo": "dev-master",
-        "twitter/app-bundle": "dev-master",
-        "twitter/oauth": "dev-master",
 
-        "hwi/oauth-bundle": "dev-master"
+        "hwi/oauth-bundle": "dev-master",
+
+        "zendframework/zend-cache": "2.0.0-beta1",
+        "zendframework/zend-filter": "2.0.0-beta1"
     },
     "require-dev": {
         "behat/behat":                  "2.4.*",
@@ -52,44 +45,6 @@
         "behat/common-contexts":        "dev-master"
     },
     "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "twitter/oauth",
-                "version": "master-dev",
-                "dist": {
-                    "url": "https://github.com/abraham/twitteroauth/zipball/master",
-                    "type": "zip"
-                },
-                "source": {
-                    "url": "git://github.com/abraham/twitteroauth.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "twitter/app-bundle",
-                "version": "master-dev",
-                "dist": {
-                    "url": "https://github.com/Inori/InoriTwitterAppBundle/zipball/master",
-                    "type": "zip"
-                },
-                "source": {
-                    "url": "git://github.com/Inori/InoriTwitterAppBundle.git",
-                    "type": "git",
-                    "reference": "master"
-                },
-                "autoload": {
-                    "psr-0": {
-                        "Inori\\TwitterAppBundle": ""
-                    }
-                },
-                "target-dir": "Inori/TwitterAppBundle"
-            }
-        },
         {
             "type": "package",
             "package": {

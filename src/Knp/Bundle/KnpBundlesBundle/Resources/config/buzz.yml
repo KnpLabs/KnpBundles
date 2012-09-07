@@ -1,0 +1,12 @@
+services:
+    buzz.message_factory:
+        class: Buzz\Message\Factory\Factory
+        public: false
+
+    buzz.client:
+        class: Buzz\Client\Curl
+        public: false
+
+    buzz:
+        class: Buzz\Browser
+        arguments: ["@buzz.client", "@buzz.message_factory"]

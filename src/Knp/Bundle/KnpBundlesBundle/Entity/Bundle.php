@@ -280,6 +280,13 @@ class Bundle
      */
     protected $lastTweetedAt;
 
+    /**
+     * Not saved variable, it's used to simplify validation when updating bundles
+     *
+     * @var boolean
+     */
+    protected $valid = false;
+
     public function __construct($fullName = null)
     {
         if ($fullName) {
@@ -298,6 +305,22 @@ class Bundle
         $this->keywords = new ArrayCollection();
         $this->state = self::STATE_UNKNOWN;
         $this->nbRecommenders = 0;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isValid()
+    {
+        return $this->valid;
+    }
+
+    /**
+     * @param boolean $state
+     */
+    public function setIsValid($state)
+    {
+        $this->valid = (bool) $state;
     }
 
     public function isInitialized()
@@ -1024,7 +1047,7 @@ class Bundle
      */
     public function isOwnerOrContributor(User $user)
     {
-        if ($this->user == $user) {
+        if ($this->user->isEqualTo($user)) {
             return true;
         }
 
@@ -1040,7 +1063,7 @@ class Bundle
     }
 
     /**
-     * @return int Total nb of keywords for this bundle
+     * @return integer Total nb of keywords for this bundle
      */
     public function countKeywords()
     {
@@ -1072,7 +1095,7 @@ class Bundle
     /**
      * Get required versions of Symfony
      *
-     * @param array
+     * @param array $versions
      */
     public function setSymfonyVersions($versions)
     {
@@ -1119,7 +1142,9 @@ class Bundle
         $this->canonicalConfig = $canonicalConfig;
     }
 
-
+    /**
+     * @param integer $nbRecommenders
+     */
     public function setNbRecommenders($nbRecommenders)
     {
         $this->nbRecommenders = $nbRecommenders;
@@ -1128,9 +1153,9 @@ class Bundle
     /**
      * Set lastTweetedAt
      *
-     * @param date $lastTweetedAt
+     * @param \DateTime $lastTweetedAt
      */
-    public function setLastTweetedAt($lastTweetedAt)
+    public function setLastTweetedAt(\DateTime $lastTweetedAt)
     {
         $this->lastTweetedAt = $lastTweetedAt;
     }

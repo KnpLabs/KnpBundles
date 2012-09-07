@@ -21,7 +21,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'blog' => 'http://knplabs.com',
         );
 
-        $github = $this->getMock('Github\Client', array('getUserApi'));
+        $github = $this->getMock('Github\Client', array('api'));
 
         $githubUserApi = $this->getMock('Github\Api\User', array('show'), array($github));
         $githubUserApi->expects($this->any())
@@ -30,10 +30,11 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($data));
 
         $github->expects($this->any())
-            ->method('getUserApi')
+            ->method('api')
+            ->with('user')
             ->will($this->returnValue($githubUserApi));
 
-        $userEntity = new UserEntity;
+        $userEntity = new UserEntity();
         $userEntity->setName('lorem');
         $userEntity->setFullName('lorem');
 
@@ -57,7 +58,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             'blog' => 'knplabs.com',
         );
 
-        $github = $this->getMock('Github\Client', array('getUserApi'));
+        $github = $this->getMock('Github\Client', array('api'));
 
         $githubUserApi = $this->getMock('Github\Api\User', array('show'), array($github));
         $githubUserApi->expects($this->any())
@@ -66,14 +67,15 @@ class UserTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($data));
 
         $github->expects($this->any())
-            ->method('getUserApi')
+            ->method('api')
+            ->with('user')
             ->will($this->returnValue($githubUserApi));
 
-        $userEntity = new UserEntity;
+        $userEntity = new UserEntity();
         $userEntity->setName('lorem');
 
         $githubUser = new GithubUser($github, $output);
-        $ret = $githubUser->update($userEntity);
+        $githubUser->update($userEntity);
 
         $this->assertEquals('http://knplabs.com', $userEntity->getBlog());
     }

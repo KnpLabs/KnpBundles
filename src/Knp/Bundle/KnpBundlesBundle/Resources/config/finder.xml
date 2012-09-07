@@ -14,18 +14,25 @@
         <service id="knp_bundles.finder" class="%knp_bundles.finder.aggregate.class%" />
 
         <!-- Example usage of Google finder: Search query "site:github.com Symfony2 Bundle" on Google -->
-        <!--<service class="%knp_bundles.finder.google.class%" public="false">-->
-        	<!--<tag name="knp_bundles.finder" />-->
-            <!--<argument>site:github.com Symfony2 Bundle</argument>-->
-            <!--<argument>%knp_bundles.finder.limit%</argument>-->
-        <!--</service>-->
+        <!--
+        <service class="%knp_bundles.finder.google.class%" public="false">
+            <tag name="knp_bundles.finder" />
+            <argument>site:github.com Symfony2 Bundle</argument>
+            <argument>%knp_bundles.finder.limit%</argument>
+            <call method="setBrowser">
+                <argument type="service" id="buzz" />
+            </call>
+        </service>
+        -->
 
         <!-- Search "Symfony2 Bundle" on Github -->
         <service class="%knp_bundles.finder.github.class%" public="false">
             <tag name="knp_bundles.finder" />
             <argument>Bundle</argument>
             <argument>%knp_bundles.finder.limit%</argument>
+            <call method="setBrowser">
+                <argument type="service" id="buzz" />
+            </call>
         </service>
-
     </services>
 </container>

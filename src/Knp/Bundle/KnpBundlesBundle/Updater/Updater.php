@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 
-use Github\HttpClient\Exception as GithubException;
+use Github\HttpClient\ApiLimitExceedException;
 
 use OldSound\RabbitMqBundle\RabbitMq\Producer;
 
@@ -85,7 +85,7 @@ class Updater
         foreach ($this->em->getRepository('KnpBundlesBundle:Bundle')->findAllSortedBy('updatedAt') as $bundle) {
             $this->bundles[strtolower($bundle->getFullName())] = $bundle;
         }
-        $this->output->writeln(sprintf('[%s] Loaded %d bundles from the DB', $this->currentTime(), count($this->bundles)));
+        $this->output->writeln(sprintf('[%s] Loaded <comment>%d</comment> bundles from the DB', $this->currentTime(), count($this->bundles)));
     }
 
     public function searchNewBundles()
@@ -97,7 +97,7 @@ class Updater
         foreach ($repos as $repo) {
             $bundles[strtolower($repo)] = new Bundle($repo);
         }
-        $this->output->writeln(sprintf('[%s] Found %d bundle candidates', $this->currentTime(), count($bundles)));
+        $this->output->writeln(sprintf('[%s] Found <comment>%d</comment> bundle candidates', $this->currentTime(), count($bundles)));
 
         return $bundles;
     }
@@ -106,26 +106,33 @@ class Updater
     {
         $added = 0;
 
+        /* @var $bundle Bundle */
         foreach ($foundBundles as $bundle) {
             // We have it in DB already, skip it
             if (isset($this->bundles[strtolower($bundle->getFullName())])) {
                 continue;
             }
+
+            $this->githubRepoApi->updateFiles($bundle, array('sf'));
+
+            // It's not an valid Symfony2 Bundle
+            if (!$bundle->isValid()) {
+                $this->notifyInvalid($bundle, sprintf('Class "%sBundle" was not found.', ucfirst($bundle->getFullName())));
+                continue;
+            }
             // It's doesn't catch in our requirements (don't exists, or is a fork with less then 10 watchers)
             if (!$this->githubRepoApi->updateInfos($bundle)) {
-                $this->notifyInvalidBundle($bundle);
+                $this->notifyInvalid($bundle, 'Bundle not contain required informations, or we were not able to get such via API.');
                 continue;
             }
-            // It's not an valid Symfony2 Bundle
-            if (!$this->githubRepoApi->isValidSymfonyBundle($bundle)) {
-                $this->notifyInvalidBundle($bundle);
-                continue;
-            }
-            $this->output->write(sprintf('[%s] Discover bundle %s: ', $this->currentTime(), $bundle->getFullName()));
+            $this->output->write(sprintf('[%s] Discover bundle <comment>%s</comment>: ', $this->currentTime(), $bundle->getFullName()));
             $user = $this->users->getOrCreate($bundle->getUsername());
 
             $user->addBundle($bundle);
             $this->bundles[strtolower($bundle->getFullName())] = $bundle;
+
+            $this->githubRepoApi->updateFiles($bundle);
+
             $this->em->persist($bundle);
             $this->em->flush();
 
@@ -135,7 +142,7 @@ class Updater
             ++$added;
         }
 
-        $this->output->writeln(sprintf('[%s] %d created', $this->currentTime(), $added));
+        $this->output->writeln(sprintf('[%s] <comment>%d</comment> created', $this->currentTime(), $added));
     }
 
     /**
@@ -194,7 +201,7 @@ class Updater
 
     public function updateUsers()
     {
-        $this->output->writeln(sprintf('[%s] Will now update %d users', $this->currentTime(), count($this->users)));
+        $this->output->writeln(sprintf('[%s] Will now update <comment>%d</comment> users', $this->currentTime(), count($this->users)));
         foreach ($this->users as $user) {
             if ($this->em->getUnitOfWork()->getEntityState($user) != UnitOfWork::STATE_MANAGED) {
                 continue;
@@ -208,10 +215,10 @@ class Updater
                         $this->em->remove($user);
                     } else {
                         $user->recalculateScore();
-                        $this->output->writeln(sprintf('[%s] OK, score is %s', $this->currentTime(), $user->getScore()));
+                        $this->output->writeln(sprintf('[%s] OK, score is <comment>%s</comment>', $this->currentTime(), $user->getScore()));
                     }
                     break;
-                } catch (GithubException $e) {
+                } catch (ApiLimitExceedException $e) {
                     $this->output->writeln("Got a Github exception, sleeping for a few secs before trying again");
                     sleep(60);
                 }
@@ -225,25 +232,32 @@ class Updater
             $this->setUp();
         }
 
+        $this->output->writeln(sprintf('[%s] Will now check <comment>%d</comment> bundles', $this->currentTime(), count($this->bundles)));
+
         $counter = 0;
-        foreach ($this->bundles as $bundle) {
+        foreach ($this->bundles as $key => $bundle) {
             /** @var $bundle \Knp\Bundle\KnpBundlesBundle\Entity\Bundle */
-            if (false === $this->githubRepoApi->isValidSymfonyBundle($bundle)) {
-                $this->notifyInvalidBundle($bundle);
+            $this->githubRepoApi->updateFiles($bundle, array('sf'));
+            if (!$bundle->isValid()) {
                 $bundle->getUser()->removeBundle($bundle);
                 $this->em->remove($bundle);
-                $counter++;
+
+                $this->notifyInvalid($bundle, sprintf('Class "%sBundle" was not found.', ucfirst($bundle->getFullName())));
+
+                unset($this->bundles[$key]);
+
+                ++$counter;
             }
         }
 
-        $this->output->writeln(sprintf('%s invalid bundles have been found and removed', $counter));
+        $this->output->writeln(sprintf('[%s] <comment>%s</comment> invalid bundles have been found and removed', $this->currentTime(), $counter));
 
         $this->em->flush();
     }
 
-    private function notifyInvalidBundle(Bundle $bundle)
+    private function notifyInvalid(Bundle $bundle, $reason = null)
     {
-        $this->output->writeln(sprintf("[%s] %s: invalid Symfony bundle", $this->currentTime(), $bundle->getFullName()));
+        $this->output->writeln(sprintf('[%s] <error>%s</error>: INVALID - reason: %s', $this->currentTime(), $bundle->getFullName(), $reason));
     }
 
     private function currentTime()

@@ -3,7 +3,7 @@
 namespace Knp\Bundle\KnpBundlesBundle\Finder;
 
 use Symfony\Component\DomCrawler\Crawler;
-use Goutte\Client;
+use Buzz\Browser;
 
 /**
  * Abstract class for finder
@@ -12,37 +12,47 @@ use Goutte\Client;
  */
 abstract class CommonFinder implements FinderInterface
 {
+    /**
+     * @var string
+     */
     protected $query;
+    /**
+     * @var integer
+     */
     protected $limit;
-    protected $client;
+    /**
+     * @var Browser
+     */
+    protected $browser;
 
     /**
      * Constructor
      *
      * @param string  $query
      * @param integer $limit
-     * @param Client  $client
      */
-    public function __construct($query = null, $limit = 300, Client $client = null)
+    public function __construct($query = null, $limit = 300)
     {
         $this->setQuery($query);
         $this->setLimit($limit);
+    }
 
-        if (null === $client) {
-            $client = new Client();
-        }
-
-        $this->client = $client;
+    /**
+     * @param Browser $browser
+     */
+    public function setBrowser(Browser $browser)
+    {
+        $this->browser = $browser;
     }
 
     /**
      * Defines the query
      *
-     * @param  string $query
+     * @param string $query
      */
     public function setQuery($query)
     {
-        $this->query = strval($query);
+        $this->query = $query;
     }
 
     /**
@@ -52,7 +62,7 @@ abstract class CommonFinder implements FinderInterface
      */
     public function setLimit($limit)
     {
-        $this->limit = intval($limit);
+        $this->limit = $limit;
     }
 
     /**
@@ -60,16 +70,12 @@ abstract class CommonFinder implements FinderInterface
      */
     public function find()
     {
-        if (empty($this->query)) {
-            throw new \LogicException('You must specify a query to find repositories.');
-        }
-
         $repositories = array();
 
-        $page = 0;
+        $page = $counter = 0;
 
-        while (count($repositories) < $this->limit) {
-            $page++;
+        do {
+            ++$page;
 
             $results = $this->findPage($page);
             if (0 === count($results)) {
@@ -77,10 +83,11 @@ abstract class CommonFinder implements FinderInterface
             }
             foreach ($results as $result) {
                 if (!in_array($result, $repositories)) {
+                    ++$counter;
                     $repositories[] = $result;
                 }
             }
-        }
+        } while ($counter < $this->limit);
 
         return array_slice($repositories, 0, $this->limit);
     }
@@ -94,10 +101,11 @@ abstract class CommonFinder implements FinderInterface
      */
     protected function findPage($page)
     {
-        $repositories = array();
-        $crawler = $this->client->request('GET', $this->buildUrl($page));
+        $crawler = $this->doRequest($page);
+
         $urls = $this->extractPageUrls($crawler);
 
+        $repositories = array();
         foreach ($urls as $url) {
             $repository = $this->extractUrlRepository($url);
             if (null !== $repository && !in_array($repository, $repositories)) {
@@ -107,15 +115,6 @@ abstract class CommonFinder implements FinderInterface
 
         return $repositories;
     }
-
-    /**
-     * Returns the github repository extracted from the given URL
-     *
-     * @param  string $url
-     *
-     * @return string or NULL if the URL does not contain any repository
-     */
-    abstract protected function extractUrlRepository($url);
 
     /**
      * Returns the URL to perform the search
@@ -134,4 +133,28 @@ abstract class CommonFinder implements FinderInterface
      * @return array
      */
     abstract protected function extractPageUrls(Crawler $crawler);
+
+    /**
+     * Returns the github repository extracted from the given URL
+     *
+     * @param  string $url
+     *
+     * @return string or NULL if the URL does not contain any repository
+     */
+    abstract protected function extractUrlRepository($url);
+
+    /**
+     * @param integer $page
+     *
+     * @return Crawler
+     */
+    private function doRequest($page)
+    {
+        $response = $this->browser->get($this->buildUrl($page));
+
+        $crawler = new Crawler();
+        $crawler->add($response->toDomDocument());
+
+        return $crawler;
+    }
 }

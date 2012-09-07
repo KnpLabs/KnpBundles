@@ -7,8 +7,6 @@ use Goutte\Client;
 
 /**
  * Finds github repositories using Google
- *
- * @package KnpBundles
  */
 class Google extends CommonFinder
 {

@@ -21,14 +21,13 @@ class KbTweetTrendingBundleCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
+            /* @var $twitterer \Knp\Bundle\KnpBundlesBundle\Twitterer\TrendingBundleTwitterer */
             $twitterer = $this->getContainer()->get('knp_bundles.trending_bundle_twitterer');
             $trendingBundle = $twitterer->tweet();
+
+            $output->writeln(sprintf('Today trending bundle - %s has been tweeted', $trendingBundle->getName()));
         } catch (TrendingBundleNotFoundException $e) {
             $output->writeln('<error>Trending bundle not found</error>');
-        }
-
-        if ($trendingBundle) {
-            $output->writeln(sprintf('Today trending bundle - %s has been tweeted', $trendingBundle->getName()));
         }
     }
 }

@@ -2,24 +2,29 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Twig\Extension;
 
-use Knp\Bundle\KnpBundlesBundle\Activity\BundleActivity;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 class BundleUtilsExtension extends \Twig_Extension
 {
+    const ACTIVITY_HIGH   = 7;
+    const ACTIVITY_MEDIUM = 30;
+    const ACTIVITY_LOW    = 90;
+
     /**
      * @return array
      */
     public function getFilters()
     {
         return array(
-            'bundle_activity' => new \Twig_Filter_Method($this, 'bundleActivity'),
+            'bundle_activity'      => new \Twig_Filter_Method($this, 'bundleActivity'),
             'bundle_state_tooltip' => new \Twig_Filter_Method($this, 'bundleStateTooltip')
         );
     }
 
     /**
      * Display help message about bundle state
+     *
+     * @param string $state
      *
      * @return string
      */
@@ -45,16 +50,24 @@ class BundleUtilsExtension extends \Twig_Extension
     }
 
     /**
-     * Display bundle activity
+     * Get bundle activity title by days number after last commit
      *
-     * @param DateTime $lastCommitAt
+     * @param \DateTime $lastCommitAt
+     *
      * @return string
      */
     public function bundleActivity(\DateTime $lastCommitAt)
     {
-        return BundleActivity::getActivityByDays(
-            $lastCommitAt->diff(new \DateTime('now'))->format('%a')
-        );
+        $days = $lastCommitAt->diff(new \DateTime('now'))->format('%a');
+        if ($days <= self::ACTIVITY_HIGH) {
+            return 'bundles.activity.high';
+        }
+
+        if ($days <= self::ACTIVITY_MEDIUM) {
+            return 'bundles.activity.medium';
+        }
+
+        return 'bundles.activity.low';
     }
 
     /**

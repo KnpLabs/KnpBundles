@@ -28,6 +28,7 @@ class KbUpdateUsersCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        /* @var $updater Updater */
         $updater = $this->getContainer()->get('knp_bundles.updater');
         $updater->setOutput($output);
         $updater->setUp();
