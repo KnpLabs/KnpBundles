@@ -239,13 +239,11 @@ class Repo
         $packagistArray = $this->github->getHttpClient()->get($composerName, array(), array('url' => 'http://packagist.org/packages/:path.json'));
 
         // if json not encoded
-        if (!is_array($packagistArray)) {
+        if (!is_array($packagistArray) || !isset($packagistArray['package'])) {
             return false;
         }
 
         $symfonyVersions = array();
-
-        // build array branch => version
         $versionsArray = $packagistArray['package']['versions'];
 
         foreach ($versionsArray as $version => $value) {
