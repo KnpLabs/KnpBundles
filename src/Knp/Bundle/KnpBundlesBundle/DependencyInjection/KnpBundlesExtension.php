@@ -11,6 +11,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 
+use Github\Client;
+
 class KnpBundlesExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
@@ -33,6 +35,21 @@ class KnpBundlesExtension extends Extension
         $driver = strtolower($config['generate_badges']['driver']);
 
         $container->setAlias('knp_bundles.imagine', new Alias('knp_bundles.imagine.'.$driver, false));
+
+        // setup GitHub API client settings
+        $githubHttpClient = $container->getDefinition('knp_bundles.github_http_client');
+        $githubHttpClient->addMethodCall('setOption', array('limit', $config['github_client']['limit']));
+
+        $githubClient = $container->getDefinition('knp_bundles.github_client');
+        $githubClient->addMethodCall('setHttpClient', array($githubHttpClient));
+        $githubClient->addMethodCall(
+            'authenticate',
+            array(
+                $container->getParameter('knp_bundles.github.client_id'),
+                $container->getParameter('knp_bundles.github.client_secret'),
+                Client::AUTH_URL_CLIENT_ID
+            )
+        );
     }
 
     private function getConfigTree()
@@ -42,16 +59,29 @@ class KnpBundlesExtension extends Extension
         $tb
             ->root('knp_bundles')
                 ->children()
-                    ->scalarNode('git_bin')->defaultValue('/usr/bin/git')->cannotBeEmpty()->end()
+                    ->arrayNode('github_client')
+                        ->addDefaultsIfNotSet()
+                        ->children()
+                            ->scalarNode('limit')
+                                ->defaultValue(5000)
+                                ->cannotBeEmpty()
+                            ->end()
+                        ->end()
+                    ->end()
+                    ->scalarNode('git_bin')
+                        ->defaultValue('/usr/bin/git')
+                        ->cannotBeEmpty()
+                    ->end()
                     ->arrayNode('generate_badges')
                         ->addDefaultsIfNotSet()
                         ->children()
-                            ->scalarNode('driver')->defaultValue('gd')
-                            ->validate()
-                                ->ifNotInArray(array('gd', 'imagick', 'gmagick'))
-                                ->thenInvalid('Invalid imagine driver specified: %s')
+                            ->scalarNode('driver')
+                                ->defaultValue('gd')
+                                ->validate()
+                                    ->ifNotInArray(array('gd', 'imagick', 'gmagick'))
+                                    ->thenInvalid('Invalid imagine driver specified: %s')
+                                ->end()
                             ->end()
-                        ->end()
                         ->end()
                     ->end()
                 ->end()
