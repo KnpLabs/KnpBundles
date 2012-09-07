@@ -34,12 +34,9 @@
                 <span class="error"></span>
                 <p class="alert alert-error">Repository exist, validating data...</p>
             </li>
-            {#% if error -%#}
-            <li class="alert alert-error hide">
-                Houston, we have a problem! Selected repo probably don’t exist. Try enter another repo.
-                {#{ errorMessage | trans }#}
+            <li class="alert alert-error{% if not error %} hide{% endif %}">
+                {{ errorMessage ? errorMessage|trans : 'Houston, we have a problem! Selected repo probably don’t exist. Try enter another repo.' }}
             </li>
-            {#%- endif %#}
             <li class="alert alert-success hide">
                 <strong>Hey, friend!</strong> Thanks for adding your bundle to our database!
             </li>
@@ -58,7 +55,7 @@
         <ul>
             {% for bundle in bundles %}
             <li>
-                <img src="{{ bundle.user.gravatarHash|default('http://www.gravatar.com/avatar/?s=30&d=identicon&f=y') }}" alt="">
+                <img src="{{ bundle.user.gravatarHash|default('http://www.gravatar.com/avatar/?s=30&d=identicon&f=y') }}" alt="" width="30" height="30">
 
                 <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}">{{ bundle.name }}</a>
                 <span>{{ bundle.createdAt|date('d-m-Y') }} by <strong>{{ bundle.userName }}</strong></span>

@@ -888,7 +888,7 @@ class Bundle
      *
      * @return \Traversable
      */
-    public function getContributors($page = null, $limit = 1)
+    public function getContributors($page = null, $limit = 20)
     {
         if (null === $page) {
             return $this->contributors;

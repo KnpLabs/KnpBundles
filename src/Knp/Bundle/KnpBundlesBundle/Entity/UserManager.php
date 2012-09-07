@@ -69,9 +69,9 @@ class UserManager
             $username = $data;
         } elseif ($data instanceof UserResponseInterface) {
             if ($data instanceof SensioConnectUserResponse) {
-                $username = $data->getLinkedAccount('github') ?: $data->getUsername();
+                $username = $data->getLinkedAccount('github') ?: $data->getNickname();
             } else {
-                $username = $data->getUsername();
+                $username = $data->getNickname();
             }
         }
 
