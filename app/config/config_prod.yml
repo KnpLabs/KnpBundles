@@ -4,6 +4,11 @@ imports:
 framework:
     esi: { enabled: true }
 
+# KnpBundles Configuration
+knp_bundles:
+    github_client:
+        limit:    %knp_bundles.github.limit%
+
 monolog:
     handlers:
         main:

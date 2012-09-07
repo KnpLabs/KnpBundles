@@ -86,8 +86,8 @@
         {
             "package": "knplabs/github-api",
             "version": "dev-master",
-            "source-reference": "be1086c6097b6005b09622649adc1b517cacf607",
-            "commit-date": "1346159876"
+            "source-reference": "069c34e5214bcccd12918b1ce519a2f6f7fcb34e",
+            "commit-date": "1347002459"
         },
         {
             "package": "knplabs/knp-components",

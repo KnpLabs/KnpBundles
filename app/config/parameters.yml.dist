@@ -14,6 +14,7 @@ parameters:
 
     knp_bundles.github.client_id: your_client_id_here
     knp_bundles.github.client_secret: your_client_secret_here
+    knp_bundles.github.limit: 5000
 
     knp_bundles.sensio.client_id: your_client_id_here
     knp_bundles.sensio.client_secret: your_client_secret_here
