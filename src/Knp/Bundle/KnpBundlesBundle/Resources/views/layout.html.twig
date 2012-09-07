@@ -30,7 +30,7 @@
 
         <form method="get" action="{{ path('search') }}" id="search-box">
             <label for="search-query">{% trans %}search.label{% endtrans %}</label>
-            <input type="text" id="search-query" name="q" value="{% block search_query %}{% endblock %}" placeholder="Search...">
+            <input type="text" id="search-query" name="q" value="{% block search_query %}{% endblock %}" placeholder="Search..."><input type="submit" id="search-btn" value="&nbsp;">
         </form>
     </section>
 </header>
