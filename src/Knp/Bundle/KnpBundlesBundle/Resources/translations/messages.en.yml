@@ -107,13 +107,13 @@ bundles.show:
             deprecated: "deprecated"
 
 bundles.score:
-    followers:      'Github Followers: %score%'
-    activity:       "Last 30 days activity: %score%"
-    readme:         "README file size: %score%"
-    travisci:       "Uses Travis CI: %score%"
-    travisbuild:    "Travis CI build status: %score%"
-    composer:       "Provides a composer package: %score%"
-    recommenders:   "KnpBundles recommendations: %score%"
+    followers:      "Github watchers:"
+    activity:       "Last 30 days activity:"
+    readme:         "README file size:"
+    travisci:       "Uses Travis CI:"
+    travisbuild:    "Travis CI build status:"
+    composer:       "Provides a composer package:"
+    recommenders:   "KnpBundles recommendations:"
 
 bundles.list:
     by: " by "

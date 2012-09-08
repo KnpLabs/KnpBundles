@@ -119,6 +119,15 @@ class UpdateBundleConsumer implements ConsumerInterface
             return;
         }
 
+        if (isset($message['action']) && 'remove' == $message['action']) {
+            if ($this->logger) {
+                $this->logger->warn(sprintf('Bundle "%s" will be removed', $bundle->getName()));
+            }
+            $this->removeBundle($bundle);
+
+            return;
+        }
+
         if ($this->logger) {
             $this->logger->info(sprintf('Retrieved bundle %s', $bundle->getName()));
         }
@@ -215,6 +224,10 @@ class UpdateBundleConsumer implements ConsumerInterface
         if ($user instanceof User) {
             $user->removeBundle($bundle);
         }
+
+        // remove bundle from search index
+        $this->indexer->deleteBundlesIndexes($bundle);
+
         $this->em->remove($bundle);
         $this->em->flush();
 

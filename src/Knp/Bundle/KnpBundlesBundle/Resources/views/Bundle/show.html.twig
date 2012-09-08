@@ -50,10 +50,12 @@
                 {%- if bundle.symfonyVersions|length > 0 -%}
                 <li><i class="icon-symfony"></i><strong>{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}</strong>
                     <table class="versions-table">
-                        <tbody>
-                        <tr class="table-bottom-line">
-                            <th>Bundle</th><th class="table-middle-space"></th><th>Symfony</th>
+                        <thead>
+                        <tr>
+                            <th>Bundle</th><th>Symfony</th>
                         </tr>
+                        </thead>
+                        <tbody>
                         {% for key, version in bundle.symfonyVersions %}
                         <tr>
                             <td>{{ key }}</td><td>{{ version ? version : "bundles.show.infos.unknown"|trans }}</td>
@@ -147,17 +149,19 @@
             </div>
 
             <div class="tab-pane" id="score-details">
+                <ul>
                 {% if bundle.scoreDetails %}
-                <ul class="bundle-score-details">
-                    <li>{% trans with {'%score%': score_details.followers } %}bundles.score.followers{% endtrans %}</li>
-                    <li>{% trans with {'%score%': score_details.activity } %}bundles.score.activity{% endtrans %}</li>
-                    <li>{% trans with {'%score%': score_details.readme } %}bundles.score.readme{% endtrans %}</li>
-                    <li>{% trans with {'%score%': score_details.travisci } %}bundles.score.travisci{% endtrans %}</li>
-                    <li>{% trans with {'%score%': score_details.travisbuild } %}bundles.score.travisbuild{% endtrans %}</li>
-                    <li>{% trans with {'%score%': score_details.composer } %}bundles.score.composer{% endtrans %}</li>
-                    <li>{% trans with {'%score%': score_details.recommenders } %}bundles.score.recommenders{% endtrans %}</li>
-                </ul>
+                    <li><i class="icon-eye"></i>{% trans %}bundles.score.followers{% endtrans %} <strong>{{ score_details.followers }}</strong></li>
+                    <li><i class="icon-back-in-time"></i>{% trans %}bundles.score.activity{% endtrans %} <strong>{{ score_details.activity }}</strong></li>
+                    <li><i class="icon-info"></i>{% trans %}bundles.score.readme{% endtrans %} <strong>{{ score_details.readme }}</strong></li>
+                    <li><i class="icon-cogs"></i>{% trans %}bundles.score.travisci{% endtrans %} <strong>{{ score_details.travisci }}</strong></li>
+                    <li><i class="icon-cogs"></i>{% trans %}bundles.score.travisbuild{% endtrans %} <strong>{{ score_details.travisbuild }}</strong></li>
+                    <li><i class="icon-box"></i>{% trans %}bundles.score.composer{% endtrans %} <strong>{{ score_details.composer }}</strong></li>
+                    <li><i class="icon-thumbs-up"></i>{% trans %}bundles.score.recommenders{% endtrans %} <strong>{{ score_details.recommenders }}</strong></li>
+                {% else %}
+                    <li>This bundle don't have any score details.</li>
                 {% endif %}
+                </ul>
             </div>
         </div>
 

@@ -62,7 +62,7 @@ class UserController extends BaseController
         $this->highlightMenu('users');
 
         $query = $this->getUserRepository()->queryAllWithBundlesSortedBy($sortField);
-        $users = $this->getPaginator($query, $request->query->get('page', 1), 12);
+        $users = $this->getPaginator($query, $request->query->get('page', 1), 18);
 
         return $this->render('KnpBundlesBundle:User:list.'.$format.'.twig', array(
             'users'       => $users,

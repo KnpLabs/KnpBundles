@@ -58,24 +58,20 @@ class BundleController extends BaseController
             ->setMaxPerPage(10)
             ->setCurrentPage($request->query->get('page', 1))
         ;
-        $bundles = $paginator->getCurrentPageResults();
-
-        $format = $this->recognizeRequestFormat($request);
-
+        $bundles = $paginator->getCurrentPageResults()->getIterator();
+        $format  = $this->recognizeRequestFormat($request);
         if ('html' === $format && count($bundles) === 1) {
-            $iterator = $bundles->getIterator();
-            $first    = $iterator->current();
+            $first = $bundles->current();
             if (strtolower($first['name']) == strtolower($query)) {
-                $params = array('username' => $bundles[0]['username'], 'name' => $bundles[0]['name']);
-
-                return $this->redirect($this->generateUrl('bundle_show', $params));
+                return $this->redirect($this->generateUrl('bundle_show', array('username' => $first['username'], 'name' => $first['name'])));
             }
         }
 
         return $this->render('KnpBundlesBundle:Bundle:searchResults.'.$format.'.twig', array(
-            'query'    => urldecode($request->query->get('q')),
-            'bundles'  => $bundles,
-            'callback' => $request->query->get('callback')
+            'query'     => urldecode($request->query->get('q')),
+            'bundles'   => $bundles,
+            'paginator' => $paginator,
+            'callback'  => $request->query->get('callback')
         ));
     }
 

@@ -36,8 +36,10 @@
          <field name="fullName" type="text_general" indexed="true" stored="true" />
          <field name="description" type="text_general" indexed="true" stored="true" />
          <field name="totalScore" type="int" indexed="false" stored="true" />
+         <field name="state" type="string" indexed="false" stored="true" />
          <field name="userGravatarHash" type="string" indexed="false" stored="true" />
          <field name="lastCommitAt" type="date" indexed="false" stored="true" />
+         <field name="lastTweetedAt" type="date" indexed="false" stored="true" />
          <field name="keywords" type="text_general" indexed="true" stored="true" multiValued="true" />
          <field name="text" type="text_general" indexed="true" stored="false" multiValued="true" />
      </fields>
