@@ -1081,11 +1081,11 @@ code, pre {
     border-bottom: 1px solid #fff
 }
 
-.developers-list article.no-right-border {
+.developers-list article.no-right-border, .developers-list article:last-of-type {
     border-right: 1px solid #fff
 }
 
-.developers-list article.even.no-right-border, .developers-list article.even:last-child {
+.developers-list article.even:last-of-type, .developers-list article.even.no-right-border {
     border-right: 1px solid #f8fcfe
 }
 
@@ -1159,10 +1159,11 @@ code, pre {
 }
 
 .sidebar-bundle-info li .versions-table {
-    width: 200px;
+    width: 215px;
     margin: 0 0 3px 26px;
     font-size: 11px;
     line-height: 14px;
+    word-break: break-all
 }
 
 .sidebar-chart section {
@@ -1178,6 +1179,16 @@ code, pre {
 .sidebar-chart #chart {
     height: 155px;
     width: 240px
+}
+
+.sidebar-box #score-details li {
+    padding: 3px 5px 3px 20px;
+    font-size: 12px;
+    border-bottom: 1px solid #eee
+}
+
+.sidebar-box #score-details li:last-child {
+    border: 0
 }
 
 .sidebar-box .chart #chart {

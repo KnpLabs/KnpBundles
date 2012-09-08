@@ -24,6 +24,7 @@ class KbSolrIndexCommand extends ContainerAwareCommand
             ->setName('kb:solr:index')
             ->setDefinition(array(
                 new InputOption('force', null, InputOption::VALUE_NONE, 'Force a re-indexing of all bundles'),
+                new InputOption('skip-server-check', null, InputOption::VALUE_NONE, 'Skips check that Solr server is up and running.'),
                 new InputArgument('bundleName', InputArgument::OPTIONAL, 'Bundle name to index'),
             ))
             ->setDescription('Indexes bundles in Solr')
@@ -35,7 +36,7 @@ class KbSolrIndexCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->getContainer()->get('knp_bundles.utils.solr')->isSolrRunning()) {
+        if (!$input->getOption('skip-server-check') && !$this->getContainer()->get('knp_bundles.utils.solr')->isSolrRunning()) {
             $output->writeln('<error>Solr is NOT running. Please start server first!</error>');
 
             return 1;
@@ -57,29 +58,41 @@ class KbSolrIndexCommand extends ContainerAwareCommand
             $bundles = $doctrine->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\Bundle')->getStaleBundlesForIndexing();
         }
 
-        if ($force && !$bundleName) {
+        if ($force) {
             if ($verbose) {
                 $output->writeln('Deleting existing index.');
             }
 
-            $indexer->deleteBundlesIndexes();
+            $indexer->deleteBundlesIndexes($bundleName ? current($bundles) : null);
         }
 
         /* @var $bundle Bundle */
-        foreach ($bundles as $bundle) {
-            if ($verbose) {
-                $output->writeln('Indexing '.$bundle->getFullName().'...');
-            }
+        foreach ($bundles as $key => $bundle) {
+            $this->reindex($bundle, $indexer, $output, $verbose);
 
-            try {
-                $indexer->indexBundle($bundle);
-            } catch (\Exception $e) {
-                $output->writeln('<error>Exception: '.$e->getMessage().', skipping bundle '.$bundle->getFullName().'.</error>');
-            }
+            unset($bundles[$key]);
         }
 
         $doctrine->getEntityManager()->flush();
 
         return 0;
+    }
+
+    private function reindex(Bundle $bundle, $indexer, $output, $verbose)
+    {
+        if ($verbose) {
+            $output->writeln('Indexing '.$bundle->getFullName().'...');
+        }
+
+        try {
+            $indexer->indexBundle($bundle);
+        } catch (\Exception $e) {
+            $output->writeln('<error>Exception: '.$e->getMessage().', skipping bundle '.$bundle->getFullName().'.</error>');
+        }
+    }
+
+    private function deleteBundlesIndex($indexer, Bundle $bundle = null)
+    {
+        $indexer->deleteBundlesIndexes($bundle);
     }
 }

@@ -21,15 +21,15 @@ use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 class Updater
 {
     /**
-     * @var \Knp\Bundle\KnpBundlesBundle\Github\User
+     * @var User
      */
     private $githubUserApi;
     /**
-     * @var \Knp\Bundle\KnpBundlesBundle\Github\Repo
+     * @var Repo
      */
     private $githubRepoApi;
     /**
-     * @var \Knp\Bundle\KnpBundlesBundle\Finder\FinderInterface|
+     * @var FinderInterface
      */
     private $finder;
     /**
@@ -37,7 +37,7 @@ class Updater
      */
     private $bundles;
     /**
-     * @var \Knp\Bundle\KnpBundlesBundle\Entity\UserManager
+     * @var UserManager
      */
     private $users;
     /**
@@ -54,10 +54,11 @@ class Updater
     private $bundleUpdateProducer;
 
     /**
-     * @param \Doctrine\ORM\EntityManager                              $em
-     * @param \Knp\Bundle\KnpBundlesBundle\Entity\UserManager          $users
-     * @param \Knp\Bundle\KnpBundlesBundle\Finder\FinderInterface      $finder
-     * @param \Knp\Bundle\KnpBundlesBundle\Github\User                 $githubUserApi
+     * @param \Doctrine\ORM\EntityManager $em
+     * @param UserManager                 $users
+     * @param FinderInterface             $finder
+     * @param User                        $githubUserApi
+     * @param Repo                        $githubRepoApi
      */
     public function __construct(EntityManager $em, UserManager $users, FinderInterface $finder, User $githubUserApi, Repo $githubRepoApi)
     {
@@ -178,13 +179,31 @@ class Updater
 
     public function updateRepo(Bundle $bundle)
     {
-        // Create a Message object
-        $message = array('bundle_id' => $bundle->getId());
-
         if ($this->bundleUpdateProducer) {
+            // Create a Message object
+            $message = array('bundle_id' => $bundle->getId());
+
             // RabbitMQ, publish my message!
             $this->bundleUpdateProducer->publish(json_encode($message));
         }
+    }
+
+    public function removeRepo(Bundle $bundle)
+    {
+        if ($this->bundleUpdateProducer) {
+            // Create a Message object
+            $message = array(
+                'bundle_id' => $bundle->getId(),
+                'action'    => 'remove'
+            );
+
+            // RabbitMQ, publish my message!
+            $this->bundleUpdateProducer->publish(json_encode($message));
+
+            return true;
+        }
+
+        return false;
     }
 
     public function updateBundlesData()
@@ -239,8 +258,10 @@ class Updater
             /** @var $bundle \Knp\Bundle\KnpBundlesBundle\Entity\Bundle */
             $this->githubRepoApi->updateFiles($bundle, array('sf'));
             if (!$bundle->isValid()) {
-                $bundle->getUser()->removeBundle($bundle);
-                $this->em->remove($bundle);
+                if (!$this->removeRepo($bundle)) {
+                    $bundle->getUser()->removeBundle($bundle);
+                    $this->em->remove($bundle);
+                }
 
                 $this->notifyInvalid($bundle, sprintf('Class "%sBundle" was not found.', ucfirst($bundle->getFullName())));
 

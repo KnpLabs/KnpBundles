@@ -1,7 +1,7 @@
 {% for bundle in bundles %}
-<article class="bundle{% if bundle.lastTweetedAt %} award{% endif %}">
+<article class="bundle{% if bundle.lastTweetedAt|default(null) %} award{% endif %}">
     <div class="bundle-score">
-        <h3>{{ bundle.score }}</h3>
+        <h3>{{ bundle.totalScore }}</h3>
     </div>
 
     <div class="bundle-info">
@@ -10,7 +10,7 @@
             {% if bundle.state != 'unknown' %}<abbr title="{{ bundle.state|bundle_state_tooltip }}">({{ bundle.state }})</abbr>{% endif %}
         </h2>
 
-        <p>{{ bundle.description(140)|default('No description found.') }}</p>
+        <p>{{ bundle.description|slice(0, 140)|default('No description found.') }}</p>
 
         <ul>
             <li class="bundle-author">
@@ -19,7 +19,7 @@
             </li>
             <li class="bundle-activity">
                 {% trans %}bundles.list.activity{% endtrans %}
-                <abbr title="{% trans %}bundles.list.lastCommit{% endtrans %}{{ time_diff(bundle.lastCommitAt) }}" class="{{ bundle.lastCommitAt|bundle_activity|trans|lower }}">{{ bundle.lastCommitAt|bundle_activity|trans }}</abbr>
+                <abbr title="{% trans %}bundles.list.lastCommit{% endtrans %}{{ time_diff(bundle.lastCommitAt) }}">{{ time_diff(bundle.lastCommitAt) }}</abbr>
             </li>
         </ul>
     </div>

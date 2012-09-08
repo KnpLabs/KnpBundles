@@ -13,7 +13,7 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 class SolrIndexer
 {
     /**
-     * @var Doctrine\Bundle\DoctrineBundle\Registry
+     * @var Registry
      */
     protected $doctrine;
 
@@ -23,8 +23,8 @@ class SolrIndexer
     protected $solarium;
 
     /**
-     * @param Doctrine\Bundle\DoctrineBundle\Registry $doctrine
-     * @param \Solarium_Client                        $solarium
+     * @param Registry         $doctrine
+     * @param \Solarium_Client $solarium
      */
     public function __construct(Registry $doctrine, \Solarium_Client $solarium)
     {
@@ -35,7 +35,7 @@ class SolrIndexer
     /**
      * Indexes single bundle.
      *
-     * @param Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     * @param Bundle $bundle
      */
     public function indexBundle(Bundle $bundle)
     {
@@ -53,35 +53,37 @@ class SolrIndexer
     /**
      * Populates document with bundle data.
      *
-     * @param \Solarium_Document_ReadWrite              $document
-     * @param Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
-     * @param \Solarium_Query_Helper                    $helper
+     * @param \Solarium_Document_ReadWrite $document
+     * @param Bundle                       $bundle
+     * @param \Solarium_Query_Helper       $helper
      */
     private function updateDocumentFromBundle(\Solarium_Document_ReadWrite $document, Bundle $bundle, \Solarium_Query_Helper $helper)
     {
-        $document->id = $bundle->getId();
-        $document->name = $bundle->getName();
-        $document->username = $bundle->getUsername();
-        $document->fullName = $bundle->getFullName();
-        $document->description = $bundle->getDescription();
-        $document->totalScore = $bundle->getScore();
-        $document->userGravatarHash = $bundle->getUser()->getGravatarHash();
-        $document->lastCommitAt = $helper->formatDate($bundle->getLastCommitAt());
+        $document->setField('id', $bundle->getId());
+        $document->setField('name', $bundle->getName());
+        $document->setField('username', $bundle->getUsername());
+        $document->setField('fullName', $bundle->getFullName());
+        $document->setField('description', $bundle->getDescription());
+        $document->setField('totalScore', $bundle->getScore());
+        $document->setField('state', $bundle->getState());
+        $document->setField('userGravatarHash', $bundle->getUser()->getGravatarHash());
+        $document->setField('lastCommitAt', $helper->formatDate($bundle->getLastCommitAt()));
+        $document->setField('lastTweetedAt', null !== $bundle->getLastTweetedAt() ? $helper->formatDate($bundle->getLastTweetedAt()) : null);
 
         $keywords = array();
         foreach ($bundle->getKeywords() as $keyword) {
-            $keywords[] = $keyword->getValue();
+            $keywords[mb_strtolower($keyword->getValue(), 'UTF-8')] = true;
         }
-        $document->keywords = $keywords;
+        $document->setField('keywords', array_keys($keywords));
     }
 
     /**
      * Delete all bundles from index
      */
-    public function deleteBundlesIndexes()
+    public function deleteBundlesIndexes(Bundle $bundle = null)
     {
         $delete = $this->solarium->createUpdate();
-        $delete->addDeleteQuery('*:*');
+        $delete->addDeleteQuery(null !== $bundle ? $bundle->getFullName() : '*:*');
         $delete->addCommit();
 
         $this->solarium->update($delete);
