@@ -249,12 +249,18 @@ class Repo
         foreach ($versionsArray as $version => $value) {
             foreach (array('symfony/framework-bundle', 'symfony/symfony') as $requirement) {
                 if (isset($value['require'][$requirement])) {
+                    // Skip `dev` packages, add only `dev-master`
+                    if (0 === strpos($version, 'dev-') && 'dev-master' != $version) {
+                        continue;
+                    }
                     $symfonyVersions[$version] = $value['require'][$requirement]; // array('master' => '>=2.0,<2.2-dev')
                 }
             }
         }
 
-        $bundle->setSymfonyVersions($symfonyVersions);
+        if (!empty($symfonyVersions)) {
+            $bundle->setSymfonyVersions($symfonyVersions);
+        }
 
         return true;
     }

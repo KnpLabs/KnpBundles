@@ -10,6 +10,7 @@
     });
 
     $('.sidebar-users-list img,abbr').tooltip();
+    $('.symfony-versions').popover({trigger: 'hover'});
 
     $('#add-bundle-btn').bind('click', function(event) {
         var ul = $(this).parent().parent().parent(),
