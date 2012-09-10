@@ -19,7 +19,7 @@
             </li>
             <li class="bundle-activity">
                 {% trans %}bundles.list.activity{% endtrans %}
-                <abbr title="{% trans %}bundles.list.lastCommit{% endtrans %}{{ time_diff(bundle.lastCommitAt) }}">{{ time_diff(bundle.lastCommitAt) }}</abbr>
+                <abbr title="{% trans %}bundles.list.lastCommit{% endtrans %}{{ time_diff(bundle.lastCommitAt) }}" class="{{ bundle.lastCommitAt|bundle_activity|trans|lower }}">{{ bundle.lastCommitAt|bundle_activity|trans }}</abbr>
             </li>
         </ul>
     </div>
