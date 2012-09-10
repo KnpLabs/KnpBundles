@@ -57,7 +57,7 @@ Feature: Searching bundles
     When I go to "/"
     And I search for "lorem"
     Then I should be on "/search"
-    And I should see "Search 'lorem'"
+    And I should see "Looking for keyword \"lorem\""
     And I should see "No bundles found"
 
   Scenario: Searching by partial name is rather search by author
@@ -80,12 +80,12 @@ Feature: Searching bundles
     When I go to "/"
     And I search for "f"
     Then I should be on "/search"
-    And I should see "Search 'f'"
+    And I should see "Looking for keyword \"f\""
     And I should see "No bundles found"
 
   Scenario: Searching by partial name but partial name is too long
     When I go to "/"
     And I search for "FOSTwitterBootstrapLongAndSuperLongNameForABundleIsJustTooMuchBundle"
     Then I should be on "/search"
-    And I should see "Search 'FOSTwitterBootstrapLongAndSuperLongNameForABundleIsJustTooMuchBundle'"
+    And I should see "Looking for keyword \"FOSTwitterBootstrapLongAndSuperLongNameForABundleIsJustTooMuchBundle\""
     And I should see "No bundles found"
