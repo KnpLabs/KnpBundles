@@ -64,6 +64,7 @@ class SolrIndexer
         $document->setField('username', $bundle->getUsername());
         $document->setField('fullName', $bundle->getFullName());
         $document->setField('description', $bundle->getDescription());
+        $document->setField('readme', $bundle->getReadme());
         $document->setField('totalScore', $bundle->getScore());
         $document->setField('state', $bundle->getState());
         $document->setField('userGravatarHash', $bundle->getUser()->getGravatarHash());

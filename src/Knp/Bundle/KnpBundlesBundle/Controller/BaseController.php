@@ -51,7 +51,7 @@ class BaseController extends Controller
         $paginator = new Pagerfanta(new DoctrineORMAdapter($query));
         $paginator
             ->setMaxPerPage($limit)
-            ->setCurrentPage($page)
+            ->setCurrentPage($page, false, true)
         ;
 
         return $paginator;
