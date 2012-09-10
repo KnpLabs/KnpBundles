@@ -55,12 +55,16 @@ class BundleUtilsExtension extends \Twig_Extension
     /**
      * Get bundle activity title by days number after last commit
      *
-     * @param \DateTime $lastCommitAt
+     * @param mixed $lastCommitAt
      *
      * @return string
      */
-    public function bundleActivity(\DateTime $lastCommitAt)
+    public function bundleActivity($lastCommitAt)
     {
+        if (!$lastCommitAt instanceof \DateTime) {
+            $lastCommitAt = new \DateTime('@'.strtotime($lastCommitAt));
+        }
+
         $days = $lastCommitAt->diff(new \DateTime('now'))->format('%a');
         if ($days <= self::ACTIVITY_HIGH) {
             return 'bundles.activity.high';

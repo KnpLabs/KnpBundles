@@ -18,13 +18,14 @@ class SolrContext extends BehatContext implements KernelAwareInterface
      * @var \Symfony\Component\HttpKernel\KernelInterface $kernel
      */
     private $kernel;
-    
+
     /**
      * @Given /^bundles are indexed$/
      */
     public function bundlesAreIndexed()
     {
-        $this->solrIsEnabled();
+        assertTrue($this->isSolrEnabled());
+
         $bundles = $this->getContainer()->get('doctrine')->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\Bundle')->findAll();
 
         $indexer = $this->getContainer()->get('knp_bundles.indexer.solr');
@@ -37,17 +38,11 @@ class SolrContext extends BehatContext implements KernelAwareInterface
     /**
      * @throw Solr HTTP error
      */
-    protected function solrIsEnabled()
+    protected function isSolrEnabled()
     {
-        $client = $this->getSolariumClient();
-        $query = $client->createPing();
+        $utils = $this->getContainer()->get('knp_bundles.utils.solr');
 
-        $client->ping($query);
-    }
-
-    protected function getSolariumClient()
-    {
-        return $this->getContainer()->get('solarium.client');
+        return $utils->isSolrRunning();
     }
 
     /**
@@ -59,7 +54,7 @@ class SolrContext extends BehatContext implements KernelAwareInterface
     {
         return $this->kernel->getContainer();
     }
-    
+
     /**
      * Sets Kernel instance.
      *

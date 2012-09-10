@@ -23,7 +23,7 @@ Feature: Searching bundles
   Scenario: Searching some bundles
     When I go to "/"
     And I search for "Test"
-    Then I should see "2 Bundles"
+    Then I should see "Found 2 bundles"
     And I should see "TestBundle"
     And I should see "Test2Bundle"
     And I should not see "UserBundle"
@@ -31,7 +31,7 @@ Feature: Searching bundles
   Scenario: Search one bundle
     When I go to "/"
     And I search for "User"
-    Then I should see "5 Bundle"
+    Then I should see "Found 5 bundles"
     And I should see "UserBundle"
 
   Scenario: Search one bundle with exact name
@@ -42,7 +42,7 @@ Feature: Searching bundles
   Scenario: Searching some bundles from description
     When I go to "/"
     And I search for "desc"
-    Then I should see "7 Bundles"
+    Then I should see "Found 7 bundles"
     And I should see "TestBundle"
     And I should see "Test2Bundle"
     And I should see "UserBundle"
@@ -63,7 +63,7 @@ Feature: Searching bundles
   Scenario: Searching by partial name is rather search by author
     When I go to "/"
     And I search for "FOS"
-    Then I should see "5 Bundles"
+    Then I should see "Found 5 bundles"
     And I should see "FOSTwitterBundle"
     And I should see "FOSJsRoutingBundle"
     And I should see "FOSFacebookBundle"
@@ -73,7 +73,7 @@ Feature: Searching bundles
   Scenario: Searching by partial name
     When I go to "/"
     And I search for "Twitter"
-    Then I should see "1 Bundle"
+    Then I should see "Found 1 bundle"
     And I should see "FOSTwitterBundle"
 
   Scenario: Searching by partial name but partial name is too short

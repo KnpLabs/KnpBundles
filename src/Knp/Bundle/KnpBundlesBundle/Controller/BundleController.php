@@ -39,27 +39,36 @@ class BundleController extends BaseController
 
     public function searchAction(Request $request)
     {
-        $query = preg_replace('(\W)', '', trim($request->query->get('q')));
+        $format = $this->recognizeRequestFormat($request);
+        $query  = trim($request->query->get('q'));
 
-        if (empty($query)) {
+        /** @var $solarium \Solarium_Client */
+        $solarium = $this->get('solarium.client');
+
+        $select = $solarium->createSelect();
+
+        $escapedQuery = $select->getHelper()->escapeTerm($query);
+        if (empty($escapedQuery)) {
+            if ('json' === $format) {
+                return new JsonResponse(array('message' => 'Too short query.', 404));
+            }
+
             return $this->render('KnpBundlesBundle:Bundle:search.html.twig');
         }
 
-        $solarium = $this->get('solarium.client');
-        $select = $solarium->createSelect();
-        $escapedQuery = $select->getHelper()->escapePhrase($query);
-
         $dismax = $select->getDisMax();
-        $dismax->setQueryFields(array('name', 'description', 'keywords', 'text', 'username', 'fullName'));
+        $dismax->setQueryFields(array('name^2', 'username', 'fullName^1.5', 'description', 'keywords', 'text', 'text_ngram'));
+        $dismax->setPhraseFields(array('description^30'));
+        $dismax->setQueryParser('edismax');
+
         $select->setQuery($escapedQuery);
 
         $paginator = new Pagerfanta(new SolariumAdapter($solarium, $select));
         $paginator
             ->setMaxPerPage(10)
-            ->setCurrentPage($request->query->get('page', 1))
+            ->setCurrentPage($request->query->get('page', 1), false, true)
         ;
         $bundles = $paginator->getCurrentPageResults()->getIterator();
-        $format  = $this->recognizeRequestFormat($request);
         if ('html' === $format && count($bundles) === 1) {
             $first = $bundles->current();
             if (strtolower($first['name']) == strtolower($query)) {

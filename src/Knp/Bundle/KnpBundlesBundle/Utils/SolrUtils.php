@@ -34,7 +34,18 @@ class SolrUtils
      */
     public function isSolrRunning()
     {
-        return (boolean) $this->getSolrPid();
+        // create a ping query
+        $ping = $this->solarium->createPing();
+
+        // execute the ping query
+        try {
+            $result = $this->solarium->ping($ping);
+            $result = $result->getData();
+
+            return isset($result['status']) && 'OK' == $result['status'];
+        } catch(\Solarium_Exception $e) {
+            return false;
+        }
     }
 
     /**
