@@ -114,7 +114,7 @@ code, pre {
 .icon-symfony {
     display: inline-block;
     height: 18px;
-    width: 19px;
+    width: 17px;
     vertical-align: middle;
     background: url('../images/icon_symfony.png') no-repeat
 }
@@ -1162,12 +1162,8 @@ code, pre {
     font-weight: bold
 }
 
-.sidebar-bundle-info li .versions-table {
-    width: 215px;
-    margin: 0 0 3px 26px;
-    font-size: 11px;
-    line-height: 14px;
-    word-break: break-all
+.sidebar-bundle-info li .symfony-versions {
+    cursor: help
 }
 
 .sidebar-chart section {
@@ -1276,6 +1272,15 @@ code, pre {
     display: block;
     line-height: 12px;
     color: #999;
+}
+
+
+.versions-table {
+    width: 215px;
+    margin: 0;
+    font-size: 12px;
+    line-height: 15px;
+    word-break: break-all
 }
 
 

@@ -32,6 +32,25 @@
 </div>
 {%- endblock %}
 
+{% block symfony_versions %}
+{% spaceless %}
+<table class='versions-table'>
+    <thead>
+    <tr>
+        <th>Bundle</th><th>Symfony</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for key, version in bundle.symfonyVersions %}
+    <tr>
+        <td>{{ key }}</td><td>{{ version ? version : "bundles.show.infos.unknown"|trans }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endspaceless %}
+{% endblock %}
+
 {% block right %}
     <div class="sidebar-box sidebar-bundle-info">
         <hgroup>
@@ -48,21 +67,7 @@
                 {%- endif -%}
                 <li><i class="icon-chart"></i><strong>{% trans %}bundles.show.infos.score{% endtrans %}</strong> <a href="#score-details" data-toggle="tab">{{ bundle.score }}</a></li>
                 {%- if bundle.symfonyVersions|length > 0 -%}
-                <li><i class="icon-symfony"></i><strong>{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}</strong>
-                    <table class="versions-table">
-                        <thead>
-                        <tr>
-                            <th>Bundle</th><th>Symfony</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for key, version in bundle.symfonyVersions %}
-                        <tr>
-                            <td>{{ key }}</td><td>{{ version ? version : "bundles.show.infos.unknown"|trans }}</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                <li><i class="icon-symfony"></i><strong class="symfony-versions" data-placement="bottom" data-content="{{ block('symfony_versions') }}" data-title="{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}:">{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}</strong>
                 </li>
                 {%- endif -%}
                 <li><i class="icon-calendar"></i><strong>{% trans %}bundles.show.infos.created{% endtrans %}</strong> {{ bundle.createdAt|date('date_format'|trans) }}</li>
@@ -81,7 +86,7 @@
                 <li title="{% trans %}bundles.show.infos.travis{% endtrans %}">
                     <i class="icon-cogs"></i>
                     <a href="{{ bundle.travisUrl }}">
-                        <img src="https://secure.travis-ci.org/{{ bundle.username }}/{{ bundle.name }}.png" alt="Travis Build Status" />
+                        <img src="https://secure.travis-ci.org/{{ bundle.username }}/{{ bundle.name }}.png" alt="Travis Build Status" width="89" height="13">
                     </a>
                 </li>
                 {%- endif -%}
