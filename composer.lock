@@ -1,5 +1,5 @@
 {
-    "hash": "2e2826a8032e5e2a647db4d0e39835cf",
+    "hash": "1399b30328d72d5f0c1ea9a9abc409e0",
     "packages": [
         {
             "package": "avalanche123/imagine-bundle",
@@ -32,8 +32,8 @@
         {
             "package": "doctrine/doctrine-bundle",
             "version": "dev-master",
-            "source-reference": "v1.0.0",
-            "commit-date": "1347052701"
+            "source-reference": "d3c930599723c8343472a5791b0f5909a4111a73",
+            "commit-date": "1347289964"
         },
         {
             "package": "doctrine/doctrine-fixtures-bundle",
@@ -148,8 +148,8 @@
         {
             "package": "monolog/monolog",
             "version": "dev-master",
-            "source-reference": "a929570bb7688b39fefe4106f0ecf0ac35f37647",
-            "commit-date": "1346873566"
+            "source-reference": "e5bf7ba5d1df622b68d004b3c0277bc94286e1b7",
+            "commit-date": "1347105894"
         },
         {
             "package": "nelmio/solarium-bundle",
@@ -177,9 +177,9 @@
         },
         {
             "package": "sensio/distribution-bundle",
-            "version": "dev-master",
-            "source-reference": "98921298951598e8707258cba2b6180b96faa91c",
-            "commit-date": "1347023757"
+            "version": "2.1.x-dev",
+            "source-reference": "2eee3cb4cd761c851f0d766649fb9ff6f4c97002",
+            "commit-date": "1347340208"
         },
         {
             "package": "solarium/solarium",
@@ -202,8 +202,8 @@
         {
             "package": "swiftmailer/swiftmailer",
             "version": "dev-master",
-            "source-reference": "e12e4ef3a9d6dd60fb734a01984a6e6627aea764",
-            "commit-date": "1345630910"
+            "source-reference": "c97353b1ebffe25a224146f69d17efe24c093def",
+            "commit-date": "1347083952"
         },
         {
             "package": "symfony/assetic-bundle",
@@ -226,8 +226,8 @@
         {
             "package": "symfony/monolog-bundle",
             "version": "dev-master",
-            "source-reference": "v2.1.0-RC2",
-            "commit-date": "1345557954"
+            "source-reference": "b7318480e6f8bf5579d6b3cd856850302e7ba8d8",
+            "commit-date": "1347283885"
         },
         {
             "package": "symfony/swiftmailer-bundle",
@@ -244,8 +244,8 @@
         {
             "package": "symfony/symfony",
             "version": "2.1.x-dev",
-            "source-reference": "e7059b44c78ca8e1e892adb4d93b5a482f4eb9b3",
-            "commit-date": "1346926323"
+            "source-reference": "f23fd03732e115fd15ec675c0ada4cba20a035d1",
+            "commit-date": "1347354770"
         },
         {
             "package": "twig/extensions",
@@ -314,8 +314,8 @@
         {
             "package": "behat/mink-extension",
             "version": "dev-master",
-            "source-reference": "0b8a4d7d10dd83211accaa1299d57f521d912c1c",
-            "commit-date": "1346250202"
+            "source-reference": "2a0913a19c145d7e0cb0aba592635dfceb8808a1",
+            "commit-date": "1347305071"
         },
         {
             "package": "behat/symfony2-extension",
@@ -331,7 +331,6 @@
     "stability-flags": {
         "doctrine/doctrine-bundle": 20,
         "twig/extensions": 20,
-        "sensio/distribution-bundle": 20,
         "doctrine/doctrine-fixtures-bundle": 20,
         "doctrine/doctrine-migrations-bundle": 20,
         "stof/doctrine-extensions-bundle": 20,
