@@ -18,6 +18,7 @@ use Pagerfanta\Adapter\SolariumAdapter;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\User;
 use Knp\Menu\MenuItem;
+use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 
 class BundleController extends BaseController
 {
@@ -189,8 +190,8 @@ class BundleController extends BaseController
         }
 
         if (!$error) {
-            $bundle = str_replace(array('http://github.com', 'https://github.com', '.git'), '', $bundle);
-            if (preg_match('/^[a-z0-9-]+\/[a-z0-9-\.]+$/i', trim($bundle, '/'))) {
+            $bundle = trim(str_replace(array('http://github.com', 'https://github.com', '.git'), '', $bundle), '/');
+            if (preg_match('/^[a-z0-9-]+\/[a-z0-9-\.]+$/i', $bundle)) {
                 list($username, $name) = explode('/', $bundle);
 
                 $url = $this->generateUrl('bundle_show', array('username' => $username, 'name' => $name));
