@@ -67,13 +67,12 @@
                 {%- endif -%}
                 <li><i class="icon-chart"></i><strong>{% trans %}bundles.show.infos.score{% endtrans %}</strong> <a href="#score-details" data-toggle="tab">{{ bundle.score }}</a></li>
                 {%- if bundle.symfonyVersions|length > 0 -%}
-                <li><i class="icon-symfony"></i><strong class="symfony-versions" data-placement="bottom" data-content="{{ block('symfony_versions') }}" data-title="{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}:">{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}</strong>
-                </li>
+                <li><i class="icon-symfony"></i><strong class="symfony-versions" data-placement="bottom" data-content="{{ block('symfony_versions') }}" data-title="{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}:">{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}</strong></li>
                 {%- endif -%}
-                <li><i class="icon-calendar"></i><strong>{% trans %}bundles.show.infos.created{% endtrans %}</strong> {{ bundle.createdAt|date('date_format'|trans) }}</li>
+                <li><i class="icon-calendar"></i><strong>{% trans %}bundles.show.infos.updated{% endtrans %}</strong> {{ bundle.lastCheckAt|default(bundle.createdAt)|date('date_format'|trans) }}</li>
                 <li><i class="icon-developers"></i><strong>{% trans %}bundles.show.infos.contributors{% endtrans %}</strong> {{ bundle.nbContributors }}</li>
-                <li><i class="icon-eye"></i><strong>Nb of watchers:</strong> {{ bundle.nbFollowers }}</li>
-                <li><i class="icon-thumbs-up"></i><strong>Nb of recommendations:</strong> {{ bundle.nbRecommenders }}</li>
+                <li><i class="icon-eye"></i><strong>{% trans %}bundles.show.infos.watchers{% endtrans %}</strong> {{ bundle.nbFollowers }}</li>
+                <li><i class="icon-thumbs-up"></i><strong>{% trans %}bundles.show.infos.recommends{% endtrans %}</strong> {{ bundle.nbRecommenders }}</li>
                 <li title="{% trans %}bundles.show.infos.github{% endtrans %}">
                     <i class="icon-github"></i><a href="{{ bundle.githubUrl }}">{{ bundle.fullName }}</a>
                 </li>
@@ -94,6 +93,7 @@
         </section>
     </div>
 
+    {%- if bundle.keywords|length > 0 %}
     <div class="sidebar-box sidebar-keywords">
         <hgroup>
             <h2>{% trans %}bundles.show.keywords.title{% endtrans %}</h2>
@@ -102,11 +102,10 @@
         <section>
         {% for keyword in bundle.keywords %}
             <a href="{{ path('bundle_keyword', {'slug': keyword.slug}) }}" title="{{ keyword.value }}">{{ keyword.value }}</a>{{ loop.last ? '' : ',' }}
-        {% else %}
-            {% trans %}bundles.show.keywords.empty{% endtrans %}
         {% endfor %}
         </section>
     </div>
+    {%- endif %}
 
     <div class="sidebar-box sidebar-developers-list clearfix">
         <hgroup>
