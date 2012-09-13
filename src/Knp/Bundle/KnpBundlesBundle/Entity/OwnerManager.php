@@ -78,7 +78,7 @@ class OwnerManager
         }
 
         if (!$owner = $this->findOwnerBy(array('name' => $ownerName))) {
-            if (!$api = $this->getApiByOwnerName($data)) {
+            if (!$api = $this->getApiByOwnerName($ownerName)) {
                 return false;
             }
 
@@ -92,7 +92,8 @@ class OwnerManager
     }
 
     /**
-     * @param $ownerName
+     * @param string $ownerName
+     *
      * @return GithubOwnerInterface
      */
     public function getApiByOwnerName($ownerName)

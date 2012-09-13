@@ -60,6 +60,14 @@ class Bundle
     protected $ownerName;
 
     /**
+     * The type of the owner who owns this bundle
+     * This value is redundant with the class of the referenced Owner, for performance reasons
+     *
+     * @ORM\Column(type="string", length=15)
+     */
+    protected $ownerType = 'developer';
+
+    /**
      * Owner of the bundle
      *
      * @ORM\ManyToOne(targetEntity="Owner", inversedBy="bundles")
@@ -779,13 +787,13 @@ class Bundle
     }
 
     /**
-     * Set ownername
+     * Set ownerName
      *
-     * @param string
+     * @param string $ownerName
      */
-    public function setOwnerName($ownername)
+    public function setOwnerName($ownerName)
     {
-        $this->ownerName = $ownername;
+        $this->ownerName = $ownerName;
     }
 
     /**
@@ -801,7 +809,16 @@ class Bundle
      */
     public function setOwner(Owner $owner = null)
     {
-        $this->owner = $owner;
+        $this->owner     = $owner;
+        $this->ownerType = $owner instanceof Organization ? 'organization' : 'developer';
+    }
+
+    /**
+     * @return string
+     */
+    public function getOwnerType()
+    {
+        return $this->ownerType;
     }
 
     /**
@@ -1089,6 +1106,9 @@ class Bundle
      */
     public function isOwnerOrContributor(Owner $owner)
     {
+        if ($this->owner instanceof Organization) {
+            return false;
+        }
         if ($this->owner->isEqualTo($owner)) {
             return true;
         }

@@ -260,7 +260,7 @@ EOT;
             }
         }
 
-        foreach ($organizations as $key => $organization) {
+        foreach ($organizations as $organization) {
             for ($i = 1; $i < rand(2, 7); $i++) {
                 $manager->persist($this->makeBundle($organization, $i));
             }
@@ -269,7 +269,7 @@ EOT;
         $manager->flush();
     }
 
-    protected function makeBundle($owner, $i, $contributor = null)
+    protected function makeBundle(Entity\Owner $owner, $i, $contributor = null)
     {
         $trilean = array(true, false, null);
 

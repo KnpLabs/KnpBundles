@@ -16,7 +16,7 @@
     </div>
 
     <h1>{{ bundle.name }}</h1>
-    <h2>{% trans %}bundles.list.by{% endtrans %} <a href="{{ path('developer_show', {'name': bundle.ownerName}) }}">{{ bundle.ownerName }}</a></h2>
+    <h2>{% trans %}bundles.list.by{% endtrans %} <a href="{{ path(bundle.ownerType == 'organization' ? 'organization_show' : 'developer_show', {'name': bundle.ownerName}) }}">{{ bundle.ownerName }}</a></h2>
 
     <p class="description">{{ bundle.description|slice(0, 150) }}</p>
 </div>
@@ -185,7 +185,7 @@
         <section>
             <ul>
                 <li class="contributor">
-                    <a href="{{ path('developer_show', {'name': bundle.ownerName}) }}">
+                    <a href="{{ path(bundle.ownerType == 'organization' ? 'organization_show' : 'developer_show', {'name': bundle.ownerName}) }}">
                         <img src="{{ bundle.developer.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=40') }}" alt="{{ bundle.ownerName }}" title="{{ bundle.ownerName }}" width="40" height="40">
                     </a>
                 </li>
@@ -193,7 +193,7 @@
                 {%- if bundle.nbContributors != 0 %}
                 {%- for contributor in bundle.contributors(1, 18) %}
                 <li class="contributor">
-                    <a href="{{ path('developer_show', {'name': contributor}) }}">
+                    <a href="{{ path('developer_show', {'name': contributor.name}) }}">
                         <img src="{{ contributor.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y') }}" alt="{{ contributor.name }}" title="{{ contributor.name }}" width="40" height="40">
                     </a>
                 </li>

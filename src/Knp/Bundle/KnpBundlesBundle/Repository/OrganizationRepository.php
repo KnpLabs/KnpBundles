@@ -20,6 +20,16 @@ class OrganizationRepository extends OwnerRepository
             ->getOneOrNullResult();
     }
 
+    public function getEvolutionCounts()
+    {
+        return $this->createQueryBuilder('o')
+            ->select('o.createdAt AS date, COUNT(o.id) AS value')
+            ->groupBy('o.createdAt')
+            ->orderBy('o.createdAt', 'asc')
+            ->getQuery()
+            ->execute();
+    }
+
     public function queryAllWithBundlesSortedBy($field)
     {
         $qb = $this->createQueryBuilder('u')
@@ -46,5 +56,10 @@ class OrganizationRepository extends OwnerRepository
         }
 
         return $qb->getQuery();
+    }
+
+    public function count()
+    {
+        return $this->getEntityManager()->createQuery('SELECT COUNT(e.id) FROM '.$this->getEntityName().' e')->getSingleScalarResult();
     }
 }
