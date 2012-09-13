@@ -22,8 +22,7 @@ use Behat\Mink\Exception\ElementNotFoundException,
 
 use Symfony\Component\HttpKernel\KernelInterface;
 
-use Etcpasswd\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
-    Etcpasswd\OAuthBundle\Provider\Token\GithubToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 
 require_once 'PHPUnit/Autoload.php';
 require_once 'PHPUnit/Framework/Assert/Functions.php';
@@ -292,17 +291,13 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
         }
         $user = $this->users[$username];
 
-        $json = new \stdClass;
-        $json->login = $user->getUsername();
-
-        $githubToken = new GithubToken($json, 'access_token');
-        $token = new OAuthToken($user->getRoles(), $githubToken);
+        $token = new OAuthToken(null,$user->getRoles());
         $token->setUser($user);
         $token->setAuthenticated(true);
 
-        //it is little hackish but without it "hasPreviousSession" in Request return false and we do not be logged in
-        $this->getApplicationClient()->getCookieJar()->set(new \Symfony\Component\BrowserKit\Cookie(session_name(), true));
-        $this->getApplicationContainer()->get('session')->set('_security_oauth', serialize($token));
+        $session = $this->getContainer()->get('session');
+        $session->set('_security_secured_area', serialize($token));
+        $session->save();
     }
 
     /**
@@ -313,26 +308,6 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     public function setKernel(KernelInterface $kernel)
     {
         $this->kernel = $kernel;
-    }
-
-    protected function getApplicationContainer()
-    {
-        return $this->getApplicationClient()->getContainer();
-    }
-
-    protected function getApplicationClient()
-    {
-        $driver = $this->getSession()->getDriver();
-
-        if (!$driver instanceof SymfonyDriver) {
-            throw new UnsupportedDriverActionException(
-                'You need to tag the scenario with '.
-                '"@mink:symfony". Using the application container is not '.
-                'supported by %s', $driver
-            );
-        }
-
-        return $driver->getClient();
     }
 
     /**
