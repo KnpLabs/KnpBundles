@@ -50,8 +50,8 @@ class KbSolrIndexCommand extends ContainerAwareCommand
         $indexer = $this->getContainer()->get('knp_bundles.indexer.solr');
 
         if ($bundleName) {
-            list($username, $name) = explode('/', $bundleName);
-            $bundles = array($doctrine->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\Bundle')->findOneByUsernameAndName($username, $name));
+            list($ownerName, $name) = explode('/', $bundleName);
+            $bundles = array($doctrine->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\Bundle')->findOneByOwnerNameAndName($ownerName, $name));
         } elseif ($force) {
             $bundles = $doctrine->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\Bundle')->findAll();
         } else {

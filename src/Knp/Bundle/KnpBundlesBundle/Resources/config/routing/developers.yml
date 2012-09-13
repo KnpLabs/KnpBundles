@@ -1,0 +1,14 @@
+developer_list:
+    pattern:        /developer/{sort}
+    defaults:       { _controller: KnpBundlesBundle:Developer:list, sort: name }
+    requirements:   { _method: "GET", sort: "(name|best)"}
+    
+developer_bundle_list:
+    pattern:        /developer/{name}/bundles
+    defaults:       { _controller: KnpBundlesBundle:Developer:bundles }
+    requirements:   { _method: "GET", format: "(json|js)" }
+
+developer_show:
+    pattern:        /developer/{name}/profile
+    defaults:       { _controller: KnpBundlesBundle:Developer:show }
+    requirements:   { _method: "GET"}

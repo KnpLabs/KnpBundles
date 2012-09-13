@@ -93,8 +93,8 @@ code, pre {
 .icon-globe:before { content: 'p'; }
 .icon-thumbs-up:before, .icon-recommended:before { content: '<'; }
 .icon-thumbs-down:before { content: '>'; }
-.icon-user:before { content: 'u'; }
-.icon-users:before { content: 'U'; }
+.icon-developer:before { content: 'u'; }
+.icon-developers:before { content: 'U'; }
 .icon-calendar:before, .icon-newest:before { content: '='; }
 .icon-chart:before, .icon-best:before { content: 'x'; }
 .icon-download:before { content: 'd'; }
@@ -471,12 +471,12 @@ code, pre {
 }
 
 /* Intro - bundle description */
-#intro.bundle-details, #intro.user-details {
+#intro.bundle-details, #intro.developer-details {
     margin-top: 4px;
     font: 13px Arial
 }
 
-#intro.user-details figure {
+#intro.developer-details figure {
     float: left;
     padding: 3px;
     margin: 0 15px 0 0;
@@ -512,14 +512,14 @@ code, pre {
     color: #27566f
 }
 
-#intro.user-details h1 {
+#intro.developer-details h1 {
     margin: 3px 0 0;
     font: normal 30px Arial;
     line-height: 30px;
     color: #27566f
 }
 
-#intro.bundle-details h2, #intro.user-details h2 {
+#intro.bundle-details h2, #intro.developer-details h2 {
     font: normal 16px Arial;
     text-shadow: 1px 2px 1px #75b9dc;
     color: #fff
@@ -1206,23 +1206,23 @@ code, pre {
     font-size: 12px
 }
 
-.sidebar-users-list section ul {
+.sidebar-developers-list section ul {
     float: left;
     margin: 15px 5px 5px
 }
 
-.sidebar-users-list section li {
+.sidebar-developers-list section li {
     display: inline
 }
 
-.sidebar-users-list section li a {
+.sidebar-developers-list section li a {
     float: left;
     height: 40px;
     width: 40px;
     margin: 0 0 10px 10px
 }
 
-.sidebar-users-list section li .box-more-users {
+.sidebar-developers-list section li .box-more-developers {
     float: left;
     height: 38px;
     width: 38px;
@@ -1232,11 +1232,11 @@ code, pre {
     cursor: pointer
 }
 
-.sidebar-users-list section li .box-more-users abbr:before {
+.sidebar-developers-list section li .box-more-developers abbr:before {
     margin: 10px
 }
 
-.sidebar-users-list section li a.btn-recommend {
+.sidebar-developers-list section li a.btn-recommend {
     height: auto;
     width: 210px
 }

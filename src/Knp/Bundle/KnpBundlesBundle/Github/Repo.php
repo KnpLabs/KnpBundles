@@ -102,7 +102,7 @@ class Repo
     {
         $this->output->write(' infos');
 
-        $data = $this->github->api('repo')->show($bundle->getUsername(), $bundle->getName());
+        $data = $this->github->api('repo')->show($bundle->getOwnerName(), $bundle->getName());
         if (empty($data) || isset($data['message'])) {
             return false;
         }
@@ -125,7 +125,7 @@ class Repo
     {
         $this->output->write(' commits');
 
-        $commits = $this->github->api('repo')->commits()->all($bundle->getUsername(), $bundle->getName(), array('sha' => 'HEAD', 'per_page' => 30));
+        $commits = $this->github->api('repo')->commits()->all($bundle->getOwnerName(), $bundle->getName(), array('sha' => 'HEAD', 'per_page' => 30));
         if (empty($commits) || isset($data['message'])) {
             return false;
         }
@@ -140,14 +140,14 @@ class Repo
 
         $api = $this->github->api('repo')->contents();
 
-        $files = $api->show($bundle->getUsername(), $bundle->getName());
+        $files = $api->show($bundle->getOwnerName(), $bundle->getName());
         foreach ($files as $data) {
             if (!$bundle->isValid() && false !== strpos($data['name'], 'Bundle.php')) {
                 if (null !== $onlyFiles && !in_array('sf', $onlyFiles)) {
                     continue;
                 }
 
-                $file = $api->show($bundle->getUsername(), $bundle->getName(), $data['name']);
+                $file = $api->show($bundle->getOwnerName(), $bundle->getName(), $data['name']);
                 if (!isset($file['message']) && 'base64' == $file['encoding']) {
                     $this->validateSymfonyBundle($bundle, $file['content']);
                 }
@@ -161,7 +161,7 @@ class Repo
                         continue;
                     }
 
-                    $file = $api->show($bundle->getUsername(), $bundle->getName(), 'LICENSE');
+                    $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'LICENSE');
                     if (!isset($file['message']) && 'base64' == $file['encoding']) {
                         $bundle->setLicense(base64_decode($file['content']));
                         break;
@@ -181,7 +181,7 @@ class Repo
                         continue;
                     }
 
-                    $file = $api->show($bundle->getUsername(), $bundle->getName(), 'composer.json');
+                    $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'composer.json');
                     if (!isset($file['message']) && 'base64' == $file['encoding']) {
                         $this->updateComposerFile(base64_decode($file['content']), $bundle);
                         break;
@@ -190,14 +190,14 @@ class Repo
         }
 
         if (null === $onlyFiles || in_array('readme', $onlyFiles)) {
-            $readme = $api->readme($bundle->getUsername(), $bundle->getName());
+            $readme = $api->readme($bundle->getOwnerName(), $bundle->getName());
             if (!isset($readme['message']) && 'base64' == $readme['encoding']) {
                 $bundle->setReadme(base64_decode($readme['content']));
             }
         }
 
         if (null === $bundle->getLicense() && (null === $onlyFiles || in_array('license', $onlyFiles))) {
-            $file = $api->show($bundle->getUsername(), $bundle->getName(), 'Resources/meta/LICENSE');
+            $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'Resources/meta/LICENSE');
             if (!isset($file['message']) && 'base64' == $file['encoding']) {
                 $bundle->setLicense(base64_decode($file['content']));
             }
@@ -270,7 +270,7 @@ class Repo
         $this->output->write(' tags');
 
         $tags = array();
-        $data = $this->github->api('repo')->tags($bundle->getUsername(), $bundle->getName());
+        $data = $this->github->api('repo')->tags($bundle->getOwnerName(), $bundle->getName());
         if ($data) {
             foreach ($data as $tag) {
                 $tags[] = $tag['name'];
@@ -284,7 +284,7 @@ class Repo
 
     public function fetchComposerKeywords(Bundle $bundle)
     {
-        $file = $this->github->api('repo')->contents()->show($bundle->getUsername(), $bundle->getName(), 'composer.json');
+        $file = $this->github->api('repo')->contents()->show($bundle->getOwnerName(), $bundle->getName(), 'composer.json');
         if (!isset($file['message']) && 'base64' == $file['encoding']) {
             $composer = json_decode(base64_decode($file['content']), true);
             if (JSON_ERROR_NONE === json_last_error()) {
@@ -297,14 +297,14 @@ class Repo
 
     public function getContributorNames(Bundle $bundle)
     {
-        $contributors = $this->github->api('repo')->contributors($bundle->getUsername(), $bundle->getName());
+        $contributors = $this->github->api('repo')->contributors($bundle->getOwnerName(), $bundle->getName());
         if (empty($contributors)) {
             return array();
         }
 
         $names = array();
         foreach ($contributors as $contributor) {
-            if ($bundle->getUsername() != $contributor['login']) {
+            if ($bundle->getOwnerName() != $contributor['login']) {
                 $names[] = $contributor['login'];
             }
         }

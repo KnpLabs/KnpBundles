@@ -24,7 +24,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
             ->method('setTravisCiBuildStatus')
             ->with($this->isTrue());
 
-        $bundle->setUsername('KnpLabs');
+        $bundle->setOwnerName('KnpLabs');
         $bundle->setName('KnpBundles');
 
         $travis->update($bundle);
@@ -42,7 +42,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
             ->method('setTravisCiBuildStatus')
             ->with($this->isFalse());
 
-        $bundle->setUsername('KnpLabs');
+        $bundle->setOwnerName('KnpLabs');
         $bundle->setName('KnpBundles');
 
         $travis->update($bundle);
@@ -60,7 +60,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
             ->method('setTravisCiBuildStatus')
             ->with($this->isNull());
 
-        $bundle->setUsername('KnpLabs');
+        $bundle->setOwnerName('KnpLabs');
         $bundle->setName('KnpBundles');
 
         $travis->update($bundle);
@@ -78,7 +78,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
             ->method('setTravisCiBuildStatus')
             ->with($this->isNull());
 
-        $bundle->setUsername('KnpLabs');
+        $bundle->setOwnerName('KnpLabs');
         $bundle->setName('KnpBundles');
 
         $travis->update($bundle);

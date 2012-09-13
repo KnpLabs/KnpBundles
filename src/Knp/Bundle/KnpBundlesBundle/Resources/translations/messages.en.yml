@@ -2,7 +2,8 @@ date_format: "Y-m-d"
 
 menu:
     bundles: "Bundles"
-    users: "Developers"
+    developers: "Developers"
+    organizations: "Organizations"
     evolution: "Evolution"
     addBundleManually: "Register a bundle"
 
@@ -132,7 +133,7 @@ bundles.activity:
     medium: "Medium"
     low: "Low"
 
-users:
+developers:
     meta:
         title: "Discover %count% Symfony2 Developers"
         description: "All Open Source Symfony 2 Developers sorted by %sort%"
@@ -141,7 +142,7 @@ users:
         name: "Alphabetical"
         best: "Best score"
 
-users.show:
+developers.show:
     meta:
         description: "%username% has created %nb% Symfony2 bundles"
     github: "View on Github"
@@ -149,13 +150,38 @@ users.show:
         location: "Location: "
         lastCommit: "Last commit: "
         nbBundles: "Number of bundles: "
-        blog: "Website: "
+        url: "Website: "
     bundles_manage: "Bundles I owe"
     bundles_contribute: "Bundles I contribute to"
 
-users.list:
+developers.list:
     location: " from "
     lastCommit: "Last commit "
+
+organizations:
+    meta:
+        title: "Discover %count% Symfony2 organizations"
+        description: "All Open Source Symfony 2 organizations sorted by %sort%"
+    title: "%count% organizations using Symfony2"
+    sort:
+        name: "Alphabetical"
+        bundles: "Number of bundles"
+        developers: "Number of developers"
+
+organizations.show:
+    meta:
+        description: "%ownerName% has created %nb% Symfony2 bundles"
+    github: "View on Github"
+    stats:
+        location: "Location: "
+        nbBundles: "Number of bundles: "
+        nbMembers: "Number of members: "
+        url: "Website: "
+    bundles_manage: "Bundles this organization manage:"
+    members: "Members of this organization:"
+
+organizations.list:
+    location: " from "
 
 api:
     meta:

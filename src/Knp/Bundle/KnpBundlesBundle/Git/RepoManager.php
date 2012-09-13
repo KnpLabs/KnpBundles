@@ -35,8 +35,8 @@ class RepoManager
     }
 
     /**
-     * @param Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
-     * @return Knp\Bundle\KnpBundlesBundle\Git\Repo
+     * @param \Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     * @return \Knp\Bundle\KnpBundlesBundle\Git\Repo
      */
     public function getRepo(BundleEntity $bundle)
     {
@@ -51,7 +51,7 @@ class RepoManager
     }
 
     /**
-     * @param Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     * @param \Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
      * @return boolean
      */
     public function hasRepo(BundleEntity $repo)
@@ -83,7 +83,7 @@ class RepoManager
     }
 
     /**
-     * @param Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     * @param \Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
      * @return PHPGit_Repository
      */
     protected function createGitRepo(BundleEntity $bundle)
@@ -105,11 +105,11 @@ class RepoManager
     }
 
     /**
-     * @param Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
+     * @param \Knp\Bundle\KnpBundlesBundle\Entity\Bundle $bundle
      * @return string
      */
     protected function getRepoDir(BundleEntity $repo)
     {
-        return $this->dir.DIRECTORY_SEPARATOR.$repo->getUsername().DIRECTORY_SEPARATOR.$repo->getName();
+        return $this->dir.DIRECTORY_SEPARATOR.$repo->getOwnerName().DIRECTORY_SEPARATOR.$repo->getName();
     }
 }

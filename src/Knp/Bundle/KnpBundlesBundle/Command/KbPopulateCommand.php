@@ -48,6 +48,5 @@ class KbPopulateCommand extends ContainerAwareCommand
         $bundles = $updater->searchNewBundles();
         $updater->createMissingBundles($bundles);
         $updater->updateBundlesData();
-        $updater->updateUsers();
     }
 }

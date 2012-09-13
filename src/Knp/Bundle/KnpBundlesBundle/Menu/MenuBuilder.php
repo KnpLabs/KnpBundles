@@ -25,7 +25,8 @@ class MenuBuilder
         $menu->setCurrentUri($request->getRequestUri());
 
         $menu->addChild('bundles', array('route' => 'bundle_list'))->setLabel($translator->trans('menu.bundles'));
-        $menu->addChild('users', array('route' => 'user_list'))->setLabel($translator->trans('menu.users'));
+        $menu->addChild('developers', array('route' => 'developer_list'))->setLabel($translator->trans('menu.developers'));
+        $menu->addChild('organizations', array('route' => 'organization_list'))->setLabel($translator->trans('menu.organizations'));
         $menu->addChild('evolution', array('route' => 'evolution'))->setLabel($translator->trans('menu.evolution'));
         $menu->addChild('add-bundle', array('route' => 'add_bundle'))->setLabel($translator->trans('menu.addBundleManually'));
 

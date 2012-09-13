@@ -78,7 +78,7 @@
     <fields>
         <field name="id" type="string" indexed="true" stored="true" required="true" />
         <field name="name" type="text_general" indexed="true" stored="true" />
-        <field name="username" type="text_general" indexed="true" stored="true" />
+        <field name="ownerName" type="text_general" indexed="true" stored="true" />
         <field name="fullName" type="text_general" indexed="true" stored="true" />
 
         <field name="description" type="text_en" indexed="true" stored="true" />
@@ -105,12 +105,12 @@
     <solrQueryParser defaultOperator="OR" />
 
     <copyField source="name" dest="text" />
-    <copyField source="username" dest="text" />
+    <copyField source="ownerName" dest="text" />
     <copyField source="fullName" dest="text" />
     <copyField source="description" dest="text" />
     <copyField source="keywords" dest="text" />
 
-    <copyField source="username" dest="text_ngram" />
+    <copyField source="ownerName" dest="text_ngram" />
     <copyField source="fullName" dest="text_ngram" />
     <copyField source="keywords" dest="text_ngram" />
 </schema>

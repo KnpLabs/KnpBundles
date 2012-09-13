@@ -10,6 +10,7 @@ default:
       kernel:
         env: test
         debug: true
+        bootstrap: ''
     Behat\MinkExtension\Extension:
       base_url: 'http://knpbundles.local/app_test.php'
       default_session: symfony2

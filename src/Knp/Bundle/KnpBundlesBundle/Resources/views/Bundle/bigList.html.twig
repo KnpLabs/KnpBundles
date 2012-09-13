@@ -6,7 +6,7 @@
 
     <div class="bundle-info">
         <h2>
-            <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}" class="name">{{ bundle.name }}</a>
+            <a href="{{ path('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}" class="name">{{ bundle.name }}</a>
             {% if bundle.state != 'unknown' %}<abbr title="{{ bundle.state|bundle_state_tooltip }}">({{ bundle.state }})</abbr>{% endif %}
         </h2>
 
@@ -15,7 +15,7 @@
         <ul>
             <li class="bundle-author">
                 {% trans %}bundles.list.by{% endtrans %}
-                <a href="{{ path('user_show', {'name': bundle.username }) }}">{{ bundle.username }}</a>
+                <a href="{{ path('developer_show', {'name': bundle.ownerName }) }}">{{ bundle.ownerName }}</a>
             </li>
             <li class="bundle-activity">
                 {% trans %}bundles.list.activity{% endtrans %}
@@ -25,8 +25,8 @@
     </div>
 
     <figure>
-        <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}">
-            <img src="{{ bundle.user.gravatarHash|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=50') }}" alt="{{ bundle.name }} developer" width="50" height="50" />
+        <a href="{{ path('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}">
+            <img src="{{ bundle.owner.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=50') }}" alt="{{ bundle.name }} developer" width="50" height="50" />
         </a>
     </figure>
 </article>

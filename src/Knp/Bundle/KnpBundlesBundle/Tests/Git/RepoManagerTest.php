@@ -28,7 +28,7 @@ class RepoManagerTest extends \PHPUnit_Framework_TestCase
     public function shouldCreateAndCloneNewRepoWhenDoesNotExist()
     {
         $bundle = new BundleEntity();
-        $bundle->setUsername('KnpLabs');
+        $bundle->setOwnerName('KnpLabs');
         $bundle->setName('KnpBundles');
 
         $expectedDir = $this->getExpectedDir();
@@ -50,7 +50,7 @@ class RepoManagerTest extends \PHPUnit_Framework_TestCase
     public function shouldNotCreateNewRepoWhenExists()
     {
         $bundle = new BundleEntity();
-        $bundle->setUsername('KnpLabs');
+        $bundle->setOwnerName('KnpLabs');
         $bundle->setName('KnpBundles');
 
         $expectedDir = $this->getExpectedDir();

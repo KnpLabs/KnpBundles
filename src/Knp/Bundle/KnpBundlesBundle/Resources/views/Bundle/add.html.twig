@@ -55,10 +55,10 @@
         <ul>
             {% for bundle in bundles %}
             <li>
-                <img src="{{ bundle.user.gravatarHash|default('http://www.gravatar.com/avatar/?s=30&d=identicon&f=y') }}" alt="" width="30" height="30">
+                <img src="{{ bundle.owner.avatarUrl|default('http://www.gravatar.com/avatar/?s=30&d=identicon&f=y') }}" alt="" width="30" height="30">
 
-                <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}">{{ bundle.name }}</a>
-                <span>{{ bundle.createdAt|date('d-m-Y') }} by <strong>{{ bundle.userName }}</strong></span>
+                <a href="{{ path('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}">{{ bundle.name }}</a>
+                <span>{{ bundle.createdAt|date('d-m-Y') }} by <strong>{{ bundle.ownerName }}</strong></span>
             </li>
             {% endfor %}
         </ul>

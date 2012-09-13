@@ -11,33 +11,14 @@ _login_github:
 _login_sensio:
     pattern:        /login/check-sensio
 
-user_list:
-    pattern:        /developer/{sort}
-    defaults:       { _controller: KnpBundlesBundle:User:list, sort: name }
-    requirements:   { _method: "GET", sort: "(name|best)"}
-
-bundle_list:
-    pattern:        /{sort}
-    defaults:       { _controller: KnpBundlesBundle:Bundle:list, sort: trend }
-    requirements:   { _method: "GET", sort: "(best|updated|newest|trend|recommended)"}
-
-bundle_keyword:
-    pattern:        /keyword/{slug}
-    defaults:       { _controller: KnpBundlesBundle:Bundle:searchByKeyword }
-    requirements:   { _method: "GET", slug: ".+" }
-
-user_bundle_list:
-    pattern:        /{name}/bundles
-    defaults:       { _controller: KnpBundlesBundle:User:bundles }
-    requirements:   { _method: "GET", format: "(json|js)" }
-
-user_show:
-    pattern:        /{name}/profile
-    defaults:       { _controller: KnpBundlesBundle:User:show }
-    requirements:   { _method: "GET"}
-
 _static:
     resource: "routing/static.yml"
+
+_users:
+    resource: "routing/developers.yml"
+
+_organizations:
+    resource: "routing/organizations.yml"
 
 _bundles:
     resource: "routing/bundles.yml"
