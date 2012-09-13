@@ -34,8 +34,8 @@ class DeveloperRepository extends OwnerRepository
             ->select('d, b, cr')
             ->getQuery();
     }
-    
-    public function getUsersCountEvolution()
+
+    public function getEvolutionCounts()
     {
         return $this->createQueryBuilder('d')
             ->select('d.createdAt AS date, COUNT(d.id) AS value')

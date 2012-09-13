@@ -7,10 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity(repositoryClass="Knp\Bundle\KnpBundlesBundle\Repository\OrganizationRepository")
+ * @ORM\Entity(repositoryClass="Knp\Bundle\KnpBundlesBundle\Repository\OwnerRepository")
  * @ORM\Table(
- *      name="owner",
- *      uniqueConstraints={@ORM\UniqueConstraint(name="name_unique",columns={"name"})}
+ *      name="owner"
  * )
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discriminator", type="string")
@@ -86,19 +85,18 @@ class Owner
      *
      * @ORM\Column(type="integer")
      */
-    protected $score;
+    protected $score = 0;
 
     public function __construct()
     {
         $this->bundles = new ArrayCollection();
         $this->createdAt = new \DateTime();
-        $this->score = 0;
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -109,7 +107,6 @@ class Owner
      * Set name
      *
      * @param string $name
-     
      */
     public function setName($name)
     {
@@ -119,7 +116,7 @@ class Owner
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -130,7 +127,6 @@ class Owner
      * Set fullName
      *
      * @param string $fullName
-     
      */
     public function setFullName($fullName)
     {
@@ -140,7 +136,7 @@ class Owner
     /**
      * Get fullName
      *
-     * @return string 
+     * @return string
      */
     public function getFullName()
     {
@@ -151,7 +147,6 @@ class Owner
      * Set email
      *
      * @param string $email
-     
      */
     public function setEmail($email)
     {
@@ -161,7 +156,7 @@ class Owner
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -172,7 +167,6 @@ class Owner
      * Set avatarUrl
      *
      * @param string $avatarUrl
-     
      */
     public function setAvatarUrl($avatarUrl)
     {
@@ -182,7 +176,7 @@ class Owner
     /**
      * Get avatarUrl
      *
-     * @return string 
+     * @return string
      */
     public function getAvatarUrl()
     {
@@ -202,7 +196,7 @@ class Owner
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -222,7 +216,7 @@ class Owner
     /**
      * Get location
      *
-     * @return string 
+     * @return string
      */
     public function getLocation()
     {
@@ -262,7 +256,7 @@ class Owner
     /**
      * Get score
      *
-     * @return integer 
+     * @return integer
      */
     public function getScore()
     {

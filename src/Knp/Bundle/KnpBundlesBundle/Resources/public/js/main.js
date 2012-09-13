@@ -9,7 +9,7 @@
         return false;
     });
 
-    $('.sidebar-users-list img,abbr').tooltip();
+    $('.sidebar-developers-list img,abbr').tooltip();
     $('.symfony-versions').popover({trigger: 'hover'});
 
     $('#add-bundle-btn').bind('click', function(event) {

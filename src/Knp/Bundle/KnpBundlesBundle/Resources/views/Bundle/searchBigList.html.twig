@@ -15,7 +15,7 @@
         <ul>
             <li class="bundle-author">
                 {% trans %}bundles.list.by{% endtrans %}
-                <a href="{{ path('developer_show', {'name': bundle.ownerName }) }}">{{ bundle.ownerName }}</a>
+                <a href="{{ path(bundle.ownerType == 'organization' ? 'organization_show' : 'developer_show', {'name': bundle.ownerName }) }}">{{ bundle.ownerName }}</a>
             </li>
             <li class="bundle-activity">
                 {% trans %}bundles.list.activity{% endtrans %}

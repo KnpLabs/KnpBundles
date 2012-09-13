@@ -277,13 +277,13 @@ code, pre {
 
 #page-header nav li {
     float: left;
-    margin-right: 20px;
+    margin-right: 18px;
     padding: 5px 0 6px;
     border-radius: 4px
 }
 
 #page-header nav li.current {
-    padding: 5px 9px 6px 11px;
+    padding: 5px 10px 6px;
     background: #292b2f
 }
 
@@ -293,8 +293,6 @@ code, pre {
 }
 
 #page-header nav li.current a {
-    padding-right: 18px;
-    background: url("../images/arrow_gray.gif") no-repeat 100% 50%;
     color: #b6b6b7;
     font-weight: bold
 }
@@ -1350,7 +1348,7 @@ code, pre {
 
 #total-stats li {
     float: left;
-    width: 50%;
+    width: 33%;
     font: bold 18px Arial;
     line-height: 22px
 }
