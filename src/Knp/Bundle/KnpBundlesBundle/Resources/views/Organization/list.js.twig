@@ -1,0 +1,5 @@
+{% set array = [] %}
+{% for organization in organizations %}
+{% set array = array|merge([organization.toArray]) %}
+{% endfor %}
+{{ '%s(%s)'|format(callback, array|json_encode)|raw }}

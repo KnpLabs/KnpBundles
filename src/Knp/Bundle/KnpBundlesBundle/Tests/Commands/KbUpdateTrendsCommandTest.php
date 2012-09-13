@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
-use Knp\Bundle\KnpBundlesBundle\Entity\User;
+use Knp\Bundle\KnpBundlesBundle\Entity\Developer;
 use Knp\Bundle\KnpBundlesBundle\Entity\Score;
 use Knp\Bundle\KnpBundlesBundle\Command\KbUpdateTrendsCommand;
 
@@ -35,17 +35,17 @@ class KbUpdateTrendsCommandTest extends WebTestCase
         $path = $fileLocator->locate('trending-bundles.yml');
         $data = Yaml::parse($path);
 
-        $user = new User();
-        $user->setName('someName');
-        $user->setScore(0);
+        $developer = new Developer();
+        $developer->setName('someName');
+        $developer->setScore(0);
 
-        $em->persist($user);
+        $em->persist($developer);
 
         foreach ($data['bundles'] as $bundleName => $bundleData) {
             $bundle = new Bundle('vendor/' . $bundleName);
             $bundle->setDescription('some description');
             $bundle->setScore(100);
-            $bundle->setUser($user);
+            $bundle->setOwner($developer);
 
             foreach ($bundleData['scores'] as $scoreData) {
                 $score = new Score();

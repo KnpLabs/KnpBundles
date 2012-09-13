@@ -35,7 +35,8 @@ use Knp\Bundle\KnpBundlesBundle\Entity;
  */
 class FeatureContext extends RawMinkContext implements KernelAwareInterface
 {
-    private $users;
+    private $developers;
+    private $organizations;
     private $bundles;
 
     /**
@@ -58,18 +59,23 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     {
         $entityManager = $this->getEntityManager();
 
-        $this->users = array();
+        $this->developers = array();
         foreach ($table->getHash() as $row) {
-            $user = new Entity\User();
+            $developer = new Entity\Developer();
 
-            $user->fromArray(array(
+            $developer->fromArray(array(
                 'name'          => $row['name'],
                 'score'         => 0,
             ));
 
-            $entityManager->persist($user);
+            if (isset($row['organization'])) {
+                $organization = $this->organizations[$row['organization']];
+                $developer->addOrganization($organization);
+            }
 
-            $this->users[$user->getName()] = $user;
+            $entityManager->persist($developer);
+
+            $this->developers[$developer->getName()] = $developer;
         }
 
         $entityManager->flush();
@@ -84,13 +90,17 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
 
         $this->bundles = array();
         foreach ($table->getHash() as $row) {
-            $user = $this->users[$row['username']];
+            if (isset($this->developers[$row['username']])) {
+                $owner = $this->developers[$row['username']];
+            } elseif (isset($this->organizations[$row['username']])) {
+                $owner = $this->organizations[$row['username']];
+            }
 
             $bundle = new Entity\Bundle();
             $bundle->fromArray(array(
                 'name'          => $row['name'],
-                'user'          => $user,
-                'username'      => $user->getName(),
+                'owner'         => $owner,
+                'ownerName'     => $owner->getName(),
                 'description'   => $row['description'],
                 'state'         => isset($row['state']) ? $row['state'] : Entity\Bundle::STATE_UNKNOWN,
                 'lastCommitAt'  => new \DateTime($row['lastCommitAt']),
@@ -101,14 +111,14 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
             $this->setPrivateProperty($bundle, "trend1", $row['trend1']);
 
             if (isset($row['recommendedBy'])) {
-                $usernames = explode(',', $row['recommendedBy']);
-                foreach ($usernames as $username) {
-                    $user = $this->users[trim($username)];
+                $ownerNames = explode(',', $row['recommendedBy']);
+                foreach ($ownerNames as $ownerName) {
+                    $owner = $this->developers[trim($ownerName)];
 
-                    $bundle->addRecommender($user);
-                    $user->addRecommendedBundle($bundle);
+                    $bundle->addRecommender($owner);
+                    $owner->addRecommendedBundle($bundle);
 
-                    $entityManager->persist($user);
+                    $entityManager->persist($owner);
                 }
             }
 
@@ -196,11 +206,11 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     }
 
     /**
-     * @Then /^I should be on "(?P<username>[^"]+)\/(?P<name>[^"]+)" bundle page$/
+     * @Then /^I should be on "(?P<ownerName>[^"]+)\/(?P<name>[^"]+)" bundle page$/
      */
-    public function assertBundlePage($username, $name)
+    public function assertBundlePage($ownerName, $name)
     {
-        $url = $this->getRouter()->generate('bundle_show', array('username' => $username, 'name' => $name));
+        $url = $this->getRouter()->generate('bundle_show', array('ownerName' => $ownerName, 'name' => $name));
 
         return new Step\Then('I should be on "'.$url.'"');
     }
@@ -266,15 +276,15 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     }
 
     /**
-     * @Then /^I should see "([^"]*)" developer$/
+     * @Then /^I should see "([^"]*)" (developer|organization)$/
      */
-    public function iShouldSeeDeveloper($username)
+    public function iShouldSeeOwner($ownerName)
     {
-        return new Step\Then(sprintf('I should see "%s"', $username));
+        return new Step\Then(sprintf('I should see "%s"', $ownerName));
     }
 
     /**
-     * @Then /^I should see that "([^"]*)" is managed by developer$/
+     * @Then /^I should see that "([^"]*)" is managed by (developer|organization)$/
      */
     public function iShouldSeeThatIsManagedByDeveloper($bundleName)
     {
@@ -286,10 +296,10 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
      */
     public function iAmLoggedInAs($username)
     {
-        if (!$this->users[$username]) {
+        if (!$this->developers[$username]) {
             throw new ExpectationException('User not found');
         }
-        $user = $this->users[$username];
+        $user = $this->developers[$username];
 
         $token = new OAuthToken(null,$user->getRoles());
         $token->setUser($user);
@@ -298,6 +308,38 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
         $session = $this->getContainer()->get('session');
         $session->set('_security_secured_area', serialize($token));
         $session->save();
+    }
+
+    /**
+     * @Given /^the site has following organizations:$/
+     */
+    public function theSiteHasFollowingOrganizations(TableNode $table)
+    {
+        $entityManager = $this->getEntityManager();
+
+        $this->organizations = array();
+        foreach ($table->getHash() as $row) {
+            $organization = new Entity\Organization();
+
+            $organization->fromArray(array(
+                'name'          => $row['name'],
+                'score'         => 0,
+            ));
+
+            $entityManager->persist($organization);
+
+            $this->organizations[$organization->getName()] = $organization;
+        }
+
+        $entityManager->flush();
+    }
+
+    /**
+     * @Given /^organization "([^"]*)" has following members:$/
+     */
+    public function organizationHasFollowingMembers($orgName, TableNode $table)
+    {
+        throw new PendingException();
     }
 
     /**

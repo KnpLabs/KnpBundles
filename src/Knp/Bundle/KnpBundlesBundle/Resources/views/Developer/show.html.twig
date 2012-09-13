@@ -1,0 +1,68 @@
+{% extends 'KnpBundlesBundle::layout/900px.html.twig' %}
+
+{% block title %}{{ developer.name }} - {{ developer.fullName }}{% endblock %}
+
+{% block description %}{% trans with {'%ownerName%': developer.fullName, '%nb%': developer.nbBundles} %}bundles.show.infos.score{% endtrans %}{% endblock %}
+
+{% block content_attributes %} class="developer"{% endblock %}
+
+{% block intro %}
+<div id="intro" class="developer-details">
+    <figure>
+        <img src="{{ developer.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=55') }}" alt="{{ developer.name }}" width="55" height="55" alt="">
+    </figure>
+
+    <h1>{{ developer.name }}</h1>
+    <h2>{{ developer.fullName }}</h2>
+</div>
+{% endblock %}
+
+{% block right_holder %}
+<div class="content-half pull-right">
+    <div class="content-box">
+        <hgroup>
+            <h2>Some info about <strong>{{ developer.name }}</strong></h2>
+        </hgroup>
+
+        <section class="card">
+            <ul>
+                <li><i class="icon-location"></i><strong>{% trans %}developers.show.stats.location{% endtrans %}</strong> {{ developer.location|default('unknown') }}</li>
+                <li><i class="icon-calendar"></i><strong>{% trans %}developers.show.stats.lastCommit{% endtrans %}</strong> {{ developer.lastCommitAt|date('date_format'|trans) }}</li>
+                <li><i class="icon-box"></i><strong>{% trans %}developers.show.stats.nbBundles{% endtrans %}</strong> {{ developer.nbBundles }}</li>
+                {%- if developer.url %}
+                <li><i class="icon-globe"></i><strong>{% trans %}developers.show.stats.url{% endtrans %}</strong> <a href="{{ developer.url }}" rel="nofollow">{{ developer.url }}</a></li>
+                {%- endif %}
+            </ul>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block left_holder %}
+<div class="content-half pull-left">
+    <div class="content-box tabbable">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#owned" data-toggle="tab">{% trans %}developers.show.bundles_manage{% endtrans %}</a></li>
+            <li><a href="#contribute" data-toggle="tab">{% trans %}developers.show.bundles_contribute{% endtrans %}</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="owned">
+            {%- if developer.bundles|length > 0 %}
+                {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': developer.bundles} %}
+            {%- else %}
+                <p>This developer don't owe any bundle.</p>
+            {%- endif %}
+            </div>
+
+            <div class="tab-pane" id="contribute">
+            {%- if developer.contributionBundles|length > 0 %}
+                {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': developer.contributionBundles} %}
+            {%- else %}
+                <p>This developer never contributed to any bundle.</p>
+            {%- endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

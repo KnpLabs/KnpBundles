@@ -16,7 +16,7 @@ use Doctrine\ORM\Query;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\SolariumAdapter;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
-use Knp\Bundle\KnpBundlesBundle\Entity\User;
+use Knp\Bundle\KnpBundlesBundle\Entity\Developer;
 use Knp\Menu\MenuItem;
 use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 
@@ -58,7 +58,8 @@ class BundleController extends BaseController
         }
 
         $dismax = $select->getDisMax();
-        $dismax->setQueryFields(array('name^2', 'username', 'fullName^1.5', 'description', 'keywords', 'text', 'text_ngram'));
+
+        $dismax->setQueryFields(array('name^2', 'ownerName', 'fullName^1.5', 'description', 'keywords', 'text', 'text_ngram'));
         $dismax->setPhraseFields(array('description^30'));
         $dismax->setQueryParser('edismax');
 
@@ -73,7 +74,7 @@ class BundleController extends BaseController
         if ('html' === $format && count($bundles) === 1) {
             $first = $bundles->current();
             if (strtolower($first['name']) == strtolower($query)) {
-                return $this->redirect($this->generateUrl('bundle_show', array('username' => $first['username'], 'name' => $first['name'])));
+                return $this->redirect($this->generateUrl('bundle_show', array('ownerName' => $first['ownerName'], 'name' => $first['name'])));
             }
         }
 
@@ -85,19 +86,19 @@ class BundleController extends BaseController
         ));
     }
 
-    public function showAction(Request $request, $username, $name)
+    public function showAction(Request $request, $ownerName, $name)
     {
         /* @var $bundle Bundle */
-        $bundle = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);
+        $bundle = $this->getRepository('Bundle')->findOneByOwnerNameAndName($ownerName, $name);
         if (!$bundle) {
-            throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
+            throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $ownerName, $name));
         }
 
         $format = $this->recognizeRequestFormat($request);
 
         $this->highlightMenu('bundles');
 
-        $user = $this->get('security.context')->getToken()->getUser();
+        $owner = $this->get('security.context')->getToken()->getUser();
 
         return $this->render('KnpBundlesBundle:Bundle:show.'.$format.'.twig', array(
             'series'  => array(
@@ -106,10 +107,10 @@ class BundleController extends BaseController
                 'data' => $bundle->getScores(),
             )
             ),
-            'bundle'        => $bundle,
-            'score_details' => $bundle->getScoreDetails(),
-            'isUsedByUser'  => $user instanceof User && $user->isUsingBundle($bundle),
-            'callback'      => $request->query->get('callback')
+            'bundle'            => $bundle,
+            'score_details'     => $bundle->getScoreDetails(),
+            'isUsedByDeveloper' => $owner instanceof Owner && $owner->isUsingBundle($bundle),
+            'callback'          => $request->query->get('callback')
         ));
     }
 
@@ -123,9 +124,9 @@ class BundleController extends BaseController
 
         $sortField = $this->sortFields[$sort];
 
-        $query   = $this->getRepository('Bundle')->queryAllWithUsersAndContributorsSortedBy($sortField);
+        $query   = $this->getRepository('Bundle')->queryAllWithOwnersAndContributorsSortedBy($sortField);
         $bundles = $this->getPaginator($query, $request->query->get('page', 1));
-        $users   = $this->getRepository('User')->findAllSortedBy('createdAt', 20);
+        $owners   = $this->getRepository('Developer')->findAllSortedBy('createdAt', 20);
 
         $this->highlightMenu('bundles');
 
@@ -137,7 +138,7 @@ class BundleController extends BaseController
                 )
             ),
             'bundles'     => $bundles,
-            'users'       => $users,
+            'developers'       => $owners,
             'sort'        => $sort,
             'sortLegends' => $this->sortLegends,
             'callback'    => $request->query->get('callback')
@@ -156,7 +157,7 @@ class BundleController extends BaseController
             'series'  => array(
                 array(
                     'name' => 'Developers',
-                    'data' => $this->getRepository('User')->getUsersCountEvolution(),
+                    'data' => $this->getRepository('Developer')->getUsersCountEvolution(),
                 ),
                 array(
                     'name' => 'Bundles updated',
@@ -164,7 +165,7 @@ class BundleController extends BaseController
                 )
             ),
             'bundles' => $this->getRepository('Bundle')->count(),
-            'users'   => $this->getRepository('User')->count()
+            'developers'   => $this->getRepository('Developer')->count()
         ));
     }
 
@@ -192,10 +193,10 @@ class BundleController extends BaseController
         if (!$error) {
             $bundle = trim(str_replace(array('http://github.com', 'https://github.com', '.git'), '', $bundle), '/');
             if (preg_match('/^[a-z0-9-]+\/[a-z0-9-\.]+$/i', $bundle)) {
-                list($username, $name) = explode('/', $bundle);
+                list($ownerName, $name) = explode('/', $bundle);
 
-                $url = $this->generateUrl('bundle_show', array('username' => $username, 'name' => $name));
-                if ($this->getRepository('Bundle')->findOneByUsernameAndName($username, $name)) {
+                $url = $this->generateUrl('bundle_show', array('ownerName' => $ownerName, 'name' => $name));
+                if ($this->getRepository('Bundle')->findOneByOwnerNameAndName($ownerName, $name)) {
                     if (!$request->isXmlHttpRequest()) {
                         return $this->redirect($url);
                     } else {
@@ -241,29 +242,29 @@ class BundleController extends BaseController
         ), $error ? 400 : 201);
     }
 
-    public function changeUsageStatusAction($username, $name)
+    public function changeUsageStatusAction($ownerName, $name)
     {
         /* @var $bundle Bundle */
-        $bundle = $this->getRepository('Bundle')->findOneByUsernameAndName($username, $name);
+        $bundle = $this->getRepository('Bundle')->findOneByOwnerNameAndName($ownerName, $name);
         if (!$bundle) {
-            throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
+            throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $ownerName, $name));
         }
 
-        $params = array('username' => $username, 'name' => $name);
+        $params = array('ownerName' => $ownerName, 'name' => $name);
 
-        if (!$user = $this->get('security.context')->getToken()->getUser()) {
+        if (!$owner = $this->get('security.context')->getToken()->getUser()) {
             return $this->redirect($this->generateUrl('bundle_show', $params));
         }
         $em = $this->get('doctrine')->getEntityManager();
 
-        if ($user->isUsingBundle($bundle)) {
+        if ($owner->isUsingBundle($bundle)) {
             $bundle->updateScore(-5);
 
-            $bundle->removeRecommender($user);
+            $bundle->removeRecommender($owner);
         } else {
             $bundle->updateScore(5);
 
-            $bundle->addRecommender($user);
+            $bundle->addRecommender($owner);
         }
 
         $em->persist($bundle);
@@ -300,7 +301,7 @@ class BundleController extends BaseController
         }
 
         // Save only if sender is owner of bundle
-        if ((null !== $user = $this->get('security.context')->getToken()->getUser()) && $bundle->isOwnerOrContributor($user)) {
+        if ((null !== $owner = $this->get('security.context')->getToken()->getUser()) && $bundle->isOwnerOrContributor($owner)) {
             $state = $request->request->get('state', Bundle::STATE_UNKNOWN);
 
             $bundle->setState($state);
@@ -312,6 +313,6 @@ class BundleController extends BaseController
             $request->getSession()->setFlash('notice', sprintf('Bundle status was successful changed to: %s', $state));
         }
 
-        return $this->redirect($this->generateUrl('bundle_show', array('username' => $bundle->getUserName(), 'name' => $bundle->getName())));
+        return $this->redirect($this->generateUrl('bundle_show', array('ownerName' => $bundle->getOwnerName(), 'name' => $bundle->getName())));
     }
 }

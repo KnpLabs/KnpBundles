@@ -1,6 +1,6 @@
 {% extends 'KnpBundlesBundle::layout/900px.html.twig' %}
 
-{% block title %}{% trans with {'%name%': bundle.name, '%username%': bundle.username} %}bundles.show.meta.title{% endtrans %}{% endblock %}
+{% block title %}{% trans with {'%name%': bundle.name, '%ownerName%': bundle.ownerName} %}bundles.show.meta.title{% endtrans %}{% endblock %}
 {% block description %}{{ bundle.description }}{% endblock %}
 
 {% set isOwnerOrContributor = app.user is not null and bundle.isOwnerOrContributor(app.user) %}
@@ -16,7 +16,7 @@
     </div>
 
     <h1>{{ bundle.name }}</h1>
-    <h2>{% trans %}bundles.list.by{% endtrans %} <a href="{{ path('user_show', {'name': bundle.username}) }}">{{ bundle.username }}</a></h2>
+    <h2>{% trans %}bundles.list.by{% endtrans %} <a href="{{ path('developer_show', {'name': bundle.ownerName}) }}">{{ bundle.ownerName }}</a></h2>
 
     <p class="description">{{ bundle.description|slice(0, 150) }}</p>
 </div>
@@ -71,7 +71,7 @@
                 </li>
                 {%- endif -%}
                 <li><i class="icon-calendar"></i><strong>{% trans %}bundles.show.infos.created{% endtrans %}</strong> {{ bundle.createdAt|date('date_format'|trans) }}</li>
-                <li><i class="icon-users"></i><strong>{% trans %}bundles.show.infos.contributors{% endtrans %}</strong> {{ bundle.nbContributors }}</li>
+                <li><i class="icon-developers"></i><strong>{% trans %}bundles.show.infos.contributors{% endtrans %}</strong> {{ bundle.nbContributors }}</li>
                 <li><i class="icon-eye"></i><strong>Nb of watchers:</strong> {{ bundle.nbFollowers }}</li>
                 <li><i class="icon-thumbs-up"></i><strong>Nb of recommendations:</strong> {{ bundle.nbRecommenders }}</li>
                 <li title="{% trans %}bundles.show.infos.github{% endtrans %}">
@@ -86,7 +86,7 @@
                 <li title="{% trans %}bundles.show.infos.travis{% endtrans %}">
                     <i class="icon-cogs"></i>
                     <a href="{{ bundle.travisUrl }}">
-                        <img src="https://secure.travis-ci.org/{{ bundle.username }}/{{ bundle.name }}.png" alt="Travis Build Status" width="89" height="13">
+                        <img src="https://secure.travis-ci.org/{{ bundle.ownerName }}/{{ bundle.name }}.png" alt="Travis Build Status" width="89" height="13"/>
                     </a>
                 </li>
                 {%- endif -%}
@@ -108,7 +108,7 @@
         </section>
     </div>
 
-    <div class="sidebar-box sidebar-users-list clearfix">
+    <div class="sidebar-box sidebar-developers-list clearfix">
         <hgroup>
             <h2>{% trans %}bundles.show.recommenders.title{% endtrans %}</h2>
         </hgroup>
@@ -116,19 +116,19 @@
         <section>
             <ul>
                 <li>
-                    {% for user in bundle.recommenders(1, 19) %}
-                    <a href="{{ path('user_show', {'name': user.name}) }}">
-                        <img src="{{ user.gravatarHash|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=40') }}" alt="{{ user.name }}" title="{{ user.name }}" width="40" height="40">
+                    {% for developer in bundle.recommenders(1, 19) %}
+                    <a href="{{ path('developer_show', {'name': developer.name}) }}">
+                        <img src="{{ developer.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=40') }}" alt="{{ developer.name }}" title="{{ developer.name }}" width="40" height="40">
                     </a>
                     {% endfor %}
                 </li>
                 {% if bundle.nbRecommenders > 19 %}
-                <li><span class="box-more-users"><abbr class="icon-info" title="And {{ bundle.nbRecommenders - 19 }} other recommendations!"></span></li>
+                <li><span class="box-more-developers"><abbr class="icon-info" title="And {{ bundle.nbRecommenders - 19 }} other recommendations!"></span></li>
                 {%- endif %}
                 <li>
-                    <a class="btn btn-recommend" href="{{ path('bundle_change_usage_status', { 'username': bundle.username, 'name': bundle.name }) }}">
+                    <a class="btn btn-recommend" href="{{ path('bundle_change_usage_status', { 'ownerName': bundle.ownerName, 'name': bundle.name }) }}">
                         {%- if app.user is not null -%}
-                            {%- if isUsedByUser -%}
+                            {%- if isUsedByDeveloper -%}
                                 {% trans %}bundles.show.recommenders.iDontRecommend{% endtrans %}
                             {%- else -%}
                                 {% trans %}bundles.show.recommenders.iRecommend{% endtrans %}
@@ -177,7 +177,7 @@
     </div>
     {% endif %}
 
-    <div class="sidebar-box sidebar-users-list clearfix">
+    <div class="sidebar-box sidebar-developers-list clearfix">
         <hgroup>
             <h2>{% trans %}bundles.show.contributors.title{% endtrans %}</h2>
         </hgroup>
@@ -185,21 +185,21 @@
         <section>
             <ul>
                 <li class="contributor">
-                    <a href="{{ path('user_show', {'name': bundle.username}) }}">
-                        <img src="{{ bundle.user.gravatarHash|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=40') }}" alt="{{ bundle.username }}" title="{{ bundle.username }}" width="40" height="40">
+                    <a href="{{ path('developer_show', {'name': bundle.ownerName}) }}">
+                        <img src="{{ bundle.developer.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=40') }}" alt="{{ bundle.ownerName }}" title="{{ bundle.ownerName }}" width="40" height="40">
                     </a>
                 </li>
 
                 {%- if bundle.nbContributors != 0 %}
                 {%- for contributor in bundle.contributors(1, 18) %}
                 <li class="contributor">
-                    <a href="{{ path('user_show', {'name': contributor}) }}">
-                        <img src="{{ contributor.gravatarHash|default('http://www.gravatar.com/avatar/?d=identicon&f=y') }}" alt="{{ contributor.name }}" title="{{ contributor.name }}" width="40" height="40">
+                    <a href="{{ path('developer_show', {'name': contributor}) }}">
+                        <img src="{{ contributor.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y') }}" alt="{{ contributor.name }}" title="{{ contributor.name }}" width="40" height="40">
                     </a>
                 </li>
                 {%- endfor %}
                 {% if bundle.nbContributors > 18 %}
-                <li><span class="box-more-users"><abbr class="icon-info" title="And {{ bundle.nbContributors - 18 }} other contributors!"></span></li>
+                <li><span class="box-more-developers"><abbr class="icon-info" title="And {{ bundle.nbContributors - 18 }} other contributors!"></span></li>
                 {%- endif %}
                 {%- endif %}
             </ul>
@@ -251,7 +251,7 @@
                     {{ commit.message_first_line }}
                     <div class="infos">{% trans %}bundles.show.latest_commits.by{% endtrans %}
                         {% if commit.committer.login is defined %}
-                        <a href="{{ path('user_show', {'name': commit.committer.login }) }}">{{ commit.committer.login }}</a>
+                        <a href="{{ path('developer_show', {'name': commit.committer.login }) }}">{{ commit.committer.login }}</a>
                         {%- else -%}
                         <strong>{{ commit.author }}</strong>
                         {%- endif %},

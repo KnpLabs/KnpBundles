@@ -66,7 +66,7 @@ class Travis
     {
         $this->output->write(' Travis status:');
 
-        $response = $this->browser->get('http://travis-ci.org/'.$repo->getUsername().'/'.$repo->getName().'.json');
+        $response = $this->browser->get('http://travis-ci.org/'.$repo->getOwnerName().'/'.$repo->getName().'.json');
 
         $status = json_decode($response->getContent(), true);
         if (JSON_ERROR_NONE === json_last_error()) {

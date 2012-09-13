@@ -1,16 +1,16 @@
 <?php
 
-namespace Knp\Bundle\KnpBundlesBundle\Tests\Security\Core\User;
+namespace Knp\Bundle\KnpBundlesBundle\Tests\Security\Core\Developer;
 
 use Knp\Bundle\KnpBundlesBundle\Security\Core\User\UserProvider;
 
 class UserProviderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testLoadUserByUsername()
+    public function testLoadDeveloperByDevelopername()
     {
-        $john = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\User');
+        $john = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Developer');
         
-        $userManager = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\UserManager', array(
+        $userManager = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager', array(
             'getOrCreate'
         ), array(), '', false);
 

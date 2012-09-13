@@ -5,12 +5,13 @@ parameters:
     knp_bundles.trending_bundle_twitterer.template: "Discover {name}, today's trending #Symfony2 bundle {url} on #KnpBundles"
     knp_bundles.consumer.update_bundle.class: Knp\Bundle\KnpBundlesBundle\Consumer\UpdateBundleConsumer
     knp_bundles.consumer.github_hook.class: Knp\Bundle\KnpBundlesBundle\Consumer\GithubHookConsumer
-    knp_bundles.user.manager.class: Knp\Bundle\KnpBundlesBundle\Entity\UserManager
+    knp_bundles.owner.manager.class: Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager
     knp_bundles.output.class: Symfony\Component\Console\Output\NullOutput
     knp_bundles.travis.class: Knp\Bundle\KnpBundlesBundle\Travis\Travis
     knp_bundles.github.client.class: Github\Client
     knp_bundles.github.http_client.class: Github\HttpClient\HttpClient
-    knp_bundles.github.users.class: Knp\Bundle\KnpBundlesBundle\Github\User
+    knp_bundles.github.developer.class: Knp\Bundle\KnpBundlesBundle\Github\Developer
+    knp_bundles.github.organization.class: Knp\Bundle\KnpBundlesBundle\Github\Organization
     knp_bundles.git_repository_manager.class: Knp\Bundle\KnpBundlesBundle\Git\RepoManager
     knp_bundles.github.repository_api.class: Knp\Bundle\KnpBundlesBundle\Github\Repo
     knp_bundles.badge_generator.class: Knp\Bundle\KnpBundlesBundle\Badge\BadgeGenerator
@@ -36,20 +37,20 @@ services:
         class: %knp_bundles.updater.class%
         arguments:
             - @knp_bundles.entity_manager
-            - @knp_bundles.user.manager
+            - @knp_bundles.owner.manager
             - @knp_bundles.finder
-            - @knp_bundles.github.users
             - @knp_bundles.github_repository_api
 
-    knp_bundles.user.manager:
-        class: %knp_bundles.user.manager.class%
+    knp_bundles.owner.manager:
+        class: %knp_bundles.owner.manager.class%
         arguments:
             - @knp_bundles.entity_manager
+            - @knp_bundles.github_client
 
     knp_bundles.user.provider:
         class: %knp_bundles.user.provider.class%
         arguments:
-            - @knp_bundles.user.manager
+            - @knp_bundles.owner.manager
 
     knp_bundles.trending_bundle_twitterer:
         class: %knp_bundles.trending_bundle_twitterer.class%
@@ -93,8 +94,14 @@ services:
             - @knp_bundles.git_repository_manager
             - @event_dispatcher
 
-    knp_bundles.github.users:
-        class: %knp_bundles.github.users.class%
+    knp_bundles.github.developer:
+        class: %knp_bundles.github.developer.class%
+        arguments:
+            - @knp_bundles.github_client
+            - @knp_bundles.output
+
+    knp_bundles.github.organization:
+        class: %knp_bundles.github.organization.class%
         arguments:
             - @knp_bundles.github_client
             - @knp_bundles.output
@@ -109,7 +116,7 @@ services:
         class: %knp_bundles.consumer.update_bundle.class%
         arguments:
             - @doctrine.orm.entity_manager
-            - @knp_bundles.user.manager
+            - @knp_bundles.owner.manager
             - @knp_bundles.github_repository_api
             - @knp_bundles.travis
             - @knp_bundles.indexer.solr

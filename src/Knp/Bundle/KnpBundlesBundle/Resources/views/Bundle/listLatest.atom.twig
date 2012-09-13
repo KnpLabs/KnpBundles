@@ -10,11 +10,11 @@
         <id>{{ bundle.fullName }}</id>
         <published>{{ bundle.createdAt|date('c') }}</published>
         <updated>{{ bundle.lastCommitAt|date('c') }}</updated>
-        <link type="text/html" rel="alternate" href="{{ url('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}"/>
+        <link type="text/html" rel="alternate" href="{{ url('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}"/>
         <title>{{ bundle.name }}</title>
         <author>
-            <name>{{ bundle.username }}</name>
-            <uri>https://github.com/{{ bundle.username }}</uri>
+            <name>{{ bundle.ownerName }}</name>
+            <uri>https://github.com/{{ bundle.ownerName }}</uri>
         </author>
         <content type="html">
             &lt;strong&gt;{{ bundle.description }}&lt;/strong&gt;&lt;br /&gt;

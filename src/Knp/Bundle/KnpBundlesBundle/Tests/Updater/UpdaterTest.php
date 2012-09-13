@@ -45,7 +45,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         $fixtures = new Data();
         $fixtures->load($this->em);
 
-        $user = $this->em->getRepository('KnpBundlesBundle:User')->findOneBy(array('name' => 'John'));
+        $user = $this->em->getRepository('KnpBundlesBundle:Developer')->findOneBy(array('name' => 'John'));
 
         $bundle = new Bundle();
         $bundle->fromArray(array(
@@ -121,9 +121,9 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
 
         $userManager = $this->container->get('knp_bundles.user.manager');
         $finder = $this->container->get('knp_bundles.finder');
-        $githubUsers = $this->container->get('knp_bundles.github.users');
+        $githubDevelopers = $this->container->get('knp_bundles.github.users');
 
-        $updater = new Updater($this->em, $userManager, $finder, $githubUsers, $this->githubRepoApi);
+        $updater = new Updater($this->em, $userManager, $finder, $githubDevelopers, $this->githubRepoApi);
 
         $shouldNotBeNull = $this->em->getRepository('KnpBundlesBundle:Bundle')->findOneBy(array('name' => 'TestBundleToBeRemoved'));
 

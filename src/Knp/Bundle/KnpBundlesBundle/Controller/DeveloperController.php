@@ -3,15 +3,15 @@
 namespace Knp\Bundle\KnpBundlesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Templating\EngineInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
-use Zend\Paginator\Paginator;
 use Knp\Menu\MenuItem;
 
-class UserController extends BaseController
+class DeveloperController extends BaseController
 {
     protected $sortFields = array(
         'name' => 'name',
@@ -19,13 +19,13 @@ class UserController extends BaseController
     );
 
     protected $sortLegends = array(
-        'name' => 'users.sort.name',
-        'best' => 'users.sort.best',
+        'name' => 'developers.sort.name',
+        'best' => 'developers.sort.best',
     );
 
     public function userbarAction()
     {
-        $response = $this->render('KnpBundlesBundle:User:userbar.html.twig');
+        $response = $this->render('KnpBundlesBundle:Developer:userbar.html.twig');
 
         // this is private cache (don't cache with shared proxy)
         $response->setPrivate();
@@ -35,17 +35,17 @@ class UserController extends BaseController
 
     public function showAction(Request $request, $name)
     {
-        if (!$user = $this->getUserRepository()->findOneByNameWithRepos($name)) {
-            throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
+        if (!$developer = $this->getRepository('Developer')->findOneByNameWithRepos($name)) {
+            throw new NotFoundHttpException(sprintf('The developer "%s" does not exist', $name));
         }
 
         $format = $this->recognizeRequestFormat($request);
 
-        $this->highlightMenu('users');
+        $this->highlightMenu('developers');
 
-        return $this->render('KnpBundlesBundle:User:show.'.$format.'.twig', array(
-            'user'     => $user,
-            'callback' => $request->query->get('callback')
+        return $this->render('KnpBundlesBundle:Developer:show.'.$format.'.twig', array(
+            'developer' => $developer,
+            'callback'  => $request->query->get('callback')
         ));
     }
 
@@ -59,13 +59,13 @@ class UserController extends BaseController
 
         $sortField = $this->sortFields[$sort];
 
-        $this->highlightMenu('users');
+        $this->highlightMenu('developers');
 
-        $query = $this->getUserRepository()->queryAllWithBundlesSortedBy($sortField);
-        $users = $this->getPaginator($query, $request->query->get('page', 1), 18);
+        $query = $this->getRepository('Developer')->queryAllWithBundlesSortedBy($sortField);
+        $developers = $this->getPaginator($query, $request->query->get('page', 1), 18);
 
-        return $this->render('KnpBundlesBundle:User:list.'.$format.'.twig', array(
-            'users'       => $users,
+        return $this->render('KnpBundlesBundle:Developer:list.'.$format.'.twig', array(
+            'developers'       => $developers,
             'sort'        => $sort,
             'sortLegends' => $this->sortLegends,
             'callback'    => $request->query->get('callback')
@@ -74,14 +74,18 @@ class UserController extends BaseController
 
     public function bundlesAction(Request $request, $name)
     {
-        if (!$user = $this->getUserRepository()->findOneByName($name)) {
-            throw new NotFoundHttpException(sprintf('The user "%s" does not exist', $name));
-        }
-
         $format = $this->recognizeRequestFormat($request);
 
+        if ($format == 'html') {
+            return $this->redirect($this->generateUrl('developer_show', array('name' => $name)));
+        }
+
+        if (!$developer = $this->getRepository('Developer')->findOneByName($name)) {
+            throw new NotFoundHttpException(sprintf('The developer "%s" does not exist', $name));
+        }
+
         return $this->render('KnpBundlesBundle:Bundle:list.'.$format.'.twig', array(
-            'bundles'  => $user->getBundles(),
+            'bundles'  => $developer->getBundles(),
             'callback' => $request->query->get('callback')
         ));
     }

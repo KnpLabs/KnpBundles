@@ -108,7 +108,7 @@ class TrendingBundleTwitterer
     private function prepareMessage(Bundle $trendingBundle)
     {
         $bundleName = $trendingBundle->getName();
-        $url = 'knpbundles.com/'.$trendingBundle->getUsername().'/'.$bundleName;
+        $url = 'knpbundles.com/'.$trendingBundle->getOwnerName().'/'.$bundleName;
 
         return str_replace(array('{name}', '{url}'), array($bundleName, $url), $this->twitterParams['tweet_template']);
     }

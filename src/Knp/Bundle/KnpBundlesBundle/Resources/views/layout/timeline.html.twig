@@ -3,7 +3,7 @@
     <ol class="timeline">
     {%- for commit in commits %}
         <li>
-            <a href="{{ path('bundle_show', { 'username': commit.bundle_username, 'name': commit.bundle_name }) }}">{{ commit.bundle_name }}</a>
+            <a href="{{ path('bundle_show', { 'ownerName': commit.bundle_ownerName, 'name': commit.bundle_name }) }}">{{ commit.bundle_name }}</a>
             {{ commit.message }}<br />
             <span>{{ commit.author }} | {{ ago(commit.committed_date) }}</span>
         </li>

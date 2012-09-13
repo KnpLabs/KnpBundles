@@ -6,7 +6,7 @@
 
     <div class="bundle-info">
         <h2>
-            <a href="{{ path('bundle_show', {'username': bundle.username, 'name': bundle.name}) }}" class="name">{{ bundle.name }}</a>
+            <a href="{{ path('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}" class="name">{{ bundle.name }}</a>
         </h2>
 
         <p>{{ bundle.description(100)|default('No description found.') }}</p>

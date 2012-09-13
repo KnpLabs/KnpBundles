@@ -1,0 +1,61 @@
+{% extends 'KnpBundlesBundle::layout/900px.html.twig' %}
+
+{% block title %}{% trans with {'%count%': developers.nbResults, '%sort%': sort} %}developers.meta.title{% endtrans %}{% endblock %}
+
+{% block description %}{% trans with {'%count%': developers.nbResults, '%sort%': sort} %}developers.meta.description{% endtrans %}{% endblock %}
+
+{% block intro %}
+<div id="intro">
+    <h1>Developers</h1>
+    <h2>Our family has {{ developers.nbResults }} Developers!</h2>
+</div>
+{% endblock %}
+
+{% block content_holder %}
+<div id="content-holder">
+    <div class="content-box">
+        <hgroup>
+            <div class="btn-group btn-sort">
+                <button class="btn dropdown-title" data-toggle="dropdown"><i class="icon-{{ sort }}"></i>{{ sortLegends[sort]|trans }}</button>
+                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    {%- for field, text in sortLegends %}
+                    <li><i class="icon-{{ field }}"></i><a href="{{ path('developer_list', {'sort': field}) }}">{{ text|trans }}</a></li>
+                    {%- endfor %}
+                </ul>
+            </div>
+
+            <h2>{% trans with {'%count%': developers.nbResults, '%sort%': sort, '[': '<span>', ']': '</span>'} %}developers.title{% endtrans %}</h2>
+        </hgroup>
+
+        <section class="developers-list">
+            {%- for developer in developers %}
+            <article class="developer {{ loop.index is even ? 'even' : '' }} {% if loop.index % 3 == 0 %}no-right-border{% endif %} {% if loop.index > (loop.length - 3) %}no-bottom-border{% endif %}">
+                <figure>
+                    <a href="{{ url('developer_show', {'name': developer.name}) }}">
+                        <img src="{{ developer.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=50') }}" alt="{{ developer.name }}, Symfony developer" width="50" height="50" />
+                    </a>
+                </figure>
+
+                <div class="generals">
+                    <h3><a href="{{ path('developer_show', {'name': developer.name}) }}">{{ developer.name }}</a></h3>
+                    <p>{{ developer.fullName|default('−') }}</p>
+
+                    {%- if developer.location %}
+                    <span class="location">
+                        {% trans %}developers.list.location{% endtrans %}
+                        <strong>{{ developer.location }}</strong>
+                    </span>
+                    {%- endif %}
+                    <span class="created-at">{% trans %}bundles.list.createdAt{% endtrans %} <strong>{{ developer.createdAt|date('date_format'|trans) }}</strong></span>
+                </div>
+            </article>
+            {%- endfor %}
+
+            {{ pagerfanta(developers, 'knp_bundles_view') }}
+        </section>
+    </div>
+</div>
+{% endblock %}

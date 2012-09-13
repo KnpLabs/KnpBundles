@@ -24,22 +24,22 @@ bundle_keyword:
     requirements:   { _method: "GET", slug: ".+" }
 
 bundle_change_usage_status:
-    pattern:        /{username}/{name}/change-usage-status
+    pattern:        /{ownerName}/{name}/change-usage-status
     defaults:       { _controller: KnpBundlesBundle:Bundle:changeUsageStatus }
     requirements:   { _method: "GET", name: ".+" }
 
 bundle_get_badge_short:
-    pattern:        /{username}/{name}/badge-short
+    pattern:        /{ownerName}/{name}/badge-short
     defaults:       { _controller: KnpBundlesBundle:Badge:show, type: short }
     requirements:   { _method: "GET", name: ".+" }
 
 bundle_get_badge:
-    pattern:        /{username}/{name}/badge
+    pattern:        /{ownerName}/{name}/badge
     defaults:       { _controller: KnpBundlesBundle:Badge:show }
     requirements:   { _method: "GET", name: ".+" }
 
 bundle_show:
-    pattern:        /{username}/{name}
+    pattern:        /{ownerName}/{name}
     defaults:       { _controller: KnpBundlesBundle:Bundle:show }
     requirements:   { _method: "GET", format: "(html|json|js)", name: ".+" }
 
