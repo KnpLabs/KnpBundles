@@ -33,7 +33,7 @@ DROP INDEX user_id ON contribution;
 DROP INDEX user_id ON bundle;
 DROP INDEX full_name_unique ON bundle;
 DROP TABLE user;
-ALTER TABLE bundle CHANGE user_id owner_id INT NOT NULL, CHANGE username ownerName VARCHAR(127) NOT NULL;
+ALTER TABLE bundle CHANGE user_id owner_id INT NOT NULL, CHANGE username ownerName VARCHAR(127) NOT NULL, ADD ownerType VARCHAR(15) NOT NULL;
 ALTER TABLE bundle ADD CONSTRAINT FK_A57B32FD7E3C61F9 FOREIGN KEY (owner_id) REFERENCES owner (id);
 CREATE INDEX IDX_A57B32FD7E3C61F9 ON bundle (owner_id);
 CREATE UNIQUE INDEX full_name_unique ON bundle (ownerName, name);
@@ -66,6 +66,12 @@ EOF;
          * @var $github \Github\Client
          */
         $connection = $this->getContainer()->get('doctrine.orm.entity_manager')->getConnection();
+        if ($connection->getDatabasePlatform()->getName() == 'sqlite') {
+            $output->writeln(sprintf('[%s] This command can\'t be executed on <error>SQLite</error>!', $this->currentTime()));
+
+            return 1;
+        }
+
         $this->github = $github = $this->getContainer()->get('knp_bundles.github_client');
 
         $usersPerCycle = $input->getOption('users');
@@ -127,6 +133,8 @@ EOF;
         } while (count($oldUsers) > 0);
 
         $connection->executeQuery($this->afterMigration);
+
+        return 0;
     }
 
     private function migrateColumns($data, $ghUser)

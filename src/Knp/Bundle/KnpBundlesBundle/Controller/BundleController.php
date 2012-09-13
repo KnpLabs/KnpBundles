@@ -188,14 +188,15 @@ class BundleController extends BaseController
 
     public function addAction(Request $request)
     {
-        $error  = false;
-        $bundle = $request->request->get('bundle');
-        if (null === $bundle) {
+        $error   = false;
+        $message = '';
+        $bundle  = $request->request->get('bundle');
+        if (($request->isXmlHttpRequest() || 'POST' === $request->getMethod()) && null === $bundle) {
             $error   = true;
             $message = 'Please enter a valid GitHub repo name (e.g. KnpLabs/KnpBundles).';
         }
 
-        if (!$error) {
+        if (!$error && ($request->isXmlHttpRequest() || 'POST' === $request->getMethod())) {
             $bundle = trim(str_replace(array('http://github.com', 'https://github.com', '.git'), '', $bundle), '/');
             if (preg_match('/^[a-z0-9-]+\/[a-z0-9-\.]+$/i', $bundle)) {
                 list($ownerName, $name) = explode('/', $bundle);

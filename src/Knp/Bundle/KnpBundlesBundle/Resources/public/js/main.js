@@ -36,12 +36,11 @@
                 dataType: 'json',
                 data: {
                     bundle: input.attr('value')
+                },
+                success: function(data) {
+                    ul.find('li.unknown').addClass('hide');
+                    ul.find('.alert-success').html(data.message).removeClass('hide');
                 }
-            })
-            .done(function(xhr) {
-                var data = jQuery.parseJSON(xhr.responseText);
-                ul.find('li.unknown').addClass('hide');
-                ul.find('.alert-success').html(data.message).removeClass('hide');
             })
             .fail(function(xhr) {
                 var data = jQuery.parseJSON(xhr.responseText);
