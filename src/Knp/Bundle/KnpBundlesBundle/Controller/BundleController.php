@@ -153,19 +153,26 @@ class BundleController extends BaseController
 
     public function evolutionAction()
     {
+        $period = $this->container->getParameter('knp_bundles.evolution.period');
+
         return $this->render('KnpBundlesBundle:Bundle:evolution.html.twig', array(
             'series'  => array(
                 array(
                     'name' => 'Developers',
-                    'data' => $this->getRepository('Developer')->getUsersCountEvolution(),
+                    'data' => $this->getRepository('Developer')->getCountEvolution($period),
                 ),
                 array(
                     'name' => 'Bundles updated',
-                    'data' => $this->getRepository('Score')->getScoreCountEvolution(),
+                    'data' => $this->getRepository('Score')->getCountEvolution($period),
+                ),
+                array(
+                    'name' => 'Organizations',
+                    'data' => $this->getRepository('Organization')->getCountEvolution($period),
                 )
             ),
             'bundles' => $this->getRepository('Bundle')->count(),
-            'developers'   => $this->getRepository('Developer')->count()
+            'developers' => $this->getRepository('Developer')->count(),
+            'organizations' => $this->getRepository('Organization')->count()
         ));
     }
 
