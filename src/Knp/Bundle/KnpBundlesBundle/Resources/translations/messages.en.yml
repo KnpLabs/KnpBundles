@@ -59,7 +59,7 @@ bundles:
 
 bundles.show:
     meta:
-        title: "%name% by %username%"
+        title: "%name% by %ownerName%"
     github: "Download"
     issues: "Report an Issue"
     setting: "Change bundle settings"
@@ -144,7 +144,7 @@ developers:
 
 developers.show:
     meta:
-        description: "%username% has created %nb% Symfony2 bundles"
+        description: "%ownerName% has created %nb% Symfony2 bundles"
     github: "View on Github"
     stats:
         location: "Location: "

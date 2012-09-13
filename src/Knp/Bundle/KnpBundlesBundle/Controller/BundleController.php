@@ -157,15 +157,20 @@ class BundleController extends BaseController
             'series'  => array(
                 array(
                     'name' => 'Developers',
-                    'data' => $this->getRepository('Developer')->getUsersCountEvolution(),
+                    'data' => $this->getRepository('Developer')->getEvolutionCounts(),
+                ),
+                array(
+                    'name' => 'Organizations',
+                    'data' => $this->getRepository('Organization')->getEvolutionCounts(),
                 ),
                 array(
                     'name' => 'Bundles updated',
                     'data' => $this->getRepository('Score')->getScoreCountEvolution(),
                 )
             ),
-            'bundles' => $this->getRepository('Bundle')->count(),
-            'developers'   => $this->getRepository('Developer')->count()
+            'bundles'       => $this->getRepository('Bundle')->count(),
+            'developers'    => $this->getRepository('Developer')->count(),
+            'organizations' => $this->getRepository('Organization')->count()
         ));
     }
 

@@ -87,9 +87,11 @@
 
         <field name="keywords" type="text_general" indexed="true" stored="true" multiValued="true" />
 
+        <field name="ownerType" type="string" indexed="false" stored="true" />
+
         <field name="totalScore" type="int" indexed="false" stored="true" />
         <field name="state" type="string" indexed="false" stored="true" />
-        <field name="userGravatarHash" type="string" indexed="false" stored="true" />
+        <field name="avatarUrl" type="string" indexed="false" stored="true" />
         <field name="lastCommitAt" type="date" indexed="false" stored="true" />
         <field name="lastTweetedAt" type="date" indexed="false" stored="true" />
 

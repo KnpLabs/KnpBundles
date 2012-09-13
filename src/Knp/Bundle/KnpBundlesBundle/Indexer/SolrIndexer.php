@@ -62,6 +62,7 @@ class SolrIndexer
         $document->setField('id', $bundle->getId());
         $document->setField('name', $bundle->getName());
         $document->setField('ownerName', $bundle->getOwnerName());
+        $document->setField('ownerType', $bundle->getOwnerType());
         $document->setField('fullName', $bundle->getFullName());
         $document->setField('description', $bundle->getDescription());
         $document->setField('readme', $bundle->getReadme());
