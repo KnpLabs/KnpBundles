@@ -8,6 +8,7 @@ default:
     Behat\Symfony2Extension\Extension:
       mink_driver: true
       kernel:
+        bootstrap: ""
         env: test
         debug: true
     Behat\MinkExtension\Extension:
