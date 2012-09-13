@@ -3,7 +3,7 @@
 namespace Knp\Bundle\KnpBundlesBundle\Tests\EventListener\Scoring;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
-use Knp\Bundle\KnpBundlesBundle\Entity\User;
+use Knp\Bundle\KnpBundlesBundle\Entity\Developer;
 use Knp\Bundle\KnpBundlesBundle\Event\BundleEvent;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -39,7 +39,7 @@ class GlobalScoreTest extends \PHPUnit_Framework_TestCase
         $bundle->setNbFollowers(10);
 
         // recommendation (+5)
-        $bundle->addRecommender(new User());
+        $bundle->addRecommender(new Developer());
 
         // readme (+5)
         $bundle->setReadme(str_repeat('-', 500));

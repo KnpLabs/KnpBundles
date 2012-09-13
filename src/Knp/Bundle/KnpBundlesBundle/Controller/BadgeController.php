@@ -11,11 +11,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class BadgeController extends BaseController
 {
-    public function showAction($username, $name, $type = 'long')
+    public function showAction($ownerName, $name, $type = 'long')
     {
-        $bundle = $this->getBundleRepository()->findOneByUsernameAndName($username, $name);
+        $bundle = $this->getBundleRepository()->findOneByOwnerNameAndName($ownerName, $name);
         if (!$bundle) {
-            throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $username, $name));
+            throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $ownerName, $name));
         }
 
         return $this->container->get('knp_bundles.badge_generator')->show($bundle, $type);

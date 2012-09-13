@@ -8,7 +8,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 class Data implements FixtureInterface
 {
-    protected $names = array(
+    protected $devNames = array(
         'John'      => 'John Doe',
         'Brian'     => 'Brian Lester',
         'Jack'      => 'Jack Gill',
@@ -24,6 +24,13 @@ class Data implements FixtureInterface
         'Chase'     => 'Chase Hoffman',
         'Greg'      => 'Gregory Joyner',
         'Dexter'    => 'Dexter Schwartz'
+    );
+
+    protected $orgNames = array(
+        'KnpLabs'          => 'Happy Awesome Developers',
+        'FriendsOfSymfony' => 'FriendsOfSymfony',
+        'sonata-project'   => 'Sonata Project',
+        'nelmio'           => 'Nelmio'
     );
 
     private $keywords = array(
@@ -128,39 +135,14 @@ And some standard code **here**
 
 EOD;
 
-    public function load(ObjectManager $manager)
-    {
-        $users = array();
-        $trilean = array(true, false, null);
+    private $states = array(
+        Entity\Bundle::STATE_UNKNOWN,
+        Entity\Bundle::STATE_NOT_YET_READY,
+        Entity\Bundle::STATE_READY,
+        Entity\Bundle::STATE_DEPRECATED
+    );
 
-        $i = 0;
-        foreach ($this->names as $name => $fullName) {
-            $i++;
-
-            $user = new Entity\User();
-            $user->fromArray(array(
-                'name'      => $name,
-                'email'     => strtolower(str_replace(' ', '.', $fullName)).'@foomail.bar',
-                'fullName'  => $fullName,
-                'company'   => ($i%2) ? 'Company '.$i : null,
-                'location'  => ($i%2) ? 'Location '.$i : null,
-                'blog'      => ($i%2) ? 'blog'.$i.'.com' : null,
-                'score'     => 0,
-            ));
-
-            $manager->persist($user);
-
-            $users[] = $user;
-        }
-
-        $states = array(
-            Entity\Bundle::STATE_UNKNOWN,
-            Entity\Bundle::STATE_NOT_YET_READY,
-            Entity\Bundle::STATE_READY,
-            Entity\Bundle::STATE_DEPRECATED
-        );
-
-        $canonicalConfigDump = <<<EOT
+    private $canonicalConfigDump = <<<EOT
 vendor_bundle_name:
     app_id:               ~ # Required
     secret:               ~ # Required
@@ -177,69 +159,56 @@ vendor_bundle_name:
 
 EOT;
 
-        foreach ($users as $i => $user) {
-            $contributors = array();
-            $contributors[] = isset($users[$i + 1]) ? $users[$i + 1] : $users[0];
-            $contributors[] = isset($users[$i - 1]) ? $users[$i - 1] : $users[count($users) - 1];
+    public function load(ObjectManager $manager)
+    {
+        $developers = array();
+        $organizations = array();
 
-            /* @var $contributor Entity\User */
+        $i = 0;
+        foreach ($this->devNames as $name => $fullName) {
+            $i++;
+
+            $developer = new Entity\Developer();
+            $developer->fromArray(array(
+                'name'      => $name,
+                'email'     => strtolower(str_replace(' ', '.', $fullName)).'@foomail.bar',
+                'fullName'  => $fullName,
+                'company'   => ($i%2) ? 'Company '.$i : null,
+                'location'  => ($i%2) ? 'Location '.$i : null,
+                'url'      => ($i%2) ? 'blog'.$i.'.com' : null,
+                'score'     => 0,
+            ));
+
+            $manager->persist($developer);
+
+            $developers[] = $developer;
+        }
+
+        foreach ($this->orgNames as $name => $fullName) {
+            $organization = new Entity\Organization();
+            $organization->fromArray(array(
+                'name'      => $name,
+                'fullName'  => $fullName,
+                'email'     => strtolower(str_replace(' ', '.', $fullName)).'@foomail.bar',
+                'location'  => ($i%2) ? 'Location '.$i : null,
+                'url'       => ($i%2) ? 'blog'.$i.'.com' : null,
+                'score'     => 0
+            ));
+
+            $manager->persist($organization);
+
+            $organizations[] = $organization;
+        }
+
+        foreach ($developers as $i => $developer) {
+            $contributors = array();
+            $contributors[] = isset($developers[$i + 1]) ? $developers[$i + 1] : $developers[0];
+            $contributors[] = isset($developers[$i - 1]) ? $developers[$i - 1] : $developers[count($developers) - 1];
+
+            /* @var $contributor Entity\Developer */
             $contributor    = array_pop($contributors);
 
-            $bundle = new Entity\Bundle();
-            $bundle->fromArray(array(
-                'name'          => ucfirst($user->getName()).'FooBundle',
-                'username'      => $user->getName(),
-                'user'          => $user,
-                'description'   => $this->descriptions[mt_rand(0, 4)],
-                'homepage'      => ($i%2) ? 'Bundle'.$i.'.com' : null,
-                'readme'        => str_replace('__BUNDLE__', "the bundle number: {$i}", $this->readme),
-                'tags'          => ($i%2) ? array('1.0', '1.1') : array(),
-                'usesTravisCi'  => ($i%2) ? false : true,
-                'composerName'  => ($i%2) ? null : 'knplabs/knp-menu-bundle',
-                'state'         => $states[mt_rand(0, 3)],
-                'travisCiBuildStatus'  => ($i%2 == 0) ? $trilean[$i%3] : null,
-                'nbFollowers'   => $i*10,
-                'nbForks'       => $i,
-                'lastCommitAt'  => \DateTime::createFromFormat('Y-m-d', sprintf('2012-07-%d', $i)),
-                'lastCommits'   => array(
-                    array(
-                        'commit' => array(
-                            'author'    => array(
-                                'date'  => '2010-05-16T09:58:32-09:00',
-                                'name'  => $contributor->getFullName(),
-                                'email' => $contributor->getEmail()
-                            ),
-                            'committer' => array(
-                                'date'  => '2010-05-16T09:58:32-09:00',
-                                'name'  => $contributor->getFullName(),
-                                'login' => $contributor->getName()
-                            ),
-                            'url'       => 'http://github.com',
-                            'message'   => 'Fix something on this Bundle',
-                        ),
-                    ),
-                    array(
-                        'commit' => array(
-                            'author'    => array(
-                                'date'  => '2010-05-16T09:58:32-07:00',
-                                'name'  => $user->getFullName(),
-                                'email' => $user->getEmail()
-                            ),
-                            'committer' => array(
-                                'date'  => '2010-05-16T09:58:32-07:00',
-                                'name'  => $user->getFullName(),
-                                'email' => $user->getEmail()
-                            ),
-                            'url'       => 'http://github.com',
-                            'message'   => 'Commit something on this bundle',
-                        ),
-                    ),
-                ),
-                'isFork'          => false,
-                'contributors'    => array($contributor),
-                'canonicalConfig' => ($i%2 == 0) ? $canonicalConfigDump : null,
-                'nbRecommenders'  => rand(0, 90),
-            ));
+            $bundle = $this->makeBundle($developer, $i, $contributor);
 
             if ($i%5 == 0) {
                 $bundle->setLastTweetedAt(new \DateTime());
@@ -252,7 +221,7 @@ EOT;
             }
             $bundle->setScore(mt_rand(10, 666));
 
-            $bundle->addRecommender(isset($users[$i + 2]) ? $users[$i + 2] : ($users[0] != $user ? $users[0] : $users[1]));
+            $bundle->addRecommender(isset($developers[$i + 2]) ? $developers[$i + 2] : ($developers[0] != $developer ? $developers[0] : $developers[1]));
             if (isset($this->keywords[$i])) {
                 $keyword = new Entity\Keyword();
                 $keyword->setValue($this->keywords[$i]);
@@ -291,6 +260,80 @@ EOT;
             }
         }
 
+        foreach ($organizations as $key => $organization) {
+            for ($i = 1; $i < rand(2, 7); $i++) {
+                $manager->persist($this->makeBundle($organization, $i));
+            }
+        }
+
         $manager->flush();
+    }
+
+    protected function makeBundle($owner, $i, $contributor = null)
+    {
+        $trilean = array(true, false, null);
+
+        $bundle = new Entity\Bundle();
+        $bundle->fromArray(array(
+            'name'          => ucfirst($owner->getName()).$i.'FooBundle',
+            'ownerName'     => $owner->getName(),
+            'owner'         => $owner,
+            'description'   => $this->descriptions[mt_rand(0, 4)],
+            'homepage'      => ($i%2) ? 'Bundle'.$i.'.com' : null,
+            'readme'        => str_replace('__BUNDLE__', "the bundle number: {$i}", $this->readme),
+            'tags'          => ($i%2) ? array('1.0', '1.1') : array(),
+            'usesTravisCi'  => ($i%2) ? false : true,
+            'composerName'  => ($i%2) ? null : 'knplabs/knp-menu-bundle',
+            'symfonyVersions' => array(
+                'dev-master' => '2.1.*',
+                '1.2.0' => '2.0.*',
+                '1.1.0' => '2.*',
+            ),
+            'state'         => $this->states[mt_rand(0, 3)],
+            'travisCiBuildStatus'  => ($i%2 == 0) ? $trilean[$i%3] : null,
+            'nbFollowers'   => $i*10,
+            'nbForks'       => $i,
+            'lastCommitAt'  => \DateTime::createFromFormat('Y-m-d', sprintf('2012-07-%d', $i)),
+            'lastCommits'   => array(
+                array(
+                    'commit' => array(
+                        'author'    => array(
+                            'date'  => '2010-05-16T09:58:32-09:00',
+                            'name'  => $owner->getFullName(),
+                            'email' => $owner->getEmail()
+                        ),
+                        'committer' => array(
+                            'date'  => '2010-05-16T09:58:32-09:00',
+                            'name'  => $owner->getFullName(),
+                            'login' => $owner->getName()
+                        ),
+                        'url'       => 'http://github.com',
+                        'message'   => 'Fix something on this Bundle',
+                    ),
+                ),
+                array(
+                    'commit' => array(
+                        'author'    => array(
+                            'date'  => '2010-05-16T09:58:32-07:00',
+                            'name'  => $owner->getFullName(),
+                            'email' => $owner->getEmail()
+                        ),
+                        'committer' => array(
+                            'date'  => '2010-05-16T09:58:32-07:00',
+                            'name'  => $owner->getFullName(),
+                            'email' => $owner->getEmail()
+                        ),
+                        'url'       => 'http://github.com',
+                        'message'   => 'Commit something on this bundle',
+                    ),
+                ),
+            ),
+            'isFork'        => false,
+            'contributors'  => $contributor ? array($contributor) : array(),
+            'canonicalConfig' => ($i%2 == 0) ? $this->canonicalConfigDump : null,
+            'nbRecommenders' => rand(0, 90),
+        ));
+
+        return $bundle;
     }
 }

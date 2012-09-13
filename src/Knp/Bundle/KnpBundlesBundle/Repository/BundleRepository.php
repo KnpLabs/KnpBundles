@@ -26,31 +26,31 @@ class BundleRepository extends EntityRepository
     }
 
     /**
-     * Finds all the bundles with their associated users and contributors, sorted
+     * Finds all the bundles with their associated owners and contributors, sorted
      * by the specified field
      *
      * @param  string $field The name of the field to sort by
      *
-     * @return \Doctrine\Common\Collection
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function findAllWithUsersAndContributorsSortedBy($field)
+    public function findAllWithOwnersAndContributorsSortedBy($field)
     {
-        return $this->queryAllWithUsersAndContributorsSortedBy($field)->execute();
+        return $this->queryAllWithOwnersAndContributorsSortedBy($field)->execute();
     }
 
     /**
-     * Returns the query to retrieve all the bundles with their associated users
+     * Returns the query to retrieve all the bundles with their associated owners
      * and contributors, sorted by the specified field
      *
      * @param  string $field The name of the field to sort by
      *
-     * @return \Doctrine\Query
+     * @return \Doctrine\ORM\Query
      */
-    public function queryAllWithUsersAndContributorsSortedBy($field)
+    public function queryAllWithOwnersAndContributorsSortedBy($field)
     {
         $q = $this->createQueryBuilder('bundle')
-            ->select('bundle, user, contributors')
-            ->leftJoin('bundle.user', 'user')
+            ->select('bundle, owner, contributors')
+            ->leftJoin('bundle.owner', 'owner')
             ->leftJoin('bundle.contributors', 'contributors')
             ->addOrderBy('bundle.' . $field, 'name' === $field ? 'asc' : 'desc')
             ->addOrderBy('bundle.score', 'desc')
@@ -63,8 +63,8 @@ class BundleRepository extends EntityRepository
     public function queryByKeywordSlug($slug)
     {
         return $this->createQueryBuilder('bundle')
-            ->addSelect('user')
-            ->leftJoin('bundle.user', 'user')
+            ->addSelect('owner')
+            ->leftJoin('bundle.owner', 'owner')
             ->leftJoin('bundle.keywords', 'keyword')
             ->where('keyword.slug = :slug')
             ->addOrderBy('bundle.score', 'desc')
@@ -98,13 +98,13 @@ class BundleRepository extends EntityRepository
         return $this->createQueryBuilder('bundle')->orderBy('bundle.lastCommitAt', 'DESC')->getQuery()->setMaxResults($nb)->execute();
     }
 
-    public function findOneByUsernameAndName($username, $name)
+    public function findOneByOwnerNameAndName($ownerName, $name)
     {
         return $this->createQueryBuilder('bundle')
-            ->leftJoin('bundle.recommenders', 'user')
-            ->where('bundle.username = :username')
+            ->leftJoin('bundle.recommenders', 'owner')
+            ->where('bundle.ownerName = :ownerName')
             ->andWhere('bundle.name = :name')
-            ->setParameter('username', $username)
+            ->setParameter('ownerName', $ownerName)
             ->setParameter('name', $name)
             ->getQuery()
             ->getOneOrNullResult();
@@ -113,7 +113,7 @@ class BundleRepository extends EntityRepository
     public function getStaleBundlesForIndexing()
     {
         return $this->createQueryBuilder('bundle')
-            ->leftJoin('bundle.user', 'user')
+            ->leftJoin('bundle.owner', 'owner')
             ->where('bundle.indexedAt IS NULL OR bundle.indexedAt < bundle.updatedAt')
             ->getQuery()
             ->getResult();

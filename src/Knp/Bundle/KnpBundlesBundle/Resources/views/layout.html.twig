@@ -26,7 +26,7 @@
             {{ knp_menu_render(knp_menu_get('main').setAttribute('id', 'menu')) }}
         </nav>
 
-        {% render 'KnpBundlesBundle:User:userbar' %}
+        {% render 'KnpBundlesBundle:Developer:userbar' %}
 
         <form method="get" action="{{ path('search') }}" id="search-box">
             <label for="search-query">{% trans %}search.label{% endtrans %}</label>

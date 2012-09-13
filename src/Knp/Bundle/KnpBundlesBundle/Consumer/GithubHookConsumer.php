@@ -56,7 +56,7 @@ class GithubHookConsumer implements ConsumerInterface
         $payload = $message->payload;
         $bundle  = $this->manager->getRepository('KnpBundlesBundle:Bundle')->findOneBy(array(
             'name'     => $payload->repository->name,
-            'username' => $payload->repository->owner->name
+            'ownerName' => $payload->repository->owner->name
         ));
 
         if (!$bundle) {

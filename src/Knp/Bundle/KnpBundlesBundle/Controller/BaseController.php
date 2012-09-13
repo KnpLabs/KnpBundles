@@ -57,16 +57,6 @@ class BaseController extends Controller
         return $paginator;
     }
 
-    protected function getBundleRepository()
-    {
-        return $this->getRepository('Bundle');
-    }
-
-    protected function getUserRepository()
-    {
-        return $this->getRepository('User');
-    }
-
     protected function getRepository($class)
     {
         return $this->container->get('knp_bundles.entity_manager')->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\'.$class);

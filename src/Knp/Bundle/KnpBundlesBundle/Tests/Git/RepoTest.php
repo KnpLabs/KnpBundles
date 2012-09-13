@@ -32,7 +32,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
     public function shouldReturnsRequestedNumbersOfCommits()
     {
         $bundle = new Bundle();
-        $bundle->setUsername('KnpLabs');
+        $bundle->setOwnerName('KnpLabs');
         $bundle->setName('KnpBunldes');
 
         $gitRepo = $this->getPhpGitRepository();

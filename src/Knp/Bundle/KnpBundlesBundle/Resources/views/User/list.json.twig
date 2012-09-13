@@ -1,5 +1,0 @@
-{% set array = [] %}
-{% for user in users %}
-{% set array = array|merge([user.toSmallArray]) %}
-{% endfor %}
-{{ array|json_encode|raw }}

@@ -2,10 +2,10 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Tests\Github;
 
-use Knp\Bundle\KnpBundlesBundle\Github\User as GithubUser;
-use Knp\Bundle\KnpBundlesBundle\Entity\User as UserEntity;
+use Knp\Bundle\KnpBundlesBundle\Github\Developer as GithubDeveloper;
+use Knp\Bundle\KnpBundlesBundle\Entity\Developer as DeveloperEntity;
 
-class UserTest extends \PHPUnit_Framework_TestCase
+class DeveloperTest extends \PHPUnit_Framework_TestCase
 {
     public function testUpdate()
     {
@@ -13,7 +13,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $data = array(
             'email' => 'hello@knplabs.com',
-            'gravatar_id' => 'hash',
+            'avatar_url' => 'hash',
             'name' => 'lorem',
             'fullname' => 'Edgar Knp',
             'company' => 'KnpLabs',
@@ -23,8 +23,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $github = $this->getMock('Github\Client', array('api'));
 
-        $githubUserApi = $this->getMock('Github\Api\User', array('show'), array($github));
-        $githubUserApi->expects($this->any())
+        $githubDeveloperApi = $this->getMock('Github\Api\User', array('show'), array($github));
+        $githubDeveloperApi->expects($this->any())
             ->method('show')
             ->with($this->equalTo('lorem'))
             ->will($this->returnValue($data));
@@ -32,22 +32,22 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $github->expects($this->any())
             ->method('api')
             ->with('user')
-            ->will($this->returnValue($githubUserApi));
+            ->will($this->returnValue($githubDeveloperApi));
 
-        $userEntity = new UserEntity();
+        $userEntity = new DeveloperEntity();
         $userEntity->setName('lorem');
         $userEntity->setFullName('lorem');
 
-        $githubUser = new GithubUser($github, $output);
-        $githubUser->update($userEntity);
+        $githubDeveloper = new GithubDeveloper($github, $output);
+        $githubDeveloper->update($userEntity);
 
         $this->assertEquals($data['email'], $userEntity->getEmail());
         $this->assertEquals($data['name'], $userEntity->getName());
         $this->assertEquals($data['fullname'], $userEntity->getFullName());
-        $this->assertEquals($data['gravatar_id'], $userEntity->getGravatarHash());
+        $this->assertEquals($data['avatar_url'], $userEntity->getAvatarUrl());
         $this->assertEquals($data['company'], $userEntity->getCompany());
         $this->assertEquals($data['location'], $userEntity->getLocation());
-        $this->assertEquals($data['blog'], $userEntity->getBlog());
+        $this->assertEquals($data['blog'], $userEntity->getUrl());
     }
 
     public function testUpdateBadUrl()
@@ -60,8 +60,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $github = $this->getMock('Github\Client', array('api'));
 
-        $githubUserApi = $this->getMock('Github\Api\User', array('show'), array($github));
-        $githubUserApi->expects($this->any())
+        $githubDeveloperApi = $this->getMock('Github\Api\User', array('show'), array($github));
+        $githubDeveloperApi->expects($this->any())
             ->method('show')
             ->with($this->equalTo('lorem'))
             ->will($this->returnValue($data));
@@ -69,15 +69,15 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $github->expects($this->any())
             ->method('api')
             ->with('user')
-            ->will($this->returnValue($githubUserApi));
+            ->will($this->returnValue($githubDeveloperApi));
 
-        $userEntity = new UserEntity();
+        $userEntity = new DeveloperEntity();
         $userEntity->setName('lorem');
 
-        $githubUser = new GithubUser($github, $output);
-        $githubUser->update($userEntity);
+        $githubDeveloper = new GithubDeveloper($github, $output);
+        $githubDeveloper->update($userEntity);
 
-        $this->assertEquals('http://knplabs.com', $userEntity->getBlog());
+        $this->assertEquals('http://knplabs.com', $userEntity->getUrl());
     }
 
 }

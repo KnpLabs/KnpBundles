@@ -34,6 +34,7 @@ Feature: Searching bundles
     Then I should see "Found 5 bundles"
     And I should see "UserBundle"
 
+      @wip
   Scenario: Search one bundle with exact name
     When I go to "/"
     And I search for "FOSUserBundle"

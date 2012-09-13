@@ -2,8 +2,7 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Security\Core\User;
 
-use Knp\Bundle\KnpBundlesBundle\Entity\User;
-use Knp\Bundle\KnpBundlesBundle\Entity\UserManager;
+use Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager;
 
 use Symfony\Component\Security\Core\User\UserInterface,
     Symfony\Component\Security\Core\User\UserProviderInterface,
@@ -19,16 +18,16 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface,
 class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInterface
 {
     /**
-     * @var UserManager
+     * @var OwnerManager
      */
-    protected $userManager;
+    protected $ownerManager;
 
     /**
-     * @param UserManager $userManager
+     * @param OwnerManager $userManager
      */
-    public function __construct(UserManager $userManager)
+    public function __construct(OwnerManager $userManager)
     {
-        $this->userManager = $userManager;
+        $this->ownerManager = $userManager;
     }
 
     /**
@@ -36,7 +35,7 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        return $this->userManager->getOrCreate($response);
+        return $this->ownerManager->getOrCreate($response);
     }
 
     /**
@@ -44,7 +43,7 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
      */
     public function loadUserByUsername($username)
     {
-        return $this->userManager->getOrCreate($username);
+        return $this->ownerManager->getOrCreate($username);
     }
 
     /**
@@ -52,7 +51,7 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
      */
     public function refreshUser(UserInterface $user)
     {
-        $refreshedUser = $this->userManager->findUserBy(array('id' => $user->getId()));
+        $refreshedUser = $this->ownerManager->findOwnerBy(array('id' => $user->getId()));
         if (null === $refreshedUser) {
             throw new UsernameNotFoundException(sprintf('User with ID "%d" could not be reloaded.', $user->getId()));
         }

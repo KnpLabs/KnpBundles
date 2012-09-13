@@ -1,0 +1,58 @@
+{% extends 'KnpBundlesBundle::layout/900px.html.twig' %}
+
+{% block title %}{{ organization.name }} - {{ organization.fullName }}{% endblock %}
+
+{% block description %}{% trans with {'%ownerName%': organization.fullName, '%nb%': organization.nbBundles} %}bundles.show.infos.score{% endtrans %}{% endblock %}
+
+{% block content_attributes %} class="developer"{% endblock %}
+
+{% block intro %}
+<div id="intro" class="developer-details">
+    <figure>
+        <img src="{{ organization.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=55') }}" alt="{{ organization.name }}" width="55" height="55" alt="">
+    </figure>
+
+    <h1>{{ organization.name }}</h1>
+    <h2>{{ organization.fullName }}</h2>
+</div>
+{% endblock %}
+
+{% block right_holder %}
+<div class="content-half pull-right">
+    <div class="content-box">
+        <hgroup>
+            <h2>Some info about <strong>{{ organization.name }}</strong></h2>
+        </hgroup>
+
+        <section class="card">
+            <ul>
+                <li><i class="icon-location"></i><strong>{% trans %}developers.show.stats.location{% endtrans %}</strong> {{ organization.location|default('unknown') }}</li>
+                <li><i class="icon-box"></i><strong>{% trans %}developers.show.stats.nbBundles{% endtrans %}</strong> {{ organization.nbBundles }}</li>
+                {%- if organization.url %}
+                <li><i class="icon-globe"></i><strong>{% trans %}developers.show.stats.url{% endtrans %}</strong> <a href="{{ organization.url }}" rel="nofollow">{{ organization.url }}</a></li>
+                {%- endif %}
+            </ul>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block left_holder %}
+<div class="content-half pull-left">
+    <div class="content-box tabbable">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#owned" data-toggle="tab">{% trans %}developers.show.bundles_manage{% endtrans %}</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane active" id="owned">
+            {%- if organization.bundles|length > 0 %}
+                {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': organization.bundles} %}
+            {%- else %}
+                <p>This developer don't owe any bundle.</p>
+            {%- endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

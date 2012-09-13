@@ -19,7 +19,7 @@ use Pagerfanta\Adapter\DoctrineCollectionAdapter;
  *      indexes={
  *          @ORM\Index(name="trend1", columns={"trend1"})
  *      },
- *      uniqueConstraints={@ORM\UniqueConstraint(name="full_name_unique",columns={"username", "name"})}
+ *      uniqueConstraints={@ORM\UniqueConstraint(name="full_name_unique",columns={"ownerName", "name"})}
  * )
  * @ORM\HasLifecycleCallbacks
  */
@@ -49,31 +49,31 @@ class Bundle
     protected $name;
 
     /**
-     * The name of the user who owns this bundle
-     * This value is redundant with the name of the referenced User, for performance reasons
+     * The name of the owner who owns this bundle
+     * This value is redundant with the name of the referenced Owner, for performance reasons
      *
      * @Assert\NotBlank()
      * @Assert\Length(min = 2)
      *
      * @ORM\Column(type="string", length=127)
      */
-    protected $username;
+    protected $ownerName;
 
     /**
-     * User who owns the bundle
+     * Owner of the bundle
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="bundles")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="Owner", inversedBy="bundles")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=false)
      */
-    protected $user;
+    protected $owner;
 
     /**
-     * Recommenders recommending the bundle
+     * Developers recommending the bundle
      *
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="recommendedBundles")
+     * @ORM\ManyToMany(targetEntity="Developer", inversedBy="recommendedBundles")
      * @ORM\JoinTable(name="bundles_usage",
      *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="knpbundles_user_id", referencedColumnName="id")}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="knpbundles_owner_id", referencedColumnName="id")}
      * )
      */
     protected $recommenders;
@@ -186,12 +186,12 @@ class Bundle
     protected $state = self::STATE_UNKNOWN;
 
     /**
-     * Recommenders who contributed to the Repo
+     * Developers who contributed to the Repo
      *
-     * @ORM\ManyToMany(targetEntity="User", inversedBy="contributionBundles")
+     * @ORM\ManyToMany(targetEntity="Developer", inversedBy="contributionBundles")
      * @ORM\JoinTable(name="contribution",
      *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="developer_id", referencedColumnName="id", onDelete="CASCADE")}
      * )
      *
      * @var Collection
@@ -293,11 +293,11 @@ class Bundle
     public function __construct($fullName = null)
     {
         if ($fullName) {
-            list($this->username, $this->name) = explode('/', $fullName);
+            list($this->ownerName, $this->name) = explode('/', $fullName);
         }
 
-        $this->createdAt = new \DateTime('NOW');
-        $this->updatedAt = new \DateTime('NOW');
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
         $this->lastCommitAt = new \DateTime('2010-01-01');
 
         $this->lastCommits = serialize(array());
@@ -491,7 +491,7 @@ class Bundle
     {
         foreach($lastCommits as $index => $commit) {
             $lastCommits[$index]['bundle_name'] = $this->getName();
-            $lastCommits[$index]['bundle_username'] = $this->getUsername();
+            $lastCommits[$index]['bundle_ownerName'] = $this->getOwnerName();
         }
         $this->lastCommits = serialize($lastCommits);
 
@@ -695,7 +695,7 @@ class Bundle
      */
     public function getGitHubUrl()
     {
-        return sprintf('http://github.com/%s/%s', $this->username, $this->name);
+        return sprintf('http://github.com/%s/%s', $this->ownerName, $this->name);
     }
 
     /**
@@ -705,7 +705,7 @@ class Bundle
      */
     public function getTravisUrl()
     {
-        return $this->usesTravisCi ? sprintf('http://travis-ci.org/%s/%s', $this->username, $this->name) : false;
+        return $this->usesTravisCi ? sprintf('http://travis-ci.org/%s/%s', $this->ownerName, $this->name) : false;
     }
 
     /**
@@ -725,17 +725,17 @@ class Bundle
      */
     public function getGitUrl()
     {
-        return sprintf('git://github.com/%s/%s.git', $this->username, $this->name);
+        return sprintf('git://github.com/%s/%s.git', $this->ownerName, $this->name);
     }
 
     /**
-     * Get full name, including username
+     * Get full name, including ownerName
      *
      * @return string
      */
     public function getFullName()
     {
-        return $this->username.'/'.$this->name;
+        return $this->ownerName.'/'.$this->name;
     }
 
     /**
@@ -769,39 +769,39 @@ class Bundle
     }
 
     /**
-     * Get username
+     * Get ownername
      *
      * @return string
      */
-    public function getUsername()
+    public function getOwnerName()
     {
-        return $this->username;
+        return $this->ownerName;
     }
 
     /**
-     * Set username
+     * Set ownername
      *
      * @param string
      */
-    public function setUsername($username)
+    public function setOwnerName($ownername)
     {
-        $this->username = $username;
+        $this->ownerName = $ownername;
     }
 
     /**
-     * @return User
+     * @return Owner
      */
-    public function getUser()
+    public function getOwner()
     {
-        return $this->user;
+        return $this->owner;
     }
 
     /**
-     * @param null|User $user
+     * @param null|Owner $owner
      */
-    public function setUser(User $user = null)
+    public function setOwner(Owner $owner = null)
     {
-        $this->user = $user;
+        $this->owner = $owner;
     }
 
     /**
@@ -1007,7 +1007,7 @@ class Bundle
         return array(
             'type' => $this->getClass(),
             'name' => $this->getName(),
-            'username' => $this->getUsername(),
+            'ownerName' => $this->getOwnerName(),
             'description' => $this->getDescription(),
             'homepage' => $this->getHomepage(),
             'score' => $this->getScore(),
@@ -1030,7 +1030,7 @@ class Bundle
 
     public function __toString()
     {
-        return $this->username.'/'.$this->name;
+        return $this->ownerName.'/'.$this->name;
     }
 
     public function getClass()
@@ -1066,34 +1066,34 @@ class Bundle
         return count($this->recommenders);
     }
 
-    public function addRecommender(User $user)
+    public function addRecommender(Owner $owner)
     {
-        $user->addRecommendedBundle($this);
+        $owner->addRecommendedBundle($this);
 
-        $this->recommenders[] = $user;
+        $this->recommenders[] = $owner;
         $this->nbRecommenders++;
     }
 
-    public function removeRecommender(User $user)
+    public function removeRecommender(Owner $owner)
     {
-        $user->getUsedBundles()->removeElement($this);
+        $owner->getUsedBundles()->removeElement($this);
 
-        $this->recommenders->removeElement($user);
+        $this->recommenders->removeElement($owner);
         $this->nbRecommenders--;
     }
 
     /**
-     * @param User $user
+     * @param Owner $owner
      *
      * @return boolean
      */
-    public function isOwnerOrContributor(User $user)
+    public function isOwnerOrContributor(Owner $owner)
     {
-        if ($this->user->isEqualTo($user)) {
+        if ($this->owner->isEqualTo($owner)) {
             return true;
         }
 
-        return $this->contributors->contains($user);
+        return $this->contributors->contains($owner);
     }
 
     /**

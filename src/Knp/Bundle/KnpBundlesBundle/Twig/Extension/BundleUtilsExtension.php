@@ -85,7 +85,7 @@ class BundleUtilsExtension extends \Twig_Extension
             $url = 'http://github.com/%s/%s';
         }
 
-        return sprintf($url, $bundle->getUsername(), $this->getName());
+        return sprintf($url, $bundle->getOwnerName(), $this->getName());
     }
 
     public function bundlePackagistUrl(Bundle $bundle)
@@ -95,7 +95,7 @@ class BundleUtilsExtension extends \Twig_Extension
 
     public function bundleTravisUrl(Bundle $bundle)
     {
-        return $bundle->getUsesTravisCi() ? sprintf('http://travis-ci.org/%s/%s', $bundle->getUsername(), $this->getName()) : null;
+        return $bundle->getUsesTravisCi() ? sprintf('http://travis-ci.org/%s/%s', $bundle->getOwnerName(), $this->getName()) : null;
     }
 
     /**

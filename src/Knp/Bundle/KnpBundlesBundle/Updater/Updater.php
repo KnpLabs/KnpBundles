@@ -12,18 +12,12 @@ use Github\HttpClient\ApiLimitExceedException;
 use OldSound\RabbitMqBundle\RabbitMq\Producer;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
-use Knp\Bundle\KnpBundlesBundle\Entity\UserManager;
+use Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager;
 use Knp\Bundle\KnpBundlesBundle\Finder\FinderInterface;
-use Knp\Bundle\KnpBundlesBundle\Github\User;
 use Knp\Bundle\KnpBundlesBundle\Github\Repo;
-use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 
 class Updater
 {
-    /**
-     * @var User
-     */
-    private $githubUserApi;
     /**
      * @var Repo
      */
@@ -37,9 +31,9 @@ class Updater
      */
     private $bundles;
     /**
-     * @var UserManager
+     * @var OwnerManager
      */
-    private $users;
+    private $ownerManager;
     /**
      * @var \Doctrine\ORM\EntityManager
      */
@@ -54,19 +48,17 @@ class Updater
     private $bundleUpdateProducer;
 
     /**
-     * @param \Doctrine\ORM\EntityManager $em
-     * @param UserManager                 $users
-     * @param FinderInterface             $finder
-     * @param User                        $githubUserApi
-     * @param Repo                        $githubRepoApi
+     * @param \Doctrine\ORM\EntityManager  $em
+     * @param OwnerManager                 $ownerManager
+     * @param FinderInterface              $finder
+     * @param Repo                         $githubRepoApi
      */
-    public function __construct(EntityManager $em, UserManager $users, FinderInterface $finder, User $githubUserApi, Repo $githubRepoApi)
+    public function __construct(EntityManager $em, OwnerManager $ownerManager, FinderInterface $finder, Repo $githubRepoApi)
     {
         $this->em = $em;
         $this->finder = $finder;
-        $this->githubUserApi = $githubUserApi;
         $this->githubRepoApi = $githubRepoApi;
-        $this->users = $users;
+        $this->ownerManager = $ownerManager;
         $this->output = new NullOutput();
     }
 
@@ -127,9 +119,9 @@ class Updater
                 continue;
             }
             $this->output->write(sprintf('[%s] Discover bundle <comment>%s</comment>: ', $this->currentTime(), $bundle->getFullName()));
-            $user = $this->users->getOrCreate($bundle->getUsername());
+            $owner = $this->ownerManager->getOrCreate($bundle->getOwnerName());
 
-            $user->addBundle($bundle);
+            $owner->addBundle($bundle);
             $this->bundles[strtolower($bundle->getFullName())] = $bundle;
 
             $this->githubRepoApi->updateFiles($bundle);
@@ -155,14 +147,19 @@ class Updater
      */
     public function addBundle($fullName, $updateRepo = true)
     {
-        list($username, $bundleName) = explode('/', $fullName);
+        list($ownerName, $bundleName) = explode('/', $fullName);
 
-        $user = $this->users->getOrCreate($username);
+        $owner = $this->ownerManager->getOrCreate($ownerName);
+
+        if (!$owner) {
+            return false;
+        }
 
         if (!isset($this->bundles[strtolower($fullName)])) {
             $bundle = new Bundle($fullName);
+            $bundle->setOwner($owner);
             $this->em->persist($bundle);
-            $user->addBundle($bundle);
+            $owner->addBundle($bundle);
             $this->bundles[strtolower($fullName)] = $bundle;
         } else {
             $bundle = $this->bundles[strtolower($fullName)];
@@ -218,33 +215,6 @@ class Updater
         }
     }
 
-    public function updateUsers()
-    {
-        $this->output->writeln(sprintf('[%s] Will now update <comment>%d</comment> users', $this->currentTime(), count($this->users)));
-        foreach ($this->users as $user) {
-            if ($this->em->getUnitOfWork()->getEntityState($user) != UnitOfWork::STATE_MANAGED) {
-                continue;
-            }
-
-            while (true) {
-                try {
-                    $this->output->write($user->getName() . str_repeat(' ', 40 - strlen($user->getName())));
-                    if (!$this->githubUserApi->update($user)) {
-                        $this->output->writeln(sprintf('[%s] Remove user', $this->currentTime()));
-                        $this->em->remove($user);
-                    } else {
-                        $user->recalculateScore();
-                        $this->output->writeln(sprintf('[%s] OK, score is <comment>%s</comment>', $this->currentTime(), $user->getScore()));
-                    }
-                    break;
-                } catch (ApiLimitExceedException $e) {
-                    $this->output->writeln("Got a Github exception, sleeping for a few secs before trying again");
-                    sleep(60);
-                }
-            }
-        }
-    }
-
     public function removeNonSymfonyBundles()
     {
         if (count($this->bundles) === 0) {
@@ -259,7 +229,7 @@ class Updater
             $this->githubRepoApi->updateFiles($bundle, array('sf'));
             if (!$bundle->isValid()) {
                 if (!$this->removeRepo($bundle)) {
-                    $bundle->getUser()->removeBundle($bundle);
+                    $bundle->getOwner()->removeBundle($bundle);
                     $this->em->remove($bundle);
                 }
 

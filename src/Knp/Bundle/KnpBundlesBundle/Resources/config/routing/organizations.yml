@@ -1,0 +1,19 @@
+organization_list:
+    pattern:        /organization/{sort}
+    defaults:       { _controller: KnpBundlesBundle:Organization:list, sort: name }
+    requirements:   { _method: "GET", sort: "(name|developers|bundles)"}
+
+organization_show:
+    pattern:        /organization/{name}/profile
+    defaults:       { _controller: KnpBundlesBundle:Organization:show }
+    requirements:   { _method: "GET"}
+
+organization_bundle_list:
+    pattern:        /organization/{name}/bundles
+    defaults:       { _controller: KnpBundlesBundle:Organization:bundles }
+    requirements:   { _method: "GET", format: "(json|js)" }
+
+organization_members_list:
+    pattern:        /organization/{name}/members
+    defaults:       { _controller: KnpBundlesBundle:Organization:members }
+    requirements:   { _method: "GET", format: "(json|js)" }

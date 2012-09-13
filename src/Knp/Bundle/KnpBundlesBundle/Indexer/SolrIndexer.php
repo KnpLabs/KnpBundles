@@ -61,13 +61,13 @@ class SolrIndexer
     {
         $document->setField('id', $bundle->getId());
         $document->setField('name', $bundle->getName());
-        $document->setField('username', $bundle->getUsername());
+        $document->setField('ownerName', $bundle->getOwnerName());
         $document->setField('fullName', $bundle->getFullName());
         $document->setField('description', $bundle->getDescription());
         $document->setField('readme', $bundle->getReadme());
         $document->setField('totalScore', $bundle->getScore());
         $document->setField('state', $bundle->getState());
-        $document->setField('userGravatarHash', $bundle->getUser()->getGravatarHash());
+        $document->setField('avatarUrl', $bundle->getOwner()->getAvatarUrl());
         $document->setField('lastCommitAt', $helper->formatDate($bundle->getLastCommitAt()));
         $document->setField('lastTweetedAt', null !== $bundle->getLastTweetedAt() ? $helper->formatDate($bundle->getLastTweetedAt()) : null);
 

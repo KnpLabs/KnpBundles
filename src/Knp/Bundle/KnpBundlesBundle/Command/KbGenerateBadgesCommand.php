@@ -34,7 +34,7 @@ class KbGenerateBadgesCommand extends ContainerAwareCommand
                 $badgeGenerator->generate($bundle);
                 ++$badgesCount;
             } catch (ImageNotSavedException $e) {
-                $output->writeln('<error>Error occured during an image saving for '.$bundle->getUsername().'-'.$bundle->getName().' </error>');
+                $output->writeln('<error>Error occured during an image saving for '.$bundle->getOwnerName().'-'.$bundle->getName().' </error>');
             }
         }
 

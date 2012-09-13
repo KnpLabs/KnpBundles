@@ -6,8 +6,8 @@ use Knp\Bundle\KnpBundlesBundle\Github\Repo;
 use Knp\Bundle\KnpBundlesBundle\Git;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\Score;
-use Knp\Bundle\KnpBundlesBundle\Entity\User;
-use Knp\Bundle\KnpBundlesBundle\Entity\UserManager;
+use Knp\Bundle\KnpBundlesBundle\Entity\Owner;
+use Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager;
 use Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer;
 use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
 
@@ -43,9 +43,9 @@ class UpdateBundleConsumer implements ConsumerInterface
     private $em;
 
     /**
-     * @var Knp\Bundle\KnpBundlesBundle\Entity\UserManager
+     * @var Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager
      */
-    private $users;
+    private $ownerManager;
 
     /**
      * @var Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer
@@ -64,18 +64,18 @@ class UpdateBundleConsumer implements ConsumerInterface
 
     /**
      * @param ObjectManager  $em
-     * @param UserManager    $users
+     * @param OwnerManager   $ownerManager
      * @param Repo           $githubRepoApi
      * @param Travis         $travis
      * @param SolrIndexer    $indexer
      */
-    public function __construct(ObjectManager $em, UserManager $users, Repo $githubRepoApi, Travis $travis, SolrIndexer $indexer)
+    public function __construct(ObjectManager $em, OwnerManager $ownerManager, Repo $githubRepoApi, Travis $travis, SolrIndexer $indexer)
     {
         $this->em = $em;
-        $this->users = $users;
+        $this->ownerManager = $ownerManager;
         $this->githubRepoApi = $githubRepoApi;
         $this->travis = $travis;
-        $this->users = $users;
+        $this->ownerManager = $ownerManager;
         $this->indexer = $indexer;
     }
 
@@ -187,7 +187,7 @@ class UpdateBundleConsumer implements ConsumerInterface
 
         $contributors = array();
         foreach ($contributorNames as $contributorName) {
-            $contributors[] = $this->users->getOrCreate($contributorName);
+            $contributors[] = $this->ownerManager->getOrCreate($contributorName);
         }
         $bundle->setContributors($contributors);
 
@@ -220,9 +220,9 @@ class UpdateBundleConsumer implements ConsumerInterface
      */
     protected function removeBundle(Bundle $bundle)
     {
-        $user = $bundle->getUser();
-        if ($user instanceof User) {
-            $user->removeBundle($bundle);
+        $owner = $bundle->getOwner();
+        if ($owner instanceof Owner) {
+            $owner->removeBundle($bundle);
         }
 
         // remove bundle from search index
