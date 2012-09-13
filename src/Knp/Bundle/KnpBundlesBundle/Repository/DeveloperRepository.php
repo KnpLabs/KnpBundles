@@ -34,19 +34,4 @@ class DeveloperRepository extends OwnerRepository
             ->select('d, b, cr')
             ->getQuery();
     }
-
-    public function getEvolutionCounts()
-    {
-        return $this->createQueryBuilder('d')
-            ->select('d.createdAt AS date, COUNT(d.id) AS value')
-            ->groupBy('d.createdAt')
-            ->orderBy('d.createdAt', 'asc')
-            ->getQuery()
-            ->execute();
-    }
-
-    public function count()
-    {
-        return $this->getEntityManager()->createQuery('SELECT COUNT(e.id) FROM '.$this->getEntityName().' e')->getSingleScalarResult();
-    }
 }

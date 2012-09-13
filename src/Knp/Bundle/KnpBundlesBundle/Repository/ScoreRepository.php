@@ -17,7 +17,7 @@ class ScoreRepository extends EntityRepository
      *
      * @return array
      */
-    public function getScoreSumEvolution()
+    public function getSumEvolution()
     {
         return $this->createQueryBuilder('s')
             ->select('s.date, SUM(s.value) AS sumValues')
@@ -32,12 +32,14 @@ class ScoreRepository extends EntityRepository
      *
      * @return array
      */
-    public function getScoreCountEvolution()
+    public function getEvolutionCounts($period = 50)
     {
         return $this->createQueryBuilder('s')
             ->select('s.date, COUNT(s.id) AS value')
+            ->where('s.date > :period')
             ->groupBy('s.date')
             ->orderBy('s.date', 'asc')
+            ->setParameter('period', new \DateTime(sprintf('%d days ago', $period)))
             ->getQuery()
             ->execute();
     }

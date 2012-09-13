@@ -8,6 +8,8 @@ parameters:
     database_password: ~
     database_path:     %kernel.root_dir%/db-%kernel.environment%.sql
 
+    knp_bundles.evolution.period: 50 #days
+
     knp_bundles.trending_bundle_twitterer.idle_period: 30 #days
     knp_bundles.trending_bundle.min_score_diff: 3
     knp_bundles.trending_bundle.min_score_threshold: 25

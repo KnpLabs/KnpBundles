@@ -30,7 +30,11 @@ class Data implements FixtureInterface
         'KnpLabs'          => 'Happy Awesome Developers',
         'FriendsOfSymfony' => 'FriendsOfSymfony',
         'sonata-project'   => 'Sonata Project',
-        'nelmio'           => 'Nelmio'
+        'nelmio'           => 'Nelmio',
+        'robertJobs'       => 'jobs Robert',
+        'google'           => 'google',
+        'apple'            => 'apple',
+        'selenium'         => 'selenium'
     );
 
     private $keywords = array(
@@ -175,8 +179,9 @@ EOT;
                 'fullName'  => $fullName,
                 'company'   => ($i%2) ? 'Company '.$i : null,
                 'location'  => ($i%2) ? 'Location '.$i : null,
-                'url'      => ($i%2) ? 'blog'.$i.'.com' : null,
+                'url'       => ($i%2) ? 'blog'.$i.'.com' : null,
                 'score'     => 0,
+                'createdAt' => new \DateTime(sprintf('%d days ago', rand(1, 50)))
             ));
 
             $manager->persist($developer);
@@ -192,7 +197,8 @@ EOT;
                 'email'     => strtolower(str_replace(' ', '.', $fullName)).'@foomail.bar',
                 'location'  => ($i%2) ? 'Location '.$i : null,
                 'url'       => ($i%2) ? 'blog'.$i.'.com' : null,
-                'score'     => 0
+                'score'     => 0,
+                'createdAt' => new \DateTime(sprintf('%d days ago', rand(1, 50)))
             ));
 
             $manager->persist($organization);
