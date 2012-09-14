@@ -72,7 +72,7 @@ class Organization extends Owner
         $organization->setEmail(isset($data['email']) ? $data['email'] : null);
         $organization->setAvatarUrl(isset($data['avatar_url']) ? $data['avatar_url'] : null);
         $organization->setLocation(isset($data['location']) ? $data['location'] : null);
-        $organization->setUrl(isset($data['url']) ? $this->fixUrl($data['url']) : null);
+        $organization->setUrl(isset($data['blog']) ? $this->fixUrl($data['blog']) : null);
 
         $membersData = $api->members()->all($organization->getName());
 
