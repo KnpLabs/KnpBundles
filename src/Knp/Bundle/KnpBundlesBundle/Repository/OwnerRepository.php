@@ -41,13 +41,12 @@ class OwnerRepository extends EntityRepository
         $rsm->addFieldResult('e', 'value', 'value');
 
         $sql = <<<EOF
-SELECT id, createdAt, DATE(createdAt) as date,
-    (SELECT COUNT(id) FROM owner WHERE DATE(createdAt) = date AND discriminator = :entityType) as value
+SELECT id, COUNT(id) as `value`, DATE(createdAt) as `date`
 FROM owner
 WHERE createdAt > :period
   AND discriminator = :entityType
-GROUP BY date
-ORDER BY date ASC
+GROUP BY `date`
+ORDER BY `date` ASC
 EOF;
 
         $periodDate = new \DateTime(sprintf('%d days ago', $period));
