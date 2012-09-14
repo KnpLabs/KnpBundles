@@ -209,14 +209,14 @@
 {% block left %}
 <div class="content-box tabbable">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#readme" data-toggle="tab"><i class="icon-info"></i>README</a></li>
+        <li class="active"><a href="#readme" data-toggle="tab" data-target="readme"><i class="icon-info"></i>README</a></li>
         {%- if bundle.license -%}
-        <li><a href="#license" data-toggle="tab"><i class="icon-bag"></i>LICENSE</a></li>
+        <li><a href="#license" data-toggle="tab" data-target="license"><i class="icon-bag"></i>LICENSE</a></li>
         {%- endif %}
         {%- if not bundle.canonicalConfig is empty -%}
-        <li><a href="#configuration" data-toggle="tab"><i class="icon-wrench"></i>Configuration</a></li>
+        <li><a href="#configuration" data-toggle="tab" data-target="configuration"><i class="icon-wrench"></i>Configuration</a></li>
         {%- endif %}
-        <li><a href="#activity" data-toggle="tab"><i class="icon-clock"></i>Recent activity</a></li>
+        <li><a href="#activity" data-toggle="tab" data-target="activity"><i class="icon-clock"></i>Recent activity</a></li>
     </ul>
 
     <div class="tab-content">
