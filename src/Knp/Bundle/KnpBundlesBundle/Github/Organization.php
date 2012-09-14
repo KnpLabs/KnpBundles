@@ -76,11 +76,9 @@ class Organization extends Owner
 
         $membersData = $api->members()->all($organization->getName());
 
-        if (!$members = $this->updateMembers($membersData)) {
-            return false;
+        if ($members = $this->updateMembers($membersData)) {
+            $organization->setMembers($members);
         }
-
-        $organization->setMembers($members);
 
         return true;
     }
