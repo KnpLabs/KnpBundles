@@ -1,4 +1,8 @@
 (function($) {
+    if (window.location.hash.length > 0) {
+        $('ul.nav-tabs li > a[data-target="' + window.location.hash.replace('#', '') + '"]').tab('show');
+    }
+
     $(document).bind('keydown.s keydown.f keydown./', function() {
         $('#search-query').focus();
         return false;
