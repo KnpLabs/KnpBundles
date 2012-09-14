@@ -3,7 +3,7 @@
 namespace Knp\Bundle\KnpBundlesBundle\Github;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Organization as EntityOrganization,
-    Knp\Bundle\KnpBundlesBundle\Repository\OrganizationRepository;
+    Knp\Bundle\KnpBundlesBundle\Repository\OwnerRepository;
 
 use Github\HttpClient\ApiLimitExceedException;
 use Symfony\Component\Console\Output\NullOutput;
@@ -11,14 +11,14 @@ use Symfony\Component\Console\Output\NullOutput;
 class Organization extends Owner
 {
     /**
-     * @var OrganizationRepository
+     * @var OwnerRepository
      */
     private $repository;
 
     /**
-     * @param OrganizationRepository $repository
+     * @param OwnerRepository $repository
      */
-    public function setRepository(OrganizationRepository $repository)
+    public function setRepository(OwnerRepository $repository)
     {
         $this->repository = $repository;
     }

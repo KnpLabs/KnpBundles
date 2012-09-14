@@ -121,18 +121,23 @@ class Updater
             $this->output->write(sprintf('[%s] Discover bundle <comment>%s</comment>: ', $this->currentTime(), $bundle->getFullName()));
             $owner = $this->ownerManager->getOrCreate($bundle->getOwnerName());
 
-            $owner->addBundle($bundle);
-            $this->bundles[strtolower($bundle->getFullName())] = $bundle;
+            if ($owner) {
+                $owner->addBundle($bundle);
 
-            $this->githubRepoApi->updateFiles($bundle);
+                $this->bundles[strtolower($bundle->getFullName())] = $bundle;
 
-            $this->em->persist($bundle);
-            $this->em->flush();
+                $this->githubRepoApi->updateFiles($bundle);
 
-            $this->updateRepo($bundle);
+                $this->em->persist($bundle);
+                $this->em->flush();
 
-            $this->output->writeln(' ADDED');
-            ++$added;
+                $this->updateRepo($bundle);
+
+                $this->output->writeln(' ADDED');
+                ++$added;
+            } else {
+                $this->output->writeln(' <error>ERROR</error>');
+            }
         }
 
         $this->output->writeln(sprintf('[%s] <comment>%d</comment> created', $this->currentTime(), $added));

@@ -82,7 +82,9 @@ class OwnerManager
                 return false;
             }
 
-            $owner = $api->import($data);
+            if (!$owner = $api->import($data)) {
+                return false;
+            }
 
             $this->entityManager->persist($owner);
             $this->entityManager->flush();

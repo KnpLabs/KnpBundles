@@ -266,21 +266,23 @@ class Owner
     /**
      * Add bundles
      *
-     * @param Bundle $bundles
+     * @param Bundle $bundle
      */
-    public function addBundle(Bundle $bundles)
+    public function addBundle(Bundle $bundle)
     {
-        $this->bundles[] = $bundles;
+        $this->bundles[] = $bundle;
+
+        $bundle->setOwner($this);
     }
 
     /**
      * Remove bundles
      *
-     * @param Bundle $bundles
+     * @param Bundle $bundle
      */
-    public function removeBundle(Bundle $bundles)
+    public function removeBundle(Bundle $bundle)
     {
-        $this->bundles->removeElement($bundles);
+        $this->bundles->removeElement($bundle);
     }
 
     /**
