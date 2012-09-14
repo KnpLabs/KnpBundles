@@ -35,6 +35,26 @@
             </ul>
         </section>
     </div>
+
+    {%- if developer.organizations|length > 0 %}
+    <div class="content-box sidebar-developers-list clearfix">
+        <hgroup>
+            <h2>My organizations</h2>
+        </hgroup>
+
+        <section>
+            <ul>
+                {%- for organization in developer.organizations %}
+                <li>
+                    <a href="{{ path('organization_show', {'name': organization.name}) }}">
+                        <img src="{{ organization.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=40') }}" alt="{{ organization.name }}" title="{{ organization.name }}" width="40" height="40">
+                    </a>
+                </li>
+                {%- endfor %}
+            </ul>
+        </section>
+    </div>
+    {%- endif %}
 </div>
 {% endblock %}
 

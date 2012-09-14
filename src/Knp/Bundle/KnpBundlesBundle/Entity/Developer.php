@@ -79,21 +79,25 @@ class Developer extends Owner implements UserInterface
     /**
      * Add organizations
      *
-     * @param Organization $organizations
+     * @param Organization $organization
      */
-    public function addOrganization(Organization $organizations)
+    public function addOrganization(Organization $organization)
     {
-        $this->organizations[] = $organizations;
+        $this->organizations[] = $organization;
+
+        $organization->addMember($this);
     }
 
     /**
      * Remove organizations
      *
-     * @param Organization $organizations
+     * @param Organization $organization
      */
-    public function removeOrganization(Organization $organizations)
+    public function removeOrganization(Organization $organization)
     {
-        $this->organizations->removeElement($organizations);
+        $this->organizations->removeElement($organization);
+
+        $organization->removeMember($this);
     }
 
     /**

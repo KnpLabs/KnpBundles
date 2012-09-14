@@ -772,6 +772,10 @@ code, pre {
     margin: 10px 20px
 }
 
+.content-box.sidebar-developers-list section {
+    margin: 0
+}
+
 .content-box section.bundles-list {
     margin-top: 0
 }

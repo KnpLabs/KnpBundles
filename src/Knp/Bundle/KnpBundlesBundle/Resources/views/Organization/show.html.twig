@@ -34,6 +34,26 @@
             </ul>
         </section>
     </div>
+
+    {%- if organization.members|length > 0 %}
+    <div class="content-box sidebar-developers-list clearfix">
+        <hgroup>
+            <h2>My members</h2>
+        </hgroup>
+
+        <section>
+            <ul>
+                {%- for developer in organization.members %}
+                    <li>
+                        <a href="{{ path('developer_show', {'name': developer.name}) }}">
+                            <img src="{{ developer.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=40') }}" alt="{{ developer.name }}" title="{{ developer.name }}" width="40" height="40">
+                        </a>
+                    </li>
+                {%- endfor %}
+            </ul>
+        </section>
+    </div>
+    {%- endif %}
 </div>
 {% endblock %}
 

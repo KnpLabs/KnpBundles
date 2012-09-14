@@ -169,6 +169,25 @@ EOT;
         $organizations = array();
 
         $i = 0;
+        foreach ($this->orgNames as $name => $fullName) {
+            $i++;
+            $organization = new Entity\Organization();
+            $organization->fromArray(array(
+                'name'      => $name,
+                'fullName'  => $fullName,
+                'email'     => strtolower(str_replace(' ', '.', $fullName)).'@foomail.bar',
+                'location'  => ($i%2) ? 'Location '.$i : null,
+                'url'       => ($i%2) ? 'blog'.$i.'.com' : null,
+                'score'     => 0,
+                'createdAt' => new \DateTime(sprintf('%d days ago', rand(1, 50)))
+            ));
+
+            $manager->persist($organization);
+
+            $organizations[] = $organization;
+        }
+
+        $i = 0;
         foreach ($this->devNames as $name => $fullName) {
             $i++;
 
@@ -184,26 +203,13 @@ EOT;
                 'createdAt' => new \DateTime(sprintf('%d days ago', rand(1, 50)))
             ));
 
+            if (isset($organizations[$i+1])) {
+                $developer->addOrganization($organizations[$i+1]);
+            }
+
             $manager->persist($developer);
 
             $developers[] = $developer;
-        }
-
-        foreach ($this->orgNames as $name => $fullName) {
-            $organization = new Entity\Organization();
-            $organization->fromArray(array(
-                'name'      => $name,
-                'fullName'  => $fullName,
-                'email'     => strtolower(str_replace(' ', '.', $fullName)).'@foomail.bar',
-                'location'  => ($i%2) ? 'Location '.$i : null,
-                'url'       => ($i%2) ? 'blog'.$i.'.com' : null,
-                'score'     => 0,
-                'createdAt' => new \DateTime(sprintf('%d days ago', rand(1, 50)))
-            ));
-
-            $manager->persist($organization);
-
-            $organizations[] = $organization;
         }
 
         foreach ($developers as $i => $developer) {
