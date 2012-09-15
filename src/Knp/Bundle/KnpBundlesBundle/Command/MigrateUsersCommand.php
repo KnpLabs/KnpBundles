@@ -139,6 +139,7 @@ EOF;
         $connection->executeQuery($this->afterMigration);
 
         $this->assignMembers();
+        $this->updateOwnerTypes();
 
         return 0;
     }
@@ -164,6 +165,19 @@ EOF;
             $githubApi->update($organization);
 
             $em->persist($organization);
+        }
+
+        $em->flush();
+    }
+
+    private function updateOwnerTypes()
+    {
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+
+        foreach ($em->getRepository('KnpBundlesBundle:Bundle')->findAll() as $bundle) {
+            $bundle->setOwner($bundle->getOwner());
+
+            $em->persist($bundle);
         }
 
         $em->flush();
