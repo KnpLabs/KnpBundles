@@ -49,7 +49,7 @@ class OrganizationController extends BaseController
         $this->highlightMenu('organizations');
 
         $query = $this->getRepository('Organization')->queryAllWithBundlesSortedBy($sortField);
-        $paginator = $this->getPaginator($query, $request->query->get('page', 1));
+        $paginator = $this->getPaginator($query, $request->query->get('page', 1), 18);
 
         $organizations = $paginator->getCurrentPageResults();
         /**
