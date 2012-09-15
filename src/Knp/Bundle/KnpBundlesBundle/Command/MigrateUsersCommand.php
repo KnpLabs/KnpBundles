@@ -6,6 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\NullOutput;
+
+use Knp\Bundle\KnpBundlesBundle\Github\Organization as GithubOrganization;
+use Knp\Bundle\KnpBundlesBundle\Entity\Organization as EntityOrganization;
 
 use Github\Exception\ApiLimitExceedException;
 
@@ -134,6 +138,8 @@ EOF;
 
         $connection->executeQuery($this->afterMigration);
 
+        $this->assignMembers();
+
         return 0;
     }
 
@@ -145,5 +151,21 @@ EOF;
         unset($data['blog'], $data['gravatarHash'], $data['is_migrated']);
 
         return $data;
+    }
+
+    private function assignMembers()
+    {
+        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $github = $this->getContainer()->get('knp_bundles.github_client');
+        $githubApi = new GithubOrganization($github, new NullOutput());
+        $githubApi->setRepository($em->getRepository('KnpBundlesBundle:Owner'));
+
+        foreach ($em->getRepository('KnpBundlesBundle:Organization')->findAll() as $organization) {
+            $githubApi->update($organization);
+
+            $em->persist($organization);
+        }
+
+        $em->flush();
     }
 }
