@@ -69,7 +69,7 @@
             {%- if organization.bundles|length > 0 %}
                 {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': organization.bundles} %}
             {%- else %}
-                <p>This developer don't owe any bundle.</p>
+                <p>This organization don't owe any bundle.</p>
             {%- endif %}
             </div>
         </div>

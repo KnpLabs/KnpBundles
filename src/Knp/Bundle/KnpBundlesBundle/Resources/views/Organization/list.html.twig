@@ -6,7 +6,7 @@
 
 {% block intro %}
 <div id="intro">
-    <h1>Developers</h1>
+    <h1>Organizations</h1>
     <h2>Our family has {{ paginator.nbResults }} Organizations!</h2>
 </div>
 {% endblock %}
@@ -35,7 +35,7 @@
             <article class="developer {{ loop.index is even ? 'even' : '' }} {% if loop.index % 3 == 0 %}no-right-border{% endif %} {% if loop.index > (loop.length - 3) %}no-bottom-border{% endif %}">
                 <figure>
                     <a href="{{ url('organization_show', {'name': organization.name}) }}">
-                        <img src="{{ organization.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=50') }}" alt="{{ organization.name }}, Symfony developer" width="50" height="50" />
+                        <img src="{{ organization.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=50') }}" alt="{{ organization.name }}, Symfony organization" width="50" height="50" />
                     </a>
                 </figure>
 
