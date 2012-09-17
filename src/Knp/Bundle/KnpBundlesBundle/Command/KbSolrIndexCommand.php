@@ -9,6 +9,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer;
+
 /**
  * @author Paweł Jędrzejewski <pjedrzejewski@diweb.pl>
  * @author Igor Wiedler <igor@wiedler.ch>
@@ -47,8 +49,12 @@ class KbSolrIndexCommand extends ContainerAwareCommand
         $bundleName = $input->getArgument('bundleName');
 
         $doctrine = $this->getContainer()->get('doctrine');
+        /** @var $indexer \Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer */
         $indexer = $this->getContainer()->get('knp_bundles.indexer.solr');
 
+        if ($verbose) {
+            $output->writeln($bundleName ? 'Getting bundle ('.$bundleName.') data to re-index.' : 'Getting bundles data to re-index.');
+        }
         if ($bundleName) {
             list($ownerName, $name) = explode('/', $bundleName);
             $bundles = array($doctrine->getRepository('Knp\\Bundle\\KnpBundlesBundle\\Entity\\Bundle')->findOneByOwnerNameAndName($ownerName, $name));
@@ -78,6 +84,12 @@ class KbSolrIndexCommand extends ContainerAwareCommand
         return 0;
     }
 
+    /**
+     * @param Bundle          $bundle
+     * @param SolrIndexer     $indexer
+     * @param OutputInterface $output
+     * @param boolean         $verbose
+     */
     private function reindex(Bundle $bundle, $indexer, $output, $verbose)
     {
         if ($verbose) {
@@ -89,10 +101,5 @@ class KbSolrIndexCommand extends ContainerAwareCommand
         } catch (\Exception $e) {
             $output->writeln('<error>Exception: '.$e->getMessage().', skipping bundle '.$bundle->getFullName().'.</error>');
         }
-    }
-
-    private function deleteBundlesIndex($indexer, Bundle $bundle = null)
-    {
-        $indexer->deleteBundlesIndexes($bundle);
     }
 }
