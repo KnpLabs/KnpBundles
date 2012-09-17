@@ -64,6 +64,7 @@
         <ul class="nav nav-tabs">
             <li class="active"><a href="#owned" data-toggle="tab">{% trans %}developers.show.bundles_manage{% endtrans %}</a></li>
             <li><a href="#contribute" data-toggle="tab">{% trans %}developers.show.bundles_contribute{% endtrans %}</a></li>
+            <li><a href="#recommend" data-toggle="tab" style="border-right: 0;">Recommended</a></li>
         </ul>
 
         <div class="tab-content">
@@ -80,6 +81,14 @@
                 {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': developer.contributionBundles} %}
             {%- else %}
                 <p>This developer never contributed to any bundle.</p>
+            {%- endif %}
+            </div>
+
+            <div class="tab-pane" id="recommend">
+            {%- if developer.recommendedBundles|length > 0 %}
+                {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': developer.recommendedBundles} %}
+            {%- else %}
+                <p>This developer don't recommend any bundle yet.</p>
             {%- endif %}
             </div>
         </div>
