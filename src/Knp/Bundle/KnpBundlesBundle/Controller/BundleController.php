@@ -214,15 +214,21 @@ class BundleController extends BaseController
                 }
 
                 if (!$error) {
+                    /** @var $updater \Knp\Bundle\KnpBundlesBundle\Updater\Updater */
                     $updater = $this->get('knp_bundles.updater');
                     $updater->setUp();
                     try {
-                        $updater->addBundle($bundle, false);
+                        $valid = $updater->addBundle($bundle, false, true);
 
-                        if (!$request->isXmlHttpRequest()) {
-                            return $this->redirect($url);
+                        if ($valid) {
+                            if (!$request->isXmlHttpRequest()) {
+                                return $this->redirect($url);
+                            }
+                            $message = '<strong>Hey, friend!</strong> Thanks for adding <a href="'.$url.'">your bundle</a> to our database!';
+                        } else {
+                            $error   = true;
+                            $message = 'Specified repo is not valid Symfony2 bundle!';
                         }
-                        $message = '<strong>Hey, friend!</strong> Thanks for adding <a href="'.$url.'">your bundle</a> to our database!';
                     } catch (UserNotFoundException $e) {
                         $error = true;
                         $message = 'Specified user was not found on GitHub.';

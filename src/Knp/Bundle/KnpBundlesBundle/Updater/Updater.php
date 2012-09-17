@@ -146,29 +146,38 @@ class Updater
     /**
      * Add or update a repo
      *
-     * @param $fullName   string A full repo name like knplabs/KnpMenuBundle
-     * @param $updateRepo boolean Wether or not to fetch informations
-     * @return Bundle
+     * @param string  $fullName    A full repo name like knplabs/KnpMenuBundle
+     * @param boolean $updateRepo  Wether or not to fetch informations
+     * @param boolean $validate    Check that given data is proper bundle
+     *
+     * @return boolean|Bundle
      */
-    public function addBundle($fullName, $updateRepo = true)
+    public function addBundle($fullName, $updateRepo = true, $validate = false)
     {
         list($ownerName, $bundleName) = explode('/', $fullName);
 
-        $owner = $this->ownerManager->getOrCreate($ownerName);
-
-        if (!$owner) {
-            return false;
-        }
-
         if (!isset($this->bundles[strtolower($fullName)])) {
             $bundle = new Bundle($fullName);
-            $bundle->setOwner($owner);
+
+            if ($validate) {
+                $this->githubRepoApi->updateFiles($bundle, array('sf'));
+                if (!$bundle->isValid()) {
+                    return false;
+                }
+            }
+
             $this->em->persist($bundle);
-            $owner->addBundle($bundle);
+
             $this->bundles[strtolower($fullName)] = $bundle;
         } else {
             $bundle = $this->bundles[strtolower($fullName)];
         }
+
+        $owner = $this->ownerManager->getOrCreate($ownerName);
+        if (!$owner) {
+            return false;
+        }
+        $owner->addBundle($bundle);
 
         $this->em->flush();
 

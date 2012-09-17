@@ -185,7 +185,7 @@
             <ul>
                 <li class="contributor">
                     <a href="{{ path(bundle.ownerType == 'organization' ? 'organization_show' : 'developer_show', {'name': bundle.ownerName}) }}">
-                        <img src="{{ bundle.developer.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=40') }}" alt="{{ bundle.ownerName }}" title="{{ bundle.ownerName }}" width="40" height="40">
+                        <img src="{{ bundle.owner.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=40') }}" alt="{{ bundle.ownerName }}" title="{{ bundle.ownerName }}" width="40" height="40">
                     </a>
                 </li>
 
