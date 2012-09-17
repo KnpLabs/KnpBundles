@@ -1,3 +1,12 @@
+* 2012-09-13
+  * Split `User` entities into `Developer`, `Organization` and `Owner`,
+    same as split for `Github\User`, also renamed `UserManager` to `OwnerManager`
+
+* 2012-09-10
+  * `BundleUtilsExtension#bundleActivity()` now accepts date also as string
+  * `BundleController#searchAction()` no longer returns html when query is too short
+    if request was made in other format
+
 * 2012-09-07
   * Introduced new design!
   * Replaced `knp-components` with `pagerfanta`
