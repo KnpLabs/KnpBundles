@@ -286,16 +286,6 @@ class Owner
     }
 
     /**
-     * Check that owner is using bundles
-     *
-     * @param Bundle $bundle
-     */
-    public function isUsingBundle(Bundle $bundle)
-    {
-        return $this->bundles->contains($bundle);
-    }
-
-    /**
      * Get bundles
      *
      * @return ArrayCollection

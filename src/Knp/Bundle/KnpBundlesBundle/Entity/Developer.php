@@ -141,6 +141,18 @@ class Developer extends Owner implements UserInterface
     }
 
     /**
+     * Check that owner is using bundles
+     *
+     * @param Bundle $bundle
+     *
+     * @return boolean
+     */
+    public function isUsingBundle(Bundle $bundle)
+    {
+        return $this->recommendedBundles->contains($bundle);
+    }
+
+    /**
      * Add contributionBundles
      *
      * @param Bundle $contributionBundles

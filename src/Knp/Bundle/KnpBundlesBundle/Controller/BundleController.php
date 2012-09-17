@@ -109,7 +109,7 @@ class BundleController extends BaseController
             ),
             'bundle'            => $bundle,
             'score_details'     => $bundle->getScoreDetails(),
-            'isUsedByDeveloper' => $owner instanceof Owner && $owner->isUsingBundle($bundle),
+            'isUsedByDeveloper' => $owner instanceof Developer && $owner->isUsingBundle($bundle),
             'callback'          => $request->query->get('callback')
         ));
     }

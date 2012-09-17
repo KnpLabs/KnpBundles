@@ -1083,19 +1083,19 @@ class Bundle
         return count($this->recommenders);
     }
 
-    public function addRecommender(Owner $owner)
+    public function addRecommender(Developer $developer)
     {
-        $owner->addRecommendedBundle($this);
+        $developer->addRecommendedBundle($this);
 
-        $this->recommenders[] = $owner;
+        $this->recommenders[] = $developer;
         $this->nbRecommenders++;
     }
 
-    public function removeRecommender(Owner $owner)
+    public function removeRecommender(Developer $developer)
     {
-        $owner->getUsedBundles()->removeElement($this);
+        $developer->getRecommendedBundles()->removeElement($this);
 
-        $this->recommenders->removeElement($owner);
+        $this->recommenders->removeElement($developer);
         $this->nbRecommenders--;
     }
 
@@ -1106,9 +1106,6 @@ class Bundle
      */
     public function isOwnerOrContributor(Owner $owner)
     {
-        if ($this->owner instanceof Organization) {
-            return false;
-        }
         if ($this->owner->isEqualTo($owner)) {
             return true;
         }
