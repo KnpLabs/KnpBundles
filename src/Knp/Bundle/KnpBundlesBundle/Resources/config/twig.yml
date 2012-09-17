@@ -8,3 +8,8 @@ services:
         class: Knp\Bundle\KnpBundlesBundle\Twig\Extension\BundleUtilsExtension
         tags:
             - { name: twig.extension }
+
+    twig.extension.txt:
+        class: Twig_Extensions_Extension_Text
+        tags:
+            - { name: twig.extension }

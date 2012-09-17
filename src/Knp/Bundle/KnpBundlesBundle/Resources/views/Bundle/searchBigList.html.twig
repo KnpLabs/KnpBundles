@@ -10,7 +10,7 @@
             {% if bundle.state != 'unknown' %}<abbr title="{{ bundle.state|bundle_state_tooltip }}">({{ bundle.state }})</abbr>{% endif %}
         </h2>
 
-        <p>{{ bundle.description|default('No description found.')|slice(0, 140) }}</p>
+        <p>{{ bundle.description|default('No description found.')|truncate(140, true) }}</p>
 
         <ul>
             <li class="bundle-author">

@@ -41,12 +41,12 @@
 
                 <div class="generals">
                     <h3><a href="{{ path('developer_show', {'name': developer.name}) }}">{{ developer.name }}</a></h3>
-                    <p>{{ developer.fullName|default('−') }}</p>
+                    <p>{{ developer.fullName|default('−')|truncate(27) }}</p>
 
                     {%- if developer.location %}
                     <span class="location">
                         {% trans %}developers.list.location{% endtrans %}
-                        <strong>{{ developer.location }}</strong>
+                        <strong>{{ developer.location|truncate(20) }}</strong>
                     </span>
                     {%- endif %}
                     <span class="created-at">{% trans %}bundles.list.createdAt{% endtrans %} <strong>{{ developer.createdAt|date('date_format'|trans) }}</strong></span>

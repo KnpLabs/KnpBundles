@@ -18,7 +18,7 @@
     <h1>{{ bundle.name }}</h1>
     <h2>{% trans %}bundles.list.by{% endtrans %} <a href="{{ path(bundle.ownerType == 'organization' ? 'organization_show' : 'developer_show', {'name': bundle.ownerName}) }}">{{ bundle.ownerName }}</a></h2>
 
-    <p class="description">{{ bundle.description|slice(0, 150) }}</p>
+    <p class="description">{{ bundle.description|truncate(150, true) }}</p>
 </div>
 {% endblock %}
 
@@ -74,11 +74,11 @@
                 <li><i class="icon-eye"></i><strong>{% trans %}bundles.show.infos.watchers{% endtrans %}</strong> {{ bundle.nbFollowers }}</li>
                 <li><i class="icon-thumbs-up"></i><strong>{% trans %}bundles.show.infos.recommends{% endtrans %}</strong> {{ bundle.nbRecommenders }}</li>
                 <li title="{% trans %}bundles.show.infos.github{% endtrans %}">
-                    <i class="icon-github"></i><a href="{{ bundle.githubUrl }}">{{ bundle.fullName }}</a>
+                    <i class="icon-github"></i><a href="{{ bundle.githubUrl }}" title="{{ bundle.fullName }}">{{ bundle.fullName|truncate(30) }}</a>
                 </li>
                 {%- if bundle.composerName -%}
                 <li title="{% trans %}bundles.show.infos.composer{% endtrans %}">
-                    <i class="icon-box"></i><a href="{{ bundle.packagistUrl }}">{{ bundle.composerName }}</a>
+                    <i class="icon-box"></i><a href="{{ bundle.packagistUrl }}" title="{{ bundle.composerName }}">{{ bundle.composerName|truncate(30) }}</a>
                 </li>
                 {%- endif -%}
                 {%- if bundle.usesTravisCi %}

@@ -41,12 +41,12 @@
 
                 <div class="generals">
                     <h3><a href="{{ path('organization_show', {'name': organization.name}) }}">{{ organization.name }}</a></h3>
-                    <p>{{ organization.fullName|default('−') }}</p>
+                    <p>{{ organization.fullName|default('−')|truncate(27) }}</p>
 
                     {%- if organization.location %}
                     <span class="location">
                         {% trans %}organizations.list.location{% endtrans %}
-                        <strong>{{ organization.location }}</strong>
+                        <strong>{{ organization.location|truncate(20) }}</strong>
                     </span>
                     {%- endif %}
                     <span class="created-at">{% trans %}bundles.list.createdAt{% endtrans %} <strong>{{ organization.createdAt|date('date_format'|trans) }}</strong></span>

@@ -1117,6 +1117,7 @@ code, pre {
 
 .developers-list article span {
     float: left;
+    width: 159px;
     font-size: 11px;
     line-height: 13px;
     color: #aaa
