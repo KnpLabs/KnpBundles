@@ -9,7 +9,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="Knp\Bundle\KnpBundlesBundle\Repository\OwnerRepository")
  * @ORM\Table(
- *      name="owner"
+ *      name="owner",
+ *      uniqueConstraints={@ORM\UniqueConstraint(name="name_unique",columns={"name"})}
  * )
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discriminator", type="string")
