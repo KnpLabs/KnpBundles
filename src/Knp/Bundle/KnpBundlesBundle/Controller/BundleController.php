@@ -43,6 +43,17 @@ class BundleController extends BaseController
             return $this->render('KnpBundlesBundle:Bundle:search.html.twig');
         }
 
+        // Skip search if query matches exactly one bundle name, and such was found in database
+        if (!$request->isXmlHttpRequest() && preg_match('/^[a-z0-9-]+\/[a-z0-9-\.]+$/i', $query)) {
+            list($ownerName, $name) = explode('/', $query);
+
+            /* @var $bundle Bundle */
+            $bundle = $this->getRepository('Bundle')->findOneBy(array('ownerName' => $ownerName, 'name' => $name));
+            if ($bundle) {
+                return $this->redirect($this->generateUrl('bundle_show', array('ownerName' => $ownerName, 'name' => $name, '_format' => $format)));
+            }
+        }
+
         /** @var $solarium \Solarium_Client */
         $solarium = $this->get('solarium.client');
 
@@ -57,17 +68,26 @@ class BundleController extends BaseController
 
         $select->setQuery($escapedQuery);
 
-        $paginator = new Pagerfanta(new SolariumAdapter($solarium, $select));
-        $paginator
-            ->setMaxPerPage(10)
-            ->setCurrentPage($request->query->get('page', 1), false, true)
-        ;
+        try {
+            $paginator = new Pagerfanta(new SolariumAdapter($solarium, $select));
+            $paginator
+                ->setMaxPerPage($request->query->get('limit', 10))
+                ->setCurrentPage($request->query->get('page', 1), false, true)
+            ;
 
-        if (1 === $paginator->getNbResults()) {
-            $first = $paginator->getCurrentPageResults()->getIterator()->current();
-            if (strtolower($first['name']) == strtolower($query)) {
-                return $this->redirect($this->generateUrl('bundle_show', array('ownerName' => $first['ownerName'], 'name' => $first['name'], '_format' => $format)));
+            if (1 === $paginator->getNbResults() && !$request->isXmlHttpRequest()) {
+                $first = $paginator->getCurrentPageResults()->getIterator()->current();
+                if (strtolower($first['name']) == strtolower($query)) {
+                    return $this->redirect($this->generateUrl('bundle_show', array('ownerName' => $first['ownerName'], 'name' => $first['name'], '_format' => $format)));
+                }
             }
+        } catch (\Solarium_Client_HttpException $e) {
+            $msg = 'Seems that our search engine is currently offline. Please check later.';
+            if ('json' === $format) {
+                return new JsonResponse(array('status' => 'error', 'message' => $msg), 500);
+            }
+
+            throw new HttpException(500, $msg);
         }
 
         if ('json' === $format) {
@@ -79,30 +99,33 @@ class BundleController extends BaseController
             foreach ($paginator as $bundle) {
                 $result['results'][] = array(
                     'name'        => $bundle->fullName,
-                    'description' => $bundle->description ?: '',
+                    'description' => null !== $bundle->description ? substr($bundle->description, 0, 110).'...' : '',
+                    'avatarUrl'   => $bundle->avatarUrl ?: 'http://www.gravatar.com/avatar/?d=identicon&f=y&s=50',
                     'state'       => $bundle->state,
                     'score'       => $bundle->totalScore,
                     'url'         => $this->generateUrl('bundle_show', array('ownerName' => $bundle->ownerName, 'name' => $bundle->name), true)
                 );
             }
 
-            if ($paginator->hasPreviousPage()) {
-                $result['prev'] = $this->generateUrl('search', array(
-                    'q'       => urldecode($query),
-                    'page'    => $paginator->getPreviousPage(),
-                    '_format' => 'json',
-                ), true);
+            if (!$request->isXmlHttpRequest()) {
+                if ($paginator->hasPreviousPage()) {
+                    $result['prev'] = $this->generateUrl('search', array(
+                        'q'       => urldecode($query),
+                        'page'    => $paginator->getPreviousPage(),
+                        '_format' => 'json',
+                    ), true);
+                }
+
+                if ($paginator->hasNextPage()) {
+                    $result['next'] = $this->generateUrl('search', array(
+                        'q'       => urldecode($query),
+                        'page'    => $paginator->getNextPage(),
+                        '_format' => 'json',
+                    ), true);
+                }
             }
 
-            if ($paginator->hasNextPage()) {
-                $result['next'] = $this->generateUrl('search', array(
-                    'q'       => urldecode($query),
-                    'page'    => $paginator->getNextPage(),
-                    '_format' => 'json',
-                ), true);
-            }
-
-            return new JsonResponse($result);
+            return new JsonResponse($request->isXmlHttpRequest() ? $result['results'] : $result);
         }
 
         return $this->render('KnpBundlesBundle:Bundle:searchResults.html.twig', array(
@@ -172,6 +195,7 @@ class BundleController extends BaseController
                 'total'   => $paginator->getNbResults(),
             );
 
+            /* @var $bundle Bundle */
             foreach ($paginator as $bundle) {
                 $result['results'][] = $bundle->toSmallArray() + array(
                     'url' => $this->generateUrl('bundle_show', array('ownerName' => $bundle->getOwnerName(), 'name' => $bundle->getName()), true)
@@ -376,6 +400,7 @@ class BundleController extends BaseController
                 'total'   => $paginator->getNbResults(),
             );
 
+            /* @var $bundle Bundle */
             foreach ($paginator as $bundle) {
                 $result['results'][] = $bundle->toSmallArray() + array(
                     'url' => $this->generateUrl('bundle_show', array('ownerName' => $bundle->getOwnerName(), 'name' => $bundle->getName()), true)
