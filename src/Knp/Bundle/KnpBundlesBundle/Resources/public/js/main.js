@@ -57,4 +57,33 @@
 
         return event.preventDefault();
     });
+
+    $('.content-box article h3 a,.content-half article .bundle-info h2 a').each(function() {
+        var code = $(this);
+        var codeWidthReal = code.css('display', 'inline-block').width();
+        var codeWidthStyle = code.css('display', 'block').parent().width();
+
+        code.parent().after($("<div></div>").css('height', code.height()));
+        code.parent().css({
+            width: codeWidthStyle,
+            position: 'absolute'
+        });
+
+        if (codeWidthReal > codeWidthStyle) {
+            code.mouseenter(function() {
+                $(this).parent().stop().animate({
+                    width: codeWidthReal + 8,
+                    borderRadius: '6px',
+                    zIndex: 6666
+                }, 'fast');
+            });
+
+            code.mouseleave(function() {
+                $(this).parent().stop().animate({
+                    width: codeWidthStyle,
+                    borderRadius: '0'
+                }, 'fast');
+            });
+        }
+    });
 })(jQuery);
