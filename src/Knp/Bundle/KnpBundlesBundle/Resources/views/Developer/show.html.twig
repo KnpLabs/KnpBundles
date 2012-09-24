@@ -72,7 +72,7 @@
             {%- if developer.bundles|length > 0 %}
                 {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': developer.bundles} %}
             {%- else %}
-                <p>This developer don't owe any bundle.</p>
+                <p>This developer doesn't own any bundles.</p>
             {%- endif %}
             </div>
 
@@ -80,7 +80,7 @@
             {%- if developer.contributionBundles|length > 0 %}
                 {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': developer.contributionBundles} %}
             {%- else %}
-                <p>This developer never contributed to any bundle.</p>
+                <p>This developer hasn't contributed to any bundles yet.</p>
             {%- endif %}
             </div>
 
@@ -88,7 +88,7 @@
             {%- if developer.recommendedBundles|length > 0 %}
                 {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': developer.recommendedBundles} %}
             {%- else %}
-                <p>This developer don't recommend any bundle yet.</p>
+                <p>This developer hasn't recommend any bundles yet.</p>
             {%- endif %}
             </div>
         </div>
