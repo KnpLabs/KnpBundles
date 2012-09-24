@@ -25,7 +25,7 @@ search:
     content:
         description:
             part1: "Please use the search input at the top right."
-            part2: "The engine will search in repository name, description and developer name."
+            part2: "The engine will search the repository name, description and developer name."
 
 header:
     baseline: "Bundles for Symfony2"
@@ -152,7 +152,7 @@ developers.show:
         lastCommit: "Last commit: "
         nbBundles: "Number of bundles: "
         url: "Website: "
-    bundles_manage: "Bundles I owe"
+    bundles_manage: "Bundles I own"
     bundles_contribute: "Bundles I contribute to"
 
 developers.list:
@@ -228,7 +228,7 @@ addBundle:
     example: Example:
 
 bundle:
-    noDescription: "We're fetching informations about this repo. In a few hours, you'll know everything about it."
+    noDescription: "We're fetching information about this repo. In a few hours, you'll know everything about it."
 
 error:
     404:
