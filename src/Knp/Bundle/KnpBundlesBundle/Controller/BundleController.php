@@ -204,13 +204,13 @@ class BundleController extends BaseController
                 list($ownerName, $name) = explode('/', $bundle);
 
                 $url = $this->generateUrl('bundle_show', array('ownerName' => $ownerName, 'name' => $name));
-                if ($this->getRepository('Bundle')->findOneByOwnerNameAndName($ownerName, $name)) {
+                if ($this->getRepository('Bundle')->findOneBy(array('ownerName' => $ownerName, 'name' => $name))) {
                     if (!$request->isXmlHttpRequest()) {
                         return $this->redirect($url);
-                    } else {
-                        $error   = true;
-                        $message = 'Specified bundle already <a href="'.$url.'">exists</a> at KnpBundles.com!';
                     }
+
+                    $error   = true;
+                    $message = 'Specified bundle already <a href="'.$url.'">exists</a> at KnpBundles.com!';
                 }
 
                 if (!$error) {
@@ -230,12 +230,12 @@ class BundleController extends BaseController
                             $message = 'Specified repo is not valid Symfony2 bundle!';
                         }
                     } catch (UserNotFoundException $e) {
-                        $error = true;
+                        $error   = true;
                         $message = 'Specified user was not found on GitHub.';
                     }
                 }
             } else {
-                $error = true;
+                $error   = true;
                 $message = 'Please enter a valid GitHub repo name (e.g. KnpLabs/KnpBundles).';
             }
         }
