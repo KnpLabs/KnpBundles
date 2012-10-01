@@ -1,12 +1,12 @@
 search:
-    pattern:        /search
-    defaults:       { _controller: KnpBundlesBundle:Bundle:search }
-    requirements:   { _method: "GET|POST"}
+    pattern:        /search.{_format}
+    defaults:       { _controller: KnpBundlesBundle:Bundle:search, _format: html }
+    requirements:   { _method: "GET|POST", _format: "(html|json)" }
 
 latest:
-    pattern:        /latest
-    defaults:       { _controller: KnpBundlesBundle:Bundle:listLatest }
-    requirements:   { _method: "GET" }
+    pattern:        /latest.{_format}
+    defaults:       { _controller: KnpBundlesBundle:Bundle:listLatest, _format: atom }
+    requirements:   { _method: "GET", _format: atom }
 
 add_bundle:
     pattern:        /add
@@ -14,34 +14,34 @@ add_bundle:
     requirements:   { _method: "GET|POST" }
 
 bundle_list:
-    pattern:        /{sort}
-    defaults:       { _controller: KnpBundlesBundle:Bundle:list, sort: trend }
-    requirements:   { _method: "GET", sort: "(best|updated|newest|trend|recommended)"}
+    pattern:        /{sort}.{_format}
+    defaults:       { _controller: KnpBundlesBundle:Bundle:list, sort: trend, _format: html }
+    requirements:   { _method: "GET", sort: "(best|updated|newest|trend|recommended)", _format: "(html|json)" }
 
 bundle_keyword:
-    pattern:        /keyword/{slug}
-    defaults:       { _controller: KnpBundlesBundle:Bundle:searchByKeyword }
-    requirements:   { _method: "GET", slug: ".+" }
+    pattern:        /keyword/{slug}.{_format}
+    defaults:       { _controller: KnpBundlesBundle:Bundle:searchByKeyword, _format: html }
+    requirements:   { _method: "GET", _format: "(html|json)" }
 
 bundle_change_usage_status:
     pattern:        /{ownerName}/{name}/change-usage-status
     defaults:       { _controller: KnpBundlesBundle:Bundle:changeUsageStatus }
-    requirements:   { _method: "GET", name: ".+" }
+    requirements:   { _method: "GET" }
 
 bundle_get_badge_short:
     pattern:        /{ownerName}/{name}/badge-short
     defaults:       { _controller: KnpBundlesBundle:Badge:show, type: short }
-    requirements:   { _method: "GET", name: ".+" }
+    requirements:   { _method: "GET" }
 
 bundle_get_badge:
     pattern:        /{ownerName}/{name}/badge
     defaults:       { _controller: KnpBundlesBundle:Badge:show }
-    requirements:   { _method: "GET", name: ".+" }
+    requirements:   { _method: "GET" }
 
 bundle_show:
-    pattern:        /{ownerName}/{name}
-    defaults:       { _controller: KnpBundlesBundle:Bundle:show }
-    requirements:   { _method: "GET", format: "(html|json|js)", name: ".+" }
+    pattern:        /{ownerName}/{name}.{_format}
+    defaults:       { _controller: KnpBundlesBundle:Bundle:show, _format: html }
+    requirements:   { _method: "GET", _format: "(html|json)" }
 
 bundle_settings:
     pattern:        /bundle/settings/{id}

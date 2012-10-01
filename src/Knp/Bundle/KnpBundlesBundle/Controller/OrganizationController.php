@@ -3,8 +3,13 @@
 namespace Knp\Bundle\KnpBundlesBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Knp\Bundle\KnpBundlesBundle\Entity\Developer;
+use Knp\Bundle\KnpBundlesBundle\Entity\Organization;
 
 class OrganizationController extends BaseController
 {
@@ -22,27 +27,38 @@ class OrganizationController extends BaseController
 
     public function showAction(Request $request, $name)
     {
+        $format = $request->getRequestFormat();
+        /* @var $organization Organization */
         if (!$organization = $this->getRepository('Organization')->findOneByNameWithRepos($name)) {
+            if ('json' === $format) {
+                return new JsonResponse(array('status' => 'error', 'message' => 'Organization not found.'), 404);
+            }
+
             throw new NotFoundHttpException(sprintf('The organization "%s" does not exist', $name));
         }
 
-        $format = $this->recognizeRequestFormat($request);
+        if ('json' === $format) {
+            return new JsonResponse($organization->toSmallArray());
+        }
 
         $this->highlightMenu('organizations');
 
-        return $this->render('KnpBundlesBundle:Organization:show.'.$format.'.twig', array(
-            'organization' => $organization,
-            'callback'     => $request->query->get('callback')
+        return $this->render('KnpBundlesBundle:Organization:show.html.twig', array(
+            'organization' => $organization
         ));
     }
 
-    public function listAction(Request $request, $sort = 'name')
+    public function listAction(Request $request, $sort)
     {
+        $format = $request->getRequestFormat();
         if (!array_key_exists($sort, $this->sortFields)) {
-            throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
-        }
+            $msg = sprintf('%s is not a valid sorting field', $sort);
+            if ('json' === $format) {
+                return new JsonResponse(array('status' => 'error', 'message' => $msg), 406);
+            }
 
-        $format = $this->recognizeRequestFormat($request);
+            throw new HttpException($msg, 406);
+        }
 
         $sortField = $this->sortFields[$sort];
 
@@ -61,48 +77,95 @@ class OrganizationController extends BaseController
             }
         }
 
-        return $this->render('KnpBundlesBundle:Organization:list.'.$format.'.twig', array(
-            'organizations' => $organizations,
-            'paginator'     => $paginator,
-            'callback'      => $request->query->get('callback'),
-            'sortLegends'   => $this->sortLegends,
-            'sort'          => $sort
+        if ('json' === $format) {
+            $result = array(
+                'results' => array(),
+                'total'   => $paginator->getNbResults(),
+            );
+
+            /* @var $organization Organization */
+            foreach ($organizations as $organization) {
+                $result['results'][] = $organization->toSmallArray() + array(
+                    'url' => $this->generateUrl('organization_show', array('name' => $organization->getName()), true)
+                );
+            }
+
+            if ($paginator->hasPreviousPage()) {
+                $result['prev'] = $this->generateUrl('organization_list', array(
+                    'sort'    => $sort,
+                    'page'    => $paginator->getPreviousPage(),
+                    '_format' => 'json',
+                ), true);
+            }
+
+            if ($paginator->hasNextPage()) {
+                $result['next'] = $this->generateUrl('organization_list', array(
+                    'sort'    => $sort,
+                    'page'    => $paginator->getNextPage(),
+                    '_format' => 'json',
+                ), true);
+            }
+
+            return new JsonResponse($result);
+        }
+
+        return $this->render('KnpBundlesBundle:Organization:list.html.twig', array(
+            'paginator'   => $paginator,
+            'sortLegends' => $this->sortLegends,
+            'sort'        => $sort
         ));
     }
 
-    public function bundlesAction(Request $request, $name)
+    public function bundlesAction($name)
     {
-        $format = $this->recognizeRequestFormat($request);
-
-        if ($format == 'html') {
-            return $this->redirect($this->generateUrl('organization_show', array('name' => $name)));
-        }
-
+        /* @var $organization Organization */
         if (!$organization = $this->getRepository('Organization')->findOneByName($name)) {
-            throw new NotFoundHttpException(sprintf('The organization "%s" does not exist', $name));
+            return new JsonResponse(array('status' => 'error', 'message' => 'Organization not found.'), 404);
         }
 
-        return $this->render('KnpBundlesBundle:Bundle:list.'.$format.'.twig', array(
-            'bundles'  => $organization->getBundles(),
-            'callback' => $request->query->get('callback')
-        ));
+        $result = array(
+            'organization' => $organization->getName(),
+            'bundles'      => array(),
+        );
+
+        /* @var $bundle Bundle */
+        foreach ($organization->getBundles() as $bundle) {
+            $result['bundles'][] = array(
+                'name'  => $bundle->getFullName(),
+                'state' => $bundle->getState(),
+                'score' => $bundle->getScore(),
+                'url'   => $this->generateUrl('bundle_show', array('ownerName' => $bundle->getOwnerName(), 'name' => $bundle->getName()), true)
+            );
+        }
+
+        return new JsonResponse($result);
     }
 
-    public function membersAction(Request $request, $name)
+    public function membersAction($name)
     {
-        $format = $this->recognizeRequestFormat($request);
-
-        if ($format == 'html') {
-            return $this->redirect($this->generateUrl('organization_show', array('name' => $name)));
-        }
-
+        /* @var $organization Organization */
         if (!$organization = $this->getRepository('Organization')->findOneByName($name)) {
-            throw new NotFoundHttpException(sprintf('The organization "%s" does not exist', $name));
+            return new JsonResponse(array('status' => 'error', 'message' => 'Organization not found.'), 404);
         }
 
-        return $this->render('KnpBundlesBundle:Developer:list.'.$format.'.twig', array(
-            'bundles'  => $organization->getMembers(),
-            'callback' => $request->query->get('callback')
-        ));
+        $result = array(
+            'organization' => $organization->getName(),
+            'members'      => array(),
+        );
+
+        /* @var $developer Developer */
+        foreach ($organization->getMembers() as $developer) {
+            $result['members'][] = array(
+                'name'      => $developer->getName(),
+                'full_name' => $developer->getFullName(),
+                'company'   => $developer->getCompany(),
+                'location'  => $developer->getLocation(),
+                'blog'      => $developer->getUrl(),
+                'score'     => $developer->getScore(),
+                'url'       => $this->generateUrl('developer_show', array('name' => $developer->getName()), true)
+            );
+        }
+
+        return new JsonResponse($result);
     }
 }

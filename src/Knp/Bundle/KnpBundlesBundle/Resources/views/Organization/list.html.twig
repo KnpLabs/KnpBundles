@@ -31,7 +31,7 @@
         </hgroup>
 
         <section class="developers-list">
-            {%- for organization in organizations %}
+            {%- for organization in paginator %}
             <article class="developer {{ loop.index is even ? 'even' : '' }} {% if loop.index % 3 == 0 %}no-right-border{% endif %} {% if loop.index > (loop.length - 3) %}no-bottom-border{% endif %}">
                 <figure>
                     <a href="{{ url('organization_show', {'name': organization.name}) }}">

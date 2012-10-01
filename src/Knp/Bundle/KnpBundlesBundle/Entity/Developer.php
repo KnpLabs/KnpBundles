@@ -287,7 +287,7 @@ class Developer extends Owner implements UserInterface
         return array(
             'name'          => $this->getName(),
             'email'         => $this->getEmail(),
-            'gravatarHash'  => $this->getAvatarUrl(),
+            'avatarUrl'     => $this->getAvatarUrl(),
             'fullName'      => $this->getFullName(),
             'company'       => $this->getCompany(),
             'location'      => $this->getLocation(),

@@ -1,19 +1,24 @@
+organizations_list:
+    pattern:        /organization.{_format}
+    defaults:       { _controller: KnpBundlesBundle:Organization:list, sort: name, _format: html }
+    requirements:   { _method: "GET", _format: html|json }
+
 organization_list:
-    pattern:        /organization/{sort}
-    defaults:       { _controller: KnpBundlesBundle:Organization:list, sort: name }
-    requirements:   { _method: "GET", sort: "(name|developers|bundles)"}
+    pattern:        /organization/{sort}.{_format}
+    defaults:       { _controller: KnpBundlesBundle:Organization:list, sort: name, _format: html }
+    requirements:   { _method: "GET", sort: "(name|developers|bundles)", _format: html|json }
 
 organization_show:
-    pattern:        /organization/{name}/profile
-    defaults:       { _controller: KnpBundlesBundle:Organization:show }
-    requirements:   { _method: "GET"}
+    pattern:        /organization/{name}/profile.{_format}
+    defaults:       { _controller: KnpBundlesBundle:Organization:show, _format: html }
+    requirements:   { _method: "GET", _format: html|json }
 
 organization_bundle_list:
-    pattern:        /organization/{name}/bundles
-    defaults:       { _controller: KnpBundlesBundle:Organization:bundles }
-    requirements:   { _method: "GET", format: "(json|js)" }
+    pattern:        /organization/{name}/bundles.{_format}
+    defaults:       { _controller: KnpBundlesBundle:Organization:bundles, _format: json }
+    requirements:   { _method: "GET", _format: json }
 
 organization_members_list:
-    pattern:        /organization/{name}/members
-    defaults:       { _controller: KnpBundlesBundle:Organization:members }
-    requirements:   { _method: "GET", format: "(json|js)" }
+    pattern:        /organization/{name}/members.{_format}
+    defaults:       { _controller: KnpBundlesBundle:Organization:members, _format: json }
+    requirements:   { _method: "GET", _format: json }

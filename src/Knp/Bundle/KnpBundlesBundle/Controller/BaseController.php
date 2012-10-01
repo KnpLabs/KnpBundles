@@ -12,31 +12,6 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
 class BaseController extends Controller
 {
     /**
-     * Recognizes request format based on 'format' parameter in request.
-     * Returns recognized format.
-     *
-     * @param  Request $request
-     * @param  array   $supported      Array of supported formats.
-     * @param  string  $default        Default format.
-     *
-     * @return string
-     *
-     * @throws NotFoundHttpException
-     */
-    protected function recognizeRequestFormat(Request $request, $supported = array('html', 'json', 'js'), $default = 'html')
-    {
-        $format = $request->query->get('format', $default);
-
-        if (!in_array($format, $supported)) {
-            throw new NotFoundHttpException(sprintf('The format "%s" does not exist', $format));
-        }
-
-        $request->setRequestFormat($format);
-
-        return $format;
-    }
-
-    /**
      * Returns the paginator instance configured for the given query and page
      * number
      *

@@ -1,5 +1,0 @@
-{% set array = [] %}
-{% for bundle in bundles %}
-{% set array = array|merge([bundle.toSmallArray]) %}
-{% endfor %}
-{{ '%s(%s)'|format(callback, array|json_encode)|raw }}

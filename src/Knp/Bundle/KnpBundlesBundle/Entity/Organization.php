@@ -88,6 +88,19 @@ class Organization extends Owner
         return $names;
     }
 
+    public function toSmallArray()
+    {
+        return array(
+            'name'          => $this->getName(),
+            'email'         => $this->getEmail(),
+            'avatarUrl'     => $this->getAvatarUrl(),
+            'fullName'      => $this->getFullName(),
+            'location'      => $this->getLocation(),
+            'blog'          => $this->getUrl(),
+            'score'         => $this->getScore(),
+        );
+    }
+
     public function toArray()
     {
         return array(
