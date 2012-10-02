@@ -24,16 +24,14 @@ class Organization extends Owner
     }
 
     /**
-     * @param string
-     *
-     * @return boolean|EntityOrganization
+     * {@inheritDoc}
      */
-    public function import($response)
+    public function import($response, $update = true)
     {
         $organization = new EntityOrganization();
         $organization->setName($response);
 
-        if (!$this->update($organization)) {
+        if ($update && !$this->update($organization)) {
             return false;
         }
 

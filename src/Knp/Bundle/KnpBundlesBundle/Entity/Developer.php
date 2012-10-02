@@ -4,7 +4,6 @@ namespace Knp\Bundle\KnpBundlesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -20,6 +19,16 @@ class Developer extends Owner implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $company;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $githubId;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $sensioId;
 
     /**
      * Organizations where developer part of
@@ -59,7 +68,6 @@ class Developer extends Owner implements UserInterface
         parent::__construct();
     }
 
-
     /**
      * @param $company
      */
@@ -74,6 +82,38 @@ class Developer extends Owner implements UserInterface
     public function getCompany()
     {
         return $this->company;
+    }
+
+    /**
+     * @param $githubId
+     */
+    public function setGithubId($githubId)
+    {
+        $this->githubId = $githubId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGithubId()
+    {
+        return $this->githubId;
+    }
+
+    /**
+     * @param $sensioId
+     */
+    public function setSensioId($sensioId)
+    {
+        $this->sensioId = $sensioId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSensioId()
+    {
+        return $this->sensioId;
     }
 
     /**

@@ -35,7 +35,7 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        return $this->ownerManager->getOrCreate($response);
+        return $this->ownerManager->getOrCreate($response, 'developer');
     }
 
     /**
@@ -51,7 +51,7 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
      */
     public function refreshUser(UserInterface $user)
     {
-        $refreshedUser = $this->ownerManager->findOwnerBy(array('id' => $user->getId()));
+        $refreshedUser = $this->ownerManager->findDeveloperBy(array('id' => $user->getId()));
         if (null === $refreshedUser) {
             throw new UsernameNotFoundException(sprintf('User with ID "%d" could not be reloaded.', $user->getId()));
         }

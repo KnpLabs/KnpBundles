@@ -196,6 +196,7 @@ EOT;
                 'name'      => $name,
                 'email'     => strtolower(str_replace(' ', '.', $fullName)).'@foomail.bar',
                 'fullName'  => $fullName,
+                'githubId'  => $name,
                 'company'   => ($i%2) ? 'Company '.$i : null,
                 'location'  => ($i%2) ? 'Location '.$i : null,
                 'url'       => ($i%2) ? 'blog'.$i.'.com' : null,
@@ -205,6 +206,10 @@ EOT;
 
             if (isset($organizations[$i+1])) {
                 $developer->addOrganization($organizations[$i+1]);
+            }
+
+            if ($i%2) {
+                $developer->setSensioId($name);
             }
 
             $manager->persist($developer);

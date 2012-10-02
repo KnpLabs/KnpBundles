@@ -6,6 +6,7 @@ use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 use Github\HttpClient\ApiLimitExceedException;
 
@@ -156,6 +157,12 @@ class Updater
     {
         list($ownerName, $bundleName) = explode('/', $fullName);
 
+        try {
+            $owner = $this->ownerManager->getOrCreate($ownerName);
+        } catch (UsernameNotFoundException $e) {
+            return false;
+        }
+
         if (!isset($this->bundles[strtolower($fullName)])) {
             $bundle = new Bundle($fullName);
 
@@ -173,10 +180,6 @@ class Updater
             $bundle = $this->bundles[strtolower($fullName)];
         }
 
-        $owner = $this->ownerManager->getOrCreate($ownerName);
-        if (!$owner) {
-            return false;
-        }
         $owner->addBundle($bundle);
 
         $this->em->flush();
