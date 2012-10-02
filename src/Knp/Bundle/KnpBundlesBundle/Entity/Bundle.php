@@ -1106,7 +1106,7 @@ class Bundle
      */
     public function isOwnerOrContributor(Owner $owner)
     {
-        if ($this->owner->isEqualTo($owner)) {
+        if ($this->owner instanceof Developer && $this->owner->isEqualTo($owner)) {
             return true;
         }
 

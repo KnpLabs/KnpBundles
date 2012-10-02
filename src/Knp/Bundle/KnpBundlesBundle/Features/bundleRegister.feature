@@ -8,8 +8,13 @@ Feature: Showing bundles
       | l3l0    |
       | KnpLabs |
     Given the site has following bundles:
-      | username  | name        | description | lastCommitAt | score | trend1 | state      |
-      | KnpLabs   | TestBundle  | test desc   |-1 day        | 20    | 5      | ready      |
+      | username | name       | description | lastCommitAt | score | trend1 | state |
+      | KnpLabs  | TestBundle | test desc   | -1 day       | 20    | 5      | ready |
+
+  Scenario: Cannot register bundle when not logged in
+    Given I am at homepage
+     When I go to "/add"
+     Then I should be on "/login"
 
   Scenario: Navigate to register bundle page
     Given I am at homepage
@@ -22,23 +27,18 @@ Feature: Showing bundles
     Given I am at homepage
       And I am logged in as "l3l0"
       And I go to "/add"
-     When I fill in "bundle" with "KnpLabs/KnpBundles"
+     When I fill in "bundle" with "KnpLabs/KnpTimeBundle"
       And I press "Add Symfony2 bundle"
-     Then I should be on "KnpLabs/KnpBundles" bundle page
-      And I should see "KnpBundles"
+     Then I should be on "KnpLabs/KnpTimeBundle" bundle page
+      And I should see "KnpTimeBundle"
       And I should see "by KnpLabs"
 
   Scenario: Register existing bundle
     Given I am at homepage
       And I am logged in as "l3l0"
       And I go to "/add"
-     When I fill in "bundle" with "KnpLabs/TestBundles"
+     When I fill in "bundle" with "KnpLabs/TestBundle"
       And I press "Add Symfony2 bundle"
-     Then I should be on "KnpLabs/TestBundles" bundle page
-      And I should see "TestBundles"
+     Then I should be on "KnpLabs/TestBundle" bundle page
+      And I should see "TestBundle"
       And I should see "by KnpLabs"
-
-  Scenario: Cannot register bundle when not logged in
-    Given I am at homepage
-     When I go to "/add"
-     Then I should be on "/login"
