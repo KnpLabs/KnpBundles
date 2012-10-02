@@ -13,11 +13,9 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Developer as EntityDeveloper,
 class Developer extends Owner
 {
     /**
-     * @param string|UserResponseInterface $response
-     *
-     * @return boolean|EntityDeveloper
+     * {@inheritDoc}
      */
-    public function import($response)
+    public function import($response, $update = true)
     {
         $developer = new EntityDeveloper();
         if (is_string($response)) {
@@ -29,6 +27,10 @@ class Developer extends Owner
 
         if ($response instanceof SensioConnectUserResponse) {
             $developer->setName($response->getLinkedAccount('github') ?: $response->getNickname());
+            $developer->setGithubId($response->getLinkedAccount('github'));
+            $developer->setSensioId($response->getNickname());
+        } else {
+            $developer->setGithubId($response->getNickname());
         }
 
         if ($response instanceof AdvancedUserResponseInterface) {
@@ -36,7 +38,7 @@ class Developer extends Owner
             $developer->setAvatarUrl($response->getProfilePicture());
         }
 
-        if (!$this->update($developer)) {
+        if ($update && !$this->update($developer)) {
             return false;
         }
 

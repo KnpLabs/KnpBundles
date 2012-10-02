@@ -6,6 +6,9 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse as BaseRespo
 
 class SensioConnectUserResponse extends BaseResponse
 {
+    /**
+     * @var array
+     */
     private $accounts = array();
 
     /**
@@ -18,11 +21,21 @@ class SensioConnectUserResponse extends BaseResponse
         return isset($this->accounts['sensio']) ? $this->accounts['sensio'] : $this->getNodeValue('./foaf:name', $this->response);
     }
 
+    /**
+     * @param string $name
+     *
+     * @return null|string
+     */
     public function getLinkedAccount($name)
     {
+        $this->getOnlineAccounts();
+
         return isset($this->accounts[$name]) ? $this->accounts[$name] : null;
     }
 
+    /**
+     * @return array
+     */
     protected function getOnlineAccounts()
     {
         if (0 < count($this->accounts)) {

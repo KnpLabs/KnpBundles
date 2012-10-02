@@ -141,6 +141,9 @@ class Repo
         $api = $this->github->api('repo')->contents();
 
         $files = $api->show($bundle->getOwnerName(), $bundle->getName());
+        if (empty($files) || isset($files['message'])) {
+            return false;
+        }
         foreach ($files as $data) {
             if (!$bundle->isValid() && false !== strpos($data['name'], 'Bundle.php')) {
                 if (null !== $onlyFiles && !in_array('sf', $onlyFiles)) {

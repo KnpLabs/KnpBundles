@@ -4,21 +4,21 @@ namespace Knp\Bundle\KnpBundlesBundle\Entity;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 
 use Github\Client;
 
-use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException,
-    Knp\Bundle\KnpBundlesBundle\Security\OAuth\Response\SensioConnectUserResponse;
-
-use Knp\Bundle\KnpBundlesBundle\Github\Developer as GithubDeveloper,
-    Knp\Bundle\KnpBundlesBundle\Github\Organization as GithubOrganization,
-    Knp\Bundle\KnpBundlesBundle\Github\OwnerInterface as GithubOwnerInterface;
+use Knp\Bundle\KnpBundlesBundle\Security\OAuth\Response\SensioConnectUserResponse;
+use Knp\Bundle\KnpBundlesBundle\Github\Developer as GithubDeveloper;
+use Knp\Bundle\KnpBundlesBundle\Github\Organization as GithubOrganization;
+use Knp\Bundle\KnpBundlesBundle\Github\OwnerInterface as GithubOwnerInterface;
 
 /**
  * Manages user entities
  *
  * @author Romain Pouclet <romain.pouclet@knplabs.com>
+ * @author Joseph Bielawski <stloyd@gmail.com>
  */
 class OwnerManager
 {
@@ -26,11 +26,6 @@ class OwnerManager
      * @var ObjectManager
      */
     private $entityManager;
-
-    /**
-     * @var \Knp\Bundle\KnpBundlesBundle\Repository\OwnerRepository
-     */
-    private $repository;
 
     /**
      * @var Client
@@ -44,46 +39,73 @@ class OwnerManager
     public function __construct(ObjectManager $entityManager, Client $github)
     {
         $this->entityManager = $entityManager;
-        $this->repository    = $entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Owner');
         $this->github        = $github;
     }
 
     /**
      * @param array $data
      *
-     * @return mixed
+     * @return null|Owner
      */
     public function findOwnerBy(array $data)
     {
-        return $this->repository->findOneBy($data);
+        return $this->entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Owner')->findOneBy($data);
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return null|Developer
+     */
+    public function findDeveloperBy(array $data)
+    {
+        return $this->entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Developer')->findOneBy($data);
     }
 
     /**
      * @param string|UserResponseInterface $data
+     * @param string                       $entityType
      *
-     * @return Developer
+     * @return Owner
      *
-     * @throws UserNotFoundException
+     * @throws UsernameNotFoundException
      */
-    public function getOrCreate($data)
+    public function getOrCreate($data, $entityType = 'owner')
     {
         if (is_string($data)) {
-            $ownerName = $data;
+            $findBy = array('name' => $data);
         } elseif ($data instanceof UserResponseInterface) {
             if ($data instanceof SensioConnectUserResponse) {
-                $ownerName = $data->getLinkedAccount('github') ?: $data->getNickname();
+                if ($data->getLinkedAccount('github')) {
+                    $findBy = array('githubId' => $data->getLinkedAccount('github'));
+                } else {
+                    $findBy = array('sensioId' => $data->getNickname());
+                }
             } else {
-                $ownerName = $data->getNickname();
+                $findBy = array('githubId' => $data->getNickname());
             }
         }
 
-        if (!$owner = $this->findOwnerBy(array('name' => $ownerName))) {
-            if (!$api = $this->getApiByOwnerName($ownerName)) {
-                return false;
+        if ('developer' == $entityType) {
+            $owner = $this->findDeveloperBy($findBy);
+        } else {
+            $owner = $this->findOwnerBy($findBy);
+        }
+
+        if (!$owner) {
+            if (is_string($data)) {
+                $this->throwUserNotFoundException($data);
             }
 
-            if (!$owner = $api->import($data)) {
-                return false;
+            // SensioLabs response is always an developer connection
+            if ($data instanceof SensioConnectUserResponse) {
+                $api = new GithubDeveloper($this->github, new NullOutput());
+            } elseif (!$api = $this->getApiByOwnerName(current($findBy))) {
+                $this->throwUserNotFoundException($data->getNickname());
+            }
+
+            if (!$owner = $api->import($data, false)) {
+                $this->throwUserNotFoundException($data->getNickname());
             }
 
             $this->entityManager->persist($owner);
@@ -110,9 +132,19 @@ class OwnerManager
             $api = new GithubDeveloper($this->github, new NullOutput());
         } else {
             $api = new GithubOrganization($this->github, new NullOutput());
-            $api->setRepository($this->repository);
+            $api->setRepository($this->entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Organization'));
         }
 
         return $api;
+    }
+
+    /**
+     * @param string $username
+     *
+     * @throws UsernameNotFoundException
+     */
+    private function throwUserNotFoundException($username)
+    {
+        throw new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
     }
 }
