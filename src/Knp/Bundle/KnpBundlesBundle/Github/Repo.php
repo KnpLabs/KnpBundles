@@ -11,11 +11,9 @@ use Symfony\Component\Config\Definition\PrototypedArrayNode;
 use Symfony\Component\Process\PhpProcess;
 
 use Github\Client;
-use Github\HttpClient\ApiLimitExceedException;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Git;
-use Knp\Bundle\KnpBundlesBundle\Detector;
 use Knp\Bundle\KnpBundlesBundle\Event\BundleEvent;
 
 class Repo
@@ -50,9 +48,9 @@ class Repo
     public static $canonicalConfiguration;
 
     /**
-     * @param Client $github
-     * @param OutputInterface $output
-     * @param Git\RepoManager $gitRepoManager
+     * @param Client                   $github
+     * @param OutputInterface          $output
+     * @param Git\RepoManager          $gitRepoManager
      * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager, EventDispatcherInterface $dispatcher)
