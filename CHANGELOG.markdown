@@ -1,3 +1,12 @@
+* 2012-10-03
+  * Removed `js` format from web API, we still support: `json` and `html`,
+  * Moved code related to web API into controllers and removed all view templates
+    used before for it
+  * Removed `BaseController#recognizeRequestFormat()` method, use
+    `Symfony\Component\HttpFoundation\Request#getRequestFormat()` instead,
+  * URL query `?format=json` is no longer valid, use proper affix instead,
+    i.e.: `/KnpLabs/KnpMenuBundle.json`
+
 * 2012-09-13
   * Split `User` entities into `Developer`, `Organization` and `Owner`,
     same as split for `Github\User`, also renamed `UserManager` to `OwnerManager`
