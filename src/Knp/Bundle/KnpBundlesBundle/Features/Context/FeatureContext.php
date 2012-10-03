@@ -53,84 +53,6 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     }
 
     /**
-     * @Given /^the site has following users:$/
-     */
-    public function theSiteHasFollowingUsers(TableNode $table)
-    {
-        $entityManager = $this->getEntityManager();
-
-        $this->developers = array();
-        foreach ($table->getHash() as $row) {
-            $developer = new Entity\Developer();
-
-            $developer->fromArray(array(
-                'name'          => $row['name'],
-                'score'         => 0,
-            ));
-
-            if (isset($row['organization'])) {
-                $organization = $this->organizations[$row['organization']];
-                $developer->addOrganization($organization);
-            }
-
-            $entityManager->persist($developer);
-
-            $this->developers[$developer->getName()] = $developer;
-        }
-
-        $entityManager->flush();
-    }
-
-    /**
-     * @Given /^the site has following bundles:$/
-     */
-    public function theSiteHasFollowingBundles(TableNode $table)
-    {
-        $entityManager = $this->getEntityManager();
-
-        $this->bundles = array();
-        foreach ($table->getHash() as $row) {
-            if (isset($this->developers[$row['username']])) {
-                $owner = $this->developers[$row['username']];
-            } elseif (isset($this->organizations[$row['username']])) {
-                $owner = $this->organizations[$row['username']];
-            }
-
-            $bundle = new Entity\Bundle();
-            $bundle->fromArray(array(
-                'name'          => $row['name'],
-                'owner'         => $owner,
-                'ownerName'     => $owner->getName(),
-                'description'   => $row['description'],
-                'state'         => isset($row['state']) ? $row['state'] : Entity\Bundle::STATE_UNKNOWN,
-                'lastCommitAt'  => new \DateTime($row['lastCommitAt']),
-            ));
-
-            $bundle->setScore($row['score']);
-
-            $this->setPrivateProperty($bundle, "trend1", $row['trend1']);
-
-            if (isset($row['recommendedBy'])) {
-                $ownerNames = explode(',', $row['recommendedBy']);
-                foreach ($ownerNames as $ownerName) {
-                    $owner = $this->developers[trim($ownerName)];
-
-                    $bundle->addRecommender($owner);
-                    $owner->addRecommendedBundle($bundle);
-
-                    $entityManager->persist($owner);
-                }
-            }
-
-            $entityManager->persist($bundle);
-
-            $this->bundles[$bundle->getName()] = $bundle;
-        }
-
-        $entityManager->flush();
-    }
-
-    /**
      * Checks, that page contains specified texts in order.
      *
      * @Then /^(?:|I )should see following texts in order:$/
@@ -244,9 +166,9 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     }
 
     /**
-     * @Then /^I should see don\'t recommend button$/
+     * @Then /^I should not see recommend button$/
      */
-    public function iShouldSeeDonTRecommendButton()
+    public function iShouldNotSeeRecommendButton()
     {
         return new Step\Then('I should see "I don\'t recommend this bundle"');
     }
@@ -311,6 +233,34 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     }
 
     /**
+     * @Given /^the site has following users:$/
+     */
+    public function theSiteHasFollowingUsers(TableNode $table)
+    {
+        $entityManager = $this->getEntityManager();
+
+        $this->developers = array();
+        foreach ($table->getHash() as $row) {
+            $developer = new Entity\Developer();
+            $developer->fromArray(array(
+                 'name'          => $row['name'],
+                 'score'         => 0,
+            ));
+
+            if (isset($row['organization'])) {
+                $organization = $this->organizations[$row['organization']];
+                $developer->addOrganization($organization);
+            }
+
+            $entityManager->persist($developer);
+
+            $this->developers[$developer->getName()] = $developer;
+        }
+
+        $entityManager->flush();
+    }
+
+    /**
      * @Given /^the site has following organizations:$/
      */
     public function theSiteHasFollowingOrganizations(TableNode $table)
@@ -320,15 +270,63 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
         $this->organizations = array();
         foreach ($table->getHash() as $row) {
             $organization = new Entity\Organization();
-
             $organization->fromArray(array(
-                'name'          => $row['name'],
-                'score'         => 0,
+                 'name'          => $row['name'],
+                 'score'         => 0,
             ));
 
             $entityManager->persist($organization);
 
             $this->organizations[$organization->getName()] = $organization;
+        }
+
+        $entityManager->flush();
+    }
+
+    /**
+     * @Given /^the site has following bundles:$/
+     */
+    public function theSiteHasFollowingBundles(TableNode $table)
+    {
+        $entityManager = $this->getEntityManager();
+
+        $this->bundles = array();
+        foreach ($table->getHash() as $row) {
+            if (isset($this->developers[$row['username']])) {
+                $owner = $this->developers[$row['username']];
+            } elseif (isset($this->organizations[$row['username']])) {
+                $owner = $this->organizations[$row['username']];
+            }
+
+            $bundle = new Entity\Bundle();
+            $bundle->fromArray(array(
+                'name'          => $row['name'],
+                'owner'         => $owner,
+                'ownerName'     => $owner->getName(),
+                'description'   => $row['description'],
+                'state'         => isset($row['state']) ? $row['state'] : Entity\Bundle::STATE_UNKNOWN,
+                'lastCommitAt'  => new \DateTime($row['lastCommitAt']),
+            ));
+
+            $bundle->setScore($row['score']);
+
+            $this->setPrivateProperty($bundle, "trend1", $row['trend1']);
+
+            if (isset($row['recommendedBy'])) {
+                $ownerNames = explode(',', $row['recommendedBy']);
+                foreach ($ownerNames as $ownerName) {
+                    $owner = $this->developers[trim($ownerName)];
+
+                    $bundle->addRecommender($owner);
+                    $owner->addRecommendedBundle($bundle);
+
+                    $entityManager->persist($owner);
+                }
+            }
+
+            $entityManager->persist($bundle);
+
+            $this->bundles[$bundle->getName()] = $bundle;
         }
 
         $entityManager->flush();

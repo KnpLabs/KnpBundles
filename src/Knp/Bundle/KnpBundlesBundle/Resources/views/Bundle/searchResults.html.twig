@@ -2,7 +2,7 @@
 
 {% block title %}{% trans with {'%query%': query} %}search.results.meta.title{% endtrans %}{% endblock %}
 
-{% block description %}{% trans with {'%count%': paginator.nbResults, '%query%': query} %}search.results.meta.description{% endtrans %}{% endblock %}
+{% block description %}{% trans with {'%count%': bundles.nbResults, '%query%': query} %}search.results.meta.description{% endtrans %}{% endblock %}
 
 {% block intro %}
 <div id="intro">
@@ -15,19 +15,19 @@
 <div class="content-box">
     <hgroup>
         <h2>
-            {%- if paginator.nbResults == 0 -%}
+            {%- if bundles.nbResults == 0 -%}
             No bundles found. Feel free to create your own :)
             {%- else -%}
-            Found {{ paginator.nbResults }} bundle{{ paginator.nbResults > 1 ? 's' : '' }}.
+            Found {{ bundles.nbResults }} bundle{{ bundles.nbResults > 1 ? 's' : '' }}.
             {%- endif -%}
         </h2>
     </hgroup>
 
-    {% if paginator.nbResults > 0 %}
+    {% if bundles.nbResults > 0 %}
     <section id="search-result-bundles">
         {% include 'KnpBundlesBundle:Bundle:searchBigList.html.twig' with {'bundles': bundles} %}
 
-        {{ pagerfanta(paginator, 'knp_bundles_view') }}
+        {{ pagerfanta(bundles, 'knp_bundles_view') }}
     </section>
     {% endif %}
 </div>

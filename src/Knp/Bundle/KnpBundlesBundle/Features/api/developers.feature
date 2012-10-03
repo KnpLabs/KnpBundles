@@ -50,7 +50,7 @@ Feature:
       | cordoval20 | User7Bundle | user desc   |-2 days       | 20    | 5      |
 
   Scenario: Show first page of developers list
-    When I send a GET request to "/developer?page=1&format=json"
+    When I send a GET request to "/developer.json?page=1"
     Then I should get JSON with following items:
       | name       |
       | cordoval1  |
@@ -73,8 +73,52 @@ Feature:
       | cordoval7  |
 
   Scenario: Show second page of developers list
-    When I send a GET request to "/developer?page=2&format=json"
+    When I send a GET request to "/developer.json?page=2"
     Then I should get JSON with following items:
       | name       |
       | cordoval8  |
       | cordoval9  |
+
+  Scenario: Show developer profile
+    When I send a GET request to "/developer/cordoval1/profile.json"
+    Then the response code should be 200
+     And the response should equal to JSON:
+      """
+      {
+        "name": "cordoval1",
+        "email": null,
+        "avatarUrl": null,
+        "fullName": null,
+        "company": null,
+        "location": null,
+        "blog": null,
+        "bundles": [
+          {
+            "name": "cordoval1/Test1Bundle",
+            "state": "unknown",
+            "score": 10,
+            "url": "http://knpbundles.local/cordoval1/Test1Bundle"
+          }
+        ],
+        "lastCommitAt": null,
+        "score": 0
+      }
+      """
+
+  Scenario: Show developer bundles data
+    When I send a GET request to "/developer/cordoval1/bundles.json"
+    Then the response code should be 200
+     And the response should equal to JSON:
+      """
+      {
+        "developer": "cordoval1",
+        "bundles": [
+          {
+            "name": "cordoval1/Test1Bundle",
+            "state": "unknown",
+            "score": 10,
+            "url": "http://knpbundles.local/cordoval1/Test1Bundle"
+          }
+        ]
+      }
+      """

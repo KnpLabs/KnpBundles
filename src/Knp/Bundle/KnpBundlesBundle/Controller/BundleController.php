@@ -2,22 +2,14 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpKernel\HttpKernel;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Console\Output\NullOutput as Output;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Templating\EngineInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Query;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\SolariumAdapter;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\Developer;
-use Knp\Menu\MenuItem;
 use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 
 class BundleController extends BaseController
@@ -40,8 +32,16 @@ class BundleController extends BaseController
 
     public function searchAction(Request $request)
     {
-        $format = $this->recognizeRequestFormat($request);
+        $format = $request->getRequestFormat();
         $query  = trim($request->query->get('q'));
+
+        if (empty($query)) {
+            if ('json' === $format) {
+                return new JsonResponse(array('status' => 'error', 'message' => 'Missing or too short search query, example: ?q=example'), 400);
+            }
+
+            return $this->render('KnpBundlesBundle:Bundle:search.html.twig');
+        }
 
         /** @var $solarium \Solarium_Client */
         $solarium = $this->get('solarium.client');
@@ -49,16 +49,8 @@ class BundleController extends BaseController
         $select = $solarium->createSelect();
 
         $escapedQuery = $select->getHelper()->escapeTerm($query);
-        if (empty($escapedQuery)) {
-            if ('json' === $format) {
-                return new JsonResponse(array('message' => 'Too short query.', 404));
-            }
-
-            return $this->render('KnpBundlesBundle:Bundle:search.html.twig');
-        }
 
         $dismax = $select->getDisMax();
-
         $dismax->setQueryFields(array('name^2', 'ownerName', 'fullName^1.5', 'description', 'keywords', 'text', 'text_ngram'));
         $dismax->setPhraseFields(array('description^30'));
         $dismax->setQueryParser('edismax');
@@ -70,78 +62,154 @@ class BundleController extends BaseController
             ->setMaxPerPage(10)
             ->setCurrentPage($request->query->get('page', 1), false, true)
         ;
-        $bundles = $paginator->getCurrentPageResults()->getIterator();
-        if ('html' === $format && count($bundles) === 1) {
-            $first = $bundles->current();
+
+        if (1 === $paginator->getNbResults()) {
+            $first = $paginator->getCurrentPageResults()->getIterator()->current();
             if (strtolower($first['name']) == strtolower($query)) {
-                return $this->redirect($this->generateUrl('bundle_show', array('ownerName' => $first['ownerName'], 'name' => $first['name'])));
+                return $this->redirect($this->generateUrl('bundle_show', array('ownerName' => $first['ownerName'], 'name' => $first['name'], '_format' => $format)));
             }
         }
 
-        return $this->render('KnpBundlesBundle:Bundle:searchResults.'.$format.'.twig', array(
-            'query'     => urldecode($request->query->get('q')),
-            'bundles'   => $bundles,
-            'paginator' => $paginator,
-            'callback'  => $request->query->get('callback')
+        if ('json' === $format) {
+            $result = array(
+                'results' => array(),
+                'total'   => $paginator->getNbResults(),
+            );
+
+            foreach ($paginator as $bundle) {
+                $result['results'][] = array(
+                    'name'        => $bundle->fullName,
+                    'description' => $bundle->description ?: '',
+                    'state'       => $bundle->state,
+                    'score'       => $bundle->totalScore,
+                    'url'         => $this->generateUrl('bundle_show', array('ownerName' => $bundle->ownerName, 'name' => $bundle->name), true)
+                );
+            }
+
+            if ($paginator->hasPreviousPage()) {
+                $result['prev'] = $this->generateUrl('search', array(
+                    'q'       => urldecode($query),
+                    'page'    => $paginator->getPreviousPage(),
+                    '_format' => 'json',
+                ), true);
+            }
+
+            if ($paginator->hasNextPage()) {
+                $result['next'] = $this->generateUrl('search', array(
+                    'q'       => urldecode($query),
+                    'page'    => $paginator->getNextPage(),
+                    '_format' => 'json',
+                ), true);
+            }
+
+            return new JsonResponse($result);
+        }
+
+        return $this->render('KnpBundlesBundle:Bundle:searchResults.html.twig', array(
+            'query'     => urldecode($query),
+            'bundles'   => $paginator
         ));
     }
 
     public function showAction(Request $request, $ownerName, $name)
     {
+        $format = $request->getRequestFormat();
+
         /* @var $bundle Bundle */
         $bundle = $this->getRepository('Bundle')->findOneByOwnerNameAndName($ownerName, $name);
         if (!$bundle) {
+            if ('json' === $format) {
+                return new JsonResponse(array('status' => 'error', 'message' => 'Bundle not found.'), 404);
+            }
+
             throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $ownerName, $name));
         }
 
-        $format = $this->recognizeRequestFormat($request);
+        if ('json' === $format) {
+            return new JsonResponse($bundle->toBigArray());
+        }
 
         $this->highlightMenu('bundles');
 
         $owner = $this->get('security.context')->getToken()->getUser();
 
-        return $this->render('KnpBundlesBundle:Bundle:show.'.$format.'.twig', array(
+        return $this->render('KnpBundlesBundle:Bundle:show.html.twig', array(
             'series'  => array(
-            array(
-                'name' => 'Score',
-                'data' => $bundle->getScores(),
-            )
+                array(
+                    'name' => 'Score',
+                    'data' => $bundle->getScores(),
+                )
             ),
             'bundle'            => $bundle,
             'score_details'     => $bundle->getScoreDetails(),
-            'isUsedByDeveloper' => $owner instanceof Developer && $owner->isUsingBundle($bundle),
-            'callback'          => $request->query->get('callback')
+            'isUsedByDeveloper' => $owner instanceof Developer && $owner->isUsingBundle($bundle)
         ));
     }
 
     public function listAction(Request $request, $sort)
     {
-        if (!array_key_exists($sort, $this->sortFields)) {
-            throw new HttpException(406, sprintf('%s is not a valid sorting field', $sort));
-        }
+        $format = $request->getRequestFormat();
 
-        $format = $this->recognizeRequestFormat($request);
+        if (!array_key_exists($sort, $this->sortFields)) {
+            $msg = sprintf('%s is not a valid sorting field', $sort);
+            if ('json' === $format) {
+                return new JsonResponse(array('status' => 'error', 'message' => $msg), 406);
+            }
+
+            throw new HttpException(406, $msg);
+        }
 
         $sortField = $this->sortFields[$sort];
 
-        $query   = $this->getRepository('Bundle')->queryAllWithOwnersAndContributorsSortedBy($sortField);
-        $bundles = $this->getPaginator($query, $request->query->get('page', 1));
-        $owners   = $this->getRepository('Developer')->findAllSortedBy('createdAt', 20);
+        $query     = $this->getRepository('Bundle')->queryAllWithOwnersAndContributorsSortedBy($sortField);
+        $paginator = $this->getPaginator($query, $request->query->get('page', 1));
+
+        if ('json' === $format) {
+            $result = array(
+                'results' => array(),
+                'total'   => $paginator->getNbResults(),
+            );
+
+            foreach ($paginator as $bundle) {
+                $result['results'][] = $bundle->toSmallArray() + array(
+                    'url' => $this->generateUrl('bundle_show', array('ownerName' => $bundle->getOwnerName(), 'name' => $bundle->getName()), true)
+                );
+            }
+
+            if ($paginator->hasPreviousPage()) {
+                $result['prev'] = $this->generateUrl('bundle_list', array(
+                    'sort'    => $sort,
+                    'page'    => $paginator->getPreviousPage(),
+                    '_format' => 'json',
+                ), true);
+            }
+
+            if ($paginator->hasNextPage()) {
+                $result['next'] = $this->generateUrl('bundle_list', array(
+                    'sort'    => $sort,
+                    'page'    => $paginator->getNextPage(),
+                    '_format' => 'json',
+                ), true);
+            }
+
+            return new JsonResponse($result);
+        }
 
         $this->highlightMenu('bundles');
 
-        $response = $this->render('KnpBundlesBundle:Bundle:list.'.$format.'.twig', array(
+        $owners = $this->getRepository('Developer')->findAllSortedBy('createdAt', 20);
+
+        $response = $this->render('KnpBundlesBundle:Bundle:list.html.twig', array(
             'series'  => array(
                 array(
                     'name' => 'New bundles',
                     'data' => $this->getRepository('Bundle')->getBundlesCountEvolution(5),
                 )
             ),
-            'bundles'     => $bundles,
-            'developers'       => $owners,
+            'bundles'     => $paginator,
+            'developers'  => $owners,
             'sort'        => $sort,
-            'sortLegends' => $this->sortLegends,
-            'callback'    => $request->query->get('callback')
+            'sortLegends' => $this->sortLegends
         ));
 
         // caching
@@ -176,15 +244,12 @@ class BundleController extends BaseController
         ));
     }
 
-    public function listLatestAction(Request $request)
+    public function listLatestAction()
     {
         $bundles = $this->getRepository('Bundle')->findAllSortedBy('createdAt', 'desc', 50);
 
-        $format  = $this->recognizeRequestFormat($request, array('atom'), 'atom');
-
-        return $this->render('KnpBundlesBundle:Bundle:listLatest.'.$format.'.twig', array(
-            'bundles'  => $bundles,
-            'callback' => $request->query->get('callback')
+        return $this->render('KnpBundlesBundle:Bundle:listLatest.atom.twig', array(
+            'bundles'  => $bundles
         ));
     }
 
@@ -289,13 +354,43 @@ class BundleController extends BaseController
 
     public function searchByKeywordAction(Request $request, $slug)
     {
-        $query   = $this->getRepository('Bundle')->queryByKeywordSlug($slug);
-        $bundles = $this->getPaginator($query, $request->query->get('page', 1));
+        $format    = $request->getRequestFormat();
+        $query     = $this->getRepository('Bundle')->queryByKeywordSlug($slug);
+        $paginator = $this->getPaginator($query, $request->query->get('page', 1));
+
+        if ('json' === $format) {
+            $result = array(
+                'results' => array(),
+                'total'   => $paginator->getNbResults(),
+            );
+
+            foreach ($paginator as $bundle) {
+                $result['results'][] = $bundle->toSmallArray() + array(
+                    'url' => $this->generateUrl('bundle_show', array('ownerName' => $bundle->getOwnerName(), 'name' => $bundle->getName()), true)
+                );
+            }
+
+            if ($paginator->hasPreviousPage()) {
+                $result['prev'] = $this->generateUrl('bundle_keyword', array(
+                    'page'    => $paginator->getPreviousPage(),
+                    '_format' => 'json',
+                ), true);
+            }
+
+            if ($paginator->hasNextPage()) {
+                $result['next'] = $this->generateUrl('bundle_keyword', array(
+                    'page'    => $paginator->getNextPage(),
+                    '_format' => 'json',
+                ), true);
+            }
+
+            return new JsonResponse($result);
+        }
 
         $this->highlightMenu('bundles');
 
         $response = $this->render('KnpBundlesBundle:Bundle:searchByKeywordResults.html.twig', array(
-            'bundles'     => $bundles,
+            'bundles'     => $paginator,
             'keywordSlug' => $slug
         ));
 

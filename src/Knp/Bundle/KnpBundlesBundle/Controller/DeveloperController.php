@@ -2,14 +2,13 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Templating\EngineInterface;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Query;
-use Knp\Menu\MenuItem;
+
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Knp\Bundle\KnpBundlesBundle\Entity\Developer;
 
 class DeveloperController extends BaseController
 {
@@ -35,58 +34,139 @@ class DeveloperController extends BaseController
 
     public function showAction(Request $request, $name)
     {
+        $format = $request->getRequestFormat();
+        /* @var $developer Developer */
         if (!$developer = $this->getRepository('Developer')->findOneByNameWithRepos($name)) {
+            if ('json' === $format) {
+                return new JsonResponse(array('status' => 'error', 'message' => 'Developer not found.'), 404);
+            }
+
             throw new NotFoundHttpException(sprintf('The developer "%s" does not exist', $name));
         }
 
-        $format = $this->recognizeRequestFormat($request);
+        if ('json' === $format) {
+            $result = array(
+                'name'          => $developer->getName(),
+                'email'         => $developer->getEmail(),
+                'avatarUrl'     => $developer->getAvatarUrl(),
+                'fullName'      => $developer->getFullName(),
+                'company'       => $developer->getCompany(),
+                'location'      => $developer->getLocation(),
+                'blog'          => $developer->getUrl(),
+                'bundles'       => array(),
+                'lastCommitAt'  => $developer->getLastCommitAt() ? $developer->getLastCommitAt()->getTimestamp() : null,
+                'score'         => $developer->getScore()
+            );
+
+            /* @var $bundle Bundle */
+            foreach ($developer->getBundles() as $bundle) {
+                $result['bundles'][] = array(
+                    'name'  => $bundle->getFullName(),
+                    'state' => $bundle->getState(),
+                    'score' => $bundle->getScore(),
+                    'url'   => $this->generateUrl('bundle_show', array('ownerName' => $bundle->getOwnerName(), 'name' => $bundle->getName()), true)
+                );
+            }
+
+            return new JsonResponse($result);
+        }
 
         $this->highlightMenu('developers');
 
-        return $this->render('KnpBundlesBundle:Developer:show.'.$format.'.twig', array(
-            'developer' => $developer,
-            'callback'  => $request->query->get('callback')
+        return $this->render('KnpBundlesBundle:Developer:show.html.twig', array(
+            'developer' => $developer
         ));
     }
 
-    public function listAction(Request $request, $sort = 'name')
+    public function listAction(Request $request, $sort)
     {
+        $format = $request->getRequestFormat();
         if (!array_key_exists($sort, $this->sortFields)) {
-            throw new HttpException(sprintf('%s is not a valid sorting field', $sort), 406);
-        }
+            $msg = sprintf('%s is not a valid sorting field', $sort);
+            if ('json' === $format) {
+                return new JsonResponse(array('status' => 'error', 'message' => $msg), 406);
+            }
 
-        $format = $this->recognizeRequestFormat($request);
+            throw new HttpException($msg, 406);
+        }
 
         $sortField = $this->sortFields[$sort];
 
+        $query = $this->getRepository('Developer')->queryAllWithBundlesSortedBy($sortField);
+        $paginator = $this->getPaginator($query, $request->query->get('page', 1), 18);
+
+        if ('json' === $format) {
+            $result = array(
+                'results' => array(),
+                'total'   => $paginator->getNbResults(),
+            );
+
+            /* @var $developer Developer */
+            foreach ($paginator as $developer) {
+                $result['results'][] = array(
+                    'name'          => $developer->getName(),
+                    'email'         => $developer->getEmail(),
+                    'avatarUrl'     => $developer->getAvatarUrl(),
+                    'fullName'      => $developer->getFullName(),
+                    'company'       => $developer->getCompany(),
+                    'location'      => $developer->getLocation(),
+                    'blog'          => $developer->getUrl(),
+                    'lastCommitAt'  => $developer->getLastCommitAt() ? $developer->getLastCommitAt()->getTimestamp() : null,
+                    'score'         => $developer->getScore(),
+                    'url'           => $this->generateUrl('developer_show', array('name' => $developer->getName()), true)
+                );
+            }
+
+            if ($paginator->hasPreviousPage()) {
+                $result['prev'] = $this->generateUrl('developer_list', array(
+                    'sort'    => $sort,
+                    'page'    => $paginator->getPreviousPage(),
+                    '_format' => 'json',
+                ), true);
+            }
+
+            if ($paginator->hasNextPage()) {
+                $result['next'] = $this->generateUrl('developer_list', array(
+                    'sort'    => $sort,
+                    'page'    => $paginator->getNextPage(),
+                    '_format' => 'json',
+                ), true);
+            }
+
+            return new JsonResponse($result);
+        }
+
         $this->highlightMenu('developers');
 
-        $query = $this->getRepository('Developer')->queryAllWithBundlesSortedBy($sortField);
-        $developers = $this->getPaginator($query, $request->query->get('page', 1), 18);
-
-        return $this->render('KnpBundlesBundle:Developer:list.'.$format.'.twig', array(
-            'developers'       => $developers,
+        return $this->render('KnpBundlesBundle:Developer:list.html.twig', array(
+            'developers'  => $paginator,
             'sort'        => $sort,
-            'sortLegends' => $this->sortLegends,
-            'callback'    => $request->query->get('callback')
+            'sortLegends' => $this->sortLegends
         ));
     }
 
-    public function bundlesAction(Request $request, $name)
+    public function bundlesAction($name)
     {
-        $format = $this->recognizeRequestFormat($request);
-
-        if ($format == 'html') {
-            return $this->redirect($this->generateUrl('developer_show', array('name' => $name)));
-        }
-
+        /* @var $developer Developer */
         if (!$developer = $this->getRepository('Developer')->findOneByName($name)) {
-            throw new NotFoundHttpException(sprintf('The developer "%s" does not exist', $name));
+            return new JsonResponse(array('status' => 'error', 'message' => 'Developer not found.'), 404);
         }
 
-        return $this->render('KnpBundlesBundle:Bundle:list.'.$format.'.twig', array(
-            'bundles'  => $developer->getBundles(),
-            'callback' => $request->query->get('callback')
-        ));
+        $result = array(
+            'developer' => $developer->getName(),
+            'bundles'   => array(),
+        );
+
+        /* @var $bundle Bundle */
+        foreach ($developer->getBundles() as $bundle) {
+            $result['bundles'][] = array(
+                'name'  => $bundle->getFullName(),
+                'state' => $bundle->getState(),
+                'score' => $bundle->getScore(),
+                'url'   => $this->generateUrl('bundle_show', array('ownerName' => $bundle->getOwnerName(), 'name' => $bundle->getName()), true)
+            );
+        }
+
+        return new JsonResponse($result);
     }
 }

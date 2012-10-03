@@ -1,5 +1,0 @@
-{% set array = [] %}
-{% for developer in developers %}
-{% set array = array|merge([developer.toSmallArray]) %}
-{% endfor %}
-{{ array|json_encode|raw }}

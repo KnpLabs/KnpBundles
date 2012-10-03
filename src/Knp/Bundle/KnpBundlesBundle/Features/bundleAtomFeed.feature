@@ -14,6 +14,6 @@ Feature: Listing bundle feed
 
 
   Scenario: Listing latest bundles
-    When I go to "/latest?format=atom"
+    When I go to "/latest.atom"
     Then I should see "KnpLabs/TestBundle" atom entry
     And I should see "FoS/UserBundle" atom entry
