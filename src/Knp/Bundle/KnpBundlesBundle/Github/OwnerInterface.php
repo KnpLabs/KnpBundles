@@ -7,10 +7,10 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Owner as EntityOwner;
 interface OwnerInterface
 {
     /**
-     * @param string|UserResponseInterface $response
-     * @param boolean                      $update
+     * @param string  $name
+     * @param boolean $update
      *
      * @return boolean|EntityOwner
      */
-    public function import($response, $update = true);
+    public function import($name, $update = true);
 }

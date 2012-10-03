@@ -5,6 +5,9 @@ namespace Knp\Bundle\KnpBundlesBundle\Github;
 use Symfony\Component\Console\Output\OutputInterface;
 use Github\Client;
 
+use Knp\Bundle\KnpBundlesBundle\Entity\Owner as EntityOwner;
+use Knp\Bundle\KnpBundlesBundle\Entity\Developer as EntityDeveloper;
+
 abstract class Owner implements OwnerInterface
 {
     /**
@@ -86,5 +89,22 @@ abstract class Owner implements OwnerInterface
         }
 
         return $url;
+    }
+
+    /**
+     * @param EntityOwner $owner
+     * @param array       $data
+     */
+    protected function updateOwner(EntityOwner $owner, array $data)
+    {
+        $owner->setFullName(isset($data['fullname']) ? $data['fullname'] : null);
+        $owner->setEmail(isset($data['email']) ? $data['email'] : null);
+        $owner->setAvatarUrl(isset($data['avatar_url']) ? $data['avatar_url'] : null);
+        $owner->setLocation(isset($data['location']) ? $data['location'] : null);
+        $owner->setUrl(isset($data['blog']) ? $this->fixUrl($data['blog']) : null);
+
+        if ($owner instanceof EntityDeveloper) {
+            $owner->setCompany(isset($data['company']) ? $data['company'] : null);
+        }
     }
 }
