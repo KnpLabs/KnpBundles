@@ -6,17 +6,17 @@ use Knp\Bundle\KnpBundlesBundle\Security\Core\User\UserProvider;
 
 class UserProviderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testLoadDeveloperByDevelopername()
+    public function testLoadDeveloperByUsername()
     {
         $john = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Developer');
-        
+
         $userManager = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager', array(
-            'getOrCreate'
+            'findDeveloperBy'
         ), array(), '', false);
 
         $userManager->expects($this->once())
-            ->method('getOrCreate')
-            ->with($this->equalTo('john'))
+            ->method('findDeveloperBy')
+            ->with($this->equalTo(array('name' => 'john')))
             ->will($this->returnValue($john));
 
         $provider = new UserProvider($userManager);

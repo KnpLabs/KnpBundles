@@ -2,14 +2,15 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Security\Core\User;
 
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
+
 use Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager;
-
-use Symfony\Component\Security\Core\User\UserInterface,
-    Symfony\Component\Security\Core\User\UserProviderInterface,
-    Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-
-use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface,
-    HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
+use Knp\Bundle\KnpBundlesBundle\Security\OAuth\Response\SensioConnectUserResponse;
 
 /**
  * A User provider which is using together with OAuth bundle to create new
@@ -35,7 +36,30 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        return $this->ownerManager->getOrCreate($response, 'developer');
+        if ($response instanceof SensioConnectUserResponse) {
+            if ($response->getLinkedAccount('github')) {
+                $findBy = array('githubId' => $response->getLinkedAccount('github'));
+            } else {
+                $findBy = array('sensioId' => $response->getNickname());
+            }
+        } else {
+            $findBy = array('githubId' => $response->getNickname());
+        }
+
+        $user = $this->ownerManager->findDeveloperBy(array('name' => current($findBy)));
+        if ($user) {
+            return $user;
+        }
+
+        $user = $this->ownerManager->findDeveloperBy($findBy);
+        if (!$user) {
+            $user = $this->ownerManager->createOwner(current($findBy));
+            if (!$user) {
+                throw new UsernameNotFoundException(sprintf('User with username "%s" could not found or created.', current($findBy)));
+            }
+        }
+
+        return $user;
     }
 
     /**
@@ -43,7 +67,7 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
      */
     public function loadUserByUsername($username)
     {
-        return $this->ownerManager->getOrCreate($username);
+        return $this->ownerManager->findDeveloperBy(array('name' => $username));
     }
 
     /**

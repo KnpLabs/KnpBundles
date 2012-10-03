@@ -2,8 +2,8 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Github;
 
-use Knp\Bundle\KnpBundlesBundle\Entity\Organization as EntityOrganization,
-    Knp\Bundle\KnpBundlesBundle\Repository\OwnerRepository;
+use Knp\Bundle\KnpBundlesBundle\Entity\Organization as EntityOrganization;
+use Knp\Bundle\KnpBundlesBundle\Repository\OwnerRepository;
 
 use Github\HttpClient\ApiLimitExceedException;
 use Symfony\Component\Console\Output\NullOutput;
@@ -26,10 +26,10 @@ class Organization extends Owner
     /**
      * {@inheritDoc}
      */
-    public function import($response, $update = true)
+    public function import($name, $update = true)
     {
         $organization = new EntityOrganization();
-        $organization->setName($response);
+        $organization->setName($name);
 
         if ($update && !$this->update($organization)) {
             return false;
@@ -62,18 +62,13 @@ class Organization extends Owner
         $data = $api->show($organization->getName());
 
         // Organization has been removed / not found ?
-        if (empty($data)) {
+        if (empty($data) || isset($data['message'])) {
             return false;
         }
 
-        $organization->setFullName(isset($data['fullname']) ? $data['fullname'] : null);
-        $organization->setEmail(isset($data['email']) ? $data['email'] : null);
-        $organization->setAvatarUrl(isset($data['avatar_url']) ? $data['avatar_url'] : null);
-        $organization->setLocation(isset($data['location']) ? $data['location'] : null);
-        $organization->setUrl(isset($data['blog']) ? $this->fixUrl($data['blog']) : null);
+        $this->updateOwner($organization, $data);
 
         $membersData = $api->members()->all($organization->getName());
-
         if ($members = $this->updateMembers($membersData)) {
             $organization->setMembers($members);
         }

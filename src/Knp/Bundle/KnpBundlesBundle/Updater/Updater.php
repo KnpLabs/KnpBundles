@@ -120,8 +120,8 @@ class Updater
                 continue;
             }
             $this->output->write(sprintf('[%s] Discover bundle <comment>%s</comment>: ', $this->currentTime(), $bundle->getFullName()));
-            $owner = $this->ownerManager->getOrCreate($bundle->getOwnerName());
 
+            $owner = $this->ownerManager->createOwner($bundle->getOwnerName(), 'unknown');
             if ($owner) {
                 $owner->addBundle($bundle);
 
@@ -157,9 +157,8 @@ class Updater
     {
         list($ownerName, $bundleName) = explode('/', $fullName);
 
-        try {
-            $owner = $this->ownerManager->getOrCreate($ownerName);
-        } catch (UsernameNotFoundException $e) {
+        $owner = $this->ownerManager->createOwner($ownerName, 'unknown');
+        if (!$owner) {
             return false;
         }
 
