@@ -1,14 +1,19 @@
+developers_list:
+    pattern:        /developer.{_format}
+    defaults:       { _controller: KnpBundlesBundle:Developer:list, sort: name, _format: html }
+    requirements:   { _method: "GET", _format: html|json }
+
 developer_list:
-    pattern:        /developer/{sort}
-    defaults:       { _controller: KnpBundlesBundle:Developer:list, sort: name }
-    requirements:   { _method: "GET", sort: "(name|best)"}
-    
+    pattern:        /developer/{sort}.{_format}
+    defaults:       { _controller: KnpBundlesBundle:Developer:list, sort: name, _format: html }
+    requirements:   { _method: "GET", sort: "(name|best)", _format: html|json }
+
 developer_bundle_list:
-    pattern:        /developer/{name}/bundles
-    defaults:       { _controller: KnpBundlesBundle:Developer:bundles }
-    requirements:   { _method: "GET", format: "(json|js)" }
+    pattern:        /developer/{name}/bundles.{_format}
+    defaults:       { _controller: KnpBundlesBundle:Developer:bundles, _format: json }
+    requirements:   { _method: "GET", _format: json }
 
 developer_show:
-    pattern:        /developer/{name}/profile
-    defaults:       { _controller: KnpBundlesBundle:Developer:show }
-    requirements:   { _method: "GET"}
+    pattern:        /developer/{name}/profile.{_format}
+    defaults:       { _controller: KnpBundlesBundle:Developer:show, _format: html }
+    requirements:   { _method: "GET", _format: html|json }
