@@ -187,7 +187,7 @@ class UpdateBundleConsumer implements ConsumerInterface
 
         $contributors = array();
         foreach ($contributorNames as $contributorName) {
-            $contributors[] = $this->ownerManager->getOrCreate($contributorName);
+            $contributors[] = $this->ownerManager->createOwner($contributorName, 'unknown');
         }
         $bundle->setContributors($contributors);
 
