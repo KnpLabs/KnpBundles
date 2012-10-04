@@ -14,7 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  *          @ORM\Index(name="date", columns={"date"}),
  *          @ORM\Index(name="bundle", columns={"bundle_id"}),
  *      },
- *      uniqueConstraints={@ORM\UniqueConstraint(name="date_bundle",columns={"date", "bundle_id"})}
+ *      uniqueConstraints={@ORM\UniqueConstraint(name="date_bundle",columns={"date", "bundle_id", "hash"})
+ * }
  * )
  * @ORM\HasLifecycleCallbacks
  */
@@ -49,6 +50,13 @@ class Score
      * @ORM\Column(type="integer")
      */
     protected $value = 0;
+
+    /**
+     * Unique score hash
+     *
+     * @ORM\Column(type="string", length=32)
+     */
+    protected $hash;
 
     public function __construct()
     {
@@ -109,6 +117,12 @@ class Score
     public function setBundle(Bundle $bundle = null)
     {
         $this->bundle = $bundle;
+        $this->hash = $bundle->getStatusHash();
+    }
+
+    public function getHash()
+    {
+        return $this->hash;
     }
 
     public function __toString()
