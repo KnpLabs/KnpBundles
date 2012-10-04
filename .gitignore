@@ -10,6 +10,8 @@
 /app/phpunit.xml
 /web/bundles/*
 /web/sitemap.xml*
+/web/css/*
+/web/js/*
 /app/DoctrineMigrations/*
 /src/Knp/Bundle/KnpBundlesBundle/DoctrineMigrations/*
 /src/Knp/Bundle/KnpBundlesBundle/Resources/solr/data/*
@@ -19,8 +21,10 @@
 composer.phar
 bin/*
 !bin/update-all-bundles.sh
+!bin/setup-*.sh
 !bin/launch-rabit-consumers.sh
 !bin/prepare-*.sh
 !bin/behat-*.sh
 build
 behat.yml
+app/Resources/java/*

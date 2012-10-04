@@ -3,7 +3,6 @@
 namespace Knp\Bundle\KnpBundlesBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Main controller

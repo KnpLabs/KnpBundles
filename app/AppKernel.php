@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new Igorw\FileServeBundle\IgorwFileServeBundle(),
+            new Symfony\Bundle\AsseticBundle\AsseticBundle(),
 
             // register your bundles here
             new Knp\Bundle\MarkdownBundle\KnpMarkdownBundle(),
