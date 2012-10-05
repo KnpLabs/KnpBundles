@@ -246,6 +246,87 @@ code, pre {
     border-bottom-color: #d0d0d0
 }
 
+.ui-autocomplete {
+    float: left;
+    width: 276px;
+    padding: 5px 9px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    border: 3px solid #dedede;
+    border-radius: 5px;
+    background: #fff;
+    cursor: pointer
+}
+
+.ui-autocomplete:after, .ui-autocomplete:before {
+    bottom: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.ui-autocomplete:after {
+    border-color: rgba(136, 183, 213, 0);
+    border-bottom-color: #fff;
+    border-width: 10px;
+    left: 10%;
+    margin-left: -10px;
+}
+
+.ui-autocomplete:before {
+    border-color: rgba(194, 225, 245, 0);
+    border-bottom-color: #dedede;
+    border-width: 14px;
+    left: 10%;
+    margin-left: -14px;
+}
+
+.ui-autocomplete li {
+    float: left;
+    padding: 10px 3px;
+    border-bottom: 1px solid #eee
+}
+
+.ui-autocomplete li:first-child {
+    padding-top: 5px
+}
+
+.ui-autocomplete li:last-child {
+    padding-bottom: 5px;
+    border: 0
+}
+
+.ui-autocomplete li a {
+    color: #999;
+    font-size: 12px;
+    line-height: 15px
+}
+
+.ui-autocomplete li a img {
+    float: left;
+    margin: 3px 10px 0 0
+}
+
+.ui-autocomplete li a strong {
+    float: left;
+    width: 220px;
+    margin-bottom: 3px;
+    color: #5697bc;
+    font-size: 14px
+}
+
+.ui-autocomplete li a strong:hover {
+    color: #5697bc
+}
+
+.ui-autocomplete li a span {
+    float: left;
+    width: 220px;
+    line-height: 16px;
+    word-break: break-all
+}
 
 /* Header */
 #page-header {

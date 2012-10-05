@@ -1,4 +1,6 @@
 (function($) {
+    var cache = {},
+        lastXhr;
     if (window.location.hash.length > 0) {
         $('ul.nav-tabs li > a[data-target="' + window.location.hash + '"]').tab('show');
     }
@@ -11,7 +13,46 @@
     $('#search-query').bind('keydown.esc', function() {
         $('#search-query').blur();
         return false;
-    });
+    }).autocomplete({
+        minLength: 4,
+        position: {
+            my : "left top",
+            at: "left bottom",
+            offset: "0 12",
+            collision: "none"
+        },
+        source: function(request, response) {
+            var term = request.term;
+            if (term in cache) {
+                response(cache[term]);
+                return;
+            }
+
+            lastXhr = $.ajax({
+                type: "GET",
+                url: $('#search-box').attr('href')+'.json?limit=5',
+                dataType: 'json',
+                data: {
+                    q: term
+                },
+                success: function(data, status, xhr) {
+                    cache[term] = data;
+                    if (xhr === lastXhr) {
+                        response(data);
+                    }
+                }
+            });
+        },
+        select: function(event, ui) {
+            $('#search-query').val(ui.item.name).parent().trigger('submit');
+            return false;
+        }
+    }).data('autocomplete')._renderItem = function(ul, item) {
+        return $('<li></li>')
+            .data('item.autocomplete', item)
+            .append('<a><img src="'+item.avatarUrl+'" width="40" height="40"><strong>'+(item.name.length > 26 ? item.name.slice(0, 24)+'...' : item.name)+'</strong><span>'+(item.description || '<em>No description</em>')+'</span></a>')
+            .appendTo(ul);
+    };
 
     $('.sidebar-developers-list img,abbr').tooltip();
     $('.symfony-versions').popover({trigger: 'hover'});
