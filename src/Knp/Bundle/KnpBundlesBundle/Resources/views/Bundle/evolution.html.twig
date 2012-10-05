@@ -20,8 +20,21 @@
     </hgroup>
 
     <section class="graph">
-        {% include 'KnpBundlesBundle::layout/chart.html.twig' %}
+        {% include 'KnpBundlesBundle::layout/chart.html.twig' with {'series': evolution, 'id': 1} %}
+    </section>
 
+    <hr />
+
+    <hgroup>
+        <h2>{% trans %}evolution.recent_items.title{% endtrans %}</h2>
+        <h4>{{ 'evolution.recent_items.text'|trans|markdown }}</h4>
+    </hgroup>
+
+    <section class="graph">
+        {% include 'KnpBundlesBundle::layout/chart.html.twig' with {'series': recentItems, 'id': 2, 'include_lib': false} %}
+    </section>
+
+    <section class="graph">
         <ul id="total-stats">
             <li>
                 <div>

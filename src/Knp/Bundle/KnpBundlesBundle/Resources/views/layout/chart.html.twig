@@ -1,14 +1,19 @@
+{% set id = id|default(1) %}
 {% set simple = simple|default(false) %}
+{% set include_lib = include_lib|default(true) %}
 {% set tooltipText = tooltipText|default('new<br>bundles') %}
 
-<div id="chart"></div>
+<div id="chart{{ id }}"></div>
 
+{% if include_lib %}
 <script type="text/javascript" src="{{ asset('bundles/knpbundles/js/highcharts.js') }}"></script>
+{% endif %}
+
 <script type="text/javascript">
     $(function () {
         chart = new Highcharts.Chart({
             chart: {
-                renderTo: 'chart',
+                renderTo: 'chart{{ id }}',
                 {% if not simple %}
                 marginTop: 35,
                 {% endif %}

@@ -755,6 +755,10 @@ code, pre {
     border-bottom: 2px solid #DEDEDE
 }
 
+.content-box hr {
+    border: 1px solid #DEDEDE
+}
+
 .content-box hgroup h2 {
     margin: 15px;
     color: #33363b;
@@ -1194,7 +1198,7 @@ code, pre {
     font-size: 11px
 }
 
-.sidebar-chart #chart {
+.sidebar-chart #chart1 {
     height: 155px;
     width: 240px
 }
@@ -1209,7 +1213,7 @@ code, pre {
     border: 0
 }
 
-.sidebar-box .chart #chart {
+.sidebar-box .chart #chart1 {
     height: 200px;
     width: 260px
 }
