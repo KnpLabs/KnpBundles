@@ -132,7 +132,7 @@ class Bundle
     /**
      * Internal scores
      *
-     * @ORM\OneToMany(targetEntity="Score", mappedBy="bundle")
+     * @ORM\OneToMany(targetEntity="Score", mappedBy="bundle", fetch="EXTRA_LAZY")
      */
     protected $scores;
 
@@ -574,9 +574,13 @@ class Bundle
      *
      * @return array
      */
-    public function getScores()
+    public function getScores($limit = null)
     {
-        return $this->scores;
+        if (null === $limit) {
+            return $this->scores;
+        }
+
+        return $this->scores->slice(0, $limit);
     }
 
     public function getLatestScoreDetails()

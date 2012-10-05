@@ -3,6 +3,7 @@
 namespace Knp\Bundle\KnpBundlesBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 class BundleRepository extends EntityRepository
 {
@@ -139,18 +140,30 @@ class BundleRepository extends EntityRepository
         return $query->getOneOrNullResult();
     }
 
-    public function getBundlesCountEvolution($nb = null)
+    public function getEvolutionCounts($period = 50)
     {
-        $query = $this->createQueryBuilder('b')
-            ->select('b.createdAt AS date, COUNT(b.id) AS value')
-            ->groupBy('b.createdAt')
-            ->orderBy('b.createdAt', 'asc')
-            ->getQuery();
+        $rsm = new ResultSetMapping();
+        $rsm->addEntityResult('Knp\Bundle\KnpBundlesBundle\Entity\Score', 'e');
+        $rsm->addFieldResult('e', 'id', 'id');
+        $rsm->addFieldResult('e', 'date', 'date');
+        $rsm->addFieldResult('e', 'value', 'value');
 
-        if (null !== $nb) {
-            $query->setMaxResults($nb);
-        }
+        $sql = <<<EOF
+SELECT id, COUNT(id) as `value`, DATE(createdAt) as `date`
+FROM bundle
+WHERE createdAt > :period
+GROUP BY `date`
+ORDER BY `date` ASC
+EOF;
 
-        return $query->execute();
+        $periodDate = new \DateTime(sprintf('%d days ago', $period));
+        $periodDate = $periodDate->format('Y-m-d H:i:s');
+
+        return $this
+            ->getEntityManager()
+            ->createNativeQuery($sql, $rsm)
+            ->setParameter('period', $periodDate)
+            ->getResult()
+        ;
     }
 }
