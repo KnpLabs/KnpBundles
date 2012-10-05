@@ -16,7 +16,7 @@
         'bundles/knpbundles/css/styles.css'
         'bundles/knpbundles/css/highlightjs-css/github.css'
     %}
-    <link rel="stylesheet" href="{{ asset_url }}?v1" type="text/css" media="screen">
+    <link rel="stylesheet" href="{{ asset_url }}" type="text/css" media="screen">
     {% endstylesheets %}
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
@@ -133,8 +133,8 @@
     'bundles/knpbundles/js/main.js'
     'bundles/knpbundles/js/highlightjs-js/highlight.js'
 %}
-<script src="{{ asset_url }}?v1"></script>
+<script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
-<script>hljs.initHighlightingOnLoad();</script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
 </body>
 </html>

@@ -30,7 +30,7 @@
 
             lastXhr = $.ajax({
                 type: "GET",
-                url: $('#search-box').attr('href')+'.json?limit=5',
+                url: $('#search-box').attr('action')+'.json?limit=5',
                 dataType: 'json',
                 data: {
                     q: term
