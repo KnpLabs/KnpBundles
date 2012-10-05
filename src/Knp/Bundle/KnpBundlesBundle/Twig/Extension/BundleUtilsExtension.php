@@ -2,6 +2,9 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Twig\Extension;
 
+use Knp\Bundle\TimeBundle\Twig\Extension\TimeExtension;
+
+use Knp\Bundle\KnpBundlesBundle\Entity\Activity;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 class BundleUtilsExtension extends \Twig_Extension
@@ -22,6 +25,66 @@ class BundleUtilsExtension extends \Twig_Extension
             'bundle_state_tooltip' => new \Twig_Filter_Method($this, 'bundleStateTooltip'),
             'bundle_travis_url'    => new \Twig_Filter_Method($this, 'bundleTravisUrl'),
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getFunctions()
+    {
+        return array(
+            'bundle_activity_icon'  => new \Twig_Function_Method($this, 'bundleActivityIcon', array('is_safe' => array('html'))),
+            'bundle_activity_msg'   => new \Twig_Function_Method($this, 'bundleActivityMessage'),
+        );
+    }
+
+    /**
+     * @param string $activityType
+     *
+     * @return string
+     */
+    public function bundleActivityIcon($activityType)
+    {
+        switch ($activityType) {
+            case Activity::ACTIVITY_TYPE_COMMIT:
+                $icon = 'github';
+                break;
+
+            case Activity::ACTIVITY_TYPE_RECOMMEND:
+                $icon = 'thumbs-up';
+                break;
+
+            default:
+                $icon = 'info';
+        }
+
+        return sprintf('<i class="icon-%s"></i>', $icon);
+    }
+
+    /**
+     * @param Activity $activity
+     * @param string   $type
+     *
+     * @return string
+     */
+    public function bundleActivityMessage(Activity $activity, $type = 'long')
+    {
+        switch ($activity->getType()) {
+            case Activity::ACTIVITY_TYPE_COMMIT:
+                return 'long' == $type ? $activity->getMessage() : 'commited into';
+                break;
+
+            case Activity::ACTIVITY_TYPE_RECOMMEND:
+                return 'long' == $type ? 'Bundle was recommended' : 'recommended';
+                break;
+
+            case Activity::ACTIVITY_TYPE_TWEETED:
+                return 'long' == $type ? 'Bundle archived top trending badge' : 'archived';
+                break;
+
+            default:
+                return $activity->getMessage() ?: 'Various info';
+        }
     }
 
     /**

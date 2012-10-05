@@ -3,44 +3,52 @@
 namespace Knp\Bundle\KnpBundlesBundle\Github;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\NodeInterface;
 use Symfony\Component\Config\Definition\ArrayNode;
 use Symfony\Component\Config\Definition\PrototypedArrayNode;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\PhpProcess;
 
 use Github\Client;
 
+use Knp\Bundle\KnpBundlesBundle\Entity\Activity;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
-use Knp\Bundle\KnpBundlesBundle\Git;
+use Knp\Bundle\KnpBundlesBundle\Entity\Developer as EntityDeveloper;
 use Knp\Bundle\KnpBundlesBundle\Event\BundleEvent;
+use Knp\Bundle\KnpBundlesBundle\Manager\OwnerManager;
+use Knp\Bundle\KnpBundlesBundle\Git;
 
 class Repo
 {
     /**
      * php-github-api instance used to request GitHub API
      *
-     * @var Client|null
+     * @var Client
      */
-    protected $github = null;
+    private $github;
 
     /**
-     * @var Git\RepoManager|null
+     * @var Git\RepoManager
      */
-    protected $gitRepoManager = null;
+    private $gitRepoManager;
 
     /**
      * Output buffer
      *
-     * @var null|OutputInterface
+     * @var OutputInterface
      */
-    protected $output = null;
+    private $output;
 
     /**
      * @var EventDispatcherInterface
      */
-    protected $dispatcher;
+    private $dispatcher;
+
+    /**
+     * @var OwnerManager
+     */
+    private $ownerManager;
 
     /**
      * @var string
@@ -52,15 +60,22 @@ class Repo
      * @param OutputInterface          $output
      * @param Git\RepoManager          $gitRepoManager
      * @param EventDispatcherInterface $dispatcher
+     * @param OwnerManager             $ownerManager
      */
-    public function __construct(Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager, EventDispatcherInterface $dispatcher)
+    public function __construct(Client $github, OutputInterface $output, Git\RepoManager $gitRepoManager, EventDispatcherInterface $dispatcher, OwnerManager $ownerManager)
     {
         $this->github = $github;
         $this->output = $output;
         $this->gitRepoManager = $gitRepoManager;
         $this->dispatcher = $dispatcher;
+        $this->ownerManager = $ownerManager;
     }
 
+    /**
+     * @param Bundle $bundle
+     *
+     * @return boolean|Bundle
+     */
     public function update(Bundle $bundle)
     {
         try {
@@ -76,9 +91,6 @@ class Repo
             return false;
         }
         if (!$this->updateCommits($bundle)) {
-            return false;
-        }
-        if (!$this->updateTags($bundle)) {
             return false;
         }
 
@@ -128,7 +140,22 @@ class Repo
         if (empty($commits) || isset($data['message'])) {
             return false;
         }
-        $bundle->setLastCommits($commits);
+
+        /* @var $developer EntityDeveloper */
+        foreach ($commits as $commit) {
+            $lastCommitAt = new \DateTime();
+            $lastCommitAt->setTimestamp(strtotime($commit['commit']['committer']['date']));
+
+            $developer = $this->ownerManager->createOwner($commit['commiter']['login'], 'developer', false);
+            $developer->setLastCommitAt($lastCommitAt);
+
+            $activity = new Activity();
+            $activity->setType(Activity::ACTIVITY_TYPE_COMMIT);
+            $activity->setMessage(strtok($commit['commit']['message'], "\n\r"));
+            $activity->setCreatedAt($lastCommitAt);
+            $activity->setBundle($bundle);
+            $activity->setDeveloper($developer);
+        }
 
         return true;
     }
@@ -144,19 +171,6 @@ class Repo
             return false;
         }
         foreach ($files as $data) {
-            if (!$bundle->isValid() && false !== strpos($data['name'], 'Bundle.php')) {
-                if (null !== $onlyFiles && !in_array('sf', $onlyFiles)) {
-                    continue;
-                }
-
-                $file = $api->show($bundle->getOwnerName(), $bundle->getName(), $data['name']);
-                if (!isset($file['message']) && 'base64' == $file['encoding']) {
-                    $this->validateSymfonyBundle($bundle, $file['content']);
-                }
-
-                continue;
-            }
-
             switch ($data['name']) {
                 case 'LICENSE':
                     if (null !== $onlyFiles && !in_array('license', $onlyFiles)) {
@@ -267,23 +281,6 @@ class Repo
         return true;
     }
 
-    public function updateTags(Bundle $bundle)
-    {
-        $this->output->write(' tags');
-
-        $tags = array();
-        $data = $this->github->api('repo')->tags($bundle->getOwnerName(), $bundle->getName());
-        if ($data) {
-            foreach ($data as $tag) {
-                $tags[] = $tag['name'];
-            }
-        }
-
-        $bundle->setTags($tags);
-
-        return $bundle;
-    }
-
     public function fetchComposerKeywords(Bundle $bundle)
     {
         $file = $this->github->api('repo')->contents()->show($bundle->getOwnerName(), $bundle->getName(), 'composer.json');
@@ -312,6 +309,33 @@ class Repo
         }
 
         return $names;
+    }
+
+    /**
+     * @param Bundle $bundle
+     *
+     * @return boolean
+     */
+    public function validate(Bundle $bundle)
+    {
+        $api   = $this->github->api('repo')->contents();
+        $files = $api->show($bundle->getOwnerName(), $bundle->getName());
+        if (empty($files) || isset($files['message'])) {
+            return false;
+        }
+
+        foreach ($files as $data) {
+            if (false !== strpos($data['name'], 'Bundle.php')) {
+                $file = $api->show($bundle->getOwnerName(), $bundle->getName(), $data['name']);
+                if (!isset($file['message']) && 'base64' == $file['encoding']) {
+                    return false !== strpos(base64_decode($file['content']), 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle');
+                }
+
+                break;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -438,21 +462,6 @@ EOF;
     public function setCanonicalConfiguration($canonicalConfiguration)
     {
         self::$canonicalConfiguration = $canonicalConfiguration;
-    }
-
-    /**
-     * Checks if '*Bundle.php' class use base class for Symfony bundle
-     *
-     * @param Bundle $bundle
-     * @param string $content
-     *
-     * @return boolean
-     */
-    private function validateSymfonyBundle(Bundle $bundle, $content)
-    {
-        $bundle->setIsValid(false !== strpos(base64_decode($content), 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle'));
-
-        return $bundle->isValid();
     }
 
     /**

@@ -3,9 +3,11 @@
 namespace Knp\Bundle\KnpBundlesBundle\Travis;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 use Buzz\Browser;
+
+use Knp\Bundle\KnpBundlesBundle\Entity\Activity;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 
 /*
  * This class is very simple and stupid - it uses curl for getting data
@@ -58,34 +60,43 @@ class Travis
     /**
      * Updates repo based on status from travis.
      *
-     * @param  Bundle $repo
+     * @param  Bundle $bundle
      *
      * @return boolean
      */
-    public function update(Bundle $repo)
+    public function update(Bundle $bundle)
     {
         $this->output->write(' Travis status:');
 
-        $response = $this->browser->get('http://travis-ci.org/'.$repo->getOwnerName().'/'.$repo->getName().'.json');
+        $response = $this->browser->get('http://travis-ci.org/'.$bundle->getOwnerName().'/'.$bundle->getName().'.json');
+
+        $activity = new Activity();
+        $activity->setType(Activity::ACTIVITY_TYPE_TRAVIS_BUILD);
 
         $status = json_decode($response->getContent(), true);
         if (JSON_ERROR_NONE === json_last_error()) {
             if (0 === $status['last_build_status']) {
-                $repo->setTravisCiBuildStatus(true);
+                $activity->setState(Activity::STATE_OPEN);
+
+                $bundle->setTravisCiBuildStatus(true);
+                $bundle->addActivity($activity);
                 $this->output->write(' success');
 
                 return true;
             }
 
             if (1 === $status['last_build_status']) {
-                $repo->setTravisCiBuildStatus(false);
+                $activity->setState(Activity::STATE_CLOSED);
+
+                $bundle->setTravisCiBuildStatus(false);
+                $bundle->addActivity($activity);
                 $this->output->write(' failed');
 
                 return true;
             }
         }
 
-        $repo->setTravisCiBuildStatus(null);
+        $bundle->setTravisCiBuildStatus(null);
         $this->output->write(' error');
 
         return false;

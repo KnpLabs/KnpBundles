@@ -30,7 +30,7 @@ class KbUpdateTrendsCommand extends ContainerAwareCommand
         $em = $this->getContainer()->get('knp_bundles.entity_manager');
 
         if ($em->getConnection()->getDatabasePlatform()->getName() == 'sqlite') {
-            $output->writeln(sprintf('[%s] This command can\'t be executed on <error>SQLite</error>!', $this->currentTime()));
+            $output->writeln(sprintf('[%s] This command can\'t be executed on <error>SQLite</error>!', date('d-m-y H:i:s')));
 
             return 1;
         }
@@ -38,11 +38,11 @@ class KbUpdateTrendsCommand extends ContainerAwareCommand
         $em->getConnection()->beginTransaction();
         try {
             $nbRows = $this->updateTrends();
-            $output->writeln(sprintf('[%s] <info>%s</info> rows updated', $this->currentTime(), $nbRows));
+            $output->writeln(sprintf('[%s] <info>%s</info> rows updated', date('d-m-y H:i:s'), $nbRows));
 
             $em->getConnection()->commit();
         } catch (\Exception $e) {
-            $output->writeln(sprintf('[%s] <error>Rollbacking</error> because of %s', $this->currentTime(), $e));
+            $output->writeln(sprintf('[%s] <error>Rollbacking</error> because of %s', date('d-m-y H:i:s'), $e));
             $em->getConnection()->rollback();
             $em->close();
 
@@ -88,10 +88,5 @@ EOF;
         $nbRows = $em->getConnection()->executeUpdate($query, array('minDiff' => $minDiff, 'minThreshold' => $minThreshold));
 
         return $nbRows;
-    }
-
-    private function currentTime()
-    {
-        return date('d-m-y H:i:s');
     }
 }

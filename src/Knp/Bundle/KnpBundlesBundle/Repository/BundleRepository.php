@@ -79,21 +79,6 @@ class BundleRepository extends EntityRepository
         return $this->getEntityManager()->createQuery('SELECT COUNT(bundle.id) FROM ' . $this->getEntityName() . ' bundle')->getSingleScalarResult();
     }
 
-    public function getLastCommits($nb)
-    {
-        $bundles = $this->findByLastCommitAt($nb);
-        $commits = array();
-        foreach ($bundles as $bundle) {
-            $commits = array_merge($commits, $bundle->getLastCommits());
-        }
-        usort($commits, function($a, $b) {
-            return strtotime($a['committed_date']) < strtotime($b['committed_date']);
-        });
-        $commits = array_slice($commits, 0, $nb);
-
-        return $commits;
-    }
-
     public function findByLastCommitAt($nb)
     {
         return $this->createQueryBuilder('bundle')->orderBy('bundle.lastCommitAt', 'DESC')->getQuery()->setMaxResults($nb)->execute();

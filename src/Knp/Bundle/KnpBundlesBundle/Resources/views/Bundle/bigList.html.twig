@@ -6,7 +6,7 @@
 
     <div class="bundle-info">
         <h2>
-            <a href="{{ path('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}" class="name">{{ bundle.name }}</a>
+            <a href="{{ path('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}" class="name">{{ bundle.name|truncate(38, true) }}</a>
             {% if bundle.state != 'unknown' %}<abbr title="{{ bundle.state|bundle_state_tooltip }}">({{ bundle.state }})</abbr>{% endif %}
         </h2>
 
