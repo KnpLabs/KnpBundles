@@ -49,3 +49,5 @@ parameters:
 
     monolog.swift.from_email: error@knpbundles.com
     monolog.swift.to_email: error@knpbundles.com
+
+    yuicompressor_jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar

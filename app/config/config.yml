@@ -7,7 +7,9 @@ framework:
     secret:           %secret%
     router:           { resource: "%kernel.root_dir%/config/routing.yml" }
     validation:       { enabled: true, enable_annotations: true }
-    templating:       { engines: ['twig'] }
+    templating:
+        engines: ['twig']
+        assets_version: v1
     default_locale:   en
     session:
         cookie_lifetime: 3600
@@ -123,3 +125,14 @@ hwi_oauth:
             client_secret:       %knp_bundles.twitter.consumer_secret%
 
     firewall_name: secured_area
+
+assetic:
+    use_controller: false
+    bundles:        [ KnpBundlesBundle ]
+    # java: "/usr/bin/java"
+    filters:
+        cssrewrite: ~
+        yui_css:
+            jar: %yuicompressor_jar%
+        yui_js:
+            jar: %yuicompressor_jar%
