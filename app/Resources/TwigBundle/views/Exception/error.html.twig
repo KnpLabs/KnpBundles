@@ -16,7 +16,7 @@
     <section id="error-desc">
         <p>An error occurred</p>
         <p>Edgar found some issue at this page<br>and reported it to our ninja developers.</p>
-        <p id="error-sorry">(we're terribly sorry about this)</p>
+        <p id="error-sorry">{{ status_text|default('(we\'re terribly sorry about this)') }}</p>
     </section>
 </div>
 {% endblock %}

@@ -113,6 +113,7 @@ class Repo
         $bundle->setDescription(empty($data['description']) ? null : $data['description']);
         $bundle->setNbFollowers($data['watchers']);
         $bundle->setNbForks($data['forks']);
+        $bundle->setIsFork($data['fork']);
         $bundle->setCreatedAt(new \DateTime($data['created_at']));
         $bundle->setHomepage(empty($data['homepage']) ? null : $data['homepage']);
 
