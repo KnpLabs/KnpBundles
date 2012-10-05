@@ -214,6 +214,11 @@ evolution:
         text: |
             The activity level shows the number of bundle updates (maintenance and upgrade) and new bundles
             entering the ecosystem.
+    recent_items:
+        title: "Recent bundles, developers and organizations"
+        text: |
+            The activity level shows the number of new bundles, developers and organizations entering the ecosystem.
+
 travis:
     buildStatus:
         passing: "Passing"

@@ -133,11 +133,13 @@ class BundleController extends BaseController
 
         $owner = $this->get('security.context')->getToken()->getUser();
 
+        $scoresNumber = $this->container->getParameter('knp_bundles.bundle.graph.view_page.scores_number');
+
         return $this->render('KnpBundlesBundle:Bundle:show.html.twig', array(
             'series'  => array(
                 array(
                     'name' => 'Score',
-                    'data' => $bundle->getScores(),
+                    'data' => $bundle->getScores($scoresNumber),
                 )
             ),
             'bundle'            => $bundle,
@@ -199,11 +201,13 @@ class BundleController extends BaseController
 
         $owners = $this->getRepository('Developer')->findAllSortedBy('createdAt', 20);
 
+        $graphPeriod = $this->container->getParameter('knp_bundles.bundle.graph.main_page.period');
+
         $response = $this->render('KnpBundlesBundle:Bundle:list.html.twig', array(
             'series'  => array(
                 array(
                     'name' => 'New bundles',
-                    'data' => $this->getRepository('Bundle')->getBundlesCountEvolution(5),
+                    'data' => $this->getRepository('Bundle')->getEvolutionCounts($graphPeriod),
                 )
             ),
             'bundles'     => $paginator,
@@ -224,20 +228,28 @@ class BundleController extends BaseController
         $period = $this->container->getParameter('knp_bundles.evolution.period');
 
         return $this->render('KnpBundlesBundle:Bundle:evolution.html.twig', array(
-            'series'  => array(
-                array(
-                    'name' => 'Developers',
-                    'data' => $this->getRepository('Developer')->getEvolutionCounts($period),
-                ),
-                array(
-                    'name' => 'Organizations',
-                    'data' => $this->getRepository('Organization')->getEvolutionCounts($period),
-                ),
+            'evolution'  => array(
                 array(
                     'name' => 'Bundles updated',
                     'data' => $this->getRepository('Score')->getEvolutionCounts($period),
                 )
             ),
+
+            'recentItems'  => array(
+                array(
+                    'name' => 'New bundles',
+                    'data' => $this->getRepository('Bundle')->getEvolutionCounts($period),
+                ),
+                array(
+                    'name' => 'New developers',
+                    'data' => $this->getRepository('Developer')->getEvolutionCounts($period),
+                ),
+                array(
+                    'name' => 'New organizations',
+                    'data' => $this->getRepository('Organization')->getEvolutionCounts($period),
+                )
+            ),
+
             'bundles'       => $this->getRepository('Bundle')->count(),
             'developers'    => $this->getRepository('Developer')->count(),
             'organizations' => $this->getRepository('Organization')->count()
