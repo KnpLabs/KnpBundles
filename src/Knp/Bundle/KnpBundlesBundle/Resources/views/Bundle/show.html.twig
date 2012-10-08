@@ -225,7 +225,7 @@
     <div class="tab-content">
         <div id="readme" class="tab-pane active markdown">
             {% if bundle.readme %}
-                {{ bundle.readme|github_md_2_md|markdown }}
+                {{ bundle.readme|markdown }}
             {% else %}
                 No readme file found in bundle.
             {% endif %}

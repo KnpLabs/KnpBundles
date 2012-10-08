@@ -4,7 +4,7 @@
         "psr-0": { "": "src/" }
     },
     "require": {
-        "php": ">=5.3.2",
+        "php": ">=5.3.3",
         "symfony/symfony": "2.1.*",
         "symfony/assetic-bundle": "2.1.*",
         "symfony/monolog-bundle": "2.1.*",
@@ -16,7 +16,7 @@
         "doctrine/doctrine-fixtures-bundle": "dev-master",
         "doctrine/doctrine-migrations-bundle": "dev-master",
         "stof/doctrine-extensions-bundle": "dev-master",
-        "knplabs/knp-markdown-bundle": "dev-master",
+        "knplabs/knp-markdown-bundle": "1.1.*",
         "knplabs/knp-menu-bundle": "1.1.*",
         "knplabs/knp-disqus-bundle": "dev-master",
         "knplabs/knp-time-bundle": "dev-master",
