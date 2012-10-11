@@ -3,9 +3,9 @@ Feature: Showing static page
   I want to browse informational pages
 
   Scenario: About scoring page
-    When I go to "/about/scoring"
+    When I go to "/about/faq-scoring"
     Then response is successful
-    And I should see "About KnpBundles scoring algorithm"
+    And I should see "Frequent answers to questions regarding bundle scoring issues"
 
   Scenario: Api page
     When I go to "/api"

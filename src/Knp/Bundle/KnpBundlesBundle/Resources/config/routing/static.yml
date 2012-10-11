@@ -1,6 +1,15 @@
+# @todo start deprecated route --> kept for seo but remove this route after some time
 scoring:
-    pattern:        /about/scoring
-    defaults:       { _controller: KnpBundlesBundle:Main:aboutScoring }
+    pattern: /about/scoring
+    defaults:
+        _controller: FrameworkBundle:Redirect:redirect
+        route: faq_scoring
+        permanent: true
+# @todo end deprecated route --> kept for seo but remove this route after some time
+
+faq_scoring:
+    pattern:        /about/faq-scoring
+    defaults:       { _controller: KnpBundlesBundle:Main:faqScoring }
     requirements:   { _method: "GET" }
 
 api:
