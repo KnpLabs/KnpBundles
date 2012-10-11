@@ -17,7 +17,6 @@ use PhpAmqpLib\Message\AMQPMessage;
 use Github\Exception\ApiLimitExceedException;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 use Doctrine\Common\Persistence\ObjectManager;
@@ -43,22 +42,22 @@ class UpdateBundleConsumer implements ConsumerInterface
     private $em;
 
     /**
-     * @var Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager
+     * @var OwnerManager
      */
     private $ownerManager;
 
     /**
-     * @var Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer
+     * @var SolrIndexer
      */
     private $indexer;
 
     /**
-     * @var Knp\Bundle\KnpBundlesBundle\Github\Repo
+     * @var Repo
      */
     private $githubRepoApi;
 
     /**
-     * @var Knp\Bundle\KnpBundlesBundle\Travis\Travis
+     * @var Travis
      */
     private $travis;
 
@@ -132,7 +131,6 @@ class UpdateBundleConsumer implements ConsumerInterface
             $this->logger->info(sprintf('Retrieved bundle %s', $bundle->getName()));
         }
 
-        $scoreRepo = $this->em->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score');
         for ($i = 0; $i < self::MAX_GITHUB_TRIALS; $i++) {
             try {
                 if (!$this->githubRepoApi->update($bundle)) {
@@ -148,15 +146,7 @@ class UpdateBundleConsumer implements ConsumerInterface
 
                 $this->updateContributors($bundle);
                 $this->updateKeywords($bundle);
-
-                $score = $scoreRepo->findOneBy(array('date' => new \DateTime(), 'bundle' => $bundle->getId()));
-                if (!$score) {
-                    $score = new Score();
-                    $score->setBundle($bundle);
-                }
-                $score->setValue($bundle->getScore());
-                $this->em->persist($score);
-                $this->em->flush();
+                $this->updateScore($bundle);
 
                 if ($bundle->getUsesTravisCi()) {
                     $this->travis->update($bundle);
@@ -211,6 +201,31 @@ class UpdateBundleConsumer implements ConsumerInterface
 
             $bundle->addKeyword($keyword);
         }
+    }
+
+    private function updateScore(Bundle $bundle)
+    {
+        if (!$bundle->hasChanges()) {
+            return;
+        }
+
+        $score = $this->em
+            ->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Score')
+            ->findOneBy(array(
+                'date' => new \DateTime(),
+                'bundle' => $bundle->getId()
+            )
+        );
+
+        if (!$score) {
+            $score = new Score();
+            $score->setBundle($bundle);
+        }
+
+        $score->setValue($bundle->getScore());
+
+        $this->em->persist($score);
+        $this->em->flush();
     }
 
     /**

@@ -1232,4 +1232,30 @@ class Bundle
     {
         return $this->lastTweetedAt;
     }
+
+    /**
+     * Unique string which shows current status of the bundle
+     *
+     * @return string
+     */
+    public function getStatusHash()
+    {
+        $statusFields = array(
+            'description' => $this->getDescription(),
+            'nbFollowers' => $this->getNbFollowers(),
+            'nbForks' => $this->getNbForks(),
+            'lastCommitAt' => $this->getLastCommitAt()->getTimestamp(),
+            'readme' => $this->getReadme()
+        );
+
+        return md5(serialize($statusFields));
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasChanges()
+    {
+        return $this->getLatestScoreDetails()->getHash() !== $this->getStatusHash();
+    }
 }
