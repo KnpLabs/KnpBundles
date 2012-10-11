@@ -98,7 +98,7 @@ code, pre {
 .icon-calendar:before, .icon-newest:before { content: '='; }
 .icon-chart:before, .icon-best:before { content: 'x'; }
 .icon-download:before { content: 'd'; }
-.icon-box:before { content: 'B'; }
+.icon-box:before, .icon-bundles:before { content: 'B'; }
 .icon-wrench:before { content: 'n'; }
 .icon-clock:before { content: 't'; }
 
