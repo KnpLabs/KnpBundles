@@ -1168,6 +1168,9 @@ class Bundle
     /** @ORM\PrePersist */
     public function markAsCreated()
     {
-        $this->createdAt = $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+        if (!$this->createdAt) {
+            $this->createdAt = $this->updatedAt;
+        }
     }
 }

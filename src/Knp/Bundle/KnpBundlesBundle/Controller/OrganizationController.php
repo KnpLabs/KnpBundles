@@ -65,13 +65,13 @@ class OrganizationController extends BaseController
         $this->highlightMenu('organizations');
 
         $query = $this->getRepository('Organization')->queryAllWithBundlesSortedBy($sortField);
-        $paginator = $this->getPaginator($query, $request->query->get('page', 1), 18);
+        $paginator = $this->getPaginator($query, $request->query->get('page', 1), $request->query->get('limit', 18));
 
         $organizations = $paginator->getCurrentPageResults();
         /**
          * @see http://stackoverflow.com/a/8527531
          */
-        if (is_array($organizations[0])) {
+        if (isset($organizations[0]) && is_array($organizations[0])) {
             foreach ($organizations as $i => $org) {
                 $organizations[$i] = $org[0];
             }
@@ -94,6 +94,7 @@ class OrganizationController extends BaseController
                 $result['prev'] = $this->generateUrl('organization_list', array(
                     'sort'    => $sort,
                     'page'    => $paginator->getPreviousPage(),
+                    'limit'   => $request->query->get('limit'),
                     '_format' => 'json',
                 ), true);
             }
@@ -102,6 +103,7 @@ class OrganizationController extends BaseController
                 $result['next'] = $this->generateUrl('organization_list', array(
                     'sort'    => $sort,
                     'page'    => $paginator->getNextPage(),
+                    'limit'   => $request->query->get('limit'),
                     '_format' => 'json',
                 ), true);
             }

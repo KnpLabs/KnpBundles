@@ -6,10 +6,7 @@ use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\Step,
     Behat\Behat\Context\TranslatedContextInterface,
     Behat\Behat\Exception\PendingException;
-use Behat\CommonContexts\SymfonyDoctrineContext;
-use Behat\MinkExtension\Context\MinkContext;
-use Behat\Symfony2Extension\Context\KernelAwareInterface;
-use Behat\MinkExtension\Context\RawMinkContext;
+
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
 
@@ -20,7 +17,13 @@ use Behat\Mink\Exception\ElementNotFoundException,
     Behat\Mink\Exception\ElementTextException,
     Behat\Mink\Exception\UnsupportedDriverActionException;
 
+use Behat\MinkExtension\Context\MinkContext;
+use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\Symfony2Extension\Context\KernelAwareInterface;
+
 use Symfony\Component\HttpKernel\KernelInterface;
+
+use Behat\CommonContexts\SymfonyDoctrineContext;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 
@@ -32,24 +35,30 @@ use Knp\Bundle\KnpBundlesBundle\Entity;
 
 /**
  * Feature context.
+ *
+ * @author Luis Cordova <cordoval@gmail.com>
+ * @author Leszek Prabucki <leszek.prabucki@gmail.com>
+ * @author Joseph Bielawski <stloyd@gmail.com>
  */
 class FeatureContext extends RawMinkContext implements KernelAwareInterface
 {
     private $developers;
     private $organizations;
     private $bundles;
+    private $placeHolders = array();
 
     /**
      * @var \Symfony\Component\HttpKernel\KernelInterface $kernel
      */
     private $kernel;
 
-    public function __construct($kernel)
+    public function __construct($parameters)
     {
         $this->useContext('symfony_doctrine', new SymfonyDoctrineContext());
         $this->useContext('solr', new SolrContext());
         $this->useContext('mink', new MinkContext());
-        $this->useContext('api', new ApiContext());
+
+        $this->setPlaceHolder('%base_url%', rtrim($parameters['base_url'], '/app_test.php'));
     }
 
     /**
@@ -117,14 +126,23 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     }
 
     /**
-     * @Given /^I search for "(?P<text>(?:[^"]|\\")*)"$/
+     * @Then /^(?:the )?response should contain json:$/
      */
-    public function searchFor($text)
+    public function assertResponseShouldContainJson(PyStringNode $jsonString)
     {
-        return array(
-            new Step\When('I fill in "search-query" with "'.$text.'"'),
-            new Step\When('I press "search-btn"')
-        );
+        $etalon = json_decode($this->replacePlaceHolder($jsonString->getRaw()), true);
+        $actual = json_decode($this->getSession()->getPage()->getContent(), true);
+
+        if (null === $etalon) {
+            throw new \RuntimeException(
+                "Can not convert etalon to json:\n".$this->replacePlaceHolder($jsonString->getRaw())
+            );
+        }
+
+        assertCount(count($etalon), $actual);
+        foreach ($actual as $needle) {
+            assertContains($needle, $etalon);
+        }
     }
 
     /**
@@ -138,23 +156,14 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     }
 
     /**
-     * @Given /^the bundles have following keywords:$/
+     * @Given /^I search for "(?P<text>(?:[^"]|\\")*)"$/
      */
-    public function theBundlesHaveFollowingKeywords(TableNode $table)
+    public function searchFor($text)
     {
-        $entityManager = $this->getEntityManager();
-
-        foreach ($table->getHash() as $row) {
-            if (isset($this->bundles[$row['bundle']])) {
-                $bundle = $this->bundles[$row['bundle']];
-                $keyword = $entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Keyword')->findOrCreateOne($row['keyword']);
-
-                $bundle->addKeyword($keyword);
-                $entityManager->persist($bundle);
-            }
-        }
-
-        $entityManager->flush();
+        return array(
+            new Step\When('I fill in "search-query" with "'.$text.'"'),
+            new Step\When('I press "search-btn"')
+        );
     }
 
     /**
@@ -214,6 +223,14 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     }
 
     /**
+     * @When /^(?:I )?send a GET request to "([^"]+)"$/
+     */
+    public function iSendARequest($url)
+    {
+        return new Step\When(sprintf('I go to "%s"', ltrim($url, '/')));
+    }
+
+    /**
      * @When /^I am logged in as "([^"]*)"$/
      */
     public function iAmLoggedInAs($username)
@@ -233,6 +250,26 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     }
 
     /**
+     * @Given /^the bundles have following keywords:$/
+     */
+    public function theBundlesHaveFollowingKeywords(TableNode $table)
+    {
+        $entityManager = $this->getEntityManager();
+
+        foreach ($table->getHash() as $row) {
+            if (isset($this->bundles[$row['bundle']])) {
+                $bundle = $this->bundles[$row['bundle']];
+                $keyword = $entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Keyword')->findOrCreateOne($row['keyword']);
+
+                $bundle->addKeyword($keyword);
+                $entityManager->persist($bundle);
+            }
+        }
+
+        $entityManager->flush();
+    }
+
+    /**
      * @Given /^the site has following users:$/
      */
     public function theSiteHasFollowingUsers(TableNode $table)
@@ -243,8 +280,8 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
         foreach ($table->getHash() as $row) {
             $developer = new Entity\Developer();
             $developer->fromArray(array(
-                 'name'          => $row['name'],
-                 'score'         => 0,
+                 'name'  => $row['name'],
+                 'score' => isset($row['score']) ? $row['score'] : 0,
             ));
 
             if (isset($row['organization'])) {
@@ -271,8 +308,8 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
         foreach ($table->getHash() as $row) {
             $organization = new Entity\Organization();
             $organization->fromArray(array(
-                 'name'          => $row['name'],
-                 'score'         => 0,
+                'name'  => $row['name'],
+                'score' => isset($row['score']) ? $row['score'] : 0,
             ));
 
             $entityManager->persist($organization);
@@ -296,6 +333,8 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
                 $owner = $this->developers[$row['username']];
             } elseif (isset($this->organizations[$row['username']])) {
                 $owner = $this->organizations[$row['username']];
+            } else {
+                continue;
             }
 
             $bundle = new Entity\Bundle();
@@ -305,8 +344,14 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
                 'ownerName'     => $owner->getName(),
                 'description'   => $row['description'],
                 'state'         => isset($row['state']) ? $row['state'] : Entity\Bundle::STATE_UNKNOWN,
-                'lastCommitAt'  => new \DateTime($row['lastCommitAt']),
             ));
+
+            if (isset($row['createdAt'])) {
+                $bundle->setCreatedAt(new \DateTime($row['createdAt']));
+            }
+            if (isset($row['lastCommitAt'])) {
+                $bundle->setLastCommitAt(new \DateTime($row['lastCommitAt']));
+            }
 
             $bundle->setScore($row['score']);
 
@@ -378,6 +423,29 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     protected function getContainer()
     {
         return $this->kernel->getContainer();
+    }
+
+    /**
+     * @param string $key
+     * @param string $value
+     */
+    protected function setPlaceHolder($key, $value)
+    {
+        $this->placeHolders[$key] = $value;
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return string
+     */
+    protected function replacePlaceHolder($string)
+    {
+        foreach ($this->placeHolders as $key => $val) {
+            $string = str_replace($key, $val, $string);
+        }
+
+        return $string;
     }
 
     /**

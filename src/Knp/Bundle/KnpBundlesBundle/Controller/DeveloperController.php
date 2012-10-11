@@ -93,7 +93,7 @@ class DeveloperController extends BaseController
         $sortField = $this->sortFields[$sort];
 
         $query = $this->getRepository('Developer')->queryAllWithBundlesSortedBy($sortField);
-        $paginator = $this->getPaginator($query, $request->query->get('page', 1), 18);
+        $paginator = $this->getPaginator($query, $request->query->get('page', 1), $request->query->get('limit', 18));
 
         if ('json' === $format) {
             $result = array(
@@ -121,6 +121,7 @@ class DeveloperController extends BaseController
                 $result['prev'] = $this->generateUrl('developer_list', array(
                     'sort'    => $sort,
                     'page'    => $paginator->getPreviousPage(),
+                    'limit'   => $request->query->get('limit'),
                     '_format' => 'json',
                 ), true);
             }
@@ -129,6 +130,7 @@ class DeveloperController extends BaseController
                 $result['next'] = $this->generateUrl('developer_list', array(
                     'sort'    => $sort,
                     'page'    => $paginator->getNextPage(),
+                    'limit'   => $request->query->get('limit'),
                     '_format' => 'json',
                 ), true);
             }

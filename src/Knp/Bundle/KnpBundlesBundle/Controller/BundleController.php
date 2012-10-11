@@ -186,7 +186,7 @@ class BundleController extends BaseController
         $sortField = $this->sortFields[$sort];
 
         $query     = $this->getRepository('Bundle')->queryAllWithOwnersAndContributorsSortedBy($sortField);
-        $paginator = $this->getPaginator($query, $request->query->get('page', 1));
+        $paginator = $this->getPaginator($query, $request->query->get('page', 1), $request->query->get('limit', 10));
 
         if ('json' === $format) {
             $result = array(
@@ -205,6 +205,7 @@ class BundleController extends BaseController
                 $result['prev'] = $this->generateUrl('bundle_list', array(
                     'sort'    => $sort,
                     'page'    => $paginator->getPreviousPage(),
+                    'limit'   => $request->query->get('limit'),
                     '_format' => 'json',
                 ), true);
             }
@@ -213,6 +214,7 @@ class BundleController extends BaseController
                 $result['next'] = $this->generateUrl('bundle_list', array(
                     'sort'    => $sort,
                     'page'    => $paginator->getNextPage(),
+                    'limit'   => $request->query->get('limit'),
                     '_format' => 'json',
                 ), true);
             }
@@ -372,7 +374,7 @@ class BundleController extends BaseController
     {
         $format    = $request->getRequestFormat();
         $query     = $this->getRepository('Bundle')->queryByKeywordSlug($slug);
-        $paginator = $this->getPaginator($query, $request->query->get('page', 1));
+        $paginator = $this->getPaginator($query, $request->query->get('page', 1), $request->query->get('limit', 10));
 
         if ('json' === $format) {
             $result = array(
@@ -390,6 +392,7 @@ class BundleController extends BaseController
             if ($paginator->hasPreviousPage()) {
                 $result['prev'] = $this->generateUrl('bundle_keyword', array(
                     'page'    => $paginator->getPreviousPage(),
+                    'limit'   => $request->query->get('limit'),
                     '_format' => 'json',
                 ), true);
             }
@@ -397,6 +400,7 @@ class BundleController extends BaseController
             if ($paginator->hasNextPage()) {
                 $result['next'] = $this->generateUrl('bundle_keyword', array(
                     'page'    => $paginator->getNextPage(),
+                    'limit'   => $request->query->get('limit'),
                     '_format' => 'json',
                 ), true);
             }
