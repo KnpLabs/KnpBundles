@@ -72,6 +72,8 @@ class Bundle
      *
      * @ORM\ManyToOne(targetEntity="Owner", inversedBy="bundles")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=false)
+     *
+     * @var Collection
      */
     protected $owner;
 
@@ -83,6 +85,8 @@ class Bundle
      *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="knpbundles_owner_id", referencedColumnName="id")}
      * )
+     *
+     * @var Collection
      */
     protected $recommenders;
 
@@ -133,6 +137,8 @@ class Bundle
      * Internal scores
      *
      * @ORM\OneToMany(targetEntity="Score", mappedBy="bundle", fetch="EXTRA_LAZY")
+     *
+     * @var Collection
      */
     protected $scores;
 
@@ -140,6 +146,7 @@ class Bundle
      * Latest score's details
      *
      * @ORM\Column(type="array", nullable=true)
+     *
      * @var array
      */
     protected $scoreDetails = array();
@@ -166,21 +173,7 @@ class Bundle
     protected $lastCommitAt;
 
     /**
-     * The last commits on this bundle repo
-     *
-     * @ORM\Column(type="text")
-     */
-    protected $lastCommits;
-
-    /**
-     * Released tags are Git tags
-     *
-     * @ORM\Column(type="text")
-     */
-    protected $tags;
-
-    /**
-     * Date of the last succesful GitHub check
+     * Date of the last successful GitHub check
      *
      * @ORM\Column(type="date", nullable=true)
      */
@@ -262,6 +255,8 @@ class Bundle
      *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="keyword_id", referencedColumnName="id")}
      * )
+     *
+     * @var Collection
      */
     protected $keywords;
 
@@ -282,7 +277,7 @@ class Bundle
     /**
      * @ORM\Column(type="integer")
      */
-    protected $nbRecommenders;
+    protected $nbRecommenders = 0;
 
     /**
      * Date when bundle was tweeted from knplabs account.
@@ -292,46 +287,29 @@ class Bundle
     protected $lastTweetedAt;
 
     /**
-     * Not saved variable, it's used to simplify validation when updating bundles
+     * @ORM\OneToMany(targetEntity="Activity", mappedBy="bundle", fetch="EXTRA_LAZY", cascade={"persist"}, orphanRemoval=true)
      *
-     * @var boolean
+     * @var Collection
      */
-    protected $valid = false;
+    protected $activities;
 
+    /**
+     * @param null|string $fullName
+     */
     public function __construct($fullName = null)
     {
         if ($fullName) {
             list($this->ownerName, $this->name) = explode('/', $fullName);
         }
 
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->createdAt    = new \DateTime();
+        $this->updatedAt    = new \DateTime();
         $this->lastCommitAt = new \DateTime('2010-01-01');
 
-        $this->lastCommits = serialize(array());
-        $this->tags = serialize(array());
-
+        $this->activities   = new ArrayCollection();
         $this->contributors = new ArrayCollection();
-        $this->scores = new ArrayCollection();
-        $this->keywords = new ArrayCollection();
-        $this->state = self::STATE_UNKNOWN;
-        $this->nbRecommenders = 0;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isValid()
-    {
-        return $this->valid;
-    }
-
-    /**
-     * @param boolean $state
-     */
-    public function setIsValid($state)
-    {
-        $this->valid = (bool) $state;
+        $this->scores       = new ArrayCollection();
+        $this->keywords     = new ArrayCollection();
     }
 
     public function isInitialized()
@@ -339,6 +317,16 @@ class Bundle
         // Using the fact that a repo should have at least one declared fork:
         // itself
         return $this->nbForks > 0;
+    }
+
+    /**
+     * Get id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -442,73 +430,6 @@ class Bundle
     }
 
     /**
-     * Get tags
-     *
-     * @return array
-     */
-    public function getTags()
-    {
-        return unserialize($this->tags);
-    }
-
-    /**
-     * Set tags
-     *
-     * @param array $tags
-     */
-    public function setTags(array $tags)
-    {
-        $this->tags = serialize($tags);
-    }
-
-    public function getLastTagName()
-    {
-        $tags = $this->getTags();
-        if (empty($tags)) {
-            return null;
-        }
-
-        return reset($tags);
-    }
-
-    /**
-     * Get lastCommits
-     *
-     * @param integer $nb
-     *
-     * @return array
-     */
-    public function getLastCommits($nb = 10)
-    {
-        $lastCommits = array_slice(unserialize($this->lastCommits), 0, $nb);
-        foreach ($lastCommits as $i => $commitInfo) {
-            $lastCommits[$i]['message_first_line'] = strtok($commitInfo['commit']['message'], "\n\r");
-            $lastCommits[$i]['author'] = $commitInfo['commit']['committer']['name'];
-            $lastCommits[$i]['date'] = $commitInfo['commit']['committer']['date'];
-        }
-
-        return $lastCommits;
-    }
-
-    /**
-     * Set lastCommits
-     *
-     * @param array $lastCommits
-     */
-    public function setLastCommits(array $lastCommits)
-    {
-        foreach($lastCommits as $index => $commit) {
-            $lastCommits[$index]['bundle_name'] = $this->getName();
-            $lastCommits[$index]['bundle_ownerName'] = $this->getOwnerName();
-        }
-        $this->lastCommits = serialize($lastCommits);
-
-        $lastCommitAt = new \DateTime();
-        $lastCommitAt->setTimestamp(strtotime($lastCommits[0]['commit']['committer']['date']));
-        $this->setLastCommitAt($lastCommitAt);
-    }
-
-    /**
      * Get readme
      *
      * @return string
@@ -527,7 +448,6 @@ class Bundle
     {
         $this->readme = $readme;
     }
-
 
     /**
      * Get license
@@ -571,6 +491,8 @@ class Bundle
 
     /**
      * Get all historical scores indexed by date
+     *
+     * @param integer $limit
      *
      * @return array
      */
@@ -642,8 +564,7 @@ class Bundle
     /**
      * Set lastCommitAt
      *
-     * @param  \DateTime
-     * @return null
+     * @param \DateTime $lastCommitAt
      */
     public function setLastCommitAt(\DateTime $lastCommitAt)
     {
@@ -771,16 +692,6 @@ class Bundle
     }
 
     /**
-     * Get id
-     *
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Get ownername
      *
      * @return string
@@ -809,11 +720,12 @@ class Bundle
     }
 
     /**
-     * @param null|Owner $owner
+     * @param Owner $owner
      */
-    public function setOwner(Owner $owner = null)
+    public function setOwner(Owner $owner)
     {
         $this->owner     = $owner;
+        $this->ownerName = $owner->getName();
         $this->ownerType = $owner instanceof Organization ? 'organization' : 'developer';
     }
 
@@ -988,18 +900,6 @@ class Bundle
         return $names;
     }
 
-    /** @ORM\PreUpdate */
-    public function markAsUpdated()
-    {
-        $this->updatedAt = new \DateTime();
-    }
-
-    /** @ORM\PrePersist */
-    public function markAsCreated()
-    {
-        $this->createdAt = $this->updatedAt = new \DateTime();
-    }
-
     /**
      * Get the first part of the name, without Bundle
      *
@@ -1018,7 +918,6 @@ class Bundle
     public function toBigArray()
     {
         return $this->toSmallArray() + array(
-            'lastCommits' => $this->getLastCommits(),
             'readme' => $this->getReadme()
         );
     }
@@ -1036,7 +935,6 @@ class Bundle
             'nbForks' => $this->getNbForks(),
             'createdAt' => $this->getCreatedAt()->getTimestamp(),
             'lastCommitAt' => $this->getLastCommitAt()->getTimestamp(),
-            'tags' => $this->getTags(),
             'contributors' => $this->getContributorNames()
         );
     }
@@ -1093,6 +991,8 @@ class Bundle
 
         $this->recommenders[] = $developer;
         $this->nbRecommenders++;
+
+        $this->updateScore(5);
     }
 
     public function removeRecommender(Developer $developer)
@@ -1101,6 +1001,16 @@ class Bundle
 
         $this->recommenders->removeElement($developer);
         $this->nbRecommenders--;
+
+        $this->updateScore(-5);
+    }
+
+    /**
+     * @param integer $nbRecommenders
+     */
+    public function setNbRecommenders($nbRecommenders)
+    {
+        $this->nbRecommenders = $nbRecommenders;
     }
 
     /**
@@ -1133,16 +1043,40 @@ class Bundle
         return count($this->keywords);
     }
 
+    /**
+     * @param Keyword $keyword
+     *
+     * @return boolean
+     */
     public function hasKeyword(Keyword $keyword)
     {
         return $this->keywords->contains($keyword);
     }
 
+    /**
+     * @param Keyword $keyword
+     */
     public function addKeyword(Keyword $keyword)
     {
         if (!$this->hasKeyword($keyword)) {
             $this->keywords[] = $keyword;
         }
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getActivities()
+    {
+        return $this->activities;
+    }
+
+    /**
+     * @param Activity $activity
+     */
+    public function addActivity(Activity $activity)
+    {
+        $this->activities[] = $activity;
     }
 
     /**
@@ -1206,14 +1140,6 @@ class Bundle
     }
 
     /**
-     * @param integer $nbRecommenders
-     */
-    public function setNbRecommenders($nbRecommenders)
-    {
-        $this->nbRecommenders = $nbRecommenders;
-    }
-
-    /**
      * Set lastTweetedAt
      *
      * @param \DateTime $lastTweetedAt
@@ -1231,5 +1157,17 @@ class Bundle
     public function getLastTweetedAt()
     {
         return $this->lastTweetedAt;
+    }
+
+    /** @ORM\PreUpdate */
+    public function markAsUpdated()
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
+    /** @ORM\PrePersist */
+    public function markAsCreated()
+    {
+        $this->createdAt = $this->updatedAt = new \DateTime();
     }
 }

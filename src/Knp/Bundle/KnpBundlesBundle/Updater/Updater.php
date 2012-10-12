@@ -12,10 +12,13 @@ use Github\HttpClient\ApiLimitExceedException;
 
 use OldSound\RabbitMqBundle\RabbitMq\Producer;
 
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
-use Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager;
 use Knp\Bundle\KnpBundlesBundle\Finder\FinderInterface;
 use Knp\Bundle\KnpBundlesBundle\Github\Repo;
+use Knp\Bundle\KnpBundlesBundle\Manager\BundleManager;
 
 class Updater
 {
@@ -28,160 +31,125 @@ class Updater
      */
     private $finder;
     /**
-     * @var array
+     * @var BundleManager
      */
-    private $bundles;
+    private $bundleManager;
     /**
-     * @var OwnerManager
-     */
-    private $ownerManager;
-    /**
-     * @var \Doctrine\ORM\EntityManager
+     * @var EntityManager
      */
     private $em;
     /**
-     * @var \Symfony\Component\Console\Output\NullOutput
+     * @var OutputInterface
      */
     private $output;
     /**
-     * @var \OldSound\RabbitMqBundle\RabbitMq\Producer
+     * @var Producer
      */
     private $bundleUpdateProducer;
 
     /**
-     * @param \Doctrine\ORM\EntityManager  $em
-     * @param OwnerManager                 $ownerManager
-     * @param FinderInterface              $finder
-     * @param Repo                         $githubRepoApi
+     * @param EntityManager   $em
+     * @param BundleManager   $bundleManager
+     * @param FinderInterface $finder
+     * @param Repo            $githubRepoApi
      */
-    public function __construct(EntityManager $em, OwnerManager $ownerManager, FinderInterface $finder, Repo $githubRepoApi)
+    public function __construct(EntityManager $em, BundleManager $bundleManager, FinderInterface $finder, Repo $githubRepoApi)
     {
         $this->em = $em;
         $this->finder = $finder;
         $this->githubRepoApi = $githubRepoApi;
-        $this->ownerManager = $ownerManager;
+        $this->bundleManager = $bundleManager;
         $this->output = new NullOutput();
     }
 
+    /**
+     * @param OutputInterface $output
+     */
     public function setOutput(OutputInterface $output)
     {
         $this->output = $output;
     }
 
+    /**
+     * @param Producer $bundleUpdateProducer
+     */
     public function setBundleUpdateProducer(Producer $bundleUpdateProducer)
     {
         $this->bundleUpdateProducer = $bundleUpdateProducer;
     }
 
-    public function setUp()
-    {
-        $this->bundles = array();
-        foreach ($this->em->getRepository('KnpBundlesBundle:Bundle')->findAllSortedBy('updatedAt') as $bundle) {
-            $this->bundles[strtolower($bundle->getFullName())] = $bundle;
-        }
-        $this->output->writeln(sprintf('[%s] Loaded <comment>%d</comment> bundles from the DB', $this->currentTime(), count($this->bundles)));
-    }
-
     public function searchNewBundles()
     {
-        $this->output->writeln(sprintf('[%s] Trying to find bundle candidates', $this->currentTime()));
+        $this->output->writeln(sprintf('[%s] Trying to find bundle candidates', date('d-m-y H:i:s')));
 
-        $repos = $this->finder->find();
         $bundles = array();
-        foreach ($repos as $repo) {
-            $bundles[strtolower($repo)] = new Bundle($repo);
+        foreach ($this->finder->find() as $fullName) {
+            list($ownerName, $bundleName) = explode('/', $fullName);
+
+            // We have it in DB already, skip it
+            if ($this->bundleManager->findBundleBy(array('ownerName' => $ownerName, 'name' => $bundleName))) {
+                continue;
+            }
+
+            $bundles[] = $fullName;
         }
-        $this->output->writeln(sprintf('[%s] Found <comment>%d</comment> bundle candidates', $this->currentTime(), count($bundles)));
+        $this->output->writeln(sprintf('[%s] Found <comment>%d</comment> bundle candidates', date('d-m-y H:i:s'), count($bundles)));
 
         return $bundles;
     }
 
-    public function createMissingBundles($foundBundles)
+    public function createMissingBundles(array $foundBundles)
     {
         $added = 0;
 
         /* @var $bundle Bundle */
-        foreach ($foundBundles as $bundle) {
-            // We have it in DB already, skip it
-            if (isset($this->bundles[strtolower($bundle->getFullName())])) {
+        foreach ($foundBundles as $fullName) {
+            $bundle = $this->bundleManager->createBundle($fullName, false);
+
+            // It's not an valid Symfony2 Bundle or failed with our requirements (i.e: is a fork with less then 10 watchers)
+            if (!$bundle) {
+                $this->notifyInvalid($bundle, 'Bundle is not an valid Symfony2 Bundle or failed with our requirements , or we were not able to get such via API.');
                 continue;
             }
+            $this->output->write(sprintf('[%s] Discover bundle <comment>%s</comment>: ', date('d-m-y H:i:s'), $bundle->getFullName()));
 
-            $this->githubRepoApi->updateFiles($bundle, array('sf'));
-
-            // It's not an valid Symfony2 Bundle
-            if (!$bundle->isValid()) {
-                $this->notifyInvalid($bundle, sprintf('Class "%sBundle" was not found.', ucfirst($bundle->getFullName())));
-                continue;
-            }
-            // It's doesn't catch in our requirements (don't exists, or is a fork with less then 10 watchers)
-            if (!$this->githubRepoApi->updateInfos($bundle)) {
-                $this->notifyInvalid($bundle, 'Bundle not contain required informations, or we were not able to get such via API.');
-                continue;
-            }
-            $this->output->write(sprintf('[%s] Discover bundle <comment>%s</comment>: ', $this->currentTime(), $bundle->getFullName()));
-
-            $owner = $this->ownerManager->createOwner($bundle->getOwnerName(), 'unknown');
-            if ($owner) {
-                $owner->addBundle($bundle);
-
-                $this->bundles[strtolower($bundle->getFullName())] = $bundle;
-
+            try {
                 $this->githubRepoApi->updateFiles($bundle);
+            } catch (\RuntimeException $e) {
+                $this->output->writeln(sprintf(' <error>%s</error>', $e->getMessage()));
 
-                $this->em->persist($bundle);
-                $this->em->flush();
-
-                $this->updateRepo($bundle);
-
-                $this->output->writeln(' ADDED');
-                ++$added;
-            } else {
-                $this->output->writeln(' <error>ERROR</error>');
+                continue;
             }
+
+            $this->em->persist($bundle);
+
+            $this->updateRepo($bundle);
+
+            $this->output->writeln(' ADDED');
+            ++$added;
         }
 
-        $this->output->writeln(sprintf('[%s] <comment>%d</comment> created', $this->currentTime(), $added));
+        $this->em->flush();
+
+        if ($added) {
+            $this->output->writeln(sprintf('[%s] Created <comment>%d</comment> new bundles', date('d-m-y H:i:s'), $added));
+        }
     }
 
     /**
      * Add or update a repo
      *
-     * @param string  $fullName    A full repo name like knplabs/KnpMenuBundle
-     * @param boolean $updateRepo  Wether or not to fetch informations
-     * @param boolean $validate    Check that given data is proper bundle
+     * @param string  $fullName    A full repo name like KnpLabs/KnpMenuBundle
+     * @param boolean $updateRepo  Whether or not to fetch information
      *
      * @return boolean|Bundle
      */
-    public function addBundle($fullName, $updateRepo = true, $validate = false)
+    public function addBundle($fullName, $updateRepo = true)
     {
-        list($ownerName, $bundleName) = explode('/', $fullName);
-
-        $owner = $this->ownerManager->createOwner($ownerName, 'unknown');
-        if (!$owner) {
+        $bundle = $this->bundleManager->createBundle($fullName);
+        if (!$bundle) {
             return false;
         }
-
-        if (!isset($this->bundles[strtolower($fullName)])) {
-            $bundle = new Bundle($fullName);
-
-            if ($validate) {
-                $this->githubRepoApi->updateFiles($bundle, array('sf'));
-                if (!$bundle->isValid()) {
-                    return false;
-                }
-            }
-
-            $this->em->persist($bundle);
-
-            $this->bundles[strtolower($fullName)] = $bundle;
-        } else {
-            $bundle = $this->bundles[strtolower($fullName)];
-        }
-
-        $owner->addBundle($bundle);
-
-        $this->em->flush();
 
         if ($updateRepo) {
             $this->updateRepo($bundle);
@@ -190,6 +158,63 @@ class Updater
         return $bundle;
     }
 
+    public function updateBundlesData()
+    {
+        $this->output->writeln(sprintf('[%s] Will now update commits, files and tags', date('d-m-y H:i:s')));
+
+        $unitOfWork = $this->em->getUnitOfWork();
+
+        $page  = 1;
+        $pager = $this->paginateExistingBundles($page);
+        do {
+            // Now update bundles with more precise GitHub data
+            /** @var $bundle Bundle */
+            foreach ($pager->getCurrentPageResults() as $bundle) {
+                if (UnitOfWork::STATE_MANAGED !== $unitOfWork->getEntityState($bundle)) {
+                    continue;
+                }
+
+                $this->updateRepo($bundle);
+            }
+
+            ++$page;
+        } while ($pager->haveToPaginate() && $pager->setCurrentPage($page, false, true));
+    }
+
+    public function removeNonSymfonyBundles()
+    {
+        $counter = 0;
+
+        $page  = 1;
+        $pager = $this->paginateExistingBundles($page);
+
+        $this->output->writeln(sprintf('[%s] Will now check <comment>%d</comment> bundles', date('d-m-y H:i:s'), $pager->getNbResults()));
+        do {
+            /** @var $bundle Bundle */
+            foreach ($pager->getCurrentPageResults() as $bundle) {
+                if (!$this->githubRepoApi->validate($bundle)) {
+                    $this->notifyInvalid($bundle, sprintf('File "%sBundle.php" with base class was not found.', ucfirst($bundle->getFullName())));
+
+                    if (!$this->removeRepo($bundle)) {
+                        $bundle->getOwner()->removeBundle($bundle);
+                        $this->em->remove($bundle);
+                    }
+
+                    ++$counter;
+                }
+            }
+
+            ++$page;
+        } while ($pager->haveToPaginate() && $pager->setCurrentPage($page, false, true));
+
+        $this->output->writeln(sprintf('[%s] <comment>%s</comment> invalid bundles have been found and removed', date('d-m-y H:i:s'), $counter));
+
+        $this->em->flush();
+    }
+
+    /**
+     * @param Bundle $bundle
+     */
     public function updateRepo(Bundle $bundle)
     {
         if ($this->bundleUpdateProducer) {
@@ -201,6 +226,11 @@ class Updater
         }
     }
 
+    /**
+     * @param Bundle $bundle
+     *
+     * @return boolean
+     */
     public function removeRepo(Bundle $bundle)
     {
         if ($this->bundleUpdateProducer) {
@@ -219,56 +249,33 @@ class Updater
         return false;
     }
 
-    public function updateBundlesData()
-    {
-        $this->output->writeln(sprintf('[%s] Will now update commits, files and tags', $this->currentTime()));
-        // Now update repos with more precise GitHub data
-        foreach (array_reverse($this->bundles) as $bundle) {
-            if ($this->em->getUnitOfWork()->getEntityState($bundle) != UnitOfWork::STATE_MANAGED) {
-                continue;
-            }
-            $this->updateRepo($bundle);
-        }
-    }
-
-    public function removeNonSymfonyBundles()
-    {
-        if (count($this->bundles) === 0) {
-            $this->setUp();
-        }
-
-        $this->output->writeln(sprintf('[%s] Will now check <comment>%d</comment> bundles', $this->currentTime(), count($this->bundles)));
-
-        $counter = 0;
-        foreach ($this->bundles as $key => $bundle) {
-            /** @var $bundle \Knp\Bundle\KnpBundlesBundle\Entity\Bundle */
-            $this->githubRepoApi->updateFiles($bundle, array('sf'));
-            if (!$bundle->isValid()) {
-                if (!$this->removeRepo($bundle)) {
-                    $bundle->getOwner()->removeBundle($bundle);
-                    $this->em->remove($bundle);
-                }
-
-                $this->notifyInvalid($bundle, sprintf('Class "%sBundle" was not found.', ucfirst($bundle->getFullName())));
-
-                unset($this->bundles[$key]);
-
-                ++$counter;
-            }
-        }
-
-        $this->output->writeln(sprintf('[%s] <comment>%s</comment> invalid bundles have been found and removed', $this->currentTime(), $counter));
-
-        $this->em->flush();
-    }
-
+    /**
+     * @param Bundle      $bundle
+     * @param null|string $reason
+     */
     private function notifyInvalid(Bundle $bundle, $reason = null)
     {
-        $this->output->writeln(sprintf('[%s] <error>%s</error>: INVALID - reason: %s', $this->currentTime(), $bundle->getFullName(), $reason));
+        $this->output->writeln(sprintf('[%s] <error>%s</error>: INVALID - reason: %s', date('d-m-y H:i:s'), $bundle->getFullName(), $reason));
     }
 
-    private function currentTime()
+    /**
+     * @param integer $page
+     * @param integer $limit
+     *
+     * @return Pagerfanta
+     */
+    private function paginateExistingBundles($page, $limit = 100)
     {
-        return date('d-m-y H:i:s');
+        $pager = new Pagerfanta(new DoctrineORMAdapter($this->em->getRepository('KnpBundlesBundle:Bundle')->queryAllSortedBy('updatedAt'), false));
+        $pager
+            ->setMaxPerPage($limit)
+            ->setCurrentPage($page, false, true)
+        ;
+
+        if (1 === $page) {
+            $this->output->writeln(sprintf('[%s] Loaded <comment>%d</comment> bundles from the DB', date('d-m-y H:i:s'), $pager->getNbResults()));
+        }
+
+        return $pager;
     }
 }

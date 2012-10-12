@@ -1,11 +1,15 @@
 <?php
 
-namespace Knp\Bundle\KnpBundlesBundle\Entity;
+namespace Knp\Bundle\KnpBundlesBundle\Manager;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Console\Output\NullOutput;
 
 use Github\Client;
+
+use Knp\Bundle\KnpBundlesBundle\Entity\Developer;
+use Knp\Bundle\KnpBundlesBundle\Entity\Organization;
+use Knp\Bundle\KnpBundlesBundle\Entity\Owner;
 
 use Knp\Bundle\KnpBundlesBundle\Github\Developer as GithubDeveloper;
 use Knp\Bundle\KnpBundlesBundle\Github\Organization as GithubOrganization;
@@ -46,7 +50,7 @@ class OwnerManager
      */
     public function findOwnerBy(array $data)
     {
-        return $this->entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Owner')->findOneBy($data);
+        return $this->entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Owner')->findOneByUniqueFields($data);
     }
 
     /**
@@ -70,35 +74,38 @@ class OwnerManager
     }
 
     /**
-     * @param string $ownerName
-     * @param string $entityType
+     * @param string  $ownerName
+     * @param string  $entityType
+     * @param boolean $flushEntities
      *
      * @return boolean|Owner
      */
-    public function createOwner($ownerName, $entityType = 'developer')
+    public function createOwner($ownerName, $entityType = 'developer', $flushEntities = true)
     {
-        $findBy = array('name' => $ownerName);
+        $findBy = array(
+            'name'     => $ownerName,
+            'githubId' => $ownerName,
+            'sensioId' => $ownerName
+        );
 
-        if ('developer' == $entityType) {
-            $owner = $this->findDeveloperBy($findBy);
-        } elseif ('organization' == $entityType) {
-            $owner = $this->findOrganizationBy($findBy);
-        } else {
-            // If owner is unknown yet, skip loading
-            $owner = $this->findOwnerBy($findBy);
+        if ('unknown' != $entityType) {
+            $findBy['discriminator'] = $entityType;
         }
 
+        $owner = $this->findOwnerBy($findBy);
         if (!$owner) {
             if (!$api = $this->getApiByOwnerName($ownerName)) {
                 return false;
             }
 
-            if (!$owner = $api->import($ownerName, false)) {
+            if (!$owner = $api->import($ownerName)) {
                 return false;
             }
 
             $this->entityManager->persist($owner);
-            $this->entityManager->flush();
+            if ($flushEntities) {
+                $this->entityManager->flush();
+            }
         }
 
         return $owner;
@@ -121,7 +128,7 @@ class OwnerManager
             $api = new GithubDeveloper($this->github, new NullOutput());
         } else {
             $api = new GithubOrganization($this->github, new NullOutput());
-            $api->setRepository($this->entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Organization'));
+            $api->setOwnerManager($this);
         }
 
         return $api;

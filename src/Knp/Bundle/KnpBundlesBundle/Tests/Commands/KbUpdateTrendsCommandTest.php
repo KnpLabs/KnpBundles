@@ -9,15 +9,19 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+use Knp\Bundle\KnpBundlesBundle\DataFixtures\ORM\Data;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\Developer;
 use Knp\Bundle\KnpBundlesBundle\Entity\Score;
 use Knp\Bundle\KnpBundlesBundle\Command\KbUpdateTrendsCommand;
 
 use Doctrine\ORM\Tools\SchemaTool;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 
 class KbUpdateTrendsCommandTest extends WebTestCase
 {
+    private $em;
+
     public function setUp()
     {
         $kernel = static::createKernel();
@@ -29,7 +33,7 @@ class KbUpdateTrendsCommandTest extends WebTestCase
             );
         }
 
-        $em = $kernel->getContainer()->get('knp_bundles.entity_manager');
+        $this->em = $kernel->getContainer()->get('knp_bundles.entity_manager');
 
         $fileLocator = new FileLocator(__DIR__ . '/fixtures/');
         $path = $fileLocator->locate('trending-bundles.yml');
@@ -39,7 +43,7 @@ class KbUpdateTrendsCommandTest extends WebTestCase
         $developer->setName('someName');
         $developer->setScore(0);
 
-        $em->persist($developer);
+        $this->em->persist($developer);
 
         foreach ($data['bundles'] as $bundleName => $bundleData) {
             $bundle = new Bundle('vendor/' . $bundleName);
@@ -53,12 +57,26 @@ class KbUpdateTrendsCommandTest extends WebTestCase
                 $score->setBundle($bundle);
                 $score->setValue($scoreData['value']);
 
-                $em->persist($score);
+                $this->em->persist($score);
             }
 
-            $em->persist($bundle);
-            $em->flush();
+            $this->em->persist($bundle);
         }
+
+        $this->em->flush();
+    }
+
+    public function tearDown()
+    {
+        if (!$this->em) {
+            return;
+        }
+
+        $purger = new ORMPurger($this->em);
+        $purger->purge();
+
+        $fixtures = new Data();
+        $fixtures->load($this->em);
     }
 
     public function testExecute()

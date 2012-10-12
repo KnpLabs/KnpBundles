@@ -2,25 +2,25 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Github;
 
-use Knp\Bundle\KnpBundlesBundle\Entity\Organization as EntityOrganization;
-use Knp\Bundle\KnpBundlesBundle\Repository\OwnerRepository;
-
 use Github\HttpClient\ApiLimitExceedException;
 use Symfony\Component\Console\Output\NullOutput;
+
+use Knp\Bundle\KnpBundlesBundle\Entity\Organization as EntityOrganization;
+use Knp\Bundle\KnpBundlesBundle\Manager\OwnerManager;
 
 class Organization extends Owner
 {
     /**
-     * @var OwnerRepository
+     * @var OwnerManager
      */
-    private $repository;
+    private $manager;
 
     /**
-     * @param OwnerRepository $repository
+     * @param OwnerManager $manager
      */
-    public function setRepository(OwnerRepository $repository)
+    public function setOwnerManager(OwnerManager $manager)
     {
-        $this->repository = $repository;
+        $this->manager = $manager;
     }
 
     /**
@@ -69,9 +69,12 @@ class Organization extends Owner
         $this->updateOwner($organization, $data);
 
         $membersData = $api->members()->all($organization->getName());
-        if ($members = $this->updateMembers($membersData)) {
-            $organization->setMembers($members);
+        // Can't access members info ? Skip it for now then.
+        if (empty($membersData) || isset($membersData['message'])) {
+            return true;
         }
+
+        $organization->setMembers($this->updateMembers($membersData));
 
         return true;
     }
@@ -79,14 +82,10 @@ class Organization extends Owner
     private function updateMembers($membersData)
     {
         $members = array();
-        $api = new Developer($this->github, new NullOutput());
-
         foreach ($membersData as $memberData) {
-            if (!$member = $this->repository->findOneBy(array('name' => $memberData['login']))) {
-                $member = $api->import($memberData['login']);
+            if ($member = $this->manager->createOwner($memberData['login'], 'developer')) {
+                $members[] = $member;
             }
-
-            $members[] = $member;
         }
 
         return $members;

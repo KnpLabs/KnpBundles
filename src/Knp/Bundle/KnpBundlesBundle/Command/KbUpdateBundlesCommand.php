@@ -33,14 +33,12 @@ class KbUpdateBundlesCommand extends ContainerAwareCommand
 
         /* @var $updater Updater */
         $updater = $container->get('knp_bundles.updater');
+        $updater->setOutput($output);
 
         if (!$input->getOption('no-publish')) {
             // manually set RabbitMQ producer
             $updater->setBundleUpdateProducer($container->get('old_sound_rabbit_mq.update_bundle_producer'));
         }
-
-        $updater->setOutput($output);
-        $updater->setUp();
 
         $updater->updateBundlesData();
 

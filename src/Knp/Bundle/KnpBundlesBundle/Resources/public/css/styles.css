@@ -1350,7 +1350,7 @@ code, pre {
 }
 
 .sidebar-recent li {
-    height: 40px;
+    min-height: 40px;
     padding: 7px 15px;
     font-size: 12px;
     border-bottom: 1px dotted #999
@@ -1374,7 +1374,32 @@ code, pre {
 .sidebar-recent li span {
     display: block;
     line-height: 12px;
-    color: #999;
+    color: #999
+}
+
+
+.sidebar-box.sidebar-recent li {
+    float: left;
+    padding: 8px 12px 6px
+}
+
+.sidebar-box.sidebar-recent li img {
+    margin-right: 9px
+}
+
+.sidebar-box.sidebar-recent li span {
+    float: right;
+    width: 199px;
+    line-height: 18px
+}
+
+
+.content-box.sidebar-recent #activity li {
+    padding: 0
+}
+
+.content-box.sidebar-recent #activity li i {
+    margin: 10px 15px 10px 5px
 }
 
 
