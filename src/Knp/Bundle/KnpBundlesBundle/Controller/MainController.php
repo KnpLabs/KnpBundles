@@ -25,10 +25,10 @@ class MainController extends BaseController
         return $this->render('KnpBundlesBundle:Main:symfony2bundles.html.twig', array('text' => $text));
     }
 
-    public function aboutScoringAction()
+    public function faqScoringAction()
     {
-        return $this->render('KnpBundlesBundle:Main:aboutScoring.html.twig', array(
-            'text' => file_get_contents(__DIR__.'/../Resources/doc/about_scoring.markdown'),
+        return $this->render('KnpBundlesBundle:Main:faqScoring.html.twig', array(
+            'text' => file_get_contents(__DIR__.'/../Resources/doc/faq_scoring.markdown'),
         ));
     }
 
