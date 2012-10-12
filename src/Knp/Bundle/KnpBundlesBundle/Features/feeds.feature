@@ -12,8 +12,7 @@ Feature: Listing bundle feed
     | KnpLabs   | TestBundle | test desc   |-1 day        | 10    | 15     |
     | FoS       | UserBundle | user desc   |-2 days       | 20    | 5      |
 
-
   Scenario: Listing latest bundles
     When I go to "/latest.atom"
     Then I should see "KnpLabs/TestBundle" atom entry
-    And I should see "FoS/UserBundle" atom entry
+     And I should see "FoS/UserBundle" atom entry

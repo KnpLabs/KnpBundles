@@ -13,7 +13,7 @@ To get the list of bundles sorted by a given field, use:
     $ curl http://knpbundles.com/best.json
 
     # the newest bundles first
-    $ curl http://knpbundles.com/latest.json
+    $ curl http://knpbundles.com/newest.json
 
     # the bundles updated recently first
     $ curl http://knpbundles.com/updated.json
