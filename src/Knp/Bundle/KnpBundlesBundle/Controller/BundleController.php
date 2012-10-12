@@ -8,9 +8,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\SolariumAdapter;
+use Knp\Bundle\KnpBundlesBundle\Entity\Activity;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\Developer;
-use Knp\Bundle\KnpBundlesBundle\Updater\Exception\UserNotFoundException;
 
 class BundleController extends BaseController
 {
@@ -44,10 +44,9 @@ class BundleController extends BaseController
         }
 
         // Skip search if query matches exactly one bundle name, and such was found in database
-        if (!$request->isXmlHttpRequest() && preg_match('/^[a-z0-9-]+\/[a-z0-9-\.]+$/i', $query)) {
+        if (!$request->isXmlHttpRequest() && preg_match('/^[a-z0-9-]+\/[a-z0-9-]+$/i', $query)) {
             list($ownerName, $name) = explode('/', $query);
 
-            /* @var $bundle Bundle */
             $bundle = $this->getRepository('Bundle')->findOneBy(array('ownerName' => $ownerName, 'name' => $name));
             if ($bundle) {
                 return $this->redirect($this->generateUrl('bundle_show', array('ownerName' => $ownerName, 'name' => $name, '_format' => $format)));
@@ -223,7 +222,8 @@ class BundleController extends BaseController
 
         $this->highlightMenu('bundles');
 
-        $owners = $this->getRepository('Developer')->findAllSortedBy('createdAt', 20);
+        $developers = $this->getRepository('Developer')->findAllSortedBy('createdAt', 20);
+        $activities = $this->getRepository('Activity')->findAllSortedBy('createdAt', 10);
 
         $graphPeriod = $this->container->getParameter('knp_bundles.bundle.graph.main_page.period');
 
@@ -235,7 +235,8 @@ class BundleController extends BaseController
                 )
             ),
             'bundles'     => $paginator,
-            'developers'  => $owners,
+            'developers'  => $developers,
+            'activities'  => $activities,
             'sort'        => $sort,
             'sortLegends' => $this->sortLegends
         ));
@@ -301,7 +302,7 @@ class BundleController extends BaseController
 
         if (!$error && ($request->isXmlHttpRequest() || 'POST' === $request->getMethod())) {
             $bundle = trim(str_replace(array('http://github.com', 'https://github.com', '.git'), '', $bundle), '/');
-            if (preg_match('/^[a-z0-9-]+\/[a-z0-9-\.]+$/i', $bundle)) {
+            if (preg_match('/^[a-z0-9-]+\/[a-z0-9-]+$/i', $bundle)) {
                 list($ownerName, $name) = explode('/', $bundle);
 
                 $url = $this->generateUrl('bundle_show', array('ownerName' => $ownerName, 'name' => $name));
@@ -317,22 +318,14 @@ class BundleController extends BaseController
                 if (!$error) {
                     /** @var $updater \Knp\Bundle\KnpBundlesBundle\Updater\Updater */
                     $updater = $this->get('knp_bundles.updater');
-                    $updater->setUp();
-                    try {
-                        $valid = $updater->addBundle($bundle, false, true);
-
-                        if ($valid) {
-                            if (!$request->isXmlHttpRequest()) {
-                                return $this->redirect($url);
-                            }
-                            $message = '<strong>Hey, friend!</strong> Thanks for adding <a href="'.$url.'">your bundle</a> to our database!';
-                        } else {
-                            $error   = true;
-                            $message = 'Specified repo is not valid Symfony2 bundle!';
+                    if ($updater->addBundle($bundle)) {
+                        if (!$request->isXmlHttpRequest()) {
+                            return $this->redirect($url);
                         }
-                    } catch (UserNotFoundException $e) {
+                        $message = '<strong>Hey, friend!</strong> Thanks for adding <a href="'.$url.'">your bundle</a> to our database!';
+                    } else {
                         $error   = true;
-                        $message = 'Specified user was not found on GitHub.';
+                        $message = 'Specified repository is not valid Symfony2 bundle!';
                     }
                 }
             } else {
@@ -360,32 +353,19 @@ class BundleController extends BaseController
     public function changeUsageStatusAction($ownerName, $name)
     {
         /* @var $bundle Bundle */
-        $bundle = $this->getRepository('Bundle')->findOneByOwnerNameAndName($ownerName, $name);
+        $bundle = $this->getRepository('Bundle')->findOneBy(array('ownerName' => $ownerName, 'name' => $name));
         if (!$bundle) {
             throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $ownerName, $name));
         }
 
-        $params = array('ownerName' => $ownerName, 'name' => $name);
-
-        if (!$owner = $this->get('security.context')->getToken()->getUser()) {
-            return $this->redirect($this->generateUrl('bundle_show', $params));
-        }
-        $em = $this->get('doctrine')->getEntityManager();
-
-        if ($owner->isUsingBundle($bundle)) {
-            $bundle->updateScore(-5);
-
-            $bundle->removeRecommender($owner);
-        } else {
-            $bundle->updateScore(5);
-
-            $bundle->addRecommender($owner);
+        $url = $this->generateUrl('bundle_show', array('ownerName' => $ownerName, 'name' => $name));
+        if (!$developer = $this->get('security.context')->getToken()->getUser()) {
+            return $this->redirect($url);
         }
 
-        $em->persist($bundle);
-        $em->flush();
+        $this->get('knp_bundles.bundle.manager')->manageBundleRecommendation($bundle, $developer);
 
-        return $this->redirect($this->generateUrl('bundle_show', $params));
+        return $this->redirect($url);
     }
 
     public function searchByKeywordAction(Request $request, $slug)

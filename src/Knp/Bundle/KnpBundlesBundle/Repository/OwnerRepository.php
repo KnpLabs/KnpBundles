@@ -5,18 +5,50 @@ namespace Knp\Bundle\KnpBundlesBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
 
+use Knp\Bundle\KnpBundlesBundle\Entity\Owner;
+
 /**
  * OwnerRepository
  */
 class OwnerRepository extends EntityRepository
 {
-    public function findOneByName($name)
+    /**
+     * Lookup for Owner by check of unique fields
+     *
+     * @param array $fields
+     *
+     * @return null|Owner
+     */
+    public function findOneByUniqueFields(array $fields)
     {
-        return $this->createQueryBuilder('d')
+        $query = $this->createQueryBuilder('d')
             ->where('d.name = :name')
-            ->setParameter('name', $name)
-            ->getQuery()
-            ->getOneOrNullResult();
+            ->setParameter('name', $fields['name'])
+        ;
+
+        if (isset($fields['discriminator'])) {
+            if ('developer' == $fields['discriminator']) {
+                $query->andWhere('d INSTANCE OF Knp\\Bundle\\KnpBundlesBundle\\Entity\\Developer');
+            } elseif ('organization' == $fields['discriminator']) {
+                $query->andWhere('d INSTANCE OF Knp\\Bundle\\KnpBundlesBundle\\Entity\\Organization');
+            }
+        }
+
+        if (isset($fields['githubId'])) {
+            $query
+                ->orWhere('d.githubId = :github_id')
+                ->setParameter('github_id', $fields['githubId'])
+            ;
+        }
+
+        if (isset($fields['sensioId'])) {
+            $query
+                ->orWhere('d.sensioId = :sensio_id')
+                ->setParameter('sensio_id', $fields['sensioId'])
+            ;
+        }
+
+        return $query->getQuery()->getOneOrNullResult();
     }
 
     public function findAllSortedBy($field, $limit = null)

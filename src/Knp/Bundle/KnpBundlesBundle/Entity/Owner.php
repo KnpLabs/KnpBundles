@@ -68,13 +68,6 @@ class Owner
     protected $location;
 
     /**
-     * Bundles the user owns
-     *
-     * @ORM\OneToMany(targetEntity="Bundle", mappedBy="owner")
-     */
-    protected $bundles;
-
-    /**
      * User creation date (on this website)
      *
      * @ORM\Column(type="datetime")
@@ -87,6 +80,23 @@ class Owner
      * @ORM\Column(type="integer")
      */
     protected $score = 0;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $githubId;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $sensioId;
+
+    /**
+     * Bundles the user owns
+     *
+     * @ORM\OneToMany(targetEntity="Bundle", mappedBy="owner")
+     */
+    protected $bundles;
 
     public function __construct()
     {
@@ -262,6 +272,38 @@ class Owner
     public function getScore()
     {
         return $this->score;
+    }
+
+    /**
+     * @param string $githubId
+     */
+    public function setGithubId($githubId)
+    {
+        $this->githubId = $githubId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGithubId()
+    {
+        return $this->githubId;
+    }
+
+    /**
+     * @param string $sensioId
+     */
+    public function setSensioId($sensioId)
+    {
+        $this->sensioId = $sensioId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSensioId()
+    {
+        return $this->sensioId;
     }
 
     /**

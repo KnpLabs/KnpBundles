@@ -39,9 +39,6 @@ Return a list of bundles:
                 "nbForks": 41,
                 "createdAt": 1305230511,
                 "lastCommitAt": 1346364000,
-                "tags": [
-                    "1.0.0"
-                ],
                 "contributors": [
                     "mazen"
                 ],
@@ -73,9 +70,6 @@ Return informations about one Bundle:
         "nbForks": 359,
         "createdAt": 1293115855,
         "lastCommitAt": 1348783200,
-        "tags": [
-            "1.0.0"
-        ],
         "contributors": [
             "stof"
         ],
@@ -285,7 +279,6 @@ Return a list of bundles:
                 "nbForks": 10,
                 "createdAt": 1288818582,
                 "lastCommitAt": 1349301600,
-                "tags": [],
                 "contributors": [
                     "ornicar",
                 ],

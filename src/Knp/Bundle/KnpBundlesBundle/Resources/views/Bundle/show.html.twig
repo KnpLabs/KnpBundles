@@ -4,6 +4,7 @@
 {% block description %}{{ bundle.description }}{% endblock %}
 
 {% set isOwnerOrContributor = app.user is not null and bundle.isOwnerOrContributor(app.user) %}
+{% set hasActivities = bundle.activities|length > 0 %}
 
 {% block intro %}
 <div id="intro" class="bundle-details">
@@ -216,7 +217,7 @@
         {%- if not bundle.canonicalConfig is empty -%}
         <li><a href="#configuration" data-toggle="tab" data-target="#configuration"><i class="icon-wrench"></i>Configuration</a></li>
         {%- endif %}
-        {%- if bundle.lastCommits|length > 0 -%}
+        {%- if hasActivities -%}
         <li><a href="#activity" data-toggle="tab" data-target="#activity"><i class="icon-clock"></i>Recent activity</a></li>
         {%- endif %}
     </ul>
@@ -244,20 +245,20 @@
         </div>
         {%- endif -%}
 
-        {%- if bundle.lastCommits|length > 0 -%}
+        {%- if hasActivities -%}
         <div id="activity" class="tab-pane">
             <ul>
-                {%- for commit in bundle.lastCommits %}
+                {%- for activity in bundle.activities %}
                 <li>
-                    <i class="icon-github"></i>
-                    {{ commit.message_first_line }}
+                    {{ bundle_activity_icon(activity.type) }}
+                    {{ bundle_activity_msg(activity) }}
                     <div class="infos">{% trans %}bundles.show.latest_commits.by{% endtrans %}
-                        {% if commit.committer.login is defined %}
-                        <a href="{{ path('developer_show', {'name': commit.committer.login }) }}">{{ commit.committer.login }}</a>
+                        {% if not activity.developer is empty %}
+                        <a href="{{ path('developer_show', {'name': activity.author }) }}">{{ activity.author }}</a>
                         {%- else -%}
-                        <strong>{{ commit.author }}</strong>
+                        <strong>{{ activity.author }}</strong>
                         {%- endif %},
-                        <strong>{{ time_diff(commit.date) }}</strong>
+                        <strong>{{ time_diff(activity.createdAt) }}</strong>
                     </div>
                 </li>
                 {%- endfor %}

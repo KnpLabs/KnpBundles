@@ -10,7 +10,7 @@ class UserProviderTest extends \PHPUnit_Framework_TestCase
     {
         $john = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Developer');
 
-        $userManager = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager', array(
+        $userManager = $this->getMock('Knp\Bundle\KnpBundlesBundle\Manager\OwnerManager', array(
             'findDeveloperBy'
         ), array(), '', false);
 

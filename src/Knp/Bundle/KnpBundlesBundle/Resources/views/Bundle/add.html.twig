@@ -46,7 +46,7 @@
 {% endblock %}
 
 {% block right %}
-<div class="sidebar-box sidebar-recent">
+<div class="sidebar-box sidebar-recent clearfix">
     <hgroup>
         <h2>Newest Bundles</h2>
     </hgroup>
@@ -57,7 +57,7 @@
             <li>
                 <img src="{{ bundle.owner.avatarUrl|default('http://www.gravatar.com/avatar/?s=30&d=identicon&f=y') }}" alt="" width="30" height="30">
 
-                <a href="{{ path('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}">{{ bundle.name }}</a>
+                <a href="{{ path('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}">{{ bundle.name|truncate(28, true) }}</a>
                 <span>{{ bundle.createdAt|date('d-m-Y') }} by <strong>{{ bundle.ownerName }}</strong></span>
             </li>
             {% endfor %}

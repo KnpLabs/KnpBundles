@@ -7,8 +7,8 @@ use Knp\Bundle\KnpBundlesBundle\Git;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
 use Knp\Bundle\KnpBundlesBundle\Entity\Score;
 use Knp\Bundle\KnpBundlesBundle\Entity\Owner;
-use Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager;
 use Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer;
+use Knp\Bundle\KnpBundlesBundle\Manager\OwnerManager;
 use Knp\Bundle\KnpBundlesBundle\Travis\Travis;
 
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
@@ -43,22 +43,22 @@ class UpdateBundleConsumer implements ConsumerInterface
     private $em;
 
     /**
-     * @var Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager
+     * @var OwnerManager
      */
     private $ownerManager;
 
     /**
-     * @var Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer
+     * @var SolrIndexer
      */
     private $indexer;
 
     /**
-     * @var Knp\Bundle\KnpBundlesBundle\Github\Repo
+     * @var Repo
      */
     private $githubRepoApi;
 
     /**
-     * @var Knp\Bundle\KnpBundlesBundle\Travis\Travis
+     * @var Travis
      */
     private $travis;
 
@@ -137,9 +137,8 @@ class UpdateBundleConsumer implements ConsumerInterface
             try {
                 if (!$this->githubRepoApi->update($bundle)) {
                     if ($this->logger) {
-                        $this->logger->warn(sprintf('Update failed, bundle "%s" will be removed', $bundle->getName()));
+                        $this->logger->warn(sprintf('Update of "%s" failed', $bundle->getName()));
                     }
-                    $this->removeBundle($bundle);
 
                     return;
                 }

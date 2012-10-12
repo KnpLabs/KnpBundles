@@ -5,11 +5,11 @@ namespace Knp\Bundle\KnpBundlesBundle\Tests\Updater;
 require_once __DIR__.'../../../../../../../app/AppKernel.php';
 
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Symfony\Bundle\FrameworkBundle\Tests\Functional\WebTestCase;
-use Knp\Bundle\KnpBundlesBundle\Updater\Updater;
-use Knp\Bundle\KnpBundlesBundle\Entity\Bundle as BundleEntity;
-use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+
 use Knp\Bundle\KnpBundlesBundle\DataFixtures\ORM\Data;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Knp\Bundle\KnpBundlesBundle\Entity\Developer;
+use Knp\Bundle\KnpBundlesBundle\Updater\Updater;
 
 /**
  * @author Luis Cordova <cordoval@gmail.com>
@@ -17,14 +17,11 @@ use Knp\Bundle\KnpBundlesBundle\DataFixtures\ORM\Data;
  */
 class UpdaterTest extends \PHPUnit_Framework_TestCase
 {
-    protected $githubRepoApi;
     protected $container;
     protected $em;
 
     public function setUp()
     {
-        $this->markTestIncomplete('This needs to be updated to new code.');
-
         $kernel = new \AppKernel('test', true);
         $kernel->boot();
 
@@ -42,20 +39,19 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         $purger = new ORMPurger($this->em);
         $purger->purge();
 
-        $fixtures = new Data();
-        $fixtures->load($this->em);
+        $user = new Developer();
+        $user->setName('John');
 
-        $user = $this->em->getRepository('KnpBundlesBundle:Developer')->findOneBy(array('name' => 'John'));
+        $this->em->persist($user);
 
         $bundle = new Bundle();
         $bundle->fromArray(array(
             'name'          => 'TestBundleToBeRemoved',
-            'username'      => $user->getName().'test',
-            'user'          => $user,
+            'ownerName'     => $user->getName().'test',
+            'owner'         => $user,
             'description'   => 'Description of my bundle',
             'homepage'      => 'Bundle.com',
-            'readme'        => "the test bundle",
-            'tags'          => array('1.0', '1.1'),
+            'readme'        => 'the test bundle',
             'usesTravisCi'  => false,
             'composerName'  => 'knplabs/test-bundle',
             'state'         => $states[mt_rand(0, 3)],
@@ -63,40 +59,6 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
             'nbFollowers'   => 10,
             'nbForks'       => 2,
             'lastCommitAt'  => new \DateTime('-'.(1*4).' day'),
-            'lastCommits'   => array(
-                array(
-                    'commit' => array(
-                        'author'    => array(
-                            'date'  => '2010-05-16T09:58:32-09:00',
-                            'name'  => $user->getFullName(),
-                            'email' => $user->getEmail()
-                        ),
-                        'committer' => array(
-                            'date'  => '2010-05-16T09:58:32-09:00',
-                            'name'  => $user->getFullName(),
-                            'login' => $user->getName()
-                        ),
-                        'url'       => 'http://github.com',
-                        'message'   => 'Fix something on this Bundle',
-                    ),
-                ),
-                array(
-                    'commit' => array(
-                        'author'    => array(
-                            'date'  => '2010-05-16T09:58:32-07:00',
-                            'name'  => $user->getFullName(),
-                            'email' => $user->getEmail()
-                        ),
-                        'committer' => array(
-                            'date'  => '2010-05-16T09:58:32-07:00',
-                            'name'  => $user->getFullName(),
-                            'email' => $user->getEmail()
-                        ),
-                        'url'       => 'http://github.com',
-                        'message'   => 'Commit something on this bundle',
-                    ),
-                ),
-            ),
             'isFork'        => false,
             'contributors'  => array($user)
         ));
@@ -105,34 +67,50 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         $this->em->flush();
     }
 
+    public function tearDown()
+    {
+        $purger = new ORMPurger($this->em);
+        $purger->purge();
+
+        $fixtures = new Data();
+        $fixtures->load($this->em);
+    }
+
     /**
      * @test
      */
     public function shouldRemoveOneNonSymfonyBundle()
     {
-        $this->githubRepoApi = $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Github\Repo')
+        $invalidBundle = $this->em->getRepository('KnpBundlesBundle:Bundle')->findOneBy(array('name' => 'TestBundleToBeRemoved'));
+        $this->assertNotNull($invalidBundle);
+
+        $updater = $this->getUpdater($invalidBundle );
+        $updater->removeNonSymfonyBundles();
+
+        $invalidBundle = $this->em->getRepository('KnpBundlesBundle:Bundle')->findOneBy(array('name' => 'TestBundleToBeRemoved'));
+        $this->assertNull($invalidBundle);
+    }
+
+    private function getUpdater($invalidBundle = null)
+    {
+        $updater = new Updater($this->em, $this->container->get('knp_bundles.bundle.manager'), $this->container->get('knp_bundles.finder'), $this->getRepoApi($invalidBundle));
+
+        return $updater;
+    }
+
+    private function getRepoApi($invalidBundle = null)
+    {
+        $repoApi = $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Github\Repo')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->githubRepoApi
-            ->expects($this->any())
-            ->method('updateFiles')
-            ->will($this->returnValue(false));
+        if ($invalidBundle) {
+            $repoApi->expects($this->any())
+                ->method('validate')
+                ->with($this->equalTo($invalidBundle))
+                ->will($this->returnValue(false));
+        }
 
-        $userManager = $this->container->get('knp_bundles.user.manager');
-        $finder = $this->container->get('knp_bundles.finder');
-        $githubDevelopers = $this->container->get('knp_bundles.github.users');
-
-        $updater = new Updater($this->em, $userManager, $finder, $githubDevelopers, $this->githubRepoApi);
-
-        $shouldNotBeNull = $this->em->getRepository('KnpBundlesBundle:Bundle')->findOneBy(array('name' => 'TestBundleToBeRemoved'));
-
-        $this->assertNotNull($shouldNotBeNull);
-
-        $updater->removeNonSymfonyBundles();
-
-        $shouldBeNull = $this->em->getRepository('KnpBundlesBundle:Bundle')->findOneBy(array('name' => 'TestBundleToBeRemoved'));
-
-        $this->assertNull($shouldBeNull);
+        return $repoApi;
     }
 }

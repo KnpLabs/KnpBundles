@@ -34,7 +34,6 @@ class KbAddSearchedBundlesCommand extends ContainerAwareCommand
         /* @var $updater Updater */
         $updater = $this->getContainer()->get('knp_bundles.updater');
         $updater->setOutput($output);
-        $updater->setUp();
 
         $bundles = $updater->searchNewBundles();
         $updater->createMissingBundles($bundles);

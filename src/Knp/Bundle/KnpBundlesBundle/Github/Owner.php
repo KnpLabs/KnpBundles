@@ -5,8 +5,8 @@ namespace Knp\Bundle\KnpBundlesBundle\Github;
 use Symfony\Component\Console\Output\OutputInterface;
 use Github\Client;
 
-use Knp\Bundle\KnpBundlesBundle\Entity\Owner as EntityOwner;
 use Knp\Bundle\KnpBundlesBundle\Entity\Developer as EntityDeveloper;
+use Knp\Bundle\KnpBundlesBundle\Entity\Owner as EntityOwner;
 
 abstract class Owner implements OwnerInterface
 {
@@ -25,7 +25,7 @@ abstract class Owner implements OwnerInterface
     protected $output;
 
     /**
-     * @param Client $github
+     * @param Client          $github
      * @param OutputInterface $output
      */
     public function __construct(Client $github, OutputInterface $output)
@@ -75,23 +75,6 @@ abstract class Owner implements OwnerInterface
     }
 
     /**
-     * Fixes url.
-     * Adds http protocol by default, when no protocol is specified.
-     *
-     * @param string $url
-     * @return string
-     */
-    public function fixUrl($url)
-    {
-        $scheme = parse_url($url, PHP_URL_SCHEME);
-        if (null === $scheme) {
-            return 'http://'.$url;
-        }
-
-        return $url;
-    }
-
-    /**
      * @param EntityOwner $owner
      * @param array       $data
      */
@@ -104,7 +87,25 @@ abstract class Owner implements OwnerInterface
         $owner->setUrl(isset($data['blog']) ? $this->fixUrl($data['blog']) : null);
 
         if ($owner instanceof EntityDeveloper) {
+            $owner->setGithubId(isset($data['login']) ? $data['login'] : null);
             $owner->setCompany(isset($data['company']) ? $data['company'] : null);
         }
+    }
+
+    /**
+     * Fixes url.
+     * Adds http protocol by default, when no protocol is specified.
+     *
+     * @param string $url
+     * @return string
+     */
+    private function fixUrl($url)
+    {
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+        if (null === $scheme) {
+            return 'http://'.$url;
+        }
+
+        return $url;
     }
 }

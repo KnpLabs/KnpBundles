@@ -225,7 +225,7 @@ EOT;
             /* @var $contributor Entity\Developer */
             $contributor    = array_pop($contributors);
 
-            $bundle = $this->makeBundle($developer, $i, $contributor);
+            $bundle = $this->makeBundle($manager, $developer, $i, $contributor);
 
             if ($i%5 == 0) {
                 $bundle->setLastTweetedAt(new \DateTime());
@@ -279,26 +279,23 @@ EOT;
 
         foreach ($organizations as $organization) {
             for ($i = 1; $i < rand(2, 7); $i++) {
-                $manager->persist($this->makeBundle($organization, $i));
+                $manager->persist($this->makeBundle($manager, $organization, $i));
             }
         }
 
         $manager->flush();
     }
 
-    protected function makeBundle(Entity\Owner $owner, $i, $contributor = null)
+    protected function makeBundle($manager, Entity\Owner $owner, $i, $contributor = null)
     {
         $trilean = array(true, false, null);
 
         $bundle = new Entity\Bundle();
         $bundle->fromArray(array(
             'name'          => ucfirst($owner->getName()).$i.'FooBundle',
-            'ownerName'     => $owner->getName(),
-            'owner'         => $owner,
             'description'   => $this->descriptions[mt_rand(0, 4)],
             'homepage'      => ($i%2) ? 'Bundle'.$i.'.com' : null,
             'readme'        => str_replace('__BUNDLE__', "the bundle number: {$i}", $this->readme),
-            'tags'          => ($i%2) ? array('1.0', '1.1') : array(),
             'usesTravisCi'  => ($i%2) ? false : true,
             'composerName'  => ($i%2) ? null : 'knplabs/knp-menu-bundle',
             'symfonyVersions' => array(
@@ -310,46 +307,49 @@ EOT;
             'travisCiBuildStatus'  => ($i%2 == 0) ? $trilean[$i%3] : null,
             'nbFollowers'   => $i*10,
             'nbForks'       => $i,
-            'lastCommitAt'  => \DateTime::createFromFormat('Y-m-d', sprintf('2012-07-%d', $i)),
-            'lastCommits'   => array(
-                array(
-                    'commit' => array(
-                        'author'    => array(
-                            'date'  => '2010-05-16T09:58:32-09:00',
-                            'name'  => $owner->getFullName(),
-                            'email' => $owner->getEmail()
-                        ),
-                        'committer' => array(
-                            'date'  => '2010-05-16T09:58:32-09:00',
-                            'name'  => $owner->getFullName(),
-                            'login' => $owner->getName()
-                        ),
-                        'url'       => 'http://github.com',
-                        'message'   => 'Fix something on this Bundle',
-                    ),
-                ),
-                array(
-                    'commit' => array(
-                        'author'    => array(
-                            'date'  => '2010-05-16T09:58:32-07:00',
-                            'name'  => $owner->getFullName(),
-                            'email' => $owner->getEmail()
-                        ),
-                        'committer' => array(
-                            'date'  => '2010-05-16T09:58:32-07:00',
-                            'name'  => $owner->getFullName(),
-                            'email' => $owner->getEmail()
-                        ),
-                        'url'       => 'http://github.com',
-                        'message'   => 'Commit something on this bundle',
-                    ),
-                ),
-            ),
             'isFork'        => false,
             'contributors'  => $contributor ? array($contributor) : array(),
             'canonicalConfig' => ($i%2 == 0) ? $this->canonicalConfigDump : null,
             'nbRecommenders' => rand(0, 90),
         ));
+
+        $commits = array(
+            array(
+                'date'      => '2010-05-16T09:58:32-09:00',
+                'author'    => $owner instanceof Entity\Developer ? $owner->getName() : 'Random Person',
+                'message'   => 'Fix something on this Bundle',
+            ),
+            array(
+                'date'      => '2010-05-16T09:58:32-07:00',
+                'author'    => 'Fake Name',
+                'message'   => 'Commit something on this bundle',
+            ),
+        );
+
+        foreach ($commits as $commit) {
+            $lastCommitAt = new \DateTime();
+            $lastCommitAt->setTimestamp(strtotime($commit['date']));
+
+            $bundle->setLastCommitAt($lastCommitAt);
+
+            $activity = new Entity\Activity();
+            $activity->setType(Entity\Activity::ACTIVITY_TYPE_COMMIT);
+            $activity->setMessage(strtok($commit['message'], "\n\r"));
+            $activity->setCreatedAt($lastCommitAt);
+            $activity->setBundle($bundle);
+
+            if ($owner->getName() == $commit['author']) {
+                $owner->setLastCommitAt($lastCommitAt);
+
+                $activity->setDeveloper($owner);
+            } else {
+                $activity->setAuthor($commit['author']);
+            }
+
+            $manager->persist($activity);
+        }
+
+        $owner->addBundle($bundle);
 
         return $bundle;
     }

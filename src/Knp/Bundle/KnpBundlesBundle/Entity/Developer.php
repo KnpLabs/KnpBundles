@@ -21,48 +21,51 @@ class Developer extends Owner implements UserInterface
     private $company;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $githubId;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $sensioId;
-
-    /**
-     * Organizations where developer part of
+     * Date of the last Git commit
      *
-     * @var ArrayCollection
+     * @ORM\Column(type="date")
+     */
+    private $lastCommitAt;
+
+    /**
+     * Organizations where developer belongs to
+     *
      * @ORM\ManyToMany(targetEntity="Organization", mappedBy="members")
+     *
+     * @var Collection
      */
     private $organizations;
 
     /**
-     * Bundles this User recommended to
+     * Bundles recommended by this user
      *
-     * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="recommenders")
+     *
+     * @var Collection
      */
     private $recommendedBundles;
 
     /**
      * Bundles this User contributed to
      *
-     * @var ArrayCollection
      * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="contributors")
+     *
+     * @var Collection
      */
     private $contributionBundles;
 
     /**
-     * local cache, not persisted
+     * @ORM\OneToMany(targetEntity="Activity", mappedBy="developer", fetch="EXTRA_LAZY", cascade={"persist"})
+     *
+     * @var Collection
      */
-    private $lastCommitsCache;
+    private $activities;
 
     public function __construct()
     {
-        $this->organizations = new ArrayCollection();
-        $this->recommendedBundles = new ArrayCollection();
+        $this->activities          = new ArrayCollection();
+        $this->organizations       = new ArrayCollection();
+        $this->recommendedBundles  = new ArrayCollection();
         $this->contributionBundles = new ArrayCollection();
 
         parent::__construct();
@@ -85,35 +88,23 @@ class Developer extends Owner implements UserInterface
     }
 
     /**
-     * @param $githubId
+     * Get the date of the last commit
+     *
+     * @return \DateTime
      */
-    public function setGithubId($githubId)
+    public function getLastCommitAt()
     {
-        $this->githubId = $githubId;
+        return $this->lastCommitAt;
     }
 
     /**
-     * @return mixed
+     * Set lastCommitAt
+     *
+     * @param \DateTime $lastCommitAt
      */
-    public function getGithubId()
+    public function setLastCommitAt(\DateTime $lastCommitAt)
     {
-        return $this->githubId;
-    }
-
-    /**
-     * @param $sensioId
-     */
-    public function setSensioId($sensioId)
-    {
-        $this->sensioId = $sensioId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSensioId()
-    {
-        return $this->sensioId;
+        $this->lastCommitAt = $lastCommitAt;
     }
 
     /**
@@ -143,7 +134,7 @@ class Developer extends Owner implements UserInterface
     /**
      * Get organizations
      *
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getOrganizations()
     {
@@ -151,29 +142,29 @@ class Developer extends Owner implements UserInterface
     }
 
     /**
-     * Add recommendedBundles
+     * Add recommended Bundle
      *
-     * @param Bundle $recommendedBundles
+     * @param Bundle $recommendedBundle
      */
-    public function addRecommendedBundle(Bundle $recommendedBundles)
+    public function addRecommendedBundle(Bundle $recommendedBundle)
     {
-        $this->recommendedBundles[] = $recommendedBundles;
+        $this->recommendedBundles[] = $recommendedBundle;
     }
 
     /**
-     * Remove recommendedBundles
+     * Remove recommended Bundle
      *
-     * @param Bundle $recommendedBundles
+     * @param Bundle $recommendedBundle
      */
-    public function removeRecommendedBundle(Bundle $recommendedBundles)
+    public function removeRecommendedBundle(Bundle $recommendedBundle)
     {
-        $this->recommendedBundles->removeElement($recommendedBundles);
+        $this->recommendedBundles->removeElement($recommendedBundle);
     }
 
     /**
-     * Get recommendedBundles
+     * Get recommended Bundles
      *
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getRecommendedBundles()
     {
@@ -193,29 +184,29 @@ class Developer extends Owner implements UserInterface
     }
 
     /**
-     * Add contributionBundles
+     * Add contribution Bundle
      *
-     * @param Bundle $contributionBundles
+     * @param Bundle $contributionBundle
      */
-    public function addContributionBundle(Bundle $contributionBundles)
+    public function addContributionBundle(Bundle $contributionBundle)
     {
-        $this->contributionBundles[] = $contributionBundles;
+        $this->contributionBundles[] = $contributionBundle;
     }
 
     /**
-     * Remove contributionBundles
+     * Remove contribution Bundle
      *
-     * @param Bundle $contributionBundles
+     * @param Bundle $contributionBundle
      */
-    public function removeContributionBundle(Bundle $contributionBundles)
+    public function removeContributionBundle(Bundle $contributionBundle)
     {
-        $this->contributionBundles->removeElement($contributionBundles);
+        $this->contributionBundles->removeElement($contributionBundle);
     }
 
     /**
      * Get contributionBundles
      *
-     * @return ArrayCollection
+     * @return Collection
      */
     public function getContributionBundles()
     {
@@ -223,63 +214,27 @@ class Developer extends Owner implements UserInterface
     }
 
     /**
-     * @param $lastCommitsCache
+     * @return Collection
      */
-    public function setLastCommitsCache($lastCommitsCache)
+    public function getActivities()
     {
-        $this->lastCommitsCache = $lastCommitsCache;
+        return $this->activities;
     }
 
     /**
-     * @return mixed
+     * @param Activity $activity
      */
-    public function getLastCommitsCache()
+    public function addActivity(Activity $activity)
     {
-        return $this->lastCommitsCache;
+        $this->activities[] = $activity;
     }
 
     /**
-     * Get the date of the last commit
-     *
-     * @return \DateTime
+     * @param Activity $activity
      */
-    public function getLastCommitAt()
+    public function removeActivity(Activity $activity)
     {
-        $lastCommits = $this->getLastCommits(1);
-        if (empty($lastCommits)) {
-            return null;
-        }
-        $lastCommit = $lastCommits[0];
-        $date = new \DateTime($lastCommit['committed_date']);
-
-        return $date;
-    }
-
-    /**
-     * Get the more recent commits by this user
-     *
-     * @param integer $nb
-     * @return array
-     */
-    public function getLastCommits($nb = 10)
-    {
-        if (null === $this->lastCommitsCache) {
-            $commits = array();
-            foreach ($this->getAllBundles() as $bundle) {
-                foreach ($bundle->getLastCommits() as $commit) {
-                    if (isset($commit['author']['login']) && $commit['author']['login'] === $this->name) {
-                        $commits[] = $commit;
-                    }
-                }
-            }
-            usort($commits, function($a, $b) {
-                return strtotime($a['committed_date']) < strtotime($b['committed_date']);
-            });
-            $this->lastCommitsCache = $commits;
-        }
-        $commits = array_slice($this->lastCommitsCache, 0, $nb);
-
-        return $commits;
+        $this->activities->removeElement($activity);
     }
 
     public function toSmallArray()
@@ -295,13 +250,6 @@ class Developer extends Owner implements UserInterface
             'bundles'       => $this->getBundleNames(),
             'lastCommitAt'  => $this->getLastCommitAt() ? $this->getLastCommitAt()->getTimestamp() : null,
             'score'         => $this->getScore(),
-        );
-    }
-
-    public function toBigArray()
-    {
-        return $this->toSmallArray() + array(
-            'lastCommits' => $this->getLastCommits()
         );
     }
 

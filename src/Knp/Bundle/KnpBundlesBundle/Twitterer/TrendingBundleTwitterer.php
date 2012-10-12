@@ -2,13 +2,15 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Twitterer;
 
-use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
-use Knp\Bundle\KnpBundlesBundle\Twitterer\Exception\TrendingBundleNotFoundException;
 use Doctrine\ORM\EntityManager;
 use Buzz\Message\Request;
 use Buzz\Message\Response;
 use Buzz\Client\ClientInterface;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+
+use Knp\Bundle\KnpBundlesBundle\Entity\Activity;
+use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Knp\Bundle\KnpBundlesBundle\Twitterer\Exception\TrendingBundleNotFoundException;
 
 class TrendingBundleTwitterer
 {
@@ -88,10 +90,17 @@ class TrendingBundleTwitterer
         );
 
         $response = $this->httpRequest($this->twitterApiUrl, $this->prepareMessage($trendingBundle), $parameters, array(), 'POST');
-
         if ($response->isSuccessful()) {
             $trendingBundle->setLastTweetedAt(new \DateTime());
+
             $this->em->persist($trendingBundle);
+
+            $activity = new Activity();
+            $activity->setType(Activity::ACTIVITY_TYPE_TWEETED);
+            $activity->setCreatedAt(new \DateTime());
+            $activity->setBundle($trendingBundle);
+
+            $this->em->persist($activity);
             $this->em->flush();
 
             return $trendingBundle;

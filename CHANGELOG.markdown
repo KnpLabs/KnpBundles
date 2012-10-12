@@ -1,3 +1,20 @@
+* 2012-10-08
+  * Added `Activity` entity and replace all text based ones with new approach
+    in `Bundle` and `Developer` entities,
+  * Added `OwnerRepository#findOneByUniqueFields()` to lookup for users in database,
+  * Added new methods to `BundleUtilsExtension`: `#bundleActivityIcon`
+    and `#bundleActivityMessage`,
+  * Added `BundleManager` for easier creation of bundles,
+  * Moved `OwnerManager` into own namespace,
+  * Moved methods `#getGithubId()`, `#getSensioId()` from `Developer` entity
+    to `Owner` entity
+  * Replace dependency of `Github\Organization` from `OrganizationRepository`
+    to `OwnerManager`,
+  * Replaced dependency of `Update` from `OwnerManager` to `BundleManager`,
+  * Removed `Updater#setUp` method, bundles are now loaded via `Pagerfanta`,
+  * `UpdateBundleConsumer` no longer removes bundle on API failure,
+  * Removed unused exception `UserNotFoundException`
+
 * 2012-10-03
   * Removed `js` format from web API, we still support: `json` and `html`,
   * Moved code related to web API into controllers and removed all view templates

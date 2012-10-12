@@ -5,7 +5,8 @@ parameters:
     knp_bundles.trending_bundle_twitterer.template: "Discover {name}, today's trending #Symfony2 bundle {url} on #KnpBundles"
     knp_bundles.consumer.update_bundle.class: Knp\Bundle\KnpBundlesBundle\Consumer\UpdateBundleConsumer
     knp_bundles.consumer.github_hook.class: Knp\Bundle\KnpBundlesBundle\Consumer\GithubHookConsumer
-    knp_bundles.owner.manager.class: Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager
+    knp_bundles.bundle.manager.class: Knp\Bundle\KnpBundlesBundle\Manager\BundleManager
+    knp_bundles.owner.manager.class: Knp\Bundle\KnpBundlesBundle\Manager\OwnerManager
     knp_bundles.output.class: Symfony\Component\Console\Output\NullOutput
     knp_bundles.travis.class: Knp\Bundle\KnpBundlesBundle\Travis\Travis
     knp_bundles.github.client.class: Github\Client
@@ -37,8 +38,15 @@ services:
         class: %knp_bundles.updater.class%
         arguments:
             - @knp_bundles.entity_manager
-            - @knp_bundles.owner.manager
+            - @knp_bundles.bundle.manager
             - @knp_bundles.finder
+            - @knp_bundles.github_repository_api
+
+    knp_bundles.bundle.manager:
+        class: %knp_bundles.bundle.manager.class%
+        arguments:
+            - @knp_bundles.entity_manager
+            - @knp_bundles.owner.manager
             - @knp_bundles.github_repository_api
 
     knp_bundles.owner.manager:
@@ -93,6 +101,7 @@ services:
             - @knp_bundles.output
             - @knp_bundles.git_repository_manager
             - @event_dispatcher
+            - @knp_bundles.owner.manager
 
     knp_bundles.github.developer:
         class: %knp_bundles.github.developer.class%

@@ -67,4 +67,28 @@
         </ul>
     </section>
 </div>
+
+<div class="sidebar-box sidebar-recent clearfix">
+    <hgroup>
+        <h2>Latest activities</h2>
+    </hgroup>
+
+    <section>
+        <ul>
+            {% for activity in activities %}
+                <li>
+                    <img src="{{ activity.developer is empty ? 'http://www.gravatar.com/avatar/?d=identicon&f=y&s=30' : activity.developer.avatarUrl|default('http://www.gravatar.com/avatar/?d=identicon&f=y&s=30') }}" alt="{{ activity.author }}" title="{{ activity.author }}" width="30" height="30">
+                    <span>
+                        {%- if not activity.developer is empty %}
+                            <a href="{{ path('developer_show', {'name': activity.author }) }}">{{ activity.author }}</a>
+                        {%- else -%}
+                            <strong>{{ activity.author }}</strong>
+                        {%- endif %}
+                        {{ bundle_activity_msg(activity, 'short') }} <a href="{{ path('bundle_show', {'ownerName': activity.bundleOwnerName, 'name': activity.bundleName}) }}">{{ activity.bundleName }}</a> <strong>{{ time_diff(activity.createdAt) }}</strong>
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+</div>
 {% endblock %}

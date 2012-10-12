@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 
-use Knp\Bundle\KnpBundlesBundle\Entity\OwnerManager;
+use Knp\Bundle\KnpBundlesBundle\Manager\OwnerManager;
 use Knp\Bundle\KnpBundlesBundle\Security\OAuth\Response\SensioConnectUserResponse;
 
 /**
@@ -36,26 +36,21 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
+        $findBy = array('name' => $response->getNickname());
         if ($response instanceof SensioConnectUserResponse) {
+            $findBy['sensioId'] = $response->getNickname();
             if ($response->getLinkedAccount('github')) {
-                $findBy = array('githubId' => $response->getLinkedAccount('github'));
-            } else {
-                $findBy = array('sensioId' => $response->getNickname());
+                $findBy['githubId'] = $response->getLinkedAccount('github');
             }
         } else {
-            $findBy = array('githubId' => $response->getNickname());
-        }
-
-        $user = $this->ownerManager->findDeveloperBy(array('name' => current($findBy)));
-        if ($user) {
-            return $user;
+            $findBy['githubId'] = $response->getNickname();
         }
 
         $user = $this->ownerManager->findDeveloperBy($findBy);
         if (!$user) {
-            $user = $this->ownerManager->createOwner(current($findBy));
+            $user = $this->ownerManager->createOwner($findBy['name']);
             if (!$user) {
-                throw new UsernameNotFoundException(sprintf('User with username "%s" could not found or created.', current($findBy)));
+                throw new UsernameNotFoundException(sprintf('User with username "%s" could not found or created.', $findBy['name']));
             }
         }
 
@@ -88,6 +83,6 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
      */
     public function supportsClass($class)
     {
-        return $class === 'Knp\Bundle\KnpBundlesBundle\Entity\User';
+        return $class === 'Knp\\Bundle\\KnpBundlesBundle\\Entity\\Developer';
     }
 }

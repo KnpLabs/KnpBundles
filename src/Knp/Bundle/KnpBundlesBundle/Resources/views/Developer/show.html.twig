@@ -55,6 +55,26 @@
         </section>
     </div>
     {%- endif %}
+
+    {%- if developer.activities|length > 0 %}
+    <div class="content-box sidebar-recent clearfix">
+        <hgroup>
+            <h2>Recent activities</h2>
+        </hgroup>
+
+        <section id="activity">
+            <ul>
+                {%- for activity in developer.activities %}
+                <li>
+                    {{ bundle_activity_icon(activity.type) }}
+                    <strong>{{ activity.author }}</strong> {{ bundle_activity_msg(activity, 'short') }}
+                    <a href="{{ path('bundle_show', {'ownerName': activity.bundleOwnerName, 'name': activity.bundleName}) }}">{{ activity.bundleName }}</a> <strong>{{ time_diff(activity.createdAt) }}</strong>
+                </li>
+                {%- endfor %}
+            </ul>
+        </section>
+    </div>
+    {%- endif %}
 </div>
 {% endblock %}
 
