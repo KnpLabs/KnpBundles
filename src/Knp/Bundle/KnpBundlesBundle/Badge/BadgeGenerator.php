@@ -125,7 +125,7 @@ class BadgeGenerator
         $imageShort = $this->imagine->open($this->getResourceDir().'/images/'.$this->type[self::SHORT]);
 
         // Bundle Title
-        $bundleName = $this->shorten($bundle->getName(), 15);
+        $bundleName = $this->shorten($bundle->getName(), 16);
         $image->draw()->text($bundleName, $this->setFont($this->imagine, $this->font, 14, '085066'), new Point(75, 10));
 
         // Score points
