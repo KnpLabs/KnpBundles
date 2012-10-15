@@ -211,6 +211,24 @@
             </ul>
         </section>
     </div>
+
+    <div class="sidebar-box sidebar-developers-list clearfix">
+        <hgroup>
+            <h2>{% trans %}bundles.show.badge.title{% endtrans %}</h2>
+        </hgroup>
+
+        <section>
+            <ul>
+                {% if bundle_badge_url(bundle) %}
+                <li class="badge">
+                    <img src="{{ bundle_badge_url(bundle) }}" alt="{{ bundle.name }}" title="{{ bundle.name }}">
+                </li>
+                {% else %}
+                <li>{% trans %}bundles.show.badge.wait_generation{% endtrans %}</li>
+                {% endif %}
+            </ul>
+        </section>
+    </div>
 {% endblock %}
 
 {% block left %}

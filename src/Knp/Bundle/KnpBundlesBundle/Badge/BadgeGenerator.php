@@ -198,7 +198,7 @@ class BadgeGenerator
      *
      * @return string
      */
-    protected function getBadgeFile(Bundle $bundle, $type = self::LONG)
+    public function getBadgeFile(Bundle $bundle, $type = self::LONG)
     {
         return $this->cacheDir.'/badges/'.$type.'/'.$bundle->getOwnerName().'-'.$bundle->getName().'.png';
     }

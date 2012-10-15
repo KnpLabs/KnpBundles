@@ -2,16 +2,25 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Twig\Extension;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Knp\Bundle\TimeBundle\Twig\Extension\TimeExtension;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Activity;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
+use Knp\Bundle\KnpBundlesBundle\Badge\BadgeGenerator;
 
 class BundleUtilsExtension extends \Twig_Extension
 {
     const ACTIVITY_HIGH   = 7;
     const ACTIVITY_MEDIUM = 30;
     const ACTIVITY_LOW    = 90;
+
+    private $container;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }    
 
     /**
      * @return array
@@ -35,6 +44,7 @@ class BundleUtilsExtension extends \Twig_Extension
         return array(
             'bundle_activity_icon'  => new \Twig_Function_Method($this, 'bundleActivityIcon', array('is_safe' => array('html'))),
             'bundle_activity_msg'   => new \Twig_Function_Method($this, 'bundleActivityMessage'),
+            'bundle_badge_url'      => new \Twig_Function_Method($this, 'bundleBadgeUrl'),
         );
     }
 
@@ -159,6 +169,17 @@ class BundleUtilsExtension extends \Twig_Extension
     public function bundleTravisUrl(Bundle $bundle)
     {
         return $bundle->getUsesTravisCi() ? sprintf('http://travis-ci.org/%s/%s', $bundle->getOwnerName(), $this->getName()) : null;
+    }
+
+    public function bundleBadgeUrl(Bundle $bundle, $type = BadgeGenerator::LONG)
+    {
+        $badgeUrl = $this->container->get('knp_bundles.badge_generator')->getBadgeFile($bundle, $type);
+
+        if (!file_exists($badgeUrl)) {
+            return false;
+        }
+
+        return $badgeUrl;
     }
 
     /**

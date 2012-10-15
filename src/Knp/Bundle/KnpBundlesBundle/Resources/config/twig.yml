@@ -1,6 +1,8 @@
 services:
     twig.extension.knp.bundle_utils:
         class: Knp\Bundle\KnpBundlesBundle\Twig\Extension\BundleUtilsExtension
+        arguments:
+            - "@service_container"
         tags:
             - { name: twig.extension }
 
