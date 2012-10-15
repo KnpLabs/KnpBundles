@@ -54,16 +54,16 @@ class BadgeGenerator
         self::LONG => array(
             // n => x:y
             // n+1 - score count number
-            '29:16',
-            '23:16',
-            '15:16',
-            '10:16'
+            '29:10',
+            '23:10',
+            '15:10',
+            '10:10'
         ),
         self::SHORT => array(
-            '28:5',
-            '22:5',
-            '14:5',
-            '6:5'
+            '23:5',
+            '17:5',
+            '9:5',
+            '3:5'
         )
     );
 
@@ -126,25 +126,25 @@ class BadgeGenerator
 
         // Bundle Title
         $bundleName = $this->shorten($bundle->getName(), 15);
-        $image->draw()->text($bundleName, $this->setFont($this->imagine, $this->font, 14), new Point(77, 10));
+        $image->draw()->text($bundleName, $this->setFont($this->imagine, $this->font, 14, '085066'), new Point(75, 10));
 
         // Score points
         $score = $bundle->getScore() ?: 'N/A';
         $image->draw()->text($score, $this->setFont($this->imagine, $this->font, 18), $this->getPositionByType($score, self::LONG));
-        $imageShort->draw()->text($score, $this->setFont($this->imagine, $this->font, 18), $this->getPositionByType($score, self::SHORT));
+        $imageShort->draw()->text($score, $this->setFont($this->imagine, $this->font, 16), $this->getPositionByType($score, self::SHORT));
 
 
         // Recommend
         $recommenders = $bundle->getNbRecommenders();
         if ($recommenders) {
-            $recommendationsText = 'by '.$recommenders.' developers';
+            $recommendationsText = $recommenders.' recommendations';
         } else {
             $recommendationsText = 'No recommendations';
         }
         $image->draw()->text(
             $recommendationsText,
-            $this->setFont($this->imagine, $this->font, 8),
-            new Point(98, 34)
+            $this->setFont($this->imagine, $this->font, 9),
+            new Point(92, 33)
         );
 
         // Check or create dir for generated badges
@@ -185,7 +185,7 @@ class BadgeGenerator
      *
      * @return string
      */
-    protected function setFont(ImagineInterface $imagine, $font, $size, $color = '8c96a0')
+    protected function setFont(ImagineInterface $imagine, $font, $size, $color = 'ffffff')
     {
         return $imagine->font($this->getResourceDir().'/fonts/'.$font, $size, new Color($color));
     }
