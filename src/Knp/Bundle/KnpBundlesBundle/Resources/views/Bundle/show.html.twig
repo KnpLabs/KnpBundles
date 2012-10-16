@@ -59,13 +59,11 @@
 {% endblock %}
 
 {% block badge %}
-{% spaceless %}
-<textarea rows="5" cols="23">
+<textarea class="badge-code">
     <a href="{{ url('bundle_show', { 'ownerName': bundle.ownerName , 'name': bundle.name }) }}">
         <img src="{{ url('bundle_get_badge', { 'ownerName': bundle.ownerName , 'name': bundle.name }) }}" />
     </a>    
 </textarea>
-{% endspaceless %}
 {% endblock %}
 
 {% block right %}
