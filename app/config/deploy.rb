@@ -1,3 +1,4 @@
+set :mainrepo,      "KnpLabs"
 set :stages,        %w(prod vps100)
 set :default_stage, "vps100"
 set :stage_dir,     "app/config/deploy"
@@ -12,7 +13,7 @@ ssh_options[:port] = "22123"
 ssh_options[:forward_agent] = true
 default_run_options[:pty] = true
 
-set :repository,  "git@github.com:KnpLabs/KnpBundles.git"
+set :repository,  "git@github.com:#{mainrepo}/KnpBundles.git"
 set :scm,         :git
 set :deploy_via, :remote_cache
 
@@ -22,7 +23,6 @@ set :admin_runner, nil
 set  :keep_releases,  3
 # Be more verbose by uncommenting the following line
 # logger.level = Logger::MAX_LEVEL
-
 
 set :shared_files,      ["app/config/parameters.yml"]
 set :shared_children,     [app_path + "/logs", web_path + "/uploads", app_path + "/sessions"]
@@ -44,3 +44,5 @@ namespace :symfony do
     puts_ok
   end
 end
+
+logger.level = Logger::MAX_LEVEL
