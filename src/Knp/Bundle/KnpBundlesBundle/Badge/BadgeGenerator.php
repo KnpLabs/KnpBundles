@@ -105,8 +105,8 @@ class BadgeGenerator
             $this->rootDir
         );
 
-        $filename = sprintf('%s/badges/%s/%s-%s.png', rtrim($relativePath, '/'), $type, $bundle->getOwnerName(), $bundle->getName());
-        if (false !== $regenerate || !$this->filesystem->exists($filename)) {
+        $filename = sprintf('%sbadges/%s/%s-%s.png', $relativePath, $type, $bundle->getOwnerName(), $bundle->getName());
+        if (!$this->filesystem->exists($filename) || false !== $regenerate) {
             $this->generate($bundle);
         }
 
@@ -198,7 +198,7 @@ class BadgeGenerator
      *
      * @return string
      */
-    public function getBadgeFile(Bundle $bundle, $type = self::LONG)
+    protected function getBadgeFile(Bundle $bundle, $type = self::LONG)
     {
         return $this->cacheDir.'/badges/'.$type.'/'.$bundle->getOwnerName().'-'.$bundle->getName().'.png';
     }
