@@ -21,8 +21,6 @@ set :model_manager, "doctrine"
 set :admin_runner, nil
 
 set  :keep_releases,  3
-# Be more verbose by uncommenting the following line
-# logger.level = Logger::MAX_LEVEL
 
 set :shared_files,      ["app/config/parameters.yml"]
 set :shared_children,     [app_path + "/logs", web_path + "/uploads", app_path + "/sessions"]
@@ -45,4 +43,4 @@ namespace :symfony do
   end
 end
 
-#logger.level = Logger::MAX_LEVEL
+logger.level = Logger::MAX_LEVEL
