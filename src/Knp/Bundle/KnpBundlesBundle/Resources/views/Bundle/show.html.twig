@@ -2,6 +2,12 @@
 
 {% block title %}{% trans with {'%name%': bundle.name, '%ownerName%': bundle.ownerName} %}bundles.show.meta.title{% endtrans %}{% endblock %}
 {% block description %}{{ bundle.description }}{% endblock %}
+{% block meta %}
+<meta name="twitter:site" content="@KnpLabs">
+<meta name="twitter:title" content="{{ bundle.name }} by {{ bundle.ownerName }}">
+<meta name="twitter:url" content="{{ url('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}">
+<meta name="twitter:description" content="{{ bundle.description }}">
+{% endblock %}
 
 {% set isOwnerOrContributor = app.user is not null and bundle.isOwnerOrContributor(app.user) %}
 {% set hasActivities = bundle.activities|length > 0 %}
