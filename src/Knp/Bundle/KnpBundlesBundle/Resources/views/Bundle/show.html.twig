@@ -277,7 +277,7 @@
 {%- if isOwnerOrContributor -%}
 <form class="modal hide" action="{{ path('bundle_settings', {'id': bundle.id}) }}" method="post" id="modal-settings">
     <div class="modal-header">
-        <a class="close" href="#">×</a>
+        <a class="close" href="#" data-dismiss="modal">×</a>
         <h3>{% trans %}bundles.show.settings.modal{% endtrans %}</h3>
     </div>
 
