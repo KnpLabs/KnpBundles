@@ -21,11 +21,11 @@
         "knplabs/knp-disqus-bundle": "dev-master",
         "knplabs/knp-time-bundle": "dev-master",
         "knplabs/knp-zend-cache-bundle": "dev-master",
-        "knplabs/github-api": "dev-master",
+        "knplabs/github-api": "1.0.*",
         "avalanche123/imagine-bundle": "dev-master",
         "kriswallsmith/buzz": "0.7",
         "nelmio/solarium-bundle": "dev-master",
-        "igorw/file-serve-bundle": "dev-master",
+        "igorw/file-serve-bundle": "1.0.*",
         "white-october/pagerfanta-bundle": "dev-master",
 
         "videlalvaro/php-amqplib": "dev-master",

@@ -148,7 +148,6 @@ services:
         class: %knp_bundles.badge_generator.class%
         arguments:
             - @knp_bundles.imagine
-            - @igorw_file_serve.response_factory
             - @filesystem
         calls:
             - [ setCacheDir, [%kernel.cache_dir%] ]

@@ -68,7 +68,7 @@ class BadgeGenerator
     );
 
     /**
-     * Instace of Imagine lib acсording to image lib
+     * Instance of Imagine lib according to image lib
      *
      * @var ImagineInterface
      */
@@ -78,20 +78,17 @@ class BadgeGenerator
      * @var Filesystem
      */
     private $filesystem;
-    private $responseFactory;
 
     /**
      * Constructor
      *
      * @param ImagineInterface $imagine
-     * @param object           $responseFactory
-     * @param Filesystem|null  $filesystem
+     * @param null|Filesystem  $filesystem
      */
-    public function __construct(ImagineInterface $imagine, $responseFactory, $filesystem = null)
+    public function __construct(ImagineInterface $imagine, $filesystem = null)
     {
-        $this->imagine         = $imagine;
-        $this->responseFactory = $responseFactory;
-        $this->filesystem      = $filesystem ?: new Filesystem();
+        $this->imagine    = $imagine;
+        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     /**
@@ -99,24 +96,21 @@ class BadgeGenerator
      * @param string  $type
      * @param boolean $regenerate
      *
-     * @return mixed
+     * @return string
      */
     public function show(Bundle $bundle, $type = 'long', $regenerate = false)
     {
         $relativePath = $this->filesystem->makePathRelative(
-            $this->rootDir,
-            $this->cacheDir
+            $this->cacheDir,
+            $this->rootDir
         );
 
-        $filename = sprintf('%s/badges/%s/%s-%s.png', $relativePath, $type, $bundle->getOwnerName(), $bundle->getName());
-        if (!$this->filesystem->exists($filename) || false !== $regenerate) {
+        $filename = sprintf('%s/badges/%s/%s-%s.png', rtrim($relativePath, '/'), $type, $bundle->getOwnerName(), $bundle->getName());
+        if (false !== $regenerate || !$this->filesystem->exists($filename)) {
             $this->generate($bundle);
         }
 
-        return $this->responseFactory->create(
-            $filename,
-            'image/png'
-        );
+        return $filename;
     }
 
     /**
@@ -185,9 +179,9 @@ class BadgeGenerator
      * Return full font path
      *
      * @param ImagineInterface $imagine
-     * @param string $font
-     * @param integer $size
-     * @param string $color
+     * @param string           $font
+     * @param integer          $size
+     * @param string           $color
      *
      * @return string
      */
@@ -220,15 +214,15 @@ class BadgeGenerator
     /**
      * Trim long bundle name
      *
-     * @param string $name
-     * @param integer $lenght symbol count from the end
+     * @param string  $name
+     * @param integer $length symbol count from the end
      *
      * @return string
      */
-    protected function shorten($name, $lenght)
+    protected function shorten($name, $length)
     {
-        if ($lenght < strlen($name)) {
-            $name = '...'.substr($name, -1 * $lenght);
+        if ($length < strlen($name)) {
+            $name = '...'.substr($name, -1 * $length);
         }
 
         return $name;
@@ -236,8 +230,6 @@ class BadgeGenerator
 
     /**
      * Check and create a dir for uploaded badges
-     *
-     * @throws \RuntimeException
      */
     protected function createBadgesDir()
     {
@@ -254,8 +246,8 @@ class BadgeGenerator
     /**
      * Get score points position x:y
      *
-     * @param string $type
      * @param integer|string $score
+     * @param string         $type
      *
      * @return Point
      */
