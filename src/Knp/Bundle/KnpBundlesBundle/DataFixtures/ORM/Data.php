@@ -107,7 +107,7 @@ Entity\Role:
 
 look here
 
-``` php
+```  php
 <?php
 include('doctrine.php');
 ```
@@ -128,6 +128,12 @@ and some xml
     </parameters>
 </container>
 ```
+
+Testing inline markup for code `single tick text`
+
+Testing inline markup for code ``double tick text``
+
+Testing inline markup for code ```triple tick text```
 
 And some standard code **here**
 

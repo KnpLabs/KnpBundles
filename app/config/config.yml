@@ -21,8 +21,19 @@ twig:
     strict_variables: %kernel.debug%
 
 # Markdown Configuration
-knp_markdown:
-    parser: ~       # Enable the parser service
+knp_markdown: #~
+    parser:       # Enable the parser service
+        service: markdown.parser.sundown
+    sundown:
+        extensions:
+            fenced_code_blocks: true
+            no_intra_emphasis: true
+            autolink: true
+            strikethrough: true
+            tables: true
+        render_flags:
+            filter_html: true
+            hard_wrap: true
 
 # Time Configuration
 knp_time: ~     # Enable the time helper
