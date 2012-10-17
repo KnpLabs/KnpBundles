@@ -145,7 +145,6 @@ services:
         public: false
 
     knp_bundles.badge_generator:
-        scope: request
         class: %knp_bundles.badge_generator.class%
         arguments:
             - @knp_bundles.imagine

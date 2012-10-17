@@ -1,6 +1,6 @@
 server 'KnpBundles.com', :app, :web, :db, :primary => true
 set :domain,      "KnpBundles.com"
-set :deploy_to,   "/var/www/KnpBundles.com/site"
-set :branch, "feature/263"
+set :deploy_to,   "/home/knpbundles/sites/KnpBundles-staging/site"
+set :branch, "master"
 set :user, "user"
 set :password, "password"

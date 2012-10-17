@@ -1,6 +1,6 @@
 set :mainrepo,      "KnpLabs"
-set :stages,        %w(prod vps100)
-set :default_stage, "vps100"
+set :stages,        %w(prod staging)
+set :default_stage, "staging"
 set :stage_dir,     "app/config/deploy"
 require 'capistrano/ext/multistage'
 
@@ -20,7 +20,7 @@ set :deploy_via, :remote_cache
 set :model_manager, "doctrine"
 set :admin_runner, nil
 
-set  :keep_releases,  3
+set  :keep_releases,  2
 
 set :shared_files,      ["app/config/parameters.yml"]
 set :shared_children,     [app_path + "/logs", web_path + "/uploads", app_path + "/sessions"]
