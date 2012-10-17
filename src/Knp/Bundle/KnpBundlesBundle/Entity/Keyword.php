@@ -33,6 +33,11 @@ class Keyword
      */
     protected $slug;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="keywords", fetch="EXTRA_LAZY")
+     */
+    protected $bundles;
+
     public function getId()
     {
         return $this->id;

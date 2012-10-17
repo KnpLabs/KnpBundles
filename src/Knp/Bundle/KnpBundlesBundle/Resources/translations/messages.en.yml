@@ -196,11 +196,9 @@ symfony2bundles:
         description: "More features, more love from KnpLabs… Symfony2bundles has been renamed to comply with Symfony trademarks"
     title: "Symfony2bundles becomes KnpBundles"
 
-about_scoring:
-    meta:
-        title: "About KnpBundles scoring algorithm"
-        description: "KnpBundles assigns each bundle a score based on best practices, here's how it works"
-    title: "About KnpBundles scoring algorithm"
+faq_scoring:
+    title: "KnpBundles FAQ Scoring"
+    description: "Frequent answers to questions regarding bundle scoring issues"
 
 notFound:
     title: "404 - Page not found"

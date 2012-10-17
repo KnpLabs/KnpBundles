@@ -16,7 +16,7 @@
         "doctrine/doctrine-fixtures-bundle": "dev-master",
         "doctrine/doctrine-migrations-bundle": "dev-master",
         "stof/doctrine-extensions-bundle": "dev-master",
-        "knplabs/knp-markdown-bundle": "1.1.*",
+        "knplabs/knp-markdown-bundle": "1.2.*",
         "knplabs/knp-menu-bundle": "1.1.*",
         "knplabs/knp-disqus-bundle": "dev-master",
         "knplabs/knp-time-bundle": "dev-master",
