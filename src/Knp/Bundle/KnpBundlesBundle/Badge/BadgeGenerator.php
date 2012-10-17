@@ -106,7 +106,7 @@ class BadgeGenerator
         );
 
         $filename = sprintf('%sbadges/%s/%s-%s.png', $relativePath, $type, $bundle->getOwnerName(), $bundle->getName());
-        if (!$this->filesystem->exists($filename) || false !== $regenerate) {
+        if (false !== $regenerate || !$this->filesystem->exists($filename)) {
             $this->generate($bundle);
         }
 
