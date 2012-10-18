@@ -239,9 +239,12 @@ class Repo
             return;
         }
 
-        $composerName = isset($composer['name']) ? $composer['name'] : null;
-
-        $bundle->setComposerName($composerName);
+        if (isset($composer['name'])) {
+            $bundle->setComposerName($composer['name']);
+        }
+        if (isset($composer['license'])) {
+            $bundle->setLicenseType(is_array($composer['license']) ? implode(', ', $composer['license']) : $composer['license']);
+        }
     }
 
     public function updateSymfonyVersions(Bundle $bundle)

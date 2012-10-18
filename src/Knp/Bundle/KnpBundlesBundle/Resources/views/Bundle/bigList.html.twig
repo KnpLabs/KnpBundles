@@ -14,9 +14,19 @@
 
         <ul>
             <li class="bundle-author">
-                {% trans %}bundles.list.by{% endtrans %}
-                <a href="{{ path(bundle.ownerType == 'organization' ? 'organization_show' : 'developer_show', {'name': bundle.ownerName }) }}">{{ bundle.ownerName }}</a>
+                owner:
+                <a href="{{ path(bundle.ownerType == 'organization' ? 'organization_show' : 'developer_show', {'name': bundle.ownerName }) }}">{{ bundle.ownerName }}</a>,
             </li>
+            {% if (not bundle.license is empty) or (not bundle.licenseType is empty) -%}
+            <li class="bundle-license">
+                license:
+                {% if not bundle.license is empty -%}
+                <a href="{{ path('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}#license" class="bundle-license-{{ bundle.licenseType is empty ? 'unknown' : 'detected' }}">{{ bundle.licenseType|default('details') }}</a>
+                {%- elseif not bundle.licenseType is empty -%}
+                <strong>{{ bundle.licenseType }}</strong>
+                {%- endif -%},
+            </li>
+            {%- endif %}
             <li class="bundle-activity">
                 {% trans %}bundles.list.activity{% endtrans %}
                 <abbr title="{% trans %}bundles.list.lastCommit{% endtrans %}{{ time_diff(bundle.lastCommitAt) }}" class="{{ bundle.lastCommitAt|bundle_activity|trans|lower }}">{{ bundle.lastCommitAt|bundle_activity|trans }}</abbr>

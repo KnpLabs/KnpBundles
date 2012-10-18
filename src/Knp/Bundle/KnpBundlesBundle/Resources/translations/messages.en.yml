@@ -101,7 +101,7 @@ bundles.show:
         title: "Score evolution"
     settings:
         title:  "Bundle settings"
-        modal:  "Bundle Status Setting"
+        modal:  "Bundle Setting"
         state:
             unknown:    "unknown"
             not_ready:  "not yet ready"
