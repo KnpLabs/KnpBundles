@@ -60,7 +60,7 @@
     // select all code inside textarea by click
     $(document).on('click', '.badge-code', function() {
         $(this).select();
-    })
+    });
 
     $('#add-bundle-btn').bind('click', function(event) {
         var ul = $(this).parent().parent().parent(),

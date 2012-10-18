@@ -59,10 +59,8 @@
 {% endblock %}
 
 {% block badge %}
-<textarea class="badge-code">
-    <a href="{{ url('bundle_show', { 'ownerName': bundle.ownerName , 'name': bundle.name }) }}">
-        <img src="{{ url('bundle_get_badge', { 'ownerName': bundle.ownerName , 'name': bundle.name }) }}" />
-    </a>    
+<textarea class="badge-code" rows="6">
+<a href="{{ url('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}"><img src="{{ url('bundle_get_badge', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}"></a>
 </textarea>
 {% endblock %}
 
@@ -220,17 +218,17 @@
         </section>
     </div>
 
-    <div class="sidebar-box sidebar-developers-list clearfix">
+    <div class="sidebar-box sidebar-badge clearfix">
         <hgroup>
             <h2>{% trans %}bundles.show.badge.title{% endtrans %}</h2>
         </hgroup>
 
-        <section style="margin: 0 0 15px;">
+        <section>
             <div class="badge" data-placement="left" data-content='{{ block('badge') }}' data-title="{% trans %}bundles.show.badge.embed{% endtrans %}:">
-                <img src="{{ path('bundle_get_badge', { 'ownerName': bundle.ownerName , 'name': bundle.name }) }}" title="{% trans %}bundles.show.badge.click_for_embed{% endtrans %}">
+                <img src="{{ path('bundle_get_badge', {'ownerName': bundle.ownerName, 'name': bundle.name }) }}" title="{% trans %}bundles.show.badge.click_for_embed{% endtrans %}">
             </div>
             <div class="badge" data-placement="left" data-content='{{ block('badge') }}' data-title="{% trans %}bundles.show.badge.embed{% endtrans %}:">
-                <img src="{{ path('bundle_get_badge_short', { 'ownerName': bundle.ownerName , 'name': bundle.name }) }}" title="{% trans %}bundles.show.badge.click_for_embed{% endtrans %}">
+                <img src="{{ path('bundle_get_badge_short', {'ownerName': bundle.ownerName, 'name': bundle.name }) }}" title="{% trans %}bundles.show.badge.click_for_embed{% endtrans %}">
             </div>
         </section>
     </div>

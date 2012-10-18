@@ -11,7 +11,7 @@ class BundleUtilsExtension extends \Twig_Extension
 {
     const ACTIVITY_HIGH   = 7;
     const ACTIVITY_MEDIUM = 30;
-    const ACTIVITY_LOW    = 90;   
+    const ACTIVITY_LOW    = 90;
 
     /**
      * @return array

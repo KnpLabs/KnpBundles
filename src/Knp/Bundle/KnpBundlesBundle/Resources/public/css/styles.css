@@ -1393,15 +1393,23 @@ code, pre {
     line-height: 18px
 }
 
-.sidebar-box div.badge {
-    padding: 15px 15px 0;
+
+.sidebar-badge section {
+    margin: 0 0 15px
+}
+
+.sidebar-badge .badge {
+    padding: 15px 15px 0
+}
+
+.sidebar-badge .badge img {
+    cursor: pointer
 }
 
 .badge-code {
-    font-size: 10px;
     width: 203px;
-    height: 85px;
-    color: #686868;
+    font-size: 10px;
+    color: #686868
 }
 
 

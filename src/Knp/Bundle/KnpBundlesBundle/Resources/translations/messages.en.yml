@@ -109,8 +109,8 @@ bundles.show:
             deprecated: "deprecated"
     badge:
         title: "Take your Badge"
-        wait_generation: "Hey! Your bundle badge in the queue for the generation of"
-        click_for_embed: "Hit on badge to grab embed code"
+        wait_generation: "Hey! Your bundle's badge has been queued for generation."
+        click_for_embed: "Click on badge button to grab code to embed it on your site!"
         embed: "Place this code on your page"
 
 bundles.score:
