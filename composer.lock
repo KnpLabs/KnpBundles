@@ -900,12 +900,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMarkdownBundle",
-                "reference": "3e57c2a866169083bfc00f44f487dff51e8393fc"
+                "reference": "bd597e66a137893ceab0e302f05e99debd9a0f3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/KnpLabs/KnpMarkdownBundle/zipball/3e57c2a866169083bfc00f44f487dff51e8393fc",
-                "reference": "3e57c2a866169083bfc00f44f487dff51e8393fc",
+                "url": "https://github.com/KnpLabs/KnpMarkdownBundle/zipball/bd597e66a137893ceab0e302f05e99debd9a0f3f",
+                "reference": "bd597e66a137893ceab0e302f05e99debd9a0f3f",
                 "shasum": ""
             },
             "require": {
@@ -917,7 +917,7 @@
                 "symfony/twig-bundle": "to use the Twig markdown filter",
                 "ext-sundown": "to use optional support for php-sundown extension instead of php implementation"
             },
-            "time": "1350377767",
+            "time": "1350468085",
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {

@@ -432,15 +432,18 @@ class BundleController extends BaseController
 
         // Save only if sender is owner of bundle
         if ((null !== $owner = $this->get('security.context')->getToken()->getUser()) && $bundle->isOwnerOrContributor($owner)) {
-            $state = $request->request->get('state', Bundle::STATE_UNKNOWN);
+            $state   = $request->request->get('state');
+            $license = $request->request->get('license');
+            if ($state || $license) {
+                $bundle->setState($state);
+                $bundle->setLicenseType($license);
 
-            $bundle->setState($state);
+                $em = $this->get('doctrine')->getEntityManager();
+                $em->persist($bundle);
+                $em->flush();
 
-            $em = $this->get('doctrine')->getEntityManager();
-            $em->persist($bundle);
-            $em->flush();
-
-            $request->getSession()->setFlash('notice', sprintf('Bundle status was successful changed to: %s', $state));
+                $request->getSession()->setFlash('notice', 'Bundle settings change was successful');
+            }
         }
 
         return $this->redirect($this->generateUrl('bundle_show', array('ownerName' => $bundle->getOwnerName(), 'name' => $bundle->getName())));

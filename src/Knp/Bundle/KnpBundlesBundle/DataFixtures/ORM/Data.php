@@ -41,6 +41,10 @@ class Data implements FixtureInterface
         'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit'
     );
 
+    private $licenses = array(
+        'GPL', 'New BSD', 'MIT'
+    );
+
     private $descriptions = array(
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut a est elit, id tempus elit. Nulla facilisi.
 Suspendisse tristique sagittis auctor. Donec consequat, nisl sed mollis ullamcorper, elit erat lobortis est,
@@ -310,6 +314,8 @@ EOT;
                 '1.1.0' => '2.*',
             ),
             'state'         => $this->states[mt_rand(0, 3)],
+            'license'       => ($i%4 == 0) ? 'Some pseudo license data' : null,
+            'licenseType'   => ($i%3 == 0) ? $this->licenses[mt_rand(0, 2)] : null,
             'travisCiBuildStatus'  => ($i%2 == 0) ? $trilean[$i%3] : null,
             'nbFollowers'   => $i*10,
             'nbForks'       => $i,
