@@ -107,6 +107,11 @@ bundles.show:
             not_ready:  "not yet ready"
             ready:      "ready"
             deprecated: "deprecated"
+    badge:
+        title: "Take your Badge"
+        wait_generation: "Hey! Your bundle badge in the queue for the generation of"
+        click_for_embed: "Hit on badge to grab embed code"
+        embed: "Place this code on your page"
 
 bundles.score:
     followers:      "Github watchers:"

@@ -1393,6 +1393,17 @@ code, pre {
     line-height: 18px
 }
 
+.sidebar-box div.badge {
+    padding: 15px 15px 0;
+}
+
+.badge-code {
+    font-size: 10px;
+    width: 203px;
+    height: 85px;
+    color: #686868;
+}
+
 
 .content-box.sidebar-recent #activity li {
     padding: 0
