@@ -346,6 +346,9 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
                 'state'         => isset($row['state']) ? $row['state'] : Entity\Bundle::STATE_UNKNOWN,
             ));
 
+            if (isset($row['license'])) {
+                $bundle->setLicenseType($row['license']);
+            }
             if (isset($row['createdAt'])) {
                 $bundle->setCreatedAt(new \DateTime($row['createdAt']));
             }

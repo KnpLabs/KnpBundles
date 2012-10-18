@@ -869,7 +869,7 @@ code, pre {
     float: left;
     width: 535px;
     margin: 10px 0 0;
-    padding: 15px 10px 10px;
+    padding: 15px 10px 5px;
     border-top: 1px solid #dedede
 }
 
@@ -952,6 +952,20 @@ code, pre {
     float: left;
     margin-right: 5px
 }
+
+
+.content-box .bundle-license a {
+    font-weight: bold
+}
+
+.content-box .bundle-license strong, strong.bundle-license, a.bundle-license-detected  {
+    color: #70aa3c
+}
+
+a.bundle-license-unknown {
+    color: #ffb30f
+}
+
 
 .content-box .bundle-author a {
     font-weight: bold;
@@ -1553,6 +1567,22 @@ code, pre {
     float: left;
     margin: 10px 15px;
     color: #f29e7f
+}
+
+
+/* Modal */
+.modal-body h5 {
+    margin: 0 0 4px
+}
+
+.modal-body div {
+    width: 155px;
+    margin-left: 10px
+}
+
+.modal-body div ul {
+    margin-left: 5px;
+    font-size: 12px
 }
 
 

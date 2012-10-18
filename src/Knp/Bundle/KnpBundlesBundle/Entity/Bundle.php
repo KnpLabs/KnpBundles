@@ -109,7 +109,7 @@ class Bundle
      *
      * @ORM\Column(type="text", nullable=true)
      */
-    protected $canonicalConfig = null;
+    protected $canonicalConfig;
 
     /**
      * The bundle readme text extracted from source code
@@ -124,6 +124,13 @@ class Bundle
      * @ORM\Column(type="text", nullable=true)
      */
     protected $license;
+
+    /**
+     * The bundle license type extracted from composer.json
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $licenseType;
 
     /**
      * Internal score of the Repo, based on several indicators
@@ -450,7 +457,7 @@ class Bundle
     }
 
     /**
-     * Get license
+     * Get license data
      *
      * @return string
      */
@@ -460,13 +467,33 @@ class Bundle
     }
 
     /**
-     * Set license
+     * Set license data
      *
      * @param string $license
      */
     public function setLicense($license)
     {
         $this->license = $license;
+    }
+
+    /**
+     * Get license type
+     *
+     * @return string
+     */
+    public function getLicenseType()
+    {
+        return $this->licenseType;
+    }
+
+    /**
+     * Set license type
+     *
+     * @param string $license
+     */
+    public function setLicenseType($license)
+    {
+        $this->licenseType = $license;
     }
 
     /**

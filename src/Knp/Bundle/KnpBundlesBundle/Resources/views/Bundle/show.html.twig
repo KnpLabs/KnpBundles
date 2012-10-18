@@ -72,12 +72,21 @@
 
         <section>
             <ul>
-                {%- if bundle.state != 'unknown' -%}
+                {% if bundle.state != 'unknown' -%}
                 <li>
                     <i class="icon-{{ bundle.state == 'ready' ? 'ok' : 'cancel' }}"></i><strong>{% trans %}bundles.show.infos.state{% endtrans %}</strong>
                     <abbr title="{{ bundle.state|bundle_state_tooltip }}">{{ bundle.state }}</abbr>
                 </li>
-                {%- endif -%}
+                {%- endif %}
+                {% if (not bundle.license is empty) or (not bundle.licenseType is empty) -%}
+                <li>
+                    <i class="icon-bag"></i><strong>License:</strong>
+                    {% if not bundle.license is empty -%}
+                    <a href="#license" data-toggle="license" class="bundle-license-{{ bundle.licenseType is empty ? 'unknown' : 'detected' }}">{{ bundle.licenseType|default('details') }}</a>
+                    {%- elseif not bundle.licenseType is empty -%}
+                    <strong class="bundle-license">{{ bundle.licenseType }}</strong>
+                    {%- endif -%}
+                {%- endif %}
                 <li><i class="icon-chart"></i><strong>{% trans %}bundles.show.infos.score{% endtrans %}</strong> <a href="#score-details" data-toggle="tab">{{ bundle.score }}</a></li>
                 {%- if bundle.symfonyVersions|length > 0 -%}
                 <li><i class="icon-symfony"></i><strong class="symfony-versions" data-placement="bottom" data-content="{{ block('symfony_versions') }}" data-title="{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}:">{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}</strong></li>
@@ -298,37 +307,76 @@
 {%- if isOwnerOrContributor -%}
 <form class="modal hide" action="{{ path('bundle_settings', {'id': bundle.id}) }}" method="post" id="modal-settings">
     <div class="modal-header">
-        <a class="close" href="#" data-dismiss="modal">×</a>
+        <a class="pull-right close" href="#" data-dismiss="modal">×</a>
         <h3>{% trans %}bundles.show.settings.modal{% endtrans %}</h3>
     </div>
 
     <div class="modal-body">
-        <ul style="margin: 0 auto; width: 125px;">
-            <li>
-                <label>
-                    <input type="radio" name="state" id="state0" value="unknown"{{ bundle.state == 'unknown' ? ' checked="checked"' : '' }}>
-                    <span>{% trans %}bundles.show.settings.state.unknown{% endtrans %}</span>
-                </label>
-            </li>
-            <li>
-                <label>
-                    <input type="radio" name="state" id="state1" value="not yet ready"{{ bundle.state == 'not yet ready' ? ' checked="checked"' : '' }}>
-                    <span>{% trans %}bundles.show.settings.state.not_ready{% endtrans %}</span>
-                </label>
-            </li>
-            <li>
-                <label>
-                    <input type="radio" name="state" id="state2" value="ready"{{ bundle.state == 'ready' ? ' checked="checked"' : '' }}>
-                    <span>{% trans %}bundles.show.settings.state.ready{% endtrans %}</span>
-                </label>
-            </li>
-            <li>
-                <label>
-                    <input type="radio" name="state" id="state3" value="deprecated"{{ bundle.state == 'deprecated' ? ' checked="checked"' : '' }}>
-                    <span>{% trans %}bundles.show.settings.state.deprecated{% endtrans %}</span>
-                </label>
-            </li>
-        </ul>
+        <div class="pull-right">
+            <h5>Bundle state:</h5>
+            <ul>
+                <li>
+                    <label>
+                        <input type="radio" name="state" id="state0" value="unknown"{{ bundle.state == 'unknown' ? ' checked="checked"' : '' }}>
+                        <span>{% trans %}bundles.show.settings.state.unknown{% endtrans %}</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="state" id="state1" value="not yet ready"{{ bundle.state == 'not yet ready' ? ' checked="checked"' : '' }}>
+                        <span>{% trans %}bundles.show.settings.state.not_ready{% endtrans %}</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="state" id="state2" value="ready"{{ bundle.state == 'ready' ? ' checked="checked"' : '' }}>
+                        <span>{% trans %}bundles.show.settings.state.ready{% endtrans %}</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="state" id="state3" value="deprecated"{{ bundle.state == 'deprecated' ? ' checked="checked"' : '' }}>
+                        <span>{% trans %}bundles.show.settings.state.deprecated{% endtrans %}</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <div class="pull-left">
+            <h5>License:</h5>
+            <ul>
+                <li>
+                    <label>
+                        <input type="radio" name="license" id="license0" value=""{{ bundle.licenseType is empty ? ' checked="checked"' : '' }}>
+                        <span>Not listed below</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="license" id="license1" value="BSD"{{ bundle.licenseType == 'BSD' ? ' checked="checked"' : '' }}>
+                        <span>BSD</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="license" id="license2" value="New BSD"{{ bundle.licenseType == 'New BSD' ? ' checked="checked"' : '' }}>
+                        <span>New BSD</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="license" id="license3" value="MIT"{{ bundle.licenseType == 'MIT' ? ' checked="checked"' : '' }}>
+                        <span>MIT</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="license" id="license4" value="GPL"{{ bundle.licenseType == 'GPL' ? ' checked="checked"' : '' }}>
+                        <span>GPL</span>
+                    </label>
+                </li>
+            </ul>
+        </div>
     </div>
 
     <div class="modal-footer">
