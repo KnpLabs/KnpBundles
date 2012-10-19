@@ -141,6 +141,8 @@ class Repo
             return false;
         }
 
+        $activities = $bundle->getActivities(1, 50);
+
         /* @var $developer EntityDeveloper */
         foreach ($commits as $commit) {
             if (!isset($commit['commit']['committer'])) {
@@ -149,6 +151,21 @@ class Repo
 
             $lastCommitAt = new \DateTime();
             $lastCommitAt->setTimestamp(strtotime($commit['commit']['committer']['date']));
+
+            /* @var $activity Activity */
+            foreach ($activities as $key => $activity) {
+                // Skip loop if activity is not commit type
+                if (Activity::ACTIVITY_TYPE_COMMIT !== $activity->getType()) {
+                    continue;
+                }
+
+                // If both activities have same type and time, skip (and "hide" it) as this is probably duplicate
+                if ($lastCommitAt->getTimestamp() == $activity->getCreatedAt()->getTimestamp()) {
+                    unset($activities[$key]);
+
+                    continue 2;
+                }
+            }
 
             $activity = new Activity();
             $activity->setType(Activity::ACTIVITY_TYPE_COMMIT);
@@ -165,6 +182,8 @@ class Repo
                 $activity->setAuthor($commit['commit']['committer']['name']);
             }
         }
+
+        unset($activities);
 
         return true;
     }
