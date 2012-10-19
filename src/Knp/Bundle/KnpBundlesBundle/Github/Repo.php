@@ -152,13 +152,13 @@ class Repo
             $activity->setCreatedAt($lastCommitAt);
             $activity->setBundle($bundle);
 
-            if (isset($commit['commiter']) && isset($commit['commiter']['login'])) {
-                $developer = $this->ownerManager->createOwner($commit['commiter']['login'], 'developer', false);
+            if (isset($commit['committer']) && isset($commit['committer']['login'])) {
+                $developer = $this->ownerManager->createOwner($commit['committer']['login'], 'developer', false);
                 $developer->setLastCommitAt($lastCommitAt);
 
                 $activity->setDeveloper($developer);
             } else {
-                $activity->setAuthor($commit['commit']['commiter']['name']);
+                $activity->setAuthor($commit['commit']['committer']['name']);
             }
         }
 
