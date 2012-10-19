@@ -54,9 +54,13 @@ class MigrateCommitsCommand extends ContainerAwareCommand
 
                     $repo->updateCommits($bundle);
                 }
+
+                $em->persist($bundle);
             }
 
             $output->writeln(sprintf('[%s] Migrated %d from %d  bundles', date('d-m-y H:i:s'), $page * 100, $pager->getNbResults()));
+
+            $em->flush();
 
             ++$page;
         } while ($pager->hasNextPage() && $pager->setCurrentPage($page, false, true));
