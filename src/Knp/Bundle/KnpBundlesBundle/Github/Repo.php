@@ -146,15 +146,20 @@ class Repo
             $lastCommitAt = new \DateTime();
             $lastCommitAt->setTimestamp(strtotime($commit['commit']['committer']['date']));
 
-            $developer = $this->ownerManager->createOwner($commit['commiter']['login'], 'developer', false);
-            $developer->setLastCommitAt($lastCommitAt);
-
             $activity = new Activity();
             $activity->setType(Activity::ACTIVITY_TYPE_COMMIT);
             $activity->setMessage(strtok($commit['commit']['message'], "\n\r"));
             $activity->setCreatedAt($lastCommitAt);
             $activity->setBundle($bundle);
-            $activity->setDeveloper($developer);
+
+            if (isset($commit['commiter']) && isset($commit['commiter']['login'])) {
+                $developer = $this->ownerManager->createOwner($commit['commiter']['login'], 'developer', false);
+                $developer->setLastCommitAt($lastCommitAt);
+
+                $activity->setDeveloper($developer);
+            } else {
+                $activity->setAuthor($commit['commit']['commiter']['name']);
+            }
         }
 
         return true;

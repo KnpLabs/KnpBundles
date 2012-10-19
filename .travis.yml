@@ -7,8 +7,7 @@ php:
 before_script:
     - ./bin/prepare-test-sundown-"$TRAVIS_PHP_VERSION".sh
     - cp app/config/parameters.yml.test app/config/parameters.yml
-    - curl -s http://getcomposer.org/installer | php -- --quiet
-    - php composer.phar install --dev
+    - composer install --dev
     - ./bin/prepare-test-env.sh
     - ./bin/prepare-test-solr.sh
     - mkdir -p app/cache app/logs

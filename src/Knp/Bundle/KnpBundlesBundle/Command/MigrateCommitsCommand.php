@@ -41,12 +41,12 @@ class MigrateCommitsCommand extends ContainerAwareCommand
         ;
 
         if (1 === $page) {
-            $this->output->writeln(sprintf('[%s] Loaded <comment>%d</comment> bundles from the DB', date('d-m-y H:i:s'), $pager->getNbResults()));
+            $output->writeln(sprintf('[%s] Loaded <comment>%d</comment> bundles from the DB', date('d-m-y H:i:s'), $pager->getNbResults()));
         }
 
         do {
             /** @var $bundle Bundle */
-            foreach ($pager as $bundle) {
+            foreach ($pager->getCurrentPageResults() as $bundle) {
                 // Check that API not failed
                 if (!$repo->updateCommits($bundle)) {
                     // Sleep a while, and check again
@@ -56,7 +56,7 @@ class MigrateCommitsCommand extends ContainerAwareCommand
                 }
             }
 
-            $this->output->writeln(sprintf('[%s] Migrated %d from %d  bundles', date('d-m-y H:i:s'), $page * 100, $pager->getNbResults()));
+            $output->writeln(sprintf('[%s] Migrated %d from %d  bundles', date('d-m-y H:i:s'), $page * 100, $pager->getNbResults()));
 
             ++$page;
         } while ($pager->haveToPaginate() && $pager->setCurrentPage($page, false, true));
