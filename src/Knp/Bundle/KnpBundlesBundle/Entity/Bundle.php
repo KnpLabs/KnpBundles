@@ -1091,11 +1091,26 @@ class Bundle
     }
 
     /**
-     * @return Collection
+     * Get activities
+     *
+     * @param null|integer $page
+     * @param integer      $limit
+     *
+     * @return \Traversable
      */
-    public function getActivities()
+    public function getActivities($page = null, $limit = 15)
     {
-        return $this->activities;
+        if (null === $page) {
+            return $this->activities;
+        }
+
+        $paginator = new Pagerfanta(new DoctrineCollectionAdapter($this->activities));
+        $paginator
+            ->setMaxPerPage($limit)
+            ->setCurrentPage($page)
+        ;
+
+        return $paginator->getCurrentPageResults();
     }
 
     /**

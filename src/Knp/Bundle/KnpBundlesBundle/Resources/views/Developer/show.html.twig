@@ -56,7 +56,6 @@
     </div>
     {%- endif %}
 
-    {%- if developer.activities|length > 0 %}
     <div class="content-box sidebar-recent clearfix">
         <hgroup>
             <h2>Recent activities</h2>
@@ -64,7 +63,7 @@
 
         <section id="activity">
             <ul>
-                {%- for activity in developer.activities %}
+                {%- for activity in developer.activities(1, 20) %}
                 <li>
                     {{ bundle_activity_icon(activity.type) }}
                     <strong>{{ activity.author }}</strong> {{ bundle_activity_msg(activity, 'short') }}
@@ -74,7 +73,6 @@
             </ul>
         </section>
     </div>
-    {%- endif %}
 </div>
 {% endblock %}
 

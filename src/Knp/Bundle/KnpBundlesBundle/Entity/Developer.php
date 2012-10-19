@@ -6,6 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\Adapter\DoctrineCollectionAdapter;
+
 /**
  * An user living on GitHub
  *
@@ -164,11 +167,24 @@ class Developer extends Owner implements UserInterface
     /**
      * Get recommended Bundles
      *
-     * @return Collection
+     * @param null|integer $page
+     * @param integer      $limit
+     *
+     * @return \Traversable
      */
-    public function getRecommendedBundles()
+    public function getRecommendedBundles($page = null, $limit = 15)
     {
-        return $this->recommendedBundles;
+        if (null === $page) {
+            return $this->recommendedBundles;
+        }
+
+        $paginator = new Pagerfanta(new DoctrineCollectionAdapter($this->recommendedBundles));
+        $paginator
+            ->setMaxPerPage($limit)
+            ->setCurrentPage($page)
+        ;
+
+        return $paginator->getCurrentPageResults();
     }
 
     /**
@@ -206,19 +222,47 @@ class Developer extends Owner implements UserInterface
     /**
      * Get contributionBundles
      *
-     * @return Collection
+     * @param null|integer $page
+     * @param integer      $limit
+     *
+     * @return \Traversable
      */
-    public function getContributionBundles()
+    public function getContributionBundles($page = null, $limit = 15)
     {
-        return $this->contributionBundles;
+        if (null === $page) {
+            return $this->contributionBundles;
+        }
+
+        $paginator = new Pagerfanta(new DoctrineCollectionAdapter($this->contributionBundles));
+        $paginator
+            ->setMaxPerPage($limit)
+            ->setCurrentPage($page)
+        ;
+
+        return $paginator->getCurrentPageResults();
     }
 
     /**
-     * @return Collection
+     * Get activities
+     *
+     * @param null|integer $page
+     * @param integer      $limit
+     *
+     * @return \Traversable
      */
-    public function getActivities()
+    public function getActivities($page = null, $limit = 15)
     {
-        return $this->activities;
+        if (null === $page) {
+            return $this->activities;
+        }
+
+        $paginator = new Pagerfanta(new DoctrineCollectionAdapter($this->activities));
+        $paginator
+            ->setMaxPerPage($limit)
+            ->setCurrentPage($page)
+        ;
+
+        return $paginator->getCurrentPageResults();
     }
 
     /**

@@ -143,6 +143,10 @@ class Repo
 
         /* @var $developer EntityDeveloper */
         foreach ($commits as $commit) {
+            if (!isset($commit['commit']['committer'])) {
+                continue;
+            }
+
             $lastCommitAt = new \DateTime();
             $lastCommitAt->setTimestamp(strtotime($commit['commit']['committer']['date']));
 

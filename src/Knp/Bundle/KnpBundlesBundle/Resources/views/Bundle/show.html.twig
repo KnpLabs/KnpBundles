@@ -10,7 +10,6 @@
 {% endblock %}
 
 {% set isOwnerOrContributor = app.user is not null and bundle.isOwnerOrContributor(app.user) %}
-{% set hasActivities = bundle.activities|length > 0 %}
 
 {% block intro %}
 <div id="intro" class="bundle-details">
@@ -247,33 +246,31 @@
 <div class="content-box tabbable">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#readme" data-toggle="tab" data-target="#readme"><i class="icon-info"></i>README</a></li>
-        {%- if bundle.license -%}
+        {%- if bundle.license is not empty -%}
         <li><a href="#license" data-toggle="tab" data-target="#license"><i class="icon-bag"></i>LICENSE</a></li>
         {%- endif %}
-        {%- if not bundle.canonicalConfig is empty -%}
+        {%- if bundle.canonicalConfig is not empty -%}
         <li><a href="#configuration" data-toggle="tab" data-target="#configuration"><i class="icon-wrench"></i>Configuration</a></li>
         {%- endif %}
-        {%- if hasActivities -%}
         <li><a href="#activity" data-toggle="tab" data-target="#activity"><i class="icon-clock"></i>Recent activity</a></li>
-        {%- endif %}
     </ul>
 
     <div class="tab-content">
         <div id="readme" class="tab-pane active markdown">
-            {% if bundle.readme %}
+            {% if bundle.readme is not empty %}
                 {{ bundle.readme|markdown }}
             {% else %}
                 No readme file found in bundle.
             {% endif %}
         </div>
 
-        {% if bundle.license %}
+        {% if bundle.license is not empty %}
         <div id="license" class="tab-pane markdown">
             {{ bundle.license|nl2br }}
         </div>
         {% endif %}
 
-        {%- if not bundle.canonicalConfig is empty -%}
+        {%- if bundle.canonicalConfig is not empty -%}
         <div id="configuration" class="tab-pane markdown">
             <pre class="code">
             {{- bundle.canonicalConfig|nl2br -}}
@@ -281,10 +278,9 @@
         </div>
         {%- endif -%}
 
-        {%- if hasActivities -%}
         <div id="activity" class="tab-pane">
             <ul>
-                {%- for activity in bundle.activities %}
+                {%- for activity in bundle.activities(1, 20) %}
                 <li>
                     {{ bundle_activity_icon(activity.type) }}
                     {{ bundle_activity_msg(activity) }}
@@ -300,7 +296,6 @@
                 {%- endfor %}
             </ul>
         </div>
-        {%- endif -%}
     </div>
 </div>
 
