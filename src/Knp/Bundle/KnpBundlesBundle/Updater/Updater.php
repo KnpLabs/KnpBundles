@@ -178,7 +178,7 @@ class Updater
             }
 
             ++$page;
-        } while ($pager->haveToPaginate() && $pager->setCurrentPage($page, false, true));
+        } while ($pager->hasNextPage() && $pager->setCurrentPage($page, false, true));
     }
 
     public function removeNonSymfonyBundles()
@@ -205,7 +205,7 @@ class Updater
             }
 
             ++$page;
-        } while ($pager->haveToPaginate() && $pager->setCurrentPage($page, false, true));
+        } while ($pager->hasNextPage() && $pager->setCurrentPage($page, false, true));
 
         $this->output->writeln(sprintf('[%s] <comment>%s</comment> invalid bundles have been found and removed', date('d-m-y H:i:s'), $counter));
 

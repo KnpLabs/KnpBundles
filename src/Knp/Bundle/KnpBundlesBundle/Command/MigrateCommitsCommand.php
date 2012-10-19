@@ -59,7 +59,7 @@ class MigrateCommitsCommand extends ContainerAwareCommand
             $output->writeln(sprintf('[%s] Migrated %d from %d  bundles', date('d-m-y H:i:s'), $page * 100, $pager->getNbResults()));
 
             ++$page;
-        } while ($pager->haveToPaginate() && $pager->setCurrentPage($page, false, true));
+        } while ($pager->hasNextPage() && $pager->setCurrentPage($page, false, true));
 
         return 0;
     }
