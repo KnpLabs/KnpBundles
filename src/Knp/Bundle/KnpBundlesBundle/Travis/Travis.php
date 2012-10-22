@@ -70,26 +70,29 @@ class Travis
 
         $response = $this->browser->get('http://travis-ci.org/'.$bundle->getOwnerName().'/'.$bundle->getName().'.json');
 
-        $activity = new Activity();
-        $activity->setType(Activity::ACTIVITY_TYPE_TRAVIS_BUILD);
 
         $status = json_decode($response->getContent(), true);
         if (JSON_ERROR_NONE === json_last_error()) {
-            if (0 === $status['last_build_status']) {
-                $activity->setState(Activity::STATE_OPEN);
+            $activity = new Activity();
+            $activity->setType(Activity::ACTIVITY_TYPE_TRAVIS_BUILD);
 
+            if (0 === $status['last_build_status']) {
                 $bundle->setTravisCiBuildStatus(true);
-                $bundle->addActivity($activity);
+
+                $activity->setState(Activity::STATE_OPEN);
+                $activity->setBundle($bundle);
+
                 $this->output->write(' success');
 
                 return true;
             }
 
             if (1 === $status['last_build_status']) {
-                $activity->setState(Activity::STATE_CLOSED);
-
                 $bundle->setTravisCiBuildStatus(false);
-                $bundle->addActivity($activity);
+
+                $activity->setState(Activity::STATE_CLOSED);
+                $activity->setBundle($bundle);
+
                 $this->output->write(' failed');
 
                 return true;

@@ -243,6 +243,22 @@ class Developer extends Owner implements UserInterface
     }
 
     /**
+     * @param Activity $activity
+     */
+    public function addActivity(Activity $activity)
+    {
+        $this->activities[] = $activity;
+    }
+
+    /**
+     * @param Activity $activity
+     */
+    public function removeActivity(Activity $activity)
+    {
+        $this->activities->removeElement($activity);
+    }
+
+    /**
      * Get activities
      *
      * @param null|integer $page
@@ -265,20 +281,20 @@ class Developer extends Owner implements UserInterface
         return $paginator->getCurrentPageResults();
     }
 
-    /**
-     * @param Activity $activity
-     */
-    public function addActivity(Activity $activity)
+    public function getLatestActivities($type = Activity::ACTIVITY_TYPE_COMMIT)
     {
-        $this->activities[] = $activity;
-    }
+        if (!in_array($type, array(Activity::ACTIVITY_TYPE_COMMIT, Activity::ACTIVITY_TYPE_RECOMMEND))) {
+            throw new \InvalidArgumentException();
+        }
 
-    /**
-     * @param Activity $activity
-     */
-    public function removeActivity(Activity $activity)
-    {
-        $this->activities->removeElement($activity);
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('type', $type))
+            ->orderBy(array("createdAt" => "DESC"))
+            ->setFirstResult(0)
+            ->setMaxResults(30)
+        ;
+
+        return $this->activities->matching($criteria);
     }
 
     public function toSmallArray()

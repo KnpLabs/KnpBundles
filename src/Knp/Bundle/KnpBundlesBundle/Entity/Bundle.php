@@ -3,9 +3,10 @@
 namespace Knp\Bundle\KnpBundlesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\DoctrineCollectionAdapter;
@@ -1091,6 +1092,14 @@ class Bundle
     }
 
     /**
+     * @param Activity $activity
+     */
+    public function addActivity(Activity $activity)
+    {
+        $this->activities[] = $activity;
+    }
+
+    /**
      * Get activities
      *
      * @param null|integer $page
@@ -1113,12 +1122,20 @@ class Bundle
         return $paginator->getCurrentPageResults();
     }
 
-    /**
-     * @param Activity $activity
-     */
-    public function addActivity(Activity $activity)
+    public function getLatestActivities($type = Activity::ACTIVITY_TYPE_COMMIT)
     {
-        $this->activities[] = $activity;
+        if (!in_array($type, array(Activity::ACTIVITY_TYPE_COMMIT, Activity::ACTIVITY_TYPE_RECOMMEND, Activity::ACTIVITY_TYPE_TRAVIS_BUILD))) {
+            throw new \InvalidArgumentException();
+        }
+
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq('type', $type))
+            ->orderBy(array("createdAt" => "DESC"))
+            ->setFirstResult(0)
+            ->setMaxResults(30)
+        ;
+
+        return $this->activities->matching($criteria);
     }
 
     /**

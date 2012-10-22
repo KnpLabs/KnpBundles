@@ -141,7 +141,7 @@ class Repo
             return false;
         }
 
-        $activities = $bundle->getActivities(1, 50);
+        $activities = $bundle->getLatestActivities();
 
         /* @var $developer EntityDeveloper */
         foreach ($commits as $commit) {
@@ -154,11 +154,6 @@ class Repo
 
             /* @var $activity Activity */
             foreach ($activities as $key => $activity) {
-                // Skip loop if activity is not commit type
-                if (Activity::ACTIVITY_TYPE_COMMIT !== $activity->getType()) {
-                    continue;
-                }
-
                 // If both activities have same type and time, skip (and "hide" it) as this is probably duplicate
                 if ($lastCommitAt->getTimestamp() == $activity->getCreatedAt()->getTimestamp()) {
                     unset($activities[$key]);

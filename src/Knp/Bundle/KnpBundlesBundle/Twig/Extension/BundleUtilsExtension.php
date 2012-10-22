@@ -54,6 +54,10 @@ class BundleUtilsExtension extends \Twig_Extension
                 $icon = 'thumbs-up';
                 break;
 
+            case Activity::ACTIVITY_TYPE_TRAVIS_BUILD:
+                $icon = 'cogs';
+                break;
+
             default:
                 $icon = 'info';
         }
@@ -76,6 +80,10 @@ class BundleUtilsExtension extends \Twig_Extension
 
             case Activity::ACTIVITY_TYPE_RECOMMEND:
                 return 'long' == $type ? 'Bundle was recommended' : 'recommended';
+                break;
+
+            case Activity::ACTIVITY_TYPE_TRAVIS_BUILD:
+                return ('long' == $type ? 'Travis-CI build of the bundle' : 'CI build').(Activity::STATE_OPEN == $activity->getState() ? ' passed' : ' failed');
                 break;
 
             case Activity::ACTIVITY_TYPE_TWEETED:
