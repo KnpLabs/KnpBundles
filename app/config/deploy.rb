@@ -1,38 +1,33 @@
-set :mainrepo,      "KnpLabs"
-set :stages,        %w(prod staging)
-set :default_stage, "staging"
-set :stage_dir,     "app/config/deploy"
+set :stages,                    %w(production staging)
+set :default_stage,             "staging"
+set :stage_dir,                 "app/config/deploy"
+
 require 'capistrano/ext/multistage'
 
-set :application, "KnpBundles.com"
-set :app_path,    "app"
-set :group_writable, false
-set :use_sudo, false
+set :application,               "KnpBundles.com"
+set :app_path,                  "app"
+set :symfony_console,           "app/console"
+set :group_writable,            false
+set :use_sudo,                  false
 
-ssh_options[:port] = "22123"
-ssh_options[:forward_agent] = true
-default_run_options[:pty] = true
+set :repository,                "git://github.com/KnpLabs/KnpBundles.git"
+set :scm,                       :git
+set :deploy_via,                :remote_cache
 
-set :repository,  "git@github.com:#{mainrepo}/KnpBundles.git"
-set :scm,         :git
-set :deploy_via, :remote_cache
+set :model_manager,             "doctrine"
+set :admin_runner,              nil
+set :keep_releases,             2
 
-set :model_manager, "doctrine"
-set :admin_runner, nil
+set :shared_files,              ["app/config/parameters.yml", "bin/launch-rabbit-consumers.sh", "app/Resources/java"]
+set :shared_children,           [app_path + "/logs"]
+set :use_composer,              true
+set :update_vendors,            false
 
-set  :keep_releases,  2
+set :dump_assetic_assets,       true
+set :interactive_mode,          false
+set :use_sudo,                  false
 
-set :shared_files,      ["app/config/parameters.yml"]
-set :shared_children,     [app_path + "/logs", web_path + "/uploads", app_path + "/sessions"]
-set :use_composer, true
-set :update_vendors, true
-set :vendors_mode, "install"
-set :dump_assetic_assets, true
-set :interactive_mode, false
-set :use_sudo, false
-
-before 'symfony:composer:update', 'symfony:copy_vendors'
-before 'symfony:cache:warmup', 'symfony:force_migrate'
+before 'symfony:composer:install', 'symfony:copy_vendors'
 
 namespace :symfony do
   desc "Copy vendors from previous release"
@@ -43,4 +38,5 @@ namespace :symfony do
   end
 end
 
-logger.level = Logger::MAX_LEVEL
+# Be more verbose by uncommenting the following line
+# logger.level = Logger::MAX_LEVEL

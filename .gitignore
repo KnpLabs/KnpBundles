@@ -19,8 +19,6 @@
 /app/config/parameters.yml
 /app/config/parameters.*.yml
 /app/config/deploy/*
-!/app/config/deploy/prod.rb.dist
-!/app/config/deploy/staging.rb.dist
 composer.phar
 bin/*
 !bin/update-all-bundles.sh
