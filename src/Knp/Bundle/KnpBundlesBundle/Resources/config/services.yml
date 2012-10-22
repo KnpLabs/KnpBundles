@@ -9,11 +9,10 @@ parameters:
     knp_bundles.owner.manager.class: Knp\Bundle\KnpBundlesBundle\Manager\OwnerManager
     knp_bundles.output.class: Symfony\Component\Console\Output\NullOutput
     knp_bundles.travis.class: Knp\Bundle\KnpBundlesBundle\Travis\Travis
+    knp_bundles.git_repository_manager.class: Knp\Bundle\KnpBundlesBundle\Git\RepoManager
     knp_bundles.github.client.class: Github\Client
-    knp_bundles.github.http_client.class: Github\HttpClient\HttpClient
     knp_bundles.github.developer.class: Knp\Bundle\KnpBundlesBundle\Github\Developer
     knp_bundles.github.organization.class: Knp\Bundle\KnpBundlesBundle\Github\Organization
-    knp_bundles.git_repository_manager.class: Knp\Bundle\KnpBundlesBundle\Git\RepoManager
     knp_bundles.github.repository_api.class: Knp\Bundle\KnpBundlesBundle\Github\Repo
     knp_bundles.badge_generator.class: Knp\Bundle\KnpBundlesBundle\Badge\BadgeGenerator
     knp_bundles.imagine.gd.class: Imagine\Gd\Imagine
@@ -82,10 +81,8 @@ services:
     knp_bundles.github_client:
         public: false
         class: %knp_bundles.github.client.class%
-
-    knp_bundles.github_http_client:
-        public: false
-        class: %knp_bundles.github.http_client.class%
+        calls:
+            - [ authenticate, [%knp_bundles.github.client_id%, %knp_bundles.github.client_secret%, 'url_client_id']]
 
     knp_bundles.git_repository_manager:
         class: %knp_bundles.git_repository_manager.class%

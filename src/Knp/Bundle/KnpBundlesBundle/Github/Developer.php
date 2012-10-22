@@ -2,7 +2,8 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Github;
 
-use Github\HttpClient\ApiLimitExceedException;
+use Github\Exception\ApiLimitExceedException;
+use Github\Exception\RuntimeException;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Developer as EntityDeveloper;
 
@@ -40,11 +41,20 @@ class Developer extends Owner
             $keywords[] = $developer->getEmail();
         }
 
-        $api  = $this->github->api('user');
-        $data = $api->show($developer->getName());
+        $api = $this->github->api('user');
 
-        if (empty($data) || isset($data['message'])) {
+        try {
+            $data = $api->show($developer->getName());
+        } catch(ApiLimitExceedException $e) {
+            return false;
+        } catch(RuntimeException $e) {
+            // Not found via actual name? Search by other known data
             foreach ($keywords as $field) {
+                // Did we found user in this iteration ?
+                if (!empty($data)) {
+                    break;
+                }
+
                 try {
                     $data = $api->search($field);
                     if (isset($data['users']) && 0 < count($data['users'])) {
@@ -53,18 +63,16 @@ class Developer extends Owner
                         $data = $api->show($data['login']);
                     }
                 } catch(ApiLimitExceedException $e) {
-                    break;
-                }
-
-                // Did we found user in this iteration ?
-                if (!empty($data) && !isset($data['message'])) {
-                    break;
+                    // Api limit ? Then not do anything more
+                    return false;
+                } catch(RuntimeException $e) {
+                    // Not found yet ? Continue loop
                 }
             }
         }
 
         // Developer has been removed / not found ?
-        if (empty($data) || isset($data['message'])) {
+        if (empty($data)) {
             return false;
         }
 
