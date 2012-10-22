@@ -14,6 +14,7 @@ parameters:
     knp_bundles.bundle.graph.main_page.period: 21 #days
 
     knp_bundles.trending_bundle_twitterer.idle_period: 30 #days
+    knp_bundles.trending_bundle_twitterer.template: "Discover {name}, today's trending #Symfony2 bundle {url} on #KnpBundles"
     knp_bundles.trending_bundle.min_score_diff: 3
     knp_bundles.trending_bundle.min_score_threshold: 25
 

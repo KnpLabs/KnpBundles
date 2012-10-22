@@ -2,7 +2,6 @@ parameters:
     knp_bundles.updater.class: Knp\Bundle\KnpBundlesBundle\Updater\Updater
     knp_bundles.user.provider.class: Knp\Bundle\KnpBundlesBundle\Security\Core\User\UserProvider
     knp_bundles.trending_bundle_twitterer.class: Knp\Bundle\KnpBundlesBundle\Twitterer\TrendingBundleTwitterer
-    knp_bundles.trending_bundle_twitterer.template: "Discover {name}, today's trending #Symfony2 bundle {url} on #KnpBundles"
     knp_bundles.consumer.update_bundle.class: Knp\Bundle\KnpBundlesBundle\Consumer\UpdateBundleConsumer
     knp_bundles.consumer.github_hook.class: Knp\Bundle\KnpBundlesBundle\Consumer\GithubHookConsumer
     knp_bundles.bundle.manager.class: Knp\Bundle\KnpBundlesBundle\Manager\BundleManager
@@ -26,11 +25,6 @@ parameters:
     knp_bundles.scoring.readme.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\ReadmeListener
     knp_bundles.scoring.travis.class: Knp\Bundle\KnpBundlesBundle\EventListener\Scoring\TravisListener
     knp_bundles.utils.solr.class: Knp\Bundle\KnpBundlesBundle\Utils\SolrUtils
-    knp_bundles.twitter.parameters:
-        consumer_key: %knp_bundles.twitter.consumer_key%
-        consumer_secret: %knp_bundles.twitter.consumer_secret%
-        oauth_token: %knp_bundles.twitter.oauth_token%
-        oauth_token_secret: %knp_bundles.twitter.oauth_token_secret%
 
 services:
     knp_bundles.updater:
@@ -64,8 +58,6 @@ services:
         arguments:
             - @knp_bundles.entity_manager
             - @buzz.client
-        calls:
-            - [ setTwitterParams, [%knp_bundles.trending_bundle_twitterer.template%, %knp_bundles.trending_bundle_twitterer.idle_period%, %knp_bundles.twitter.parameters%] ]
 
     knp_bundles.output:
         public: false
@@ -81,8 +73,6 @@ services:
     knp_bundles.github_client:
         public: false
         class: %knp_bundles.github.client.class%
-        calls:
-            - [ authenticate, [%knp_bundles.github.client_id%, %knp_bundles.github.client_secret%, 'url_client_id']]
 
     knp_bundles.git_repository_manager:
         class: %knp_bundles.git_repository_manager.class%

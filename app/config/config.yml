@@ -43,7 +43,19 @@ knp_menu:
     twig: true
 
 # KnpBundles Configuration
-knp_bundles: ~
+knp_bundles:
+    github_client:
+        client_id:          %knp_bundles.github.client_id%
+        client_secret:      %knp_bundles.github.client_secret%
+        limit:              %knp_bundles.github.limit%
+    sensiolabs_client:
+        client_id:          %knp_bundles.sensio.client_id%
+        client_secret:      %knp_bundles.sensio.client_secret%
+    twitter_client:
+        consumer_key:       %knp_bundles.twitter.consumer_key%
+        consumer_secret:    %knp_bundles.twitter.consumer_secret%
+        oauth_token:        %knp_bundles.twitter.oauth_token%
+        oauth_token_secret: %knp_bundles.twitter.oauth_token_secret%
 
 # Doctrine Configuration
 doctrine:
