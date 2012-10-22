@@ -171,7 +171,11 @@ EOT;
 
     protected function getRepo($httpClient = null)
     {
-        $github = new \Github\Client($httpClient ? $httpClient : null);
+        $github = new \Github\Client();
+        if ($httpClient) {
+            $github->setHttpClient($httpClient);
+        }
+
         $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
         $repoManager = $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Git\RepoManager')
             ->disableOriginalConstructor()

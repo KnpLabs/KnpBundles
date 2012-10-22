@@ -35,20 +35,11 @@ class KnpBundlesExtension extends Extension
 
         $container->setAlias('knp_bundles.imagine', new Alias('knp_bundles.imagine.'.$driver, false));
 
-        // setup GitHub API client settings
-        $githubHttpClient = $container->getDefinition('knp_bundles.github_http_client');
-        $githubHttpClient->addMethodCall('setOption', array('limit', $config['github_client']['limit']));
-
-        $githubClient = $container->getDefinition('knp_bundles.github_client');
-        $githubClient->addMethodCall('setHttpClient', array($githubHttpClient));
-        $githubClient->addMethodCall(
-            'authenticate',
-            array(
-                $container->getParameter('knp_bundles.github.client_id'),
-                $container->getParameter('knp_bundles.github.client_secret'),
-                Client::AUTH_URL_CLIENT_ID
-            )
-        );
+        if (5000 != $config['github_client']['limit']) {
+            // setup GitHub API client settings
+            $githubClient = $container->getDefinition('knp_bundles.github_client');
+            $githubClient->addMethodCall('setOption', array('api_limit', $config['github_client']['limit']));
+        }
     }
 
     private function getConfigTree()
