@@ -251,7 +251,7 @@ class Repo
             $this->updateCanonicalConfigFile($bundle);
         }
 
-        $this->updateSymfonyVersions($bundle);
+        $this->updateVersionsHistory($bundle);
 
         return true;
     }
@@ -275,6 +275,7 @@ class Repo
         }
     }
 
+    // @deprecated use updateVersionsHistory
     public function updateSymfonyVersions(Bundle $bundle)
     {
         // no composer file
@@ -311,6 +312,51 @@ class Repo
 
         return true;
     }
+
+    public function updateVersionsHistory(Bundle $bundle)
+    {
+        // no composer file
+        if (null === $composerName = $bundle->getComposerName()) {
+            return false;
+        }
+
+        // query packagist json
+        $packagistArray = $this->github->getHttpClient()->get($composerName, array(), array('url' => 'http://packagist.org/packages/:path.json'));
+
+        // if json not encoded
+        if (!is_array($packagistArray) || !isset($packagistArray['package'])) {
+            return false;
+        }
+
+        $versionsHistory = array();
+        $versionsArray = $packagistArray['package']['versions'];
+
+        foreach ($versionsArray as $version => $value) {
+            // Skip `dev` packages, add only `dev-master`
+            if (0 === strpos($version, 'dev-') && 'dev-master' != $version) {
+                continue;
+            }
+
+            foreach (array('symfony/framework-bundle', 'symfony/symfony') as $requirement) {
+                if (isset($value['require'][$requirement])) {
+                    $versionsHistory['symfony'][$version] = $value['require'][$requirement]; // array('master' => '>=2.0,<2.2-dev')
+                }
+            }
+
+            // store all bundle dependencies
+            $versionsHistory['dependencies'][$version] = array(
+                'require' => $value['require'],
+                'require-dev' => $value['require-dev'],
+                'suggest' => $value['suggest']
+            );
+        }
+
+        if (!empty($versionsHistory)) {
+            $bundle->setVersionsHistory($versionsHistory);
+        }
+
+        return true;
+    }  
 
     public function fetchComposerKeywords(Bundle $bundle)
     {
