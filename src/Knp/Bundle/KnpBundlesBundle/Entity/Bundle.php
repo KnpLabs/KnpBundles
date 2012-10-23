@@ -269,14 +269,6 @@ class Bundle
     protected $keywords;
 
     /**
-     * @deprecated use $versionsHistory
-     * Symfony versions required
-     *
-     * @ORM\Column(type="array", nullable=true)
-     */
-    protected $symfonyVersions;
-
-    /**
      * Bundle versions history
      *
      * @ORM\Column(type="array", nullable=true)
@@ -1147,25 +1139,13 @@ class Bundle
     }
 
     /**
-     * @deprecated use getVersionsHistory
-     * Get required versions of Symfony
+     * Get required versions of Symfony from bundle Versions History
      *
      * @return array
      */
     public function getSymfonyVersions()
     {
-        return $this->symfonyVersions;
-    }
-
-    /**
-     * @deprecated use setVersionsHistory 
-     * Set required versions of Symfony
-     *
-     * @param array $versions
-     */
-    public function setSymfonyVersions($versions)
-    {
-        $this->symfonyVersions = $versions;
+        return $this->getVersionsHistory['symfony'];
     }
 
     /**
