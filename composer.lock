@@ -1,5 +1,5 @@
 {
-    "hash": "9970bf31b2f710972c4d6d8cd8e6d621",
+    "hash": "dce68e8840b898aef6e68569ab5360a5",
     "packages": [
         {
             "name": "avalanche123/imagine-bundle",
@@ -398,12 +398,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineMigrationsBundle.git",
-                "reference": "b3ec793dc232fb19f025c3ffc9a0757471d78605"
+                "reference": "e494aceebe05200c3f5e7b54c9facf2cf0b2099c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/DoctrineMigrationsBundle/zipball/b3ec793dc232fb19f025c3ffc9a0757471d78605",
-                "reference": "b3ec793dc232fb19f025c3ffc9a0757471d78605",
+                "url": "https://github.com/doctrine/DoctrineMigrationsBundle/zipball/e494aceebe05200c3f5e7b54c9facf2cf0b2099c",
+                "reference": "e494aceebe05200c3f5e7b54c9facf2cf0b2099c",
                 "shasum": ""
             },
             "require": {
@@ -412,7 +412,7 @@
                 "symfony/framework-bundle": ">=2.1.0,<2.3-dev",
                 "doctrine/doctrine-bundle": "1.0.*"
             },
-            "time": "1349789824",
+            "time": "1350561870",
             "type": "symfony-bundle",
             "installation-source": "source",
             "autoload": {
@@ -451,12 +451,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations",
-                "reference": "v1.0-ALPHA1"
+                "reference": "c1d875ce7d092dd1bc7508c3867b5c6b97431e43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/migrations/zipball/v1.0-ALPHA1",
-                "reference": "v1.0-ALPHA1",
+                "url": "https://github.com/doctrine/migrations/zipball/c1d875ce7d092dd1bc7508c3867b5c6b97431e43",
+                "reference": "c1d875ce7d092dd1bc7508c3867b5c6b97431e43",
                 "shasum": ""
             },
             "require": {
@@ -470,7 +470,7 @@
             "suggest": {
                 "symfony/console": "to run the migration from the console"
             },
-            "time": "1349435713",
+            "time": "1350643044",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -563,12 +563,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/l3pp4rd/DoctrineExtensions.git",
-                "reference": "117f14e0f8fd069d679ca0f84fa05c781cca3119"
+                "reference": "8eb6bf40c398a2f98d73e5fc56058283a356c2ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/l3pp4rd/DoctrineExtensions/zipball/117f14e0f8fd069d679ca0f84fa05c781cca3119",
-                "reference": "117f14e0f8fd069d679ca0f84fa05c781cca3119",
+                "url": "https://github.com/l3pp4rd/DoctrineExtensions/zipball/8eb6bf40c398a2f98d73e5fc56058283a356c2ea",
+                "reference": "8eb6bf40c398a2f98d73e5fc56058283a356c2ea",
                 "shasum": ""
             },
             "require": {
@@ -579,7 +579,7 @@
                 "doctrine/orm": ">=2.1",
                 "doctrine/mongodb-odm": "*"
             },
-            "time": "1349888959",
+            "time": "1350832294",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -795,29 +795,34 @@
         },
         {
             "name": "knplabs/github-api",
-            "version": "1.0.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/php-github-api.git",
-                "reference": "1.0.2"
+                "reference": "45d4849be7d225da8dae24f0cb7d3d0a55318107"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/KnpLabs/php-github-api/zipball/1.0.2",
-                "reference": "1.0.2",
+                "url": "https://github.com/KnpLabs/php-github-api/zipball/45d4849be7d225da8dae24f0cb7d3d0a55318107",
+                "reference": "45d4849be7d225da8dae24f0cb7d3d0a55318107",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
                 "ext-curl": "*",
-                "kriswallsmith/buzz": "0.7"
+                "kriswallsmith/buzz": ">=0.7"
             },
-            "time": "2012-09-07 07:20:59",
+            "time": "1350902062",
             "type": "library",
-            "installation-source": "dist",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
-                    "Github": "lib/"
+                    "Github\\": "lib/"
                 }
             },
             "license": [
@@ -839,7 +844,8 @@
             "keywords": [
                 "api",
                 "github",
-                "gist"
+                "gist",
+                "gh"
             ]
         },
         {
@@ -900,12 +906,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMarkdownBundle",
-                "reference": "bd597e66a137893ceab0e302f05e99debd9a0f3f"
+                "reference": "1a31848de5aad77b32d2b152bdce51cfbc9edcca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/KnpLabs/KnpMarkdownBundle/zipball/bd597e66a137893ceab0e302f05e99debd9a0f3f",
-                "reference": "bd597e66a137893ceab0e302f05e99debd9a0f3f",
+                "url": "https://github.com/KnpLabs/KnpMarkdownBundle/zipball/1a31848de5aad77b32d2b152bdce51cfbc9edcca",
+                "reference": "1a31848de5aad77b32d2b152bdce51cfbc9edcca",
                 "shasum": ""
             },
             "require": {
@@ -917,7 +923,7 @@
                 "symfony/twig-bundle": "to use the Twig markdown filter",
                 "ext-sundown": "to use optional support for php-sundown extension instead of php implementation"
             },
-            "time": "1350468085",
+            "time": "1350500955",
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
@@ -1072,12 +1078,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpTimeBundle",
-                "reference": "f71d440383acc4254d112182ef382a02da772a09"
+                "reference": "bfb7340cb2915150cc997321c0145520b3dfa530"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/KnpLabs/KnpTimeBundle/zipball/f71d440383acc4254d112182ef382a02da772a09",
-                "reference": "f71d440383acc4254d112182ef382a02da772a09",
+                "url": "https://github.com/KnpLabs/KnpTimeBundle/zipball/bfb7340cb2915150cc997321c0145520b3dfa530",
+                "reference": "bfb7340cb2915150cc997321c0145520b3dfa530",
                 "shasum": ""
             },
             "require": {
@@ -1087,7 +1093,7 @@
             "suggest": {
                 "symfony/twig-bundle": "to use the Twig time_diff function"
             },
-            "time": "1343681304",
+            "time": "1350486277",
             "type": "symfony-bundle",
             "installation-source": "source",
             "autoload": {
@@ -1177,12 +1183,12 @@
             "source": {
                 "type": "git",
                 "url": "http://github.com/kriswallsmith/assetic.git",
-                "reference": "e22c5e07e672bb0cf43127e97e9368b53abf4aa8"
+                "reference": "fa85fb99d63ad0a10d832bde584fc3963e0a7918"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/kriswallsmith/assetic/zipball/e22c5e07e672bb0cf43127e97e9368b53abf4aa8",
-                "reference": "e22c5e07e672bb0cf43127e97e9368b53abf4aa8",
+                "url": "https://github.com/kriswallsmith/assetic/zipball/fa85fb99d63ad0a10d832bde584fc3963e0a7918",
+                "reference": "fa85fb99d63ad0a10d832bde584fc3963e0a7918",
                 "shasum": ""
             },
             "require": {
@@ -1203,7 +1209,7 @@
                 "ptachoire/cssembed": "Assetic provides the integration with phpcssembed to embed data uris",
                 "leafo/scssphp-compass": "Assetic provides the integration with the SCSS compass plugin"
             },
-            "time": "1349004759",
+            "time": "1350597340",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1288,12 +1294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog",
-                "reference": "4b11ac001200e8fa70820a573fe886c80139b9e1"
+                "reference": "023b31a31f3807fb19bda1501abb96deacea7c84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/Seldaek/monolog/zipball/4b11ac001200e8fa70820a573fe886c80139b9e1",
-                "reference": "4b11ac001200e8fa70820a573fe886c80139b9e1",
+                "url": "https://github.com/Seldaek/monolog/zipball/023b31a31f3807fb19bda1501abb96deacea7c84",
+                "reference": "023b31a31f3807fb19bda1501abb96deacea7c84",
                 "shasum": ""
             },
             "require": {
@@ -1307,7 +1313,7 @@
                 "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
                 "ext-mongo": "Allow sending log messages to a MongoDB server"
             },
-            "time": "1350121319",
+            "time": "1350826548",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1663,18 +1669,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/swiftmailer/swiftmailer.git",
-                "reference": "22731e907f5ca288c9bfde6b54f3611ace0a6c39"
+                "reference": "ff51aae43c62aeaa55dcda109c5baf35731c04a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/swiftmailer/swiftmailer/zipball/22731e907f5ca288c9bfde6b54f3611ace0a6c39",
-                "reference": "22731e907f5ca288c9bfde6b54f3611ace0a6c39",
+                "url": "https://github.com/swiftmailer/swiftmailer/zipball/ff51aae43c62aeaa55dcda109c5baf35731c04a1",
+                "reference": "ff51aae43c62aeaa55dcda109c5baf35731c04a1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "1349196829",
+            "time": "1350807573",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1713,12 +1719,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/AsseticBundle",
-                "reference": "7d7393fc9d01f77a3da254735303d696181048c1"
+                "reference": "4eea8571954132e4715a5e756fe6a90a7e2d90f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/AsseticBundle/zipball/7d7393fc9d01f77a3da254735303d696181048c1",
-                "reference": "7d7393fc9d01f77a3da254735303d696181048c1",
+                "url": "https://github.com/symfony/AsseticBundle/zipball/4eea8571954132e4715a5e756fe6a90a7e2d90f6",
+                "reference": "4eea8571954132e4715a5e756fe6a90a7e2d90f6",
                 "shasum": ""
             },
             "require": {
@@ -1738,7 +1744,7 @@
             "suggest": {
                 "symfony/twig-bundle": ">=2.1.0,<2.3-dev"
             },
-            "time": "1350218039",
+            "time": "1350864366",
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
@@ -1885,12 +1891,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/symfony/symfony.git",
-                "reference": "defccb35161e29c99cb0b2f18b6d6e97a6a1632b"
+                "reference": "bb636c857abea60ac3a27ce0ab62ea979b3aad58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/symfony/zipball/defccb35161e29c99cb0b2f18b6d6e97a6a1632b",
-                "reference": "defccb35161e29c99cb0b2f18b6d6e97a6a1632b",
+                "url": "https://github.com/symfony/symfony/zipball/bb636c857abea60ac3a27ce0ab62ea979b3aad58",
+                "reference": "bb636c857abea60ac3a27ce0ab62ea979b3aad58",
                 "shasum": ""
             },
             "require": {
@@ -1939,7 +1945,7 @@
                 "propel/propel1": "dev-master",
                 "monolog/monolog": "1.*"
             },
-            "time": "1350396939",
+            "time": "1350717030",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2025,22 +2031,22 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "bac6bc7851c51692af1d855065e88b564e047b3b"
+                "reference": "61393dc9fb8982110048624aa573aec4aee0b465"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/zipball/bac6bc7851c51692af1d855065e88b564e047b3b",
-                "reference": "bac6bc7851c51692af1d855065e88b564e047b3b",
+                "url": "https://github.com/fabpot/Twig/zipball/61393dc9fb8982110048624aa573aec4aee0b465",
+                "reference": "61393dc9fb8982110048624aa573aec4aee0b465",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "1350391198",
+            "time": "1350737598",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.10-dev"
+                    "dev-master": "1.11-dev"
                 }
             },
             "installation-source": "source",
@@ -2074,18 +2080,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/videlalvaro/php-amqplib.git",
-                "reference": "8a393d2e1c041b31186196cc67a17a880153ecea"
+                "reference": "85ff1412152e2de8519dc75ffb741fe3adf89b9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/videlalvaro/php-amqplib/zipball/8a393d2e1c041b31186196cc67a17a880153ecea",
-                "reference": "8a393d2e1c041b31186196cc67a17a880153ecea",
+                "url": "https://github.com/videlalvaro/php-amqplib/zipball/85ff1412152e2de8519dc75ffb741fe3adf89b9c",
+                "reference": "85ff1412152e2de8519dc75ffb741fe3adf89b9c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "1350048962",
+            "time": "1350881455",
             "type": "library",
             "installation-source": "source",
             "autoload": {

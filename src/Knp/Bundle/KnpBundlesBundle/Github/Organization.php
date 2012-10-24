@@ -2,8 +2,7 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Github;
 
-use Github\HttpClient\ApiLimitExceedException;
-use Symfony\Component\Console\Output\NullOutput;
+use Github\Exception\RuntimeException;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Organization as EntityOrganization;
 use Knp\Bundle\KnpBundlesBundle\Manager\OwnerManager;
@@ -58,23 +57,23 @@ class Organization extends Owner
         /**
          * @var $api \Github\Api\Organization
          */
-        $api  = $this->getGithubClient()->api('organization');
-        $data = $api->show($organization->getName());
-
-        // Organization has been removed / not found ?
-        if (empty($data) || isset($data['message'])) {
+        $api = $this->getGithubClient()->api('organization');
+        try {
+            $data = $api->show($organization->getName());
+        } catch(RuntimeException $e) {
+            // Api limit ? Organization has been not found ?
             return false;
         }
 
         $this->updateOwner($organization, $data);
 
-        $membersData = $api->members()->all($organization->getName());
-        // Can't access members info ? Skip it for now then.
-        if (empty($membersData) || isset($membersData['message'])) {
-            return true;
-        }
+        try {
+            $membersData = $api->members()->all($organization->getName());
 
-        $organization->setMembers($this->updateMembers($membersData));
+            $organization->setMembers($this->updateMembers($membersData));
+        } catch(RuntimeException $e) {
+            // Api limit ? Can't access members info ? Skip it for now then.
+        }
 
         return true;
     }

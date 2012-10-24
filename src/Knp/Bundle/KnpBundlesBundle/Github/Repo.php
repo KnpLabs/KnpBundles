@@ -11,6 +11,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\PhpProcess;
 
 use Github\Client;
+use Github\Exception\RuntimeException;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Activity;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
@@ -112,8 +113,9 @@ class Repo
     {
         $this->output->write(' infos');
 
-        $data = $this->github->api('repo')->show($bundle->getOwnerName(), $bundle->getName());
-        if (empty($data) || isset($data['message'])) {
+        try {
+            $data = $this->github->api('repo')->show($bundle->getOwnerName(), $bundle->getName());
+        } catch(RuntimeException $e) {
             return false;
         }
 
@@ -136,8 +138,9 @@ class Repo
     {
         $this->output->write(' commits');
 
-        $commits = $this->github->api('repo')->commits()->all($bundle->getOwnerName(), $bundle->getName(), array('sha' => 'HEAD', 'per_page' => 30));
-        if (empty($commits) || isset($data['message'])) {
+        try {
+            $commits = $this->github->api('repo')->commits()->all($bundle->getOwnerName(), $bundle->getName(), array('sha' => 'HEAD', 'per_page' => 30));
+        } catch(RuntimeException $e) {
             return false;
         }
 
@@ -189,10 +192,12 @@ class Repo
 
         $api = $this->github->api('repo')->contents();
 
-        $files = $api->show($bundle->getOwnerName(), $bundle->getName());
-        if (empty($files) || isset($files['message'])) {
+        try {
+            $files = $api->show($bundle->getOwnerName(), $bundle->getName());
+        } catch(RuntimeException $e) {
             return false;
         }
+
         foreach ($files as $data) {
             switch ($data['name']) {
                 case 'LICENSE':
@@ -309,12 +314,16 @@ class Repo
 
     public function fetchComposerKeywords(Bundle $bundle)
     {
-        $file = $this->github->api('repo')->contents()->show($bundle->getOwnerName(), $bundle->getName(), 'composer.json');
-        if (!isset($file['message']) && 'base64' == $file['encoding']) {
-            $composer = json_decode(base64_decode($file['content']), true);
-            if (JSON_ERROR_NONE === json_last_error()) {
-                return isset($composer['keywords']) ? $composer['keywords'] : array();
+        try {
+            $file = $this->github->api('repo')->contents()->show($bundle->getOwnerName(), $bundle->getName(), 'composer.json');
+
+            if ('base64' == $file['encoding']) {
+                $composer = json_decode(base64_decode($file['content']), true);
+                if (JSON_ERROR_NONE === json_last_error()) {
+                    return isset($composer['keywords']) ? $composer['keywords'] : array();
+                }
             }
+        } catch(RuntimeException $e) {
         }
 
         return array();
@@ -322,8 +331,9 @@ class Repo
 
     public function getContributorNames(Bundle $bundle)
     {
-        $contributors = $this->github->api('repo')->contributors($bundle->getOwnerName(), $bundle->getName());
-        if (empty($contributors)) {
+        try {
+            $contributors = $this->github->api('repo')->contributors($bundle->getOwnerName(), $bundle->getName());
+        } catch(RuntimeException $e) {
             return array();
         }
 
@@ -344,17 +354,22 @@ class Repo
      */
     public function validate(Bundle $bundle)
     {
-        $api   = $this->github->api('repo')->contents();
-        $files = $api->show($bundle->getOwnerName(), $bundle->getName());
-        if (empty($files) || isset($files['message'])) {
+        $api = $this->github->api('repo')->contents();
+        try {
+            $files = $api->show($bundle->getOwnerName(), $bundle->getName());
+        } catch(RuntimeException $e) {
             return false;
         }
 
         foreach ($files as $data) {
             if (false !== strpos($data['name'], 'Bundle.php')) {
-                $file = $api->show($bundle->getOwnerName(), $bundle->getName(), $data['name']);
-                if (!isset($file['message']) && 'base64' == $file['encoding']) {
-                    return false !== strpos(base64_decode($file['content']), 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle');
+                try {
+                    $file = $api->show($bundle->getOwnerName(), $bundle->getName(), $data['name']);
+                    if ('base64' == $file['encoding']) {
+                        return false !== strpos(base64_decode($file['content']), 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle');
+                    }
+                } catch(RuntimeException $e) {
+                    return false;
                 }
 
                 break;

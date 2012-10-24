@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Console\Output\NullOutput;
 
 use Github\Client;
+use Github\Exception\RuntimeException;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Developer;
 use Knp\Bundle\KnpBundlesBundle\Entity\Organization;
@@ -118,9 +119,15 @@ class OwnerManager
      */
     public function getApiByOwnerName($ownerName)
     {
-        $githubOwner = $this->github->api('user')->show($ownerName);
+        try {
+            $githubOwner = $this->github->api('user')->show($ownerName);
 
-        if (!is_array($githubOwner) || !isset($githubOwner['type'])) {
+            // Data fetched, but not in expected format ?
+            if (!isset($githubOwner['type'])) {
+                return false;
+            }
+        } catch(RuntimeException $e) {
+            // Api limit? User/organization not found? Don't continue
             return false;
         }
 
