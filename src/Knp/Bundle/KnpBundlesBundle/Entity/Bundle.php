@@ -1145,7 +1145,12 @@ class Bundle
      */
     public function getSymfonyVersions()
     {
-        return $this->getVersionsHistory['symfony'];
+        // @todo remove this after all bundles update is pass
+        if (!isset($this->versionsHistory['symfony'])) {
+            return $this->versionsHistory;
+        }
+
+        return $this->versionsHistory['symfony'];
     }
 
     /**
