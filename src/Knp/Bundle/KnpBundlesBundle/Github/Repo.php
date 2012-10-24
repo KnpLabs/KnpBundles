@@ -156,12 +156,14 @@ class Repo
             $lastCommitAt->setTimestamp(strtotime($commit['commit']['committer']['date']));
 
             /* @var $activity Activity */
-            foreach ($activities as $key => $activity) {
-                // If both activities have same type and time, skip (and "hide" it) as this is probably duplicate
-                if ($lastCommitAt->getTimestamp() == $activity->getCreatedAt()->getTimestamp()) {
-                    unset($activities[$key]);
+            if ($activities) {
+                foreach ($activities as $key => $activity) {
+                    // If both activities have same type and time, skip (and "hide" it) as this is probably duplicate
+                    if ($lastCommitAt->getTimestamp() == $activity->getCreatedAt()->getTimestamp()) {
+                        unset($activities[$key]);
 
-                    continue 2;
+                        continue 2;
+                    }
                 }
             }
 
@@ -346,8 +348,8 @@ class Repo
             // store all bundle dependencies
             $versionsHistory['dependencies'][$version] = array(
                 'require' => $value['require'],
-                'require-dev' => $value['require-dev'],
-                'suggest' => $value['suggest']
+                'require-dev' => isset($value['require-dev']) ? $value['require-dev'] : '',
+                'suggest' => isset($value['suggest']) ? $value['suggest'] : ''
             );
         }
 
