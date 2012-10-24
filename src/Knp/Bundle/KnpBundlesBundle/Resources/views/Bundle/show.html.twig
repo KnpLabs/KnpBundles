@@ -68,6 +68,19 @@
 </textarea>
 {% endmacro %}
 
+{% macro dependency(dependencies, title) %}
+<h3>{{ title|trans }}</h3>
+{% if dependencies is not empty %}
+<ul>
+    {% for dependencyTitle, dependencyVersion in dependencies %}
+        <li>{{ dependencyTitle ~ ': ' ~ dependencyVersion }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+    {% trans %}bundles.show.dependency.none{% endtrans %}
+{% endif %}
+{% endmacro %}
+
 {% block right %}
     <div class="sidebar-box sidebar-bundle-info">
         <hgroup>
@@ -258,7 +271,7 @@
         {%- if bundle.canonicalConfig is not empty -%}
         <li><a href="#configuration" data-toggle="tab" data-target="#configuration"><i class="icon-wrench"></i>Configuration</a></li>
         {%- endif %}
-        {% if bundle.versionsHistory.dependencies is not empty %}
+        {% if bundle.versionsHistory.dependencies is defined %}
         <li><a href="#dependencies" data-toggle="tab" data-target="#dependencies"><i class="icon-clock"></i>Dependencies</a></li>
         {% endif %}
     </ul>
@@ -305,20 +318,14 @@
             </ul>
         </div>
 
-        {% if bundle.versionsHistory.dependencies is not empty %}
+        {% if bundle.versionsHistory.dependencies is defined %}
         <div id="dependencies" class="tab-pane markdown">
+            {% import _self as versionType %}
             {% for versionTitle, version in bundle.versionsHistory.dependencies %}
                 <h2>{{ versionTitle }}</h2>
-                <h3>{% trans %}bundles.show.dependency.requires{% endtrans %}</h3>
-                <ul>
-                    {% for dependencyTitle, dependencyVersion in version.require %}
-                        <li>{{ dependencyTitle ~ ': ' ~ dependencyVersion }}</li>
-                    {% endfor %}
-                </ul>
-                <h3>{% trans %}bundles.show.dependency.requires_dev{% endtrans %}</h3>
-                ...
-                <h3>{% trans %}bundles.show.dependency.suggests{% endtrans %}</h3>
-                ...
+                {% for dependencyTitle, dependencies in version %}
+                    {{ versionType.dependency(dependencies, 'bundles.show.dependency.' ~ dependencyTitle) }}
+                {% endfor %}
             {% endfor %}
         </div>
         {% endif %}
