@@ -112,6 +112,10 @@ bundles.show:
         wait_generation: "Hey! Your bundle's badge has been queued for generation."
         click_for_embed: "Click on badge button to grab code to embed it on your site!"
         embed: "Place this code on your page"
+    dependency:
+        requires: Requires
+        requires_dev: Requires (Dev)
+        suggests: Suggests
 
 bundles.score:
     followers:      "Github watchers:"

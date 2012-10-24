@@ -258,7 +258,9 @@
         {%- if bundle.canonicalConfig is not empty -%}
         <li><a href="#configuration" data-toggle="tab" data-target="#configuration"><i class="icon-wrench"></i>Configuration</a></li>
         {%- endif %}
-        <li><a href="#activity" data-toggle="tab" data-target="#activity"><i class="icon-clock"></i>Recent activity</a></li>
+        {% if bundle.versionsHistory.dependencies is not empty %}
+        <li><a href="#dependencies" data-toggle="tab" data-target="#dependencies"><i class="icon-clock"></i>Dependencies</a></li>
+        {% endif %}
     </ul>
 
     <div class="tab-content">
@@ -302,6 +304,24 @@
                 {%- endfor %}
             </ul>
         </div>
+
+        {% if bundle.versionsHistory.dependencies is not empty %}
+        <div id="dependencies" class="tab-pane markdown">
+            {% for versionTitle, version in bundle.versionsHistory.dependencies %}
+                <h2>{{ versionTitle }}</h2>
+                <h3>{% trans %}bundles.show.dependency.requires{% endtrans %}</h3>
+                <ul>
+                    {% for dependencyTitle, dependencyVersion in version.require %}
+                        <li>{{ dependencyTitle ~ ': ' ~ dependencyVersion }}</li>
+                    {% endfor %}
+                </ul>
+                <h3>{% trans %}bundles.show.dependency.requires_dev{% endtrans %}</h3>
+                ...
+                <h3>{% trans %}bundles.show.dependency.suggests{% endtrans %}</h3>
+                ...
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 </div>
 
