@@ -1045,6 +1045,14 @@ a.bundle-license-unknown {
     line-height: 10px
 }
 
+.content-box h2.version {
+    background-color: whiteSmoke;
+    padding-left: 5px;
+}
+
+.content-box .shift-right {
+    padding-left: 10px;
+}
 
 /* Content - modal settings*/
 #modal-settings {

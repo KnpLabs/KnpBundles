@@ -322,10 +322,12 @@
         <div id="dependencies" class="tab-pane markdown">
             {% import _self as versionType %}
             {% for versionTitle, version in bundle.versionsHistory.dependencies %}
-                <h2>{{ versionTitle }}</h2>
-                {% for dependencyTitle, dependencies in version %}
-                    {{ versionType.dependency(dependencies, 'bundles.show.dependency.' ~ dependencyTitle) }}
-                {% endfor %}
+                <h2 class="version">{{ versionTitle }}</h2>
+                <div class="shift-right">
+                    {% for dependencyTitle, dependencies in version %}
+                        {{ versionType.dependency(dependencies, 'bundles.show.dependency.' ~ dependencyTitle) }}
+                    {% endfor %}    
+                </div>
             {% endfor %}
         </div>
         {% endif %}
