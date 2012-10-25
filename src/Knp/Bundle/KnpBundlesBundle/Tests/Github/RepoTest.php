@@ -115,7 +115,7 @@ EOT;
     /**
      * @test
      */
-    public function shouldUpdateSymfonyVersions()
+    public function shouldUpdateVersionsHistory()
     {
         $json = array(
             'package' => array(
@@ -139,15 +139,17 @@ EOT;
             ->will($this->returnValue($json));
 
         $githubRepo = $this->getRepo($httpClient);
-        $githubRepo->updateSymfonyVersions($bundle);
+        $githubRepo->updateVersionsHistory($bundle);
 
-        $this->assertCount(2, $bundle->getSymfonyVersions());
+        $versionsHistory = $bundle->getVersionsHistory();
+
+        $this->assertCount(2, $versionsHistory['symfony']);
     }
 
     /**
      * @test
      */
-    public function shoudNotUpdateSymfonyVersionsWithWrongData()
+    public function shoudNotUpdateVersionsHistoryWithWrongData()
     {
         $json = 'I am wrong json';
 
@@ -164,9 +166,9 @@ EOT;
             ->will($this->returnValue($json));
 
         $githubRepo = $this->getRepo($httpClient);
-        $githubRepo->updateSymfonyVersions($bundle);
+        $githubRepo->updateVersionsHistory($bundle);
 
-        $this->assertNull($bundle->getSymfonyVersions());
+        $this->assertNull($bundle->getVersionsHistory());
     }
 
     protected function getRepo($httpClient = null)
