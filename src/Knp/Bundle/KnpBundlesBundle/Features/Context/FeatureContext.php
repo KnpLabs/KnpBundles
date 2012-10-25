@@ -349,6 +349,7 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
                 'owner'         => $owner,
                 'ownerName'     => $owner->getName(),
                 'description'   => $row['description'],
+                'readme'        => $row['readme'],
                 'state'         => isset($row['state']) ? $row['state'] : Entity\Bundle::STATE_UNKNOWN,
             ));
 
@@ -363,6 +364,14 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
             }
 
             $bundle->setScore($row['score']);
+
+            $versionsHistory['dependencies']['dev-master'] = array(
+                'require' => array('php' => '>=5.3.2'),
+                'require-dev' => '',
+                'suggest' => ''
+            );
+
+            $bundle->setVersionsHistory($versionsHistory);
 
             $this->setPrivateProperty($bundle, "trend1", $row['trend1']);
 
