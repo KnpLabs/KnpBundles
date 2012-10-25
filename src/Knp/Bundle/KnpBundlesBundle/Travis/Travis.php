@@ -70,30 +70,38 @@ class Travis
 
         $response = $this->browser->get('http://travis-ci.org/'.$bundle->getOwnerName().'/'.$bundle->getName().'.json');
 
-
         $status = json_decode($response->getContent(), true);
         if (JSON_ERROR_NONE === json_last_error()) {
-            $activity = new Activity();
-            $activity->setType(Activity::ACTIVITY_TYPE_TRAVIS_BUILD);
+            $lastBuildAt = new \DateTime();
+            $lastBuildAt->setTimestamp(strtotime($status['last_build_finished_at']));
 
-            if (0 === $status['last_build_status']) {
-                $bundle->setTravisCiBuildStatus(true);
+            // Only execute if date of last build is older than last update of bundle
+            if ($lastBuildAt < $bundle->getUpdatedAt()) {
+                $state = Activity::STATE_UNKNOWN;
+                if (0 === $status['last_build_status']) {
+                    $bundle->setTravisCiBuildStatus(true);
 
-                $activity->setState(Activity::STATE_OPEN);
-                $activity->setBundle($bundle);
+                    $state = Activity::STATE_OPEN;
 
-                $this->output->write(' success');
+                    $this->output->write(' success');
+                } elseif (1 === $status['last_build_status']) {
+                    $bundle->setTravisCiBuildStatus(false);
 
-                return true;
-            }
+                    $state = Activity::STATE_CLOSED;
 
-            if (1 === $status['last_build_status']) {
-                $bundle->setTravisCiBuildStatus(false);
+                    $this->output->write(' failed');
+                }
 
-                $activity->setState(Activity::STATE_CLOSED);
-                $activity->setBundle($bundle);
+                if (Activity::STATE_UNKNOWN !== $state) {
+                    $activity = new Activity();
+                    $activity->setType(Activity::ACTIVITY_TYPE_TRAVIS_BUILD);
+                    $activity->setState($state);
+                    $activity->setBundle($bundle);
 
-                $this->output->write(' failed');
+                    return true;
+                }
+            } else {
+                $this->output->write(' skipped');
 
                 return true;
             }
