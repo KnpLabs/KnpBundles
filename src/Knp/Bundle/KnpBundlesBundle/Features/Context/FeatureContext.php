@@ -349,7 +349,7 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
                 'owner'         => $owner,
                 'ownerName'     => $owner->getName(),
                 'description'   => $row['description'],
-                'readme'        => $row['readme'],
+                'readme'        => isset($row['readme']) ? $row['readme'] : '',
                 'state'         => isset($row['state']) ? $row['state'] : Entity\Bundle::STATE_UNKNOWN,
             ));
 
