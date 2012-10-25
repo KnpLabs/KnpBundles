@@ -248,23 +248,34 @@ EOT;
                             '1.1.0'      => '2.*',
                         ),
                         'dependencies' => array(
-                            'require' => array(
-                                'php' => '>=5.3.2',
-                                'symfony/framework-bundle' => '>=2.1,<2.3-dev',
-                                'symfony/security-bundle' => '>=2.1,<2.3-dev'
+                            'dev-master' => array(
+                                'require' => array(
+                                    'php' => '>=5.3.2',
+                                    'symfony/framework-bundle' => '>=2.1,<2.3-dev',
+                                    'symfony/security-bundle' => '>=2.1,<2.3-dev'
+                                ),
+                                'require-dev' => array(
+                                    'twig/twig' => '*',
+                                    'doctrine/doctrine-bundle' => '*',
+                                    'swiftmailer/swiftmailer' => '*',
+                                    'willdurand/propel-typehintable-behavior' => 'dev-master',
+                                    'symfony/validator' => '2.1.*',
+                                    'symfony/yaml' => '2.1.*'
+                                ),
+                                'suggest' => array(
+                                    'doctrine/couchdb-odm-bundle' => '*',
+                                    'doctrine/doctrine-bundle' => '*',
+                                    'doctrine/mongodb-odm-bundle' => '*'
+                                )
                             ),
-                            'require-dev' => array(
-                                'twig/twig' => '*',
-                                'doctrine/doctrine-bundle' => '*',
-                                'swiftmailer/swiftmailer' => '*',
-                                'willdurand/propel-typehintable-behavior' => 'dev-master',
-                                'symfony/validator' => '2.1.*',
-                                'symfony/yaml' => '2.1.*'
-                            ),
-                            'suggest' => array(
-                                'doctrine/couchdb-odm-bundle' => '*',
-                                'doctrine/doctrine-bundle' => '*',
-                                'doctrine/mongodb-odm-bundle' => '*'
+                            '1.2.x-dev' => array(
+                                'require' => array(
+                                    'php' => '>=5.3.2',
+                                    'symfony/framework-bundle' => '>=2.1,<2.3-dev',
+                                    'symfony/security-bundle' => '>=2.1,<2.3-dev'
+                                ),
+                                'require-dev' => '',
+                                'suggest' => ''
                             )
                         )
                     )
@@ -339,23 +350,34 @@ EOT;
                     '1.1.0'      => '2.*',
                 ),
                 'dependencies' => array(
-                    'require' => array(
-                        'php' => '>=5.3.2',
-                        'symfony/framework-bundle' => '>=2.1,<2.3-dev',
-                        'symfony/security-bundle' => '>=2.1,<2.3-dev'
+                    'dev-master' => array(
+                        'require' => array(
+                            'php' => '>=5.3.2',
+                            'symfony/framework-bundle' => '>=2.1,<2.3-dev',
+                            'symfony/security-bundle' => '>=2.1,<2.3-dev'
+                        ),
+                        'require-dev' => array(
+                            'twig/twig' => '*',
+                            'doctrine/doctrine-bundle' => '*',
+                            'swiftmailer/swiftmailer' => '*',
+                            'willdurand/propel-typehintable-behavior' => 'dev-master',
+                            'symfony/validator' => '2.1.*',
+                            'symfony/yaml' => '2.1.*'
+                        ),
+                        'suggest' => array(
+                            'doctrine/couchdb-odm-bundle' => '*',
+                            'doctrine/doctrine-bundle' => '*',
+                            'doctrine/mongodb-odm-bundle' => '*'
+                        )
                     ),
-                    'require-dev' => array(
-                        'twig/twig' => '*',
-                        'doctrine/doctrine-bundle' => '*',
-                        'swiftmailer/swiftmailer' => '*',
-                        'willdurand/propel-typehintable-behavior' => 'dev-master',
-                        'symfony/validator' => '2.1.*',
-                        'symfony/yaml' => '2.1.*'
-                    ),
-                    'suggest' => array(
-                        'doctrine/couchdb-odm-bundle' => '*',
-                        'doctrine/doctrine-bundle' => '*',
-                        'doctrine/mongodb-odm-bundle' => '*'
+                    '1.2.x-dev' => array(
+                        'require' => array(
+                            'php' => '>=5.3.2',
+                            'symfony/framework-bundle' => '>=2.1,<2.3-dev',
+                            'symfony/security-bundle' => '>=2.1,<2.3-dev'
+                        ),
+                        'require-dev' => '',
+                        'suggest' => ''
                     )
                 )
             ),
