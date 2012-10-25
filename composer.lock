@@ -1,5 +1,5 @@
 {
-    "hash": "dce68e8840b898aef6e68569ab5360a5",
+    "hash": "e5e348f60f860843d37fca0b2b48fa0d",
     "packages": [
         {
             "name": "avalanche123/imagine-bundle",
@@ -177,18 +177,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/data-fixtures.git",
-                "reference": "v1.0.0-ALPHA3"
+                "reference": "181b71e9a19bcdc93a9bf5c19dc0ef9615656173"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/data-fixtures/zipball/v1.0.0-ALPHA3",
-                "reference": "v1.0.0-ALPHA3",
+                "url": "https://github.com/doctrine/data-fixtures/zipball/181b71e9a19bcdc93a9bf5c19dc0ef9615656173",
+                "reference": "181b71e9a19bcdc93a9bf5c19dc0ef9615656173",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
             },
-            "time": "1348136794",
+            "time": "1350901469",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -345,12 +345,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineFixturesBundle.git",
-                "reference": "1e2c7af26f9f7ac9110d47cee8133d700fb99ae1"
+                "reference": "9edc67af16e736a31605e7fa9c9e3edbd9db6427"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/DoctrineFixturesBundle/zipball/1e2c7af26f9f7ac9110d47cee8133d700fb99ae1",
-                "reference": "1e2c7af26f9f7ac9110d47cee8133d700fb99ae1",
+                "url": "https://github.com/doctrine/DoctrineFixturesBundle/zipball/9edc67af16e736a31605e7fa9c9e3edbd9db6427",
+                "reference": "9edc67af16e736a31605e7fa9c9e3edbd9db6427",
                 "shasum": ""
             },
             "require": {
@@ -359,7 +359,7 @@
                 "doctrine/doctrine-bundle": "1.0.*",
                 "symfony/doctrine-bridge": ">=2.1.0,<2.3-dev"
             },
-            "time": "1349789605",
+            "time": "1350914272",
             "type": "symfony-bundle",
             "installation-source": "source",
             "autoload": {
@@ -563,12 +563,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/l3pp4rd/DoctrineExtensions.git",
-                "reference": "8eb6bf40c398a2f98d73e5fc56058283a356c2ea"
+                "reference": "3033d7ecc6633b20bec3e9bcc2336219f3818068"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/l3pp4rd/DoctrineExtensions/zipball/8eb6bf40c398a2f98d73e5fc56058283a356c2ea",
-                "reference": "8eb6bf40c398a2f98d73e5fc56058283a356c2ea",
+                "url": "https://github.com/l3pp4rd/DoctrineExtensions/zipball/3033d7ecc6633b20bec3e9bcc2336219f3818068",
+                "reference": "3033d7ecc6633b20bec3e9bcc2336219f3818068",
                 "shasum": ""
             },
             "require": {
@@ -579,7 +579,7 @@
                 "doctrine/orm": ">=2.1",
                 "doctrine/mongodb-odm": "*"
             },
-            "time": "1350832294",
+            "time": "1351156694",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -700,12 +700,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/igorw/IgorwFileServeBundle",
-                "reference": "f0804e489c5e6d74af4191eca8ebf2df11eacc26"
+                "reference": "v1.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/igorw/IgorwFileServeBundle/zipball/f0804e489c5e6d74af4191eca8ebf2df11eacc26",
-                "reference": "f0804e489c5e6d74af4191eca8ebf2df11eacc26",
+                "url": "https://github.com/igorw/IgorwFileServeBundle/zipball/v1.0.2",
+                "reference": "v1.0.2",
                 "shasum": ""
             },
             "require": {
@@ -717,7 +717,7 @@
             "suggest": {
                 "symfony/framework-bundle": "2.*"
             },
-            "time": "1350423052",
+            "time": "1351090104",
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
@@ -799,12 +799,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/php-github-api.git",
-                "reference": "45d4849be7d225da8dae24f0cb7d3d0a55318107"
+                "reference": "1.1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/KnpLabs/php-github-api/zipball/45d4849be7d225da8dae24f0cb7d3d0a55318107",
-                "reference": "45d4849be7d225da8dae24f0cb7d3d0a55318107",
+                "url": "https://github.com/KnpLabs/php-github-api/zipball/1.1.1",
+                "reference": "1.1.1",
                 "shasum": ""
             },
             "require": {
@@ -812,7 +812,7 @@
                 "ext-curl": "*",
                 "kriswallsmith/buzz": ">=0.7"
             },
-            "time": "1350902062",
+            "time": "1351153858",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1183,12 +1183,12 @@
             "source": {
                 "type": "git",
                 "url": "http://github.com/kriswallsmith/assetic.git",
-                "reference": "fa85fb99d63ad0a10d832bde584fc3963e0a7918"
+                "reference": "a1b6fa1f7bb27c203b6c3cf7d0dd0184f8dffcdc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/kriswallsmith/assetic/zipball/fa85fb99d63ad0a10d832bde584fc3963e0a7918",
-                "reference": "fa85fb99d63ad0a10d832bde584fc3963e0a7918",
+                "url": "https://github.com/kriswallsmith/assetic/zipball/a1b6fa1f7bb27c203b6c3cf7d0dd0184f8dffcdc",
+                "reference": "a1b6fa1f7bb27c203b6c3cf7d0dd0184f8dffcdc",
                 "shasum": ""
             },
             "require": {
@@ -1209,7 +1209,7 @@
                 "ptachoire/cssembed": "Assetic provides the integration with phpcssembed to embed data uris",
                 "leafo/scssphp-compass": "Assetic provides the integration with the SCSS compass plugin"
             },
-            "time": "1350597340",
+            "time": "1351079542",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1294,12 +1294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog",
-                "reference": "023b31a31f3807fb19bda1501abb96deacea7c84"
+                "reference": "38bb472abb27db138536f845f7d259c1c47bbd3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/Seldaek/monolog/zipball/023b31a31f3807fb19bda1501abb96deacea7c84",
-                "reference": "023b31a31f3807fb19bda1501abb96deacea7c84",
+                "url": "https://github.com/Seldaek/monolog/zipball/38bb472abb27db138536f845f7d259c1c47bbd3f",
+                "reference": "38bb472abb27db138536f845f7d259c1c47bbd3f",
                 "shasum": ""
             },
             "require": {
@@ -1313,7 +1313,7 @@
                 "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
                 "ext-mongo": "Allow sending log messages to a MongoDB server"
             },
-            "time": "1350826548",
+            "time": "1351084926",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1665,22 +1665,22 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "dev-master",
+            "version": "v4.2.2",
             "source": {
                 "type": "git",
                 "url": "git://github.com/swiftmailer/swiftmailer.git",
-                "reference": "ff51aae43c62aeaa55dcda109c5baf35731c04a1"
+                "reference": "v4.2.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/swiftmailer/swiftmailer/zipball/ff51aae43c62aeaa55dcda109c5baf35731c04a1",
-                "reference": "ff51aae43c62aeaa55dcda109c5baf35731c04a1",
+                "url": "https://github.com/swiftmailer/swiftmailer/zipball/v4.2.2",
+                "reference": "v4.2.2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "1350807573",
+            "time": "2012-10-25 01:30:40",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1891,12 +1891,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/symfony/symfony.git",
-                "reference": "bb636c857abea60ac3a27ce0ab62ea979b3aad58"
+                "reference": "94f5f49894cd3dc7bbf299844b870a0891766e84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/symfony/zipball/bb636c857abea60ac3a27ce0ab62ea979b3aad58",
-                "reference": "bb636c857abea60ac3a27ce0ab62ea979b3aad58",
+                "url": "https://github.com/symfony/symfony/zipball/94f5f49894cd3dc7bbf299844b870a0891766e84",
+                "reference": "94f5f49894cd3dc7bbf299844b870a0891766e84",
                 "shasum": ""
             },
             "require": {
@@ -1945,7 +1945,7 @@
                 "propel/propel1": "dev-master",
                 "monolog/monolog": "1.*"
             },
-            "time": "1350717030",
+            "time": "1351092937",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2379,12 +2379,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/Behat/Mink.git",
-                "reference": "962e23a1df3c876994e07b3944e366f93f5abc4d"
+                "reference": "9177e696713371e69820a713889dd75d7d189cbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/Behat/Mink/zipball/962e23a1df3c876994e07b3944e366f93f5abc4d",
-                "reference": "962e23a1df3c876994e07b3944e366f93f5abc4d",
+                "url": "https://github.com/Behat/Mink/zipball/9177e696713371e69820a713889dd75d7d189cbd",
+                "reference": "9177e696713371e69820a713889dd75d7d189cbd",
                 "shasum": ""
             },
             "require": {
@@ -2406,7 +2406,7 @@
                 "behat/mink-selenium2-driver": "to enable Selenium2 (webdriver support)",
                 "behat/mink-zombie-driver": "to enable Zombie.js support"
             },
-            "time": "1349686208",
+            "time": "1350985979",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2488,12 +2488,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/Behat/MinkExtension.git",
-                "reference": "0314376612298d00127aeb042bab3bd595fa81f7"
+                "reference": "0f92203531851a014f7e5bac89b6bfbb42519594"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/Behat/MinkExtension/zipball/0314376612298d00127aeb042bab3bd595fa81f7",
-                "reference": "0314376612298d00127aeb042bab3bd595fa81f7",
+                "url": "https://github.com/Behat/MinkExtension/zipball/0f92203531851a014f7e5bac89b6bfbb42519594",
+                "reference": "0f92203531851a014f7e5bac89b6bfbb42519594",
                 "shasum": ""
             },
             "require": {
@@ -2504,7 +2504,7 @@
             "require-dev": {
                 "behat/mink-goutte-driver": "*"
             },
-            "time": "1350380416",
+            "time": "1351090772",
             "type": "behat-extension",
             "installation-source": "source",
             "autoload": {
