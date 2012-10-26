@@ -120,8 +120,14 @@ EOT;
         $json = array(
             'package' => array(
                 'versions' => array(
-                    array('require' => array('symfony/framework-bundle' => 'dev-master', 'symfony/symfony' => 'dev-master')),
-                    array('require' => array('symfony/framework-bundle' => '>=2.0,<2.2-dev', 'symfony/symfony' => '>=2.0,<2.2-dev'))
+                    array(
+                        'name'    => 'symfony/framework-bundle',
+                        'require' => array('symfony/framework-bundle' => 'dev-master', 'symfony/symfony' => 'dev-master')
+                    ),
+                    array(
+                        'name'    => 'symfony/framework-bundle',
+                        'require' => array('symfony/framework-bundle' => '>=2.0,<2.2-dev', 'symfony/symfony' => '>=2.0,<2.2-dev')
+                    )
                 )
             )
         );

@@ -309,9 +309,11 @@ class Repo
 
             // store all bundle dependencies
             $versionsHistory['dependencies'][$version] = array(
-                'require' => $value['require'],
+                'name'        => $value['name'],
+                'extra'       => isset($value['extra']) ? $value['require-dev'] : '',
+                'require'     => $value['require'],
                 'require-dev' => isset($value['require-dev']) ? $value['require-dev'] : '',
-                'suggest' => isset($value['suggest']) ? $value['suggest'] : ''
+                'suggest'     => isset($value['suggest']) ? $value['suggest'] : ''
             );
         }
 

@@ -366,6 +366,10 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
             $bundle->setScore($row['score']);
 
             $versionsHistory['dependencies']['dev-master'] = array(
+                'name' => 'friendsofsymfony/user-bundle',
+                'extra' => array(
+                    'branch-alias' => array('dev-master' => '2.0.x-dev')
+                ),
                 'require' => array('php' => '>=5.3.2'),
                 'require-dev' => '',
                 'suggest' => ''

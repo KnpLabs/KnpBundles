@@ -249,6 +249,10 @@ EOT;
                         ),
                         'dependencies' => array(
                             'dev-master' => array(
+                                'name' => 'friendsofsymfony/user-bundle',
+                                'extra' => array(
+                                    'branch-alias' => array('dev-master' => '2.0.x-dev')
+                                ),
                                 'require' => array(
                                     'php' => '>=5.3.2',
                                     'symfony/framework-bundle' => '>=2.1,<2.3-dev',
@@ -269,6 +273,7 @@ EOT;
                                 )
                             ),
                             '1.2.x-dev' => array(
+                                'name' => 'friendsofsymfony/user-bundle',
                                 'require' => array(
                                     'php' => '>=5.3.2',
                                     'symfony/framework-bundle' => '>=2.1,<2.3-dev',
@@ -351,6 +356,10 @@ EOT;
                 ),
                 'dependencies' => array(
                     'dev-master' => array(
+                        'name' => 'friendsofsymfony/user-bundle',
+                        'extra' => array(
+                            'branch-alias' => array('dev-master' => '2.0.x-dev')
+                        ),
                         'require' => array(
                             'php' => '>=5.3.2',
                             'symfony/framework-bundle' => '>=2.1,<2.3-dev',
@@ -371,6 +380,7 @@ EOT;
                         )
                     ),
                     '1.2.x-dev' => array(
+                        'name' => 'friendsofsymfony/user-bundle',
                         'require' => array(
                             'php' => '>=5.3.2',
                             'symfony/framework-bundle' => '>=2.1,<2.3-dev',

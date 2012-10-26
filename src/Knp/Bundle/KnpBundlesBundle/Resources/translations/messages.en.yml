@@ -117,6 +117,7 @@ bundles.show:
         require-dev: Requires (Dev)
         suggest: Suggests
         none: none
+        composer: Composer line
 
 bundles.score:
     followers:      "Github watchers:"
