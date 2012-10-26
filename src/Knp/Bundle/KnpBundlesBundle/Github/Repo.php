@@ -320,7 +320,7 @@ class Repo
         }
 
         return true;
-    }  
+    }
 
     public function fetchComposerKeywords(Bundle $bundle)
     {
