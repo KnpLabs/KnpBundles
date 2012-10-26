@@ -277,44 +277,6 @@ class Repo
         }
     }
 
-    // @deprecated use updateVersionsHistory
-    public function updateSymfonyVersions(Bundle $bundle)
-    {
-        // no composer file
-        if (null === $composerName = $bundle->getComposerName()) {
-            return false;
-        }
-
-        // query packagist json
-        $packagistArray = $this->github->getHttpClient()->get($composerName, array(), array('url' => 'http://packagist.org/packages/:path.json'));
-
-        // if json not encoded
-        if (!is_array($packagistArray) || !isset($packagistArray['package'])) {
-            return false;
-        }
-
-        $symfonyVersions = array();
-        $versionsArray = $packagistArray['package']['versions'];
-
-        foreach ($versionsArray as $version => $value) {
-            foreach (array('symfony/framework-bundle', 'symfony/symfony') as $requirement) {
-                if (isset($value['require'][$requirement])) {
-                    // Skip `dev` packages, add only `dev-master`
-                    if (0 === strpos($version, 'dev-') && 'dev-master' != $version) {
-                        continue;
-                    }
-                    $symfonyVersions[$version] = $value['require'][$requirement]; // array('master' => '>=2.0,<2.2-dev')
-                }
-            }
-        }
-
-        if (!empty($symfonyVersions)) {
-            $bundle->setSymfonyVersions($symfonyVersions);
-        }
-
-        return true;
-    }
-
     public function updateVersionsHistory(Bundle $bundle)
     {
         // no composer file
