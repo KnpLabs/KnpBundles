@@ -4,7 +4,8 @@
     font-family: 'fontello';
     font-style: normal;
     font-weight: normal;
-    src: url('../fonts/fontello.woff') format('woff'), url('../fonts/fontello.ttf') format('truetype')
+    src: url("../fonts/fontello.eot");
+    src: url("../fonts/fontello.eot?#iefix") format('embedded-opentype'), url('../fonts/fontello.woff') format('woff'), url('../fonts/fontello.ttf') format('truetype'), url("../fonts/fontello.svg#fontello") format('svg')
 }
 
 @font-face {
@@ -70,37 +71,39 @@ code, pre {
     line-height: 1em
 }
 
-.icon-info:before { content: 'i'; }
-.icon-star:before { content: 's'; }
-.icon-star-empty:before { content: 'S'; }
-.icon-heart-empty:before { content: 'H'; }
-.icon-heart:before { content: 'h'; }
-.icon-cogs:before { content: 'G'; }
-.icon-pencil:before { content: 'P'; }
-.icon-ok:before { content: 'V'; }
-.icon-cancel:before { content: 'X'; }
-.icon-quote:before { content: '&quot;'; }
-.icon-eye:before { content: 'e'; }
-.icon-comment:before { content: 'c'; }
-.icon-chat:before { content: 'C'; }
-.icon-vcard:before { content: '#'; }
-.icon-location:before { content: 'l'; }
-.icon-down-open:before { content: 'v'; }
-.icon-back-in-time:before, .icon-updated:before { content: 'T'; }
-.icon-bag:before { content: 'b'; }
-.icon-off:before { content: 'L'; }
-.icon-github:before { content: 'z'; }
-.icon-globe:before { content: 'p'; }
-.icon-thumbs-up:before, .icon-recommended:before { content: '<'; }
-.icon-thumbs-down:before { content: '>'; }
-.icon-developer:before { content: 'u'; }
-.icon-developers:before { content: 'U'; }
-.icon-calendar:before, .icon-newest:before { content: '='; }
-.icon-chart:before, .icon-best:before { content: 'x'; }
-.icon-download:before { content: 'd'; }
-.icon-box:before, .icon-bundles:before { content: 'B'; }
-.icon-wrench:before { content: 'n'; }
-.icon-clock:before { content: 't'; }
+.icon-info:before { content: 'i' }
+.icon-star:before { content: 's' }
+.icon-star-empty:before { content: 'S' }
+.icon-list:before { content: '|' }
+.icon-heart-empty:before { content: 'H' }
+.icon-heart:before { content: 'h' }
+.icon-cogs:before { content: 'G' }
+.icon-pencil:before { content: 'P' }
+.icon-ok:before { content: 'V' }
+.icon-cancel:before { content: 'X' }
+.icon-quote:before { content: '&quot;' }
+.icon-eye:before { content: 'e' }
+.icon-comment:before { content: 'c' }
+.icon-chat:before { content: 'C' }
+.icon-vcard:before { content: '#' }
+.icon-location:before { content: 'l' }
+.icon-down-open:before { content: 'v' }
+.icon-back-in-time:before, .icon-updated:before { content: 'T' }
+.icon-bag:before { content: 'b' }
+.icon-off:before { content: 'L' }
+.icon-twitter:before { content: '@' }
+.icon-github:before { content: 'z' }
+.icon-globe:before { content: 'p' }
+.icon-thumbs-up:before, .icon-recommended:before { content: '<' }
+.icon-thumbs-down:before { content: '>' }
+.icon-developer:before { content: 'u' }
+.icon-developers:before { content: 'U' }
+.icon-calendar:before, .icon-newest:before { content: '=' }
+.icon-chart:before, .icon-best:before { content: 'x' }
+.icon-download:before { content: 'd' }
+.icon-box:before, .icon-bundles:before { content: 'B' }
+.icon-wrench:before { content: 'n' }
+.icon-clock:before { content: 't' }
 
 .icon-trend:before {
     content: url('../images/icon_arrows.png')
