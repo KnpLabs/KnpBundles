@@ -57,11 +57,16 @@
 {% endspaceless %}
 {% endblock %}
 
-{% block badge %}
+{% macro badge(bundle, badgeRoute) %}
+<strong>Html</strong>
 <textarea class="badge-code" rows="6">
-<a href="{{ url('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}"><img src="{{ url('bundle_get_badge', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}"></a>
+<a href="{{ url('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) }}"><img src="{{ url(badgeRoute, {'ownerName': bundle.ownerName, 'name': bundle.name}) }}"></a>
 </textarea>
-{% endblock %}
+<strong>Markdown</strong>
+<textarea class="badge-code" rows="6">
+{{ '[![knpbundles.com](' ~ url(badgeRoute, {'ownerName': bundle.ownerName, 'name': bundle.name}) ~ ')](' ~ url('bundle_show', {'ownerName': bundle.ownerName, 'name': bundle.name}) ~ ')' }}
+</textarea>
+{% endmacro %}
 
 {% block right %}
     <div class="sidebar-box sidebar-bundle-info">
@@ -231,11 +236,12 @@
             <h2>{% trans %}bundles.show.badge.title{% endtrans %}</h2>
         </hgroup>
 
+        {% import _self as show %}
         <section>
-            <div class="badge" data-placement="left" data-content='{{ block('badge') }}' data-title="{% trans %}bundles.show.badge.embed{% endtrans %}:">
+            <div class="badge" data-placement="left" data-content='{{ show.badge(bundle, "bundle_get_badge") }}' data-title="{% trans %}bundles.show.badge.embed{% endtrans %}:">
                 <img src="{{ path('bundle_get_badge', {'ownerName': bundle.ownerName, 'name': bundle.name }) }}" title="{% trans %}bundles.show.badge.click_for_embed{% endtrans %}">
             </div>
-            <div class="badge" data-placement="left" data-content='{{ block('badge') }}' data-title="{% trans %}bundles.show.badge.embed{% endtrans %}:">
+            <div class="badge" data-placement="left" data-content='{{ show.badge(bundle, "bundle_get_badge_short") }}' data-title="{% trans %}bundles.show.badge.embed{% endtrans %}:">
                 <img src="{{ path('bundle_get_badge_short', {'ownerName': bundle.ownerName, 'name': bundle.name }) }}" title="{% trans %}bundles.show.badge.click_for_embed{% endtrans %}">
             </div>
         </section>
