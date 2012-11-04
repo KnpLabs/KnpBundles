@@ -255,13 +255,19 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     public function theBundlesHaveFollowingKeywords(TableNode $table)
     {
         $entityManager = $this->getEntityManager();
+        $repository = $entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Keyword');
 
         foreach ($table->getHash() as $row) {
             if (isset($this->bundles[$row['bundle']])) {
-                $bundle = $this->bundles[$row['bundle']];
-                $keyword = $entityManager->getRepository('Knp\Bundle\KnpBundlesBundle\Entity\Keyword')->findOrCreateOne($row['keyword']);
+                $bundle  = $this->bundles[$row['bundle']];
+                $keyword = $repository->findOneBy(array('value' => $row['keyword']));
+                if (!$keyword) {
+                    $keyword = new Entity\Keyword();
+                    $keyword->setValue($row['keyword']);
+                }
 
                 $bundle->addKeyword($keyword);
+
                 $entityManager->persist($bundle);
             }
         }

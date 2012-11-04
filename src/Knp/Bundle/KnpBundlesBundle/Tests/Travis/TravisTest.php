@@ -17,12 +17,15 @@ class RepoTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUpdateBundleForSuccessfulBuildStatus()
     {
-        $travis = $this->getTravis(array('last_build_status' => 0), 'KnpLabs/KnpBundles');
+        $travis = $this->getTravis(array('last_build_status' => 0, 'last_build_finished_at' => '2011-10-25T11:27:42Z'), 'KnpLabs/KnpBundles');
 
-        $bundle = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Bundle', array('setTravisCiBuildStatus'));
+        $bundle = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Bundle', array('setTravisCiBuildStatus', 'getUpdatedAt'));
         $bundle->expects($this->once())
             ->method('setTravisCiBuildStatus')
             ->with($this->isTrue());
+        $bundle->expects($this->once())
+            ->method('getUpdatedAt')
+            ->will($this->returnValue(new \DateTime()));
 
         $bundle->setOwnerName('KnpLabs');
         $bundle->setName('KnpBundles');
@@ -35,12 +38,15 @@ class RepoTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUpdateBundleForFailureBuildStatus()
     {
-        $travis = $this->getTravis(array('last_build_status' => 1), 'KnpLabs/KnpBundles');
+        $travis = $this->getTravis(array('last_build_status' => 1, 'last_build_finished_at' => '2011-10-25T11:27:42Z'), 'KnpLabs/KnpBundles');
 
-        $bundle = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Bundle', array('setTravisCiBuildStatus'));
+        $bundle = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Bundle', array('setTravisCiBuildStatus', 'getUpdatedAt'));
         $bundle->expects($this->once())
             ->method('setTravisCiBuildStatus')
             ->with($this->isFalse());
+        $bundle->expects($this->once())
+            ->method('getUpdatedAt')
+            ->will($this->returnValue(new \DateTime()));
 
         $bundle->setOwnerName('KnpLabs');
         $bundle->setName('KnpBundles');
@@ -53,12 +59,15 @@ class RepoTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldUpdateBundleForUndefinedBuildStatus()
     {
-        $travis = $this->getTravis(array('last_build_status' => 777));
+        $travis = $this->getTravis(array('last_build_status' => 777, 'last_build_finished_at' => '2011-10-25T11:27:42Z'));
 
-        $bundle = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Bundle', array('setTravisCiBuildStatus'));
+        $bundle = $this->getMock('Knp\Bundle\KnpBundlesBundle\Entity\Bundle', array('setTravisCiBuildStatus', 'getUpdatedAt'));
         $bundle->expects($this->once())
             ->method('setTravisCiBuildStatus')
             ->with($this->isNull());
+        $bundle->expects($this->once())
+            ->method('getUpdatedAt')
+            ->will($this->returnValue(new \DateTime()));
 
         $bundle->setOwnerName('KnpLabs');
         $bundle->setName('KnpBundles');

@@ -144,7 +144,7 @@ class Bundle
     /**
      * Internal scores
      *
-     * @ORM\OneToMany(targetEntity="Score", mappedBy="bundle", fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(targetEntity="Score", mappedBy="bundle", cascade={"persist"}, fetch="EXTRA_LAZY")
      *
      * @var Collection
      */
