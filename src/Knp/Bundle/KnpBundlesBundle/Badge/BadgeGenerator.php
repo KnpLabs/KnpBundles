@@ -98,7 +98,7 @@ class BadgeGenerator
      *
      * @return string
      */
-    public function show(Bundle $bundle, $type = self::LONG, $regenerate = false)
+    public function show(Bundle $bundle, $type = 'long', $regenerate = false)
     {
         $relativePath = $this->filesystem->makePathRelative(
             $this->cacheDir,
