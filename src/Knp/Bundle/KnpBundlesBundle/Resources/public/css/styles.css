@@ -835,6 +835,11 @@ code, pre {
     border: 1px solid #dedede
 }
 
+.content-box.tabbable .nav-tabs > li {
+    font-size: 13px;
+    margin-bottom: -2px;
+}
+
 .content-box hgroup {
     border-bottom: 2px solid #DEDEDE
 }
@@ -1045,6 +1050,18 @@ a.bundle-license-unknown {
     line-height: 10px
 }
 
+.content-box h2.version {
+    background-color: #F7F7F9;
+    padding-left: 5px;
+}
+
+.content-box .shift-right {
+    padding-left: 10px;
+}
+
+.content-box .pull-right {
+    float: right;
+}
 
 /* Content - modal settings*/
 #modal-settings {

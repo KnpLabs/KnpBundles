@@ -156,12 +156,14 @@ class Repo
             $lastCommitAt->setTimestamp(strtotime($commit['commit']['committer']['date']));
 
             /* @var $activity Activity */
-            foreach ($activities as $key => $activity) {
-                // If both activities have same type and time, skip (and "hide" it) as this is probably duplicate
-                if ($lastCommitAt->getTimestamp() == $activity->getCreatedAt()->getTimestamp()) {
-                    unset($activities[$key]);
+            if ($activities) {
+                foreach ($activities as $key => $activity) {
+                    // If both activities have same type and time, skip (and "hide" it) as this is probably duplicate
+                    if ($lastCommitAt->getTimestamp() == $activity->getCreatedAt()->getTimestamp()) {
+                        unset($activities[$key]);
 
-                    continue 2;
+                        continue 2;
+                    }
                 }
             }
 
@@ -251,7 +253,7 @@ class Repo
             $this->updateCanonicalConfigFile($bundle);
         }
 
-        $this->updateSymfonyVersions($bundle);
+        $this->updateVersionsHistory($bundle);
 
         return true;
     }
@@ -275,7 +277,7 @@ class Repo
         }
     }
 
-    public function updateSymfonyVersions(Bundle $bundle)
+    public function updateVersionsHistory(Bundle $bundle)
     {
         // no composer file
         if (null === $composerName = $bundle->getComposerName()) {
@@ -290,23 +292,33 @@ class Repo
             return false;
         }
 
-        $symfonyVersions = array();
+        $versionsHistory = array();
         $versionsArray = $packagistArray['package']['versions'];
 
         foreach ($versionsArray as $version => $value) {
+            // Skip `dev` packages, add only `dev-master`
+            if (0 === strpos($version, 'dev-') && 'dev-master' != $version) {
+                continue;
+            }
+
             foreach (array('symfony/framework-bundle', 'symfony/symfony') as $requirement) {
                 if (isset($value['require'][$requirement])) {
-                    // Skip `dev` packages, add only `dev-master`
-                    if (0 === strpos($version, 'dev-') && 'dev-master' != $version) {
-                        continue;
-                    }
-                    $symfonyVersions[$version] = $value['require'][$requirement]; // array('master' => '>=2.0,<2.2-dev')
+                    $versionsHistory['symfony'][$version] = $value['require'][$requirement]; // array('master' => '>=2.0,<2.2-dev')
                 }
             }
+
+            // store all bundle dependencies
+            $versionsHistory['dependencies'][$version] = array(
+                'name'        => $value['name'],
+                'extra'       => isset($value['extra']) ? $value['require-dev'] : '',
+                'require'     => $value['require'],
+                'require-dev' => isset($value['require-dev']) ? $value['require-dev'] : '',
+                'suggest'     => isset($value['suggest']) ? $value['suggest'] : ''
+            );
         }
 
-        if (!empty($symfonyVersions)) {
-            $bundle->setSymfonyVersions($symfonyVersions);
+        if (!empty($versionsHistory)) {
+            $bundle->setVersionsHistory($versionsHistory);
         }
 
         return true;

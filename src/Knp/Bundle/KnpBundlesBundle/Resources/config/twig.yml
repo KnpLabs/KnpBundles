@@ -8,3 +8,9 @@ services:
         class: Twig_Extensions_Extension_Text
         tags:
             - { name: twig.extension }
+
+    twig.extension.debug:
+        class: Twig_Extension_Debug
+        tags:
+            - { name: twig.extension }
+        public: false
