@@ -52,6 +52,7 @@ class KbUpdateTrendsCommandTest extends WebTestCase
             $bundle->setOwner($developer);
 
             foreach ($bundleData['scores'] as $scoreData) {
+                $bundle->setDescription(md5(time().serialize($scoreData)));
                 $score = new Score();
                 $score->setDate(new \DateTime($scoreData['date']));
                 $score->setBundle($bundle);

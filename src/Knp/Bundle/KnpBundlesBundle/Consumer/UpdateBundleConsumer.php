@@ -18,7 +18,6 @@ use PhpAmqpLib\Message\AMQPMessage;
 use Github\Exception\ApiLimitExceedException;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
 use Doctrine\Common\Persistence\ObjectManager;
@@ -217,13 +216,24 @@ class UpdateBundleConsumer implements ConsumerInterface
      */
     private function updateScore(Bundle $bundle, $repository)
     {
-        $score = $repository->findOneBy(array('date' => new \DateTime(), 'bundle' => $bundle->getId()));
+        if (!$bundle->hasChanges()) {
+            return;
+        }
+
+        $score = $repository->findOneBy(array(
+            'date'   => new \DateTime(),
+            'bundle' => $bundle->getId()
+        ));
+
         if (!$score) {
             $score = new Score();
             $score->setBundle($bundle);
         }
 
         $score->setValue($bundle->getScore());
+
+        $this->em->persist($score);
+        $this->em->flush();
     }
 
     /**
