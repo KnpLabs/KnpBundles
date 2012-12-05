@@ -17,6 +17,12 @@
     </hgroup>
 
     <section>
+        {%- if error is not empty %}
+        <div class="alert alert-error">
+            {{ error }}
+        </div>
+        {%- endif %}
+
         <a class="btn btn-large" href="{{ hwi_oauth_login_url('github') }}">GitHub</a>
         <a class="btn btn-large" href="{{ hwi_oauth_login_url('sensio') }}">Sensio Connect</a>
     </section>
