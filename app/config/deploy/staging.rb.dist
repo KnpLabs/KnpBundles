@@ -1,0 +1,7 @@
+server 'KnpBundles.com', :app, :web, :db, :primary => true
+
+set :domain,      "stage.knpbundles.local"
+set :deploy_to,   "/path/to/knpbundles/staging"
+set :user,        "staging-user"
+set :branch,      "develop"
+set :port,        26
