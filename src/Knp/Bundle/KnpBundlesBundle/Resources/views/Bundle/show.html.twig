@@ -68,6 +68,19 @@
 </textarea>
 {% endmacro %}
 
+{% macro dependency(dependencies, title) %}
+<h3>{{ title|trans }}</h3>
+{% if dependencies is not empty %}
+<ul>
+    {% for dependencyTitle, dependencyVersion in dependencies %}
+        <li>{{ dependencyTitle ~ ': ' ~ dependencyVersion }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+    {% trans %}bundles.show.dependency.none{% endtrans %}
+{% endif %}
+{% endmacro %}
+
 {% block right %}
     <div class="sidebar-box sidebar-bundle-info">
         <hgroup>
@@ -236,12 +249,11 @@
             <h2>{% trans %}bundles.show.badge.title{% endtrans %}</h2>
         </hgroup>
 
-        {% import _self as show %}
         <section>
-            <div class="badge" data-placement="left" data-content='{{ show.badge(bundle, "bundle_get_badge") }}' data-title="{% trans %}bundles.show.badge.embed{% endtrans %}:">
+            <div class="badge" data-placement="left" data-content='{{ _self.badge(bundle, "bundle_get_badge") }}' data-title="{% trans %}bundles.show.badge.embed{% endtrans %}:">
                 <img src="{{ path('bundle_get_badge', {'ownerName': bundle.ownerName, 'name': bundle.name }) }}" title="{% trans %}bundles.show.badge.click_for_embed{% endtrans %}">
             </div>
-            <div class="badge" data-placement="left" data-content='{{ show.badge(bundle, "bundle_get_badge_short") }}' data-title="{% trans %}bundles.show.badge.embed{% endtrans %}:">
+            <div class="badge" data-placement="left" data-content='{{ _self.badge(bundle, "bundle_get_badge_short") }}' data-title="{% trans %}bundles.show.badge.embed{% endtrans %}:">
                 <img src="{{ path('bundle_get_badge_short', {'ownerName': bundle.ownerName, 'name': bundle.name }) }}" title="{% trans %}bundles.show.badge.click_for_embed{% endtrans %}">
             </div>
         </section>
@@ -258,7 +270,10 @@
         {%- if bundle.canonicalConfig is not empty -%}
         <li><a href="#configuration" data-toggle="tab" data-target="#configuration"><i class="icon-wrench"></i>Configuration</a></li>
         {%- endif %}
-        <li><a href="#activity" data-toggle="tab" data-target="#activity"><i class="icon-clock"></i>Recent activity</a></li>
+        <li><a href="#activity" data-toggle="tab" data-target="#activity"><i class="icon-clock"></i>Activity</a></li>
+        {% if bundle.versionsHistory.dependencies is defined %}
+        <li><a href="#dependencies" data-toggle="tab" data-target="#dependencies"><i class="icon-cogs"></i>Dependencies</a></li>
+        {% endif %}
     </ul>
 
     <div class="tab-content">
@@ -302,6 +317,29 @@
                 {%- endfor %}
             </ul>
         </div>
+
+        {% if bundle.versionsHistory.dependencies is defined %}
+        <div id="dependencies" class="tab-pane markdown">
+            {% for versionTitle, version in bundle.versionsHistory.dependencies %}
+                <h2 class="version">{{ versionTitle }}
+                    <a href="javascript:void(0);" data-toggle="collapse" data-target="#{{ loop.index }}" class="pull-right">
+                        <i class="icon-list"></i></a>
+                </h2>
+                <div class="shift-right collapse in" id="{{ loop.index }}">
+                    {% if versionTitle == 'dev-master' %}
+                        {% set versionTitle = version.extra['branch-alias']['dev-master'] %}
+                    {% endif %}
+                    <h3>{% trans %}bundles.show.dependency.composer{% endtrans %}</h3>
+                    <pre class="code">require: "{{ version.name }}": "{{ versionTitle }}"</pre>
+                    {% for dependencyTitle, dependencies in version %}
+                        {% if dependencyTitle not in ['name', 'extra'] %}
+                            {{ _self.dependency(dependencies, 'bundles.show.dependency.' ~ dependencyTitle) }}
+                        {% endif %}
+                    {% endfor %}    
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 </div>
 

@@ -269,11 +269,11 @@ class Bundle
     protected $keywords;
 
     /**
-     * Symfony versions required
+     * Bundle versions history
      *
      * @ORM\Column(type="array", nullable=true)
      */
-    protected $symfonyVersions;
+    protected $versionsHistory;
 
     /**
      * Last indexing time.
@@ -1139,23 +1139,38 @@ class Bundle
     }
 
     /**
-     * Get required versions of Symfony
+     * Get required versions of Symfony from bundle Versions History
      *
      * @return array
      */
     public function getSymfonyVersions()
     {
-        return $this->symfonyVersions;
+        // @todo remove this after all bundles update is pass
+        if (!isset($this->versionsHistory['symfony'])) {
+            return $this->versionsHistory;
+        }
+
+        return $this->versionsHistory['symfony'];
     }
 
     /**
-     * Get required versions of Symfony
+     * Get bundle versions history
+     *
+     * @return array
+     */
+    public function getVersionsHistory()
+    {
+        return $this->versionsHistory;
+    }
+
+    /**
+     * Set bundle versions history
      *
      * @param array $versions
      */
-    public function setSymfonyVersions($versions)
+    public function setVersionsHistory($versions)
     {
-        $this->symfonyVersions = $versions;
+        $this->versionsHistory = $versions;
     }
 
     /**

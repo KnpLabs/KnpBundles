@@ -240,11 +240,51 @@ EOT;
             if ($i%5 == 0) {
                 $bundle->setLastTweetedAt(new \DateTime());
             } else {
-                $bundle->setSymfonyVersions(array(
-                    'dev-master' => '2.1.*',
-                    '1.2.0'      => '2.0.*',
-                    '1.1.0'      => '2.*',
-                ));
+                $bundle->setVersionsHistory(
+                    array(
+                        'symfony' => array(
+                            'dev-master' => '2.1.*',
+                            '1.2.0'      => '2.0.*',
+                            '1.1.0'      => '2.*',
+                        ),
+                        'dependencies' => array(
+                            'dev-master' => array(
+                                'name' => 'friendsofsymfony/user-bundle',
+                                'extra' => array(
+                                    'branch-alias' => array('dev-master' => '2.0.x-dev')
+                                ),
+                                'require' => array(
+                                    'php' => '>=5.3.2',
+                                    'symfony/framework-bundle' => '>=2.1,<2.3-dev',
+                                    'symfony/security-bundle' => '>=2.1,<2.3-dev'
+                                ),
+                                'require-dev' => array(
+                                    'twig/twig' => '*',
+                                    'doctrine/doctrine-bundle' => '*',
+                                    'swiftmailer/swiftmailer' => '*',
+                                    'willdurand/propel-typehintable-behavior' => 'dev-master',
+                                    'symfony/validator' => '2.1.*',
+                                    'symfony/yaml' => '2.1.*'
+                                ),
+                                'suggest' => array(
+                                    'doctrine/couchdb-odm-bundle' => '*',
+                                    'doctrine/doctrine-bundle' => '*',
+                                    'doctrine/mongodb-odm-bundle' => '*'
+                                )
+                            ),
+                            '1.2.x-dev' => array(
+                                'name' => 'friendsofsymfony/user-bundle',
+                                'require' => array(
+                                    'php' => '>=5.3.2',
+                                    'symfony/framework-bundle' => '>=2.1,<2.3-dev',
+                                    'symfony/security-bundle' => '>=2.1,<2.3-dev'
+                                ),
+                                'require-dev' => '',
+                                'suggest' => ''
+                            )
+                        )
+                    )
+                );
             }
             $bundle->setScore(mt_rand(10, 666));
 
@@ -308,10 +348,48 @@ EOT;
             'readme'        => str_replace('__BUNDLE__', "the bundle number: {$i}", $this->readme),
             'usesTravisCi'  => ($i%2) ? false : true,
             'composerName'  => ($i%2) ? null : 'knplabs/knp-menu-bundle',
-            'symfonyVersions' => array(
-                'dev-master' => '2.1.*',
-                '1.2.0' => '2.0.*',
-                '1.1.0' => '2.*',
+            'versionsHistory' => array(
+                'symfony' => array(
+                    'dev-master' => '2.1.*',
+                    '1.2.0'      => '2.0.*',
+                    '1.1.0'      => '2.*',
+                ),
+                'dependencies' => array(
+                    'dev-master' => array(
+                        'name' => 'friendsofsymfony/user-bundle',
+                        'extra' => array(
+                            'branch-alias' => array('dev-master' => '2.0.x-dev')
+                        ),
+                        'require' => array(
+                            'php' => '>=5.3.2',
+                            'symfony/framework-bundle' => '>=2.1,<2.3-dev',
+                            'symfony/security-bundle' => '>=2.1,<2.3-dev'
+                        ),
+                        'require-dev' => array(
+                            'twig/twig' => '*',
+                            'doctrine/doctrine-bundle' => '*',
+                            'swiftmailer/swiftmailer' => '*',
+                            'willdurand/propel-typehintable-behavior' => 'dev-master',
+                            'symfony/validator' => '2.1.*',
+                            'symfony/yaml' => '2.1.*'
+                        ),
+                        'suggest' => array(
+                            'doctrine/couchdb-odm-bundle' => '*',
+                            'doctrine/doctrine-bundle' => '*',
+                            'doctrine/mongodb-odm-bundle' => '*'
+                        )
+                    ),
+                    '1.2.x-dev' => array(
+                        'name' => 'friendsofsymfony/user-bundle',
+                        'require' => array(
+                            'php' => '>=5.3.2',
+                            'symfony/framework-bundle' => '>=2.1,<2.3-dev',
+                            'symfony/security-bundle' => '>=2.1,<2.3-dev'
+                        ),
+                        'require-dev' => '',
+                        'suggest' => ''
+                    )
+                )
             ),
             'state'         => $this->states[mt_rand(0, 3)],
             'license'       => ($i%4 == 0) ? 'Some pseudo license data' : null,

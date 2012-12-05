@@ -115,13 +115,19 @@ EOT;
     /**
      * @test
      */
-    public function shouldUpdateSymfonyVersions()
+    public function shouldUpdateVersionsHistory()
     {
         $json = array(
             'package' => array(
                 'versions' => array(
-                    array('require' => array('symfony/framework-bundle' => 'dev-master', 'symfony/symfony' => 'dev-master')),
-                    array('require' => array('symfony/framework-bundle' => '>=2.0,<2.2-dev', 'symfony/symfony' => '>=2.0,<2.2-dev'))
+                    array(
+                        'name'    => 'symfony/framework-bundle',
+                        'require' => array('symfony/framework-bundle' => 'dev-master', 'symfony/symfony' => 'dev-master')
+                    ),
+                    array(
+                        'name'    => 'symfony/framework-bundle',
+                        'require' => array('symfony/framework-bundle' => '>=2.0,<2.2-dev', 'symfony/symfony' => '>=2.0,<2.2-dev')
+                    )
                 )
             )
         );
@@ -139,15 +145,17 @@ EOT;
             ->will($this->returnValue($json));
 
         $githubRepo = $this->getRepo($httpClient);
-        $githubRepo->updateSymfonyVersions($bundle);
+        $githubRepo->updateVersionsHistory($bundle);
 
-        $this->assertCount(2, $bundle->getSymfonyVersions());
+        $versionsHistory = $bundle->getVersionsHistory();
+
+        $this->assertCount(2, $versionsHistory['symfony']);
     }
 
     /**
      * @test
      */
-    public function shoudNotUpdateSymfonyVersionsWithWrongData()
+    public function shoudNotUpdateVersionsHistoryWithWrongData()
     {
         $json = 'I am wrong json';
 
@@ -164,9 +172,9 @@ EOT;
             ->will($this->returnValue($json));
 
         $githubRepo = $this->getRepo($httpClient);
-        $githubRepo->updateSymfonyVersions($bundle);
+        $githubRepo->updateVersionsHistory($bundle);
 
-        $this->assertNull($bundle->getSymfonyVersions());
+        $this->assertNull($bundle->getVersionsHistory());
     }
 
     protected function getRepo($httpClient = null)

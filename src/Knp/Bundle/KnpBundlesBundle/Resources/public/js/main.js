@@ -4,6 +4,8 @@
     if (window.location.hash.length > 0) {
         $('ul.nav-tabs li > a[data-target="' + window.location.hash + '"]').tab('show');
     }
+    // collapse all bundle versions dependencies
+    $('.collapse').collapse();
 
     $(document).bind('keydown.s keydown.f keydown./', function() {
         $('#search-query').focus();
@@ -56,7 +58,7 @@
 
     $('.sidebar-developers-list img,abbr').tooltip();
     $('.symfony-versions').popover({trigger: 'hover'});
-    $('.badge').popover({trigger: 'click'});
+    $('.badge').popover({trigger: 'click', html: true});
     // select all code inside textarea by click
     $(document).on('click', '.badge-code', function() {
         $(this).select();
