@@ -18,7 +18,12 @@ set :model_manager,             "doctrine"
 set :admin_runner,              nil
 set :keep_releases,             2
 
-set :shared_files,              ["app/config/parameters.yml", "bin/launch-rabbit-consumers.sh", "app/Resources/java"]
+set :writable_dirs,             ["app/cache", "app/logs"]
+set :webserver_user,            "www-data"
+set :permission_method,         :acl
+set :use_set_permissions,       true
+
+set :shared_files,              ["app/config/parameters.yml", "app/Resources/java", "web/.htaccess", "bin/launch-rabbit-consumers.sh"]
 set :shared_children,           [app_path + "/logs"]
 set :use_composer,              true
 set :update_vendors,            false
@@ -32,11 +37,12 @@ before 'symfony:composer:install', 'symfony:copy_vendors'
 namespace :symfony do
   desc "Copy vendors from previous release"
   task :copy_vendors, :except => { :no_release => true } do
-    pretty_print "--> Copying vendors from previous release if exists"
+    capifony_pretty_print "--> Copying vendors from previous release if exists"
+
     run "if [ -d #{previous_release}/vendor ]; then cp -a #{previous_release}/vendor #{latest_release}/vendor; fi"
-    puts_ok
+    capifony_puts_ok
   end
 end
 
-# Be more verbose by uncommenting the following line
-# logger.level = Logger::MAX_LEVEL
+after "deploy:update", "deploy:cleanup"
+after "deploy", "deploy:set_permissions"
