@@ -197,7 +197,8 @@ class BundleController extends BaseController
             /* @var $bundle Bundle */
             foreach ($paginator as $bundle) {
                 $result['results'][] = $bundle->toSmallArray() + array(
-                    'url' => $this->generateUrl('bundle_show', array('ownerName' => $bundle->getOwnerName(), 'name' => $bundle->getName()), true)
+                    'url' => $this->generateUrl('bundle_show', array('ownerName' => $bundle->getOwnerName(), 'name' => $bundle->getName()), true),
+                    'composerName' => $bundle->getComposerName()
                 );
             }
 
