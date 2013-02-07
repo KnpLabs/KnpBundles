@@ -110,11 +110,11 @@ old_sound_rabbit_mq:
             callback:         knp_bundles.consumer.github_hook
 
 nelmio_solarium:
-    adapter:
-        class: Solarium_Client_Adapter_Http
-        host: %solarium.host%
-        port: %solarium.port%
-        path: %solarium.path%
+    clients:
+        default:
+            host: %solarium.host%
+            port: %solarium.port%
+            path: %solarium.path%
 
 hwi_oauth:
     resource_owners:
