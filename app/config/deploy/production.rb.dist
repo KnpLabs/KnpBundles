@@ -4,4 +4,3 @@ set :domain,      "knpbundles.local"
 set :deploy_to,   "/path/to/knpbundles/production"
 set :user,        "production-user"
 set :branch,      "master"
-set :port,        27
