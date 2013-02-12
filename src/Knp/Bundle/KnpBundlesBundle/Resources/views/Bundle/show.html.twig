@@ -106,7 +106,7 @@
                 {%- endif %}
                 <li><i class="icon-chart"></i><strong>{% trans %}bundles.show.infos.score{% endtrans %}</strong> <a href="#score-details" data-toggle="tab">{{ bundle.score }}</a></li>
                 {%- if bundle.symfonyVersions|length > 0 -%}
-                <li><i class="icon-symfony"></i><strong class="symfony-versions" data-placement="bottom" data-content="{{ block('symfony_versions') }}" data-title="{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}:">{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}</strong></li>
+                <li><i class="icon-symfony"></i><strong class="symfony-versions" data-placement="bottom" data-html="true" data-content="{{ block('symfony_versions') }}" data-title="{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}:">{% trans %}bundles.show.infos.symfonyVersion{% endtrans %}</strong></li>
                 {%- endif -%}
                 <li><i class="icon-calendar"></i><strong>{% trans %}bundles.show.infos.updated{% endtrans %}</strong> {{ bundle.lastCheckAt|default(bundle.updatedAt)|date('date_format'|trans) }}</li>
                 <li><i class="icon-developers"></i><strong>{% trans %}bundles.show.infos.contributors{% endtrans %}</strong> {{ bundle.nbContributors }}</li>
