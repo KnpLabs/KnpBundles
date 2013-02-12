@@ -207,11 +207,16 @@ class Repo
                         continue;
                     }
 
-                    $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'LICENSE');
-                    if (!isset($file['message']) && 'base64' == $file['encoding']) {
-                        $bundle->setLicense(base64_decode($file['content']));
+                    try {
+                        $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'LICENSE');
+                        if (!isset($file['message']) && 'base64' == $file['encoding']) {
+                            $bundle->setLicense(base64_decode($file['content']));
+                            break;
+                        }
+                    } catch(RuntimeException $e) {
                         break;
                     }
+
                     break;
 
                 case '.travis.yml':
@@ -227,9 +232,13 @@ class Repo
                         continue;
                     }
 
-                    $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'composer.json');
-                    if (!isset($file['message']) && 'base64' == $file['encoding']) {
-                        $this->updateComposerFile(base64_decode($file['content']), $bundle);
+                    try {
+                        $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'composer.json');
+                        if (!isset($file['message']) && 'base64' == $file['encoding']) {
+                            $this->updateComposerFile(base64_decode($file['content']), $bundle);
+                            break;
+                        }
+                    } catch(RuntimeException $e) {
                         break;
                     }
             }
