@@ -224,7 +224,7 @@ class Repo
                         $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'LICENSE');
                         $bundle->setLicense(base64_decode($file['content']));
                     } catch(RuntimeException $e) {
-                        return false;
+
                     }
 
                     break;
@@ -246,7 +246,7 @@ class Repo
                         $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'composer.json');
                         $this->updateComposerFile(base64_decode($file['content']), $bundle);
                     } catch(RuntimeException $e) {
-                        return false;
+
                     }
 
                     break;
