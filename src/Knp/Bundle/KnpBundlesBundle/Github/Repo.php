@@ -209,12 +209,9 @@ class Repo
 
                     try {
                         $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'LICENSE');
-                        if (!isset($file['message']) && 'base64' == $file['encoding']) {
-                            $bundle->setLicense(base64_decode($file['content']));
-                            break;
-                        }
+                        $bundle->setLicense(base64_decode($file['content']));
                     } catch(RuntimeException $e) {
-                        break;
+                        return false;
                     }
 
                     break;
@@ -234,13 +231,12 @@ class Repo
 
                     try {
                         $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'composer.json');
-                        if (!isset($file['message']) && 'base64' == $file['encoding']) {
-                            $this->updateComposerFile(base64_decode($file['content']), $bundle);
-                            break;
-                        }
+                        $this->updateComposerFile(base64_decode($file['content']), $bundle);
                     } catch(RuntimeException $e) {
-                        break;
+                        return false;
                     }
+
+                    break;
             }
         }
 
@@ -253,16 +249,22 @@ class Repo
 
         if (null === $bundle->getLicense() && (null === $onlyFiles || in_array('license', $onlyFiles))) {
             $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'Resources/meta/LICENSE');
-            if (!isset($file['message']) && 'base64' == $file['encoding']) {
-                $bundle->setLicense(base64_decode($file['content']));
-            }
+            $bundle->setLicense(base64_decode($file['content']));
         }
 
         if (null === $onlyFiles || in_array('configuration', $onlyFiles)) {
-            $this->updateCanonicalConfigFile($bundle);
+            try {
+                $this->updateCanonicalConfigFile($bundle);    
+            } catch (RuntimeException $e) {
+
+            }
         }
 
-        $this->updateVersionsHistory($bundle);
+        try {
+            $this->updateVersionsHistory($bundle);
+        } catch (RuntimeException $e) {
+
+        }
 
         return true;
     }
