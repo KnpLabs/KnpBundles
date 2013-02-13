@@ -145,6 +145,7 @@ class Repo
         }
 
         $activities = $bundle->getLatestActivities();
+        $lastEverCommitAt = $bundle->getLastCommitAt();
 
         /* @var $developer EntityDeveloper */
         foreach ($commits as $commit) {
@@ -154,6 +155,11 @@ class Repo
 
             $lastCommitAt = new \DateTime();
             $lastCommitAt->setTimestamp(strtotime($commit['commit']['committer']['date']));
+
+            // be sure that budle have a latest date following to latest commit
+            if ($lastCommitAt > $lastEverCommitAt) {
+                $lastEverCommitAt = $lastCommitAt;
+            }
 
             /* @var $activity Activity */
             if ($activities) {
@@ -181,6 +187,13 @@ class Repo
             } else {
                 $activity->setAuthor($commit['commit']['committer']['name']);
             }
+        }
+
+        // update last pushed commit date
+        $bundle->setLastCommitAt($lastEverCommitAt);
+       
+        if ('developer' === $bundle->getOwnerType()) {
+            $bundle->getOwner()->setLastCommitAt($lastEverCommitAt);     
         }
 
         unset($activities);
