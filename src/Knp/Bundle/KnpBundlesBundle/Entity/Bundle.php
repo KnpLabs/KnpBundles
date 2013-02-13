@@ -1271,6 +1271,10 @@ class Bundle
      */
     public function hasChanges()
     {
-        return $this->getLatestScoreDetails()->getHash() !== $this->getStatusHash();
+        if ($this->getLatestScoreDetails()) {
+            return $this->getLatestScoreDetails()->getHash() !== $this->getStatusHash();
+        }
+
+        return true;
     }
 }

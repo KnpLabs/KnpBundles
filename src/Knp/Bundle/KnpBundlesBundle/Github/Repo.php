@@ -145,6 +145,7 @@ class Repo
         }
 
         $activities = $bundle->getLatestActivities();
+        $lastEverCommitAt = $bundle->getLastCommitAt();
 
         /* @var $developer EntityDeveloper */
         foreach ($commits as $commit) {
@@ -154,6 +155,11 @@ class Repo
 
             $lastCommitAt = new \DateTime();
             $lastCommitAt->setTimestamp(strtotime($commit['commit']['committer']['date']));
+
+            // be sure that budle have a latest date following to latest commit
+            if ($lastCommitAt > $lastEverCommitAt) {
+                $lastEverCommitAt = $lastCommitAt;
+            }
 
             /* @var $activity Activity */
             if ($activities) {
@@ -183,6 +189,13 @@ class Repo
             }
         }
 
+        // update last pushed commit date
+        $bundle->setLastCommitAt($lastEverCommitAt);
+       
+        if ('developer' === $bundle->getOwnerType()) {
+            $bundle->getOwner()->setLastCommitAt($lastEverCommitAt);     
+        }
+
         unset($activities);
 
         return true;
@@ -207,11 +220,13 @@ class Repo
                         continue;
                     }
 
-                    $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'LICENSE');
-                    if (!isset($file['message']) && 'base64' == $file['encoding']) {
+                    try {
+                        $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'LICENSE');
                         $bundle->setLicense(base64_decode($file['content']));
-                        break;
+                    } catch(RuntimeException $e) {
+
                     }
+
                     break;
 
                 case '.travis.yml':
@@ -227,11 +242,14 @@ class Repo
                         continue;
                     }
 
-                    $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'composer.json');
-                    if (!isset($file['message']) && 'base64' == $file['encoding']) {
+                    try {
+                        $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'composer.json');
                         $this->updateComposerFile(base64_decode($file['content']), $bundle);
-                        break;
+                    } catch(RuntimeException $e) {
+
                     }
+
+                    break;
             }
         }
 
@@ -244,16 +262,22 @@ class Repo
 
         if (null === $bundle->getLicense() && (null === $onlyFiles || in_array('license', $onlyFiles))) {
             $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'Resources/meta/LICENSE');
-            if (!isset($file['message']) && 'base64' == $file['encoding']) {
-                $bundle->setLicense(base64_decode($file['content']));
-            }
+            $bundle->setLicense(base64_decode($file['content']));
         }
 
         if (null === $onlyFiles || in_array('configuration', $onlyFiles)) {
-            $this->updateCanonicalConfigFile($bundle);
+            try {
+                $this->updateCanonicalConfigFile($bundle);    
+            } catch (RuntimeException $e) {
+
+            }
         }
 
-        $this->updateVersionsHistory($bundle);
+        try {
+            $this->updateVersionsHistory($bundle);
+        } catch (RuntimeException $e) {
+
+        }
 
         return true;
     }

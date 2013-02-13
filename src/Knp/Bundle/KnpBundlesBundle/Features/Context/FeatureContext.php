@@ -4,6 +4,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Features\Context;
 
 use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\Step,
+    Behat\Behat\Event\ScenarioEvent,
     Behat\Behat\Context\TranslatedContextInterface,
     Behat\Behat\Exception\PendingException;
 
@@ -59,6 +60,21 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
         $this->useContext('mink', new MinkContext());
 
         $this->setPlaceHolder('%base_url%', rtrim($parameters['base_url'], '/app_test.php'));
+    }
+
+    /**
+     * @AfterScenario
+     */
+    public function printLastResponseOnError(ScenarioEvent $scenarioEvent)
+    {
+        if ($scenarioEvent->getResult() != 0) {
+            // avoid the error if we're using Goutte and there has been no request yet
+            if ($this->getSession()->getDriver() instanceof GoutteDriver && !$this->getSession()->getDriver()->getClient()->getRequest()) {
+                return;
+            }
+
+            $this->getSubcontext('mink')->printLastResponse();
+        }
     }
 
     /**
@@ -240,7 +256,7 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
         }
         $user = $this->developers[$username];
 
-        $token = new OAuthToken(null,$user->getRoles());
+        $token = new OAuthToken(null, $user->getRoles());
         $token->setUser($user);
         $token->setAuthenticated(true);
 
