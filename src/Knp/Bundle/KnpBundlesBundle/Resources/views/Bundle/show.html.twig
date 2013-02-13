@@ -301,7 +301,7 @@
 
         <div id="activity" class="tab-pane">
             <ul>
-                {%- for activity in bundle.activities(1, 20) %}
+                {%- for activity in bundle.latestActivities() %}
                 <li>
                     {{ bundle_activity_icon(activity.type) }}
                     {{ bundle_activity_msg(activity) }}
