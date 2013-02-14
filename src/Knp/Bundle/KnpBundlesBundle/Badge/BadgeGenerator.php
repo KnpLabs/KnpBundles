@@ -235,11 +235,11 @@ class BadgeGenerator
     {
         $dir = $this->cacheDir.'/badges';
 
-        $this->filesystem->mkdir($dir, 0755);
+        $this->filesystem->mkdir($dir, 0777);
 
         // Create badge types folder
         foreach ($this->type as $type => $image) {
-            $this->filesystem->mkdir($dir.'/'.$type, 0755);
+            $this->filesystem->mkdir($dir.'/'.$type, 0777);
         }
     }
 
