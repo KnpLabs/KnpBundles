@@ -180,7 +180,7 @@ class Repo
             $activity->setBundle($bundle);
 
             if (isset($commit['committer']) && isset($commit['committer']['login'])) {
-                $developer = $this->ownerManager->createOwner($commit['committer']['login'], 'developer', false);
+                $developer = $this->ownerManager->createOwner($commit['committer']['login'], 'developer', true);
                 $developer->setLastCommitAt($lastCommitAt);
 
                 $activity->setDeveloper($developer);
