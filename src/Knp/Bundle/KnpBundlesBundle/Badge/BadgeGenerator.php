@@ -157,6 +157,10 @@ class BadgeGenerator
         // Save badge
         $image->save($this->getBadgeFile($bundle));
         $imageShort->save($this->getBadgeFile($bundle, self::SHORT));
+
+        // Set write permission for father files update
+        chmod($this->getBadgeFile($bundle), 0777);
+        chmod($this->getBadgeFile($bundle, self::SHORT), 0777);
     }
 
     /**
@@ -235,11 +239,11 @@ class BadgeGenerator
     {
         $dir = $this->cacheDir.'/badges';
 
-        $this->filesystem->mkdir($dir, 0755);
+        $this->filesystem->mkdir($dir, 0777);
 
         // Create badge types folder
         foreach ($this->type as $type => $image) {
-            $this->filesystem->mkdir($dir.'/'.$type, 0755);
+            $this->filesystem->mkdir($dir.'/'.$type, 0777);
         }
     }
 
