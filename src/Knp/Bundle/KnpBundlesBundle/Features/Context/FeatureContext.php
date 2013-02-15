@@ -73,7 +73,8 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
                 return;
             }
 
-            $this->getSubcontext('mink')->printLastResponse();
+            // uncomment to better scenario debug
+            //$this->getSubcontext('mink')->printLastResponse();
         }
     }
 
