@@ -157,6 +157,10 @@ class BadgeGenerator
         // Save badge
         $image->save($this->getBadgeFile($bundle));
         $imageShort->save($this->getBadgeFile($bundle, self::SHORT));
+
+        // Set write permission for father files update
+        chmod($this->getBadgeFile($bundle), 0777);
+        chmod($this->getBadgeFile($bundle, self::SHORT), 0777);
     }
 
     /**
