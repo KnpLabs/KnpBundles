@@ -10,10 +10,10 @@ Feature:
       | KnpLabs   |
       | FoS       |
     Given the site has following bundles:
-      | username  | name        | description | createdAt  | lastCommitAt | score | trend1 | state      |
-      | KnpLabs   | TestBundle  | test desc   | 2012-09-01 | 2012-10-01   | 20    | 5      | ready      |
-      | KnpLabs   | TestBundle2 | test2 desc  | 2012-09-05 | 2012-10-05   | 10    | 10     | unknown    |
-      | FoS       | UserBundle  | user desc   | 2012-09-10 | 2012-10-10   | 50    | 1      | deprecated |
+      | username  | name        | description | createdAt  | lastCommitAt | score | trend1 | state      | composerName         |
+      | KnpLabs   | TestBundle  | test desc   | 2012-09-01 | 2012-10-01   | 20    | 5      | ready      | knplabs/test-bundle  |
+      | KnpLabs   | TestBundle2 | test2 desc  | 2012-09-05 | 2012-10-05   | 10    | 10     | unknown    | knplabs/test-bundle2 |
+      | FoS       | UserBundle  | user desc   | 2012-09-10 | 2012-10-10   | 50    | 1      | deprecated | fos/user-bundle      |
 
   Scenario: Show first page of latest bundles list
     When I send a GET request to "/newest.json?page=1&limit=2"
@@ -34,7 +34,8 @@ Feature:
             "createdAt": 1347235200,
             "lastCommitAt": 1349827200,
             "contributors": [],
-            "url": "%base_url%/FoS/UserBundle"
+            "url": "%base_url%/FoS/UserBundle",
+            "composerName": "fos/user-bundle"
           },
           {
             "type": "Bundle",
@@ -48,7 +49,8 @@ Feature:
             "createdAt": 1346803200,
             "lastCommitAt": 1349395200,
             "contributors": [],
-            "url": "%base_url%/KnpLabs/TestBundle2"
+            "url": "%base_url%/KnpLabs/TestBundle2",
+            "composerName": "knplabs/test-bundle2"
           }
         ],
         "total": 3,
@@ -75,7 +77,8 @@ Feature:
             "createdAt": 1346457600,
             "lastCommitAt": 1349049600,
             "contributors": [],
-            "url": "%base_url%/KnpLabs/TestBundle"
+            "url": "%base_url%/KnpLabs/TestBundle",
+            "composerName": "knplabs/test-bundle"
           }
         ],
         "total": 3,
