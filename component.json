@@ -1,0 +1,8 @@
+{
+  "name": "KnpBundles: THE Unofficial Symfony2 Bundles Listing",
+  "version": "1.0.0",
+  "main": ["./web/assets/css/main.css", "./web/assets/js/main.js", "./web/assets/images/sprite.img"],
+  "dependencies": {
+    "jquery-ui": "1.8.*"
+  }
+}
