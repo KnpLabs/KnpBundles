@@ -233,12 +233,8 @@ class Updater
                             $leftActivities[] = $activity->getId();
                         }
 
-                        //echo implode(',', $leftActivities);
-                        
                         $activityRepository->removeActivities($bundle, $leftActivities);
-                        
-                        $this->output->writeln(sprintf('<info>%s</info>', $countActivities));
-                        ++$counter;    
+                        ++$counter;
                     } catch (\Exception $e) {
                         
                     }
