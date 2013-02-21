@@ -212,6 +212,46 @@ class Updater
         $this->em->flush();
     }
 
+    public function cleanupBundlesActivities($limit = 30)
+    {
+        $counter = 0;
+
+        $page  = 1;
+        $pager = $this->paginateExistingBundles($page);
+        $activityRepository = $this->em->getRepository('KnpBundlesBundle:Activity');
+
+        do {
+            /** @var $bundle Bundle */
+            foreach ($pager->getCurrentPageResults() as $bundle) {
+                $countActivities = $activityRepository->countActivitiesByBundle($bundle);
+                if ($countActivities > $limit) {
+                    try {
+                        $latestActivities = $activityRepository->findLastActivitiesForBundle($bundle, $limit);
+                        
+                        $leftActivities = array();
+                        foreach ($latestActivities as $activity) {
+                            $leftActivities[] = $activity->getId();
+                        }
+
+                        $activityRepository->removeActivities($bundle, $leftActivities);
+                        ++$counter;
+                        // echoes progress dot
+                        $this->output->write('<info>.</info>');
+                    } catch (\Exception $e) {
+                        
+                    }
+                }
+            }
+
+            ++$page;
+        } while ($pager->hasNextPage() && $pager->setCurrentPage($page, false, true));
+
+        $this->output->writeln('');
+        $this->output->writeln(sprintf('[%s] for <comment>%s</comment> bundles activities were cut', date('d-m-y H:i:s'), $counter));
+
+        $this->em->flush();
+    }
+
     /**
      * @param Bundle $bundle
      */

@@ -40,6 +40,54 @@ class ActivityRepository extends EntityRepository
     }
 
     /**
+     * @param Bundle $bundle
+     *
+     * @return integer
+     */
+    public function countActivitiesByBundle(Bundle $bundle)
+    {
+        return $this->createQueryBuilder('a')
+            ->select('count(a.id)')
+            ->where('a.bundle = :bundle')
+            ->setParameter('bundle', $bundle)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @param Bundle  $bundle
+     * @param integer $limit
+     *
+     * @return array
+     */
+    public function findLastActivitiesForBundle(Bundle $bundle, $limit = 10)
+    {
+        $query = $this->queryLastActivities(null, $bundle->getId(), null);
+        if (null !== $limit) {
+            $query->setMaxResults($limit);
+        }
+
+        return $query->execute();
+    }
+
+    /**
+     * @param Bundle $bundle
+     *
+     * @return void
+     */
+    public function removeActivities(Bundle $bundle, array $leftActivities)
+    {
+        return
+            $this->_em
+            ->createQuery('DELETE FROM KnpBundlesBundle:Activity a WHERE a.bundle = ?1 AND a.id NOT IN (?2)')
+            ->setParameter(1, $bundle)
+            ->setParameter(2, $leftActivities)
+            ->execute()
+        ;
+    }
+
+    /**
      * @param string  $type
      * @param integer $bundleId
      * @param integer $developerId
