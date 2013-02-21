@@ -80,8 +80,9 @@ class ActivityRepository extends EntityRepository
     {
         return
             $this->_em
-            ->createQuery('DELETE FROM KnpBundlesBundle:Activity a WHERE a.bundle = ?1 AND a.id NOT IN ('.implode(',', $leftActivities).')')
+            ->createQuery('DELETE FROM KnpBundlesBundle:Activity a WHERE a.bundle = ?1 AND a.id NOT IN (?2)')
             ->setParameter(1, $bundle)
+            ->setParameter(2, $leftActivities)
             ->execute()
         ;
     }

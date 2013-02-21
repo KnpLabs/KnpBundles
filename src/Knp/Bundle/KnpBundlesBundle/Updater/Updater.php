@@ -235,6 +235,8 @@ class Updater
 
                         $activityRepository->removeActivities($bundle, $leftActivities);
                         ++$counter;
+                        // echoes progress dot
+                        $this->output->write('<info>.</info>');
                     } catch (\Exception $e) {
                         
                     }
@@ -244,6 +246,7 @@ class Updater
             ++$page;
         } while ($pager->hasNextPage() && $pager->setCurrentPage($page, false, true));
 
+        $this->output->writeln('');
         $this->output->writeln(sprintf('[%s] for <comment>%s</comment> bundles activities were cut', date('d-m-y H:i:s'), $counter));
 
         $this->em->flush();
