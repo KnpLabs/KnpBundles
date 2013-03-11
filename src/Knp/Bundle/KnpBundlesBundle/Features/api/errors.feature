@@ -15,7 +15,7 @@ Feature:
       }
       """
 
-  Scenario: Show some non-existsting developer
+  Scenario: Show some non-existing developer
     When I send a GET request to "/developer/Unknown/profile.json"
     Then the response status code should be 404
      And the response should contain json:
@@ -26,7 +26,7 @@ Feature:
       }
       """
 
-  Scenario: Show some non-existsting organization
+  Scenario: Show some non-existing organization
     When I send a GET request to "/organization/Unknown/profile.json"
     Then the response status code should be 404
      And the response should contain json:

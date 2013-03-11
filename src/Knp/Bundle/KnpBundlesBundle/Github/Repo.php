@@ -156,7 +156,7 @@ class Repo
             $lastCommitAt = new \DateTime();
             $lastCommitAt->setTimestamp(strtotime($commit['commit']['committer']['date']));
 
-            // be sure that budle have a latest date following to latest commit
+            // be sure that bundle have a latest date following to latest commit
             if ($lastCommitAt > $lastEverCommitAt) {
                 $lastEverCommitAt = $lastCommitAt;
             }

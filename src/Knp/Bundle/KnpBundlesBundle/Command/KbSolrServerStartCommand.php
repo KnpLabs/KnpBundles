@@ -27,7 +27,7 @@ class KbSolrServerStartCommand extends ContainerAwareCommand
     {
         $this
             ->setName('kb:solr:start')
-            ->setDescription('Start SOLR for given enviroment')
+            ->setDescription('Start SOLR for given environment')
             ->addOption('solr-path', 'p', InputOption::VALUE_OPTIONAL, 'path to solr (where start.jar is localized)', '/opt/solr/example')
             ->addOption('show-commands-only', null, InputOption::VALUE_NONE, 'If set show command but not execute it')
         ;
