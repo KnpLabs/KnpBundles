@@ -155,7 +155,7 @@ EOT;
     /**
      * @test
      */
-    public function shoudNotUpdateVersionsHistoryWithWrongData()
+    public function shouldNotUpdateVersionsHistoryWithWrongData()
     {
         $json = 'I am wrong json';
 

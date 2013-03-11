@@ -33,7 +33,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
     {
         $bundle = new Bundle();
         $bundle->setOwnerName('KnpLabs');
-        $bundle->setName('KnpBunldes');
+        $bundle->setName('KnpBundles');
 
         $gitRepo = $this->getPhpGitRepository();
         $gitRepo->expects($this->once())
@@ -42,8 +42,8 @@ class RepoTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->getCommits()));
 
         $expectedArray = array(
-            '12344' => array('url' => 'http://github.com/KnpLabs/KnpBunldes/commit/12344', 'id' => '12344'),
-            '33456' => array('url' => 'http://github.com/KnpLabs/KnpBunldes/commit/33456', 'id' => '33456')
+            '12344' => array('url' => 'http://github.com/KnpLabs/KnpBundles/commit/12344', 'id' => '12344'),
+            '33456' => array('url' => 'http://github.com/KnpLabs/KnpBundles/commit/33456', 'id' => '33456')
         );
 
         $repo = new Repo($bundle, $gitRepo);
