@@ -106,12 +106,15 @@
         return event.preventDefault();
     });
 
+    var titleHeight = 0;
     $('.content-box article h3 a,.content-half article .bundle-info h2 a').each(function() {
         var code = $(this);
         var codeWidthReal = code.css('display', 'inline-block').width();
         var codeWidthStyle = code.css('display', 'block').parent().width();
-
-        code.parent().after($("<div></div>").css('height', code.height()));
+        if (code.height() > 0) {
+            titleHeight = code.height();
+        }
+        code.parent().after($("<div></div>").css('height', titleHeight));
         code.parent().css({
             width: codeWidthStyle,
             position: 'absolute'
