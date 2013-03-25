@@ -1318,6 +1318,55 @@ a.bundle-license-unknown {
     width: 240px
 }
 
+.sidebar-knpuniversity {
+    background: #ffffff; /* Old browsers */
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjQ2JSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjY3JSIgc3RvcC1jb2xvcj0iI2Y3ZjdmNyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmN2Y3ZjciIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top,  #ffffff 0%, #ffffff 46%, #f7f7f7 67%, #f7f7f7 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(46%,#ffffff), color-stop(67%,#f7f7f7), color-stop(100%,#f7f7f7)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #ffffff 0%,#ffffff 46%,#f7f7f7 67%,#f7f7f7 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #ffffff 0%,#ffffff 46%,#f7f7f7 67%,#f7f7f7 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #ffffff 0%,#ffffff 46%,#f7f7f7 67%,#f7f7f7 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #ffffff 0%,#ffffff 46%,#f7f7f7 67%,#f7f7f7 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f7f7f7',GradientType=0 ); /* IE6-8 */
+}
+
+.sidebar-knpuniversity h1 {
+    font-family: 'Signika', sans-serif;
+    font-family: ;
+    text-align: center;
+    font-weight: normal;
+    font-size: 20px;
+}
+
+.sidebar-knpuniversity .logo {
+    background: transparent url(/bundles/knpbundles/images/logo_knpuniversity.png) no-repeat;
+    width: 209px;
+    height: 166px;
+    margin: 0 auto;
+}
+
+.sidebar-knpuniversity .logo .play {
+    background: transparent url(/bundles/knpbundles/images/logo_knpuniversity_play.png) no-repeat;
+    width: 209px;
+    height: 166px;
+    margin: 0 auto;
+    display: block;
+}
+
+.sidebar-knpuniversity .logo .play:hover {
+    background-position: 0 -166px;
+}
+
+.sidebar-knpuniversity .baseline {
+    color: #bfbfbf;
+    color: #9e9e9e;
+    font-size: 12px;
+    text-align: center;
+    margin: 0 15px 10px 15px;
+    text-shadow: 0 1px 1px #ffffff;
+}
+
 .sidebar-box #score-details li {
     padding: 3px 5px 3px 20px;
     font-size: 12px;
