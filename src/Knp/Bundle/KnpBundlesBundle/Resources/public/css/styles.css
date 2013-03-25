@@ -1344,17 +1344,12 @@ a.bundle-license-unknown {
     width: 209px;
     height: 166px;
     margin: 0 auto;
-}
-
-.sidebar-knpuniversity .logo .play {
-    background: transparent url(/bundles/knpbundles/images/logo_knpuniversity_play.png) no-repeat;
-    width: 209px;
-    height: 166px;
-    margin: 0 auto;
     display: block;
+    text-indent: -1000px;
+    overflow: hidden;
 }
 
-.sidebar-knpuniversity .logo .play:hover {
+.sidebar-knpuniversity .logo:hover {
     background-position: 0 -166px;
 }
 
@@ -1365,6 +1360,7 @@ a.bundle-license-unknown {
     text-align: center;
     margin: 0 15px 10px 15px;
     text-shadow: 0 1px 1px #ffffff;
+    display: block;
 }
 
 .sidebar-box #score-details li {
