@@ -78,14 +78,18 @@
 
 {% block left_holder %}
 <div class="content-half pull-left">
+
     <div class="content-box tabbable">
+
         <ul class="nav nav-tabs">
             <li class="active"><a href="#owned" data-toggle="tab">{% trans %}developers.show.bundles_manage{% endtrans %}</a></li>
             <li><a href="#contribute" data-toggle="tab">{% trans %}developers.show.bundles_contribute{% endtrans %}</a></li>
-            <li><a href="#recommend" data-toggle="tab" style="border-right: 0;">Recommended</a></li>
+            <li><a href="#recommend" data-toggle="tab">{% trans %}developers.show.bundles_recommended{% endtrans %}</a></li>
+            <li><a href="#favorited" data-toggle="tab" style="border-right: 0;">{% trans %}developers.show.bundles_favorited{% endtrans %}</a></li>
         </ul>
 
         <div class="tab-content">
+
             <div class="tab-pane active" id="owned">
             {%- if developer.bundles|length > 0 %}
                 {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': developer.bundles} %}
@@ -109,7 +113,18 @@
                 <p>This developer hasn't recommend any bundles yet.</p>
             {%- endif %}
             </div>
+
+            <div class="tab-pane" id="favorited">
+                {%- if developer.favoriteBundles|length > 0 %}
+                    {% include 'KnpBundlesBundle:Bundle:mediumList.html.twig' with {'bundles': developer.favoriteBundles} %}
+                {%- else %}
+                    <p>This developer hasn't favorited any bundles yet.</p>
+                {%- endif %}
+            </div>
+
         </div>
+
     </div>
+
 </div>
 {% endblock %}

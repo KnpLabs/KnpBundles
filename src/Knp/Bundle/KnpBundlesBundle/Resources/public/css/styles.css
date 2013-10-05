@@ -774,6 +774,13 @@ code, pre {
     margin: 15px 0 0;
 }
 
+#bundle-actions .btn {
+    margin-right: 0;
+}
+
+#bundle-actions .btn:first-child {
+    margin-right: 2px;
+}
 
 #content-holder {
     float: left;

@@ -33,7 +33,15 @@
     {{ parent() }}
 
     <div id="bundle-actions">
-        <a class="btn btn-large" href="{{ bundle.gitHubUrl }}" style="width:228px">{% trans %}bundles.show.github{% endtrans %}</a>
+        <a class="btn btn-large icon-download" href="{{ bundle.gitHubUrl }}" style="width:90px">&nbsp;{% trans %}bundles.show.github{% endtrans %}</a>
+        <a class="btn btn-large btn-fav icon-heart" href="{{ path('bundle_favorite', { 'ownerName': bundle.ownerName, 'name': bundle.name }) }}" style="width:90px;{% if isFavoritedByDeveloper %}color:#000;{% endif %}">
+            &nbsp;
+            {%- if isFavoritedByDeveloper -%}
+                {% trans %}bundles.show.favorited{% endtrans %}
+            {%- else -%}
+                {% trans %}bundles.show.favorite{% endtrans %}
+            {%- endif -%}
+        </a>
     </div>
 </div>
 {%- endblock %}

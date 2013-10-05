@@ -302,6 +302,24 @@ class Bundle
     protected $activities;
 
     /**
+     * Developers who has favorited the bundle
+     *
+     * @ORM\ManyToMany(targetEntity="Developer", inversedBy="favoriteBundles")
+     * @ORM\JoinTable(name="bundles_favorites",
+     *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="knpbundles_owner_id", referencedColumnName="id")}
+     * )
+     *
+     * @var Collection
+     */
+    protected $favorers;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $nbFavorers = 0;
+
+    /**
      * @param null|string $fullName
      */
     public function __construct($fullName = null)
@@ -318,6 +336,7 @@ class Bundle
         $this->contributors = new ArrayCollection();
         $this->scores       = new ArrayCollection();
         $this->keywords     = new ArrayCollection();
+        $this->favorers     = new ArrayCollection();
     }
 
     public function isInitialized()
@@ -1136,6 +1155,56 @@ class Bundle
         ;
 
         return $this->activities->matching($criteria);
+    }
+
+    /**
+     * @param null|integer $page
+     * @param integer      $limit
+     *
+     * @return \Traversable
+     */
+    public function getFavorers($page = null, $limit = 20)
+    {
+        if (null === $page) {
+            return $this->favorers;
+        }
+
+        $paginator = new Pagerfanta(new DoctrineCollectionAdapter($this->favorers));
+        $paginator
+            ->setMaxPerPage($limit)
+            ->setCurrentPage($page)
+        ;
+
+        return $paginator->getCurrentPageResults();
+    }
+
+    public function getNbFavorers()
+    {
+        return count($this->favorers);
+    }
+
+    public function addFavorer(Developer $developer)
+    {
+        $developer->addFavoriteBundle($this);
+
+        $this->favorers[] = $developer;
+        $this->nbFavorers++;
+    }
+
+    public function removeFavorer(Developer $developer)
+    {
+        $developer->getFavoriteBundles()->removeElement($this);
+
+        $this->favorers->removeElement($developer);
+        $this->nbFavorers--;
+    }
+
+    /**
+     * @param integer $nbFavorers
+     */
+    public function setNbFavorers($nbFavorers)
+    {
+        $this->nbFavorers = $nbFavorers;
     }
 
     /**

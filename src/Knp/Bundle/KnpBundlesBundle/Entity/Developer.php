@@ -64,12 +64,22 @@ class Developer extends Owner implements UserInterface
      */
     private $activities;
 
+    /**
+     * Bundles this User has favorited
+     *
+     * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="favorers")
+     *
+     * @var Collection
+     */
+    private $favoriteBundles;
+
     public function __construct()
     {
         $this->activities          = new ArrayCollection();
         $this->organizations       = new ArrayCollection();
         $this->recommendedBundles  = new ArrayCollection();
         $this->contributionBundles = new ArrayCollection();
+        $this->favoriteBundles     = new ArrayCollection();
 
         parent::__construct();
     }
@@ -295,6 +305,61 @@ class Developer extends Owner implements UserInterface
         ;
 
         return $this->activities->matching($criteria);
+    }
+
+    /**
+     * Add favorite Bundle
+     *
+     * @param Bundle $favoriteBundle
+     */
+    public function addFavoriteBundle(Bundle $favoriteBundle)
+    {
+        $this->favoriteBundles[] = $favoriteBundle;
+    }
+
+    /**
+     * Remove favorite Bundle
+     *
+     * @param Bundle $favoriteBundle
+     */
+    public function removeFavoriteBundle(Bundle $favoriteBundle)
+    {
+        $this->favoriteBundles->removeElement($favoriteBundle);
+    }
+
+    /**
+     * Get favoriteBundles
+     *
+     * @param null|integer $page
+     * @param integer      $limit
+     *
+     * @return \Traversable
+     */
+    public function getFavoriteBundles($page = null, $limit = 15)
+    {
+        if (null === $page) {
+            return $this->favoriteBundles;
+        }
+
+        $paginator = new Pagerfanta(new DoctrineCollectionAdapter($this->favoriteBundles));
+        $paginator
+            ->setMaxPerPage($limit)
+            ->setCurrentPage($page)
+        ;
+
+        return $paginator->getCurrentPageResults();
+    }
+
+    /**
+     * Check that user has favorited bundles
+     *
+     * @param Bundle $bundle
+     *
+     * @return boolean
+     */
+    public function hasFavoritedBundle(Bundle $bundle)
+    {
+        return $this->favoriteBundles->contains($bundle);
     }
 
     public function toSmallArray()

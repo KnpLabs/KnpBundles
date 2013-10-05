@@ -164,4 +164,20 @@ class BundleManager
 
         return $bundle;
     }
+
+    /**
+     * @param Bundle    $bundle
+     * @param Developer $developer
+     */
+    public function manageBundleFavorites(Bundle $bundle, Developer $developer)
+    {
+        if ($developer->hasFavoritedBundle($bundle)) {
+            $bundle->removeFavorer($developer);
+        } else {
+            $bundle->addFavorer($developer);
+        }
+
+        $this->entityManager->persist($bundle);
+        $this->entityManager->flush();
+    }
 }

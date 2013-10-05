@@ -164,9 +164,10 @@ class BundleController extends BaseController
                     'data' => $bundle->getScores($scoresNumber),
                 )
             ),
-            'bundle'            => $bundle,
-            'score_details'     => $bundle->getScoreDetails(),
-            'isUsedByDeveloper' => $owner instanceof Developer && $owner->isUsingBundle($bundle)
+            'bundle'                 => $bundle,
+            'score_details'          => $bundle->getScoreDetails(),
+            'isUsedByDeveloper'      => $owner instanceof Developer && $owner->isUsingBundle($bundle),
+            'isFavoritedByDeveloper' => $owner instanceof Developer && $owner->hasFavoritedBundle($bundle)
         ));
     }
 
@@ -448,5 +449,26 @@ class BundleController extends BaseController
         }
 
         return $this->redirect($this->generateUrl('bundle_show', array('ownerName' => $bundle->getOwnerName(), 'name' => $bundle->getName())));
+    }
+
+    public function favoriteAction($ownerName, $name)
+    {
+        /* @var $bundle Bundle */
+        $bundle = $this->getRepository('Bundle')->findOneBy(array('ownerName' => $ownerName, 'name' => $name));
+
+        if (!$bundle) {
+            throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $ownerName, $name));
+        }
+
+        $url = $this->generateUrl('bundle_show', array('ownerName' => $ownerName, 'name' => $name));
+        $developer = $this->get('security.context')->getToken()->getUser();
+
+        if (!$developer instanceof Developer) {
+            return $this->redirect($url);
+        }
+
+        $this->get('knp_bundles.bundle.manager')->manageBundleFavorites($bundle, $developer);
+
+        return $this->redirect($url);
     }
 }

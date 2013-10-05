@@ -47,3 +47,8 @@ bundle_settings:
     pattern:        /bundle/settings/{id}
     defaults:       { _controller: KnpBundlesBundle:Bundle:settings }
     requirements:   { _method: "POST" }
+
+bundle_favorite:
+    pattern:        /{ownerName}/{name}/favorite
+    defaults:       { _controller: KnpBundlesBundle:Bundle:favorite }
+    requirements:   { _method: "GET" }
