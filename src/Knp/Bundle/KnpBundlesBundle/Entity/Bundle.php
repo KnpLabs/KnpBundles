@@ -977,7 +977,7 @@ class Bundle
 
     public function __toString()
     {
-        return $this->ownerName.'/'.$this->name;
+        return $this->getFullName();
     }
 
     public function getClass()
