@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "f81125cd003990747564480c8d753cb9",
+    "hash": "eecc34f5f8d65b80f0be9d88c3114cc3",
     "packages": [
         {
             "name": "avalanche123/imagine-bundle",
@@ -1025,30 +1025,30 @@
         },
         {
             "name": "hwi/oauth-bundle",
-            "version": "dev-master",
+            "version": "0.2.x-dev",
             "target-dir": "HWI/Bundle/OAuthBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hwi/HWIOAuthBundle.git",
-                "reference": "630d61ca64dfcafd02a13b61698fa99d7ec2c74e"
+                "reference": "eab8c7686b4c3392b0c6d1e207598ed4ea2a6e19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/630d61ca64dfcafd02a13b61698fa99d7ec2c74e",
-                "reference": "630d61ca64dfcafd02a13b61698fa99d7ec2c74e",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/eab8c7686b4c3392b0c6d1e207598ed4ea2a6e19",
+                "reference": "eab8c7686b4c3392b0c6d1e207598ed4ea2a6e19",
                 "shasum": ""
             },
             "require": {
                 "kriswallsmith/buzz": "~0.7",
-                "php": ">=5.3.3",
-                "symfony/framework-bundle": "~2.1",
-                "symfony/options-resolver": "~2.1",
-                "symfony/security-bundle": "~2.1"
+                "php": ">=5.3.2",
+                "symfony/framework-bundle": ">=2.0,<2.3-dev",
+                "symfony/security-bundle": ">=2.0,<2.3-dev"
             },
             "require-dev": {
-                "doctrine/orm": "~2.2",
-                "symfony/twig-bundle": "~2.1",
-                "symfony/validator": "~2.1"
+                "doctrine/orm": ">=2.1,<2.4-dev",
+                "friendsofsymfony/user-bundle": "~1.2",
+                "symfony/twig-bundle": ">=2.0,<2.3-dev",
+                "symfony/validator": ">=2.0,<2.3-dev"
             },
             "suggest": {
                 "doctrine/doctrine-bundle": "to use Doctrine user provider",
@@ -1058,7 +1058,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.3-dev"
+                    "dev-master": "0.2-dev"
                 }
             },
             "autoload": {
@@ -1086,53 +1086,28 @@
                 },
                 {
                     "name": "Joseph Bielawski",
-                    "email": "stloyd@gmail.com"
+                    "email": "stloyd+gh@gmail.com"
                 }
             ],
-            "description": "Support for authenticating users using both OAuth1.0a and OAuth2 in Symfony2.",
+            "description": "Support for authenticating users via oauth in Symfony2.",
             "homepage": "http://github.com/hwi/HWIOAuthBundle",
             "keywords": [
-                "37signals",
-                "Authentication",
-                "amazon",
-                "bitbucket",
-                "bitly",
-                "box",
-                "dailymotion",
-                "deviantart",
-                "disqus",
-                "dropbox",
-                "eventbrite",
                 "facebook",
                 "firewall",
-                "flickr",
-                "foursquare",
                 "github",
                 "google",
-                "instagram",
-                "jira",
                 "linkedin",
-                "mail.ru",
                 "oauth",
                 "oauth1",
                 "oauth2",
-                "odnoklassniki",
-                "qq",
                 "security",
                 "sensio connect",
-                "sina weibo",
-                "stack exchange",
-                "stereomood",
-                "trello",
-                "twitch",
                 "twitter",
                 "vkontakte",
                 "windows live",
-                "wordpress",
-                "yahoo",
-                "yandex"
+                "yahoo"
             ],
-            "time": "2013-09-28 12:37:04"
+            "time": "2013-09-25 07:03:02"
         },
         {
             "name": "igorw/file-serve-bundle",
@@ -1835,7 +1810,7 @@
         },
         {
             "name": "nelmio/solarium-bundle",
-            "version": "v1.1.0",
+            "version": "1.x-dev",
             "target-dir": "Nelmio/SolariumBundle",
             "source": {
                 "type": "git",
@@ -1890,7 +1865,7 @@
         },
         {
             "name": "oldsound/rabbitmq-bundle",
-            "version": "v1.2.0",
+            "version": "dev-master",
             "target-dir": "OldSound/RabbitMqBundle",
             "source": {
                 "type": "git",
@@ -2115,21 +2090,21 @@
         },
         {
             "name": "stof/doctrine-extensions-bundle",
-            "version": "v1.1.0",
+            "version": "dev-master",
             "target-dir": "Stof/DoctrineExtensionsBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stof/StofDoctrineExtensionsBundle.git",
-                "reference": "0aa21137bcae43241ffa047946bbdd46b91a2b0a"
+                "reference": "6e8dc798687963ffc4e4e0dfa687b361699855a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/0aa21137bcae43241ffa047946bbdd46b91a2b0a",
-                "reference": "0aa21137bcae43241ffa047946bbdd46b91a2b0a",
+                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/6e8dc798687963ffc4e4e0dfa687b361699855a9",
+                "reference": "6e8dc798687963ffc4e4e0dfa687b361699855a9",
                 "shasum": ""
             },
             "require": {
-                "gedmo/doctrine-extensions": "2.3.*",
+                "gedmo/doctrine-extensions": "~2.3.1",
                 "php": ">=5.3.2",
                 "symfony/framework-bundle": "~2.1"
             },
@@ -2173,7 +2148,7 @@
                 "translatable",
                 "tree"
             ],
-            "time": "2013-06-23 16:53:41"
+            "time": "2013-09-16 09:35:16"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -2832,16 +2807,16 @@
         },
         {
             "name": "behat/common-contexts",
-            "version": "v1.2.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/CommonContexts.git",
-                "reference": "563806a7b0c5d95fbd8e6599713e02668144eb4f"
+                "reference": "7a9abc1cc7cb1f2ca799f0bd975d0d9aacf0c1e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/CommonContexts/zipball/563806a7b0c5d95fbd8e6599713e02668144eb4f",
-                "reference": "563806a7b0c5d95fbd8e6599713e02668144eb4f",
+                "url": "https://api.github.com/repos/Behat/CommonContexts/zipball/7a9abc1cc7cb1f2ca799f0bd975d0d9aacf0c1e1",
+                "reference": "7a9abc1cc7cb1f2ca799f0bd975d0d9aacf0c1e1",
                 "shasum": ""
             },
             "require": {
@@ -2856,6 +2831,11 @@
                 "kriswallsmith/buzz": ">=0.5.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2.x-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Behat\\CommonContexts": ""
@@ -2896,7 +2876,7 @@
                 "Context",
                 "Symfony2"
             ],
-            "time": "2013-04-09 00:51:43"
+            "time": "2013-09-03 02:05:15"
         },
         {
             "name": "behat/gherkin",
@@ -3016,16 +2996,16 @@
         },
         {
             "name": "behat/mink-browserkit-driver",
-            "version": "v1.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/MinkBrowserKitDriver.git",
-                "reference": "63960c8fcad4529faad1ff33e950217980baa64c"
+                "reference": "6580790c180a34ae4344005bb9383b83588da851"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/MinkBrowserKitDriver/zipball/63960c8fcad4529faad1ff33e950217980baa64c",
-                "reference": "63960c8fcad4529faad1ff33e950217980baa64c",
+                "url": "https://api.github.com/repos/Behat/MinkBrowserKitDriver/zipball/6580790c180a34ae4344005bb9383b83588da851",
+                "reference": "6580790c180a34ae4344005bb9383b83588da851",
                 "shasum": ""
             },
             "require": {
@@ -3067,11 +3047,11 @@
                 "browser",
                 "testing"
             ],
-            "time": "2013-04-13 23:46:30"
+            "time": "2013-09-06 09:22:29"
         },
         {
             "name": "behat/mink-extension",
-            "version": "v1.2.0",
+            "version": "1.2.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/MinkExtension.git",
@@ -3125,16 +3105,16 @@
         },
         {
             "name": "behat/symfony2-extension",
-            "version": "v1.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Symfony2Extension.git",
-                "reference": "15d6ba65c381415a7c57980e7540ddeb95088f0b"
+                "reference": "1f60e6a1b028d95448fb7bb99d51d7bdecd2ee1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Symfony2Extension/zipball/15d6ba65c381415a7c57980e7540ddeb95088f0b",
-                "reference": "15d6ba65c381415a7c57980e7540ddeb95088f0b",
+                "url": "https://api.github.com/repos/Behat/Symfony2Extension/zipball/1f60e6a1b028d95448fb7bb99d51d7bdecd2ee1a",
+                "reference": "1f60e6a1b028d95448fb7bb99d51d7bdecd2ee1a",
                 "shasum": ""
             },
             "require": {
@@ -3143,15 +3123,14 @@
                 "symfony/framework-bundle": "~2.0"
             },
             "require-dev": {
-                "behat/mink": "~1.4.3",
-                "behat/mink-browserkit-driver": "~1.0.4",
-                "behat/mink-extension": "~1.0.1",
+                "behat/mink-browserkit-driver": "~1.0",
+                "behat/mink-extension": "~1.0",
                 "symfony/symfony": "~2.1"
             },
             "type": "behat-extension",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -3177,7 +3156,7 @@
                 "framework",
                 "symfony"
             ],
-            "time": "2013-08-17 19:02:21"
+            "time": "2013-09-16 08:22:20"
         }
     ],
     "aliases": [

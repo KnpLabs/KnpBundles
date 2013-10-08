@@ -15,7 +15,7 @@
         "sensio/distribution-bundle": "2.1.*",
         "doctrine/doctrine-fixtures-bundle": "v2.2.0",
         "doctrine/doctrine-migrations-bundle": "dev-master",
-        "stof/doctrine-extensions-bundle": "v1.1.0",
+        "stof/doctrine-extensions-bundle": "~1.1",
         "knplabs/knp-markdown-bundle": "1.2.*",
         "knplabs/knp-menu-bundle": "1.1.*",
         "knplabs/knp-disqus-bundle": "dev-master",
@@ -24,25 +24,25 @@
         "knplabs/github-api": "1.1.*",
         "avalanche123/imagine-bundle": "dev-master",
         "kriswallsmith/buzz": "0.7",
-        "nelmio/solarium-bundle": "v1.1.0",
+        "nelmio/solarium-bundle": "~1.1",
         "igorw/file-serve-bundle": "1.0.*",
         "white-october/pagerfanta-bundle": "dev-master",
 
-        "oldsound/rabbitmq-bundle": "v1.2.0",
+        "oldsound/rabbitmq-bundle": "~1.2",
 
         "ornicar/php-git-repo": "dev-master",
 
-        "hwi/oauth-bundle": "~0.3.0",
+        "hwi/oauth-bundle": "~0.2.9",
 
         "zendframework/zend-cache": "2.0.0-beta1",
         "zendframework/zend-filter": "2.0.0-beta1"
     },
     "require-dev": {
         "behat/behat":                  "2.5.*",
-        "behat/symfony2-extension":     "v1.1.0",
-        "behat/mink-extension":         "v1.2.0",
-        "behat/mink-browserkit-driver": "v1.1.0",
-        "behat/common-contexts":        "v1.2.0"
+        "behat/symfony2-extension":     "~1.1",
+        "behat/mink-extension":         "~1.2",
+        "behat/mink-browserkit-driver": "~1.1",
+        "behat/common-contexts":        "~1.2"
     },
     "repositories": [
         {
