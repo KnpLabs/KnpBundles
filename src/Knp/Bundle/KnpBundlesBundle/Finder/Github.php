@@ -2,13 +2,14 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Finder;
 
+use Github\Api\Repo;
 use Symfony\Component\DomCrawler\Crawler;
-use Goutte\Client;
+use Github\Client;
 
 /**
  * Finds github repositories using the github api
  */
-class Github extends CommonFinder
+class Github implements FinderInterface
 {
     const ENDPOINT         = 'https://github.com/search';
     const PARAMETER_QUERY  = 'q';
@@ -55,10 +56,59 @@ class Github extends CommonFinder
      */
     protected function extractUrlRepository($url)
     {
-        if (preg_match('/\/(?<username>[\w\.-]+)\/(?<repository>[\w\.-]+)/', $url, $matches)) {
+        if (preg_match('/https:\/\/github\.com\/(?<username>[\w\.-]+)\/(?<repository>[\w\.-]+)/', $url, $matches)) {
             return $matches['username'] . '/' . $matches['repository'];
         }
 
         return null;
+    }
+
+    /**
+     * @var string
+     */
+    private $query;
+
+    /**
+     * @var integer
+     */
+    private $limit;
+
+    /**
+     * @var Client
+     */
+    private $github;
+
+    /**
+     * @param null $query
+     * @param int $limit
+     * @param Client $github
+     */
+    public function __construct($query = null, $limit = 300, Client $github)
+    {
+        $this->query  = $query;
+        $this->limit  = $limit;
+        $this->github = $github;
+    }
+
+    /**
+     * Finds the repositories
+     *
+     * @return array
+     */
+    public function find()
+    {
+        /** @var Repo $repositoryApi */
+        $repositoryApi = $this->github->api('repo');
+
+        $repositories = array();
+
+        $repositoriesData = $repositoryApi->find($this->query, array('language' => 'php'));
+        $repositoriesData = $repositoriesData['repositories'];
+
+        foreach ($repositoriesData as $repositoryData) {
+            $repositories[] = $this->extractUrlRepository($repositoryData['url']);
+        }
+
+        return $repositories;
     }
 }
