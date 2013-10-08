@@ -43,7 +43,7 @@ class Github extends CommonFinder
      */
     protected function extractPageUrls(Crawler $crawler)
     {
-        return $crawler->filter('#code_search_results .result h2 a')->extract('href');
+        return $crawler->filter('#container h3.repolist-name a')->extract('href');
     }
 
     /**
