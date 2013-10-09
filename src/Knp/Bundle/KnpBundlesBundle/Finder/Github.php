@@ -49,13 +49,18 @@ class Github implements FinderInterface
         $repositoryApi = $this->github->api('repo');
 
         $repositories = array();
+        $page         = 1;
 
-        $repositoriesData = $repositoryApi->find($this->query, array('language' => 'php'));
-        $repositoriesData = $repositoriesData['repositories'];
+        do {
+            $repositoriesData = $repositoryApi->find($this->query, array('language' => 'php','per_page' => 2000, 'start_page' => $page));
+            $repositoriesData = $repositoriesData['repositories'];
 
-        foreach ($repositoriesData as $repositoryData) {
-            $repositories[] = $this->extractUrlRepository($repositoryData['url']);
-        }
+            foreach ($repositoriesData as $repositoryData) {
+                $repositories[] = $this->extractUrlRepository($repositoryData['url']);
+            }
+            $page++;
+
+        } while (!empty($repositoriesData));
 
         return $repositories;
     }
