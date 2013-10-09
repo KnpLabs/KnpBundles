@@ -10,6 +10,13 @@ use Knp\Bundle\KnpBundlesBundle\Manager\OwnerManager;
 class Organization extends Owner
 {
     /**
+     * Register organizations to avoid double
+     *
+     * @var array
+     */
+    static private $registeredOrganizations = array();
+
+    /**
      * @var OwnerManager
      */
     private $manager;
@@ -27,6 +34,7 @@ class Organization extends Owner
      */
     public function import($name, $update = true)
     {
+        //$organization = $this->manager->findOwnerBy(array('name' => ''))
         $organization = new EntityOrganization();
         $organization->setName($name);
 
@@ -34,7 +42,7 @@ class Organization extends Owner
             return false;
         }
 
-        return $organization;
+        return $this->checkIfRegister($organization);
     }
 
     /**
@@ -88,5 +96,17 @@ class Organization extends Owner
         }
 
         return $members;
+    }
+
+    private function checkIfRegister(EntityOrganization $organization)
+    {
+        foreach (self::$registeredOrganizations as $registeredOrganization) {
+            /** @var EntityOrganization $registeredOrganization  */
+            if ($organization->getName() === $registeredOrganization->getName()) {
+                return $registeredOrganization;
+            }
+        }
+        self::$registeredOrganizations[] = $organization;
+        return $organization;
     }
 }
