@@ -51,8 +51,10 @@ class Github implements FinderInterface
         $repositories = array();
         $page         = 1;
 
+        // Doesn't fetch more than 1000 results because github doesn't authorize this trick
+        // Notice that the crawling as an identical result
         do {
-            $repositoriesData = $repositoryApi->find($this->query, array('language' => 'php','per_page' => 2000, 'start_page' => $page));
+            $repositoriesData = $repositoryApi->find($this->query, array('language' => 'php', 'per-page' => 100, 'start_page' => $page));
             $repositoriesData = $repositoriesData['repositories'];
 
             foreach ($repositoriesData as $repositoryData) {
@@ -60,7 +62,7 @@ class Github implements FinderInterface
             }
             $page++;
 
-        } while (!empty($repositoriesData));
+        } while (!empty($repositoriesData) && $page < 10);
 
         return $repositories;
     }
