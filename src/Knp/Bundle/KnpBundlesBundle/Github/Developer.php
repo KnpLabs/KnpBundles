@@ -2,6 +2,7 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Github;
 
+use Github\Api\User;
 use Github\Exception\ApiLimitExceedException;
 use Github\Exception\RuntimeException;
 
@@ -9,6 +10,13 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Developer as EntityDeveloper;
 
 class Developer extends Owner
 {
+    /**
+     * Register organizations to avoid double
+     *
+     * @var array
+     */
+    static private $registeredDevelopers = array();
+
     /**
      * {@inheritDoc}
      */
@@ -21,7 +29,7 @@ class Developer extends Owner
             return false;
         }
 
-        return $developer;
+        return $this->checkIfRegister($developer);
     }
 
     /**
@@ -41,6 +49,7 @@ class Developer extends Owner
             $keywords[] = $developer->getEmail();
         }
 
+        /** @var User $api */
         $api = $this->github->api('user');
 
         try {
@@ -79,5 +88,17 @@ class Developer extends Owner
         $this->updateOwner($developer, $data);
 
         return true;
+    }
+
+    private function checkIfRegister(EntityDeveloper $developer)
+    {
+        foreach (self::$registeredDevelopers as $registeredOrganization) {
+            /** @var EntityDeveloper $registeredOrganization  */
+            if ($developer->getName() === $registeredOrganization->getName()) {
+                return $registeredOrganization;
+            }
+        }
+        self::$registeredDevelopers[] = $developer;
+        return $developer;
     }
 }
