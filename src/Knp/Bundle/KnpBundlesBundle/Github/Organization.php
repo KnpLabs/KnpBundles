@@ -34,7 +34,6 @@ class Organization extends Owner
      */
     public function import($name, $update = true)
     {
-        //$organization = $this->manager->findOwnerBy(array('name' => ''))
         $organization = new EntityOrganization();
         $organization->setName($name);
 
