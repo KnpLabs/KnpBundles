@@ -120,7 +120,6 @@ class BundleManager
             }
         }
         return $bundle;
-
     }
 
     /**
@@ -134,7 +133,6 @@ class BundleManager
         $bundle->setName($name);
 
         return $bundle;
-
     }
 
     /**
@@ -164,6 +162,5 @@ class BundleManager
         $owner->addBundle($bundle);
 
         return $bundle;
-
     }
 }
