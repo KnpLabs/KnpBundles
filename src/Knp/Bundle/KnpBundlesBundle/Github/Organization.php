@@ -12,7 +12,7 @@ class Organization extends Owner
     /**
      * Register organizations to avoid double
      *
-     * @var array
+     * @var array of strings
      */
     static private $registeredOrganizations = array();
 
@@ -100,12 +100,13 @@ class Organization extends Owner
     private function checkIfRegister(EntityOrganization $organization)
     {
         foreach (self::$registeredOrganizations as $registeredOrganization) {
-            /** @var EntityOrganization $registeredOrganization  */
-            if ($organization->getName() === $registeredOrganization->getName()) {
-                return $registeredOrganization;
+            /** @var string $registeredOrganization  */
+            if ($organization->getName() === $registeredOrganization) {
+                return true;
             }
         }
         self::$registeredOrganizations[] = $organization;
+
         return $organization;
     }
 }

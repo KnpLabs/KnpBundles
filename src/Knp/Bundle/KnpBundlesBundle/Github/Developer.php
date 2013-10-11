@@ -13,7 +13,7 @@ class Developer extends Owner
     /**
      * Register organizations to avoid double
      *
-     * @var array
+     * @var array of strings
      */
     static private $registeredDevelopers = array();
 
@@ -93,12 +93,13 @@ class Developer extends Owner
     private function checkIfRegister(EntityDeveloper $developer)
     {
         foreach (self::$registeredDevelopers as $registeredOrganization) {
-            /** @var EntityDeveloper $registeredOrganization  */
-            if ($developer->getName() === $registeredOrganization->getName()) {
-                return $registeredOrganization;
+            /** @var string $registeredOrganization  */
+            if ($developer->getName() === $registeredOrganization) {
+                return true;
             }
         }
-        self::$registeredDevelopers[] = $developer;
+        self::$registeredDevelopers[] = $developer->getName();
+
         return $developer;
     }
 }

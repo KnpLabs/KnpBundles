@@ -103,9 +103,11 @@ class OwnerManager
                 return false;
             }
 
-            $this->entityManager->persist($owner);
-            if ($flushEntities) {
-                $this->entityManager->flush();
+            if ($owner instanceof Owner) {
+                $this->entityManager->persist($owner);
+                if ($flushEntities) {
+                    $this->entityManager->flush();
+                }
             }
         }
 
