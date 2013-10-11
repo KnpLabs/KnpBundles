@@ -28,9 +28,9 @@
         <!-- Search "Symfony2 Bundle" on Github -->
         <service class="%knp_bundles.finder.github.class%" public="false">
             <tag name="knp_bundles.finder" />
+            <argument type="service" id="knp_bundles.github_client" />
             <argument>Bundle</argument>
             <argument>%knp_bundles.finder.limit%</argument>
-            <argument type="service" id="knp_bundles.github_client" />
         </service>
     </services>
 </container>

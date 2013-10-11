@@ -9,7 +9,7 @@ use Github\Client;
 /**
  * Finds github repositories using the github api
  */
-class Github implements FinderInterface
+class Github extends AbstractBaseFinder
 {
     /**
      * @var string
@@ -31,10 +31,10 @@ class Github implements FinderInterface
      * @param int $limit
      * @param Client $github
      */
-    public function __construct($query = null, $limit = 300, Client $github)
+    public function __construct(Client $github, $query = null, $limit = 300)
     {
-        $this->query  = $query;
-        $this->limit  = $limit;
+        parent::__construct($query, $limit);
+
         $this->github = $github;
     }
 
