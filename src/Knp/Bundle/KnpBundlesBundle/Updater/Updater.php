@@ -192,7 +192,7 @@ class Updater
             /** @var $bundle Bundle */
             foreach ($pager->getCurrentPageResults() as $bundle) {
                 if (!$this->githubRepoApi->validate($bundle)) {
-                    $this->notifyInvalid($bundle, sprintf('File "%sBundle.php" with base class was not found.', ucfirst($bundle->getFullName())));
+                    $this->notifyInvalid($bundle->getFullName(), sprintf('File "%sBundle.php" with base class was not found.', ucfirst($bundle->getFullName())));
 
                     if (!$this->removeRepo($bundle)) {
                         $bundle->getOwner()->removeBundle($bundle);
@@ -226,7 +226,7 @@ class Updater
                 if ($countActivities > $limit) {
                     try {
                         $latestActivities = $activityRepository->findLastActivitiesForBundle($bundle, $limit);
-                        
+
                         $leftActivities = array();
                         foreach ($latestActivities as $activity) {
                             $leftActivities[] = $activity->getId();
@@ -237,7 +237,7 @@ class Updater
                         // echoes progress dot
                         $this->output->write('<info>.</info>');
                     } catch (\Exception $e) {
-                        
+
                     }
                 }
             }
@@ -289,12 +289,12 @@ class Updater
     }
 
     /**
-     * @param Bundle|false      $bundle
+     * @param string|false      $bundle
      * @param null|string $reason
      */
     private function notifyInvalid($bundle, $reason = null)
     {
-        $this->output->writeln(sprintf('[%s] <error>%s</error>: INVALID - reason: %s', date('d-m-y H:i:s'), (string)$bundle, $reason));
+        $this->output->writeln(sprintf('[%s] <error>%s</error>: INVALID - reason: %s', date('d-m-y H:i:s'), $bundle, $reason));
     }
 
     /**
