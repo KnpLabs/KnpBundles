@@ -4,6 +4,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Pagerfanta\Pagerfanta;
@@ -457,7 +458,7 @@ class BundleController extends BaseController
         $bundle = $this->getRepository('Bundle')->findOneBy(array('ownerName' => $ownerName, 'name' => $name));
 
         if (!$bundle) {
-            throw new NotFoundHttpException(sprintf('The bundle "%s/%s" does not exist', $ownerName, $name));
+            return new Response(sprintf('The bundle "%s/%s" does not exist', $ownerName, $name), 404);
         }
 
         $url = $this->generateUrl('bundle_show', array('ownerName' => $ownerName, 'name' => $name));
@@ -467,8 +468,14 @@ class BundleController extends BaseController
             return $this->redirect($url);
         }
 
-        $this->get('knp_bundles.bundle.manager')->manageBundleFavorites($bundle, $developer);
+        $status = $this->get('knp_bundles.bundle.manager')->toggleBundleFavorite($bundle, $developer);
 
-        return $this->redirect($url);
+        return new JsonResponse(array(
+            'status' => 'OK',
+            'result' => array(
+                'favorited' => $status,
+                'label' => $status ? $this->get('translator')->trans('bundles.show.favorited') : $this->get('translator')->trans('bundles.show.favorite')
+            )
+        ));
     }
 }

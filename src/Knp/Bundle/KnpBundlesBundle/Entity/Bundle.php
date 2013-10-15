@@ -1180,7 +1180,7 @@ class Bundle
 
     public function getNbFavorers()
     {
-        return count($this->favorers);
+        return $this->nbFavorers;
     }
 
     public function addFavorer(Developer $developer)

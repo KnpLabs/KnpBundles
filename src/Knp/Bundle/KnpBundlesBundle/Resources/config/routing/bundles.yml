@@ -48,7 +48,7 @@ bundle_settings:
     defaults:       { _controller: KnpBundlesBundle:Bundle:settings }
     requirements:   { _method: "POST" }
 
-bundle_favorite:
+bundle_toggle_favorite:
     pattern:        /{ownerName}/{name}/favorite
     defaults:       { _controller: KnpBundlesBundle:Bundle:favorite }
-    requirements:   { _method: "GET" }
+    requirements:   { _method: "POST" }

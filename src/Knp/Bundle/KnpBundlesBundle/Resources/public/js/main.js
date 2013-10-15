@@ -137,4 +137,27 @@
             });
         }
     });
+
+    $('#fav-bundle-btn').bind('click', function(event) {
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('href'),
+            success: function(data) {
+                $(event.currentTarget).html(' ' + data.result.label);
+                if (data.result.favorited) {
+                    $(event.currentTarget).addClass('favorited');
+                } else {
+                    $(event.currentTarget).removeClass('favorited');
+                }
+            }
+        })
+        .fail(function(xhr){
+            alert(xhr.responseText);
+        });
+
+        return event.preventDefault();
+
+    });
+
 })(jQuery);

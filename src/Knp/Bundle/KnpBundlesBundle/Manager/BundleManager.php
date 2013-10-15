@@ -16,6 +16,7 @@ use Knp\Bundle\KnpBundlesBundle\Github\Repo;
  * Manages bundle entities
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
+ * @author Mohammad Emran Hasan <phpfour@gmail.com>
  */
 class BundleManager
 {
@@ -168,8 +169,9 @@ class BundleManager
     /**
      * @param Bundle    $bundle
      * @param Developer $developer
+     * @return bool
      */
-    public function manageBundleFavorites(Bundle $bundle, Developer $developer)
+    public function toggleBundleFavorite(Bundle $bundle, Developer $developer)
     {
         if ($developer->hasFavoritedBundle($bundle)) {
             $bundle->removeFavorer($developer);
@@ -179,5 +181,7 @@ class BundleManager
 
         $this->entityManager->persist($bundle);
         $this->entityManager->flush();
+
+        return $developer->hasFavoritedBundle($bundle);
     }
 }

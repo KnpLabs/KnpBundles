@@ -782,6 +782,10 @@ code, pre {
     margin-right: 2px;
 }
 
+#bundle-actions .favorited {
+    color: #333;
+}
+
 #content-holder {
     float: left;
     width: 900px;
