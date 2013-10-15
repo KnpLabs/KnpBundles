@@ -146,11 +146,7 @@
             success: function(data, state, xhr) {
                 if (data instanceof Object) {
                     $(event.currentTarget).html(' ' + data.result.label);
-                    if (data.result.favorited) {
-                        $(event.currentTarget).addClass('favorited');
-                    } else {
-                        $(event.currentTarget).removeClass('favorited');
-                    }
+                    $(event.currentTarget).toggleClass('favorited', data.result.favorited);
                 } else {
                     alert('You must be a logged in user to favorite this bundle.');
                     window.location.href = '/login';
