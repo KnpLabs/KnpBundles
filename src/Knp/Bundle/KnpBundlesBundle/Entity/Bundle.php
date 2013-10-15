@@ -305,10 +305,7 @@ class Bundle
      * Developers who has favorited the bundle
      *
      * @ORM\ManyToMany(targetEntity="Developer", inversedBy="favoriteBundles")
-     * @ORM\JoinTable(name="bundles_favorites",
-     *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="knpbundles_owner_id", referencedColumnName="id")}
-     * )
+     * @ORM\JoinTable(name="bundles_favorites")
      *
      * @var Collection
      */
