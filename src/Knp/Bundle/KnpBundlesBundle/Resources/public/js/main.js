@@ -143,16 +143,20 @@
         $.ajax({
             type: "POST",
             url: $(this).attr('href'),
-            success: function(data) {
-                $(event.currentTarget).html(' ' + data.result.label);
-                if (data.result.favorited) {
-                    $(event.currentTarget).addClass('favorited');
+            success: function(data, state, xhr) {
+                if (data instanceof Object) {
+                    $(event.currentTarget).html(' ' + data.result.label);
+                    if (data.result.favorited) {
+                        $(event.currentTarget).addClass('favorited');
+                    } else {
+                        $(event.currentTarget).removeClass('favorited');
+                    }
                 } else {
-                    $(event.currentTarget).removeClass('favorited');
+                    alert('You must be a logged in user to favorite this bundle.');
+                    window.location.href = '/login';
                 }
             }
-        })
-        .fail(function(xhr){
+        }).fail(function(xhr){
             alert(xhr.responseText);
         });
 

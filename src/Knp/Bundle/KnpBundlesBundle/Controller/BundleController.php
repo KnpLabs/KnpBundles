@@ -461,11 +461,10 @@ class BundleController extends BaseController
             return new Response(sprintf('The bundle "%s/%s" does not exist', $ownerName, $name), 404);
         }
 
-        $url = $this->generateUrl('bundle_show', array('ownerName' => $ownerName, 'name' => $name));
-        $developer = $this->get('security.context')->getToken()->getUser();
+        $developer = $this->getUser();
 
         if (!$developer instanceof Developer) {
-            return $this->redirect($url);
+            return new Response('You must log in as a Developer to favorite a bundle.', 400);
         }
 
         $status = $this->get('knp_bundles.bundle.manager')->toggleBundleFavorite($bundle, $developer);
