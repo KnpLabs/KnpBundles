@@ -12,16 +12,6 @@ use Github\Client;
 class Github extends AbstractBaseFinder
 {
     /**
-     * @var string
-     */
-    private $query;
-
-    /**
-     * @var integer
-     */
-    private $limit;
-
-    /**
      * @var Client
      */
     private $github;
