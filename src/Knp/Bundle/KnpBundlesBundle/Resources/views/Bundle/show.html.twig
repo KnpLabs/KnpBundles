@@ -49,7 +49,7 @@
     <tbody>
     {% for key, version in bundle.symfonyVersions %}
     <tr>
-        <td>{{ key }}</td><td>{{ version ? version : "bundles.show.infos.unknown"|trans }}</td>
+        <td>{{ key }}</td><td>{{ version ? version : 'bundles.show.infos.unknown'|trans }}</td>
     </tr>
     {% endfor %}
     </tbody>
@@ -335,7 +335,7 @@
                         {% if dependencyTitle not in ['name', 'extra'] %}
                             {{ _self.dependency(dependencies, 'bundles.show.dependency.' ~ dependencyTitle) }}
                         {% endif %}
-                    {% endfor %}    
+                    {% endfor %}
                 </div>
             {% endfor %}
         </div>
