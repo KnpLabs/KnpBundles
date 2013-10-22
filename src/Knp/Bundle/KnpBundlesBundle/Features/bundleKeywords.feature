@@ -21,37 +21,37 @@ Feature: Listing and searching bundles by keywords
     | UserBundle  | user         |
     | UserBundle  | user login   |
     And bundles are indexed
-    
+
   Scenario: List bundles by keyword
     When I go to "/keyword/test"
     Then I should see "2 bundles"
     And I should see "TestBundle"
     And I should see "Test2Bundle"
     And I should not see "UserBundle"
-    
+
   Scenario: List one bundle by unique keyword
     When I go to "/keyword/unique"
     Then I should see "1 bundle"
     And I should see "Test2Bundle"
     And I should not see "UserBundle"
     And I should not see "TestBundle"
-    
+
   Scenario: List bundles by complex keyword
     When I go to "/keyword/user-login"
     Then I should see "1 bundle"
     And I should see "UserBundle"
     And I should not see "TestBundle"
     And I should not see "Test2Bundle"
-    
+
   Scenario: List bundles by invalid keyword
     When I go to "/keyword/foo"
     Then I should see "0 bundles"
     And I should not see "UserBundle"
     And I should not see "TestBundle"
     And I should not see "Test2Bundle"
-    
+
   Scenario: Search one bundle with unique keyword
      When I go to "/"
      And I search for "unique"
      Then I should see "1 Bundle"
-     And I should see "Test2Bundle" 
+     And I should see "Test2Bundle"
