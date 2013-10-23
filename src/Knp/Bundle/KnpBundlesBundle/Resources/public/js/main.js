@@ -137,4 +137,27 @@
             });
         }
     });
+
+    $('#fav-bundle-btn').bind('click', function(event) {
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr('href'),
+            success: function(data, state, xhr) {
+                if (data instanceof Object) {
+                    $(event.currentTarget).html(' ' + data.result.label);
+                    $(event.currentTarget).toggleClass('favorited', data.result.favorited);
+                } else {
+                    alert('You must be a logged in user to favorite this bundle.');
+                    window.location.href = '/login';
+                }
+            }
+        }).fail(function(xhr){
+            alert(xhr.responseText);
+        });
+
+        return event.preventDefault();
+
+    });
+
 })(jQuery);

@@ -4,6 +4,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Pagerfanta\Pagerfanta;
@@ -164,9 +165,10 @@ class BundleController extends BaseController
                     'data' => $bundle->getScores($scoresNumber),
                 )
             ),
-            'bundle'            => $bundle,
-            'score_details'     => $bundle->getScoreDetails(),
-            'isUsedByDeveloper' => $owner instanceof Developer && $owner->isUsingBundle($bundle)
+            'bundle'                 => $bundle,
+            'score_details'          => $bundle->getScoreDetails(),
+            'isUsedByDeveloper'      => $owner instanceof Developer && $owner->isUsingBundle($bundle),
+            'isFavoritedByDeveloper' => $owner instanceof Developer && $owner->hasFavoritedBundle($bundle)
         ));
     }
 
@@ -448,5 +450,31 @@ class BundleController extends BaseController
         }
 
         return $this->redirect($this->generateUrl('bundle_show', array('ownerName' => $bundle->getOwnerName(), 'name' => $bundle->getName())));
+    }
+
+    public function favoriteAction($ownerName, $name)
+    {
+        /* @var $bundle Bundle */
+        $bundle = $this->getRepository('Bundle')->findOneBy(array('ownerName' => $ownerName, 'name' => $name));
+
+        if (!$bundle) {
+            return new Response(sprintf('The bundle "%s/%s" does not exist', $ownerName, $name), 404);
+        }
+
+        $developer = $this->getUser();
+
+        if (!$developer instanceof Developer) {
+            return new Response('You must log in as a Developer to favorite a bundle.', 400);
+        }
+
+        $status = $this->get('knp_bundles.bundle.manager')->toggleBundleFavorite($bundle, $developer);
+
+        return new JsonResponse(array(
+            'status' => 'OK',
+            'result' => array(
+                'favorited' => $status,
+                'label' => $status ? $this->get('translator')->trans('bundles.show.favorited') : $this->get('translator')->trans('bundles.show.favorite')
+            )
+        ));
     }
 }

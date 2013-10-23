@@ -118,6 +118,8 @@ bundles.show:
         suggest: Suggests
         none: none
         composer: Composer line
+    favorite: "Favorite"
+    favorited: "Favorited"
 
 bundles.score:
     followers:      "Github watchers:"
@@ -164,7 +166,9 @@ developers.show:
         nbBundles: "Number of bundles: "
         url: "Website: "
     bundles_manage: "Bundles I own"
-    bundles_contribute: "Bundles I contribute to"
+    bundles_contribute: "Contributed"
+    bundles_recommended: "Recommended"
+    bundles_favorited: "Favorited"
 
 developers.list:
     location: " from "

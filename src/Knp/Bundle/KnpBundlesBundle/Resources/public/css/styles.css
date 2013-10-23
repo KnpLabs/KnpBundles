@@ -774,6 +774,17 @@ code, pre {
     margin: 15px 0 0;
 }
 
+#bundle-actions .btn {
+    margin-right: 0;
+}
+
+#bundle-actions .btn:first-child {
+    margin-right: 2px;
+}
+
+#bundle-actions .favorited {
+    color: #333;
+}
 
 #content-holder {
     float: left;

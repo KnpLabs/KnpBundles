@@ -18,6 +18,7 @@ security:
         - { path: ^/add, roles: ROLE_USER }
         - { path: /change-usage-status$, roles: ROLE_USER }
         - { path: ^/bundle/settings, roles: ROLE_USER }
+        - { path: /favorite, roles: ROLE_USER }
 
     providers:
         knpbundles_user:
