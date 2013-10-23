@@ -3,7 +3,6 @@
 namespace Knp\Bundle\KnpBundlesBundle\Finder;
 
 use Github\Api\Repo;
-use Symfony\Component\DomCrawler\Crawler;
 use Github\Client;
 
 /**
