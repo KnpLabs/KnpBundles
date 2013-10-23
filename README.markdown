@@ -107,10 +107,10 @@ We use [Solr](http://lucene.apache.org/solr/) and its PHP client [Solarium](http
 To install Solr, follow this steps:
 
 1. Download the version 3.6.2 (new versions are not compatibles) and extract it
-2. Uses the command ``kb:solr:start --solr-path="/path/to/solar-3.6.2/example"
+2. Uses the command `kb:solr:start --solr-path="/path/to/solar-3.6.2/example"`
 3. And run `kb:solr:index --verbose`
 
-Use the default Jetty server included with SOLR. The default directory used for the installation is 'opt/solr/example'.
+Use the default Jetty server included with SOLR. The default directory used for the installation is `opt/solr/example`.
 Copy the recommended configuration and schema found [**here**](https://github.com/KnpLabs/KnpBundles/blob/master/src/Knp/Bundle/KnpBundlesBundle/Resources/solr/conf/schema.xml)
 to your solr/conf directory.
 
