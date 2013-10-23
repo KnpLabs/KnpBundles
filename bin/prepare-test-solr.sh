@@ -1,4 +1,4 @@
-echo "Suppression des anciennes données"
+echo "Delete old data"
 rm -rf apache_solr
 rm -f apache-solr-3.6.2.tgz
 
