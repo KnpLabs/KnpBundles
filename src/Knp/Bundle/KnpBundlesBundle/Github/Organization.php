@@ -105,7 +105,7 @@ class Organization extends Owner
                 return true;
             }
         }
-        self::$registeredOrganizations[] = $organization;
+        self::$registeredOrganizations[] = $organization->getName();
 
         return $organization;
     }
