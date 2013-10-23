@@ -85,7 +85,6 @@ class Updater
         $bundles = array();
         foreach ($this->finder->find() as $fullName) {
             list($ownerName, $bundleName) = explode('/', $fullName);
-
             // We have it in DB already, skip it
             if ($this->bundleManager->findBundleBy(array('ownerName' => $ownerName, 'name' => $bundleName))) {
                 continue;
@@ -106,7 +105,7 @@ class Updater
         foreach ($foundBundles as $fullName) {
             $bundle = $this->bundleManager->createBundle($fullName, false);
 
-            // It's not an valid Symfony2 Bundle or failed with our requirements (i.e: is a fork with less then 10 watchers)
+            // It's not a valid Symfony2 Bundle or failed with our requirements (i.e: is a fork with less then 10 watchers)
             if (!$bundle) {
                 $this->notifyInvalid($bundle, 'Bundle is not an valid Symfony2 Bundle or failed with our requirements , or we were not able to get such via API.');
                 continue;
@@ -193,7 +192,7 @@ class Updater
             /** @var $bundle Bundle */
             foreach ($pager->getCurrentPageResults() as $bundle) {
                 if (!$this->githubRepoApi->validate($bundle)) {
-                    $this->notifyInvalid($bundle, sprintf('File "%sBundle.php" with base class was not found.', ucfirst($bundle->getFullName())));
+                    $this->notifyInvalid($bundle->getFullName(), sprintf('File "%sBundle.php" with base class was not found.', ucfirst($bundle->getFullName())));
 
                     if (!$this->removeRepo($bundle)) {
                         $bundle->getOwner()->removeBundle($bundle);
@@ -227,7 +226,7 @@ class Updater
                 if ($countActivities > $limit) {
                     try {
                         $latestActivities = $activityRepository->findLastActivitiesForBundle($bundle, $limit);
-                        
+
                         $leftActivities = array();
                         foreach ($latestActivities as $activity) {
                             $leftActivities[] = $activity->getId();
@@ -238,7 +237,7 @@ class Updater
                         // echoes progress dot
                         $this->output->write('<info>.</info>');
                     } catch (\Exception $e) {
-                        
+
                     }
                 }
             }
@@ -290,12 +289,12 @@ class Updater
     }
 
     /**
-     * @param Bundle      $bundle
+     * @param string|false      $bundle
      * @param null|string $reason
      */
-    private function notifyInvalid(Bundle $bundle, $reason = null)
+    private function notifyInvalid($bundle, $reason = null)
     {
-        $this->output->writeln(sprintf('[%s] <error>%s</error>: INVALID - reason: %s', date('d-m-y H:i:s'), $bundle->getFullName(), $reason));
+        $this->output->writeln(sprintf('[%s] <error>%s</error>: INVALID - reason: %s', date('d-m-y H:i:s'), $bundle, $reason));
     }
 
     /**

@@ -10,32 +10,12 @@ use Buzz\Browser;
  *
  * @package KnpBundles
  */
-abstract class CommonFinder implements FinderInterface
+abstract class CommonFinder extends AbstractBaseFinder
 {
-    /**
-     * @var string
-     */
-    protected $query;
-    /**
-     * @var integer
-     */
-    protected $limit;
     /**
      * @var Browser
      */
     protected $browser;
-
-    /**
-     * Constructor
-     *
-     * @param string  $query
-     * @param integer $limit
-     */
-    public function __construct($query = null, $limit = 300)
-    {
-        $this->setQuery($query);
-        $this->setLimit($limit);
-    }
 
     /**
      * @param Browser $browser
@@ -43,26 +23,6 @@ abstract class CommonFinder implements FinderInterface
     public function setBrowser(Browser $browser)
     {
         $this->browser = $browser;
-    }
-
-    /**
-     * Defines the query
-     *
-     * @param string $query
-     */
-    public function setQuery($query)
-    {
-        $this->query = $query;
-    }
-
-    /**
-     * Defines the limit of results to fetch
-     *
-     * @param integer $limit
-     */
-    public function setLimit($limit)
-    {
-        $this->limit = $limit;
     }
 
     /**

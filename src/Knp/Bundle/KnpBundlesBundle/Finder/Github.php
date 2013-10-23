@@ -2,48 +2,58 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Finder;
 
-use Symfony\Component\DomCrawler\Crawler;
-use Goutte\Client;
+use Github\Api\Repo;
+use Github\Client;
 
 /**
  * Finds github repositories using the github api
  */
-class Github extends CommonFinder
+class Github extends AbstractBaseFinder
 {
-    const ENDPOINT         = 'https://github.com/search';
-    const PARAMETER_QUERY  = 'q';
-    const PARAMETER_START  = 'start_value';
+    /**
+     * @var Client
+     */
+    private $github;
 
     /**
-     * {@inheritdoc}
+     * @param null $query
+     * @param int $limit
+     * @param Client $github
      */
-    protected function buildUrl($page)
+    public function __construct(Client $github, $query = null, $limit = 300)
     {
-        $params = array(
-            self::PARAMETER_QUERY => $this->query,
-            'repo'                => null,
-            'langOverride'        => null,
-            'type'                => 'Repositories',
-            'language'            => 'PHP',
-        );
+        parent::__construct($query, $limit);
 
-        if ($page > 1) {
-            $params[self::PARAMETER_START] = $page;
-        }
-
-        return self::ENDPOINT . '?' . http_build_query($params);
+        $this->github = $github;
     }
 
     /**
-     * Extracts the urls from the given google results crawler
-     *
-     * @param  Crawler $crawler
+     * Finds the repositories
      *
      * @return array
      */
-    protected function extractPageUrls(Crawler $crawler)
+    public function find()
     {
-        return $crawler->filter('#code_search_results .result h2 a')->extract('href');
+        /** @var Repo $repositoryApi */
+        $repositoryApi = $this->github->api('repo');
+
+        $repositories = array();
+        $page         = 1;
+
+        // Doesn't fetch more than 1000 results because github doesn't authorize this trick
+        // Notice that the crawling as an identical result
+        do {
+            $repositoriesData = $repositoryApi->find($this->query, array('language' => 'php', 'per-page' => 100, 'start_page' => $page));
+            $repositoriesData = $repositoriesData['repositories'];
+
+            foreach ($repositoriesData as $repositoryData) {
+                $repositories[] = $this->extractUrlRepository($repositoryData['url']);
+            }
+            $page++;
+
+        } while (!empty($repositoriesData) && $page < 10);
+
+        return $repositories;
     }
 
     /**
@@ -55,7 +65,7 @@ class Github extends CommonFinder
      */
     protected function extractUrlRepository($url)
     {
-        if (preg_match('/\/(?<username>[\w\.-]+)\/(?<repository>[\w\.-]+)/', $url, $matches)) {
+        if (preg_match('/https:\/\/github\.com\/(?<username>[\w\.-]+)\/(?<repository>[\w\.-]+)/', $url, $matches)) {
             return $matches['username'] . '/' . $matches['repository'];
         }
 

@@ -90,7 +90,7 @@ class BundleManager
      * @param string  $fullName
      * @param boolean $flushEntities
      *
-     * @return boolean|Bundle
+     * @return boolean|Bundle return false if the bundle is not valid
      */
     public function createBundle($fullName, $flushEntities = true)
     {
@@ -119,7 +119,6 @@ class BundleManager
                 $this->entityManager->flush();
             }
         }
-
         return $bundle;
     }
 
@@ -140,7 +139,7 @@ class BundleManager
      * @param string $name
      * @param string $ownerName
      *
-     * @return boolean|Bundle
+     * @return boolean|Bundle return false if the bundle is not valid
      */
     private function createFullBundle($name, $ownerName)
     {

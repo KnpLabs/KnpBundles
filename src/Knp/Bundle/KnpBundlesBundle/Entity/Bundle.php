@@ -977,7 +977,7 @@ class Bundle
 
     public function __toString()
     {
-        return $this->ownerName.'/'.$this->name;
+        return $this->getFullName();
     }
 
     public function getClass()
@@ -1141,16 +1141,11 @@ class Bundle
     /**
      * Get required versions of Symfony from bundle Versions History
      *
-     * @return array
+     * @return array|null
      */
     public function getSymfonyVersions()
     {
-        // @todo remove this after all bundles update is pass
-        if (!isset($this->versionsHistory['symfony'])) {
-            return $this->versionsHistory;
-        }
-
-        return $this->versionsHistory['symfony'];
+        return empty($this->versionsHistory['symfony']) ? null : $this->versionsHistory['symfony'];
     }
 
     /**

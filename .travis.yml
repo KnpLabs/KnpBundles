@@ -15,7 +15,7 @@ before_script:
 
 script:
     - phpunit -c app/
-    - ./bin/behat-ci.sh
+    - ./bin/behat --format=progress @KnpBundlesBundle
 
 notifications:
     email:

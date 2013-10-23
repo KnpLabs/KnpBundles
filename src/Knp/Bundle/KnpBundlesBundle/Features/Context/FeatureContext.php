@@ -22,6 +22,7 @@ use Behat\MinkExtension\Context\MinkContext;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Symfony2Extension\Context\KernelAwareInterface;
 
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 use Behat\CommonContexts\SymfonyDoctrineContext;
@@ -157,9 +158,7 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
         }
 
         assertCount(count($etalon), $actual);
-        foreach ($actual as $needle) {
-            assertContains($needle, $etalon);
-        }
+        $this->recursiveArrayKeysCheck($actual, $etalon);
     }
 
     /**
@@ -264,6 +263,11 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
         $session = $this->getContainer()->get('session');
         $session->set('_security_secured_area', serialize($token));
         $session->save();
+
+        $this
+            ->getSession()
+            ->setCookie($session->getName(), $session->getId())
+        ;
     }
 
     /**
@@ -437,7 +441,7 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     /**
      * Returns entity manager
      *
-     * @return Doctrine\ORM\EntityManager
+     * @return \Doctrine\ORM\EntityManager
      */
     protected function getEntityManager()
     {
@@ -447,7 +451,7 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
     /**
      * Returns router service
      *
-     * @return Symfony\Bundle\FrameworkBundle\Routing\Router
+     * @return \Symfony\Bundle\FrameworkBundle\Routing\Router
      */
     protected function getRouter()
     {
@@ -499,5 +503,19 @@ class FeatureContext extends RawMinkContext implements KernelAwareInterface
         $property = $reflection->getProperty($propertyName);
         $property->setAccessible(true);
         $property->setValue($object, $value);
+    }
+
+    /**
+     * @param array $array1
+     * @param array $array2
+     */
+    private function recursiveArrayKeysCheck(array $array1, array $array2)
+    {
+        foreach ($array1 as $key => $value) {
+            assertTrue(array_key_exists($key, $array2));
+            if (gettype($value) == 'array') {
+                $this->recursiveArrayKeysCheck($array1[$key], $array2[$key]);
+            }
+        }
     }
 }
