@@ -120,6 +120,7 @@ class BundleManager
                 $this->entityManager->flush();
             }
         }
+
         return $bundle;
     }
 

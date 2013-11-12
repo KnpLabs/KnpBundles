@@ -103,7 +103,7 @@ class Updater
 
         /* @var $bundle Bundle */
         foreach ($foundBundles as $fullName) {
-            $bundle = $this->bundleManager->createBundle($fullName, false);
+            $bundle = $this->bundleManager->createBundle($fullName);
 
             // It's not a valid Symfony2 Bundle or failed with our requirements (i.e: is a fork with less then 10 watchers)
             if (!$bundle) {
