@@ -93,7 +93,9 @@ class OwnerManager
             $findBy['discriminator'] = $entityType;
         }
 
+
         $owner = $this->findOwnerBy($findBy);
+
         if (!$owner) {
             if (!$api = $this->getApiByOwnerName($ownerName)) {
                 return false;

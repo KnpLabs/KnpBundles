@@ -11,13 +11,6 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Developer as EntityDeveloper;
 class Developer extends Owner
 {
     /**
-     * Register organizations to avoid double
-     *
-     * @var array of strings
-     */
-    static private $registeredDevelopers = array();
-
-    /**
      * {@inheritDoc}
      */
     public function import($name, $update = true)
@@ -29,7 +22,7 @@ class Developer extends Owner
             return false;
         }
 
-        return $this->checkIfRegister($developer);
+        return $developer;
     }
 
     /**
@@ -88,18 +81,5 @@ class Developer extends Owner
         $this->updateOwner($developer, $data);
 
         return true;
-    }
-
-    private function checkIfRegister(EntityDeveloper $developer)
-    {
-        foreach (self::$registeredDevelopers as $registeredOrganization) {
-            /** @var string $registeredOrganization  */
-            if ($developer->getName() === $registeredOrganization) {
-                return true;
-            }
-        }
-        self::$registeredDevelopers[] = $developer->getName();
-
-        return $developer;
     }
 }
