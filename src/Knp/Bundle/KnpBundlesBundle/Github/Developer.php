@@ -58,7 +58,7 @@ class Developer extends Owner
                 }
 
                 try {
-                    $data = $api->search($field);
+                    $data = $api->find($field);
                     if (isset($data['users']) && 0 < count($data['users'])) {
                         $data = $data['users'][0];
                         // Let's call API one more time to get clean user data
