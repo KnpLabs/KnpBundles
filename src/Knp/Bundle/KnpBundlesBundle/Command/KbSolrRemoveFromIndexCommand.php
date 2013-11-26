@@ -2,7 +2,6 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Command;
 
-
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
@@ -12,7 +11,6 @@ use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Auto remove index which doesn't exists.
@@ -25,7 +23,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class KbSolrRemoveFromIndexCommand extends ContainerAwareCommand
 {
-
     protected function configure()
     {
         $this
@@ -45,10 +42,8 @@ class KbSolrRemoveFromIndexCommand extends ContainerAwareCommand
         /** @var EntityRepository $repository */
         $repository = $em->getRepository('KnpBundlesBundle:Bundle');
 
-
         $query = $solarium->createSelect();
         $query->setFields(array('name', 'ownerName'));
-
 
         try {
             $hasMoreResults = true;
@@ -79,9 +74,7 @@ class KbSolrRemoveFromIndexCommand extends ContainerAwareCommand
             }
 
         } catch (\Solarium_Client_HttpException $e) {
-
-            throw new HttpException(500, 'Seems that our search engine is currently offline. Please check later.');
+            throw new \Exception('Seems that our search engine is currently offline. Please check later.');
         }
-
     }
 }
