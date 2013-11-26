@@ -50,7 +50,10 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
         if (!$user) {
             $user = $this->ownerManager->createOwner($findBy['name']);
             if (!$user) {
-                throw new UsernameNotFoundException(sprintf('User with username "%s" could not found or created.', $findBy['name']));
+                throw new UsernameNotFoundException(sprintf(
+                    'User with username "%s" could not found or created. If your account doesn\'t exists as github account, we can\'t connect you for now.',
+                    $findBy['name']
+                ));
             }
         }
 
