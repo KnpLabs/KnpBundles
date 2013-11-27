@@ -38,6 +38,14 @@ with the callback:
 
 And update the parameters.yml with the Client ID and Secret.
 
+### Install PHP-Sundown
+
+KnpBundles uses php-sundown extension to convert markdown to HTML.
+
+To install this plugin you should use `pear` witch is available in `php-dev` package.
+
+Notice: sundown is in beta state for now, precise it during the installation or you will get an error.
+
 ### Install vendors
 
     curl -s http://getcomposer.org/installer | php
