@@ -2,7 +2,7 @@
 {% if app.user is not null %}
     <ul id="userbar">
         <li><a href="{{ path('developer_show', {'name': app.user.name }) }}"><img src="{{ app.user.avatarUrl }}" height="30" width="30" alt=""></a></li>
-        <li class="username"><a href="{{ path('developer_show', {'name': app.user.name }) }}"><span>{{ app.user.name }}</span></a></li>
+        <li class="username"><a href="{{ path('developer_show', {'name': app.user.name }) }}"><span>{{ app.user.name | truncate(8, false, '.') }}</span></a></li>
         <li class="logout"><a href="{{ path('_logout') }}"><i title="Log out" class="icon-off"></i></a></li>
     </ul>
 {% else %}
