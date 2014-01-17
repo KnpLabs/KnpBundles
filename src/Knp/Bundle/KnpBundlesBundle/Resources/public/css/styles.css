@@ -427,9 +427,9 @@ code, pre {
     background-color: #292b2f
 }
 #userbar .username span {
-    width:    60px;
+    width: 60px;
     overflow: hidden;
-    display:  block;
+    display: block;
 }
 
 #userbar .username a {
