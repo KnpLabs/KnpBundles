@@ -426,6 +426,11 @@ code, pre {
     padding: 6px 10px;
     background-color: #292b2f
 }
+#userbar .username span {
+    width: 60px;
+    overflow: hidden;
+    display: block;
+}
 
 #userbar .username a {
     color: #ccc
