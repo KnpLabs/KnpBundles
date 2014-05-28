@@ -180,6 +180,12 @@ class Updater
         } while ($pager->hasNextPage() && $pager->setCurrentPage($page, false, true));
     }
 
+    public function updateBundleData($owner, $name)
+    {
+        $bundle = $this->em->getRepository('KnpBundlesBundle:Bundle')->findOneByOwnerNameAndName($owner, $name);
+        $this->updateRepo($bundle);
+    }
+
     public function removeNonSymfonyBundles()
     {
         $counter = 0;

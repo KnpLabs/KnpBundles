@@ -205,6 +205,7 @@ class Repo
     {
         $this->output->write(' files');
 
+        /** @var \Github\Api\Repository\Contents $api */
         $api = $this->github->api('repo')->contents();
 
         try {
