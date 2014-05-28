@@ -5,6 +5,8 @@ parameters:
     knp_bundles.trending_bundle_twitterer.template: "Discover {name}, today's trending #Symfony2 bundle {url} on #KnpBundles"
     knp_bundles.consumer.update_bundle.class: Knp\Bundle\KnpBundlesBundle\Consumer\UpdateBundleConsumer
     knp_bundles.consumer.github_hook.class: Knp\Bundle\KnpBundlesBundle\Consumer\GithubHookConsumer
+    knp_bundles.producer.executor_producer.class: Knp\Bundle\KnpBundlesBundle\Producer\ExecutorProducer
+    old_sound_rabbit_mq.producer.class: Knp\Bundle\KnpBundlesBundle\Producer\RabbitProducer
     knp_bundles.bundle.manager.class: Knp\Bundle\KnpBundlesBundle\Manager\BundleManager
     knp_bundles.owner.manager.class: Knp\Bundle\KnpBundlesBundle\Manager\OwnerManager
     knp_bundles.output.class: Symfony\Component\Console\Output\NullOutput
@@ -128,6 +130,11 @@ services:
             - @knp_bundles.indexer.solr
         calls:
             - [ setLogger, [@logger]]
+
+    knp_bundles.producer.executor_producer:
+        class: %knp_bundles.producer.executor_producer.class%
+        arguments:
+            - @knp_bundles.consumer.update_bundle
 
     knp_bundles.imagine.gd:
         class: %knp_bundles.imagine.gd.class%
