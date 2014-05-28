@@ -4,6 +4,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Updater;
 
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\EntityManager;
+use PhpAmqpLib\Message\AMQPMessage;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -11,6 +12,7 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Github\HttpClient\ApiLimitExceedException;
 
 use OldSound\RabbitMqBundle\RabbitMq\Producer;
+use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
@@ -48,6 +50,11 @@ class Updater
     private $bundleUpdateProducer;
 
     /**
+     * @var ConsumerInterface
+     */
+    private $bundleUpdateConsumer;
+
+    /**
      * @param EntityManager   $em
      * @param BundleManager   $bundleManager
      * @param FinderInterface $finder
@@ -76,6 +83,14 @@ class Updater
     public function setBundleUpdateProducer(Producer $bundleUpdateProducer)
     {
         $this->bundleUpdateProducer = $bundleUpdateProducer;
+    }
+
+    /**
+     * @param ConsumerInterface $bundleUpdateConsumer
+     */
+    public function setBundleUpdateConsumer(ConsumerInterface $bundleUpdateConsumer)
+    {
+        $this->bundleUpdateConsumer = $bundleUpdateConsumer;
     }
 
     public function searchNewBundles()
@@ -262,12 +277,14 @@ class Updater
      */
     public function updateRepo(Bundle $bundle)
     {
-        if ($this->bundleUpdateProducer) {
-            // Create a Message object
-            $message = array('bundle_id' => $bundle->getId());
+        // Create a Message object
+        $message = array('bundle_id' => $bundle->getId());
 
+        if ($this->bundleUpdateProducer) {
             // RabbitMQ, publish my message!
             $this->bundleUpdateProducer->publish(json_encode($message));
+        } else if ($this->bundleUpdateConsumer) {
+            $this->bundleUpdateConsumer->execute(new AMQPMessage(json_encode($message)));
         }
     }
 
