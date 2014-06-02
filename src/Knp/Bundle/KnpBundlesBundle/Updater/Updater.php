@@ -48,7 +48,6 @@ class Updater
      */
     private $bundleUpdateProducer;
 
-
     /**
      * @param EntityManager   $em
      * @param BundleManager   $bundleManager
