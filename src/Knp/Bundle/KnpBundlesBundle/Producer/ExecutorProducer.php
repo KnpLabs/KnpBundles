@@ -22,4 +22,4 @@ class ExecutorProducer implements ProducerInterface
         $msg = new AMQPMessage($msgBody);
         $this->consumer->execute($msg);
     }
-} 
+}

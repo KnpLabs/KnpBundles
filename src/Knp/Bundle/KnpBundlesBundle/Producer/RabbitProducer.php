@@ -7,4 +7,4 @@ use OldSound\RabbitMqBundle\RabbitMq\Producer;
 class RabbitProducer extends Producer implements ProducerInterface
 {
 
-} 
+}
