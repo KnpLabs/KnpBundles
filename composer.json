@@ -42,7 +42,8 @@
         "behat/symfony2-extension":     "~1.1",
         "behat/mink-extension":         "~1.2",
         "behat/mink-browserkit-driver": "~1.1",
-        "behat/common-contexts":        "~1.2"
+        "behat/common-contexts":        "~1.2",
+        "phpunit/phpunit": "~3.7"
     },
     "repositories": [
         {
