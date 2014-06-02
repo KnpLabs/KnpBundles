@@ -4,6 +4,7 @@ namespace Knp\Bundle\KnpBundlesBundle\Updater;
 
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\EntityManager;
+use Knp\Bundle\KnpBundlesBundle\Producer\ProducerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -73,7 +74,7 @@ class Updater
     /**
      * @param Producer $bundleUpdateProducer
      */
-    public function setBundleUpdateProducer(Producer $bundleUpdateProducer)
+    public function setBundleUpdateProducer(ProducerInterface $bundleUpdateProducer)
     {
         $this->bundleUpdateProducer = $bundleUpdateProducer;
     }
@@ -180,6 +181,12 @@ class Updater
         } while ($pager->hasNextPage() && $pager->setCurrentPage($page, false, true));
     }
 
+    public function updateBundleData($owner, $name)
+    {
+        $bundle = $this->em->getRepository('KnpBundlesBundle:Bundle')->findOneByOwnerNameAndName($owner, $name);
+        $this->updateRepo($bundle);
+    }
+
     public function removeNonSymfonyBundles()
     {
         $counter = 0;
@@ -259,7 +266,6 @@ class Updater
         if ($this->bundleUpdateProducer) {
             // Create a Message object
             $message = array('bundle_id' => $bundle->getId());
-
             // RabbitMQ, publish my message!
             $this->bundleUpdateProducer->publish(json_encode($message));
         }
