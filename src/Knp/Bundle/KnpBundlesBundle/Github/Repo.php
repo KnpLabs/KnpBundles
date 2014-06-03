@@ -144,7 +144,7 @@ class Repo
             return false;
         }
 
-        $activities = $bundle->getLatestActivities();
+        $activities       = $bundle->getLatestActivities();
         $lastEverCommitAt = $bundle->getLastCommitAt();
 
         /* @var $developer EntityDeveloper */
