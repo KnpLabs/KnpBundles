@@ -163,7 +163,6 @@ class Repo
             );
 
             if (!empty($activities)) {
-                $shouldContinue = false;
                 foreach ($activities as $registeredActivity) {
                     if (
                         $registeredActivity->getMessage() === $activityData['message'] &&
