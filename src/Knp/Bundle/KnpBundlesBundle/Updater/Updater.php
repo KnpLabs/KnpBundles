@@ -106,21 +106,6 @@ class Updater
         foreach ($foundBundles as $fullName) {
             $bundle = $this->bundleManager->createBundle($fullName);
 
-            // It's not a valid Symfony2 Bundle or failed with our requirements (i.e: is a fork with less then 10 watchers)
-            if (!$bundle) {
-                $this->notifyInvalid($bundle, 'Bundle is not an valid Symfony2 Bundle or failed with our requirements , or we were not able to get such via API.');
-                continue;
-            }
-            $this->output->write(sprintf('[%s] Discover bundle <comment>%s</comment>: ', date('d-m-y H:i:s'), $bundle->getFullName()));
-
-            try {
-                $this->githubRepoApi->updateFiles($bundle);
-            } catch (\RuntimeException $e) {
-                $this->output->writeln(sprintf(' <error>%s</error>', $e->getMessage()));
-
-                continue;
-            }
-
             $this->em->persist($bundle);
 
             $this->updateRepo($bundle);
@@ -263,11 +248,31 @@ class Updater
      */
     public function updateRepo(Bundle $bundle)
     {
+        $this->updateBundle($bundle);
+
         if ($this->bundleUpdateProducer) {
             // Create a Message object
             $message = array('bundle_id' => $bundle->getId());
             // RabbitMQ, publish my message!
             $this->bundleUpdateProducer->publish(json_encode($message));
+        }
+    }
+
+    private function updateBundle(Bundle $bundle)
+    {
+        // It's not a valid Symfony2 Bundle or failed with our requirements (i.e: is a fork with less then 10 watchers)
+        if (!$bundle) {
+            $this->notifyInvalid($bundle, 'Bundle is not an valid Symfony2 Bundle or failed with our requirements , or we were not able to get such via API.');
+            continue;
+        }
+        $this->output->write(sprintf('[%s] Discover bundle <comment>%s</comment>: ', date('d-m-y H:i:s'), $bundle->getFullName()));
+
+        try {
+            $this->githubRepoApi->update($bundle);
+        } catch (\RuntimeException $e) {
+            $this->output->writeln(sprintf(' <error>%s</error>', $e->getMessage()));
+
+            continue;
         }
     }
 
