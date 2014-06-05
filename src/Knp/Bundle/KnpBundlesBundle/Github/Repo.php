@@ -153,30 +153,36 @@ class Repo
                 continue;
             }
 
-            $lastCommitAt = new \DateTime();
-            $lastCommitAt->setTimestamp(strtotime($commit['commit']['committer']['date']));
+            $lastCommitAt = new \DateTime($commit['commit']['committer']['date']);
+            $lastCommitAt->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+
+            $activityData = array(
+                'type'      => Activity::ACTIVITY_TYPE_COMMIT,
+                'message'   => strtok($commit['commit']['message'], "\n\r"),
+                'createdAt' => $lastCommitAt
+            );
+
+            if (!empty($activities)) {
+                $shouldContinue = false;
+                foreach ($activities as $registeredActivity) {
+                    if (
+                        $registeredActivity->getMessage() === $activityData['message'] &&
+                        $registeredActivity->getCreatedAt() == $activityData['createdAt']
+                    ) {
+                        continue 2;
+                    }
+                }
+            }
 
             // be sure that bundle have a latest date following to latest commit
             if ($lastCommitAt > $lastEverCommitAt) {
                 $lastEverCommitAt = $lastCommitAt;
             }
 
-            /* @var $activity Activity */
-            if ($activities) {
-                foreach ($activities as $key => $activity) {
-                    // If both activities have same type and time, skip (and "hide" it) as this is probably duplicate
-                    if ($lastCommitAt->getTimestamp() == $activity->getCreatedAt()->getTimestamp()) {
-                        unset($activities[$key]);
-
-                        continue 2;
-                    }
-                }
-            }
-
             $activity = new Activity();
-            $activity->setType(Activity::ACTIVITY_TYPE_COMMIT);
-            $activity->setMessage(strtok($commit['commit']['message'], "\n\r"));
-            $activity->setCreatedAt($lastCommitAt);
+            $activity->setType($activityData['type']);
+            $activity->setMessage($activityData['message']);
+            $activity->setCreatedAt($activityData['createdAt']);
             $activity->setBundle($bundle);
 
             if (isset($commit['committer']) && isset($commit['committer']['login'])) {
@@ -190,10 +196,10 @@ class Repo
         }
 
         // update last pushed commit date
-        $bundle->setLastCommitAt($lastEverCommitAt);
-       
+        $bundle->setLastCommitAt(clone $lastEverCommitAt);
+
         if ('developer' === $bundle->getOwnerType()) {
-            $bundle->getOwner()->setLastCommitAt($lastEverCommitAt);     
+            $bundle->getOwner()->setLastCommitAt(clone $lastEverCommitAt);
         }
 
         unset($activities);
@@ -268,7 +274,7 @@ class Repo
 
         if (null === $onlyFiles || in_array('configuration', $onlyFiles)) {
             try {
-                $this->updateCanonicalConfigFile($bundle);    
+                $this->updateCanonicalConfigFile($bundle);
             } catch (RuntimeException $e) {
 
             }

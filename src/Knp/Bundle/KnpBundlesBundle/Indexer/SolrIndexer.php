@@ -69,7 +69,7 @@ class SolrIndexer
         $document->setField('totalScore', $bundle->getScore());
         $document->setField('state', $bundle->getState());
         $document->setField('avatarUrl', $bundle->getOwner()->getAvatarUrl());
-        $document->setField('lastCommitAt', $helper->formatDate($bundle->getLastCommitAt()));
+        $document->setField('lastCommitAt', $helper->formatDate(clone $bundle->getLastCommitAt()));
         $document->setField('lastTweetedAt', null !== $bundle->getLastTweetedAt() ? $helper->formatDate($bundle->getLastTweetedAt()) : null);
 
         $keywords = array();
