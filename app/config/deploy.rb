@@ -26,7 +26,7 @@ set :use_set_permissions,       true
 set :shared_files,              ["app/config/parameters.yml", "app/Resources/java", "web/.htaccess", "bin/launch-rabbit-consumers.sh"]
 set :shared_children,           [app_path + "/logs"]
 set :use_composer,              true
-set :composer_options,          "--no-scripts --verbose --prefer-source"
+set :composer_options,          "--verbose --prefer-source"
 set :update_vendors,            false
 
 set :dump_assetic_assets,       true
