@@ -259,6 +259,48 @@ class Updater
     }
 
     /**
+     * This method is a fix in case of other commands don't work as expected.
+     */
+    public function removeDuplicatedActivities()
+    {
+        $counter = 0;
+        $page    = 1;
+        $pager   = $this->paginateExistingBundles($page);
+        $activityRepository = $this->em->getRepository('KnpBundlesBundle:Activity');
+
+        // paginate bundles to avoid explosion of the server
+        do {
+            /** @var $bundle Bundle */
+            foreach ($pager->getCurrentPageResults() as $bundle) {
+                $removed    = array();
+                $toDelete   = array();
+                $activities = $bundle->getActivities();
+                // Fetch bundle activities
+                foreach($activities as $activity) {
+                    if (in_array($activity->getId(), $removed)) {
+                        continue;
+                    }
+                    $similarActivities = $activityRepository->findAllSimilar($activity);
+                    if (!empty($similarActivities)) {
+                        // Fetch & delete similar activities
+                        foreach ($similarActivities as $similarActivity) {
+                            $removed[]  = $similarActivity->getId();
+                            $toDelete[] = $similarActivity->getId();
+                            $this->output->write('<info>.</info>');
+                            ++$counter;
+                        }
+                    }
+                }
+                $activityRepository->deleteIds($toDelete);
+            }
+            $page++;
+        } while($pager->hasNextPage() && $pager->setCurrentPage($page, false, true));
+
+        $this->output->writeln('');
+        $this->output->writeln(sprintf('[%s] for <comment>%s</comment> bundles activities were delete.', date('d-m-y H:i:s'), $counter));
+    }
+
+    /**
      * @param Bundle $bundle
      */
     public function updateRepo(Bundle $bundle)

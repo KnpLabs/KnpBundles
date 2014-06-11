@@ -87,6 +87,21 @@ class ActivityRepository extends EntityRepository
         ;
     }
 
+    public function deleteIds(array $ids)
+    {
+        if (empty($ids)) {
+            return;
+        }
+
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->delete('KnpBundlesBundle:Activity', 'a')
+            ->where($qb->expr()->in('a.id', $ids))
+            ->getQuery()
+            ->execute()
+        ;
+    }
+
     /**
      * @param string  $type
      * @param integer $bundleId
@@ -126,5 +141,30 @@ class ActivityRepository extends EntityRepository
         }
 
         return $query->getQuery();
+    }
+
+    /**
+     * @param  Activity $activity
+     * @return array
+     */
+    public function findAllSimilar(Activity $activity)
+    {
+        return $this
+            ->createQueryBuilder('a')
+            ->where('a.id != ?1')
+            ->andWhere('a.author = ?2')
+            ->andWhere('a.bundleName = ?3')
+            ->andWhere('a.bundleOwnerName = ?4')
+            ->andWhere('a.message = ?5')
+            ->andWhere('a.createdAt = ?6')
+            ->setParameter(1, $activity->getId())
+            ->setParameter(2, $activity->getAuthor())
+            ->setParameter(3, $activity->getBundleName())
+            ->setParameter(4, $activity->getBundleOwnerName())
+            ->setParameter(5, $activity->getMessage())
+            ->setParameter(6, $activity->getCreatedAt())
+            ->getQuery()
+            ->getResult()
+        ;
     }
 }

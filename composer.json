@@ -9,12 +9,13 @@
         "symfony/assetic-bundle": "2.1.*",
         "symfony/monolog-bundle": "2.1.*",
         "symfony/swiftmailer-bundle": "2.1.*",
-        "doctrine/orm": "2.3.*",
-        "doctrine/doctrine-bundle": "1.1.*",
-        "twig/extensions": "dev-master",
+        "doctrine/orm": "~2.2,>=2.2.3",
+        "doctrine/doctrine-bundle": "~1.1.0",
+        "twig/extensions": "~1.0",
         "sensio/distribution-bundle": "2.1.*",
         "doctrine/doctrine-fixtures-bundle": "~2.2.0",
         "doctrine/doctrine-migrations-bundle": "dev-master",
+        "doctrine/migrations": "dev-master",
         "stof/doctrine-extensions-bundle": "~1.1",
         "knplabs/knp-markdown-bundle": "1.2.*",
         "knplabs/knp-menu-bundle": "1.1.*",
@@ -26,7 +27,7 @@
         "kriswallsmith/buzz": "0.7",
         "nelmio/solarium-bundle": "~1.1",
         "igorw/file-serve-bundle": "1.0.*",
-        "white-october/pagerfanta-bundle": "dev-master",
+        "white-october/pagerfanta-bundle": "1.0.0",
 
         "oldsound/rabbitmq-bundle": "~1.2",
 
@@ -100,7 +101,6 @@
             }
         }
     ],
-    "minimum-stability": "dev",
     "scripts": {
         "post-install-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",

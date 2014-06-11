@@ -93,7 +93,6 @@ class OwnerManager
             $findBy['discriminator'] = $entityType;
         }
 
-
         $owner = $this->findOwnerBy($findBy);
 
         if (!$owner) {
