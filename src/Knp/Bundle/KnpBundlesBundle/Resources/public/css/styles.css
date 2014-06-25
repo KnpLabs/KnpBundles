@@ -393,19 +393,20 @@ code, pre {
 }
 
 #search-box input[type="text"] {
-    width: 140px;
-    padding: 8px 6px 7px;
+    width: 128px;
+    padding: 9px 6px 8px;
     font-size: 12px;
     border: 0;
-    border-radius: 2px 0 0 2px;
-    background: #fff
+    border-radius: 4px 0 0 4px;
+    background: #fff;
+
 }
 
 #search-box input[type="submit"] {
-    padding: 8px 15px 7px 10px;
+    padding: 9px 15px 8px 10px;
     font-size: 12px;
     border: 0;
-    border-radius: 0 2px 2px 0;
+    border-radius: 0 4px 4px 0;
     background: #fff url('../images/icon_magnifier.gif') no-repeat 50% 50%
 }
 
