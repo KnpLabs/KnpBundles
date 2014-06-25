@@ -10,5 +10,14 @@
     <services>
         <!-- Entity manager -->
         <service id="knp_bundles.entity_manager" alias="doctrine.orm.entity_manager" />
+
+        <service
+            id="knp_bundles.repository.developer"
+            class="Knp\Bundle\KnpBundlesBundle\Repository\DeveloperRepository"
+            factory-service="knp_bundles.entity_manager"
+            factory-method="getRepository">
+            <argument>Knp\Bundle\KnpBundlesBundle\Entity\Developer</argument>
+        </service>
+
     </services>
 </container>

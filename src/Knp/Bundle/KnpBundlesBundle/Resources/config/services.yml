@@ -1,9 +1,11 @@
 parameters:
     knp_bundles.updater.class: Knp\Bundle\KnpBundlesBundle\Updater\Updater
+    knp_bundles.developer_updater.class: Knp\Bundle\KnpBundlesBundle\Updater\DeveloperUpdater
     knp_bundles.user.provider.class: Knp\Bundle\KnpBundlesBundle\Security\Core\User\UserProvider
     knp_bundles.trending_bundle_twitterer.class: Knp\Bundle\KnpBundlesBundle\Twitterer\TrendingBundleTwitterer
     knp_bundles.trending_bundle_twitterer.template: "Discover {name}, today's trending #Symfony2 bundle {url} on #KnpBundles"
     knp_bundles.consumer.update_bundle.class: Knp\Bundle\KnpBundlesBundle\Consumer\UpdateBundleConsumer
+    knp_bundles.consumer.update_developer.class: Knp\Bundle\KnpBundlesBundle\Consumer\UpdateDeveloperConsumer
     knp_bundles.consumer.github_hook.class: Knp\Bundle\KnpBundlesBundle\Consumer\GithubHookConsumer
     knp_bundles.producer.executor_producer.class: Knp\Bundle\KnpBundlesBundle\Producer\ExecutorProducer
     old_sound_rabbit_mq.producer.class: Knp\Bundle\KnpBundlesBundle\Producer\RabbitProducer
@@ -42,6 +44,14 @@ services:
             - @knp_bundles.bundle.manager
             - @knp_bundles.finder
             - @knp_bundles.github_repository_api
+
+    knp_bundles.developer_updater:
+        class: %knp_bundles.developer_updater.class%
+        arguments:
+            - @old_sound_rabbit_mq.update_developer_producer
+            - @knp_bundles.entity_manager
+            - @knp_bundles.repository.developer
+            - @knp_bundles.github.developer
 
     knp_bundles.bundle.manager:
         class: %knp_bundles.bundle.manager.class%
@@ -130,6 +140,11 @@ services:
             - @knp_bundles.indexer.solr
         calls:
             - [ setLogger, [@logger]]
+
+    knp_bundles.consumer.update_developer:
+        class: %knp_bundles.consumer.update_developer.class%
+        arguments:
+            - @knp_bundles.developer_updater
 
     knp_bundles.producer.executor_producer:
         class: %knp_bundles.producer.executor_producer.class%

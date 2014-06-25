@@ -97,12 +97,21 @@ old_sound_rabbit_mq:
         update_bundle:
             connection: default
             exchange_options: {name: 'upload-bundle', type: direct, durable: true, auto_delete: false }
+        update_developer:
+            connection: default
+            exchange_options: {name: 'update-developer', type: direct, durable: true, auto_delete: false }
+
     consumers:
         update_bundle:
             connection: default
             exchange_options: {name: 'upload-bundle', type: direct, durable: true, auto_delete: false }
             queue_options:    {name: 'upload-bundle'}
             callback:         knp_bundles.consumer.update_bundle
+        update_developer:
+            connection: default
+            exchange_options: {name: 'update-developer', type: direct, durable: true, auto_delete: false }
+            queue_options:    {name: 'update-developer'}
+            callback:         knp_bundles.consumer.update_developer
     anon_consumers:
         github_hook:
             connection: default

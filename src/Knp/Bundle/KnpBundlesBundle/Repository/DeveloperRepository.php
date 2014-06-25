@@ -9,6 +9,25 @@ use Doctrine\ORM\EntityRepository;
  */
 class DeveloperRepository extends OwnerRepository
 {
+    public function findAllNameOnly()
+    {
+        return $this->createQueryBuilder('d')
+            ->select('d.name')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findOneByName($name)
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     public function findOneByNameWithRepos($name)
     {
         return $this->createQueryBuilder('d')
