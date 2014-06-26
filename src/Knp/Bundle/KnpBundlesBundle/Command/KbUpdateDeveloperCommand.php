@@ -42,6 +42,14 @@ class KbUpdateDeveloperCommand extends ContainerAwareCommand
         /* @var $updater \Knp\Bundle\KnpBundlesBundle\Updater\DeveloperUpdater */
         $updater = $container->get('knp_bundles.developer_updater');
 
+        $updater->setMessenger(function($developerName) use ($output) {
+            $output->writeln(sprintf(
+                    'Developer with username "%s" has been queued for update',
+                    $developerName
+                )
+            );
+        });
+
         if ($name = $input->getArgument('name')) {
             $updater->updateDeveloperByName($name);
         }

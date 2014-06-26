@@ -16,6 +16,8 @@ class DeveloperUpdater
     protected $developerRepository;
     protected $githubDeveloper;
 
+    protected $messenger;
+
     public function __construct(
         RabbitProducer $updateDeveloperProducer,
         EntityManager $entityManager,
@@ -26,6 +28,8 @@ class DeveloperUpdater
         $this->entityManager = $entityManager;
         $this->developerRepository = $developerRepository;
         $this->githubDeveloper = $githubDeveloper;
+
+        $this->messenger = function($name){};
     }
 
     public function updateAll()
@@ -59,8 +63,17 @@ class DeveloperUpdater
         }
     }
 
+    public function setMessenger(\Closure $messenger)
+    {
+        $this->messenger = $messenger;
+    }
+
     protected function publishUpdateMessage($name)
     {
         $this->updateDeveloperProducer->publish(json_encode(array('name' => $name)));
+
+        // can not just use `$this->messenger($name)`
+        // cause this will be call of nonexistent method
+        $this->messenger->__invoke($name);
     }
 }
