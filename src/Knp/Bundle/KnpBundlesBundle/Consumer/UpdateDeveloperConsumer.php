@@ -5,21 +5,21 @@ namespace Knp\Bundle\KnpBundlesBundle\Consumer;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 
-use Knp\Bundle\KnpBundlesBundle\Updater\DeveloperUpdater;
+use Knp\Bundle\KnpBundlesBundle\Updater\DeveloperUpdaterManager;
 
 class UpdateDeveloperConsumer implements ConsumerInterface
 {
-    protected $developerUpdater;
+    protected $developerUpdaterManager;
 
-    public function __construct(DeveloperUpdater $developerUpdater)
+    public function __construct(DeveloperUpdaterManager $developerUpdaterManager)
     {
-        $this->developerUpdater = $developerUpdater;
+        $this->developerUpdaterManager = $developerUpdaterManager;
     }
 
     public function execute(AMQPMessage $msg)
     {
         $message = json_decode($msg->body, true);
         $name = $message['name'];
-        $this->developerUpdater->performDeveloperUpdate($name);
+        $this->developerUpdaterManager->performDeveloperUpdate($name);
     }
 }

@@ -29,6 +29,12 @@ class KbUpdateDeveloperCommand extends ContainerAwareCommand
                 InputOption::VALUE_NONE,
                 'Update all Developers'
             )
+            ->addOption(
+                'rabbitmq',
+                null,
+                InputOption::VALUE_NONE,
+                'Using rabbitmq if specified'
+            )
         ;
     }
 
@@ -39,23 +45,29 @@ class KbUpdateDeveloperCommand extends ContainerAwareCommand
     {
         $container = $this->getContainer();
 
-        /* @var $updater \Knp\Bundle\KnpBundlesBundle\Updater\DeveloperUpdater */
-        $updater = $container->get('knp_bundles.developer_updater');
+        /* @var $updaterManager \Knp\Bundle\KnpBundlesBundle\Updater\DeveloperUpdaterManager */
+        $updaterManager = $container->get('knp_bundles.developer_updater_manager');
 
-        $updater->setMessenger(function($developerName) use ($output) {
+        $updaterStrategy = $input->getOption('rabbitmq') ?
+            $container->get('knp_bundles.developer_updater.strategy.rabbit_mq') :
+            $container->get('knp_bundles.developer_updater.strategy.plain')
+        ;
+        $updaterManager->setUpdateStrategy($updaterStrategy);
+
+        $updaterManager->setMessenger(function($developerName) use ($output) {
             $output->writeln(sprintf(
-                    'Developer with username "%s" has been queued for update',
+                    'Developer with username "%s" has been updated',
                     $developerName
                 )
             );
         });
 
         if ($name = $input->getArgument('name')) {
-            $updater->updateDeveloperByName($name);
+            $updaterManager->updateDeveloperByName($name);
         }
 
         if ($input->getOption('all')) {
-            $updater->updateAll();
+            $updaterManager->updateAll();
         }
     }
 }

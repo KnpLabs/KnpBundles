@@ -1,6 +1,6 @@
 parameters:
     knp_bundles.updater.class: Knp\Bundle\KnpBundlesBundle\Updater\Updater
-    knp_bundles.developer_updater.class: Knp\Bundle\KnpBundlesBundle\Updater\DeveloperUpdater
+    knp_bundles.developer_updater_manager.class: Knp\Bundle\KnpBundlesBundle\Updater\DeveloperUpdaterManager
     knp_bundles.user.provider.class: Knp\Bundle\KnpBundlesBundle\Security\Core\User\UserProvider
     knp_bundles.trending_bundle_twitterer.class: Knp\Bundle\KnpBundlesBundle\Twitterer\TrendingBundleTwitterer
     knp_bundles.trending_bundle_twitterer.template: "Discover {name}, today's trending #Symfony2 bundle {url} on #KnpBundles"
@@ -45,13 +45,28 @@ services:
             - @knp_bundles.finder
             - @knp_bundles.github_repository_api
 
-    knp_bundles.developer_updater:
-        class: %knp_bundles.developer_updater.class%
+    knp_bundles.developer_updater_manager:
+        class: %knp_bundles.developer_updater_manager.class%
         arguments:
-            - @old_sound_rabbit_mq.update_developer_producer
+            - @knp_bundles.repository.developer
+            - @knp_bundles.developer_updater_plain
+
+    knp_bundles.developer_updater_plain:
+        class: Knp\Bundle\KnpBundlesBundle\Updater\DeveloperUpdaterPlain
+        arguments:
             - @knp_bundles.entity_manager
             - @knp_bundles.repository.developer
             - @knp_bundles.github.developer
+
+    knp_bundles.developer_updater.strategy.plain:
+        class: Knp\Bundle\KnpBundlesBundle\Updater\DeveloperUpdaterPlainStrategy
+        arguments:
+            - @knp_bundles.developer_updater_plain
+
+    knp_bundles.developer_updater.strategy.rabbit_mq:
+        class: Knp\Bundle\KnpBundlesBundle\Updater\DeveloperUpdaterRabbitMqStrategy
+        arguments:
+            - @old_sound_rabbit_mq.update_developer_producer
 
     knp_bundles.bundle.manager:
         class: %knp_bundles.bundle.manager.class%
@@ -144,7 +159,7 @@ services:
     knp_bundles.consumer.update_developer:
         class: %knp_bundles.consumer.update_developer.class%
         arguments:
-            - @knp_bundles.developer_updater
+            - @knp_bundles.developer_updater_manager
 
     knp_bundles.producer.executor_producer:
         class: %knp_bundles.producer.executor_producer.class%
