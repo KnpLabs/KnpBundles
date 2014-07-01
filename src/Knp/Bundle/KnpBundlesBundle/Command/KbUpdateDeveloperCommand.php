@@ -30,10 +30,10 @@ class KbUpdateDeveloperCommand extends ContainerAwareCommand
                 'Update all Developers'
             )
             ->addOption(
-                'rabbitmq',
+                'plain',
                 null,
                 InputOption::VALUE_NONE,
-                'Using rabbitmq if specified'
+                'Use plain Developer update, bypass RabbitMQ'
             )
         ;
     }
@@ -48,9 +48,9 @@ class KbUpdateDeveloperCommand extends ContainerAwareCommand
         /* @var $updaterManager \Knp\Bundle\KnpBundlesBundle\Updater\DeveloperUpdaterManager */
         $updaterManager = $container->get('knp_bundles.developer_updater_manager');
 
-        $updaterStrategy = $input->getOption('rabbitmq') ?
-            $container->get('knp_bundles.developer_updater.strategy.rabbit_mq') :
-            $container->get('knp_bundles.developer_updater.strategy.plain')
+        $updaterStrategy = $input->getOption('plain') ?
+            $container->get('knp_bundles.developer_updater.strategy.plain') :
+            $container->get('knp_bundles.developer_updater.strategy.rabbit_mq')
         ;
         $updaterManager->setUpdateStrategy($updaterStrategy);
 
