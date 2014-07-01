@@ -25,12 +25,12 @@ class Organization extends Owner
     /**
      * {@inheritDoc}
      */
-    public function import($name, $update = true)
+    public function import($name, $update = true, $updateMembers = true)
     {
         $organization = new EntityOrganization();
         $organization->setName($name);
 
-        if ($update && !$this->update($organization)) {
+        if ($update && !$this->update($organization, $updateMembers)) {
             return false;
         }
 
@@ -42,7 +42,7 @@ class Organization extends Owner
      *
      * @return boolean
      */
-    public function update(EntityOrganization $organization)
+    public function update(EntityOrganization $organization, $updateMembers = true)
     {
         $keywords = array(
             $organization->getName()
@@ -67,12 +67,14 @@ class Organization extends Owner
 
         $this->updateOwner($organization, $data);
 
-        try {
-            $membersData = $api->members()->all($organization->getName());
+        if ($updateMembers) {
+            try {
+                $membersData = $api->members()->all($organization->getName());
 
-            $organization->setMembers($this->updateMembers($membersData));
-        } catch(RuntimeException $e) {
-            // Api limit ? Can't access members info ? Skip it for now then.
+                $organization->setMembers($this->updateMembers($membersData));
+            } catch(RuntimeException $e) {
+                // Api limit ? Can't access members info ? Skip it for now then.
+            }
         }
 
         return true;
