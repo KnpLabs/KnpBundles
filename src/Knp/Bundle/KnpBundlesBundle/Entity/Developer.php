@@ -127,7 +127,7 @@ class Developer extends Owner implements UserInterface
      */
     public function addOrganization(Organization $organization)
     {
-        $this->organizations[] = $organization;
+        $this->organizations->add($organization);
 
         $organization->addMember($this);
     }

@@ -33,7 +33,7 @@ class Organization extends Owner
      */
     public function addMember(Developer $member)
     {
-        $this->members[] = $member;
+        $this->members->add($member);
     }
 
     /**
