@@ -1261,16 +1261,16 @@
         },
         {
             "name": "knplabs/github-api",
-            "version": "1.1.4",
+            "version": "1.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/php-github-api.git",
-                "reference": "e55c465f1eea1d9a4860e88e687717142ba77b4f"
+                "reference": "6ee8ad85e4d4a82e8ab92ac76fd14671dbba5158"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/e55c465f1eea1d9a4860e88e687717142ba77b4f",
-                "reference": "e55c465f1eea1d9a4860e88e687717142ba77b4f",
+                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/6ee8ad85e4d4a82e8ab92ac76fd14671dbba5158",
+                "reference": "6ee8ad85e4d4a82e8ab92ac76fd14671dbba5158",
                 "shasum": ""
             },
             "require": {
@@ -1312,7 +1312,7 @@
                 "gist",
                 "github"
             ],
-            "time": "2013-08-30 21:41:55"
+            "time": "2014-07-01 15:38:55"
         },
         {
             "name": "knplabs/knp-disqus-bundle",
