@@ -56,7 +56,10 @@ services:
         arguments:
             - @knp_bundles.entity_manager
             - @knp_bundles.repository.developer
+            - @knp_bundles.repository.organization
             - @knp_bundles.github.developer
+            - @knp_bundles.github.organization
+            - @knp_bundles.owner.manager
 
     knp_bundles.developer_updater.strategy.plain:
         class: Knp\Bundle\KnpBundlesBundle\Updater\DeveloperUpdaterPlainStrategy
