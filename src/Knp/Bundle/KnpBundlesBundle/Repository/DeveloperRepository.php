@@ -18,16 +18,6 @@ class DeveloperRepository extends OwnerRepository
         ;
     }
 
-    public function findOneByName($name)
-    {
-        return $this->createQueryBuilder('d')
-            ->where('d.name = :name')
-            ->setParameter('name', $name)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-
     public function findOneByNameWithRepos($name)
     {
         return $this->createQueryBuilder('d')
