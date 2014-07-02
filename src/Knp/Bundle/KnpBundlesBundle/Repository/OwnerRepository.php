@@ -12,6 +12,16 @@ use Knp\Bundle\KnpBundlesBundle\Entity\Owner;
  */
 class OwnerRepository extends EntityRepository
 {
+    public function findOneByName($name)
+    {
+        return $this->createQueryBuilder('o')
+            ->where('o.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     /**
      * Lookup for Owner by check of unique fields
      *

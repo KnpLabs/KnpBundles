@@ -22,7 +22,7 @@
         "knplabs/knp-disqus-bundle": "dev-master",
         "knplabs/knp-time-bundle": "dev-master",
         "knplabs/knp-zend-cache-bundle": "dev-master",
-        "knplabs/github-api": "1.1.*",
+        "knplabs/github-api": "1.2.*",
         "avalanche123/imagine-bundle": "dev-master",
         "kriswallsmith/buzz": "0.7",
         "nelmio/solarium-bundle": "~1.1",
@@ -36,7 +36,8 @@
         "hwi/oauth-bundle": "~0.2.9",
 
         "zendframework/zend-cache": "2.0.0-beta1",
-        "zendframework/zend-filter": "2.0.0-beta1"
+        "zendframework/zend-filter": "2.0.0-beta1",
+        "guzzle/guzzle": "~3.7"
     },
     "require-dev": {
         "behat/behat":                  "2.5.*",

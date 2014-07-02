@@ -82,4 +82,13 @@ class Developer extends Owner
 
         return true;
     }
+
+    /**
+     * @param EntityDeveloper $developer
+     * @return array          organizations information
+     */
+    public function getOrganizations(EntityDeveloper $developer)
+    {
+        return $this->github->api('user')->organizations($developer->getName());
+    }
 }

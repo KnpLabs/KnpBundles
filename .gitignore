@@ -23,7 +23,7 @@ composer.phar
 bin/*
 !bin/update-all-bundles.sh
 !bin/setup-*.sh
-!bin/launch-rabit-consumers.sh
+!bin/launch-rabbit*consumers.sh
 !bin/prepare-*.sh
 !bin/behat-*.sh
 build
