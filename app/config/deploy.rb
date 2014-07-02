@@ -23,7 +23,7 @@ set :webserver_user,            "www-data"
 set :permission_method,         :acl
 set :use_set_permissions,       true
 
-set :shared_files,              ["app/config/parameters.yml", "app/Resources/java", "web/.htaccess", "bin/launch-rabbit-update-bundle-consumers.sh", "launch-rabbit-update-developer-consumers.sh"]
+set :shared_files,              ["app/config/parameters.yml", "app/Resources/java", "web/.htaccess", "bin/launch-rabbit-update-bundle-consumers.sh", "bin/launch-rabbit-update-developer-consumers.sh"]
 set :shared_children,           [app_path + "/logs"]
 set :use_composer,              true
 set :composer_options,          "--verbose --prefer-source"
