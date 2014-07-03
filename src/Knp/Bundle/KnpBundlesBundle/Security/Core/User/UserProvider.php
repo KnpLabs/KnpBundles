@@ -35,8 +35,10 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        $findBy = array('name' => $response->getNickname());
-        $findBy['githubId'] = $response->getNickname();
+        $findBy = array(
+            'name'     => $response->getNickname(),
+            'githubId' => $response->getNickname(),
+        );
 
         $user = $this->ownerManager->findDeveloperBy($findBy);
         if (!$user) {
