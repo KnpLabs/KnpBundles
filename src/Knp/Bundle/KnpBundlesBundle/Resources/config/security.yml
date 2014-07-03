@@ -7,7 +7,6 @@ security:
             oauth:
                 resource_owners:
                     github:        /login/check-github
-                    sensio:        /login/check-sensio
                 login_path:        /login
                 failure_path:      /login
 

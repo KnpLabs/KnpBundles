@@ -218,10 +218,6 @@ EOT;
                 $developer->addOrganization($organizations[$i+1]);
             }
 
-            if ($i%2) {
-                $developer->setSensioId($name);
-            }
-
             $manager->persist($developer);
 
             $developers[] = $developer;

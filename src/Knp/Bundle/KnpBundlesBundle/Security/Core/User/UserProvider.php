@@ -10,7 +10,6 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 
 use Knp\Bundle\KnpBundlesBundle\Manager\OwnerManager;
-use Knp\Bundle\KnpBundlesBundle\Security\OAuth\Response\SensioConnectUserResponse;
 
 /**
  * A User provider which is using together with OAuth bundle to create new
@@ -37,14 +36,7 @@ class UserProvider implements UserProviderInterface, OAuthAwareUserProviderInter
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
         $findBy = array('name' => $response->getNickname());
-        if ($response instanceof SensioConnectUserResponse) {
-            $findBy['sensioId'] = $response->getNickname();
-            if ($response->getLinkedAccount('github')) {
-                $findBy['githubId'] = $response->getLinkedAccount('github');
-            }
-        } else {
-            $findBy['githubId'] = $response->getNickname();
-        }
+        $findBy['githubId'] = $response->getNickname();
 
         $user = $this->ownerManager->findDeveloperBy($findBy);
         if (!$user) {
