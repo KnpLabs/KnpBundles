@@ -12,7 +12,6 @@
 /web/sitemap.xml*
 /web/css/*
 /web/js/*
-/app/DoctrineMigrations/*
 /src/Knp/Bundle/KnpBundlesBundle/DoctrineMigrations/*
 /src/Knp/Bundle/KnpBundlesBundle/Resources/solr/data/*
 /vendor/*
