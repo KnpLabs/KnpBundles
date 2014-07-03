@@ -936,7 +936,8 @@ code, pre {
 
 .content-box .bundle-score {
     float: left;
-    width: 70px
+    width: 70px;
+    padding-right: 5px;
 }
 
 .content-box .bundle-score h3 {
