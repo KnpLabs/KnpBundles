@@ -87,11 +87,6 @@ class Owner
     protected $githubId;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    protected $sensioId;
-
-    /**
      * Bundles the user owns
      *
      * @ORM\OneToMany(targetEntity="Bundle", mappedBy="owner")
@@ -288,22 +283,6 @@ class Owner
     public function getGithubId()
     {
         return $this->githubId;
-    }
-
-    /**
-     * @param string $sensioId
-     */
-    public function setSensioId($sensioId)
-    {
-        $this->sensioId = $sensioId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSensioId()
-    {
-        return $this->sensioId;
     }
 
     /**
