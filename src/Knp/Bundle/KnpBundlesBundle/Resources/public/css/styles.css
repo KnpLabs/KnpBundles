@@ -456,9 +456,9 @@ code, pre {
 }
 
 #auth-menu .login {
-    padding: 6px 28px 7px 8px;
+    padding: 6px 10px 7px 8px;
     border-radius: 4px;
-    background: #292b2f url('../images/arrow_gray.gif') no-repeat 93% 50%;
+    background: #292b2f;
     color: #b6b6b7;
     cursor: pointer
 }
@@ -479,22 +479,20 @@ code, pre {
     background: #292b2f
 }
 
-#auth-menu ul li {
+#auth-menu li {
     float: none;
     padding: 5px 15px;
     border-bottom: 1px solid #3f4144
 }
 
-#auth-menu ul li:last-child {
+#auth-menu li:last-child {
     border-bottom: 0
 }
-
-#auth-menu ul li a {
-    color: #8b8d90;
-    font-size: 11px
+#auth-menu a {
+    color: #b6b6b7;
 }
 
-#auth-menu ul li a:hover {
+#auth-menu li a:hover {
     color: #ccc
 }
 

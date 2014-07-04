@@ -7,9 +7,9 @@
     </ul>
 {% else %}
     <ul id="auth-menu">
-        <li>
+        <li class="login">
             <img src="{{ asset('bundles/knpbundles/images/icon_person.gif') }}" alt="Log out">
-            <a href="{{ hwi_oauth_login_url('github') }}">Login via GitHub</a>
+            <a href="{{ hwi_oauth_login_url('github') }}">Login</a>
         </li>
     </ul>
 {% endif %}
