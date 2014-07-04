@@ -41,6 +41,8 @@ class KbPopulateCommand extends ContainerAwareCommand
         if (!$input->getOption('no-publish')) {
             // manually set RabbitMQ producer
             $updater->setBundleUpdateProducer($container->get('old_sound_rabbit_mq.update_bundle_producer'));
+        } else {
+            $updater->setBundleUpdateProducer($container->get('knp_bundles.producer.executor_producer'));
         }
 
         $bundles = $updater->searchNewBundles();
