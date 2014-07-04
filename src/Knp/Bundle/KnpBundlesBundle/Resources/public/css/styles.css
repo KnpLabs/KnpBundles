@@ -479,20 +479,11 @@ code, pre {
     background: #292b2f
 }
 
-#auth-menu li {
-    float: none;
-    padding: 5px 15px;
-    border-bottom: 1px solid #3f4144
-}
-
-#auth-menu li:last-child {
-    border-bottom: 0
-}
 #auth-menu a {
     color: #b6b6b7;
 }
 
-#auth-menu li a:hover {
+#auth-menu a:hover {
     color: #ccc
 }
 
