@@ -385,7 +385,7 @@ code, pre {
 /* Header - search box */
 #search-box {
     float: right;
-    margin: 0 5px
+    margin: 0 5px 0 0;
 }
 
 #search-box label {
@@ -393,7 +393,7 @@ code, pre {
 }
 
 #search-box input[type="text"] {
-    width: 128px;
+    width: 107px;
     padding: 9px 6px 8px;
     font-size: 12px;
     border: 0;
