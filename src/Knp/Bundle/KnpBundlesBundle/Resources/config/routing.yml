@@ -8,9 +8,6 @@ _logout:
 _login_github:
     pattern:        /login/check-github
 
-_login_sensio:
-    pattern:        /login/check-sensio
-
 _static:
     resource: "routing/static.yml"
 

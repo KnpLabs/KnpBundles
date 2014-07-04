@@ -51,13 +51,6 @@ class OwnerRepository extends EntityRepository
             ;
         }
 
-        if (isset($fields['sensioId'])) {
-            $query
-                ->orWhere('d.sensioId = :sensio_id')
-                ->setParameter('sensio_id', $fields['sensioId'])
-            ;
-        }
-
         return $query->getQuery()->getOneOrNullResult();
     }
 

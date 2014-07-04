@@ -86,7 +86,6 @@ class OwnerManager
         $findBy = array(
             'name'     => $ownerName,
             'githubId' => $ownerName,
-            'sensioId' => $ownerName
         );
 
         if ('unknown' != $entityType) {
