@@ -160,4 +160,16 @@
 
     });
 
+    function setCookie(sortingLink) {
+        $.cookie('sortingState', sortingLink.attr('href'));
+    }
+
+    $('.dropdown-menu li > a').on('click', function() {
+        setCookie($(this));
+    });
+
+    if ($('.dropdown-menu').eq(0).data('url') === '/' && typeof $.cookie('sortingState') !== 'undefined') {
+        window.location.replace($.cookie('sortingState'));
+    }
+
 })(jQuery);

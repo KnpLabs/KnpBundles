@@ -19,7 +19,7 @@
             <button class="btn dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
             </button>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu" data-url="{{ app.request.getPathInfo() }}">
                 {%- for field, text in sortLegends %}
                 <li><i class="icon-{{ field }}"></i><a href="{{ path('bundle_list', {'sort': field}) }}">{{ text|trans }}</a></li>
                 {%- endfor %}
