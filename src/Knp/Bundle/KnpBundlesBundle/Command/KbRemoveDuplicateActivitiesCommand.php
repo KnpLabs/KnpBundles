@@ -19,8 +19,6 @@ class KbRemoveDuplicateActivitiesCommand extends ContainerAwareCommand
         ;
     }
 
-
-
     /**
      * {@inheritdoc}
      *
