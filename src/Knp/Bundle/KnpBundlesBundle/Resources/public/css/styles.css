@@ -385,7 +385,7 @@ code, pre {
 /* Header - search box */
 #search-box {
     float: right;
-    margin: 0 5px
+    margin: 0 5px 0 0;
 }
 
 #search-box label {
@@ -393,7 +393,7 @@ code, pre {
 }
 
 #search-box input[type="text"] {
-    width: 128px;
+    width: 107px;
     padding: 9px 6px 8px;
     font-size: 12px;
     border: 0;
@@ -456,9 +456,9 @@ code, pre {
 }
 
 #auth-menu .login {
-    padding: 6px 28px 7px 8px;
+    padding: 6px 10px 7px 8px;
     border-radius: 4px;
-    background: #292b2f url('../images/arrow_gray.gif') no-repeat 93% 50%;
+    background: #292b2f;
     color: #b6b6b7;
     cursor: pointer
 }
@@ -479,22 +479,11 @@ code, pre {
     background: #292b2f
 }
 
-#auth-menu ul li {
-    float: none;
-    padding: 5px 15px;
-    border-bottom: 1px solid #3f4144
+#auth-menu a {
+    color: #b6b6b7;
 }
 
-#auth-menu ul li:last-child {
-    border-bottom: 0
-}
-
-#auth-menu ul li a {
-    color: #8b8d90;
-    font-size: 11px
-}
-
-#auth-menu ul li a:hover {
+#auth-menu a:hover {
     color: #ccc
 }
 
