@@ -47,7 +47,7 @@ class SolrIndexer
         $this->solarium->update($update);
         $bundle->setIndexedAt(new \DateTime);
 
-        $this->doctrine->getEntityManager()->flush();
+        $this->doctrine->getManager()->flush();
     }
 
     /**
