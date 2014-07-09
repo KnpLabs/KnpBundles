@@ -3,7 +3,7 @@ rm -rf apache_solr
 rm -f apache-solr-3.6.2.tgz
 
 echo "Download of solr 3.6.2..."
-wget --quiet http://archive.apache.org/dist/lucene/solr/3.6.2/apache-solr-3.6.2.tgz
+wget  http://archive.apache.org/dist/lucene/solr/3.6.2/apache-solr-3.6.2.tgz
 
 echo "Extracting solr..."
 tar -zxf apache-solr-3.6.2.tgz

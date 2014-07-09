@@ -76,5 +76,4 @@ class SolrUtils
             '-Dsolr.solr.home' => $this->kernel->getBundle('KnpBundlesBundle')->getPath().'/Resources/solr'
         );
     }
-    
 }

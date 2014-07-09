@@ -3,7 +3,6 @@
 namespace Knp\Bundle\KnpBundlesBundle\Command;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Bundle;
-use Knp\Bundle\KnpBundlesBundle\Indexer\SolrIndexer;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,16 +32,32 @@ class KbSolrReindexCommand extends ContainerAwareCommand
         $doctrine = $this->getContainer()->get('doctrine');
         $bundles = $doctrine->getRepository('KnpBundlesBundle:Bundle')->findAll();
 
+        $count = count($bundles);
         foreach ($bundles as $key => $bundle) {
             try {
                 $indexer->indexBundle($bundle);
+                $this->printOutput($output, $key, $count);
             } catch (Exception $e) {
-                $output->writeln('<error>Exception: '.$e->getMessage().', skipping bundle '.$bundle->getFullName().'.</error>');
+                $output->writeln(sprintf("<error>Exception: %s, skipping bundle %s.</error>", $e->getMessage(), $bundle->getFullName()));
             }
 
             unset($bundles[$key]);
         }
-
-        $doctrine->getManager()->flush();
     }
-} 
+
+    private function printOutput($output, $key, $count)
+    {
+        $percent = round($key / $count * 100, 2);
+        $output->write(sprintf(" %.2f%% [", $percent));
+        for ($i = 0; $i < 100; $i++) {
+            if ($i == round($percent)) {
+                $output->write('>');
+            } elseif ($i < round($percent)) {
+                $output->write('=');
+            } else {
+                $output->write('.');
+            }
+        }
+        $output->write("] $key of $count\r");
+    }
+}
