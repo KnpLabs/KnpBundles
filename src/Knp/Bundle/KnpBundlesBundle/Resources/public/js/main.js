@@ -160,16 +160,12 @@
 
     });
 
-    function setCookie(sortingLink) {
-        $.cookie('sortingState', sortingLink.attr('href'));
-    }
-
     $('.dropdown-menu li > a').on('click', function() {
-        setCookie($(this));
+        $.jStorage.set('sortingState', $(this).attr('href'));
     });
 
-    if ($('.dropdown-menu').eq(0).data('url') === '/' && typeof $.cookie('sortingState') !== 'undefined') {
-        window.location.replace($.cookie('sortingState'));
+    if ($('.dropdown-menu').eq(0).data('url') === '/' && $.jStorage.get('sortingState') !== null) {
+        window.location.replace($.jStorage.get('sortingState'));
     }
 
 })(jQuery);
