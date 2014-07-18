@@ -2,6 +2,7 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Utils;
 
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Process\Process;
 
 class SolrUtils
@@ -9,7 +10,7 @@ class SolrUtils
     private $kernel;
     private $solarium;
 
-    public function __construct($solarium, $kernel)
+    public function __construct(\Solarium_Client $solarium, KernelInterface $kernel)
     {
         $this->solarium = $solarium;
         $this->kernel   = $kernel;

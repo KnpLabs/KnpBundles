@@ -28,3 +28,4 @@ bin/*
 build
 behat.yml
 app/Resources/java/*
+apache-solr*
