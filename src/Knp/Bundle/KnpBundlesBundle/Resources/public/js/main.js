@@ -160,6 +160,10 @@
 
     });
 
+    $('a.dropdown-toggle, .dropdown-menu a').on('touchstart', function(e) {
+        e.stopPropagation();
+    });
+
     $('.dropdown-menu li > a').on('click', function() {
         $.jStorage.set('sortingState', $(this).attr('href'));
     });
