@@ -260,15 +260,23 @@ class Repo
         }
 
         if (null === $onlyFiles || in_array('readme', $onlyFiles)) {
-            $readme = $api->readme($bundle->getOwnerName(), $bundle->getName());
-            if (!isset($readme['message']) && 'base64' == $readme['encoding']) {
-                $bundle->setReadme(base64_decode($readme['content']));
+            try {
+                $readme = $api->readme($bundle->getOwnerName(), $bundle->getName());
+                if (!isset($readme['message']) && 'base64' == $readme['encoding']) {
+                    $bundle->setReadme(base64_decode($readme['content']));
+                }
+            } catch (RuntimeException $e) {
+
             }
         }
 
         if (null === $bundle->getLicense() && (null === $onlyFiles || in_array('license', $onlyFiles))) {
-            $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'Resources/meta/LICENSE');
-            $bundle->setLicense(base64_decode($file['content']));
+            try {
+                $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'Resources/meta/LICENSE');
+                $bundle->setLicense(base64_decode($file['content']));
+            } catch (RuntimeException $e) {
+
+            }
         }
 
         if (null === $onlyFiles || in_array('configuration', $onlyFiles)) {
