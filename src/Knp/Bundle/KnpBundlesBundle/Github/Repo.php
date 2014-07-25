@@ -274,9 +274,7 @@ class Repo
             try {
                 $file = $api->show($bundle->getOwnerName(), $bundle->getName(), 'Resources/meta/LICENSE');
                 $bundle->setLicense(base64_decode($file['content']));
-            } catch (RuntimeException $e) {
-
-            }
+            } catch (RuntimeException $e) {}
         }
 
         if (null === $onlyFiles || in_array('configuration', $onlyFiles)) {
