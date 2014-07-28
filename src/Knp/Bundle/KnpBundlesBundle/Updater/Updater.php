@@ -108,7 +108,7 @@ class Updater
 
             // It's not a valid Symfony2 Bundle or failed with our requirements (i.e: is a fork with less then 10 watchers)
             if (!$bundle) {
-                $this->notifyInvalid($bundle, 'Bundle is not an valid Symfony2 Bundle or failed with our requirements , or we were not able to get such via API.');
+                $this->notifyInvalid($bundle, 'Bundle is not an valid Symfony2 Bundle or failed with our requirements, or we were not able to get such via API.');
                 continue;
             }
             $this->output->write(sprintf('[%s] Discover bundle <comment>%s</comment>: ', date('d-m-y H:i:s'), $bundle->getFullName()));
