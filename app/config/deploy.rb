@@ -46,4 +46,4 @@ namespace :symfony do
 end
 
 after "deploy:update", "deploy:cleanup"
-after "deploy", "deploy:set_permissions"
+after "deploy:set_permissions", "symfony:doctrine:migrations:migrate"
