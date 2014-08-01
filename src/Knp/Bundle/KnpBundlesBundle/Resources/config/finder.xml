@@ -30,6 +30,7 @@
             <tag name="knp_bundles.finder" />
             <argument type="service" id="knp_bundles.github_client" />
             <argument>Bundle</argument>
+            <argument>Bundle watchers:>=10 stars:>=10 fork:only</argument>
             <argument>%knp_bundles.finder.limit%</argument>
         </service>
     </services>

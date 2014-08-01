@@ -11,18 +11,26 @@ use Github\Client;
 class Github extends AbstractBaseFinder
 {
     /**
+     * @var string
+     */
+    private $forkedRepoQuery;
+
+    /**
      * @var Client
      */
     private $github;
 
     /**
      * @param null $query
+     * @param null $forkedRepoQuery
      * @param int $limit
      * @param Client $github
      */
-    public function __construct(Client $github, $query = null, $limit = 300)
+    public function __construct(Client $github, $query = null, $forkedRepoQuery = null, $limit = 300)
     {
         parent::__construct($query, $limit);
+
+        $this->forkedRepoQuery = $forkedRepoQuery;
 
         $this->github = $github;
     }
@@ -37,23 +45,10 @@ class Github extends AbstractBaseFinder
         /** @var Repo $repositoryApi */
         $repositoryApi = $this->github->api('repo');
 
-        $repositories = array();
-        $page         = 1;
+        $repositories = $this->fetchRepositoryApi($repositoryApi, $this->query);
+        $forkedRepositories = $this->fetchRepositoryApi($repositoryApi, $this->forkedRepoQuery);
 
-        // Doesn't fetch more than 1000 results because github doesn't authorize this trick
-        // Notice that the crawling as an identical result
-        do {
-            $repositoriesData = $repositoryApi->find($this->query, array('language' => 'php', 'per-page' => 100, 'start_page' => $page));
-            $repositoriesData = $repositoriesData['repositories'];
-
-            foreach ($repositoriesData as $repositoryData) {
-                $repositories[] = $this->extractUrlRepository($repositoryData['url']);
-            }
-            $page++;
-
-        } while (!empty($repositoriesData) && $page < 10);
-
-        return $repositories;
+        return array_merge($repositories, $forkedRepositories);
     }
 
     /**
@@ -70,5 +65,26 @@ class Github extends AbstractBaseFinder
         }
 
         return null;
+    }
+
+    protected function fetchRepositoryApi($repositoryApi, $query)
+    {
+        $repositories = array();
+        $page         = 1;
+
+        // Doesn't fetch more than 1000 results because github doesn't authorize this trick
+        // Notice that the crawling as an identical result
+        do {
+            $repositoriesData = $repositoryApi->find($query, array('language' => 'php', 'per-page' => 100, 'start_page' => $page));
+            $repositoriesData = $repositoriesData['repositories'];
+
+            foreach ($repositoriesData as $repositoryData) {
+                $repositories[] = $this->extractUrlRepository($repositoryData['url']);
+            }
+            $page++;
+
+        } while (!empty($repositoriesData) && $page < 10);
+
+        return $repositories;
     }
 }
