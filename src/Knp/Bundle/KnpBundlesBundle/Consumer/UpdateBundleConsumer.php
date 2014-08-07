@@ -17,6 +17,7 @@ use PhpAmqpLib\Message\AMQPMessage;
 
 use Github\Exception\ApiLimitExceedException;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 
@@ -140,8 +141,6 @@ class UpdateBundleConsumer implements ConsumerInterface
                     if ($this->logger) {
                         $this->logger->warn(sprintf('Update of "%s" failed', $bundle->getName()));
                     }
-
-                    return;
                 }
 
                 $this->indexer->indexBundle($bundle);
