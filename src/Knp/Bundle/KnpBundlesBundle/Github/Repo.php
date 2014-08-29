@@ -267,9 +267,7 @@ class Repo
                 if (!isset($readme['message']) && 'base64' == $readme['encoding']) {
                     $bundle->setReadme(base64_decode($readme['content']));
                 }
-            } catch (RuntimeException $e) {
-
-            }
+            } catch (RuntimeException $e) {}
         }
 
         if (null === $bundle->getLicense() && (null === $onlyFiles || in_array('license', $onlyFiles))) {
