@@ -402,27 +402,37 @@ class Repo
      */
     public function validate(Bundle $bundle)
     {
-        $api = $this->github->api('repo')->contents();
         try {
-            $files = $api->show($bundle->getOwnerName(), $bundle->getName());
-        } catch(RuntimeException $e) {
+            $contentApi = $this->github->api('repo')->contents();
+
+            $treeApi = $this->github->api('git')->trees();
+            $tree = $treeApi->show($bundle->getOwnerName(), $bundle->getName(), 'master', true);
+
+            foreach ($tree['tree'] as $fileData) {
+                if ($fileData['path'] == 'app') {
+                    // this is a Symfony2 app, avoid it
+                    return false;
+                } else if (false !== strpos($fileData['path'], 'Bundle.php')) {
+                    try {
+                        $file = $contentApi->show($bundle->getOwnerName(), $bundle->getName(), $fileData['path']);
+                        if ('base64' == $file['encoding']) {
+                            if (false === strpos(base64_decode($file['content']), 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle')) {
+                                return false;
+                            }
+
+                            return true;
+                        }
+                    } catch(RuntimeException $e) {
+                        return false;
+                    }
+
+                    break;
+                }
+            }
+        } catch (RuntimeException $e) {
             return false;
         }
 
-        foreach ($files as $data) {
-            if (false !== strpos($data['name'], 'Bundle.php')) {
-                try {
-                    $file = $api->show($bundle->getOwnerName(), $bundle->getName(), $data['name']);
-                    if ('base64' == $file['encoding']) {
-                        return false !== strpos(base64_decode($file['content']), 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle');
-                    }
-                } catch(RuntimeException $e) {
-                    return false;
-                }
-
-                break;
-            }
-        }
 
         return false;
     }
