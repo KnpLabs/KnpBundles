@@ -408,7 +408,7 @@ class Repo
             $treeApi = $this->github->api('git')->trees();
             $tree = $treeApi->show($bundle->getOwnerName(), $bundle->getName(), 'master', true);
 
-            foreach ($tree['tree'] as $fileData) {
+            foreach ($tree['tree'] as $id => $fileData) {
                 if ($fileData['path'] == 'app') {
                     // this is a Symfony2 app, avoid it
                     return false;

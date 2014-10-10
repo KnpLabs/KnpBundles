@@ -198,42 +198,68 @@ EOT;
 
         $githubApiContentsMock = $this->getMockBuilder('Github\Api\Repository\Contents')
             ->disableOriginalConstructor()
-            ->getMock();
-        $githubApiContentsMock->expects($this->at(0))
+            ->getMock()
+        ;
+        $githubApiTreesMock = $this->getMockBuilder('Github\Api\GitData\Trees')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
+        $githubApiTreesMock->expects($this->at(0))
             ->method('show')
-            ->with('KnpLabs', 'KnpMenuBundle')
+            ->with('KnpLabs', 'KnpMenuBundle', 'master', true)
             ->will($this->returnValue(array(
-                array(
-                    'name'     => $bundleClassName,
-                    'encoding' => 'base64',
-                    'content'  => $json
-                )
-            )));
+                "tree" => array(
+                    array(
+                        "path" => $bundleClassName,
+                    )
+                ),
+            )))
+        ;
 
         if (false !== strpos($bundleClassName, 'KnpMenuBundle')) {
-            $githubApiContentsMock->expects($this->at(1))
+            $githubApiContentsMock->expects($this->at(0))
                 ->method('show')
                 ->with('KnpLabs', 'KnpMenuBundle', $bundleClassName)
-                ->will($this->returnValue($json));
+                ->will($this->returnValue($json))
+            ;
         }
 
         $githubApiMock = $this->getMockBuilder('Github\Api\Repo')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMock()
+        ;
         $githubApiMock->expects($this->any())
             ->method('contents')
-            ->will($this->returnValue($githubApiContentsMock));
+            ->will($this->returnValue($githubApiContentsMock))
+        ;
+
+        $githubGitMock = $this->getMockBuilder('Github\Api\GitData')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+        $githubGitMock->expects($this->any())
+            ->method('trees')
+            ->will($this->returnValue($githubApiTreesMock))
+        ;
 
         $githubMock = $this->getMock('Github\Client');
-        $githubMock->expects($this->any())
+        $githubMock->expects($this->at(0))
             ->method('api')
             ->with('repo')
-            ->will($this->returnValue($githubApiMock));
+            ->will($this->returnValue($githubApiMock))
+        ;
+        $githubMock->expects($this->at(1))
+            ->method('api')
+            ->with('git')
+            ->will($this->returnValue($githubGitMock))
+        ;
         $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
 
         $repoManager = $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Git\RepoManager')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMock()
+        ;
 
         return new Repo($githubMock, $output, $repoManager, new EventDispatcher(), $this->getOwnerManagerMock());
     }
