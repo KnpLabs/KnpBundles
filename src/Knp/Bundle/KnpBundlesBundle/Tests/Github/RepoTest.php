@@ -64,7 +64,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
     public function isValidSymfonyBundleShouldReturnFALSEIfRepoHasIncorrectBundleClass()
     {
         $bundle = new Bundle('KnpLabs/KnpMenuBundle');
-        $repo   = $this->getRepoWithMockedGithubClient('KnpMenuBundle.php', __DIR__ . '/fixtures/info.invalid-bundle-class.json');
+        $repo   = $this->getRepoWithMockedGithubClient('KnpMenuBundle.php', __DIR__ . '/fixtures/info.invalid-bundle-class.json', false);
 
         $this->assertFalse($repo->validate($bundle));
     }
@@ -192,7 +192,7 @@ EOT;
         return new Repo($github, $output, $repoManager, new EventDispatcher(), $this->getOwnerManagerMock());
     }
 
-    protected function getRepoWithMockedGithubClient($bundleClassName, $bundleClassContentsLink)
+    protected function getRepoWithMockedGithubClient($bundleClassName, $bundleClassContentsLink, $valid = true)
     {
         $json = json_decode(file_get_contents($bundleClassContentsLink), true);
 
@@ -217,8 +217,22 @@ EOT;
             )))
         ;
 
-        if (false !== strpos($bundleClassName, 'KnpMenuBundle')) {
+        if ($valid && false !== strpos($bundleClassName, 'KnpMenuBundle')) {
+            $composer = json_decode(file_get_contents(__DIR__ . '/fixtures/encoded-composer.json'), true);
             $githubApiContentsMock->expects($this->at(0))
+                ->method('show')
+                ->with('KnpLabs', 'KnpMenuBundle', 'composer.json')
+                ->will($this->returnValue($composer))
+            ;
+        } else {
+            $composer = json_decode(file_get_contents(__DIR__ . '/fixtures/encoded-invalid-composer.json'), true);
+            $githubApiContentsMock->expects($this->at(0))
+                ->method('show')
+                ->with('KnpLabs', 'KnpMenuBundle', 'composer.json')
+                ->will($this->returnValue($composer))
+            ;
+
+            $githubApiContentsMock->expects($this->at(1))
                 ->method('show')
                 ->with('KnpLabs', 'KnpMenuBundle', $bundleClassName)
                 ->will($this->returnValue($json))
@@ -229,7 +243,7 @@ EOT;
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        $githubApiMock->expects($this->any())
+        $githubApiMock->expects($this->at(0))
             ->method('contents')
             ->will($this->returnValue($githubApiContentsMock))
         ;
@@ -238,7 +252,7 @@ EOT;
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        $githubGitMock->expects($this->any())
+        $githubGitMock->expects($this->at(0))
             ->method('trees')
             ->will($this->returnValue($githubApiTreesMock))
         ;
