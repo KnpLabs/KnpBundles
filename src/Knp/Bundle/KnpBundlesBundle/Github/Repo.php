@@ -417,16 +417,14 @@ class Repo
                 foreach ($tree['tree'] as $id => $fileData) {
                     if ($fileData['path'] === 'app') {
                         // this is a Symfony2 app, avoid it
-                        $valid = false;
+                        break;
                     } else if (false !== strpos($fileData['path'], 'Bundle.php')) {
                         try {
                             $file = $contentApi->show($bundle->getOwnerName(), $bundle->getName(), $fileData['path']);
                             if ('base64' == $file['encoding']) {
-                                if (false === strpos(base64_decode($file['content']), 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle')) {
-                                    $valid = false;
+                                if (false !== strpos(base64_decode($file['content']), 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle')) {
+                                    $valid = true;
                                 }
-
-                                $valid = true;
                             }
                         } catch(RuntimeException $e) {
                             $valid = false;
@@ -439,7 +437,6 @@ class Repo
         } catch (RuntimeException $e) {
             $valid = false;
         }
-
 
         return $valid;
     }

@@ -39,7 +39,7 @@ class RepoTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function isValidSymfonyBundleShouldReturnTRUEIfRepoHasCorrectBundleClass()
+    public function isValidSymfonyBundleShouldReturnTRUEIfRepoHasCorrectComposerFile()
     {
         $bundle = new Bundle('KnpLabs/KnpMenuBundle');
         $repo   = $this->getRepoWithMockedGithubClient('KnpMenuBundle.php', __DIR__ . '/fixtures/info.valid-bundle-class.json');
@@ -50,18 +50,18 @@ class RepoTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function isValidSymfonyBundleShouldReturnFALSEIfRepoDoesNotHaveBundleClass()
+    public function isValidSymfonyBundleShouldReturnTrueIfRepoDoesHaveIncorrectComposerFileButCorrectBundleClass()
     {
         $bundle = new Bundle('KnpLabs/KnpMenuBundle');
-        $repo   = $this->getRepoWithMockedGithubClient('Smth.php', __DIR__ . '/fixtures/info.valid-bundle-class.json');
+        $repo   = $this->getRepoWithMockedGithubClient('KnpMenuBundle.php', __DIR__ . '/fixtures/info.valid-bundle-class.json', false);
 
-        $this->assertFalse($repo->validate($bundle));
+        $this->assertTrue($repo->validate($bundle));
     }
 
     /**
      * @test
      */
-    public function isValidSymfonyBundleShouldReturnFALSEIfRepoHasIncorrectBundleClass()
+    public function isValidSymfonyBundleShouldReturnFALSEIfRepoHasIncorrectComposerFileAndIncorrectBundleClass()
     {
         $bundle = new Bundle('KnpLabs/KnpMenuBundle');
         $repo   = $this->getRepoWithMockedGithubClient('KnpMenuBundle.php', __DIR__ . '/fixtures/info.invalid-bundle-class.json', false);
@@ -192,7 +192,7 @@ EOT;
         return new Repo($github, $output, $repoManager, new EventDispatcher(), $this->getOwnerManagerMock());
     }
 
-    protected function getRepoWithMockedGithubClient($bundleClassName, $bundleClassContentsLink, $valid = true)
+    protected function getRepoWithMockedGithubClient($bundleClassName, $bundleClassContentsLink, $validComposerFile = true)
     {
         $json = json_decode(file_get_contents($bundleClassContentsLink), true);
 
@@ -200,45 +200,6 @@ EOT;
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        $githubApiTreesMock = $this->getMockBuilder('Github\Api\GitData\Trees')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
-
-        $githubApiTreesMock->expects($this->at(0))
-            ->method('show')
-            ->with('KnpLabs', 'KnpMenuBundle', 'master', true)
-            ->will($this->returnValue(array(
-                "tree" => array(
-                    array(
-                        "path" => $bundleClassName,
-                    )
-                ),
-            )))
-        ;
-
-        if ($valid && false !== strpos($bundleClassName, 'KnpMenuBundle')) {
-            $composer = json_decode(file_get_contents(__DIR__ . '/fixtures/encoded-composer.json'), true);
-            $githubApiContentsMock->expects($this->at(0))
-                ->method('show')
-                ->with('KnpLabs', 'KnpMenuBundle', 'composer.json')
-                ->will($this->returnValue($composer))
-            ;
-        } else {
-            $composer = json_decode(file_get_contents(__DIR__ . '/fixtures/encoded-invalid-composer.json'), true);
-            $githubApiContentsMock->expects($this->at(0))
-                ->method('show')
-                ->with('KnpLabs', 'KnpMenuBundle', 'composer.json')
-                ->will($this->returnValue($composer))
-            ;
-
-            $githubApiContentsMock->expects($this->at(1))
-                ->method('show')
-                ->with('KnpLabs', 'KnpMenuBundle', $bundleClassName)
-                ->will($this->returnValue($json))
-            ;
-        }
-
         $githubApiMock = $this->getMockBuilder('Github\Api\Repo')
             ->disableOriginalConstructor()
             ->getMock()
@@ -248,14 +209,56 @@ EOT;
             ->will($this->returnValue($githubApiContentsMock))
         ;
 
+        if (!$validComposerFile) {
+            $composerContent = file_get_contents(__DIR__ . '/fixtures/encoded-invalid-composer.json');
+        } else {
+            $composerContent = file_get_contents(__DIR__ . '/fixtures/encoded-composer.json');
+        }
+
+        $composer = json_decode($composerContent, true);
+        $githubApiContentsMock->expects($this->at(0))
+            ->method('show')
+            ->with('KnpLabs', 'KnpMenuBundle', 'composer.json')
+            ->will($this->returnValue($composer))
+        ;
+
+        if (!$validComposerFile) {
+            $githubApiTreesMock = $this->getMockBuilder('Github\Api\GitData\Trees')
+                ->disableOriginalConstructor()
+                ->getMock()
+            ;
+            $githubApiTreesMock->expects($this->at(0))
+                ->method('show')
+                ->with('KnpLabs', 'KnpMenuBundle', 'master', true)
+                ->will($this->returnValue(array(
+                    "tree" => array(
+                        array(
+                            "path" => $bundleClassName,
+                        )
+                    ),
+                )))
+            ;
+        }
+
         $githubGitMock = $this->getMockBuilder('Github\Api\GitData')
             ->disableOriginalConstructor()
             ->getMock()
         ;
-        $githubGitMock->expects($this->at(0))
-            ->method('trees')
-            ->will($this->returnValue($githubApiTreesMock))
-        ;
+
+        if (!$validComposerFile) {
+            $githubGitMock->expects($this->at(0))
+                ->method('trees')
+                ->will($this->returnValue($githubApiTreesMock))
+            ;
+        }
+
+        if (!$validComposerFile) {
+            $githubApiContentsMock->expects($this->at(1))
+                ->method('show')
+                ->with('KnpLabs', 'KnpMenuBundle', $bundleClassName)
+                ->will($this->returnValue($json))
+            ;
+        }
 
         $githubMock = $this->getMock('Github\Client');
         $githubMock->expects($this->at(0))
@@ -263,11 +266,13 @@ EOT;
             ->with('repo')
             ->will($this->returnValue($githubApiMock))
         ;
-        $githubMock->expects($this->at(1))
-            ->method('api')
-            ->with('git')
-            ->will($this->returnValue($githubGitMock))
-        ;
+        if (!$validComposerFile) {
+            $githubMock->expects($this->at(1))
+                ->method('api')
+                ->with('git')
+                ->will($this->returnValue($githubGitMock))
+            ;
+        }
         $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
 
         $repoManager = $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Git\RepoManager')
