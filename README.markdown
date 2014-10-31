@@ -42,7 +42,7 @@ And update the parameters.yml with the Client ID and Secret.
 
 KnpBundles uses php-sundown extension to convert markdown to HTML.
 
-To install this plugin you should use `pear` witch is available in `php-dev` package.
+To install this plugin you should use `pear` which is available in `php-dev` package.
 
 Notice: sundown is in beta state for now, precise it during the installation or you will get an error.
 
