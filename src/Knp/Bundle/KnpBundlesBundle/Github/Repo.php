@@ -12,6 +12,7 @@ use Symfony\Component\Process\PhpProcess;
 
 use Github\Client;
 use Github\Api\Repository\Contents;
+use Github\Api\GitData\Trees;
 use Github\Exception\RuntimeException;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Activity;
@@ -412,33 +413,56 @@ class Repo
 
             if (!$valid) {
                 $treeApi = $this->github->api('git')->trees();
-                $tree    = $treeApi->show($bundle->getOwnerName(), $bundle->getName(), 'master', true);
-
-                foreach ($tree['tree'] as $id => $fileData) {
-                    if ($fileData['path'] === 'app') {
-                        // this is a Symfony2 app, avoid it
-                        break;
-                    } else if (false !== strpos($fileData['path'], 'Bundle.php')) {
-                        try {
-                            $file = $contentApi->show($bundle->getOwnerName(), $bundle->getName(), $fileData['path']);
-                            if ('base64' == $file['encoding']) {
-                                if (false !== strpos(base64_decode($file['content']), 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle')) {
-                                    $valid = true;
-                                }
-                            }
-                        } catch(RuntimeException $e) {
-                            $valid = false;
-                        }
-
-                        break;
-                    }
-                }
+                $valid   = $this->tryToValidateWithFiles($bundle, $treeApi, $contentApi);
             }
         } catch (RuntimeException $e) {
             $valid = false;
         }
 
         return $valid;
+    }
+
+    private function tryToValidateWithFiles(Bundle $bundle, Trees $treeApi, Contents $contentApi)
+    {
+        $valid = false;
+        $tree  = $treeApi->show($bundle->getOwnerName(), $bundle->getName(), 'master', true);
+
+        foreach ($tree['tree'] as $id => $fileData) {
+            if ($fileData['path'] === 'app') {
+                // this is a Symfony2 app, avoid it
+                break;
+            }
+
+            if (false !== strpos($fileData['path'], 'Bundle.php')) {
+                try {
+                    $file = $contentApi->show($bundle->getOwnerName(), $bundle->getName(), $fileData['path']);
+                    $fileContent = $this->decodeFileContent($file);
+                    if ($this->containValidSymfonyReference($fileContent)) {
+                        $valid = true;
+                    }
+                } catch(RuntimeException $e) {
+                    $valid = false;
+                }
+
+                break;
+            }
+        }
+
+        return $valid;
+    }
+
+    private function decodeFileContent($file, $json = false)
+    {
+        if ($json) {
+            return json_decode(base64_decode($file['content']), true);
+        }
+
+        return base64_decode($file['content']);
+    }
+
+    private function containValidSymfonyReference($fileContent)
+    {
+        return false !== strpos($fileContent, 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle');
     }
 
     private function tryToValidateWithComposerFile(Bundle $bundle, Contents $contentApi)
@@ -448,26 +472,24 @@ class Repo
         try {
             $file = $contentApi->show($bundle->getOwnerName(), $bundle->getName(), 'composer.json');
 
-            if ('base64' == $file['encoding']) {
-                $composer = json_decode(base64_decode($file['content']), true);
-                if (JSON_ERROR_NONE === json_last_error()) {
-                    if (isset($composer['type']) && false !== strpos(strtolower($composer['type']), 'symfony')) {
-                        $validComposer = true;
-                    }
+            $composer = $this->decodeFileContent($file, true);
+            if (JSON_ERROR_NONE === json_last_error()) {
+                if (isset($composer['type']) && false !== strpos(strtolower($composer['type']), 'symfony')) {
+                    $validComposer = true;
+                }
 
-                    if (isset($composer['autoload']['psr-0'])) {
-                        foreach ($composer['autoload']['psr-0'] as $key => $value) {
-                            if (preg_match('/\\\\(.*)(\w*)Bundle$/', $key) > 0) {
-                                $validComposer = true;
-                            }
+                if (isset($composer['autoload']['psr-0'])) {
+                    foreach ($composer['autoload']['psr-0'] as $key => $value) {
+                        if (preg_match('/\\\\(.*)(\w*)Bundle$/', $key) > 0) {
+                            $validComposer = true;
                         }
                     }
+                }
 
-                    if (isset($composer['autoload']['psr-4'])) {
-                        foreach ($composer['autoload']['psr-4'] as $key => $value) {
-                            if (preg_match('/\\\\(.*)(\w*)Bundle$/', $key) > 0) {
-                                $validComposer = true;
-                            }
+                if (isset($composer['autoload']['psr-4'])) {
+                    foreach ($composer['autoload']['psr-4'] as $key => $value) {
+                        if (preg_match('/\\\\(.*)(\w*)Bundle$/', $key) > 0) {
+                            $validComposer = true;
                         }
                     }
                 }
