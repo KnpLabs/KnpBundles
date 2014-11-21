@@ -169,7 +169,9 @@
     });
 
     if ($('.dropdown-menu').eq(0).data('url') === '/' && $.jStorage.get('sortingState') !== null) {
-        window.location.replace($.jStorage.get('sortingState'));
+        var sortingState = $.jStorage.get('sortingState');
+        $.jStorage.deleteKey('sortingState');
+        window.location.replace(sortingState);
     }
 
 })(jQuery);
