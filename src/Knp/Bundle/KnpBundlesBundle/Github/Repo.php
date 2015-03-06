@@ -11,6 +11,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Process\PhpProcess;
 
 use Github\Client;
+use Github\Api\Repository\Contents;
+use Github\Api\GitData\Trees;
 use Github\Exception\RuntimeException;
 
 use Knp\Bundle\KnpBundlesBundle\Entity\Activity;
@@ -402,29 +404,101 @@ class Repo
      */
     public function validate(Bundle $bundle)
     {
-        $api = $this->github->api('repo')->contents();
+        $valid = false;
+
         try {
-            $files = $api->show($bundle->getOwnerName(), $bundle->getName());
-        } catch(RuntimeException $e) {
-            return false;
+            $contentApi = $this->github->api('repo')->contents();
+
+            $valid = $this->tryToValidateWithComposerFile($bundle, $contentApi);
+
+            if (!$valid) {
+                $treeApi = $this->github->api('git')->trees();
+                $valid   = $this->tryToValidateWithFiles($bundle, $treeApi, $contentApi);
+            }
+        } catch (RuntimeException $e) {
+            $valid = false;
         }
 
-        foreach ($files as $data) {
-            if (false !== strpos($data['name'], 'Bundle.php')) {
+        return $valid;
+    }
+
+    private function tryToValidateWithFiles(Bundle $bundle, Trees $treeApi, Contents $contentApi)
+    {
+        $valid = false;
+        $tree  = $treeApi->show($bundle->getOwnerName(), $bundle->getName(), 'master', true);
+
+        foreach ($tree['tree'] as $id => $fileData) {
+            if ($fileData['path'] === 'app') {
+                // this is a Symfony2 app, avoid it
+                break;
+            }
+
+            if (false !== strpos($fileData['path'], 'Bundle.php')) {
                 try {
-                    $file = $api->show($bundle->getOwnerName(), $bundle->getName(), $data['name']);
-                    if ('base64' == $file['encoding']) {
-                        return false !== strpos(base64_decode($file['content']), 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle');
+                    $file = $contentApi->show($bundle->getOwnerName(), $bundle->getName(), $fileData['path']);
+                    $fileContent = $this->decodeFileContent($file);
+                    if ($this->containValidSymfonyReference($fileContent)) {
+                        $valid = true;
                     }
                 } catch(RuntimeException $e) {
-                    return false;
+                    $valid = false;
                 }
 
                 break;
             }
         }
 
-        return false;
+        return $valid;
+    }
+
+    private function decodeFileContent($file, $json = false)
+    {
+        if ($json) {
+            return json_decode(base64_decode($file['content']), true);
+        }
+
+        return base64_decode($file['content']);
+    }
+
+    private function containValidSymfonyReference($fileContent)
+    {
+        return false !== strpos($fileContent, 'Symfony\\Component\\HttpKernel\\Bundle\\Bundle');
+    }
+
+    private function tryToValidateWithComposerFile(Bundle $bundle, Contents $contentApi)
+    {
+        $validComposer = false;
+
+        try {
+            $file = $contentApi->show($bundle->getOwnerName(), $bundle->getName(), 'composer.json');
+
+            $composer = $this->decodeFileContent($file, true);
+            if (JSON_ERROR_NONE === json_last_error()) {
+                if (isset($composer['type']) && false !== strpos(strtolower($composer['type']), 'symfony')) {
+                    $validComposer = true;
+                }
+
+                if (isset($composer['autoload']['psr-0'])) {
+                    foreach ($composer['autoload']['psr-0'] as $key => $value) {
+                        if (preg_match('/\\\\(.*)(\w*)Bundle$/', $key) > 0) {
+                            $validComposer = true;
+                        }
+                    }
+                }
+
+                if (isset($composer['autoload']['psr-4'])) {
+                    foreach ($composer['autoload']['psr-4'] as $key => $value) {
+                        if (preg_match('/\\\\(.*)(\w*)Bundle$/', $key) > 0) {
+                            $validComposer = true;
+                        }
+                    }
+                }
+            }
+        } catch (RuntimeException $e) {
+            $validComposer = false;
+        }
+
+        return $validComposer;
     }
 
     /**
