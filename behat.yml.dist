@@ -1,7 +1,7 @@
 default:
   context:
     parameters:
-      base_url: "http://knpbundles.local/app_test.php"
+      base_url: "http://localhost:8000/"
   formatter:
     name: progress
   extensions:
@@ -12,5 +12,5 @@ default:
         debug: true
         bootstrap: ''
     Behat\MinkExtension\Extension:
-      base_url: 'http://knpbundles.local/app_test.php'
+      base_url: 'http://localhost:8000/'
       default_session: symfony2
