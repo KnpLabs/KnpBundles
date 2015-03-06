@@ -27,9 +27,9 @@ class MainController extends BaseController
 
     public function faqScoringAction()
     {
-        return $this->render('KnpBundlesBundle:Main:faqScoring.html.twig', array(
-            'text' => file_get_contents(__DIR__.'/../Resources/doc/faq_scoring.markdown'),
-        ));
+        $text = file_get_contents(__DIR__.'/../Resources/doc/faq_scoring.markdown');
+
+        return $this->render('KnpBundlesBundle:Main:faqScoring.html.twig', array('text' => $text));
     }
 
     public function bannerAction()
