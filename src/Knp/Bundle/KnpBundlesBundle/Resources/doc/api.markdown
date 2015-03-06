@@ -257,8 +257,7 @@ Return the error response:
 
 ### Pagination
 
-API calls that return a pageable list share standard paging parameters. Paging may be limited, both in the total
-number of pages (`page` parameter) and the number of results per page (`limit` parameter).
+API calls that return a pageable list share standard paging parameters. Paging may be limited, both in the total number of pages (`page` parameter) and the number of results per page (`limit` parameter).
 
 Example of usage:
 

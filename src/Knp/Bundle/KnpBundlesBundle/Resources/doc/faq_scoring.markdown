@@ -16,25 +16,17 @@ For more details on the items above please refer to the remaining answers.
 
 ####Why my bundle is not ranking higher?
 
-Along the months or years now it has been realized that tuning and coming
-with the right metrics for the Symfony2 bundle ecosystem is not an easy thing.
+Along the months or years now it has been realized that tuning and coming with the right metrics for the Symfony2 bundle ecosystem is not an easy thing.
 
-The metrics and its threshold values are evolving with the feedback of users
-and daily monitoring experience. Remember each day metrics change so they are
-dynamic, sometimes we have to wait for the numbers to show up, sometimes we have
-misunderstood the metric. Metrics are defined to display preference and usage
-so you can take a well informed decision. Of course this should be just one
-metric to ponder among others.
+The metrics and its threshold values are evolving with the feedback of users and daily monitoring experience. Remember each day metrics change so they are dynamic, sometimes we have to wait for the numbers to show up, sometimes we have misunderstood the metric. Metrics are defined to display preference and usage so you can take a well informed decision. Of course this should be just one metric to ponder among others.
 
 ####What is the minimum score your bundle needs to have before it is regarded as trendy?
 
-Currently a bundle is considered trendy at a given time if the change
-in its score becomes greater than 25 points between consecutive inspections.
+Currently a bundle is considered trendy at a given time if the change in its score becomes greater than 25 points between consecutive inspections.
 
 ####How often a score is updated? What is the time between consecutive inspections?
 
-Our system currently is monitoring bundles more than once a day, and scores could
-be updated even withing few hours.
+Our system currently is monitoring bundles more than once a day, and scores could be updated even withing few hours.
 
 ####Will points be given for failed travis builds?
 
