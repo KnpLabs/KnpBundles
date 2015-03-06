@@ -2,12 +2,11 @@
 
 namespace Knp\Bundle\KnpBundlesBundle\Consumer;
 
+use Doctrine\Common\Persistence\ObjectManager;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use OldSound\RabbitMqBundle\RabbitMq\Producer;
-
+use PhpAmqpLib\Message\AMQPMessage;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
-
-use Doctrine\Common\Persistence\ObjectManager;
 
 class GithubHookConsumer implements ConsumerInterface
 {
@@ -39,7 +38,7 @@ class GithubHookConsumer implements ConsumerInterface
     /**
      * {@inheritDoc}
      */
-    public function execute($msg)
+    public function execute(AMQPMessage $msg)
     {
         if ($this->logger) {
             $this->logger->info('[GithubHookConsumer] Received a github post push hook');
