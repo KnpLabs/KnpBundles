@@ -79,7 +79,7 @@ class KbSolrIndexCommand extends ContainerAwareCommand
             unset($bundles[$key]);
         }
 
-        $doctrine->getEntityManager()->flush();
+        $doctrine->getManager()->flush();
 
         return 0;
     }

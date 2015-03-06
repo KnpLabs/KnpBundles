@@ -441,7 +441,7 @@ class BundleController extends BaseController
                 $bundle->setState($state);
                 $bundle->setLicenseType($license);
 
-                $em = $this->get('doctrine')->getEntityManager();
+                $em = $this->get('doctrine')->getManager();
                 $em->persist($bundle);
                 $em->flush();
 

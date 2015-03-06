@@ -426,10 +426,11 @@ EOT;
 
             if ($owner->getName() == $commit['author']) {
                 $owner->setLastCommitAt($lastCommitAt);
-
                 $activity->setDeveloper($owner);
+                $activity->setBundleOwnerName(strtolower($owner->getName()));
             } else {
                 $activity->setAuthor($commit['author']);
+                $activity->setBundleOwnerName(strtolower($commit['author']));
             }
 
             $manager->persist($activity);

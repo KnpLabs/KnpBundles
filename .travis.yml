@@ -1,8 +1,6 @@
 language: php
 
 php:
-  - 5.3
-  - 5.4
   - 5.5
 
 before_script:
@@ -13,6 +11,8 @@ before_script:
     - ./bin/prepare-test-solr.sh
     - mkdir -p app/cache app/logs
     - sudo chmod -R 777 app/cache app/logs
+    - php app/console server:run &
+    - sleep 5
 
 script:
     - ./bin/phpunit -c app/
