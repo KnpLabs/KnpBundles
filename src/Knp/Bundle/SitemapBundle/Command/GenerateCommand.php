@@ -46,13 +46,13 @@ class GenerateCommand extends DoctrineCommand
 
         $output->write('<info>Fetching resources..</info>' . PHP_EOL);
         $dql = <<<___SQL
-        SELECT b.name, b.username, b.updatedAt FROM KnpBundlesBundle:Bundle b
+        SELECT b.name, b.ownerName, b.updatedAt FROM KnpBundlesBundle:Bundle b
 ___SQL;
         $q = $em->createQuery($dql);
         $bundles = $q->getArrayResult();
 
         $dql = <<<___SQL
-        SELECT u.name, u.createdAt FROM KnpBundlesBundle:User u
+        SELECT d.name, d.createdAt FROM KnpBundlesBundle:Developer d
 ___SQL;
         $q = $em->createQuery($dql);
         $users = $q->getArrayResult();
