@@ -397,6 +397,24 @@ class Repo
         return $names;
     }
 
+    public function getCollaboratorsNames(Bundle $bundle)
+    {
+        try {
+            $collaborators = $this->github->api('repo')->collaborators()->all();
+        } catch(RuntimeException $e) {
+            return array();
+        }
+
+        $names = array();
+        foreach ($collaborators as $collaborator) {
+            if ($bundle->getOwnerName() != $collaborator['login']) {
+                $names[] = $collaborator['login'];
+            }
+        }
+
+        return $names;
+    }
+
     /**
      * @param Bundle $bundle
      *
