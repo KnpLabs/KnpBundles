@@ -3,6 +3,7 @@
 namespace Knp\Bundle\KnpBundlesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -58,6 +59,15 @@ class Developer extends Owner implements UserInterface
     private $contributionBundles;
 
     /**
+     * Bundles this User is collaborating
+     *
+     * @ORM\ManyToMany(targetEntity="Bundle", mappedBy="collaborators")
+     *
+     * @var Collection
+     */
+    private $collaboratedBundles;
+
+    /**
      * @ORM\OneToMany(targetEntity="Activity", mappedBy="developer", fetch="EXTRA_LAZY", cascade={"persist"})
      *
      * @var Collection
@@ -79,6 +89,7 @@ class Developer extends Owner implements UserInterface
         $this->organizations       = new ArrayCollection();
         $this->recommendedBundles  = new ArrayCollection();
         $this->contributionBundles = new ArrayCollection();
+        $this->collaboratedBundles = new ArrayCollection();
         $this->favoriteBundles     = new ArrayCollection();
 
         parent::__construct();
@@ -250,6 +261,37 @@ class Developer extends Owner implements UserInterface
         ;
 
         return $paginator->getCurrentPageResults();
+    }
+
+    /**
+     * Add collaborated Bundle
+     *
+     * @param Bundle $collaboratedBundle
+     */
+    public function addCollaboratedBundle(Bundle $collaboratedBundle)
+    {
+        $this->collaboratedBundles[] = $collaboratedBundle;
+    }
+
+    /**
+     * Remove collaborated Bundle
+     *
+     * @param Bundle $collaboratedBundle
+     */
+    public function removeCollaboratedBundle(Bundle $collaboratedBundle)
+    {
+        $this->collaboratedBundles->removeElement($collaboratedBundle);
+    }
+
+    /**
+     * Get collaborated bundles
+
+     *
+     * @return \Traversable
+     */
+    public function getCollaboratedBundles()
+    {
+        return $this->collaboratedBundles;
     }
 
     /**

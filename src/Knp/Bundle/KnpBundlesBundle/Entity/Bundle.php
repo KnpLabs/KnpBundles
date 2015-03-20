@@ -208,6 +208,19 @@ class Bundle
     protected $contributors;
 
     /**
+     * Developers who are the Repo collabs
+     *
+     * @ORM\ManyToMany(targetEntity="Developer", inversedBy="collaboratedBundles")
+     * @ORM\JoinTable(name="collaboration",
+     *      joinColumns={@ORM\JoinColumn(name="bundle_id", referencedColumnName="id", onDelete="CASCADE")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="developer_id", referencedColumnName="id", onDelete="CASCADE")}
+     * )
+     *
+     * @var Collection
+     */
+    protected $collaborators;
+
+    /**
      * Number of GitHub followers
      *
      * @ORM\Column(type="integer")
