@@ -31,6 +31,19 @@ class BundleManager
     private $repoApi;
 
     /**
+     * @var OwnerManager
+     */
+    private $ownerManager;
+
+    /**
+     * @var array
+     */
+    private $options = array(
+        'min_score_diff'      => null,
+        'min_score_threshold' => null
+    );
+
+    /**
      * @param ObjectManager $entityManager
      * @param OwnerManager  $ownerManager
      * @param Repo          $repoApi
@@ -40,6 +53,21 @@ class BundleManager
         $this->entityManager = $entityManager;
         $this->ownerManager  = $ownerManager;
         $this->repoApi       = $repoApi;
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function setOption($name, $value)
+    {
+        if (!array_key_exists($name, $this->options)) {
+            throw new \InvalidArgumentException();
+        }
+
+        $this->options[$name] = $value;
     }
 
     /**
@@ -85,6 +113,38 @@ class BundleManager
 
         $this->entityManager->persist($bundle);
         $this->entityManager->flush();
+    }
+
+    public function updateTrends()
+    {
+        // Reset trends
+        $q = $this->entityManager->createQuery('UPDATE Knp\Bundle\KnpBundlesBundle\Entity\Bundle bundle SET bundle.trend1 = 0');
+        $q->execute();
+
+        $query = <<<EOF
+UPDATE bundle
+
+JOIN (
+    SELECT date, bundle_id,
+    (
+        SELECT current.value - value AS diff
+        FROM score
+        WHERE bundle_id = current.bundle_id
+        AND date < current.date
+        ORDER BY date DESC
+        LIMIT 1
+    ) AS diff
+    FROM score AS current
+    WHERE date = CURRENT_DATE
+) score
+  ON score.bundle_id = bundle.id
+  AND score.diff > :minDiff
+
+SET trend1 = score.diff
+WHERE score >= :minThreshold
+EOF;
+
+        return $this->entityManager->getConnection()->executeUpdate($query, array('minDiff' => $this->options['min_score_diff'], 'minThreshold' => $this->options['min_score_threshold']));
     }
 
     /**

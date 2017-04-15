@@ -28,56 +28,30 @@ class KnpBundlesExtension extends Extension
         $loader->load('services.yml');
 
         $processor = new Processor();
-        $config = $processor->process($this->getConfigTree(), $configs);
+        $config = $processor->processConfiguration(new Configuration(), $configs);
+
+        $container->setAlias('knp_bundles.imagine', new Alias('knp_bundles.imagine.'.strtolower($config['generate_badges']['driver']), false));
+
         $container->setParameter('knp_bundles.git_bin', $config['git_bin']);
 
-        $driver = strtolower($config['generate_badges']['driver']);
+        $bundleManager = $container->getDefinition('knp_bundles.bundle.manager');
+        $bundleManager->addMethodCall('setOption', array('min_score_diff', $config['trending_bundle']['min_score_diff']));
+        $bundleManager->addMethodCall('setOption', array('min_score_threshold', $config['trending_bundle']['min_score_threshold']));
 
-        $container->setAlias('knp_bundles.imagine', new Alias('knp_bundles.imagine.'.$driver, false));
+        $twitterClient = $container->getDefinition('knp_bundles.trending_bundle_twitterer');
+        $twitterClient->addMethodCall('setTwitterParams', array(
+            $config['trending_bundle']['template'],
+            $config['trending_bundle']['idle_period'],
+            $config['twitter_client']
+        ));
 
-        if (5000 != $config['github_client']['limit']) {
-            // setup GitHub API client settings
-            $githubClient = $container->getDefinition('knp_bundles.github_client');
-            $githubClient->addMethodCall('setOption', array('api_limit', $config['github_client']['limit']));
-        }
-    }
-
-    private function getConfigTree()
-    {
-        $tb = new TreeBuilder();
-
-        $tb
-            ->root('knp_bundles')
-                ->children()
-                    ->arrayNode('github_client')
-                        ->addDefaultsIfNotSet()
-                        ->children()
-                            ->scalarNode('limit')
-                                ->defaultValue(5000)
-                                ->cannotBeEmpty()
-                            ->end()
-                        ->end()
-                    ->end()
-                    ->scalarNode('git_bin')
-                        ->defaultValue('/usr/bin/git')
-                        ->cannotBeEmpty()
-                    ->end()
-                    ->arrayNode('generate_badges')
-                        ->addDefaultsIfNotSet()
-                        ->children()
-                            ->scalarNode('driver')
-                                ->defaultValue('gd')
-                                ->validate()
-                                    ->ifNotInArray(array('gd', 'imagick', 'gmagick'))
-                                    ->thenInvalid('Invalid imagine driver specified: %s')
-                                ->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end()
-        ;
-
-        return $tb->buildTree();
+        // setup GitHub API client settings
+        $githubClient = $container->getDefinition('knp_bundles.github_client');
+        $githubClient->addMethodCall('setOption', array('api_limit', $config['github_client']['limit']));
+        $githubClient->addMethodCall('authenticate', array(
+            $config['github_client']['client_id'],
+            $config['github_client']['client_secret'],
+            Client::AUTH_URL_CLIENT_ID
+        ));
     }
 }
