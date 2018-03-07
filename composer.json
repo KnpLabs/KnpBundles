@@ -21,7 +21,7 @@
         "knplabs/knp-menu-bundle": "1.1.*",
         "knplabs/knp-disqus-bundle": "dev-master",
         "knplabs/knp-time-bundle": "dev-master",
-        "knplabs/knp-zend-cache-bundle": "dev-master",
+        "knplabs/knp-zend-cache-bundle": "dev-fix-knpbundles",
         "knplabs/github-api": "1.2.*",
         "avalanche123/imagine-bundle": "dev-master",
         "kriswallsmith/buzz": "0.7",
@@ -35,8 +35,6 @@
 
         "hwi/oauth-bundle": "~0.3.0",
 
-        "zendframework/zend-cache": "2.0.0-beta1",
-        "zendframework/zend-filter": "2.0.0-beta1",
         "guzzle/guzzle": "~3.7"
     },
     "require-dev": {
@@ -65,38 +63,6 @@
                 "autoload": {
                     "psr-0" : {
                         "PHPGit_" : "lib/"
-                    }
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "zendframework/zend-cache",
-                "version": "2.0.0-beta1",
-                "dist": {
-                    "url":  "http://packages.zendframework.com/get/Zend_Cache-2.0.0beta1.tgz",
-                    "type": "tar"
-                },
-                "autoload": {
-                    "psr-0": {
-                        "Zend\\Cache": "Zend_Cache-2.0.0beta1/php/"
-                    }
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "zendframework/zend-filter",
-                "version": "2.0.0-beta1",
-                "dist": {
-                    "url":  "http://packages.zendframework.com/get/Zend_Filter-2.0.0beta1.tgz",
-                    "type": "tar"
-                },
-                "autoload": {
-                    "psr-0": {
-                        "Zend\\Filter": "Zend_Filter-2.0.0beta1/php/"
                     }
                 }
             }
