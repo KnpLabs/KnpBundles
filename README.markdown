@@ -38,33 +38,26 @@ with the callback:
 
 And update the parameters.yml with the Client ID and Secret.
 
-### Install PHP-Sundown
+### Install with docker
 
-KnpBundles uses php-sundown extension to convert markdown to HTML.
-
-To install this plugin you should use `pear` which is available in `php-dev` package.
-
-Notice: sundown is in beta state for now, precise it during the installation or you will get an error.
-
-### Install vendors
-
-    curl -s http://getcomposer.org/installer | php
-    php composer.phar install
+    docker build
+    docker up -d
 
 #### Create database and tables
 
-    php app/console doctrine:database:drop --force
-    php app/console doctrine:database:create
     php app/console doctrine:schema:create
-
-    php app/console --env=test doctrine:database:drop --force
-    php app/console --env=test doctrine:database:create
     php app/console --env=test doctrine:schema:create
 
 ### Load data fixtures
 
     php app/console doctrine:fixtures:load
     php app/console --env=test doctrine:fixtures:load
+    
+### Load assets and assetic
+
+    php app/console assets:install --symlink web/
+    php app/console assetic:dump --env=dev
+    php app/console assetic:dump --env=prod
 
 ### Run the tests (requires PHPUnit >= 3.5)
 
