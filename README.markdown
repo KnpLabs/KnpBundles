@@ -45,33 +45,33 @@ And update the parameters.yml with the Client ID and Secret.
 
 #### Create database and tables
 
-    php app/console doctrine:schema:create
-    php app/console --env=test doctrine:schema:create
+    docker-compose exec php php app/console doctrine:schema:create
+    docker-compose exec php php app/console --env=test doctrine:schema:create
 
 ### Load data fixtures
 
-    php app/console doctrine:fixtures:load
-    php app/console --env=test doctrine:fixtures:load
+    docker-compose exec php php app/console doctrine:fixtures:load
+    docker-compose exec php php app/console --env=test doctrine:fixtures:load
     
 ### Load assets and assetic
 
-    php app/console assets:install --symlink web/
-    php app/console assetic:dump --env=dev
-    php app/console assetic:dump --env=prod
+    docker-compose exec php php app/console assets:install --symlink web/
+    docker-compose exec php php app/console assetic:dump --env=dev
+    docker-compose exec php php app/console assetic:dump --env=prod
 
 ### Run the tests (requires PHPUnit >= 3.5)
 
-    phpunit -c app
+    docker-compose exec php phpunit -c app
 
 #### Run the Behat tests (requires PHPUnit >= 3.5)
 
-    ./bin/behat @KnpBundlesBundle
+    docker-compose exec php ./bin/behat @KnpBundlesBundle
 
 #### To generate migrations from your current schema
 
-    php app/console doctrine:migrations:diff
-    php app/console doctrine:migrations:migrate
-    php app/console cache:warmup
+    docker-compose exec php php app/console doctrine:migrations:diff
+    docker-compose exec php php app/console doctrine:migrations:migrate
+    docker-compose exec php php app/console cache:warmup
 
 ## Usage
 
@@ -84,20 +84,20 @@ We rely on RabbitMQ to update bundles:
 
 To launch a consumer, do:
 
-    php app/console rabbitmq:consumer update_bundle
+    docker-compose exec php php app/console rabbitmq:consumer update_bundle
 
 Note that you will need a functional rabbitmq server − Follow the instructions in [this page](http://www.rabbitmq.com/download.html) to install it.
 
 ### Populate document collections from GitHub
 
-    php app/console kb:populate
+    docker-compose exec php php app/console kb:populate
 
 This can take a long time. GitHub API is limited to 60 calls per minute,
 so the commands needs to wait.
 
 ### Update all bundles in database
 
-    php app/console kb:update:bundles
+    docker-compose exec php php app/console kb:update:bundles
 
 This can take a long time but should be run to trigger update on all bundles when this is needed.
 
@@ -117,20 +117,20 @@ to your solr/conf directory.
 
 You can run SOLR using:
 
-    php app/console kb:solr:start
+    docker-compose exec php php app/console kb:solr:start
 
 See bin/prepare-test-solr.sh script
 Bundles will be automatically indexed on next update, or you can force indexing by console command.
 
 If you have Solr up and running, simply do:
 
-    php app/console kb:solr:index --verbose
+    docker-compose exec php php app/console kb:solr:index --verbose
 
 This will index all bundles.
 
 ### Generate sitemap
 
-    php app/console kb:sitemap:generate --spaceless=1
+    docker-compose exec php php app/console kb:sitemap:generate --spaceless=1
 
 Will create **sitemap.xml** and **sitemap.xml.gz** in web directory.
 Sitemap includes bundles and user profiles
