@@ -1,0 +1,38 @@
+version: '2.3'
+
+services:
+  adminer:
+    image: adminer
+    restart: on-failure
+    ports:
+      - 8080:8080
+
+  mysql:
+    image: mysql:5.7
+    restart: on-failure
+    command: --sql-mode=""
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: knp_bundles
+    volumes:
+      - './mysql:/var/lib/mysql'
+
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    restart: on-failure
+    volumes:
+      - '.:/usr/src/app'
+    user: 1000:1000
+
+  nginx:
+    image: nginx:1.15.3-alpine
+    restart: on-failure
+    volumes:
+      - './docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro'
+      - './web/:/usr/src/app'
+    depends_on:
+      - php
+    ports:
+      - 80:80

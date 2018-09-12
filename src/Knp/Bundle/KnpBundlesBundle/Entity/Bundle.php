@@ -327,7 +327,7 @@ class Bundle
 
         $this->createdAt    = new \DateTime();
         $this->updatedAt    = new \DateTime();
-        $this->lastCommitAt = new \DateTime('2010-01-01');
+        $this->lastCommitAt = new \DateTime();
 
         $this->activities   = new ArrayCollection();
         $this->contributors = new ArrayCollection();
