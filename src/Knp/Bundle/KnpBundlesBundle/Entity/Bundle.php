@@ -460,7 +460,7 @@ class Bundle
      */
     public function getReadme()
     {
-        return $this->readme;
+        return base64_decode($this->readme);
     }
 
     /**
@@ -470,7 +470,7 @@ class Bundle
      */
     public function setReadme($readme)
     {
-        $this->readme = $readme;
+        $this->readme = base64_encode($readme);
     }
 
     /**

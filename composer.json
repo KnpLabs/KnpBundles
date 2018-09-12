@@ -22,7 +22,7 @@
         "knplabs/knp-disqus-bundle": "dev-master",
         "knplabs/knp-time-bundle": "dev-master",
         "knplabs/knp-zend-cache-bundle": "dev-fix-knpbundles",
-        "knplabs/github-api": "1.2.*",
+        "knplabs/github-api": "~1.7",
         "avalanche123/imagine-bundle": "dev-master",
         "kriswallsmith/buzz": "0.7",
         "nelmio/solarium-bundle": "~1.1",
