@@ -1782,3 +1782,50 @@ a.bundle-license-unknown {
     font-size: 11px;
     color: #78797b;
 }
+
+/* start banner for new version */
+
+#bannerConsent {
+    background-color: rgba(20,20,20,0.8);
+    background-color: #c00;
+    min-height: 26px;
+    font-size: 16px;
+    color: #ccc ;
+    line-height: 26px;
+    padding: 8px 0 8px 30px;
+    font-family: "Trebuchet MS",Helvetica,sans-serif;
+    display: block;
+    z-index: 9999;
+}
+#bannerConsent a {
+    color: #fff;
+    text-decoration: none;
+}
+#closebannerConsent {
+    float: right;
+    display: inline-block;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    margin: -15px 0 0 0;
+    font-weight: bold;
+}
+#closebannerConsent:hover {
+    color: #FFF;
+}
+#bannerConsent a.bannerConsentOK {
+    background-color: #F1D600;
+    color: #000;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 0 20px;
+    cursor: pointer;
+    float: right;
+    margin: 0 60px 0 10px;
+}
+#bannerConsent a.bannerConsentOK:hover {
+    background-color: #E0C91F;
+}
+
+/* end banner for new version */
+
