@@ -1790,11 +1790,12 @@ a.bundle-license-unknown {
     background-color: #c00;
     min-height: 26px;
     font-size: 16px;
-    color: #ccc ;
+    color: #ddd;
     line-height: 26px;
     padding: 8px 0 8px 30px;
-    font-family: "Trebuchet MS",Helvetica,sans-serif;
+    font-family: Signika,"Trebuchet MS",Helvetica,sans-serif;
     display: block;
+    text-shadow: 0px 0px #ddd;
     z-index: 9999;
 }
 #bannerConsent a {
