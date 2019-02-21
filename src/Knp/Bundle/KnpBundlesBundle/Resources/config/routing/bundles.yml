@@ -38,10 +38,15 @@ bundle_get_badge:
     defaults:       { _controller: KnpBundlesBundle:Badge:show }
     requirements:   { _method: "GET" }
 
+bundle_show_json:
+    pattern:        /{ownerName}/{name}.json
+    defaults:       { _controller: KnpBundlesBundle:Bundle:show, _format: json }
+    requirements:   { _method: "GET", name: ".+" }
+
 bundle_show:
-    pattern:        /{ownerName}/{name}.{_format}
+    pattern:        /{ownerName}/{name}
     defaults:       { _controller: KnpBundlesBundle:Bundle:show, _format: html }
-    requirements:   { _method: "GET", _format: "(html|json)" }
+    requirements:   { _method: "GET", name: ".+" }
 
 bundle_settings:
     pattern:        /bundle/settings/{id}
