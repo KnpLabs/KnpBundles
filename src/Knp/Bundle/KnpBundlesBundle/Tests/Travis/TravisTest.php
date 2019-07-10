@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Leszek Prabucki <leszek.prabucki@knplabs.com>
  */
-class RepoTest extends \PHPUnit_Framework_TestCase
+class TravisTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test

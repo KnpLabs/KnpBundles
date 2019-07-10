@@ -183,6 +183,7 @@ class UpdateBundleConsumer implements ConsumerInterface
         }
         $bundle->setContributors($contributors);
 
+
         if ($this->logger) {
             $this->logger->info(sprintf('%d contributor(s) have been retrieved for bundle %s', count($contributors), $bundle->getName()));
         }

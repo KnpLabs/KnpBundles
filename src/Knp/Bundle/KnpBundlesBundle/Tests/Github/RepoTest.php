@@ -177,6 +177,101 @@ EOT;
         $this->assertNull($bundle->getVersionsHistory());
     }
 
+    /**
+     * @test
+     */
+    public function shouldReturnContributorsNames()
+    {
+        $bundle = new Bundle('KnpLabs/KnpMenuBundle');
+
+        $contributors = [
+            ['login' => 'KnpLabs'],
+            ['login' => 'akovalyov'],
+            ['login' => 'john_doe'],
+        ];
+
+
+        $githubApiMock = $this->getMockBuilder('Github\Api\Repo')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+        $githubApiMock->expects($this->at(0))
+            ->method('contributors')
+            ->will($this->returnValue($contributors))
+        ;
+
+        $githubMock = $this->getMock('Github\Client');
+        $githubMock->expects($this->at(0))
+            ->method('api')
+            ->with('repo')
+            ->will($this->returnValue($githubApiMock))
+        ;
+        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+
+        $repoManager = $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Git\RepoManager')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
+        $repo = new Repo($githubMock, $output, $repoManager, new EventDispatcher(), $this->getOwnerManagerMock());
+
+        $results = $repo->getContributorNames($bundle);
+        $this->assertTrue(count($results) === 2);
+        $this->assertFalse(array_search('KnpLabs', $results));
+    }
+
+    /**
+     * @test
+     */
+    public function shouldReturnCollaboratorsNames()
+    {
+        $bundle = new Bundle('KnpLabs/KnpMenuBundle');
+
+        $collaborators = [
+            ['login' => 'KnpLabs'],
+            ['login' => 'akovalyov'],
+            ['login' => 'john_doe'],
+        ];
+
+
+        $collaboratorsMock = $this->getMockBuilder('Github\Api\Repository\Collaborators')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $collaboratorsMock
+            ->expects($this->once())
+            ->method('all')
+            ->will($this->returnValue($collaborators));
+
+        $githubApiMock = $this->getMockBuilder('Github\Api\Repo')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+        $githubApiMock->expects($this->at(0))
+            ->method('collaborators')
+            ->will($this->returnValue($collaboratorsMock))
+        ;
+
+        $githubMock = $this->getMock('Github\Client');
+        $githubMock->expects($this->at(0))
+            ->method('api')
+            ->with('repo')
+            ->will($this->returnValue($githubApiMock))
+        ;
+        $output = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+
+        $repoManager = $this->getMockBuilder('Knp\Bundle\KnpBundlesBundle\Git\RepoManager')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
+        $repo = new Repo($githubMock, $output, $repoManager, new EventDispatcher(), $this->getOwnerManagerMock());
+
+        $results = $repo->getCollaboratorsNames($bundle);
+        $this->assertTrue(count($results) === 2);
+        $this->assertFalse(array_search('KnpLabs', $results));
+    }
+
     protected function getRepo($httpClient = null)
     {
         $github = new \Github\Client();
